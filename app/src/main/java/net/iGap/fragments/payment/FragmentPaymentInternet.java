@@ -333,60 +333,62 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
                 @Override
                 public void Allow() {
-                    MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
-                    View contactDialogView = dialog.getCustomView();
+                    ChargeContactNumberAdapter adapterContact = new ChargeContactNumberAdapter();
+                    new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
+                        if (contactNumbers.size() == 0) {
+                            HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
+                            progressBar.setVisibility(View.GONE);
+                        } else {
+                            adapterContact.setContactNumbers(contactNumbers);
+                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
+                            View contactDialogView = dialog.getCustomView();
 
-                    if (contactDialogView != null) {
-                        RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
-                        EditText editText = contactDialogView.findViewById(R.id.etSearch);
+                            if (contactDialogView != null) {
+                                RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
+                                EditText editText = contactDialogView.findViewById(R.id.etSearch);
 
-                        setDialogBackground(contactRecyclerView);
-                        setDialogBackground(editText);
+                                setDialogBackground(contactRecyclerView);
+                                setDialogBackground(editText);
 
-                        contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                        ChargeContactNumberAdapter adapterContact = new ChargeContactNumberAdapter();
-                        adapterContact.setOnItemClickListener(position -> {
-                            clickedPosition = position;
-                            onContactClicked(adapterContact);
-                            dialog.dismiss();
-                        });
+                                contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                                adapterContact.setOnItemClickListener(position -> {
+                                    clickedPosition = position;
+                                    onContactClicked(adapterContact);
+                                    dialog.dismiss();
+                                });
 
-                        contactRecyclerView.setAdapter(adapterContact);
+                                contactRecyclerView.setAdapter(adapterContact);
 
-                        if (watcher != null)
-                            editText.removeTextChangedListener(watcher);
+                                if (watcher != null)
+                                    editText.removeTextChangedListener(watcher);
 
-                        watcher = new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                watcher = new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                        if (s != null)
+                                            adapterContact.search(s.toString());
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+
+                                    }
+                                };
+                                editText.addTextChangedListener(watcher);
+
+
+
+                                contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                             }
+                            dialog.show();
+                        }
+                    });
 
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                if (s != null)
-                                    adapterContact.search(s.toString());
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-
-                            }
-                        };
-                        editText.addTextChangedListener(watcher);
-
-                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
-                            if (contactNumbers.size() == 0) {
-                                HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
-                                progressBar.setVisibility(View.GONE);
-                            } else {
-                                adapterContact.setContactNumbers(contactNumbers);
-                            }
-                        });
-
-                        contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
-                    }
-                    dialog.show();
                 }
 
                 @Override
@@ -465,7 +467,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                     }
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    HelperError.showSnackMessage(getResources().getString(R.string.no_history_found), false);
+                    HelperError.showSnackMessage(getResources().getString(R.string.list_empty), false);
                 }
             }
 
@@ -522,37 +524,8 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     public void setDialogBackground(View view) {
-        switch (G.themeColor) {
-            case Theme.DARK:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_dark));
-                break;
-            case Theme.DEFAULT:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
-                break;
-            case Theme.AMBER:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_amber));
-                break;
-            case Theme.GREEN:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_green));
-                break;
-            case Theme.BLUE:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_blue));
-                break;
-            case Theme.PURPLE:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_purple));
-                break;
-            case Theme.PINK:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_pink));
-                break;
-            case Theme.RED:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_red));
-                break;
-            case Theme.ORANGE:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_orange));
-                break;
-            case Theme.GREY:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_gray));
-                break;
+        if (G.themeColor==Theme.DARK) {
+            view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
         }
     }
 }

@@ -2627,7 +2627,7 @@
     <string name="operator_selection">انتخاب اپراتور</string>
     <string name="select_the_amount">انتخاب مبلغ</string>
     <string name="Select_from_contact_numbers">انتخاب از شماره های مخاطبین</string>
-    <string name="list_empty">در لیست شما شماره ای از قبل وجود ندارد</string>
+    <string name="list_empty">در لیست شما شماره ای از قبل موجود نیست</string>
     <string name="Select_from_previous_numbers">انتخاب از خرید های قبلی</string>
     <string name="Select_the_type_of_charge">انتخاب نوع شارژ</string>
     <string name="order_by">مرتب سازی بر اساس</string>
@@ -2642,7 +2642,7 @@
     <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
     <string name="data_sim">سیمکارت دیتا</string>
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
-    <string name="no_number_found">شماره ای از قبل موجود نیست</string>
+    <string name="no_number_found">شماره ای در لیست مخاطبین موجود نیست</string>
     <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="save_purchase">آیا مایل به ذخیره خرید در تاریخچه میباشید؟</string>
