@@ -95,6 +95,8 @@ public class CountingRequestBody extends RequestBody {
                 }
                 Buffer encryptedSink = new Buffer();
                 encryptedSink.write(encryptedByteArray);
+                bytesWritten += bytesToRead;
+                listener.onRequestProgress(bytesWritten, 0);
                 super.write(encryptedSink, encryptedSink.size());
 
             } catch (Exception e) {

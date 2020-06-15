@@ -6,6 +6,7 @@ import android.webkit.MimeTypeMap;
 import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.model.UploadData;
 import net.iGap.module.AndroidUtils;
@@ -47,6 +48,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     private FileChannel fileChannel;
     private RandomAccessFile randomAccessFile;
 
+    private static final String TAG = "UploadApiTask http";
+
     public UploadApiTask(String identity, String roomID, File file, ProtoGlobal.RoomMessageType uploadType, OnUploadListener listener) {
         this.listener = listener;
         this.identity = identity;
@@ -72,8 +75,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Log.d("bagi", file.getAbsolutePath());
-        Log.d("bagi", file.length() + "fileLen");
+        Log.d(TAG, "path: " + file.getAbsolutePath());
+        Log.d(TAG, "File size: " + file.length());
         getUploadInfoServer(!token.equals(""));
         synchronized (this) {
             try {
@@ -116,17 +119,27 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                     public void onSuccess(UploadData data) {
                         if (!isResume)
                             token = data.getToken();
-                        uploadFile(isResume, Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize()));
+                        int uploadedSize = Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize());
+                        if (file.length() - uploadedSize > 0) {
+                            uploadFile(isResume, uploadedSize);
+                            listener.onProgress(identity, uploadedSize / ((int) file.length()) * 100);
+                        }
                     }
 
                     @Override
                     public void onError(String error) {
                         listener.onError(identity);
+                        synchronized (this) {
+                            notify();
+                        }
                     }
 
                     @Override
                     public void onFailed() {
                         listener.onError(identity);
+                        synchronized (this) {
+                            notify();
+                        }
                     }
                 });
     }
@@ -151,6 +164,9 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                     @Override
                     public void onError(Throwable t) {
                         listener.onError(identity);
+                        synchronized (this) {
+                            notify();
+                        }
                     }
 
                     @Override
@@ -160,6 +176,9 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        HelperDataUsage.increaseUploadFiles(uploadType);
+                        listener.onProgress(identity, 100);
+                        listener.onFinish(identity, token);
                         synchronized (this) {
                             notify();
                         }
@@ -204,7 +223,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     private RequestBody createCountingRequestBody(boolean isResume, File file, int offset, FlowableEmitter<Double> emitter) {
         RequestBody requestBody = createRequestBody(isResume, file, offset);
         return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
-            double progress = (1.0 * bytesWritten) / contentLength;
+            HelperDataUsage.progressUpload(bytesWritten, uploadType);
+            double progress = (1.0 * (bytesWritten) / ((int) file.length())) * 100;
             emitter.onNext(progress);
         });
     }
