@@ -84,7 +84,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -247,7 +246,6 @@ import net.iGap.observers.interfaces.OnMessageReceive;
 import net.iGap.observers.interfaces.OnPinedMessage;
 import net.iGap.observers.interfaces.OnSetAction;
 import net.iGap.observers.interfaces.OnUpdateUserOrRoomInfo;
-import net.iGap.observers.interfaces.OnUpdateUserStatusInChangePage;
 import net.iGap.observers.interfaces.OnUserContactsBlock;
 import net.iGap.observers.interfaces.OnUserContactsUnBlock;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
@@ -1250,6 +1248,9 @@ public class FragmentChat extends BaseFragment
 
         if (keyboardView != null)
             keyboardView.onDestroyParentFragment();
+
+        G.onSetAction = null;
+        G.onUpdateUserStatusInChangePage = null;
 
         removeRoomAccessChangeListener();
     }
@@ -2480,7 +2481,6 @@ public class FragmentChat extends BaseFragment
                     ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
                     ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
                     activityManager.getMemoryInfo(memoryInfo);
-                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
                 }
             } else {
                 try {
@@ -2632,7 +2632,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                HelperLog.setErrorLog(e);
+                                HelperLog.getInstance().setErrorLog(e);
                             }
                         }
                     }
@@ -2655,7 +2655,7 @@ public class FragmentChat extends BaseFragment
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                     }
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
         };
@@ -2705,13 +2705,10 @@ public class FragmentChat extends BaseFragment
             }
         };
 
-        G.onUpdateUserStatusInChangePage = new OnUpdateUserStatusInChangePage() {
-            @Override
-            public void updateStatus(long peerId, String status, long lastSeen) {
-                if (chatType == CHAT) {
-                    setUserStatus(status, lastSeen);
-                    new RequestUserInfo().userInfo(peerId);
-                }
+        G.onUpdateUserStatusInChangePage = (peerId, status, lastSeen) -> {
+            if (chatType == CHAT) {
+                setUserStatus(status, lastSeen);
+                new RequestUserInfo().userInfo(peerId);
             }
         };
     }
@@ -4706,7 +4703,7 @@ public class FragmentChat extends BaseFragment
                     mAdapter.notifyDataSetChanged();
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }
@@ -9443,7 +9440,7 @@ public class FragmentChat extends BaseFragment
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

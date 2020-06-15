@@ -1,9 +1,6 @@
 package net.iGap.viewmodel;
 
-import android.app.ActivityManager;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
@@ -23,17 +20,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.BuildConfig;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
-import net.iGap.observers.eventbus.EventListener;
-import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -43,6 +34,18 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.helper.upload.UploadTask;
+import net.iGap.module.CountryListComparator;
+import net.iGap.module.CountryReader;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SUID;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.structs.StructCountry;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnInfoCountryResponse;
 import net.iGap.observers.interfaces.OnUserAvatarResponse;
@@ -55,12 +58,6 @@ import net.iGap.observers.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.observers.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.observers.interfaces.OnUserProfileUpdateUsername;
 import net.iGap.observers.interfaces.RefreshWalletBalance;
-import net.iGap.module.CountryListComparator;
-import net.iGap.module.CountryReader;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.SUID;
-import net.iGap.module.SingleLiveEvent;
-import net.iGap.module.structs.StructCountry;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
@@ -111,7 +108,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
@@ -732,7 +728,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 public void onFailure(@NotNull Call<ArrayList<Card>> call, @NotNull Throwable t) {
 
                     if (retryConnectToWallet < 3) {
-                        Crashlytics.logException(new Exception(t.getMessage()));
+                        FirebaseCrashlytics.getInstance().recordException(t);
                         getUserCredit();
                         retryConnectToWallet++;
                     }

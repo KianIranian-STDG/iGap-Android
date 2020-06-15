@@ -187,7 +187,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 surfaceLocal.init(WebRTC.getInstance().getEglBaseContext(), null);
             } catch (Exception e) {// for android version 4 on huawei device
                 e.printStackTrace();
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
                 Toast.makeText(this, getResources().getString(R.string.not_success), Toast.LENGTH_SHORT).show();
                 CallManager.getInstance().endCall();
             }
@@ -200,7 +200,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 surfaceRemote.init(WebRTC.getInstance().getEglBaseContext(), null);
             } catch (Exception e) {// for android version 4 on huawei device
                 e.printStackTrace();
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
                 Toast.makeText(this, getResources().getString(R.string.not_success), Toast.LENGTH_SHORT).show();
                 CallManager.getInstance().endCall();
             }
@@ -654,6 +654,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                     surfaceLocal.setVisibility(View.VISIBLE);
                     userImageView.setVisibility(View.GONE);
                 }
+
+                if (!isVideoCall() && CallService.getInstance() != null && isSpeakerEnable())
+                    toggleSpeaker();
 
                 holdView.setViewColor(getResources().getColor(R.color.white));
 

@@ -91,7 +91,7 @@ public class HelperLogMessage {
                 return extractLog(context, log, withLink);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             return new SpannableStringBuilder("");
         }
 

@@ -30,8 +30,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.multidex.MultiDex;
 
 import com.caspian.otpsdk.context.ApplicationContext;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yariksoffice.lingver.Lingver;
 
@@ -72,7 +71,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
-import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.web.WebBase;
@@ -471,7 +469,7 @@ public class G extends ApplicationContext {
         }
 
         context = getApplicationContext();
-        Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
 
         JobServiceReconnect.scheduleJob(getApplicationContext());

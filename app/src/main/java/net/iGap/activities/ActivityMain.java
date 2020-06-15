@@ -220,7 +220,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
@@ -1232,6 +1232,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
+            long oldTime = sharedPreferences.getLong(SHP_SETTING.KEY_OLD_TIME,0);
             long calculatorTimeLock = currentTime - oldTime;
 
             if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {
@@ -1289,7 +1290,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return super.dispatchTouchEvent(ev);
         } catch (IllegalArgumentException e) {
             //Fix for support lib bug, happening when onDestroy() is
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             return true;
         }
     }
@@ -1653,6 +1654,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStop() {
         super.onStop();
         oldTime = System.currentTimeMillis();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SHP_SETTING.KEY_OLD_TIME, oldTime);
+        editor.apply();
         G.onPayment = null;
     }
 

@@ -664,7 +664,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                 ringtonePlayer.prepare();
                 ringtonePlayer.start();
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }

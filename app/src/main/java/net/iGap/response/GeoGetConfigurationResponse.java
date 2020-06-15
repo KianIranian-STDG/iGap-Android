@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentiGapMap;
@@ -22,6 +22,7 @@ public class GeoGetConfigurationResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
+    private FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
 
     public GeoGetConfigurationResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -41,7 +42,7 @@ public class GeoGetConfigurationResponse extends MessageHandler {
         }
 
         if (builder.getTileServerList().size() == 0) {
-            Crashlytics.logException(new Exception("GeoGetConfigurationResponse -> TileServerList==0; time:" + System.currentTimeMillis()));
+            crashlytics.log("GeoGetConfigurationResponse -> TileServerList==0; time:" + System.currentTimeMillis());
         }
 
         RealmGeoGetConfiguration.putOrUpdate(builder.getCacheId());

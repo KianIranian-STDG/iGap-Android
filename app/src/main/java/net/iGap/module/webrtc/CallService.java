@@ -174,8 +174,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
         Log.d(TAG, "Starting the audio manager...");
         // This method will be called each time the number of available audio
         // devices has changed.
-        if (isVoiceCall)
-            audioManager.setDefaultAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
+        audioManager.setDefaultAudioDevice(CallAudioManager.AudioDevice.SPEAKER_PHONE);
 
         audioManager.start((selectedAudioDevice, availableAudioDevices) -> {
             if (audioManagerEvents != null)
@@ -244,7 +243,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
                 player.prepare();
                 player.start();
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }

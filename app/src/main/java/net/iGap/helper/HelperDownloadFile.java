@@ -428,7 +428,7 @@ public class HelperDownloadFile {
                                 }
                             });
                         } catch (NullPointerException e) {
-                            HelperLog.setErrorLog(e);
+                            HelperLog.getInstance().setErrorLog(e);
                         }
                     }
 

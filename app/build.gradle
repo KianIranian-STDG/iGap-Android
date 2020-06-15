@@ -2,18 +2,13 @@ buildscript {
     repositories {
 
         mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.31.2'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
 }
 
@@ -31,7 +26,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled true
         versionCode 183
-        versionName "2.1.5.beta2"
+        versionName "2.1.5.beta3"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -165,9 +160,9 @@ dependencies {
     implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
-        transitive = true
-    }
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.1'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+
     implementation project(path: ':lvl')
     implementation 'com.mikepenz:fastadapter:3.2.5'
     implementation 'com.mikepenz:fastadapter-commons:3.2.5'
@@ -217,8 +212,8 @@ dependencies {
     implementation 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.mindorks.android:prdownloader:0.6.0'
-    implementation 'com.google.firebase:firebase-core:17.2.1'
-    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-messaging:20.2.0'
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
     releaseImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
@@ -286,5 +281,4 @@ configurations.all {
     }
 }
 
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android-extensions'

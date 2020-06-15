@@ -52,21 +52,29 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
-import net.iGap.module.dialog.BottomSheetItemClickCallback;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.libs.KeyboardUtils;
+import net.iGap.libs.floatingAddButton.ArcMenu;
+import net.iGap.libs.floatingAddButton.StateChangeListener;
+import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.FileUtils;
+import net.iGap.module.GPSTracker;
+import net.iGap.module.MyInfoWindow;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.BottomSheetItemClickCallback;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.OnGeoCommentResponse;
 import net.iGap.observers.interfaces.OnGeoGetComment;
 import net.iGap.observers.interfaces.OnGetNearbyCoordinate;
@@ -76,14 +84,6 @@ import net.iGap.observers.interfaces.OnMapClose;
 import net.iGap.observers.interfaces.OnMapRegisterState;
 import net.iGap.observers.interfaces.OnMapUsersGet;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.libs.KeyboardUtils;
-import net.iGap.libs.floatingAddButton.ArcMenu;
-import net.iGap.libs.floatingAddButton.StateChangeListener;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.FileUtils;
-import net.iGap.module.GPSTracker;
-import net.iGap.module.MyInfoWindow;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
@@ -188,6 +188,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     private TopSheetDialog dialog;
 
     private HelperToolbar mHelperToolbar;
+    private FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -798,7 +799,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             if (mapUrls.size() > 0) {
                 url = mapUrls.get(new Random().nextInt(mapUrls.size()));
             } else {
-                Crashlytics.logException(new Exception("FragmentiGapMap -> mapUrls==0; time:" + System.currentTimeMillis()));
+                crashlytics.recordException(new Exception("FragmentiGapMap -> mapUrls==0; time:" + System.currentTimeMillis()));
                 url = URL_MAP;
             }
 

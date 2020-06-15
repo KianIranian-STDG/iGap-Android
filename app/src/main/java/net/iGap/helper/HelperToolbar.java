@@ -809,7 +809,7 @@ public class HelperToolbar {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 

@@ -53,6 +53,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -503,7 +504,13 @@ public final class AndroidUtils {
     private static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.reset();
-        byte[] buffer = input.getBytes(StandardCharsets.UTF_8);
+
+        byte[] buffer;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            buffer = input.getBytes(StandardCharsets.UTF_8);
+        } else {
+            buffer = input.getBytes(Charset.forName("UTF-8"));
+        }
         md.update(buffer);
         byte[] digest = md.digest();
 
@@ -606,7 +613,7 @@ public final class AndroidUtils {
         } else if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
             return true;
         } else {
-            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
+            HelperLog.getInstance().setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
             return false;
         }
     }
