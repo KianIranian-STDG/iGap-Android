@@ -360,6 +360,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                     if (editTextNumber.getText().length() == 11 || editTextNumber.getText().length() == 4) {
                         if (editTextNumber.getText().length() == 11) {
+                            closeKeyboard(editTextNumber);
                             linearWarning.setVisibility(View.VISIBLE);
                         }
                         String number = editTextNumber.getText().toString().substring(0, 4);

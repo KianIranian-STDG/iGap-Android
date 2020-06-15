@@ -191,6 +191,9 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                     if (opt != null) {
                         changeOperator(opt);
                     }
+                    if (numberEditText.getText().length() == 11) {
+                        closeKeyboard(numberEditText);
+                    }
                 }
             }
         });
