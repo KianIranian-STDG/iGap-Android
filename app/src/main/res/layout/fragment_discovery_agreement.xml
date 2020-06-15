@@ -52,7 +52,7 @@
 
                 <TextView
                     android:id="@+id/btnPositive"
-                    android:textColor="?iGapButtonColor"
+                    android:textColor="@color/green"
                     android:layout_width="wrap_content"
                     android:textSize="@dimen/dp16"
                     android:layout_height="wrap_content"
