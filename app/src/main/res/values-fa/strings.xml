@@ -2650,6 +2650,7 @@
     <string name="mic">میکروفن</string>
     <string name="hold">نگه‌داشتن</string>
     <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
+    <string name="error_term_not_accepted">شرایط و مقررات تایید نشده است!</string>
     <string-array name="billsOptions">
         <item>برق</item>
         <item>گاز</item>

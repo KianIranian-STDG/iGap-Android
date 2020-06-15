@@ -101,7 +101,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         if (discoveryField.agreementSlug != null && discoveryField.agreementSlug.length() > 1) {
             if (!discoveryField.agreement) {
-                new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragmentAgreement.newInstance(discoveryField, discoveryField.agreementSlug)).setReplace(false).load();
+                DiscoveryFragmentAgreement.newInstance(discoveryField, discoveryField.agreementSlug).show(activity.getSupportFragmentManager(), null);
                 return;
             }
         }
