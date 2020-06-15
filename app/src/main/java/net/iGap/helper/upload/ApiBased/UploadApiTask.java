@@ -8,6 +8,7 @@ import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.model.UploadData;
+import net.iGap.module.AndroidUtils;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.proto.ProtoGlobal;
@@ -35,7 +36,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     private UploadsApi apiService;
     private OnUploadListener listener;
     private String identity;
-    private String token = null;
+    private String token = "";
     private String roomID;
     private ProtoGlobal.RoomMessageType uploadType;
     private File file;
@@ -73,7 +74,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         }
         Log.d("bagi", file.getAbsolutePath());
         Log.d("bagi", file.length() + "fileLen");
-        getUploadInfoServer(!(token == null));
+        getUploadInfoServer(!token.equals(""));
         synchronized (this) {
             try {
                 wait();
@@ -108,16 +109,14 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
 
     private void getUploadInfoServer(boolean isResume) {
         long size = ((file.length() / 16 + 1) * 16) + 16;
-        new ApiInitializer<UploadData>().initAPI(apiService.initUpload("", String.valueOf(size),
+        new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(size),
                 FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()), roomID),
                 this, new ResponseCallback<UploadData>() {
                     @Override
                     public void onSuccess(UploadData data) {
-                        if (!isResume) {
+                        if (!isResume)
                             token = data.getToken();
-                        } else {
-
-                        }
+                        uploadFile(isResume, Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize()));
                     }
 
                     @Override
@@ -132,10 +131,10 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                 });
     }
 
-    private void uploadFile() {
+    private void uploadFile(boolean isResume, int offset) {
         Flowable<Double> uploadFlow = Flowable.create(emitter -> {
             try {
-                apiService.uploadData(token, createMultipartBody(file.getAbsolutePath(), emitter)).blockingGet();
+                apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter)).blockingGet();
                 emitter.onComplete();
             } catch (Exception e) {
                 emitter.tryOnError(e);
@@ -174,13 +173,23 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         }
     }
 
-    private RequestBody createMultipartBody(String filePath, FlowableEmitter<Double> emitter) {
+    private RequestBody createMultipartBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
         File file = new File(filePath);
-        return createCountingRequestBody(file, emitter);
+        return createCountingRequestBody(isResume, file, offset, emitter);
     }
 
-    private RequestBody createRequestBody(File file) {
-        return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), file);
+    private RequestBody createRequestBody(boolean isResume, File file, int offset) {
+        if (!isResume)
+            return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), file);
+        else {
+            try {
+                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileChannel, offset, ((int) file.length()));
+                return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), bytes, offset, (int) file.length());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
     }
 
     private String getMimeType(String url) {
@@ -192,8 +201,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         return type;
     }
 
-    private RequestBody createCountingRequestBody(File file, FlowableEmitter<Double> emitter) {
-        RequestBody requestBody = createRequestBody(file);
+    private RequestBody createCountingRequestBody(boolean isResume, File file, int offset, FlowableEmitter<Double> emitter) {
+        RequestBody requestBody = createRequestBody(isResume, file, offset);
         return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
             double progress = (1.0 * bytesWritten) / contentLength;
             emitter.onNext(progress);

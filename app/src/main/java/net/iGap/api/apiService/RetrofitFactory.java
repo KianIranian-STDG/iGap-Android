@@ -178,6 +178,7 @@ public class RetrofitFactory {
         return new Retrofit.Builder()
                 .baseUrl(ApiStatic.UPLOAD_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(getHttpClient())
                 .build()
                 .create(UploadsApi.class);
