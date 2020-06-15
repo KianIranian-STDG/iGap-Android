@@ -36,7 +36,7 @@ public class ChargeHistoryNumberAdapter extends RecyclerView.Adapter<ChargeHisto
 
     @Override
     public void onBindViewHolder(@NonNull ContactNumberViewHolder holder, int position) {
-        holder.bindNUmber(historyNumberList.get(position), position);
+        holder.bindNUmber(historyNumberList.get(position));
     }
 
     @Override
@@ -50,8 +50,8 @@ public class ChargeHistoryNumberAdapter extends RecyclerView.Adapter<ChargeHisto
 
         ContactNumberViewHolder(@NonNull View itemView) {
             super(itemView);
-            phoneNumber = itemView.findViewById(R.id.amount_contact);
-            amount = itemView.findViewById(R.id.number_contact);
+            phoneNumber = itemView.findViewById(R.id.number_contact);
+            amount = itemView.findViewById(R.id.amount_contact);
 
             itemView.setOnClickListener(v -> {
                 if (onItemClickListener != null) {
@@ -60,7 +60,7 @@ public class ChargeHistoryNumberAdapter extends RecyclerView.Adapter<ChargeHisto
             });
         }
 
-        void bindNUmber(FavoriteNumber historyNumber, int position) {
+        void bindNUmber(FavoriteNumber historyNumber) {
             phoneNumber.setText(historyNumber.getPhoneNumber());
             DecimalFormat df = new DecimalFormat(",###");
             if (historyNumber.getAmount() == null)
