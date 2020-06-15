@@ -655,6 +655,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                     userImageView.setVisibility(View.GONE);
                 }
 
+                if (!isVideoCall() && CallService.getInstance() != null && isSpeakerEnable())
+                    toggleSpeaker();
+
                 holdView.setViewColor(getResources().getColor(R.color.white));
 
             } else if (state == CallState.RINGING) {
