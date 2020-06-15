@@ -226,7 +226,6 @@ public class UploadManager {
         });
     }
 
-
     public boolean isUploading(String identity) {
         UploadTask uploadTask = pendingUploadTasks.get(identity);
         return uploadTask != null;
@@ -256,12 +255,8 @@ public class UploadManager {
     public boolean cancelCompressing(String identity) {
         CompressTask compressTask = pendingCompressTasks.remove(identity);
 
-        if (compressTask == null) {
-            return false;
-        } else {
-            // cancel compress task
-            return true;
-        }
+        // cancel compress task
+        return compressTask != null;
     }
 
     public boolean cancelCompressingAndUploading(String identity) {

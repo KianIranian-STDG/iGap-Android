@@ -103,6 +103,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
             randomAccessFile = null;
         }
     }
+
     private void onFinishUpload() {
         lastRequestId = new RequestFileUploadStatus().fileUploadStatus(this.token, this);
     }
