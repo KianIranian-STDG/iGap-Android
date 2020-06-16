@@ -84,7 +84,7 @@ public class MobileBankChequeListAdapter extends RecyclerView.Adapter<RecyclerVi
         void initView(int position) {
             chNumber.setText(CompatibleUnicode(mdata.get(position).getNumber()));
 
-            if (mdata.get(position).getBalance() != null) {
+            if (mdata.get(position).getBalance() != 0) {
                 chValue.setText(CompatibleUnicode(decimalFormatter(Double.parseDouble("" + mdata.get(position).getBalance()))) + itemView.getContext().getResources().getString(R.string.rial));
             } else {
                 chValue.setText(itemView.getContext().getResources().getString(R.string.mobile_bank_balance_error_no_price));

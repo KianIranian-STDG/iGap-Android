@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class BankChequeSingle {
 
     @SerializedName("balance")
-    private Integer balance;
+    private long balance;
     @SerializedName("change_status_date")
     private String changeStatusDate;
     @SerializedName("description")
@@ -21,11 +21,11 @@ public class BankChequeSingle {
     @SerializedName("status")
     private String status;
 
-    public Integer getBalance() {
+    public long getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(long balance) {
         this.balance = balance;
     }
 
