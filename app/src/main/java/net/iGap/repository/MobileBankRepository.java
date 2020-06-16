@@ -5,6 +5,7 @@ import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.MobileBankApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
+import net.iGap.helper.HelperLog;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankBlockCheque;
 import net.iGap.model.mobileBank.BankCardBalance;
@@ -13,6 +14,7 @@ import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
 import net.iGap.model.mobileBank.BankChequeSingle;
 import net.iGap.model.mobileBank.BankHistoryModel;
+import net.iGap.model.mobileBank.BankNotificationStatus;
 import net.iGap.model.mobileBank.BankPayLoanModel;
 import net.iGap.model.mobileBank.BankServiceLoanDetailModel;
 import net.iGap.model.mobileBank.BankShebaModel;
@@ -110,6 +112,27 @@ public class MobileBankRepository {
 
     public void getTakeTurn(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
         new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.getTakeTurn(getAccessToken()), callback, responseCallback);
+    }
+
+    public void changeNotifStatus(boolean activate, MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse> responseCallback) {
+        DbManager.getInstance().doRealmTask((DbManager.RealmTask) realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                String token = realmUserInfo.getPushNotificationToken();
+                if (token != null && token.length() > 0) {
+                    if (activate)
+                        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.activateNotification(getAccessToken(), token), callback, responseCallback);
+                    else
+                        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.deactivateNotification(getAccessToken(), token), callback, responseCallback);
+                } else {
+                    HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!" + token));
+                }
+            }
+        });
+    }
+
+    public void getNotifStatus(MobileBankExpiredTokenCallback callback, ResponseCallback<BaseMobileBankResponse<BankNotificationStatus>> responseCallback) {
+        new MobileBankApiInitializer<BaseMobileBankResponse<BankNotificationStatus>>().initAPI(bankApi.getNotificationStatus(getAccessToken()), callback, responseCallback);
     }
 
     public void getOTP(String cardNumber, MobileBankExpiredTokenCallback callback, ResponseCallback<ErrorModel> responseCallback) {

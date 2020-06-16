@@ -10,6 +10,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankHistoryModel;
+import net.iGap.model.mobileBank.BankNotificationStatus;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -31,8 +32,14 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
     public List<BankCardModel> cards;
     public List<BankAccountModel> accounts;
     private MobileBankHomeTabFragment.HomeTabMode mMode;
+    /**
+     * this is the Notification mode for user to get it via igap
+     * -1 : Not Available / 0: not active / 1: active
+     */
+    private SingleLiveEvent<Integer> notificationMode = new SingleLiveEvent<>();
 
     public MobileBankHomeTabViewModel() {
+        notificationMode.setValue(-1);
     }
 
     private void getCardsByApi() {
@@ -162,6 +169,44 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
         });
     }
 
+    public void getNotificationStatus() {
+        MobileBankRepository.getInstance().getNotifStatus(this, new ResponseCallback<BaseMobileBankResponse<BankNotificationStatus>>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse<BankNotificationStatus> data) {
+                notificationMode.setValue((data.getData().isStatus() ? 1 : 0));
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+    }
+
+    public void toggleNotificationStatus(boolean activate) {
+        MobileBankRepository.getInstance().changeNotifStatus(activate, this, new ResponseCallback<BaseMobileBankResponse>() {
+            @Override
+            public void onSuccess(BaseMobileBankResponse data) {
+                notificationMode.setValue((activate ? 1 : 0));
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+        });
+    }
+
     private String decimalFormatter(Double entry) {
         DecimalFormat df = new DecimalFormat(",###");
         return df.format(entry);
@@ -209,5 +254,9 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
 
     public SingleLiveEvent<String> getTakeTurnListener() {
         return takeTurnListener;
+    }
+
+    public SingleLiveEvent<Integer> getNotificationMode() {
+        return notificationMode;
     }
 }

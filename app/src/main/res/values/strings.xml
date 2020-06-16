@@ -2638,6 +2638,8 @@ Want to get it?</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
+    <string name="mobile_bank_activeNotification">Activate Notification</string>
+    <string name="mobile_bank_deActiveNotification">Deactivate Notification</string>
     <string name="secondary_password">Secondary Password</string>
     <string name="default_deposit">Default Deposit</string>
     <string name="custom_deposit">Custom Deposit</string>

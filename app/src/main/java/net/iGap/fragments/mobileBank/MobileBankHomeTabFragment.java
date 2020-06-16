@@ -72,7 +72,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         viewModel.setFragmentState(mode);
         disableViewPagerIfNeed();
         setupListener();
-        if (mode == HomeTabMode.SERVICE) setupRecyclerItems();
+        if (mode == HomeTabMode.SERVICE) {
+            viewModel.getNotificationStatus();
+            setupRecyclerItems();
+        }
     }
 
     private void setupRecyclerItems() {
@@ -139,6 +142,12 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             case R.string.take_turn:
                 onTakeTurnClicked();
                 break;
+            case R.string.mobile_bank_activeNotification:
+                viewModel.toggleNotificationStatus(true);
+                break;
+            case R.string.mobile_bank_deActiveNotification:
+                viewModel.toggleNotificationStatus(false);
+                break;
         }
     }
 
@@ -203,6 +212,10 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.facilities, R.drawable.ic_mb_loan));
         items.add(new MobileBankHomeItemsModel(R.string.take_turn, R.drawable.ic_mb_take_turn));
+        if (viewModel.getNotificationMode().getValue() == 0)
+            items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_activeNotification, R.drawable.ic_mb_active_notif));
+        else if (viewModel.getNotificationMode().getValue() == 1)
+            items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_deActiveNotification, R.drawable.ic_mb_deactive_notif));
         return items;
     }
 
@@ -214,6 +227,8 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private void setupListener() {
+
+        viewModel.getNotificationMode().observe(getViewLifecycleOwner(), integer -> setupRecyclerItems());
 
         viewModel.getCardsData().observe(getViewLifecycleOwner(), bankCardModels -> {
             if (bankCardModels != null) saveCardsTodb(bankCardModels);
