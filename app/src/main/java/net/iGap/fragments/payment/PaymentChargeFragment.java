@@ -72,7 +72,7 @@ import retrofit2.Response;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
 import static net.iGap.model.OperatorType.Type.RITEL;
 
-public class FragmentPaymentChargeNewUi extends BaseFragment {
+public class PaymentChargeFragment extends BaseFragment {
     private View frameHamrah;
     private View frameIrancel;
     private View frameRightel;
@@ -114,11 +114,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private int historyItemClicked = -1;
     private boolean isSelectedFromHistory = false;
 
-    public static FragmentPaymentChargeNewUi newInstance() {
-        return new FragmentPaymentChargeNewUi();
+    public static PaymentChargeFragment newInstance() {
+        return new PaymentChargeFragment();
     }
 
-    public FragmentPaymentChargeNewUi() {
+    public PaymentChargeFragment() {
 
         amountList.add(new Amount(10000));
         amountList.add(new Amount(20000));
@@ -239,50 +239,57 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
                     @Override
                     public void Allow() {
                         ChargeContactNumberAdapter adapter = new ChargeContactNumberAdapter();
-                            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
-                            View contactDialogView = dialog.getCustomView();
-                            if (contactDialogView != null) {
-                                RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
-                                EditText editText = contactDialogView.findViewById(R.id.etSearch);
-                                setDialogBackground(contactRecyclerView);
-                                setDialogBackground(editText);
+                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
+                            if (contactNumbers.size() == 0) {
+                                HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
+                                progressBar.setVisibility(View.GONE);
+                            } else {
+                                adapter.setContactNumbers(contactNumbers);
+                                MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
+                                View contactDialogView = dialog.getCustomView();
+                                if (contactDialogView != null) {
+                                    RecyclerView contactRecyclerView = contactDialogView.findViewById(R.id.rv_contact);
+                                    EditText editText = contactDialogView.findViewById(R.id.etSearch);
+                                    setDialogBackground(contactRecyclerView);
+                                    setDialogBackground(editText);
 
-                                contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                                contactRecyclerView.setAdapter(adapter);
-                                adapter.setOnItemClickListener(position -> {
-                                    contactPositionClicked = position;
-                                    onContactItemClicked(adapter);
-                                    dialog.dismiss();
-                                });
+                                    contactRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                                    contactRecyclerView.setAdapter(adapter);
+                                    adapter.setOnItemClickListener(position -> {
+                                        contactPositionClicked = position;
+                                        onContactItemClicked(adapter);
+                                        dialog.dismiss();
+                                    });
 
-                                ChargeContactNumberAdapter adapterContactNumber = (ChargeContactNumberAdapter) contactRecyclerView.getAdapter();
-                                if (adapterContactNumber != null) {
-                                    new Contacts().getAllPhoneContactForPayment(adapterContactNumber::setContactNumbers);
+                                    ChargeContactNumberAdapter adapterContactNumber = (ChargeContactNumberAdapter) contactRecyclerView.getAdapter();
+
+                                    if (textWatcher != null)
+                                        editText.removeTextChangedListener(textWatcher);
+
+                                    textWatcher = new TextWatcher() {
+                                        @Override
+                                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                        }
+
+                                        @Override
+                                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                            if (adapterContactNumber != null)
+                                                adapterContactNumber.search(s.toString());
+                                        }
+
+                                        @Override
+                                        public void afterTextChanged(Editable s) {
+
+                                        }
+                                    };
+                                    editText.addTextChangedListener(textWatcher);
+                                    contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
                                 }
-                                if (textWatcher != null)
-                                    editText.removeTextChangedListener(textWatcher);
-
-                                textWatcher = new TextWatcher() {
-                                    @Override
-                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                                    }
-
-                                    @Override
-                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                        if (adapterContactNumber != null)
-                                            adapterContactNumber.search(s.toString());
-                                    }
-
-                                    @Override
-                                    public void afterTextChanged(Editable s) {
-
-                                    }
-                                };
-                                editText.addTextChangedListener(textWatcher);
-                                contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
+                                dialog.show();
                             }
-                            dialog.show();
+                        });
+
                     }
 
                     @Override
@@ -360,6 +367,7 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
 
                     if (editTextNumber.getText().length() == 11 || editTextNumber.getText().length() == 4) {
                         if (editTextNumber.getText().length() == 11) {
+                            closeKeyboard(editTextNumber);
                             linearWarning.setVisibility(View.VISIBLE);
                         }
                         String number = editTextNumber.getText().toString().substring(0, 4);
@@ -852,37 +860,8 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     }
 
     public void setDialogBackground(View view) {
-        switch (G.themeColor) {
-            case Theme.DARK:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_dark));
-                break;
-            case Theme.DEFAULT:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
-                break;
-            case Theme.AMBER:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_amber));
-                break;
-            case Theme.GREEN:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_green));
-                break;
-            case Theme.BLUE:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_blue));
-                break;
-            case Theme.PURPLE:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_purple));
-                break;
-            case Theme.PINK:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_pink));
-                break;
-            case Theme.RED:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_red));
-                break;
-            case Theme.ORANGE:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_orange));
-                break;
-            case Theme.GREY:
-                view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background_gray));
-                break;
+        if (G.themeColor == Theme.DARK) {
+            view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
         }
     }
 }

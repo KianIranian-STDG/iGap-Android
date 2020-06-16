@@ -2564,6 +2564,8 @@
     <string name="active_gift_card_note">آیا از فعالسازی کارت هدیه مطمئن هستید؟! توجه داشته باشید پس از فعالسازی امکان ارسال به دیگری وجود ندارد و اطلاعات کارت هدیه فقط برای حساب کاربری شما قابل نمایش است.</string>
     <string name="inter_cheque_amount">ثبت مبلغ </string>
     <string name="take_turn">دریافت نوبت</string>
+    <string name="mobile_bank_activeNotification">فعال کردن اعلان</string>
+    <string name="mobile_bank_deActiveNotification">غیر فعال کردن اعلان</string>
     <string name="secondary_password">رمز دوم</string>
     <string name="default_deposit">حساب پیش فرض</string>
     <string name="custom_deposit">حساب دلخواه</string>
@@ -2627,7 +2629,7 @@
     <string name="operator_selection">انتخاب اپراتور</string>
     <string name="select_the_amount">انتخاب مبلغ</string>
     <string name="Select_from_contact_numbers">انتخاب از شماره های مخاطبین</string>
-    <string name="list_empty">در لیست شما شماره ای از قبل وجود ندارد</string>
+    <string name="list_empty">در لیست شما شماره ای از قبل موجود نیست</string>
     <string name="Select_from_previous_numbers">انتخاب از خرید های قبلی</string>
     <string name="Select_the_type_of_charge">انتخاب نوع شارژ</string>
     <string name="order_by">مرتب سازی بر اساس</string>
@@ -2642,7 +2644,7 @@
     <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
     <string name="data_sim">سیمکارت دیتا</string>
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
-    <string name="no_number_found">شماره ای از قبل موجود نیست</string>
+    <string name="no_number_found">شماره ای در لیست مخاطبین موجود نیست</string>
     <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="save_purchase">آیا مایل به ذخیره خرید در تاریخچه میباشید؟</string>
@@ -2650,6 +2652,7 @@
     <string name="mic">میکروفن</string>
     <string name="hold">نگه‌داشتن</string>
     <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
+    <string name="error_term_not_accepted">شرایط و مقررات تایید نشده است!</string>
     <string-array name="billsOptions">
         <item>برق</item>
         <item>گاز</item>

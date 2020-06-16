@@ -9,6 +9,7 @@ import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankChequeBookListModel;
 import net.iGap.model.mobileBank.BankChequeSingle;
 import net.iGap.model.mobileBank.BankHistoryModel;
+import net.iGap.model.mobileBank.BankNotificationStatus;
 import net.iGap.model.mobileBank.BankPayLoanModel;
 import net.iGap.model.mobileBank.BankServiceLoanDetailModel;
 import net.iGap.model.mobileBank.BankShebaModel;
@@ -21,6 +22,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 
@@ -142,4 +144,16 @@ public interface MobileBankApi {
     Call<ErrorModel> getOTP(@Field("cardNo") String cardNumber,
                             @Field("mobile_number") String mobileNumber);
 
+    @POST("notif/activate")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse> activateNotification(@Header("Authorization") String token,
+                                                      @Field("token") String FcmToken);
+
+    @POST("notif/deactivate")
+    @FormUrlEncoded
+    Call<BaseMobileBankResponse> deactivateNotification(@Header("Authorization") String token,
+                                                        @Field("token") String FcmToken);
+
+    @GET("notif/get-status")
+    Call<BaseMobileBankResponse<BankNotificationStatus>> getNotificationStatus(@Header("Authorization") String token);
 }

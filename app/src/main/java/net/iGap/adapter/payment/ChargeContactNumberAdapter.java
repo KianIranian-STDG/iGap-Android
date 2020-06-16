@@ -1,6 +1,5 @@
 package net.iGap.adapter.payment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,9 +102,7 @@ public class ChargeContactNumberAdapter extends RecyclerView.Adapter<ChargeConta
 
         void bindNumber(ContactNumber amount) {
             contactName.setText(amount.getDisplayName());
-            Log.i("Nazanin", "bindNumber: " + contactName.getText().toString());
             phoneNumber.setText(amount.getPhone().replace(" ", "").replace("+98", "0"));
-            Log.i("Nazanin", "bindNumber: " + phoneNumber.getText().toString());
         }
     }
 

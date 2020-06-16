@@ -48,8 +48,8 @@ import net.iGap.fragments.kuknos.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.news.NewsMainFrag;
-import net.iGap.fragments.payment.FragmentPaymentChargeNewUi;
 import net.iGap.fragments.payment.FragmentPaymentInternet;
+import net.iGap.fragments.payment.PaymentChargeFragment;
 import net.iGap.fragments.poll.ChartFragment;
 import net.iGap.fragments.poll.PollFragment;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
@@ -101,7 +101,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
 
         if (discoveryField.agreementSlug != null && discoveryField.agreementSlug.length() > 1) {
             if (!discoveryField.agreement) {
-                new HelperFragment(activity.getSupportFragmentManager(), DiscoveryFragmentAgreement.newInstance(discoveryField, discoveryField.agreementSlug)).setReplace(false).load();
+                DiscoveryFragmentAgreement.newInstance(discoveryField, discoveryField.agreementSlug).show(activity.getSupportFragmentManager(), null);
                 return;
             }
         }
@@ -153,7 +153,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(activity, discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case TOPUP_MENU:/** tested **/
-                new HelperFragment(activity.getSupportFragmentManager(), FragmentPaymentChargeNewUi.newInstance()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), PaymentChargeFragment.newInstance()).setReplace(false).load();
                 break;
             case BILL_MENU:/** tested **/
 
