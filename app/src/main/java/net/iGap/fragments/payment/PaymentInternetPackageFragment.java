@@ -34,7 +34,8 @@ import net.iGap.module.customView.RecyclerListView;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.PaymentInternetPackageViewModel;
 
-import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
+import static net.iGap.fragments.payment.FragmentPaymentInternet.MTN;
+
 
 public class PaymentInternetPackageFragment extends BaseFragment {
 

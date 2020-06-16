@@ -58,11 +58,11 @@ import static net.iGap.helper.HelperString.isNumeric;
 import static net.iGap.model.OperatorType.Type.HAMRAH_AVAL;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
 import static net.iGap.model.OperatorType.Type.RITEL;
-import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MCI;
-import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.MTN;
-import static net.iGap.viewmodel.FragmentPaymentChargeViewModel.RIGHTEL;
-
 public class FragmentPaymentInternet extends BaseFragment implements HandShakeCallback {
+
+    public static final String MCI = "mci";
+    public static final String MTN = "mtn";
+    public static final String RIGHTEL = "rightel";
 
     private static final String SIM_TYPE_CREDIT = "CREDIT";
     private static final String SIM_TYPE_PERMANENT = "PERMANENT";
