@@ -72,7 +72,7 @@ import retrofit2.Response;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
 import static net.iGap.model.OperatorType.Type.RITEL;
 
-public class FragmentPaymentChargeNewUi extends BaseFragment {
+public class PaymentChargeFragment extends BaseFragment {
     private View frameHamrah;
     private View frameIrancel;
     private View frameRightel;
@@ -114,11 +114,11 @@ public class FragmentPaymentChargeNewUi extends BaseFragment {
     private int historyItemClicked = -1;
     private boolean isSelectedFromHistory = false;
 
-    public static FragmentPaymentChargeNewUi newInstance() {
-        return new FragmentPaymentChargeNewUi();
+    public static PaymentChargeFragment newInstance() {
+        return new PaymentChargeFragment();
     }
 
-    public FragmentPaymentChargeNewUi() {
+    public PaymentChargeFragment() {
 
         amountList.add(new Amount(10000));
         amountList.add(new Amount(20000));

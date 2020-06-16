@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBinding;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
-import net.iGap.fragments.payment.FragmentPaymentChargeNewUi;
 import net.iGap.fragments.payment.FragmentPaymentInternet;
+import net.iGap.fragments.payment.PaymentChargeFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -87,7 +87,7 @@ public class FragmentPayment extends BaseFragment {
 
         fragmentPaymentViewModel.goToPaymentCharge.observe(getViewLifecycleOwner(), go -> {
             if (getActivity() != null && go != null && go) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaymentChargeNewUi.newInstance()).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), PaymentChargeFragment.newInstance()).setReplace(false).load();
             }
         });
 
