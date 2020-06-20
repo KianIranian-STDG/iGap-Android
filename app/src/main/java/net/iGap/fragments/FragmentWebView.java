@@ -239,6 +239,15 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
         return false;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (webView != null) {
+            webView.destroy();
+        }
+    }
+
     private class CustomWebViewClient extends WebViewClient {
 
         public boolean isWebViewVisible = true;
