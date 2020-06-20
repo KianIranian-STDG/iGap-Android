@@ -17,7 +17,7 @@ public class ActivityManageSpace extends ActivityEnhanced {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(ActivityManageSpaceViewModel.class);
-
+        ActivityMain.isStoragePage = false;
         setContentView(R.layout.activity_manage_space);
 
         viewModel.setFragment(getSupportFragmentManager().getBackStackEntryCount());
@@ -35,7 +35,6 @@ public class ActivityManageSpace extends ActivityEnhanced {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {

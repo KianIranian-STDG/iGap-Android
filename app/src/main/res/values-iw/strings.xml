@@ -2338,5 +2338,6 @@
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
-    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
+    <string name="payment_userScore">سیزین پوءنینز</string>
+    <string name="Increase_score">بو لحظه د پوءنینزی \nآرترین!</string>
 </resources>
