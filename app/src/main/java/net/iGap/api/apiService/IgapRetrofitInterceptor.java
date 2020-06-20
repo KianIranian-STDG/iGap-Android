@@ -45,7 +45,6 @@ public class IgapRetrofitInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request original = chain.request();
         Request request = chain.request();
 
         // start of checking for custom time outs
@@ -74,7 +73,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
         builder.header("Authorization", tokenContainer.getToken());
         builder.header("spec", getSpecifications());
         builder.header("Content-Type", "application/json");
-        builder.method(original.method(), original.body());
+        builder.method(request.method(), request.body());
 
         String token = tokenContainer.getToken();
 

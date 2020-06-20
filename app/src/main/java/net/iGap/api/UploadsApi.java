@@ -5,15 +5,17 @@ import net.iGap.model.UploadData;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import okhttp3.RequestBody;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Streaming;
 
@@ -34,7 +36,8 @@ public interface UploadsApi {
             IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",
             IgapRetrofitInterceptor.WRITE_TIMEOUT + ":20000"})
     @POST("upload/{token}")
-    Single<ResponseBody> uploadData(@Path("token") String token, @Body RequestBody image);
+    @Multipart
+    Single<ResponseBody> uploadData(@Path("token") String token, @Part MultipartBody.Part body, @Header("Content-Type") String content_type);
 
     @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":20000",
             IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",

@@ -25,10 +25,11 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import shadow.org.apache.commons.io.FilenameUtils;
 
@@ -36,17 +37,19 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
 
     private UploadsApi apiService;
     private OnUploadListener listener;
-    private String identity;
+    public String identity;
     private String token = "";
     private String roomID;
     private ProtoGlobal.RoomMessageType uploadType;
     private File file;
 
-    private Disposable uploadDisposable;
+    private CompositeDisposable uploadDisposable;
     private RequestBody requestBody;
 
     private FileChannel fileChannel;
     private RandomAccessFile randomAccessFile;
+
+    private int progressValue = 0;
 
     private static final String TAG = "UploadApiTask http";
 
@@ -112,6 +115,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
 
     private void getUploadInfoServer(boolean isResume) {
         long size = ((file.length() / 16 + 1) * 16) + 16;
+        Log.d(TAG, "getUploadInfoServer: " + file.length() + " " + size);
         new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(size),
                 FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()), roomID),
                 this, new ResponseCallback<UploadData>() {
@@ -145,20 +149,25 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     }
 
     private void uploadFile(boolean isResume, int offset) {
+        uploadDisposable = new CompositeDisposable();
+
         Flowable<Double> uploadFlow = Flowable.create(emitter -> {
             try {
-                apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter)).blockingGet();
+                apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
+                        MediaType.parse(getMimeType(file.getAbsolutePath())).toString()).blockingGet();
                 emitter.onComplete();
             } catch (Exception e) {
                 emitter.tryOnError(e);
             }
         }, BackpressureStrategy.LATEST);
-        uploadDisposable = uploadFlow.subscribeOn(Schedulers.computation())
+
+        uploadDisposable.add(uploadFlow.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<Double>() {
                     @Override
                     public void onNext(Double progress) {
-                        listener.onProgress(identity, progress.intValue());
+                        progressValue = progress.intValue();
+                        listener.onProgress(identity, progressValue);
                     }
 
                     @Override
@@ -183,7 +192,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                             notify();
                         }
                     }
-                });
+                }));
     }
 
     public void cancelUpload() {
@@ -192,9 +201,12 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         }
     }
 
-    private RequestBody createMultipartBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
+    private MultipartBody.Part createMultipartBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
         File file = new File(filePath);
-        return createCountingRequestBody(isResume, file, offset, emitter);
+        Log.d(TAG, "createMultipartBody: start");
+        MultipartBody.Part temp = MultipartBody.Part.createFormData("upload", file.getName(), createCountingRequestBody(isResume, file, offset, emitter));
+        Log.d(TAG, "createMultipartBody: end");
+        return temp;
     }
 
     private RequestBody createRequestBody(boolean isResume, File file, int offset) {
@@ -202,7 +214,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
             return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), file);
         else {
             try {
-                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileChannel, offset, ((int) file.length()));
+                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileChannel, 0, ((int) file.length()));
                 return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), bytes, offset, (int) file.length());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -223,6 +235,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     private RequestBody createCountingRequestBody(boolean isResume, File file, int offset, FlowableEmitter<Double> emitter) {
         RequestBody requestBody = createRequestBody(isResume, file, offset);
         return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
+            Log.d(TAG, "callback progress: " + bytesWritten + " " + contentLength);
             HelperDataUsage.progressUpload(bytesWritten, uploadType);
             double progress = (1.0 * (bytesWritten) / ((int) file.length())) * 100;
             emitter.onNext(progress);
@@ -232,5 +245,9 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     @Override
     public void onHandShake() {
 
+    }
+
+    public int getProgressValue() {
+        return progressValue;
     }
 }

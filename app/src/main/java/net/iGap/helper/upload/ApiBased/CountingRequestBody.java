@@ -1,5 +1,7 @@
 package net.iGap.helper.upload.ApiBased;
 
+import android.util.Log;
+
 import net.iGap.G;
 import net.iGap.module.AESCrypt;
 
@@ -26,7 +28,9 @@ public class CountingRequestBody extends RequestBody {
 
     private RequestBody delegate;
     private Listener listener;
-    private boolean addIV = false;
+    private boolean addIV = true;
+
+    private static final String TAG = "RequestBody http";
 
     public CountingRequestBody(RequestBody delegate) {
         this.delegate = delegate;
@@ -45,12 +49,14 @@ public class CountingRequestBody extends RequestBody {
 
     @Override
     public MediaType contentType() {
+        Log.d(TAG, "contentType: " + delegate.contentType().toString());
         return delegate.contentType(); //MediaType.parse("application/octet-stream");
     }
 
     @Override
     public long contentLength() {
         try {
+            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + (((delegate.contentLength() / 16 + 1) * 16) + 16));
             if (addIV)
                 return ((delegate.contentLength() / 16 + 1) * 16) + 16;
             else
@@ -63,12 +69,14 @@ public class CountingRequestBody extends RequestBody {
 
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
+        Log.d(TAG, "writeTo: entry");
         CountingSink countingSink = new CountingSink(sink);
         BufferedSink bufferedSink = Okio.buffer(countingSink);
 
-        delegate.writeTo(bufferedSink.buffer());
+        delegate.writeTo(bufferedSink);
 
         bufferedSink.flush();
+        Log.d(TAG, "writeTo: end");
     }
 
     final class CountingSink extends ForwardingSink {
@@ -81,18 +89,16 @@ public class CountingRequestBody extends RequestBody {
 
         @Override
         public void write(@NonNull Buffer source, long byteCount) throws IOException {
-
+            Log.d(TAG, "write: forward sink: " + source.size() + " " + byteCount);
             try {
                 long bytesToRead = Math.min(source.size(), byteCount);
 
                 byte[] mainByteArray = source.readByteArray(bytesToRead);
                 byte[] encryptedByteArray = null;
-                if (addIV) {
+                encryptedByteArray = AESCrypt.encryptUpload(G.symmetricKey, mainByteArray, addIV);
+                Log.d(TAG, "write: encrypt " + mainByteArray.length + " " + encryptedByteArray.length + " " + addIV);
+                if (addIV)
                     addIV = false;
-                    encryptedByteArray = AESCrypt.encryptUpload(G.symmetricKey, mainByteArray, true);
-                } else {
-                    encryptedByteArray = AESCrypt.encryptUpload(G.symmetricKey, mainByteArray, false);
-                }
                 Buffer encryptedSink = new Buffer();
                 encryptedSink.write(encryptedByteArray);
                 bytesWritten += bytesToRead;
