@@ -1449,7 +1449,7 @@
     <string name="Select">انتخاب</string>
     <string name="Create_new_Folder_here">در اینجا یک پوشه جدید ایجاد کنید</string>
     <string name="Powered_by_iGap">طراحی شده توسط آیگپ</string>
-    <string name="on_hold">call on hold...</string>
+    <string name="on_hold">تماس در حال انتظار است...</string>
     <string name="switchTo">switch To :</string>
     <string name="stop">توقف</string>
     <string name="stop_message_bot">آیا مطمئن هستید که میخواهید ربات را متوقف کنید؟</string>
