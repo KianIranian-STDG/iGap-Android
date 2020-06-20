@@ -2239,5 +2239,6 @@
     <string name="credit_sim">سیمکارت اعتباری</string>
     <string name="save_internet_package_dialog">آیا بسته خریده شده ذخیره شود؟</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
-    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
+    <string name="payment_userScore">Ton score</string>
+    <string name="Increase_score">Augmentez votre score \n dès maintenant!</string>
 </resources>

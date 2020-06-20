@@ -173,6 +173,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static OnBackPressedListener onBackPressedListener;
     private static long oldTime;
     public static boolean isUseCamera = false;
+    public static boolean isStoragePage = true;
     public static boolean waitingForConfiguration = false;
     private SharedPreferences sharedPreferences;
     private TextView iconLock;
@@ -1227,12 +1228,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
-        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera && isStoragePage) {
             enterPassword();
         } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
-            long oldTime = sharedPreferences.getLong(SHP_SETTING.KEY_OLD_TIME,0);
+            long oldTime = sharedPreferences.getLong(SHP_SETTING.KEY_OLD_TIME, 0);
             long calculatorTimeLock = currentTime - oldTime;
 
             if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {

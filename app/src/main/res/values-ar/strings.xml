@@ -3266,6 +3266,6 @@
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="mic">Mic</string>
     <string name="hold">Hold</string>
-
-    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
+    <string name="payment_userScore">درجاتك</string>
+    <string name="Increase_score">زيادة درجاتك الآن!</string>
 </resources>
