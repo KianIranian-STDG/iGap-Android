@@ -10,10 +10,12 @@ import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.model.UploadData;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +54,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     private int progressValue = 0;
 
     private static final String TAG = "UploadApiTask http";
+
+    private boolean isEncryptionActive = false;
 
     public UploadApiTask(String identity, String roomID, File file, ProtoGlobal.RoomMessageType uploadType, OnUploadListener listener) {
         this.listener = listener;
@@ -114,38 +118,81 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     }
 
     private void getUploadInfoServer(boolean isResume) {
-        long size = ((file.length() / 16 + 1) * 16) + 16;
+
+        long size = 0;
+        if (isEncryptionActive)
+            size = ((file.length() / 16 + 1) * 16) + 16;
+        else
+            size = file.length();
+
         Log.d(TAG, "getUploadInfoServer: " + file.length() + " " + size);
-        new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(size),
-                FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()), roomID),
-                this, new ResponseCallback<UploadData>() {
-                    @Override
-                    public void onSuccess(UploadData data) {
-                        if (!isResume)
-                            token = data.getToken();
-                        int uploadedSize = Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize());
-                        if (file.length() - uploadedSize > 0) {
-                            uploadFile(isResume, uploadedSize);
-                            listener.onProgress(identity, uploadedSize / ((int) file.length()) * 100);
-                        }
-                    }
+        if (!isEncryptionActive) {
+            Log.d(TAG, "getUploadInfoServer: in V2 init");
+            long finalSize = size;
+            DbManager.getInstance().doRealmTask(realm -> {
+                new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(finalSize),
+                        FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
+                        roomID, String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())),
+                        this, new ResponseCallback<UploadData>() {
+                            @Override
+                            public void onSuccess(UploadData data) {
+                                if (!isResume)
+                                    token = data.getToken();
+                                int uploadedSize = Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize());
+                                if (file.length() - uploadedSize > 0) {
+                                    uploadFile(isResume, uploadedSize);
+                                    listener.onProgress(identity, uploadedSize / ((int) file.length()) * 100);
+                                }
+                            }
 
-                    @Override
-                    public void onError(String error) {
-                        listener.onError(identity);
-                        synchronized (this) {
-                            notify();
-                        }
-                    }
+                            @Override
+                            public void onError(String error) {
+                                listener.onError(identity);
+                                synchronized (this) {
+                                    notify();
+                                }
+                            }
 
-                    @Override
-                    public void onFailed() {
-                        listener.onError(identity);
-                        synchronized (this) {
-                            notify();
+                            @Override
+                            public void onFailed() {
+                                listener.onError(identity);
+                                synchronized (this) {
+                                    notify();
+                                }
+                            }
+                        });
+            });
+        } else
+            new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(size),
+                    FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()), roomID, null),
+                    this, new ResponseCallback<UploadData>() {
+                        @Override
+                        public void onSuccess(UploadData data) {
+                            if (!isResume)
+                                token = data.getToken();
+                            int uploadedSize = Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize());
+                            if (file.length() - uploadedSize > 0) {
+                                uploadFile(isResume, uploadedSize);
+                                listener.onProgress(identity, uploadedSize / ((int) file.length()) * 100);
+                            }
                         }
-                    }
-                });
+
+                        @Override
+                        public void onError(String error) {
+                            listener.onError(identity);
+                            synchronized (this) {
+                                notify();
+                            }
+                        }
+
+                        @Override
+                        public void onFailed() {
+                            listener.onError(identity);
+                            synchronized (this) {
+                                notify();
+                            }
+                        }
+                    });
     }
 
     private void uploadFile(boolean isResume, int offset) {
@@ -153,9 +200,19 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
 
         Flowable<Double> uploadFlow = Flowable.create(emitter -> {
             try {
-                apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
-                        MediaType.parse(getMimeType(file.getAbsolutePath())).toString()).blockingGet();
-                emitter.onComplete();
+                if (!isEncryptionActive) {
+                    Log.d(TAG, "getUploadInfoServer: in V2 upload");
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
+                                MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),
+                                String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())).blockingGet();
+                        emitter.onComplete();
+                    });
+                } else {
+                    apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
+                            MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).blockingGet();
+                    emitter.onComplete();
+                }
             } catch (Exception e) {
                 emitter.tryOnError(e);
             }

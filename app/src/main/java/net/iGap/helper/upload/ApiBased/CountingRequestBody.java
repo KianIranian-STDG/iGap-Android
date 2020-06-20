@@ -30,6 +30,8 @@ public class CountingRequestBody extends RequestBody {
     private Listener listener;
     private boolean addIV = true;
 
+    private boolean isEncryptionActive = false;
+
     private static final String TAG = "RequestBody http";
 
     public CountingRequestBody(RequestBody delegate) {
@@ -56,7 +58,9 @@ public class CountingRequestBody extends RequestBody {
     @Override
     public long contentLength() {
         try {
-            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + (((delegate.contentLength() / 16 + 1) * 16) + 16));
+            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + (((delegate.contentLength() / 16 + 1) * 16) + 16) + " " + isEncryptionActive);
+            if (!isEncryptionActive)
+                return delegate.contentLength();
             if (addIV)
                 return ((delegate.contentLength() / 16 + 1) * 16) + 16;
             else
@@ -95,7 +99,10 @@ public class CountingRequestBody extends RequestBody {
 
                 byte[] mainByteArray = source.readByteArray(bytesToRead);
                 byte[] encryptedByteArray = null;
-                encryptedByteArray = AESCrypt.encryptUpload(G.symmetricKey, mainByteArray, addIV);
+                if (isEncryptionActive)
+                    encryptedByteArray = AESCrypt.encryptUpload(G.symmetricKey, mainByteArray, addIV);
+                else
+                    encryptedByteArray = mainByteArray;
                 Log.d(TAG, "write: encrypt " + mainByteArray.length + " " + encryptedByteArray.length + " " + addIV);
                 if (addIV)
                     addIV = false;

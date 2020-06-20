@@ -30,14 +30,18 @@ public interface UploadsApi {
                                 @Field("size") String fileSize,
                                 @Field("name") String fileName,
                                 @Field("extension") String fileExtension,
-                                @Field("room_id") String roomID);
+                                @Field("room_id") String roomID,
+                                @Header(IgapRetrofitInterceptor.USER_ID) String userID);
 
     @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":20000",
             IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",
             IgapRetrofitInterceptor.WRITE_TIMEOUT + ":20000"})
     @POST("upload/{token}")
     @Multipart
-    Single<ResponseBody> uploadData(@Path("token") String token, @Part MultipartBody.Part body, @Header("Content-Type") String content_type);
+    Single<ResponseBody> uploadData(@Path("token") String token,
+                                    @Part MultipartBody.Part body,
+                                    @Header("Content-Type") String content_type,
+                                    @Header(IgapRetrofitInterceptor.USER_ID) String userID);
 
     @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":20000",
             IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",

@@ -35,6 +35,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
     public static final String CONNECT_TIMEOUT = "CONNECT_TIMEOUT";
     public static final String READ_TIMEOUT = "READ_TIMEOUT";
     public static final String WRITE_TIMEOUT = "WRITE_TIMEOUT";
+    public static final String USER_ID = "userid";
 
     private TokenContainer tokenContainer = TokenContainer.getInstance();
 
