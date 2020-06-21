@@ -28,7 +28,7 @@ public class CountingRequestBody extends RequestBody {
 
     private RequestBody delegate;
     private Listener listener;
-    private boolean addIV = true;
+    private boolean addIV = false;
 
     private boolean isEncryptionActive = false;
 

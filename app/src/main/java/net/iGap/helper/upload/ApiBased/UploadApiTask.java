@@ -7,6 +7,7 @@ import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.model.UploadData;
 import net.iGap.module.AndroidUtils;
@@ -140,7 +141,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                                     token = data.getToken();
                                 int uploadedSize = Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize());
                                 if (file.length() - uploadedSize > 0) {
-                                    uploadFile(isResume, uploadedSize);
+//                                    uploadFile(isResume, uploadedSize);
+                                    uploadFileWithReqBody(isResume, uploadedSize);
                                     listener.onProgress(identity, uploadedSize / ((int) file.length()) * 100);
                                 }
                             }
@@ -172,7 +174,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                                 token = data.getToken();
                             int uploadedSize = Integer.parseInt(data.getUploadedSize() == null ? "0" : data.getUploadedSize());
                             if (file.length() - uploadedSize > 0) {
-                                uploadFile(isResume, uploadedSize);
+//                                uploadFile(isResume, uploadedSize);
+                                uploadFileWithReqBody(isResume, uploadedSize);
                                 listener.onProgress(identity, uploadedSize / ((int) file.length()) * 100);
                             }
                         }
@@ -230,6 +233,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                     @Override
                     public void onError(Throwable t) {
                         listener.onError(identity);
+                        HelperError.showSnackMessage("fail", true);
                         synchronized (this) {
                             notify();
                         }
@@ -245,6 +249,66 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                         HelperDataUsage.increaseUploadFiles(uploadType);
                         listener.onProgress(identity, 100);
                         listener.onFinish(identity, token);
+                        HelperError.showSnackMessage("finish", true);
+                        synchronized (this) {
+                            notify();
+                        }
+                    }
+                }));
+    }
+
+    private void uploadFileWithReqBody(boolean isResume, int offset) {
+        uploadDisposable = new CompositeDisposable();
+
+        Flowable<Double> uploadFlow = Flowable.create(emitter -> {
+            try {
+                if (!isEncryptionActive) {
+                    Log.d(TAG, "getUploadInfoServer: in V2 upload");
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        apiService.uploadDataReqBody(token, createReqBody(isResume, file.getAbsolutePath(), offset, emitter),
+                                MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),
+                                String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())).blockingGet();
+                        emitter.onComplete();
+                    });
+                } else {
+                    apiService.uploadDataReqBody(token, createReqBody(isResume, file.getAbsolutePath(), offset, emitter),
+                            MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).blockingGet();
+                    emitter.onComplete();
+                }
+            } catch (Exception e) {
+                emitter.tryOnError(e);
+            }
+        }, BackpressureStrategy.LATEST);
+
+        uploadDisposable.add(uploadFlow.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<Double>() {
+                    @Override
+                    public void onNext(Double progress) {
+                        progressValue = progress.intValue();
+                        listener.onProgress(identity, progressValue);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        listener.onError(identity);
+                        HelperError.showSnackMessage("fail", true);
+                        synchronized (this) {
+                            notify();
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        try {
+                            closeFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        HelperDataUsage.increaseUploadFiles(uploadType);
+                        listener.onProgress(identity, 100);
+                        listener.onFinish(identity, token);
+                        HelperError.showSnackMessage("finish", true);
                         synchronized (this) {
                             notify();
                         }
@@ -264,6 +328,11 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         MultipartBody.Part temp = MultipartBody.Part.createFormData("upload", file.getName(), createCountingRequestBody(isResume, file, offset, emitter));
         Log.d(TAG, "createMultipartBody: end");
         return temp;
+    }
+
+    private RequestBody createReqBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
+        File file = new File(filePath);
+        return createCountingRequestBody(isResume, file, offset, emitter);
     }
 
     private RequestBody createRequestBody(boolean isResume, File file, int offset) {
