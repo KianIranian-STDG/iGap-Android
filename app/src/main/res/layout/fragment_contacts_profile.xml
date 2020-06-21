@@ -634,12 +634,20 @@
 
                 <TextView
                     android:id="@+id/toolbar_txt_name_expanded"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="left"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:gravity="left|center_horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/standardTextSize" />
+
 
                 <TextView
                     android:id="@+id/toolbar_txt_status_expanded"
