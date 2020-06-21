@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 import net.iGap.module.structs.StructListOfContact;
 
-public class ContactNumber {
+public class ContactNumber implements Comparable<ContactNumber> {
     public String contactNumber;
     public String firstName;
     public String lastName;
@@ -64,5 +64,13 @@ public class ContactNumber {
             return this.contactNumber.equals(((StructListOfContact) obj).phone);
         }
         return super.equals(obj);
+    }
+
+    @Override
+    public int compareTo(ContactNumber that) {
+        if (getDisplayName().compareTo(that.getDisplayName()) == 0)
+            return getPhone().compareTo(that.getPhone());
+        else
+            return getDisplayName().compareTo(that.getDisplayName());
     }
 }
