@@ -41,9 +41,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentContactsProfileBinding;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
@@ -51,11 +48,14 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoUserReport;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientMuteRoom;
@@ -192,6 +192,7 @@ public class FragmentContactsProfile extends BaseFragment {
             if (name != null) {
                 binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
                 binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
+                binding.toolbarTxtNameExpanded.setSelected(true);
             }
         });
 
