@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ChargeContactNumberAdapter extends RecyclerView.Adapter<ChargeContactNumberAdapter.HistoryNumberViewHolder> {
@@ -47,19 +46,7 @@ public class ChargeContactNumberAdapter extends RecyclerView.Adapter<ChargeConta
         if (contactNumbers == null || contactNumbers.size() == 0)
             return;
 
-        Collections.sort(contactNumbers, (o1, o2) -> o1.getDisplayName().compareTo(o2.getDisplayName()));
-        if (this.contactNumbers == null)
-            this.contactNumbers = new ArrayList<>();
-
-        this.contactNumbers.clear();
-        int lastIndex = 0;
-        this.contactNumbers.add(contactNumbers.get(lastIndex));
-        for (int i = 1; i < contactNumbers.size(); i++) {
-            if (!contactNumbers.get(lastIndex).getDisplayName().equals(contactNumbers.get(i).getDisplayName())) {
-                lastIndex = i;
-                this.contactNumbers.add(contactNumbers.get(lastIndex));
-            }
-        }
+        this.contactNumbers = contactNumbers;
     }
 
     @NonNull

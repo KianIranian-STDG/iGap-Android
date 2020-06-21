@@ -14,17 +14,15 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nostra13.universalimageloader.utils.L;
 
-import net.iGap.adapter.payment.ContactNumber;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
@@ -32,6 +30,7 @@ import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.RealmResults;
@@ -458,6 +457,89 @@ public class Contacts {
         }
     }
 
+    private List<ContactNumber> getContactNumbers() {
+        List<ContactNumber> result = new ArrayList<>();
+
+        ContentResolver cr = G.context.getContentResolver();
+        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+        try (Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, sortOrder)) {
+            if (cur != null && cur.getCount() > 0) {
+                while (cur.moveToNext()) {
+                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{id}, null);
+                        while (pCur != null && pCur.moveToNext()) {
+                            String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                            ContactNumber contactNumber = normalizeContact(name, phoneNo);
+                            if (contactNumber != null)
+                                result.add(contactNumber);
+                        }
+                        if (pCur != null)
+                            pCur.close();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return normalizeList(result);
+    }
+
+    private List<ContactNumber> normalizeList(List<ContactNumber> contactNumbers) {
+        List<ContactNumber> result = new ArrayList<>();
+        Collections.sort(contactNumbers);
+
+        int lastIndex = 0;
+        result.add(contactNumbers.get(lastIndex));
+        for (int i = 1; i < contactNumbers.size(); i++) {
+            if (!contactNumbers.get(lastIndex).getDisplayName().equals(contactNumbers.get(i).getDisplayName())
+                    || !contactNumbers.get(lastIndex).getPhone().equals(contactNumbers.get(i).getPhone())) {
+                lastIndex = i;
+                result.add(contactNumbers.get(lastIndex));
+            }
+        }
+        return result;
+    }
+
+    private ContactNumber normalizeContact(String name, String phone) {
+        ContactNumber contactNumber = new ContactNumber();
+        try {
+            if (phone != null && name != null) {
+                String[] sp = name.split(" ");
+                if (sp.length == 1) {
+                    contactNumber.setFirstName(sp[0]);
+                    contactNumber.setLastName("");
+                    contactNumber.setPhone(normalizePhoneNumber(phone));
+                    contactNumber.setDisplayName(name);
+                } else if (sp.length == 2) {
+                    contactNumber.setFirstName(sp[0]);
+                    contactNumber.setLastName(sp[1]);
+                    contactNumber.setPhone(normalizePhoneNumber(phone));
+                    contactNumber.setDisplayName(name);
+                } else if (sp.length == 3) {
+                    contactNumber.setFirstName(sp[0]);
+                    contactNumber.setLastName(sp[1] + " " + sp[2]);
+                    contactNumber.setPhone(normalizePhoneNumber(phone));
+                    contactNumber.setDisplayName(name);
+                } else if (sp.length >= 3) {
+                    contactNumber.setFirstName(name);
+                    contactNumber.setLastName("");
+                    contactNumber.setPhone(normalizePhoneNumber(phone));
+                    contactNumber.setDisplayName(name);
+                }
+                return contactNumber;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void getAllPhoneContactForPayment(Delegate delegate) {
         if (!HelperPermission.grantedContactPermission()) {
             return;
@@ -468,47 +550,7 @@ public class Contacts {
             return;
         }
 
-        String[] projectionPhones = {
-                ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.TYPE,
-                ContactsContract.CommonDataKinds.Phone.LABEL,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                ContactsContract.RawContacts.ACCOUNT_TYPE,
-        };
-
-        ArrayList<ContactNumber> contactNumbers = new ArrayList<>();
-        ContentResolver cr = G.context.getContentResolver();
-
-        try {
-            Cursor pCur = null;
-            pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, projectionPhones, null, null, null);
-
-            if (pCur != null) {
-                int count = pCur.getCount();
-
-                if (count > 0) {
-                    ContactNumber contactNumber = null;
-                    String displayName;
-                    String number;
-
-                    while (pCur.moveToNext()) {
-                        number = pCur.getString(1);
-                        displayName = pCur.getString(4);
-                        contactNumber = new ContactNumber();
-                        checkContactsNumberData(displayName, number, contactNumber, contactNumbers);
-                    }
-                }
-                pCur.close();
-            }
-
-            if (delegate != null) {
-                delegate.onResult(contactNumbers);
-            }
-
-        } catch (Exception e) {
-            //nothing
-        }
+        delegate.onResult(getContactNumbers());
     }
 
     public interface Delegate {
@@ -517,41 +559,6 @@ public class Contacts {
 
     public Delegate getDelegate() {
         return delegate;
-    }
-
-    private static void checkContactsNumberData(String name, String phone, ContactNumber itemContact, List<ContactNumber> list) {
-
-        try {
-            if (phone != null && name != null) {
-                String[] sp = name.split(" ");
-                if (sp.length == 1) {
-                    itemContact.setFirstName(sp[0]);
-                    itemContact.setLastName("");
-                    phone = normalizePhoneNumber(phone);
-                    itemContact.setPhone(phone);
-                    itemContact.setDisplayName(name);
-                } else if (sp.length == 2) {
-                    itemContact.setFirstName(sp[0]);
-                    itemContact.setLastName(sp[1]);
-                    itemContact.setPhone(phone);
-                    itemContact.setDisplayName(name);
-                } else if (sp.length == 3) {
-                    itemContact.setFirstName(sp[0]);
-                    itemContact.setLastName(sp[1] + " " + sp[2]);
-                    itemContact.setPhone(phone);
-                    itemContact.setDisplayName(name);
-                } else if (sp.length >= 3) {
-                    itemContact.setFirstName(name);
-                    itemContact.setLastName("");
-                    itemContact.setPhone(phone);
-                    itemContact.setDisplayName(name);
-                }
-
-                list.add(itemContact);
-            }
-        } catch (Exception e) {
-            //nothing
-        }
     }
 
     private static String normalizePhoneNumber(String phone) {
