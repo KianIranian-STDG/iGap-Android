@@ -1251,6 +1251,7 @@ public class FragmentChat extends BaseFragment
 
         G.onSetAction = null;
         G.onUpdateUserStatusInChangePage = null;
+        G.onUserUpdateStatus = null;
 
         removeRoomAccessChangeListener();
     }
