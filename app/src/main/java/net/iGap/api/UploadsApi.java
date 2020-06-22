@@ -42,13 +42,16 @@ public interface UploadsApi {
     @Multipart
     Single<ResponseBody> uploadData(@Path("token") String token,
                                     @Part MultipartBody.Part body,
-                                    @Header("Content-Type") String content_type,
+                                    @Header("Content-Extension") String content_type,
                                     @Header(IgapRetrofitInterceptor.USER_ID) String userID);
 
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":20000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":20000"})
     @POST("upload/{token}")
     Single<ResponseBody> uploadDataReqBody(@Path("token") String token,
                                            @Body RequestBody image,
-                                           @Header("Content-Type") String content_type,
+                                           @Header("Content-Extension") String content_type,
                                            @Header(IgapRetrofitInterceptor.USER_ID) String userID);
 
 

@@ -56,7 +56,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
 
     private static final String TAG = "UploadApiTask http";
 
-    private boolean isEncryptionActive = false;
+    private boolean isEncryptionActive = true;
 
     public UploadApiTask(String identity, String roomID, File file, ProtoGlobal.RoomMessageType uploadType, OnUploadListener listener) {
         this.listener = listener;
@@ -206,13 +206,13 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                 if (!isEncryptionActive) {
                     Log.d(TAG, "getUploadInfoServer: in V2 upload");
                     DbManager.getInstance().doRealmTask(realm -> {
-                        apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
+                        apiService.uploadData(token, createWithMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
                                 MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),
                                 String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())).blockingGet();
                         emitter.onComplete();
                     });
                 } else {
-                    apiService.uploadData(token, createMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
+                    apiService.uploadData(token, createWithMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
                             MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).blockingGet();
                     emitter.onComplete();
                 }
@@ -265,13 +265,13 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                 if (!isEncryptionActive) {
                     Log.d(TAG, "getUploadInfoServer: in V2 upload");
                     DbManager.getInstance().doRealmTask(realm -> {
-                        apiService.uploadDataReqBody(token, createReqBody(isResume, file.getAbsolutePath(), offset, emitter),
+                        apiService.uploadDataReqBody(token, createWithRequestBody(isResume, file.getAbsolutePath(), offset, emitter),
                                 MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),
                                 String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())).blockingGet();
                         emitter.onComplete();
                     });
                 } else {
-                    apiService.uploadDataReqBody(token, createReqBody(isResume, file.getAbsolutePath(), offset, emitter),
+                    apiService.uploadDataReqBody(token, createWithRequestBody(isResume, file.getAbsolutePath(), offset, emitter),
                             MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).blockingGet();
                     emitter.onComplete();
                 }
@@ -322,7 +322,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         }
     }
 
-    private MultipartBody.Part createMultipartBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
+    private MultipartBody.Part createWithMultipartBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
         File file = new File(filePath);
         Log.d(TAG, "createMultipartBody: start");
         MultipartBody.Part temp = MultipartBody.Part.createFormData("upload", file.getName(), createCountingRequestBody(isResume, file, offset, emitter));
@@ -330,12 +330,12 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         return temp;
     }
 
-    private RequestBody createReqBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
+    private RequestBody createWithRequestBody(boolean isResume, String filePath, int offset, FlowableEmitter<Double> emitter) {
         File file = new File(filePath);
         return createCountingRequestBody(isResume, file, offset, emitter);
     }
 
-    private RequestBody createRequestBody(boolean isResume, File file, int offset) {
+    private RequestBody initRequestBody(boolean isResume, File file, int offset) {
         if (!isResume)
             return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), file);
         else {
@@ -359,9 +359,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     }
 
     private RequestBody createCountingRequestBody(boolean isResume, File file, int offset, FlowableEmitter<Double> emitter) {
-        RequestBody requestBody = createRequestBody(isResume, file, offset);
+        RequestBody requestBody = initRequestBody(isResume, file, offset);
         return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
-            Log.d(TAG, "callback progress: " + bytesWritten + " " + contentLength);
             HelperDataUsage.progressUpload(bytesWritten, uploadType);
             double progress = (1.0 * (bytesWritten) / ((int) file.length())) * 100;
             emitter.onNext(progress);

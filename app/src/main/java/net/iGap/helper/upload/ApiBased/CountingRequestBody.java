@@ -28,9 +28,9 @@ public class CountingRequestBody extends RequestBody {
 
     private RequestBody delegate;
     private Listener listener;
-    private boolean addIV = false;
+    private boolean addIV = true;
 
-    private boolean isEncryptionActive = false;
+    private boolean isEncryptionActive = true;
 
     private static final String TAG = "RequestBody http";
 
@@ -51,20 +51,21 @@ public class CountingRequestBody extends RequestBody {
 
     @Override
     public MediaType contentType() {
-        Log.d(TAG, "contentType: " + delegate.contentType().toString());
-        return delegate.contentType(); //MediaType.parse("application/octet-stream");
+        return delegate.contentType();
     }
 
     @Override
     public long contentLength() {
         try {
-            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + (((delegate.contentLength() / 16 + 1) * 16) + 16) + " " + isEncryptionActive);
+            long size = 0;
             if (!isEncryptionActive)
-                return delegate.contentLength();
+                size = delegate.contentLength();
             if (addIV)
-                return ((delegate.contentLength() / 16 + 1) * 16) + 16;
+                size = ((delegate.contentLength() / 16 + 1) * 16) + 16;
             else
-                return ((delegate.contentLength() / 16 + 1) * 16);
+                size = ((delegate.contentLength() / 16 + 1) * 16);
+            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + size + " " + isEncryptionActive);
+            return size;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,6 +87,7 @@ public class CountingRequestBody extends RequestBody {
     final class CountingSink extends ForwardingSink {
 
         private long bytesWritten = 0;
+        private boolean addIV = true;
 
         CountingSink(Sink delegate) {
             super(delegate);
@@ -93,7 +95,7 @@ public class CountingRequestBody extends RequestBody {
 
         @Override
         public void write(@NonNull Buffer source, long byteCount) throws IOException {
-            Log.d(TAG, "write: forward sink: " + source.size() + " " + byteCount);
+            Log.d(TAG, "write: forward sink: **encrypt: " + isEncryptionActive + " **IV: " + addIV);
             try {
                 long bytesToRead = Math.min(source.size(), byteCount);
 
@@ -103,12 +105,13 @@ public class CountingRequestBody extends RequestBody {
                     encryptedByteArray = AESCrypt.encryptUpload(G.symmetricKey, mainByteArray, addIV);
                 else
                     encryptedByteArray = mainByteArray;
-                Log.d(TAG, "write: encrypt " + mainByteArray.length + " " + encryptedByteArray.length + " " + addIV);
+                Log.d(TAG, "write: **source " + mainByteArray.length + " **encrypt " + encryptedByteArray.length);
                 if (addIV)
                     addIV = false;
                 Buffer encryptedSink = new Buffer();
                 encryptedSink.write(encryptedByteArray);
-                bytesWritten += bytesToRead;
+                bytesWritten += encryptedByteArray.length;
+                Log.d(TAG, "write: **totalWrite " + bytesWritten);
                 listener.onRequestProgress(bytesWritten, 0);
                 super.write(encryptedSink, encryptedSink.size());
 
