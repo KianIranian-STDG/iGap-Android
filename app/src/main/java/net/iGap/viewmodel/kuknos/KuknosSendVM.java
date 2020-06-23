@@ -182,7 +182,7 @@ public class KuknosSendVM extends BaseAPIViewModel {
             kuknosSendM.setDest(walletIdResponse.get());
         else
             kuknosSendM.setDest(walletID.get());
-        kuknosSendM.setAssetCode(balanceInfoM.getAssetCode());
+        kuknosSendM.setAssetCode(this.balanceInfoM.getAsset().getType().equals("native") ? "PMN" : this.balanceInfoM.getAssetCode());
         kuknosSendM.setAssetInssuer(balanceInfoM.getAssetIssuer());
         kuknosSendM.setMemo("TRANSFER: " + (text.get() == null ? "" : text.get()));
 
