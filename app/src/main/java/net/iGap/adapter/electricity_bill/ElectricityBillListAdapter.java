@@ -149,25 +149,33 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
 
                 if (bill.get(position).getBillType().equals("ELECTRICITY")) {
                     logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_elc_pec));
-                    if (HelperCalander.isPersianUnicode) {
-                        billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalElectricityBillDebt())))
-                                + " " + context.getResources().getString(R.string.rial));
-                        billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getBillID()));
-                    } else {
-                        billPrice.setText(df.format(Integer.parseInt(debit.getTotalElectricityBillDebt()))
-                                + " " + context.getResources().getString(R.string.rial));
-                        billID.setText(bill.get(position).getBillID());
+                    try {
+                        if (HelperCalander.isPersianUnicode) {
+                            billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalElectricityBillDebt())))
+                                    + " " + context.getResources().getString(R.string.rial));
+                            billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getBillID()));
+                        } else {
+                            billPrice.setText(df.format(Integer.parseInt(debit.getTotalElectricityBillDebt()))
+                                    + " " + context.getResources().getString(R.string.rial));
+                            billID.setText(bill.get(position).getBillID());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 } else {
                     logo.setImageDrawable(context.getResources().getDrawable(R.drawable.bill_gaz_pec));
-                    if (HelperCalander.isPersianUnicode) {
-                        billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalGasBillDebt())))
-                                + " " + context.getResources().getString(R.string.rial));
-                        billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getSubscriptionCode()));
-                    } else {
-                        billPrice.setText(df.format(Integer.parseInt(debit.getTotalGasBillDebt()))
-                                + " " + context.getResources().getString(R.string.rial));
-                        billID.setText(bill.get(position).getSubscriptionCode());
+                    try {
+                        if (HelperCalander.isPersianUnicode) {
+                            billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalGasBillDebt())))
+                                    + " " + context.getResources().getString(R.string.rial));
+                            billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getSubscriptionCode()));
+                        } else {
+                            billPrice.setText(df.format(Integer.parseInt(debit.getTotalGasBillDebt()))
+                                    + " " + context.getResources().getString(R.string.rial));
+                            billID.setText(bill.get(position).getSubscriptionCode());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -243,15 +251,19 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                         e.printStackTrace();
                     }
                 } else {
-                    billID.setText(debit.getLastTerm().getBillID());
-                    billPayID.setText(debit.getLastTerm().getPayID());
-                    billPayID2.setText(debit.getMidTerm().getPayID());
-                    billPrice.setText(df.format(Integer.parseInt(debit.getLastTerm().getAmount()))
-                            + " " + context.getResources().getString(R.string.rial));
-                    billTime.setText(df.format(Integer.parseInt(debit.getMidTerm().getAmount()))
-                            + " " + context.getResources().getString(R.string.rial));
-                    billPhone.setText((bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + "-"))
-                            + bill.get(position).getPhoneNumber());
+                    try {
+                        billID.setText(debit.getLastTerm().getBillID());
+                        billPayID.setText(debit.getLastTerm().getPayID());
+                        billPayID2.setText(debit.getMidTerm().getPayID());
+                        billPrice.setText(df.format(Integer.parseInt(debit.getLastTerm().getAmount()))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billTime.setText(df.format(Integer.parseInt(debit.getMidTerm().getAmount()))
+                                + " " + context.getResources().getString(R.string.rial));
+                        billPhone.setText((bill.get(position).getAreaCode() == null ? "" : (bill.get(position).getAreaCode() + "-"))
+                                + bill.get(position).getPhoneNumber());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 if (bill.get(position).getBillType().equals("MOBILE_MCI"))
