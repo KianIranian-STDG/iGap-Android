@@ -2577,7 +2577,7 @@
     <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
     <string name="kuknos_parsianTerms_title">قوانین و مقررات پارسیان</string>
     <string name="kuknos_parsianTerms_desc">برای ادامه و استفاده از خدمات کیف پول ققنوس پارسیان، شما باید تغییرات زیر در مفاد قرارداد پارسیان و ققنوس را تایید کنید.</string>
-    <string name="kuknos_parsianTerms_term1">من به آدرس شرکت پارسیان که در ادامه ذکر شده است رای میدهم. \nکلید عمومی: GALOLMASACBA6PGXV6DOJ7O42OAJS7XJLNG6EYEE2KTXZO2KTYAJWVFD</string>
+    <string name="kuknos_parsianTerms_term1">من به آدرس شرکت پارسیان که در ادامه ذکر شده است رای میدهم. \nکلید عمومی: GAG75QOJLNDST4G7TDGHX6RVJAZJ2IOMRS4BJK4EVKYQYCKILXB5JVJ6</string>
     <string name="kuknos_parsianTerms_term2">من موافقت میکنم تا آدرس دامنه پارسیان که در ادامه ذکر شده است به عنوان دامنه اصلی کیف پول من تنظیم شود. \nآدرس: https://www.pdpco.ir</string>
     <string name="kuknos_parsianTerms_term3">من به ایجاد کننده توکن SKYC اعتماد دارم.</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">اگه شما مایل به ادامه و استفاده از امکانات کیف پول پارسیان هستید، باید تمامی مفاد را تایید کنید.</string>
