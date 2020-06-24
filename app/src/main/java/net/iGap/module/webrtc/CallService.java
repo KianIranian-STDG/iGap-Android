@@ -360,16 +360,14 @@ public class CallService extends Service implements CallManager.CallStateChange 
         Intent endIntent = new Intent(this, CallActionsReceiver.class);
         endIntent.setAction(ACTION_DECLINE_CALL);
         endIntent.putExtra("callerId", callerInfo.getUserId());
-        CharSequence endTitle = getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon);
         PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.addAction(R.drawable.ic_call_notif_decline, endTitle, endPendingIntent);
+        builder.addAction(R.drawable.ic_call_notif_decline, "End call", endPendingIntent);
 
         Intent answerIntent = new Intent(this, CallActionsReceiver.class);
         answerIntent.setAction(ACTION_ANSWER_CALL);
         answerIntent.putExtra("callerId", callerInfo.getUserId());
-        CharSequence answerTitle = getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon);
         PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.addAction(R.drawable.ic_call_notif_answer, answerTitle, answerPendingIntent);
+        builder.addAction(R.drawable.ic_call_notif_answer, "Answer call", answerPendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             builder.setShowWhen(false);
