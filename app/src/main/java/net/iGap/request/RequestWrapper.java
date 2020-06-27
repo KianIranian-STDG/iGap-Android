@@ -10,6 +10,8 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnResponse;
+
 public class RequestWrapper {
 
     public long time = 0;
@@ -17,16 +19,21 @@ public class RequestWrapper {
     protected int actionId;
     private Object protoObject;
     private String randomId;
+    private OnResponse onResponse;
 
     public RequestWrapper(int actionId, Object protoObject, Object identity) {
+        this(actionId, protoObject, identity, null);
+    }
+
+    public RequestWrapper(int actionId, Object protoObject, Object identity, OnResponse onResponse) {
         this.actionId = actionId;
         this.protoObject = protoObject;
         this.identity = identity;
+        this.onResponse = onResponse;
     }
 
     public RequestWrapper(int actionId, Object protoObject) {
-        this.actionId = actionId;
-        this.protoObject = protoObject;
+        this(actionId, protoObject, null, null);
     }
 
     public int getActionId() {
@@ -67,5 +74,9 @@ public class RequestWrapper {
 
     public void setRandomId(String randomId) {
         this.randomId = randomId;
+    }
+
+    public OnResponse getOnResponse() {
+        return onResponse;
     }
 }
