@@ -118,7 +118,6 @@ import net.iGap.observers.interfaces.OnPayment;
 import net.iGap.observers.interfaces.OnUpdating;
 import net.iGap.observers.interfaces.OnUserInfoMyClient;
 import net.iGap.observers.interfaces.OnVerifyNewDevice;
-import net.iGap.observers.interfaces.OneFragmentIsOpen;
 import net.iGap.observers.interfaces.OpenFragment;
 import net.iGap.observers.interfaces.RefreshWalletBalance;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -512,13 +511,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             if (G.twoPaneMode) {
                 G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-                G.oneFragmentIsOpen = new OneFragmentIsOpen() {
-                    @Override
-                    public void justOne() {
-
-                    }
-                };
 
                 designLayout(chatLayoutMode.none);
                 setDialogFragmentSize();

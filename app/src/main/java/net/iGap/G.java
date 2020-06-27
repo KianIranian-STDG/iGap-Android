@@ -203,7 +203,6 @@ public class G extends ApplicationContext {
     public static OnUserContactDelete onUserContactdelete;
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
     public static OnClientGetRoomResponse onClientGetRoomResponse;
-    public static OnInquiry onInquiry;
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
@@ -359,7 +358,6 @@ public class G extends ApplicationContext {
     public static ISignalingCallBack iSignalingCallBack;
     @Deprecated
     public static ISignalingErrore iSignalingErrore;
-    public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCodeG.backgroundTheme

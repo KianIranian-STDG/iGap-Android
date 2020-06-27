@@ -63,10 +63,6 @@ public class BaseFragment extends SwipeBackFragment {
 
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
 
-        if (G.oneFragmentIsOpen != null) {
-            G.oneFragmentIsOpen.justOne();
-        }
-
         getSwipeBackLayout().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -97,9 +93,6 @@ public class BaseFragment extends SwipeBackFragment {
     public void onDetach() {
         super.onDetach();
 
-        if (G.oneFragmentIsOpen != null) {
-            G.oneFragmentIsOpen.justOne();
-        }
         hideKeyboard();
         if (getActivity() != null) {
             //Todo : check logic and fixed this
