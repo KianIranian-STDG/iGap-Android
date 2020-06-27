@@ -42,8 +42,6 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
             return;
         }
 
-        G.jwt = builder.getAccessToken();
-
         auth.save();
         G.handler.postDelayed(new Runnable() {
             @Override
