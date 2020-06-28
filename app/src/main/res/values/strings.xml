@@ -2316,7 +2316,7 @@ Want to get it?</string>
     <string name="kuknos_AddAsset_nullEntry">This asset can NOT be added.</string>
     <string name="kuknos_parsianTerms_title">Parsian Terms And Conditions</string>
     <string name="kuknos_parsianTerms_desc">To proceed and using Parsian kuknos wallet, the following changes must be applied in compliance with the kuknos terms of services.</string>
-    <string name="kuknos_parsianTerms_term1">I vote to Kuknos inc which has this address: GALOLMASACBA6PGXV6DOJ7O42OAJS7XJLNG6EYEE2KTXZO2KTYAJWVFD</string>
+    <string name="kuknos_parsianTerms_term1">I vote to Kuknos inc which has this address: GAG75QOJLNDST4G7TDGHX6RVJAZJ2IOMRS4BJK4EVKYQYCKILXB5JVJ6</string>
     <string name="kuknos_parsianTerms_term2">I set https://pdpco.ir as the home domain of my wallet</string>
     <string name="kuknos_parsianTerms_term3">I have trust to the issuer of SKYC</string>
     <string name="kuknos_parsianTerms_errorTermAndCondition">If you would like to continue, please accept all terms and conditions</string>
