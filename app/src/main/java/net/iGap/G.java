@@ -14,7 +14,6 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Environment;
@@ -84,7 +83,6 @@ public class G extends ApplicationContext {
     public static final String VIDEOS = "/iGap Videos";
     public static final String AUDIOS = "/iGap Audios";
     public static final String MESSAGES = "/iGap Messages";
-    //public static Realm mRealm;
     public static final String DOCUMENT = "/iGap Document";
     public static final String TEMP = "/.temp";
     public static final String CHAT_BACKGROUND = "/.chat_background";
@@ -95,9 +93,6 @@ public class G extends ApplicationContext {
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;
-    @Deprecated
-    public static boolean isVideoCallRinging = false;
-    //public static OnRejectCallStatus onRejectCallStatus;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
@@ -137,15 +132,12 @@ public class G extends ApplicationContext {
     public static String selectedLanguage = null;
     public static String symmetricMethod;
     public static Ipromote ipromote;
-    //    public static String menuBackgroundColor;
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
-    public static boolean isUserStatusOnline = false;
     public static boolean isSecure = false;
     public static boolean userLogin = false;
     public static boolean canRunReceiver = false;
-    public static boolean firstTimeEnterToApp = true; // use this field for get room list
     public static boolean firstEnter = true;
     public static boolean isSaveToGallery = false;
     public static boolean hasNetworkBefore;
@@ -153,8 +145,6 @@ public class G extends ApplicationContext {
     public static boolean latestMobileDataState;
     public static boolean showVoteChannelLayout = true;
     public static boolean showSenderNameInGroup = false;
-    @Deprecated
-    public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
     public static boolean isUpdateNotificaionColorMain = false;
     public static boolean isUpdateNotificaionColorChannel = false;
@@ -166,9 +156,7 @@ public class G extends ApplicationContext {
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
     public static boolean isLinkClicked = false;
-    public static boolean isWalletRegister = false;
     public static int themeColor;
-    public static String selectedTabInMainActivity = "";
     public static int ivSize;
     public static int userTextSize = 0;
     public static int COPY_BUFFER_SIZE = 1024;
@@ -189,15 +177,8 @@ public class G extends ApplicationContext {
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnConnectionChangeStateChat onConnectionChangeStateChat;
     public static OnUpdating onUpdating;
-    /*public static OnReceiveInfoLocation onReceiveInfoLocation;*/
-    /*public static OnUserRegistration onUserRegistration;*/
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;
-    /*public static OnUserVerification onUserVerification;*/
     public static OnUserLogin onUserLogin;
-    /*public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;*/
-    /*public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;*/
-    public static OnUserProfileSetNickNameResponse onUserProfileSetNickNameResponse;
-    /*public static OnInfoCountryResponse onInfoCountryResponse;*/
     public static OnInfoTime onInfoTime;
     public static OnUserContactEdit onUserContactEdit;
     public static OnUserContactDelete onUserContactdelete;
@@ -209,13 +190,9 @@ public class G extends ApplicationContext {
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatDelete onChatDelete;
     public static OnChatSendMessage onChatSendMessage;
-    //    public static OnUserUsernameToId onUserUsernameToId;
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;
     public static OnGroupAddMember onGroupAddMember;
-    //    public static OnGroupClearMessage onGroupClearMessage;
-    /*public static OnGroupEdit onGroupEdit;*/
-//    public static OnGroupKickMember onGroupKickMember;
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
@@ -225,8 +202,6 @@ public class G extends ApplicationContext {
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
-    /*public static OnUserProfileCheckUsername onUserProfileCheckUsername;*/
-    /*public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;*/
     public static OnGroupGetMemberList onGroupGetMemberList;
     public static OnGroupDelete onGroupDelete;
     public static OpenFragment onConvertToGroup;
@@ -239,24 +214,17 @@ public class G extends ApplicationContext {
     public static OnSetActionInRoom onSetActionInRoom;
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;
-    /*public static OnUserSessionLogout onUserSessionLogout;*/
-    //    public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
     public static OnChannelCreate onChannelCreate;
     public static OnChannelDelete onChannelDelete;
     public static OnChannelLeft onChannelLeft;
     public static OnChannelAddMember onChannelAddMember;
     public static OnChannelGetMemberList onChannelGetMemberList;
-    /*public static OnChannelEdit onChannelEdit;*/
     public static OnChannelAvatarAdd onChannelAvatarAdd;
     public static OnChannelAvatarDelete onChannelAvatarDelete;
     public static OnChannelCheckUsername onChannelCheckUsername;
-    /*public static OnGroupCheckUsername onGroupCheckUsername;*/
-    /*public static OnGroupUpdateUsername onGroupUpdateUsername;*/
     public static OnChannelUpdateUsername onChannelUpdateUsername;
     public static OnGroupAvatarDelete onGroupAvatarDelete;
-    /*public static OnRefreshActivity onRefreshActivity;*/
-    //    public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
     public static OnStickerDownloaded onStickerDownloaded;
     public static OnStickerDownload onStickerDownload;
@@ -273,40 +241,21 @@ public class G extends ApplicationContext {
     public static OnClientResolveUsername onClientResolveUsername;
     public static OnClientSubscribeToRoom onClientSubscribeToRoom;
     public static OnClientUnsubscribeFromRoom onClientUnsubscribeFromRoom;
-    /*public static OnGroupRemoveUsername onGroupRemoveUsername;*/
-    /*public static OnGroupRevokeLink onGroupRevokeLink;*/
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
     public static OnGetWallpaper onGetProfileWallpaper;
-    /*public static OnTwoStepPassword onTwoStepPassword;*/
-    /*public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;*/
-    /*public static OnSecurityCheckPassword onSecurityCheckPassword;*/
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static OnRecoveryEmailToken onRecoveryEmailToken;
-    /*public static OnQrCodeNewDevice onQrCodeNewDevice;*/
     public static OnVerifyNewDevice onVerifyNewDevice;
     public static OnPushLoginToken onPushLoginToken;
     public static OnPushTwoStepVerification onPushTwoStepVerification;
     public static IClientSearchUserName onClientSearchUserName;
-    @Deprecated
-    public static OnCallLeaveView onCallLeaveView;
-    @Deprecated
-    public static OnVideoCallFrame onVideoCallFrame;
-    @Deprecated
-    public static ICallFinish iCallFinishChat;
-    @Deprecated
-    public static ICallFinish iCallFinishMain;
-    //    public static IMainFinish iMainFinish;
-//    public static IActivityFinish iActivityFinish;
     public static OnBlockStateChanged onBlockStateChanged;
     public static OnContactsGetList onContactsGetList;
-    //public static OnCallLogClear onCallLogClear;
     public static OnMapUsersGet onMapUsersGet;
     public static OnPinedMessage onPinedMessage;
-    //    public static OnSelectMenu onSelectMenu;
-//    public static OnRemoveFragment onRemoveFragment;
     public static OnChatDeleteInRoomList onChatDeleteInRoomList;
     public static OnGroupDeleteInRoomList onGroupDeleteInRoomList;
     public static OnChannelDeleteInRoomList onChannelDeleteInRoomList;
@@ -339,42 +288,15 @@ public class G extends ApplicationContext {
     public static OnVersionCallBack onVersionCallBack;
     public static OnContactImport onContactImport;
     public static OnMplTransaction onMplTransaction;
-    public static OnMplTransactionInfo onMplTransactionInfo;
-    /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
-    @Deprecated
-    public static ISignalingOffer iSignalingOffer;
-    @Deprecated
-    public static ISignalingRinging iSignalingRinging;
-    @Deprecated
-    public static ISignalingAccept iSignalingAccept;
-    @Deprecated
-    public static ISignalingCandidate iSignalingCandidate;
-    @Deprecated
-    public static ISignalingLeave iSignalingLeave;
-    @Deprecated
-    public static ISignalingSessionHold iSignalingSessionHold;
     public static ISignalingGetCallLog iSignalingGetCallLog;
-    @Deprecated
-    public static ISignalingCallBack iSignalingCallBack;
-    @Deprecated
-    public static ISignalingErrore iSignalingErrore;
+    public static OnMplTransactionInfo onMplTransactionInfo;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCodeG.backgroundTheme
     public static boolean isTimeWhole = false;
     public static Account iGapAccount;
     public static Card selectedCard = null;
-    public static long cardamount;
-    /*public static boolean isBluetoothConnected = false;
-    public static boolean isHandsFreeConnected = false;*/
-    /*public static SpeakerControlListener speakerControlListener;*/
-    @Deprecated
-    public static VideoCallListener videoCallListener;
     public static RefreshWalletBalance refreshWalletBalance;
-    @Deprecated
-    public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
-    @Deprecated
-    public static boolean isWebRtcConnected = false;
     public static boolean isDepricatedApp = false;
     public static int rotationState;
     public static int mainRingerMode = 0;
@@ -388,14 +310,6 @@ public class G extends ApplicationContext {
     public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();
 
     public static String downloadDirectoryPath;
-
-    private static int makeColorTransparent100(String color) {
-        if (color.length() == 9) {
-            return Color.parseColor("#FF" + color.substring(3));
-        } else {
-            return Color.parseColor(color);
-        }
-    }
 
     public static void refreshRealmUi() {
         if (Looper.myLooper() == Looper.getMainLooper()) {

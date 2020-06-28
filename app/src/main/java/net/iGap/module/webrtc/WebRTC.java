@@ -16,7 +16,6 @@ import android.os.Build;
 import android.util.Log;
 
 import net.iGap.G;
-import net.iGap.activities.ActivityCall;
 import net.iGap.helper.IGLog;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -505,7 +504,6 @@ public class WebRTC {
 
     public void close() {
         Log.d(TAG, "close: ");
-        ActivityCall.allowOpenCall = false;
         try {
 
             if (videoCapturer != null) {

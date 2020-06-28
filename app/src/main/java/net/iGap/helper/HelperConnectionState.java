@@ -34,9 +34,6 @@ public class HelperConnectionState {
 
         if (connectionState != ConnectionState.IGAP) {
             CallManager.getInstance().leaveCall();
-            if (G.onCallLeaveView != null) {
-                G.onCallLeaveView.onLeaveView("SocketDisconnect");
-            }
         }
 
 
@@ -84,13 +81,6 @@ public class HelperConnectionState {
 
                 if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                     message = G.context.getResources().getString(R.string.waiting_for_network);
-
-                    if (G.iCallFinishChat != null) {
-                        G.iCallFinishChat.onFinish();
-                    }
-                    if (G.iCallFinishMain != null) {
-                        G.iCallFinishMain.onFinish();
-                    }
 
                 } else if (G.connectionState == ConnectionState.CONNECTING) {
                     message = G.context.getResources().getString(R.string.connecting);
