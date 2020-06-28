@@ -401,6 +401,9 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private void showInCallNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
+        if (callerInfo == null)
+            return;
+
         Log.i(TAG, "showInCallNotification: " + callerInfo.getName());
 
         Intent intent = new Intent(this, CallActivity.class);
@@ -416,7 +419,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
             builder.setPriority(Notification.PRIORITY_MAX);
             Intent endIntent = new Intent(this, CallActionsReceiver.class);
             endIntent.setAction(ACTION_END_CALL);
-            NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_call_notif_decline, "End Call", PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            NotificationCompat.Action action = new NotificationCompat.Action(0, "End Call", PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             builder.addAction(action);
         }
 
@@ -434,7 +437,9 @@ public class CallService extends Service implements CallManager.CallStateChange 
             builder.setLargeIcon(getAvatarBitmap());
         }
 
-        startForeground(ID_SERVICE_NOTIFICATION, builder.build());
+        Notification notification = builder.build();
+
+        startForeground(ID_SERVICE_NOTIFICATION, notification);
     }
 
     private Bitmap getAvatarBitmap() {

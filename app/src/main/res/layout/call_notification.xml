@@ -14,7 +14,7 @@
         android:layout_toRightOf="@+id/iv_app_icon"
         android:gravity="center"
         android:text="iGap secure call"
-        android:textSize="@dimen/verySmallTextSize" />
+        android:textSize="10dp" />
 
     <LinearLayout
         android:id="@+id/ll_info"
@@ -43,7 +43,7 @@
             android:layout_marginTop="6dp"
             android:textColor="#4c4c4c"
             android:text="@string/video_calls"
-            android:textSize="@dimen/smallTextSize" />
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/tv_call_account"
@@ -52,7 +52,7 @@
             android:layout_marginTop="6dp"
             android:textColor="#4c4c4c"
             android:text="abolfazl abbasi"
-            android:textSize="@dimen/smallTextSize" />
+            android:textSize="12dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_info"
-        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:baselineAligned="false"
         android:weightSum="2">

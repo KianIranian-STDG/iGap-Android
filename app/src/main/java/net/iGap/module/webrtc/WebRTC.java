@@ -56,7 +56,7 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private static String TAG = "WebRTC ";
+    private static String TAG = "iGapCall WebRTC ";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 1920;
