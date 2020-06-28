@@ -216,7 +216,6 @@ public class AccountManager {
         RequestClientGetRoomList.isPendingGetRoomList = false;
         FragmentMain.mOffset = 0;
         G.serverHashContact = null;
-        G.jwt = null;
         G.selectedCard = null;
         G.nationalCode = null;
         G.pullRequestQueueRunned = new AtomicBoolean(false);
