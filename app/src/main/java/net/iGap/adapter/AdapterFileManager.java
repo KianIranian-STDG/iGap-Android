@@ -18,8 +18,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hanks.library.AnimateCheckBox;
-
 import net.iGap.R;
 import net.iGap.module.customView.CheckBox;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
@@ -74,7 +72,11 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         }
 
         if(rowItem.nameStr == null) {
-            holder.txtTitle.setText(rowItem.name);
+            try {
+                holder.txtTitle.setText(rowItem.name);
+            } catch (Exception e) {
+                holder.txtTitle.setText(holder.imageView.getContext().getResources().getString(R.string.unknown));
+            }
         }else {
             holder.txtTitle.setText(rowItem.nameStr);
         }
@@ -82,7 +84,11 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         if (rowItem.descriptionStr != null) {
             holder.txtSubtitle.setText(rowItem.descriptionStr);
         } else {
-            holder.txtSubtitle.setText(rowItem.description);
+            try {
+                holder.txtSubtitle.setText(rowItem.description);
+            } catch (Exception e) {
+                holder.txtSubtitle.setText(holder.imageView.getContext().getResources().getString(R.string.unknown));
+            }
         }
 
         holder.itemView.setOnClickListener(view -> {
