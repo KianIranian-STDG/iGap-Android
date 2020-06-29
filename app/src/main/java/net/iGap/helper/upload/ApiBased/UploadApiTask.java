@@ -47,7 +47,6 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
     private File file;
 
     private CompositeDisposable uploadDisposable;
-    private RequestBody requestBody;
 
     private FileChannel fileChannel;
     private RandomAccessFile randomAccessFile;
@@ -71,8 +70,8 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
         this(message.getMessageId() + "", String.valueOf(message.getRoomId()), new File(message.getAttachment().getLocalFilePath()), message.getMessageType(), onUploadListener);
     }
 
-    public UploadApiTask(RealmRoomMessage message, String compressedPass, OnUploadListener onUploadListener) {
-        this(message.getMessageId() + "", String.valueOf(message.getRoomId()), new File(compressedPass), message.getMessageType(), onUploadListener);
+    public UploadApiTask(RealmRoomMessage message, String compressedPath, OnUploadListener onUploadListener) {
+        this(message.getMessageId() + "", String.valueOf(message.getRoomId()), new File(compressedPath), message.getMessageType(), onUploadListener);
     }
 
     @Override

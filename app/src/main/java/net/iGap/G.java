@@ -42,6 +42,7 @@ import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.IGLog;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
@@ -537,6 +538,7 @@ public class G extends ApplicationContext {
             IGLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
             IGLog.i("------------------- CLIENT INFO -------------------");
         }
+        UploadWorkerManager.initial(getApplicationContext());
     }
 
     @Override

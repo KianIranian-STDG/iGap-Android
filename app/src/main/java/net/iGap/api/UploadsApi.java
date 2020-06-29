@@ -54,6 +54,15 @@ public interface UploadsApi {
                                            @Header("Content-Extension") String content_type,
                                            @Header(IgapRetrofitInterceptor.USER_ID) String userID);
 
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":20000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":20000"})
+    @POST("upload/{token}")
+    Call<ResponseBody> uploadDataReqBodyCall(@Path("token") String token,
+                                             @Body RequestBody image,
+                                             @Header("Content-Extension") String content_type,
+                                             @Header(IgapRetrofitInterceptor.USER_ID) String userID);
+
 
     @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":20000",
             IgapRetrofitInterceptor.READ_TIMEOUT + ":20000",
