@@ -60,5 +60,5 @@ public interface UploadsApi {
             IgapRetrofitInterceptor.WRITE_TIMEOUT + ":20000"})
     @Streaming
     @GET("download/{token}")
-    Observable<ResponseBody> downloadData(@Path("token") String token);
+    Observable<ResponseBody> downloadData(@Path("token") String token, @Header("userid") String userId);
 }

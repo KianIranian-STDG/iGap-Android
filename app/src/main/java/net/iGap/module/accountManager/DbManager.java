@@ -89,7 +89,7 @@ public class DbManager {
 
     public void doRealmTransaction(RealmTransaction realmTransaction) {
         if (BuildConfig.DEBUG && Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException("running transaction in ui thread !!!!!!");
+//            throw new IllegalStateException("running transaction in ui thread !!!!!!");
         }
 
         DbManager.getInstance().doRealmTask(realm -> {
@@ -130,7 +130,7 @@ public class DbManager {
 
     public void doRealmTransaction(RealmTransaction realmTransaction, long userId) {
         if (BuildConfig.DEBUG && Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException("running transaction in ui thread !!!!!!");
+//            throw new IllegalStateException("running transaction in ui thread !!!!!!");
         }
 
         DbManager.getInstance().doRealmTask(realm -> {
