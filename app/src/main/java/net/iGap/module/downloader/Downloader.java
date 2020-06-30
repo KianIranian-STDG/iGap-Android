@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 
-import net.iGap.api.UploadsApi;
-import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -19,7 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Downloader implements Observer<Pair<Request, Downloader.DownloadStatus>> {
     private static Downloader instance;
-    private UploadsApi uploadsApi;
     private Queue<Request> requestsQueue;
     private List<Request> inProgressRequests;
     private AtomicInteger inProgressCount = new AtomicInteger(0);
@@ -39,7 +36,6 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
     private Downloader() {
         requestsQueue = new PriorityBlockingQueue<>();
         inProgressRequests = new ArrayList<>();
-        uploadsApi = new RetrofitFactory().getUploadRetrofit();
     }
 
     public String download(@NonNull RealmRoomMessage message,
@@ -56,7 +52,7 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
 
         Request existedRequest = findExistedRequest(Request.generateRequestId(message, selector));
         if (existedRequest == null) {
-            existedRequest = new Request(uploadsApi, message, selector, priority);
+            existedRequest = new Request(message, selector, priority);
             existedRequest.setDownloadStatusObserver(this);
             requestsQueue.add(existedRequest);
             scheduleNewDownload();
