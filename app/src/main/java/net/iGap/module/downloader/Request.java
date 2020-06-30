@@ -1,6 +1,7 @@
 package net.iGap.module.downloader;
 
 import android.os.Handler;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -8,7 +9,8 @@ import androidx.annotation.WorkerThread;
 import androidx.lifecycle.Observer;
 
 import net.iGap.G;
-import net.iGap.api.UploadsApi;
+import net.iGap.api.DownloadApi;
+import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 import net.iGap.realm.RealmAttachment;
@@ -22,7 +24,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
@@ -39,24 +43,24 @@ public class Request implements IProgress, Comparable<Request> {
     private volatile boolean isDownloaded;
     private File tempFile;
     private File downloadedFile;
-    private UploadsApi uploadsApi;
+    private DownloadApi downloadApi;
     private int progress;
     private long size;
     private long offset;
-    private Disposable disposable = null;
     private Handler handler;
     private int priority = PRIORITY.PRIORITY_DEFAULT;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    protected Request(UploadsApi uploadsApi, RealmRoomMessage message, Selector selector, int priority) {
-        this(uploadsApi, message, selector);
+    protected Request(RealmRoomMessage message, Selector selector, int priority) {
+        this(message, selector);
         this.priority = priority;
     }
 
-    private Request(UploadsApi uploadsApi, RealmRoomMessage message, Selector selector) {
+    private Request(RealmRoomMessage message, Selector selector) {
         handler = new Handler();
         this.selector = selector;
         this.message = message;
-        this.uploadsApi = uploadsApi;
+        this.downloadApi = new RetrofitFactory().getDownloadRetrofit(this);
         observers = new ArrayList<>();
         requestId = generateRequestId();
 
@@ -135,10 +139,26 @@ public class Request implements IProgress, Comparable<Request> {
         }
         isDownloading = true;
         notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
-        disposable = uploadsApi.downloadData("114c97d1-fdb2-47b6-98d4-80e7b6720698", String.valueOf(message.getUserId()))
+        Disposable disposable = downloadApi.downloadData("114c97d1-fdb2-47b6-98d4-80e7b6720698", String.valueOf(message.getUserId()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::saveDelegate, this::onError);
+        addToCompositeDisposable(disposable);
+    }
+
+    private void saveDelegate(ResponseBody responseBody) {
+        Disposable disposable = Flowable.just(responseBody)
+                .observeOn(Schedulers.io())
                 .subscribe(this::saveInTemp, this::onError);
+
+        addToCompositeDisposable(disposable);
+    }
+
+    private void addToCompositeDisposable(Disposable disposable) {
+        if (compositeDisposable == null)
+            compositeDisposable = new CompositeDisposable();
+
+        compositeDisposable.add(disposable);
     }
 
     @WorkerThread
@@ -151,11 +171,6 @@ public class Request implements IProgress, Comparable<Request> {
             while ((count = is.read(data)) != -1) {
                 os.write(data, 0, count);
                 offset += count;
-
-                int p = (int) ((offset * 100) / (double) size);
-                if (progress < p) {
-                    onProgress(p);
-                }
             }
             onDownloadCompleted();
             os.flush();
@@ -203,15 +218,16 @@ public class Request implements IProgress, Comparable<Request> {
     }
 
     public void dispose() {
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
     }
 
     @Override
     public void onProgress(int progress) {
         this.progress = progress;
+        Log.i("downloadProgress", "onProgress: " + progress);
         handler.post(this::notifyObservers);
     }
 

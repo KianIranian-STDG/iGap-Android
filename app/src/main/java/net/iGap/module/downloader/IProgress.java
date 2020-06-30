@@ -1,6 +1,6 @@
 package net.iGap.module.downloader;
 
-interface IProgress {
+public interface IProgress {
     void onProgress(int progress);
 
     void onDownloadCompleted();
