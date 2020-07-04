@@ -3,6 +3,7 @@ package net.iGap.module.accountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +37,8 @@ public class AccountManager {
     private List<AccountUser> userAccountList;
     private List<String> DbNameList = Arrays.asList("iGapLocalDatabaseEncrypted3.realm", "iGapLocalDatabaseEncrypted2.realm", defaultDBName);
     private int currentUser;
+    public static int selectedAccount;
+    public static final int MAX_ACCOUNT_COUNT = 3;
 
     public static AccountManager getInstance() {
         if (ourInstance != null) {
@@ -60,6 +63,7 @@ public class AccountManager {
             accountUser.setDbName(getDbName());
             userAccountList.add(accountUser);
             currentUser = 0;
+            internalChange(currentUser);
         }
         getCurrentUserFromSharedPreferences();
         SharedPreferences sharedPreferences = context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
@@ -97,6 +101,7 @@ public class AccountManager {
 
     private void getCurrentUserFromSharedPreferences() {
         this.currentUser = sharedPreferences.getInt("currentUser", 0);
+        internalChange(currentUser);
     }
 
     private void getUserAccountListFromSharedPreferences() {
@@ -133,6 +138,7 @@ public class AccountManager {
         userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
         setUserAccountListInSharedPreferences();
         this.currentUser = userAccountList.size() - 1;
+        internalChange(currentUser);
         setCurrentUserInSharedPreferences();
     }
 
@@ -152,6 +158,7 @@ public class AccountManager {
     public void changeCurrentUserForAddAccount() {
         clearSomeStaticValue();
         currentUser = 0;
+        internalChange(currentUser);
     }
 
     public void changeCurrentUserAccount(long userId) {
@@ -159,6 +166,7 @@ public class AccountManager {
         int t = indexOfUser(userId);
         if (t != -1) {
             currentUser = t;
+            internalChange(currentUser);
             setCurrentUserInSharedPreferences();
         } else {
             throw new IllegalArgumentException("not exist this user");
@@ -182,6 +190,7 @@ public class AccountManager {
                 userAccountList.remove(accountUser);
                 clearSomeStaticValue();
                 currentUser = userAccountList.size() - 1;
+                internalChange(currentUser);
                 userAccountList.get(0).setDbName(getDbName());
                 userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
                 setCurrentUserInSharedPreferences();
@@ -227,6 +236,7 @@ public class AccountManager {
         } else {
             if (userAccountList.size() > 1) {
                 currentUser = userAccountList.size() - 1;
+                internalChange(currentUser);
                 setCurrentUser();
                 return userAccountList.get(userAccountList.size() - 1).isAssigned();
             } else {
@@ -240,5 +250,16 @@ public class AccountManager {
         G.handler.removeCallbacksAndMessages(null);
 
         signOutWallet();
+    }
+
+    private static void internalChange(int num) {
+        if (num > 0)
+            selectedAccount = num - 1;
+        else
+            selectedAccount = num;
+
+        Log.i("abbasiMultiAccount", "internalChange: " + num);
+        Log.i("abbasiMultiAccount", "selectedAccount: " + selectedAccount);
+        Log.i("abbasiMultiAccount", "----------------------------------------------------");
     }
 }
