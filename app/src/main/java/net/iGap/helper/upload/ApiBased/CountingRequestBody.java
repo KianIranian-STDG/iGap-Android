@@ -1,5 +1,6 @@
 package net.iGap.helper.upload.ApiBased;
 
+import android.util.Base64;
 import android.util.Log;
 
 import net.iGap.G;
@@ -29,20 +30,12 @@ public class CountingRequestBody extends RequestBody {
     private RequestBody delegate;
     private Listener listener;
     private boolean addIV = true;
+    long encryptSize = 0;
+    long originalSize = 0;
 
     private boolean isEncryptionActive = true;
 
     private static final String TAG = "RequestBody http";
-
-    public CountingRequestBody(RequestBody delegate) {
-        this.delegate = delegate;
-    }
-
-    public CountingRequestBody(RequestBody delegate, boolean addIV, Listener listener) {
-        this.delegate = delegate;
-        this.listener = listener;
-        this.addIV = addIV;
-    }
 
     public CountingRequestBody(RequestBody delegate, Listener listener) {
         this.delegate = delegate;
@@ -55,17 +48,41 @@ public class CountingRequestBody extends RequestBody {
     }
 
     @Override
-    public long contentLength() {
+    public long contentLength() throws IOException {
+        if (encryptSize != 0) {
+            Log.d(TAG, "contentLength inside: " + encryptSize);
+            return encryptSize;
+        }
+        return getSizeM2();
+    }
+
+    private long getSizeM2() {
         try {
-            long size = 0;
+            originalSize = delegate.contentLength();
             if (!isEncryptionActive)
-                size = delegate.contentLength();
+                encryptSize = delegate.contentLength();
             if (addIV)
-                size = ((delegate.contentLength() / 16 + 1) * 16) + 16;
+                encryptSize = delegate.contentLength() + 32;
             else
-                size = ((delegate.contentLength() / 16 + 1) * 16);
-            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + size + " " + isEncryptionActive);
-            return size;
+                encryptSize = delegate.contentLength() + 16;
+            Log.d(TAG, "contentLength2: " + delegate.contentLength() + " " + encryptSize + " " + isEncryptionActive);
+            return encryptSize;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    private long getSizeM1() {
+        try {
+            if (!isEncryptionActive)
+                encryptSize = delegate.contentLength();
+            if (addIV)
+                encryptSize = ((delegate.contentLength() / Long.valueOf("16") + 1) * 16) + 16;
+            else
+                encryptSize = ((delegate.contentLength() / 16 + 1) * 16);
+            Log.d(TAG, "contentLength: " + delegate.contentLength() + " " + encryptSize + " " + isEncryptionActive);
+            return encryptSize;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,6 +104,7 @@ public class CountingRequestBody extends RequestBody {
     final class CountingSink extends ForwardingSink {
 
         private long bytesWritten = 0;
+        private long originalBytesWritten = 0;
         private boolean addIV = true;
 
         CountingSink(Sink delegate) {
@@ -110,9 +128,14 @@ public class CountingRequestBody extends RequestBody {
                     addIV = false;
                 Buffer encryptedSink = new Buffer();
                 encryptedSink.write(encryptedByteArray);
+                Log.d(TAG, "write: " + Base64.encodeToString(encryptedByteArray, Base64.DEFAULT));
                 bytesWritten += encryptedByteArray.length;
-                Log.d(TAG, "write: **totalWrite " + bytesWritten);
-                listener.onRequestProgress(bytesWritten, 0);
+                originalBytesWritten += mainByteArray.length;
+                Log.d(TAG, "write: **totalWrite " + bytesWritten + " " + originalBytesWritten);
+                listener.onRequestProgress(bytesWritten, encryptSize);
+                if (originalBytesWritten == originalSize) {
+                    encryptSize = bytesWritten;
+                }
                 super.write(encryptedSink, encryptedSink.size());
 
             } catch (Exception e) {

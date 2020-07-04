@@ -18,8 +18,8 @@ public class CompressWorker extends Worker implements MediaController.OnPercentC
 
     private static final String PROGRESS = "PROGRESS";
     static final String COMPRESS_ID = "COMPRESS_ID";
-    static final String COMPRESS_ORIGINAL_PATH = "COMPRESS_ID";
-    static final String COMPRESS_NEW_PATH = "COMPRESS_ID";
+    static final String COMPRESS_ORIGINAL_PATH = "COMPRESS_ORIGINAL_PATH";
+    static final String COMPRESS_NEW_PATH = "COMPRESS_NEW_PATH";
 
     private static final String TAG = "Compress Worker http";
 

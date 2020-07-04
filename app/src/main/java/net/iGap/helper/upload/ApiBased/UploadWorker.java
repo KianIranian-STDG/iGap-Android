@@ -61,6 +61,7 @@ public class UploadWorker extends Worker {
         super(context, workerParams);
         this.apiService = new RetrofitFactory().getUploadRetrofit();
         onProgress = percent -> {
+            Log.d(TAG, "UploadWorker: " + percent);
             EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, identity, percent.intValue());
             setProgressAsync(new Data.Builder()
                     .putString(UPLOAD_IDENTITY, identity)
@@ -112,7 +113,8 @@ public class UploadWorker extends Worker {
 
         long size = 0;
         if (isEncryptionActive)
-            size = ((file.length() / 16 + 1) * 16) + 16;
+//            size = ((file.length() / 16 + 1) * 16) + 16;
+            size = file.length() + 32;
         else
             size = file.length();
 
@@ -120,12 +122,14 @@ public class UploadWorker extends Worker {
          * info is used if we want to send data without encryption
          */
         info = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmUserInfo.class).findFirst();
+            RealmUserInfo info = realm.where(RealmUserInfo.class).findFirst();
+            return realm.copyFromRealm(info);
         });
+
         try {
             Response<UploadData> response = apiService.initUpload(token, String.valueOf(size),
                     FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
-                    roomID, null).execute();
+                    roomID, /*String.valueOf(info.getUserId())*/null).execute();
             if (response.isSuccessful()) {
                 if (!isResume)
                     token = response.body().getToken();
@@ -156,8 +160,8 @@ public class UploadWorker extends Worker {
         Response<ResponseBody> response = null;
         try {
             response = apiService.uploadDataReqBodyCall(token,
-                    createWithRequestBody(isResume, file.getAbsolutePath(), offset),
-                    MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).execute();
+                    createWithRequestBody(isResume, file.getAbsolutePath(), offset)/*,
+                    MediaType.parse(getMimeType(file.getAbsolutePath())).toString()*/, null).execute();
         } catch (IOException e) {
             e.printStackTrace();
             return Result.failure(outputData);
@@ -214,7 +218,7 @@ public class UploadWorker extends Worker {
         RequestBody requestBody = initRequestBody(isResume, file, offset);
         return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
             HelperDataUsage.progressUpload(bytesWritten, uploadType);
-            double progress = (1.0 * (bytesWritten) / ((int) file.length())) * 100;
+            double progress = bytesWritten / contentLength * 100;
             onProgress.onUploadProgress(progress);
         });
     }

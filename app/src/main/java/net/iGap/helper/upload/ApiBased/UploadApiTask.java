@@ -206,13 +206,13 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                     Log.d(TAG, "getUploadInfoServer: in V2 upload");
                     DbManager.getInstance().doRealmTask(realm -> {
                         apiService.uploadData(token, createWithMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
-                                MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),
+                                /*MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),*/
                                 String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())).blockingGet();
                         emitter.onComplete();
                     });
                 } else {
                     apiService.uploadData(token, createWithMultipartBody(isResume, file.getAbsolutePath(), offset, emitter),
-                            MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).blockingGet();
+                            /*MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),*/ null).blockingGet();
                     emitter.onComplete();
                 }
             } catch (Exception e) {
@@ -265,13 +265,13 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                     Log.d(TAG, "getUploadInfoServer: in V2 upload");
                     DbManager.getInstance().doRealmTask(realm -> {
                         apiService.uploadDataReqBody(token, createWithRequestBody(isResume, file.getAbsolutePath(), offset, emitter),
-                                MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),
+                                /*MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),*/
                                 String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())).blockingGet();
                         emitter.onComplete();
                     });
                 } else {
                     apiService.uploadDataReqBody(token, createWithRequestBody(isResume, file.getAbsolutePath(), offset, emitter),
-                            MediaType.parse(getMimeType(file.getAbsolutePath())).toString(), null).blockingGet();
+                            /*MediaType.parse(getMimeType(file.getAbsolutePath())).toString(),*/ null).blockingGet();
                     emitter.onComplete();
                 }
             } catch (Exception e) {

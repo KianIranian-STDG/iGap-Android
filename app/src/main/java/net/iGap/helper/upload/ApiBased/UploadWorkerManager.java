@@ -8,7 +8,6 @@ import androidx.collection.ArrayMap;
 import androidx.work.BackoffPolicy;
 import androidx.work.Constraints;
 import androidx.work.Data;
-import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
@@ -71,9 +70,9 @@ public class UploadWorkerManager {
 //                .build());
 
         constraints = new Constraints.Builder()
-                .setRequiresBatteryNotLow(true)
-                .setRequiresStorageNotLow(true)
-                .setRequiredNetworkType(NetworkType.CONNECTED)
+//                .setRequiresBatteryNotLow(true)
+//                .setRequiresStorageNotLow(true)
+//                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
 
     }
