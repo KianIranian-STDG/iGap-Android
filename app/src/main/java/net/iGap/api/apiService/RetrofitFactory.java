@@ -19,7 +19,7 @@ import net.iGap.api.StickerApi;
 import net.iGap.api.UploadsApi;
 import net.iGap.api.WeatherApi;
 import net.iGap.module.downloader.IProgress;
-import net.iGap.module.downloader.ProgressDownloadResponseBody;
+import net.iGap.module.downloader.DownloadProgressResponseBody;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -64,12 +64,18 @@ public class RetrofitFactory {
         httpClientBuilder.writeTimeout(0, TimeUnit.SECONDS);
         httpClientBuilder.readTimeout(5, TimeUnit.MINUTES);
 
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClientBuilder.addInterceptor(httpLoggingInterceptor);
+        }
+
         httpClientBuilder.addInterceptor(chain -> {
             if(progressListener == null) return chain.proceed(chain.request());
 
             Response originalResponse = chain.proceed(chain.request());
             return originalResponse.newBuilder()
-                    .body(new ProgressDownloadResponseBody(originalResponse.body(), progressListener))
+                    .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
                     .build();
         });
 
