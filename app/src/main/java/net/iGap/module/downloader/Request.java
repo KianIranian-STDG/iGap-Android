@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer;
 import net.iGap.G;
 import net.iGap.api.DownloadApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 import net.iGap.realm.RealmAttachment;
@@ -19,10 +20,11 @@ import net.iGap.realm.RealmRoomMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.CipherInputStream;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -139,7 +141,7 @@ public class Request implements IProgress, Comparable<Request> {
         }
         isDownloading = true;
         notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
-        Disposable disposable = downloadApi.downloadData("114c97d1-fdb2-47b6-98d4-80e7b6720698", String.valueOf(message.getUserId()))
+        Disposable disposable = downloadApi.downloadData("886968ba-a15e-4a6e-89c4-178d9434956c", String.valueOf(message.getUserId()), TokenContainer.getInstance().getToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::saveDelegate, this::onError);
@@ -163,8 +165,14 @@ public class Request implements IProgress, Comparable<Request> {
 
     @WorkerThread
     private void saveInTemp(ResponseBody value) {
-
-        try (InputStream is = value.byteStream(); OutputStream os = new FileOutputStream(tempFile)) {
+        byte[] iv = new byte[0];
+        try {
+            iv = value.source().readByteArray(16);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        File file = new File(G.DIR_TEMP + "/result.jpg");
+        try (CipherInputStream is = new CipherInputStream(value.byteStream(), AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey)); OutputStream os = new FileOutputStream(tempFile)) {
 
             byte[] data = new byte[4096];
             int count;
@@ -174,10 +182,56 @@ public class Request implements IProgress, Comparable<Request> {
             }
             onDownloadCompleted();
             os.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             onError(e);
         }
+
+//        boolean isEqual = true;
+//        try {
+//            FileInputStream fis1 = new FileInputStream(file);
+//            FileInputStream fis2 = new FileInputStream(downloadedFile);
+//            byte[] f1 = new byte[2048];
+//            byte[] f2 = new byte[2048];
+//            while (fis1.read(f1) != -1 && fis2.read(f2) != -1) {
+//                if (!Arrays.equals(f1, f2)) {
+//                    isEqual = false;
+//                    break;
+//                }
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Log.i(TAG, "saveInTemp: " + isEqual);
     }
+
+//    @WorkerThread
+//    private void saveInTemp(ResponseBody value) {
+//
+//        try (CipherInputStream is = new CipherInputStream(value.byteStream(),  AesCipherDownloadOptimized.getCipher("5183666c72eec9e4".getBytes(), HelperString.generateSymmetricKey("bf3c199c2470cb477d907b1e0917c17b")));
+//             OutputStream os = new FileOutputStream(tempFile)) {
+//            byte[] data = new byte[4096];
+//            int count;
+//            while ((count = is.read(data)) != -1) {
+//                os.write(data, 0, count);
+//                offset += count;
+//            }
+//            onDownloadCompleted();
+//            os.flush();
+//        } catch (IOException e) {
+//            onError(e);
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (InvalidKeyException e) {
+//            e.printStackTrace();
+//        } catch (InvalidAlgorithmParameterException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchPaddingException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public String getRequestId() {
         return requestId;
@@ -226,6 +280,9 @@ public class Request implements IProgress, Comparable<Request> {
 
     @Override
     public void onProgress(int progress) {
+        if (this.progress == progress)
+            return;
+
         this.progress = progress;
         Log.i("downloadProgress", "onProgress: " + progress);
         handler.post(this::notifyObservers);
@@ -245,6 +302,11 @@ public class Request implements IProgress, Comparable<Request> {
     @Override
     public void onError(Throwable throwable) {
         throwable.printStackTrace();
+
+        if (tempFile.exists())
+            tempFile.delete();
+        if (downloadedFile.exists())
+            downloadedFile.delete();
         isDownloading = false;
         notifyDownloadStatus(isDownloaded ? Downloader.DownloadStatus.DOWNLOADED : Downloader.DownloadStatus.NOT_DOWNLOADED);
     }
