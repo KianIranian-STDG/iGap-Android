@@ -171,7 +171,6 @@ public class Request implements IProgress, Comparable<Request> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        File file = new File(G.DIR_TEMP + "/result.jpg");
         try (CipherInputStream is = new CipherInputStream(value.byteStream(), AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey)); OutputStream os = new FileOutputStream(tempFile)) {
 
             byte[] data = new byte[4096];
@@ -185,53 +184,7 @@ public class Request implements IProgress, Comparable<Request> {
         } catch (Exception e) {
             onError(e);
         }
-
-//        boolean isEqual = true;
-//        try {
-//            FileInputStream fis1 = new FileInputStream(file);
-//            FileInputStream fis2 = new FileInputStream(downloadedFile);
-//            byte[] f1 = new byte[2048];
-//            byte[] f2 = new byte[2048];
-//            while (fis1.read(f1) != -1 && fis2.read(f2) != -1) {
-//                if (!Arrays.equals(f1, f2)) {
-//                    isEqual = false;
-//                    break;
-//                }
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Log.i(TAG, "saveInTemp: " + isEqual);
     }
-
-//    @WorkerThread
-//    private void saveInTemp(ResponseBody value) {
-//
-//        try (CipherInputStream is = new CipherInputStream(value.byteStream(),  AesCipherDownloadOptimized.getCipher("5183666c72eec9e4".getBytes(), HelperString.generateSymmetricKey("bf3c199c2470cb477d907b1e0917c17b")));
-//             OutputStream os = new FileOutputStream(tempFile)) {
-//            byte[] data = new byte[4096];
-//            int count;
-//            while ((count = is.read(data)) != -1) {
-//                os.write(data, 0, count);
-//                offset += count;
-//            }
-//            onDownloadCompleted();
-//            os.flush();
-//        } catch (IOException e) {
-//            onError(e);
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        } catch (InvalidKeyException e) {
-//            e.printStackTrace();
-//        } catch (InvalidAlgorithmParameterException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchPaddingException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public String getRequestId() {
         return requestId;
