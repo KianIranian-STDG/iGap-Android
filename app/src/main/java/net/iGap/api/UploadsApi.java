@@ -71,6 +71,10 @@ public interface UploadsApi {
                                              @Body RequestBody image,
                                              @Header(IgapRetrofitInterceptor.USER_ID) String userID);
 
+
+    @POST("dec/token")
+    Call<ResponseBody> test(@Body RequestBody image);
+
     @Streaming
     @GET("download/{token}")
     Observable<ResponseBody> downloadData(@Path("token") String token);

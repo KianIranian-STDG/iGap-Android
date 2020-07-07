@@ -112,11 +112,11 @@ public class UploadWorker extends Worker {
     private Result getUploadInfoServer(boolean isResume) {
 
         long size = 0;
-        if (isEncryptionActive)
-//            size = ((file.length() / 16 + 1) * 16) + 16;
-            size = file.length() + 32;
-        else
-            size = file.length();
+//        if (isEncryptionActive)
+////            size = ((file.length() / 16 + 1) * 16) + 16;
+//            size = file.length() + 32;
+//        else
+        size = file.length();
 
         /**
          * info is used if we want to send data without encryption
@@ -127,6 +127,15 @@ public class UploadWorker extends Worker {
         });
 
         try {
+            // this if body is only for test
+            if (true) {
+                Response<ResponseBody> temp = apiService.test(createCountingRequestBody(isResume, file, 0)).execute();
+                if (temp.isSuccessful())
+                    Log.d(TAG, "getUploadInfoServer: success");
+                else
+                    Log.d(TAG, "getUploadInfoServer: fail");
+                return Result.failure();
+            }
             Response<UploadData> response = apiService.initUpload(token, String.valueOf(size),
                     FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
                     roomID, /*String.valueOf(info.getUserId())*/null).execute();
@@ -159,8 +168,9 @@ public class UploadWorker extends Worker {
 
         Response<ResponseBody> response = null;
         try {
+            Log.d(TAG, "uploadFileWithReqBody: " + offset + isResume);
             response = apiService.uploadDataReqBodyCall(token,
-                    createWithRequestBody(isResume, file.getAbsolutePath(), offset)/*,
+                    createCountingRequestBody(isResume, file, offset)/*,
                     MediaType.parse(getMimeType(file.getAbsolutePath())).toString()*/, null).execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -209,18 +219,37 @@ public class UploadWorker extends Worker {
         return type;
     }
 
-    private RequestBody createWithRequestBody(boolean isResume, String filePath, int offset) {
-        File file = new File(filePath);
-        return createCountingRequestBody(isResume, file, offset);
-    }
-
     private RequestBody createCountingRequestBody(boolean isResume, File file, int offset) {
         RequestBody requestBody = initRequestBody(isResume, file, offset);
         return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
             HelperDataUsage.progressUpload(bytesWritten, uploadType);
             double progress = bytesWritten / contentLength * 100;
             onProgress.onUploadProgress(progress);
+        }, file);
+//        return new CountingRequestBody(requestBody, (bytesWritten, contentLength) -> {
+//            HelperDataUsage.progressUpload(bytesWritten, uploadType);
+//            double progress = bytesWritten / contentLength * 100;
+//            onProgress.onUploadProgress(progress);
+//        });
+    }
+
+    private RequestBody createCountingRequestBody2(boolean isResume, File file, int offset) {
+        CountingRequestBody test = new CountingRequestBody((bytesWritten, contentLength) -> {
+            HelperDataUsage.progressUpload(bytesWritten, uploadType);
+            double progress = bytesWritten / contentLength * 100;
+            onProgress.onUploadProgress(progress);
         });
+        if (!isResume)
+            return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), file);
+        else {
+            try {
+                byte[] bytes = AndroidUtils.getNBytesFromOffset(fileChannel, 0, ((int) file.length()));
+                return RequestBody.create(MediaType.parse(getMimeType(file.getAbsolutePath())), bytes, offset, (int) file.length());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
     }
 
     private RequestBody initRequestBody(boolean isResume, File file, int offset) {
