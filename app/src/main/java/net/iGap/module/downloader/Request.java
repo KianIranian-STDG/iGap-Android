@@ -18,9 +18,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -171,16 +169,14 @@ public class Request implements IProgress, Comparable<Request> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try (CipherInputStream is = new CipherInputStream(value.byteStream(), AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey)); OutputStream os = new FileOutputStream(tempFile)) {
+        try (CipherInputStream is = new DownloaderInputStream(value.byteStream(), AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey), tempFile)) {
 
             byte[] data = new byte[4096];
             int count;
             while ((count = is.read(data)) != -1) {
-                os.write(data, 0, count);
                 offset += count;
             }
             onDownloadCompleted();
-            os.flush();
         } catch (Exception e) {
             onError(e);
         }
