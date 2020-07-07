@@ -1,16 +1,11 @@
 package net.iGap.module.downloader;
 
-import android.os.Handler;
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
-import androidx.lifecycle.Observer;
 
 import net.iGap.G;
-import net.iGap.api.DownloadApi;
-import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
@@ -18,38 +13,34 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.crypto.CipherInputStream;
 
-import io.reactivex.Flowable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 import static net.iGap.module.AndroidUtils.suitableAppFilePath;
 
-public class Request implements IProgress, Comparable<Request> {
+public class Request extends Observable<Resource<Integer>> implements Comparable<Request> {
+    public static final String BASE_URL = "http://192.168.10.31:3007/v1.0/download/";
+
     private String requestId;
     private RealmRoomMessage message;
-    private List<Observer<Resource<Integer>>> observers;
-    private Observer<Pair<Request, Downloader.DownloadStatus>> downloadStatus;
     private Selector selector;
     private volatile boolean isDownloading;
     private volatile boolean isDownloaded;
     private File tempFile;
     private File downloadedFile;
-    private DownloadApi downloadApi;
     private int progress;
     private long size;
     private long offset;
-    private Handler handler;
     private int priority = PRIORITY.PRIORITY_DEFAULT;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private AppExecutors appExecutors;
+    private Observer<Pair<Request, Downloader.DownloadStatus>> downloadStatusObserver;
 
     protected Request(RealmRoomMessage message, Selector selector, int priority) {
         this(message, selector);
@@ -57,13 +48,10 @@ public class Request implements IProgress, Comparable<Request> {
     }
 
     private Request(RealmRoomMessage message, Selector selector) {
-        handler = new Handler();
         this.selector = selector;
         this.message = message;
-        this.downloadApi = new RetrofitFactory().getDownloadRetrofit(this);
-        observers = new ArrayList<>();
         requestId = generateRequestId();
-
+        appExecutors = AppExecutors.getInstance();
         initFileRelatedVariables();
     }
 
@@ -71,7 +59,7 @@ public class Request implements IProgress, Comparable<Request> {
         tempFile = generateTempFileForRequest();
         downloadedFile = generateDownloadFileForRequest();
 
-        size = 8344500;
+        size = 19105002;
 //        size = message.getAttachment().getSize();
 
         if (tempFile.exists()) {
@@ -134,51 +122,58 @@ public class Request implements IProgress, Comparable<Request> {
 
     public void download() {
         if (isDownloaded) {
-            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
+//            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
             return;
         }
         isDownloading = true;
-        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
-        Disposable disposable = downloadApi.downloadData("886968ba-a15e-4a6e-89c4-178d9434956c", String.valueOf(message.getUserId()), TokenContainer.getInstance().getToken())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::saveDelegate, this::onError);
-        addToCompositeDisposable(disposable);
-    }
+//        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
 
-    private void saveDelegate(ResponseBody responseBody) {
-        Disposable disposable = Flowable.just(responseBody)
-                .observeOn(Schedulers.io())
-                .subscribe(this::saveInTemp, this::onError);
 
-        addToCompositeDisposable(disposable);
-    }
-
-    private void addToCompositeDisposable(Disposable disposable) {
-        if (compositeDisposable == null)
-            compositeDisposable = new CompositeDisposable();
-
-        compositeDisposable.add(disposable);
+        appExecutors.networkIO().execute(() -> {
+            download(TokenContainer.getInstance().getToken());
+        });
     }
 
     @WorkerThread
-    private void saveInTemp(ResponseBody value) {
-        byte[] iv = new byte[0];
-        try {
-            iv = value.source().readByteArray(16);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (CipherInputStream is = new DownloaderInputStream(value.byteStream(), AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey), tempFile)) {
+    private void download(String jwtToken) {
+        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
+        OkHttpClient client = new OkHttpClient();
+//        String fileToken =  RealmRoomMessage.getFinalMessage(message).getAttachment().getToken();
+        String fileToken = "5a8b3703-0e60-4461-81b2-6d831d500959";
 
+        String url = BASE_URL + fileToken;
+        okhttp3.Request request = new okhttp3.Request.Builder().url(url).addHeader("Authorization", jwtToken)
+                .addHeader("Range", String.format("bytes=" + offset + "-" + size)).build();
+        Response response = null;
+
+        try (OutputStream os = new FileOutputStream(tempFile, true)) {
+            response = client.newCall(request).execute();
+            if (response.body() == null) {
+                throw new Exception("body is null!");
+            }
+            InputStream inputStream = response.body().byteStream();
+            byte[] iv = new byte[16];
+            int c = inputStream.read(iv, 0, 16);
+            InputStream in = new CipherInputStream(inputStream, AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey));
             byte[] data = new byte[4096];
             int count;
-            while ((count = is.read(data)) != -1) {
-                offset += count;
+            long downloaded = offset;
+            while ((count = in.read(data)) != -1) {
+                downloaded += count;
+                int t = (int) ((downloaded * 100) / size);
+                if (progress < t) {
+                    progress = t;
+                    onProgress(progress);
+                }
+                os.write(data, 0, count);
             }
             onDownloadCompleted();
         } catch (Exception e) {
             onError(e);
+        } finally {
+            if (response != null && response.body() != null) {
+                response.body().close();
+            }
         }
     }
 
@@ -186,78 +181,32 @@ public class Request implements IProgress, Comparable<Request> {
         return requestId;
     }
 
-    private void notifyObservers() {
-        for (Observer<Resource<Integer>> observer : observers) {
-            observer.onChanged(Resource.success(progress));
-        }
+    public RealmRoomMessage getMessage() {
+        return message;
     }
 
-    public void setDownloadStatusObserver(Observer<Pair<Request, Downloader.DownloadStatus>> downloadStatus) {
-        this.downloadStatus = downloadStatus;
-    }
-
-    public void notifyDownloadStatus(Downloader.DownloadStatus downloadStatus) {
-        if (this.downloadStatus != null)
-            this.downloadStatus.onChanged(new Pair<>(this, downloadStatus));
-    }
-
-    public void addObserver(Observer<Resource<Integer>> observer) {
-        for (Observer obs : observers) {
-            if (obs == observer) {
-                return;
-            }
-        }
-
-        observers.add(observer);
-    }
-
-    public void removeObserver(Observer<Resource<Integer>> observer) {
-        for (int i = 0; i < observers.size(); i++) {
-            if (observers.get(i) == observer) {
-                observers.remove(i);
-                return;
-            }
-        }
-    }
-
-    public void dispose() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
-    }
-
-    @Override
-    public void onProgress(int progress) {
-        if (this.progress == progress)
-            return;
-
-        this.progress = progress;
-        Log.i("downloadProgress", "onProgress: " + progress);
-        handler.post(this::notifyObservers);
-    }
-
-    @Override
     public void onDownloadCompleted() {
         try {
             moveTempToDownloadedDir();
             this.progress = 100;
-            handler.post(this::notifyObservers);
+            notifyObservers(Resource.success(this.progress));
+            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
         } catch (IOException e) {
             onError(e);
         }
     }
 
-    @Override
+    public void onProgress(int progress) {
+        notifyObservers(Resource.success(progress));
+    }
+
     public void onError(Throwable throwable) {
         throwable.printStackTrace();
 
-        if (tempFile.exists())
-            tempFile.delete();
         if (downloadedFile.exists())
             downloadedFile.delete();
         isDownloading = false;
-        notifyDownloadStatus(isDownloaded ? Downloader.DownloadStatus.DOWNLOADED : Downloader.DownloadStatus.NOT_DOWNLOADED);
+        notifyDownloadStatus(Downloader.DownloadStatus.NOT_DOWNLOADED);
     }
 
     @WorkerThread
@@ -284,6 +233,36 @@ public class Request implements IProgress, Comparable<Request> {
 
     public static String generateRequestId(RealmRoomMessage message, Selector selector) {
         return message.getAttachment().getCacheId() + selector.toString();
+    }
+
+    public File getDownloadedFile() {
+        return downloadedFile;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public long getOffset() {
+        return offset;
+    }
+
+    public void setDownloadStatusListener(Observer<Pair<Request, Downloader.DownloadStatus>> observer) {
+        this.downloadStatusObserver = observer;
+    }
+
+    public void notifyDownloadStatus(Downloader.DownloadStatus downloadStatus) {
+        if (downloadStatusObserver != null) {
+            downloadStatusObserver.onUpdate(new Pair<>(this, downloadStatus));
+        }
     }
 
     public static class PRIORITY {
