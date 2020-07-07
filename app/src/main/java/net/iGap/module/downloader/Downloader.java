@@ -4,7 +4,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmRoomMessage;
@@ -53,7 +52,7 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
         Request existedRequest = findExistedRequest(Request.generateRequestId(message, selector));
         if (existedRequest == null) {
             existedRequest = new Request(message, selector, priority);
-            existedRequest.setDownloadStatusObserver(this);
+            existedRequest.setDownloadStatusListener(this);
             requestsQueue.add(existedRequest);
             scheduleNewDownload();
         }
@@ -69,6 +68,10 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
 
     private Request findExistedRequest(String requestId) {
         for (Request request : requestsQueue) {
+            if (request.getRequestId().equals(requestId))
+                return request;
+        }
+        for (Request request: inProgressRequests) {
             if (request.getRequestId().equals(requestId))
                 return request;
         }
@@ -90,20 +93,6 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
                            int priority,
                            @Nullable Observer<Resource<Integer>> observer) {
         return download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
-    }
-
-    @Override
-    public void onChanged(Pair<Request, DownloadStatus> downloadStatus) {
-        if (downloadStatus == null)
-            return;
-
-        switch (downloadStatus.second) {
-            case DOWNLOADED:
-            case NOT_DOWNLOADED:
-                removeDownloadingRequestIfExist(downloadStatus.first);
-                scheduleNewDownload();
-                break;
-        }
     }
 
     private void removeDownloadingRequestIfExist(Request request) {
@@ -131,6 +120,20 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
         inProgressCount.incrementAndGet();
 
         request.download();
+    }
+
+    @Override
+    public void onUpdate(Pair<Request, DownloadStatus> arg) {
+        if (arg == null)
+            return;
+
+        switch (arg.second) {
+            case DOWNLOADED:
+            case NOT_DOWNLOADED:
+                removeDownloadingRequestIfExist(arg.first);
+                scheduleNewDownload();
+                break;
+        }
     }
 
     enum DownloadStatus {
