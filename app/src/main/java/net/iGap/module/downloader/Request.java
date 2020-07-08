@@ -26,7 +26,7 @@ import okhttp3.Response;
 import static net.iGap.module.AndroidUtils.suitableAppFilePath;
 
 public class Request extends Observable<Resource<Integer>> implements Comparable<Request> {
-    public static final String BASE_URL = "http://192.168.10.31:3007/v1.0/download/";
+    public static final String BASE_URL = "http://192.168.8.15:4000/v1.0/download/";
 
     private String requestId;
     private RealmRoomMessage message;
@@ -81,26 +81,14 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
 
     private File generateDownloadFileForRequest() {
         String name = message.getAttachment().getCacheId();
-        String type = "";
+        String mediaName = message.getAttachment().getName();
 
-        switch (message.getMessageType()) {
-            case VOICE:
-                type = ".ogg";
-                break;
-            case AUDIO_TEXT:
-            case AUDIO:
-                type = ".mp3";
-                break;
-            case IMAGE_TEXT:
-            case IMAGE:
-                type = ".jpg";
-                break;
-            default:
-                type = ".data";
-        }
+        String mime = ".data";
+        if (mediaName != null && mediaName.contains("."))
+            mime = mediaName.substring(mediaName.lastIndexOf("."));
 
         String path = suitableAppFilePath(message.getMessageType());
-        return new File(path + "/" + name + type);
+        return new File(path + "/" + name + mime);
     }
 
     private File generateTempFileForRequest() {
@@ -122,11 +110,11 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
 
     public void download() {
         if (isDownloaded) {
-//            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
+            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
             return;
         }
         isDownloading = true;
-//        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
+        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
 
 
         appExecutors.networkIO().execute(() -> {
