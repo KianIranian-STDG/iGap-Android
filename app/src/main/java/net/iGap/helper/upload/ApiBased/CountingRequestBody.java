@@ -24,13 +24,11 @@ import javax.crypto.spec.SecretKeySpec;
 import io.reactivex.annotations.NonNull;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okhttp3.internal.Util;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.ForwardingSink;
 import okio.Okio;
 import okio.Sink;
-import okio.Source;
 
 /**
  * Decorates an OkHttp request body to count the number of bytes written when writing it. Can
@@ -158,29 +156,19 @@ public class CountingRequestBody extends RequestBody {
     @Override
     public void writeTo(@NonNull BufferedSink sink) throws IOException {
         Log.d(TAG, "writeTo: entry");
-        Source source = null;
-        try {
-            source = Okio.source(temp);
-            sink.writeAll(source);
-        } finally {
-            Util.closeQuietly(source);
-        }
-//        cipherOutputStream = new CipherOutputStream(tempStream, cipher);
         CountingSink countingSink = new CountingSink(sink);
         BufferedSink bufferedSink = Okio.buffer(countingSink);
 //        progressOutPut progressOutputStream = new progressOutPut(sink.outputStream(), contentLength());
 //        BufferedSink bufferedSink = Okio.buffer(Okio.sink(progressOutputStream));
-
-
         delegate.writeTo(bufferedSink);
-//        bufferedSink.flush();
+        bufferedSink.flush();
         Log.d(TAG, "writeTo: end");
         // close log file
-        writer.append(Base64.encodeToString(encryptUpload(tempStream.toByteArray(), false), Base64.DEFAULT));
-        tempStream.flush();
-        tempStream.close();
 //        cipherOutputStream.flush();
 //        cipherOutputStream.close();
+        writer.append(Base64.encodeToString(tempStream.toByteArray(), Base64.DEFAULT));
+        writer.flush();
+        writer.close();
     }
 
     class progressOutPut extends OutputStream {
@@ -247,6 +235,23 @@ public class CountingRequestBody extends RequestBody {
             super(delegate);
         }
 
+        /*@Override
+        public void write(Buffer source, long byteCount) throws IOException {
+            long bytesToRead = Math.min(source.size(), byteCount);
+            Log.d(TAG, "write: " + bytesToRead + " " + addIV);
+             encryptedSink = new Buffer();
+             file = new CipherOutputStream(tempStream, cipher);
+             stream = new CipherOutputStream(encryptedSink.outputStream(), cipher);
+            if (addIV) {
+                encryptedSink.write(ivBytes);
+                addIV = false;
+            }
+            byte[] main = source.readByteArray(bytesToRead);
+            file.write(main);
+            stream.write(main);
+            super.write(encryptedSink, encryptedSink.size());
+        }*/
+
         @Override
         public void write(@NonNull Buffer source, long byteCount) throws IOException {
             long bytesToRead = Math.min(source.size(), byteCount);
@@ -257,9 +262,9 @@ public class CountingRequestBody extends RequestBody {
             else
                 encryptedByteArray = mainByteArray;
             Log.d(TAG, "write: **chunk **source " + mainByteArray.length + " **encrypt " + encryptedByteArray.length);
-            tempStream.write(encryptedByteArray);
+            tempStream.write(mainByteArray);
 //            cipherOutputStream.write(mainByteArray);
-            Log.d(TAG, "write: " + Base64.encodeToString(encryptedByteArray, Base64.DEFAULT));
+//            Log.d(TAG, "write: " + Base64.encodeToString(encryptedByteArray, Base64.DEFAULT));
             if (addIV)
                 addIV = false;
             Buffer encryptedSink = new Buffer();
@@ -267,10 +272,10 @@ public class CountingRequestBody extends RequestBody {
             bytesWritten += encryptedByteArray.length;
             originalBytesWritten += mainByteArray.length;
             Log.d(TAG, "write: **totalWrite **Encrypt " + bytesWritten + " **original " + originalBytesWritten);
-            listener.onRequestProgress(bytesWritten, 1);
-            if (originalBytesWritten == originalSize) {
-                encryptSize = bytesWritten;
-            }
+//            listener.onRequestProgress(bytesWritten, 1);
+//            if (originalBytesWritten == originalSize) {
+//                encryptSize = bytesWritten;
+//            }
             super.write(encryptedSink, encryptedSink.size());
         }
     }
@@ -316,8 +321,10 @@ public class CountingRequestBody extends RequestBody {
         try {
             byte[] encryptMessage = cipher.doFinal(message);
             if (addIv) {
+                Log.e(TAG, "initEncrypt2: cipher success bitch");
                 return HelperNumerical.appendByteArrays(ivBytes, encryptMessage);
             } else {
+                Log.e(TAG, "initEncrypt2: cipher success bitch");
                 return encryptMessage;
             }
         } catch (Exception e) {

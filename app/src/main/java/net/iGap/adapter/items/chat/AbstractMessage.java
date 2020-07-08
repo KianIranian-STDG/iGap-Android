@@ -61,7 +61,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
@@ -385,11 +385,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
 
-            if (!UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
-                UploadManager.getInstance().uploadMessageAndSend(type, mMessage);
+            if (!UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+                UploadWorkerManager.getInstance().uploadMessageAndSend(type, mMessage);
             } else {
                 MessageProgress _Progress = ((IProgress) holder).getProgress();
-                _Progress.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                _Progress.withProgress(UploadWorkerManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             }
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -528,9 +528,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (isSelected() || structMessage.isSelected) {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            holder.itemView.setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
+            holder.itemView.setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
 
         /**
@@ -1416,7 +1416,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+        if (UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
             return;
         }
 
@@ -1510,7 +1510,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         View thumbnail = ((IThumbNailItem) holder).getThumbNailImageView();
 
 
-        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+        if (UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
             if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
                 if (G.userLogin) {
                     messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
@@ -1721,12 +1721,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
              */
-            if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
+            if (UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
                 //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
                 hideThumbnailIf(holder);
 
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                progressBar.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                progressBar.withProgress(UploadWorkerManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             } else {
                 checkForDownloading(holder);
             }

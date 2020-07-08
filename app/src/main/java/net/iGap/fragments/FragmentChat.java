@@ -159,6 +159,7 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
@@ -4160,7 +4161,7 @@ public class FragmentChat extends BaseFragment
     public void onUploadOrCompressCancel(View view, final StructMessageInfo message, int pos) {
         HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
 
-        if (UploadManager.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
+        if (UploadWorkerManager.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
             deleteItem(message.realmRoomMessage.getMessageId(), pos);
         }
     }
