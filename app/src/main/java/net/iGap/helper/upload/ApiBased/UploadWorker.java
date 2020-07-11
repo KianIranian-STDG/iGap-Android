@@ -1,6 +1,7 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.content.Context;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -13,6 +14,7 @@ import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.upload.RequestBodyUtil;
 import net.iGap.model.UploadData;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.DbManager;
@@ -21,13 +23,24 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import java.security.SecureRandom;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -149,7 +162,7 @@ public class UploadWorker extends Worker {
                             .putString(UPLOAD_IDENTITY, identity)
                             .putInt(PROGRESS, uploadedSize / ((int) file.length()) * 100)
                             .build());
-                    return uploadFileWithReqBody(isResume, uploadedSize);
+                    return uploadFileWithOkHttp(isResume, uploadedSize);
                 } else
                     return Result.failure();
             } else {
@@ -162,6 +175,46 @@ public class UploadWorker extends Worker {
             e.printStackTrace();
             return Result.failure(outputData);
         }
+    }
+
+    private Result uploadFileWithOkHttp(boolean isResume, int offset) {
+        OkHttpClient client = new OkHttpClient();
+        String url = "http://192.168.8.15:3010/v1.0/upload/" + token;
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance("AES_256/CBC/PKCS5Padding");
+            SecureRandom r = new SecureRandom();
+            byte[] ivBytes = "1234567890123456".getBytes();
+            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            Log.d(TAG, "initEncrypt: IV " + Base64.encodeToString(ivSpec.getIV(), Base64.DEFAULT));
+            SecretKey key2 = new SecretKeySpec("1TPeILQOA6IIzyLQWZQy0q95WuiAskia".getBytes(), "AES");
+            Log.d(TAG, "initEncrypt: key " + Base64.encodeToString(key2.getEncoded(), Base64.DEFAULT));
+            cipher.init(Cipher.ENCRYPT_MODE, key2/*key*/, ivSpec);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(outputData);
+        }
+
+        try (InputStream inputStream = new CipherInputStream(new FileInputStream(file), cipher)) {
+            MediaType mediaType = MediaType.parse("image/png; charset=utf-8");
+            RequestBody requestBody = RequestBodyUtil.create(mediaType, inputStream);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .addHeader("userid", "272481237789804022")
+                    .build();
+
+            okhttp3.Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                return Result.failure(outputData);
+            }
+            Log.d("POST", response.body().string());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(outputData);
+        }
+        return Result.success(outputData);
     }
 
     private Result uploadFileWithReqBody(boolean isResume, int offset) {
