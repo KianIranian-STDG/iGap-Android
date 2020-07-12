@@ -235,16 +235,11 @@ public class CallService extends Service implements CallManager.CallStateChange 
                 } else {
                     player.setDataSource(this, alert);
                 }
-
-                if (audioManager.hasWiredHeadset()) {
-                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                } else {
-                    player.setAudioStreamType(AudioManager.STREAM_RING);
-                }
-
+                player.setOnPreparedListener(mediaPlayer -> player.start());
+//                player.setAudioStreamType(AudioManager.STREAM_RING);
                 player.setLooping(true);
-                player.prepare();
-                player.start();
+                player.setVolume(1f, 1f);
+                player.prepareAsync();
             } catch (Exception e) {
                 HelperLog.getInstance().setErrorLog(e);
             }
