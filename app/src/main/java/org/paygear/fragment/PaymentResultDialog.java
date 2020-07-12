@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -146,7 +145,7 @@ public class PaymentResultDialog extends DialogFragment {
             mList.setAdapter(new ListItemAdapter());
 
         priceValue.setText(RaadCommonUtils.formatPrice(mResult.amount, true));
-        playSound();
+//        playSound();
         return view;
     }
 
@@ -190,16 +189,16 @@ public class PaymentResultDialog extends DialogFragment {
         //SoundPool soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 100);
         //soundPool.play(soundPool.load(getActivity(), R.raw.payment_success_sound, 1), 1.0f, 1.0f, 1, 0, 1f);
         try {
-            MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.payment_success_sound);
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.release();
-                }
-            });
-            mp.start();
+//            MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.payment_success_sound);
+//            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                @Override
+//                public void onCompletion(MediaPlayer mp) {
+//                    mp.release();
+//                }
+//            });
+//            mp.start();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
