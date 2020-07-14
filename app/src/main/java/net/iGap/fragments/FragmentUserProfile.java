@@ -25,11 +25,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentUserProfileBinding;
-import net.iGap.module.dialog.account.AccountDialogListener;
-import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
@@ -42,6 +39,9 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
+import net.iGap.module.Theme;
+import net.iGap.module.dialog.account.AccountDialogListener;
+import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.viewmodel.UserProfileViewModel;
 
@@ -53,6 +53,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
+    private static final String TAG = "FragmentUserProfile1";
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
@@ -190,8 +191,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner() , state->{
-            if(state == null) return;
+        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner(), state -> {
+            if (state == null) return;
             closeKeyboard(binding.getRoot());
         });
     }
