@@ -1,6 +1,7 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -81,6 +82,7 @@ public class UploadWorker extends Worker {
     private PipedOutputStream pipedOutputStream;
     private CountDownLatch startLatch;
     private CountDownLatch pipeInitLatch;
+    private InputStream stream;
 
     public UploadWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -162,7 +164,7 @@ public class UploadWorker extends Worker {
 //                    Log.d(TAG, "getUploadInfoServer: fail");
 //                return Result.failure();
 
-                uploadFileWithOkHttpPipedStream(false, 0);
+                uploadFileWithOkHttp(false, 0);
                 return Result.failure(outputData);
             }
             Response<UploadData> response = apiService.initUpload(token, String.valueOf(size),
@@ -195,11 +197,18 @@ public class UploadWorker extends Worker {
 
     private Result uploadFileWithOkHttp(boolean isResume, int offset) {
         OkHttpClient client = new OkHttpClient();
+        AssetManager assetManager = getApplicationContext().getAssets();
+        try {
+            stream = assetManager.open("test.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         String url = "http://192.168.10.31:3007/v1/upload2?enc=1&name=" + file.getName();
 
-        try (FileInputStream fileInputStream = new FileInputStream(file); InputStream inputStream = new CipherInputStream(fileInputStream, getCipher())) {
+        try (InputStream inputStream = new CipherInputStream(stream, getCipher())) {
             MediaType mediaType = MediaType.parse("image/jpg; charset=utf-8");
-            RequestBody requestBody = RequestBodyUtil.create(mediaType, inputStream, fileInputStream.available());
+            RequestBody requestBody = RequestBodyUtil.create(mediaType, inputStream, stream.available());
             Request request = new Request.Builder()
                     .url(url)
                     .post(requestBody)

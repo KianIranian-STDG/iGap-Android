@@ -23,7 +23,7 @@ public class RequestBodyUtil {
 
             @Override
             public long contentLength() {
-                return available;
+                return available + 6;
             }
 
             @Override
