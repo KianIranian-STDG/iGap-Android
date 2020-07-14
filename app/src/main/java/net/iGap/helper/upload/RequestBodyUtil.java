@@ -1,5 +1,7 @@
 package net.iGap.helper.upload;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,7 +14,7 @@ import okio.Source;
 
 public class RequestBodyUtil {
 
-    public static RequestBody create(final MediaType mediaType, final InputStream inputStream) {
+    public static RequestBody create(final MediaType mediaType, final InputStream inputStream, long available) {
         return new RequestBody() {
             @Override
             public MediaType contentType() {
@@ -21,15 +23,11 @@ public class RequestBodyUtil {
 
             @Override
             public long contentLength() {
-                try {
-                    return inputStream.available();
-                } catch (IOException e) {
-                    return 0;
-                }
+                return available;
             }
 
             @Override
-            public void writeTo(BufferedSink sink) throws IOException {
+            public void writeTo(@NonNull BufferedSink sink) throws IOException {
                 Source source = null;
                 try {
                     source = Okio.source(inputStream);

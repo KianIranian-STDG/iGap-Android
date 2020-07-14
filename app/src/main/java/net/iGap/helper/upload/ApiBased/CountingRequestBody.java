@@ -52,7 +52,6 @@ public class CountingRequestBody extends RequestBody {
     File temp;
     FileWriter writer;
     ByteArrayOutputStream tempStream = new ByteArrayOutputStream();
-    CipherOutputStream cipherOutputStream;
 
     private boolean isEncryptionActive = true;
 
