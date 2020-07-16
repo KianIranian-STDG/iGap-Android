@@ -14,7 +14,7 @@ import okio.Source;
 
 public class RequestBodyUtil {
 
-    public static RequestBody create(final MediaType mediaType, final InputStream inputStream, long available) {
+    public static RequestBody create(final MediaType mediaType, final InputStream inputStream) {
         return new RequestBody() {
             @Override
             public MediaType contentType() {
@@ -23,13 +23,14 @@ public class RequestBodyUtil {
 
             @Override
             public long contentLength() {
-                return available + 6;
+                return -1;
             }
 
             @Override
             public void writeTo(@NonNull BufferedSink sink) throws IOException {
                 Source source = null;
                 try {
+
                     source = Okio.source(inputStream);
                     sink.writeAll(source);
                 } finally {

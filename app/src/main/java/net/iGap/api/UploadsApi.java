@@ -29,7 +29,7 @@ public interface UploadsApi {
                                 @Field("name") String fileName,
                                 @Field("extension") String fileExtension,
                                 @Field("room_id") String roomID,
-                                @Header(IgapRetrofitInterceptor.USER_ID) String userID);
+                                @Header("Authorization") String jwtToken);
 
     /**
      * UPLOAD data with multipart body

@@ -104,6 +104,7 @@ public class G extends ApplicationContext {
     public static List<Long> smsNumbers = new ArrayList<>();
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
     public static SecretKeySpec symmetricKey;
+    public static String symmetricKeyString;
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
     public static ImageLoader imageLoader;

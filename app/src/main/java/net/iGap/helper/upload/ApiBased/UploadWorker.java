@@ -1,22 +1,21 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Base64;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import net.iGap.G;
 import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.upload.RequestBodyUtil;
+import net.iGap.helper.upload.UploadRequestBody;
 import net.iGap.model.UploadData;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.DbManager;
@@ -27,18 +26,16 @@ import net.iGap.realm.RealmUserInfo;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.RandomAccessFile;
+import java.io.SequenceInputStream;
 import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
-import java.util.concurrent.CountDownLatch;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -79,14 +76,9 @@ public class UploadWorker extends Worker {
     Data outputData;
     RealmUserInfo info;
     OnProgress onProgress;
-    private PipedOutputStream pipedOutputStream;
-    private CountDownLatch startLatch;
-    private CountDownLatch pipeInitLatch;
-    private InputStream stream;
 
     public UploadWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        this.appExecutors = AppExecutors.getInstance();
         this.apiService = new RetrofitFactory().getUploadRetrofit();
         onProgress = percent -> {
             Log.d(TAG, "UploadWorker: " + percent);
@@ -155,21 +147,9 @@ public class UploadWorker extends Worker {
         });
 
         try {
-//             this if body is only for test
-            if (true) {
-//                Response<ResponseBody> temp = apiService.test(createCountingRequestBody(isResume, file, 0)).execute();
-//                if (temp.isSuccessful())
-//                    Log.d(TAG, "getUploadInfoServer: success");
-//                else
-//                    Log.d(TAG, "getUploadInfoServer: fail");
-//                return Result.failure();
-
-                uploadFileWithOkHttp(false, 0);
-                return Result.failure(outputData);
-            }
             Response<UploadData> response = apiService.initUpload(token, String.valueOf(size),
                     FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
-                    roomID, /*String.valueOf(info.getUserId())*/null).execute();
+                    roomID, TokenContainer.getInstance().getToken()).execute();
             if (response.isSuccessful()) {
                 if (!isResume)
                     token = response.body().getToken();
@@ -185,7 +165,7 @@ public class UploadWorker extends Worker {
                     return Result.failure();
             } else {
                 if (response.code() >= 500 && response.code() < 600) {
-                    return Result.retry();
+                    return Result.failure(outputData);
                 }
                 return Result.failure(outputData);
             }
@@ -197,119 +177,59 @@ public class UploadWorker extends Worker {
 
     private Result uploadFileWithOkHttp(boolean isResume, int offset) {
         OkHttpClient client = new OkHttpClient();
-        AssetManager assetManager = getApplicationContext().getAssets();
-        try {
-            stream = assetManager.open("test.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        String url = "http://192.168.10.31:3007/v1/upload2?enc=1&name=" + file.getName();
+        String url = "https://api.igap.net/file-test/v1.0/upload/" + token;
 
-        try (InputStream inputStream = new CipherInputStream(stream, getCipher())) {
-            MediaType mediaType = MediaType.parse("image/jpg; charset=utf-8");
-            RequestBody requestBody = RequestBodyUtil.create(mediaType, inputStream, stream.available());
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .addHeader("userid", "272481237789804022")
-                    .build();
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] iv = secureRandom.generateSeed(16);
 
-            okhttp3.Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                return Result.failure(outputData);
-            }
-            Log.d("POST", response.body().string());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(outputData);
-        }
-        return Result.success(outputData);
-    }
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(iv);
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            if (isResume && offset > 0)
+                fileInputStream.skip(offset);
 
-    private Result uploadFileWithOkHttpPipedStream(boolean isResume, int offset) {
-        OkHttpClient client = new OkHttpClient();
-        String url = "http://192.168.10.31:3007/v1/upload3?enc=1&name=" + file.getName();
+            try (InputStream inputStream = new SequenceInputStream(byteArrayInputStream, new CipherInputStream(fileInputStream, getCipher(iv)))) {
+                MediaType mediaType = MediaType.parse("image/jpg; charset=utf-8");
+                RequestBody requestBody = new UploadRequestBody(mediaType, file.length(), inputStream, totalByte -> {
+                    onProgress.onUploadProgress((double) ((totalByte * 100) / file.length()));
+                    Log.i(TAG, "onProgress" + totalByte);
+                });
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .addHeader("Authorization", TokenContainer.getInstance().getToken())
+                        .build();
 
-        try (PipedInputStream pipedInputStream = new PipedInputStream(1024 * 8)) {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            pipeInitLatch = new CountDownLatch(1);
-            startLatch = new CountDownLatch(1);
-            appExecutors.diskIO().execute(() -> {
-                try {
-                    pipedOutputStream = new PipedOutputStream();
-                    pipeInitLatch.countDown();
-                    CipherInputStream inputStream = new CipherInputStream(fileInputStream, getCipher());
-                    startLatch.await();
-                    pipeEncryptedDataToOutputSteam(pipedOutputStream, inputStream);
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+
+                okhttp3.Response response = client.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    return Result.failure(outputData);
                 }
-            });
-
-            pipeInitLatch.await();
-            pipedInputStream.connect(pipedOutputStream);
-            startLatch.countDown();
-            MediaType mediaType = MediaType.parse("image/jpg; charset=utf-8");
-            RequestBody requestBody = RequestBodyUtil.create(mediaType, pipedInputStream, fileInputStream.available());
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .addHeader("userid", "272481237789804022")
-                    .build();
-
-            okhttp3.Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
+                Log.d("POST", response.body().string());
+            } catch (Exception e) {
+                e.printStackTrace();
                 return Result.failure(outputData);
             }
-            Log.d("POST", response.body().string());
         } catch (Exception e) {
             e.printStackTrace();
-            return Result.failure(outputData);
         }
+        HelperDataUsage.increaseUploadFiles(uploadType);
+        onProgress.onUploadProgress(100.0);
+        HelperError.showSnackMessage("finish", true);
+        outputData = new Data.Builder()
+                .putString(UPLOAD_IDENTITY, identity)
+                .putString(UPLOAD_TOKEN, token)
+                .build();
         return Result.success(outputData);
-    }
-
-    @WorkerThread
-    public void pipeEncryptedDataToOutputSteam(PipedOutputStream pipedOutputStream, CipherInputStream inputStream) throws IOException {
-        int count;
-        byte[] buffer = new byte[1024 * 4];
-        while ((count = inputStream.read(buffer)) != -1) {
-            pipedOutputStream.write(buffer, 0, count);
-            Log.i(TAG, "pipeEncryptedDataToOutputSteam: " + new String(buffer));
-        }
-    }
-
-    private File encryptToTemp() {
-        Cipher cipher = getCipher();
-        if (cipher == null) return null;
-
-        File encryptedFile = new File(file.getParent(), "encrypted.tmp");
-        try (InputStream inputStream = new CipherInputStream(new FileInputStream(file), cipher); FileOutputStream fileOutputStream = new FileOutputStream(encryptedFile)) {
-            byte[] buffer = new byte[4096];
-            int count = 0;
-            while ((count = inputStream.read(buffer)) != -1) {
-                fileOutputStream.write(buffer, 0, count);
-            }
-            fileOutputStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        return encryptedFile;
     }
 
     @Nullable
-    private Cipher getCipher() {
+    private Cipher getCipher(byte[] iv) {
         Cipher cipher;
         try {
             cipher = Cipher.getInstance("AES_256/CBC/PKCS5Padding");
-            SecureRandom r = new SecureRandom();
-            byte[] ivBytes = "abcdefghijklmnop".getBytes();
-            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-            Log.d(TAG, "initEncrypt: IV " + Base64.encodeToString(ivSpec.getIV(), Base64.DEFAULT));
-            SecretKey key2 = new SecretKeySpec("bf3c199c2470cb477d907b1e0917c17b".getBytes(), "AES");
-            Log.d(TAG, "initEncrypt: key " + Base64.encodeToString(key2.getEncoded(), Base64.DEFAULT));
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+            SecretKey key2 = new SecretKeySpec(G.symmetricKeyString.getBytes(), "AES");
             cipher.init(Cipher.ENCRYPT_MODE, key2/*key*/, ivSpec);
 
         } catch (Exception e) {
@@ -319,30 +239,30 @@ public class UploadWorker extends Worker {
         return cipher;
     }
 
-    private Result uploadFileNoEncryption(boolean isResume, int offset) {
-        OkHttpClient client = new OkHttpClient();
-        String url = "http://192.168.10.31:3007/v1/upload3?enc=1&name=" + file.getName() + token;
-
-        try (InputStream inputStream = new FileInputStream(file)) {
-            MediaType mediaType = MediaType.parse("image/png; charset=utf-8");
-            RequestBody requestBody = RequestBodyUtil.create(mediaType, inputStream, 0);
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .addHeader("userid", "272481237789804022")
-                    .build();
-
-            okhttp3.Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                return Result.failure(outputData);
-            }
-            Log.d("POST", response.body().string());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.failure(outputData);
-        }
-        return Result.success(outputData);
-    }
+//    private Result uploadFileNoEncryption(boolean isResume, int offset) {
+//        OkHttpClient client = new OkHttpClient();
+//        String url = "http://192.168.10.31:3007/v1/upload3?enc=1&name=" + file.getName() + token;
+//
+//        try (InputStream inputStream = new FileInputStream(file)) {
+//            MediaType mediaType = MediaType.parse("image/png; charset=utf-8");
+//            RequestBody requestBody = RequestBodyUtil.create(mediaType, inputStream);
+//            Request request = new Request.Builder()
+//                    .url(url)
+//                    .post(requestBody)
+//                    .addHeader("userid", "272481237789804022")
+//                    .build();
+//
+//            okhttp3.Response response = client.newCall(request).execute();
+//            if (!response.isSuccessful()) {
+//                return Result.failure(outputData);
+//            }
+//            Log.d("POST", response.body().string());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Result.failure(outputData);
+//        }
+//        return Result.success(outputData);
+//    }
 
     private Result uploadFileWithReqBody(boolean isResume, int offset) {
 
