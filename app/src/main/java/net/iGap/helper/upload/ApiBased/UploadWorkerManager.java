@@ -259,6 +259,7 @@ public class UploadWorkerManager {
                 switch (workInfo.getState()) {
                     case RUNNING:
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(message.getMessageId()), workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+                        Log.i(TAG, "progress: " + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
                         break;
                     case SUCCEEDED:
                         Log.d("bagi", "uploadMessageAndSendonFinish");

@@ -9,8 +9,6 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.internal.Util;
 import okio.BufferedSink;
-import okio.Okio;
-import okio.Source;
 
 public class UploadRequestBody extends RequestBody {
     private final InputStream inputStream;
@@ -38,21 +36,35 @@ public class UploadRequestBody extends RequestBody {
         return contentType;
     }
 
+//        @Override
+//    public void writeTo(BufferedSink sink) throws IOException {
+//        Source source = null;
+//        try {
+//
+//            source = Okio.source(inputStream);
+//
+//            while (totalUploaded <= length - 4 * 1024) {
+//                sink.write(source, 4 * 1024);
+//                totalUploaded += 4 * 1024;
+//                progressListener.onProgress(totalUploaded);
+//            }
+//            sink.writeAll(source);
+//        } finally {
+//            Util.closeQuietly(source);
+//        }
+//    }
     @Override
     public void writeTo(BufferedSink sink) throws IOException {
-        Source source = null;
         try {
-
-            source = Okio.source(inputStream);
-
-            while (totalUploaded <= length - 4 * 1024) {
-                sink.write(source, 4 * 1024);
-                totalUploaded += 4 * 1024;
+            byte[] buffer = new byte[1024 * 4];
+            int count;
+            while ((count = inputStream.read()) != -1) {
+                sink.outputStream().write(buffer, 0, count);
+                totalUploaded += count;
                 progressListener.onProgress(totalUploaded);
             }
-            sink.writeAll(source);
         } finally {
-            Util.closeQuietly(source);
+            Util.closeQuietly(inputStream);
         }
     }
 

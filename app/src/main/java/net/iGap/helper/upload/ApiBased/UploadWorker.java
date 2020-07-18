@@ -36,6 +36,7 @@ import java.io.RandomAccessFile;
 import java.io.SequenceInputStream;
 import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -76,6 +77,7 @@ public class UploadWorker extends Worker {
     Data outputData;
     RealmUserInfo info;
     OnProgress onProgress;
+    private int progress;
 
     public UploadWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -176,9 +178,13 @@ public class UploadWorker extends Worker {
     }
 
     private Result uploadFileWithOkHttp(boolean isResume, int offset) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .build();
 
-        String url = "https://api.igap.net/file-test/v1.0/upload/" + token;
+        String url = "http://192.168.10.31:3007/v1.0/upload/" + token;
 
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = secureRandom.generateSeed(16);
@@ -191,8 +197,13 @@ public class UploadWorker extends Worker {
             try (InputStream inputStream = new SequenceInputStream(byteArrayInputStream, new CipherInputStream(fileInputStream, getCipher(iv)))) {
                 MediaType mediaType = MediaType.parse("image/jpg; charset=utf-8");
                 RequestBody requestBody = new UploadRequestBody(mediaType, file.length(), inputStream, totalByte -> {
-                    onProgress.onUploadProgress((double) ((totalByte * 100) / file.length()));
-                    Log.i(TAG, "onProgress" + totalByte);
+
+                    if (progress < (int) ((totalByte * 100) / file.length()))
+                        progress = (int) ((totalByte * 100) / file.length());
+                    setProgressAsync(new Data.Builder()
+                            .putString(UPLOAD_IDENTITY, identity)
+                            .putInt(PROGRESS, progress)
+                            .build());
                 });
                 Request request = new Request.Builder()
                         .url(url)
@@ -214,12 +225,16 @@ public class UploadWorker extends Worker {
             e.printStackTrace();
         }
         HelperDataUsage.increaseUploadFiles(uploadType);
-        onProgress.onUploadProgress(100.0);
         HelperError.showSnackMessage("finish", true);
         outputData = new Data.Builder()
                 .putString(UPLOAD_IDENTITY, identity)
                 .putString(UPLOAD_TOKEN, token)
                 .build();
+
+        setProgressAsync(new Data.Builder()
+                .putString(UPLOAD_IDENTITY, identity)
+                .putInt(PROGRESS, 100)
+                .build());
         return Result.success(outputData);
     }
 
