@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.crypto.CipherInputStream;
 
@@ -39,6 +40,7 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
     private long size;
     private long offset;
     private int priority = PRIORITY.PRIORITY_DEFAULT;
+    private AtomicBoolean cancelDownload = new AtomicBoolean(false);
     private AppExecutors appExecutors;
     private Observer<Pair<Request, Downloader.DownloadStatus>> downloadStatusObserver;
 
@@ -122,6 +124,10 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
         });
     }
 
+    public void cancelDownload() {
+        cancelDownload.set(true);
+    }
+
     @WorkerThread
     private void download(String jwtToken) {
         notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
@@ -154,6 +160,10 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
                     onProgress(progress);
                 }
                 os.write(data, 0, count);
+                if (cancelDownload.get()) {
+                    safelyCancelDownload();
+                    return;
+                }
             }
             onDownloadCompleted();
         } catch (Exception e) {
@@ -163,6 +173,13 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
                 response.body().close();
             }
         }
+    }
+
+    private void safelyCancelDownload() {
+        if (downloadedFile.exists())
+            downloadedFile.delete();
+        isDownloading = false;
+        notifyDownloadStatus(Downloader.DownloadStatus.NOT_DOWNLOADED);
     }
 
     public String getRequestId() {
@@ -191,10 +208,7 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
     public void onError(Throwable throwable) {
         throwable.printStackTrace();
 
-        if (downloadedFile.exists())
-            downloadedFile.delete();
-        isDownloading = false;
-        notifyDownloadStatus(Downloader.DownloadStatus.NOT_DOWNLOADED);
+        safelyCancelDownload();
     }
 
     @WorkerThread

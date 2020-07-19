@@ -71,7 +71,7 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
             if (request.getRequestId().equals(requestId))
                 return request;
         }
-        for (Request request: inProgressRequests) {
+        for (Request request : inProgressRequests) {
             if (request.getRequestId().equals(requestId))
                 return request;
         }
@@ -93,6 +93,21 @@ public class Downloader implements Observer<Pair<Request, Downloader.DownloadSta
                            int priority,
                            @Nullable Observer<Resource<Integer>> observer) {
         return download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
+    }
+
+    public void cancelDownload(@NonNull String cacheId) {
+        for (int i = 0; i < inProgressRequests.size(); i++) {
+            if (cacheId.contains(inProgressRequests.get(i).getRequestId())) {
+                inProgressRequests.get(i).cancelDownload();
+            }
+        }
+
+        for (Request request: requestsQueue) {
+            if (cacheId.contains(request.getRequestId())) {
+                requestsQueue.remove(request);
+                break;
+            }
+        }
     }
 
     private void removeDownloadingRequestIfExist(Request request) {
