@@ -60,24 +60,24 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
     @Override
     public void run() {
         super.run();
-        try {
-            openFile(file.getAbsolutePath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Log.d("bagi", file.getAbsolutePath());
-        Log.d("bagi", file.length() + "fileLen");
-
-        fileHash = AndroidUtils.getFileHashFromPath(file.getAbsolutePath());
-
-        lastRequestId = new RequestFileUploadOption().fileUploadOption(file.length(), this);
-        synchronized (this) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        try {
+//            openFile(file.getAbsolutePath());
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        Log.d("bagi", file.getAbsolutePath());
+//        Log.d("bagi", file.length() + "fileLen");
+//
+//        fileHash = AndroidUtils.getFileHashFromPath(file.getAbsolutePath());
+//
+//        lastRequestId = new RequestFileUploadOption().fileUploadOption(file.length(), this);
+//        synchronized (this) {
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void openFile(String filePath) throws FileNotFoundException {

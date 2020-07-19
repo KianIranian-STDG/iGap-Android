@@ -160,7 +160,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
-import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.EmojiView;
@@ -5375,16 +5374,16 @@ public class FragmentChat extends BaseFragment
             @Override
             public void resendMessage() {
 
-                for (int i = 0; i < failedMessages.size(); i++) {
-                    if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
-                        if (failedMessages.get(i).getAttachment() != null) {
-                            if (!UploadManager.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
-                                UploadManager.getInstance().uploadMessageAndSend(chatType, message.realmRoomMessage);
-                            }
-                        }
-                        break;
-                    }
-                }
+//                for (int i = 0; i < failedMessages.size(); i++) {
+//                    if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
+//                        if (failedMessages.get(i).getAttachment() != null) {
+//                            if (!UploadManager.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
+//                                UploadManager.getInstance().uploadMessageAndSend(chatType, message.realmRoomMessage);
+//                            }
+//                        }
+//                        break;
+//                    }
+//                }
 
                 mAdapter.updateMessageStatus(message.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SENDING);
 

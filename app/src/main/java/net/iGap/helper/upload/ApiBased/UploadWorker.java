@@ -149,13 +149,24 @@ public class UploadWorker extends Worker {
         });
 
         try {
-            Response<UploadData> response = apiService.initUpload(token, String.valueOf(size),
-                    FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
-                    roomID, TokenContainer.getInstance().getToken()).execute();
+            Response<UploadData> response;
+            if (token == null || token.isEmpty()) {
+                response = apiService.initUpload(String.valueOf(size),
+                        FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
+                        roomID, TokenContainer.getInstance().getToken()).execute();
+            } else {
+                response = apiService.initResumeUpload(token, TokenContainer.getInstance().getToken()).execute();
+            }
             if (response.isSuccessful()) {
-                if (!isResume)
+                if (!isResume && response.body() != null) {
                     token = response.body().getToken();
-                int uploadedSize = Integer.parseInt(response.body().getUploadedSize() == null ? "0" : response.body().getUploadedSize());
+                    outputData = new Data.Builder()
+                            .putString(UPLOAD_IDENTITY, identity)
+                            .putString(UPLOAD_TOKEN, token)
+                            .build();
+                }
+
+                int uploadedSize = Integer.parseInt(response.body() == null || response.body().getUploadedSize() == null ? "0" : response.body().getUploadedSize());
                 if (file.length() - uploadedSize > 0) {
 //                                uploadFile(isResume, uploadedSize);
                     setProgressAsync(new Data.Builder()
@@ -184,7 +195,7 @@ public class UploadWorker extends Worker {
                 .readTimeout(1, TimeUnit.MINUTES)
                 .build();
 
-        String url = "http://192.168.10.31:3007/v1.0/upload/" + token;
+        String url = "https://api.igap.net/file-test/v1.0/upload/" + token;
 
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = secureRandom.generateSeed(16);
@@ -198,12 +209,13 @@ public class UploadWorker extends Worker {
                 MediaType mediaType = MediaType.parse("image/jpg; charset=utf-8");
                 RequestBody requestBody = new UploadRequestBody(mediaType, file.length(), inputStream, totalByte -> {
 
-                    if (progress < (int) ((totalByte * 100) / file.length()))
+                    if (progress < (int) ((totalByte * 100) / file.length())) {
                         progress = (int) ((totalByte * 100) / file.length());
-                    setProgressAsync(new Data.Builder()
-                            .putString(UPLOAD_IDENTITY, identity)
-                            .putInt(PROGRESS, progress)
-                            .build());
+                        setProgressAsync(new Data.Builder()
+                                .putString(UPLOAD_IDENTITY, identity)
+                                .putInt(PROGRESS, progress)
+                                .build());
+                    }
                 });
                 Request request = new Request.Builder()
                         .url(url)
@@ -214,6 +226,7 @@ public class UploadWorker extends Worker {
 
                 okhttp3.Response response = client.newCall(request).execute();
                 if (!response.isSuccessful()) {
+                    HelperError.showSnackMessage(response.peekBody(100).string(), true);
                     return Result.failure(outputData);
                 }
                 Log.d("POST", response.body().string());
@@ -223,13 +236,10 @@ public class UploadWorker extends Worker {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return Result.failure(outputData);
         }
         HelperDataUsage.increaseUploadFiles(uploadType);
         HelperError.showSnackMessage("finish", true);
-        outputData = new Data.Builder()
-                .putString(UPLOAD_IDENTITY, identity)
-                .putString(UPLOAD_TOKEN, token)
-                .build();
 
         setProgressAsync(new Data.Builder()
                 .putString(UPLOAD_IDENTITY, identity)

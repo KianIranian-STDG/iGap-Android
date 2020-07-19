@@ -23,13 +23,16 @@ import retrofit2.http.Streaming;
 public interface UploadsApi {
 
     @FormUrlEncoded
-    @POST("init/{token}")
-    Call<UploadData> initUpload(@Path("token") String token,
-                                @Field("size") String fileSize,
+    @POST("init")
+    Call<UploadData> initUpload(@Field("size") String fileSize,
                                 @Field("name") String fileName,
                                 @Field("extension") String fileExtension,
                                 @Field("room_id") String roomID,
                                 @Header("Authorization") String jwtToken);
+
+    @GET("init/{token}")
+    Call<UploadData> initResumeUpload(@Path("token") String token,
+                                      @Header("Authorization") String jwtToken);
 
     /**
      * UPLOAD data with multipart body

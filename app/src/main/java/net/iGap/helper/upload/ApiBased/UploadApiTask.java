@@ -130,7 +130,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
             Log.d(TAG, "getUploadInfoServer: in V2 init");
             long finalSize = size;
             DbManager.getInstance().doRealmTask(realm -> {
-                new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(finalSize),
+                new ApiInitializer<UploadData>().initAPI(apiService.initUpload(String.valueOf(finalSize),
                         FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
                         roomID, String.valueOf(realm.where(RealmUserInfo.class).findFirst().getUserId())),
                         this, new ResponseCallback<UploadData>() {
@@ -164,7 +164,7 @@ public class UploadApiTask extends Thread implements HandShakeCallback {
                         });
             });
         } else
-            new ApiInitializer<UploadData>().initAPI(apiService.initUpload(token, String.valueOf(size),
+            new ApiInitializer<UploadData>().initAPI(apiService.initUpload(String.valueOf(size),
                     FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()), roomID, null),
                     this, new ResponseCallback<UploadData>() {
                         @Override

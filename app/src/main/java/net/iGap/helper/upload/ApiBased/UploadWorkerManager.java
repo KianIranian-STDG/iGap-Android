@@ -188,32 +188,6 @@ public class UploadWorkerManager {
                     Log.d(TAG, "onChanged compress: " + workInfo.getState().name() + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
                 }
             });
-            /*CompressTask compressTask = new CompressTask(message.getMessageId() + "", message.getAttachment().getLocalFilePath(), savePathVideoCompress, new OnCompress() {
-                @Override
-                public void onCompressProgress(String id, int percent) {
-                    Log.d("bagi", "onCompressProgress" + percent);
-                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent);
-                }
-
-                @Override
-                public void onCompressFinish(String id, boolean compress) {
-
-                    Log.d("bagi", "onCompressFinish" + message.getMessageId());
-                    if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
-                        compressFile.renameTo(CompletedCompressFile);
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
-
-                        uploadMessageAndSend(roomType, message, ignoreCompress);
-                    } else {
-                        if (compressFile.exists()) {
-                            compressFile.delete();
-                        }
-
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
-                        uploadMessageAndSend(roomType, message, true);
-                    }
-                }
-            });*/
             return;
         }
         WorkRequest compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
@@ -223,7 +197,6 @@ public class UploadWorkerManager {
                 (compressTask == null || !CompletedCompressFile.exists()))
             return;
 
-        Log.d("bagi", "after Compress");
         String fileAdd;
         if (CompletedCompressFile.exists()) {
             fileAdd = CompletedCompressFile.getAbsolutePath();
@@ -242,6 +215,7 @@ public class UploadWorkerManager {
                         .setInputData(new Data.Builder()
                                 .putString(UploadWorker.UPLOAD_IDENTITY, String.valueOf(message.getMessageId()))
                                 .putString(UploadWorker.UPLOAD_ROOM_ID, String.valueOf(message.getRoomId()))
+                                .putString(UploadWorker.UPLOAD_TOKEN, message.getAttachment() != null ? message.getAttachment().getToken() : "")
                                 .putInt(UploadWorker.UPLOAD_TYPE, message.getMessageType().getNumber())
                                 .putString(UploadWorker.UPLOAD_FILE_ADDRESS, fileAdd)
                                 .build())
@@ -295,7 +269,13 @@ public class UploadWorkerManager {
                         pendingUploadTasks.remove(String.valueOf(message.getMessageId()));
                         break;
                     case FAILED:
-                        Log.d("bagi", "uploadMessageAndSendError");
+                        final String updatedToken = workInfo.getOutputData().getString(UploadWorker.UPLOAD_TOKEN);
+                        if (message.getAttachment() != null && updatedToken != null) {
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                RealmAttachment.updateToken(message.getMessageId(), updatedToken);
+                            });
+                        }
+
                         String id = String.valueOf(message.getMessageId());
                         pendingUploadTasks.remove(id);
                         HelperSetAction.sendCancel(Long.parseLong(id));
@@ -305,61 +285,6 @@ public class UploadWorkerManager {
                 Log.d(TAG, "onChanged upload: " + workInfo.getState().name() + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
             }
         });
-        /*OnUploadListener onUploadListener = new OnUploadListener() {
-            @Override
-            public void onProgress(String id, int progress) {
-                Log.d("bagi", progress + "uploadMessageAndSend2");
-                EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, id, progress);
-            }
-
-            @Override
-            public void onFinish(String id, String token) {
-                Log.d("bagi", "uploadMessageAndSendonFinish");
-                if (CompletedCompressFile.exists()) {
-                    CompletedCompressFile.delete();
-                }
-
-                HelperSetAction.sendCancel(message.getMessageId());
-
-                DbManager.getInstance().doRealmTransaction(realm -> {
-                    RealmAttachment.updateToken(message.getMessageId(), token);
-                });
-
-                *//**
-         * this code should exist in under of other codes in this block
-         *//*
-                if (message.getReplyTo() == null) {
-                    new ChatSendMessageUtil().newBuilder(roomType, message.getMessageType(), message.getRoomId())
-                            .attachment(token)
-                            .message(message.getMessage())
-                            .sendMessage(message.getMessageId() + "");
-                } else {
-
-                    new ChatSendMessageUtil().newBuilder(roomType, message.getMessageType(), message.getRoomId())
-                            .replyMessage(message.getReplyTo().getMessageId())
-                            .attachment(token)
-                            .message(message.getMessage())
-                            .sendMessage(message.getMessageId() + "");
-                }
-
-
-                pendingUploadTasks.remove(id);
-            }
-
-            @Override
-            public void onError(String id) {
-                Log.d("bagi", "uploadMessageAndSendError");
-                pendingUploadTasks.remove(id);
-                HelperSetAction.sendCancel(Long.parseLong(id));
-                makeFailed(id);
-            }
-        };*/
-        /*UploadApiTask uploadTask;
-        if (CompletedCompressFile.exists()) {
-            uploadTask = new UploadApiTask(message, CompletedCompressFile.getAbsolutePath(), onUploadListener);
-        } else {
-            uploadTask = new UploadApiTask(message, onUploadListener);
-        }*/
     }
 
     /**
