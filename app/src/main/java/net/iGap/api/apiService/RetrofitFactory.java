@@ -6,7 +6,6 @@ import net.iGap.api.BillsApi;
 import net.iGap.api.CPayApi;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.CharityApi;
-import net.iGap.api.DownloadApi;
 import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.IgashtApi;
@@ -18,15 +17,11 @@ import net.iGap.api.ShahkarApi;
 import net.iGap.api.StickerApi;
 import net.iGap.api.UploadsApi;
 import net.iGap.api.WeatherApi;
-import net.iGap.module.downloader.IProgress;
-import net.iGap.module.downloader.DownloadProgressResponseBody;
 
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 import okhttp3.TlsVersion;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -55,31 +50,6 @@ public class RetrofitFactory {
             httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
         }
         return httpClient;
-    }
-
-    public OkHttpClient getOkHttpDownloadClientBuilder(IProgress progressListener) {
-        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-
-        httpClientBuilder.connectTimeout(20, TimeUnit.SECONDS);
-        httpClientBuilder.writeTimeout(0, TimeUnit.SECONDS);
-        httpClientBuilder.readTimeout(5, TimeUnit.MINUTES);
-
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            httpClientBuilder.addInterceptor(httpLoggingInterceptor);
-        }
-
-        httpClientBuilder.addInterceptor(chain -> {
-            if(progressListener == null) return chain.proceed(chain.request());
-
-            Response originalResponse = chain.proceed(chain.request());
-            return originalResponse.newBuilder()
-                    .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
-                    .build();
-        });
-
-        return httpClientBuilder.build();
     }
 
     public OkHttpClient getHttpClientForMobileBank() {
@@ -212,16 +182,6 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(UploadsApi.class);
-    }
-
-    public DownloadApi getDownloadRetrofit(IProgress callback) {
-        return new Retrofit.Builder()
-                .baseUrl(ApiStatic.UPLOAD_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(getOkHttpDownloadClientBuilder(callback))
-                .build()
-                .create(DownloadApi.class);
     }
 
     public MobileBankApi getMobileBankRetrofit() {

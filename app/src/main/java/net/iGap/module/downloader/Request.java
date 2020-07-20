@@ -42,7 +42,7 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
     private int priority = PRIORITY.PRIORITY_DEFAULT;
     private AtomicBoolean cancelDownload = new AtomicBoolean(false);
     private AppExecutors appExecutors;
-    private Observer<Pair<Request, Downloader.DownloadStatus>> downloadStatusObserver;
+    private Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> downloadStatusObserver;
 
     protected Request(RealmRoomMessage message, Selector selector, int priority) {
         this(message, selector);
@@ -112,11 +112,11 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
 
     public void download() {
         if (isDownloaded) {
-            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
+            notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADED);
             return;
         }
         isDownloading = true;
-        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
+        notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
 
 
         appExecutors.networkIO().execute(() -> {
@@ -130,7 +130,7 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
 
     @WorkerThread
     private void download(String jwtToken) {
-        notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADING);
+        notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
         OkHttpClient client = new OkHttpClient();
 //        String fileToken =  RealmRoomMessage.getFinalMessage(message).getAttachment().getToken();
         String fileToken = "5a8b3703-0e60-4461-81b2-6d831d500959";
@@ -179,7 +179,7 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
         if (downloadedFile.exists())
             downloadedFile.delete();
         isDownloading = false;
-        notifyDownloadStatus(Downloader.DownloadStatus.NOT_DOWNLOADED);
+        notifyDownloadStatus(DownloadThroughApi.DownloadStatus.NOT_DOWNLOADED);
     }
 
     public String getRequestId() {
@@ -195,7 +195,7 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
             moveTempToDownloadedDir();
             this.progress = 100;
             notifyObservers(Resource.success(this.progress));
-            notifyDownloadStatus(Downloader.DownloadStatus.DOWNLOADED);
+            notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADED);
         } catch (IOException e) {
             onError(e);
         }
@@ -257,11 +257,11 @@ public class Request extends Observable<Resource<Integer>> implements Comparable
         return offset;
     }
 
-    public void setDownloadStatusListener(Observer<Pair<Request, Downloader.DownloadStatus>> observer) {
+    public void setDownloadStatusListener(Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> observer) {
         this.downloadStatusObserver = observer;
     }
 
-    public void notifyDownloadStatus(Downloader.DownloadStatus downloadStatus) {
+    public void notifyDownloadStatus(DownloadThroughApi.DownloadStatus downloadStatus) {
         if (downloadStatusObserver != null) {
             downloadStatusObserver.onUpdate(new Pair<>(this, downloadStatus));
         }
