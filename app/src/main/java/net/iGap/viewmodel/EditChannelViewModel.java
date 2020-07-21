@@ -15,12 +15,11 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.interfaces.OnChannelAvatarAdd;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnChannelDelete;
@@ -401,7 +400,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public void uploadAvatar(String path) {
         long avatarId = SUID.id().get();
         long lastUploadedAvatarId = avatarId + 1L;
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+        Uploader.getInstance().upload(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
                 showUploadProgressLiveData.postValue(View.VISIBLE);
@@ -416,7 +415,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             public void onError(String id) {
                 showUploadProgressLiveData.postValue(View.GONE);
             }
-        }));
+        });
     }
 
     public MutableLiveData<Long> getChannelAvatarUpdatedLiveData() {

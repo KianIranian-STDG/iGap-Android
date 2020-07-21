@@ -6,11 +6,19 @@ import net.iGap.helper.upload.UploadTask;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
+import java.io.File;
+
 public class UploadAdapter implements IUpload {
     private final UploadManager uploadManager;
 
     public UploadAdapter(UploadManager uploadManager) {
         this.uploadManager = uploadManager;
+    }
+
+    @Override
+    public void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener) {
+        UploadTask uploadTask =  new UploadTask(identity, file, type, onUploadListener);
+        uploadManager.upload(uploadTask);
     }
 
     @Override

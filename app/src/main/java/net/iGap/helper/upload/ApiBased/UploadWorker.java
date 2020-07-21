@@ -207,7 +207,6 @@ public class UploadWorker extends Worker {
                     HelperError.showSnackMessage(response.peekBody(100).string(), true);
                     return Result.failure(outputData);
                 }
-                Log.d("POST", response.body().string());
             } catch (Exception e) {
                 e.printStackTrace();
                 HelperError.showSnackMessage(e.getMessage(), true);

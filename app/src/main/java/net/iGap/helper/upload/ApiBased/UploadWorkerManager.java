@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.helper.upload.ApiBased.UploadWorker.UPLOAD_IDENTITY;
 
 public class UploadWorkerManager implements IUpload {
 
@@ -79,21 +80,54 @@ public class UploadWorkerManager implements IUpload {
 
     }
 
-    public void upload(WorkRequest uploadTask) {
+    public void upload(WorkRequest uploadTask, OnUploadListener onUploadListener) {
         if (uploadTask == null)
             return;
         pendingUploadTasks.put(uploadTask.getId().toString(), uploadTask);
-        addUploadWorker(uploadTask);
+        addUploadWorker(uploadTask, onUploadListener);
     }
 
-    private void addUploadWorker(WorkRequest worker) {
+    private void addUploadWorker(WorkRequest worker, OnUploadListener onUploadListener) {
         WorkManager.getInstance(context).enqueue(worker);
 
         WorkManager.getInstance(context).getWorkInfoByIdLiveData(worker.getId()).observeForever(workInfo -> {
-            if (workInfo != null) {
-                Log.d(TAG, "onChanged: " + workInfo.getState().name() + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+            if (onUploadListener == null)
+                return;
+
+            switch (workInfo.getState()) {
+                case RUNNING:
+                    onUploadListener.onProgress(workInfo.getProgress().getString(UPLOAD_IDENTITY), workInfo.getProgress().getInt(UploadWorker.PROGRESS, 0));
+                    break;
+                case SUCCEEDED:
+                    String token = workInfo.getOutputData().getString(UploadWorker.UPLOAD_TOKEN);
+                    pendingUploadTasks.remove(worker.getId().toString());
+                    onUploadListener.onFinish(workInfo.getOutputData().getString(UPLOAD_IDENTITY), token);
+                    break;
+                case FAILED:
+                    pendingUploadTasks.remove(worker.getId().toString());
+                    onUploadListener.onError(workInfo.getOutputData().getString(UPLOAD_IDENTITY));
+                    break;
             }
         });
+    }
+
+    @Override
+    public void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener) {
+        WorkRequest uploadWork =
+                new OneTimeWorkRequest.Builder(UploadWorker.class)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(
+                                BackoffPolicy.EXPONENTIAL,
+                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                                TimeUnit.MILLISECONDS)
+                        .addTag("Upload")
+                        .setInputData(new Data.Builder()
+                                .putString(UPLOAD_IDENTITY, identity)
+                                .putInt(UploadWorker.UPLOAD_TYPE, type.getNumber())
+                                .putString(UploadWorker.UPLOAD_FILE_ADDRESS, file.getAbsolutePath())
+                                .build())
+                        .build();
+        upload(uploadWork, onUploadListener);
     }
 
     @Override
@@ -113,14 +147,14 @@ public class UploadWorkerManager implements IUpload {
                         .addTag(String.valueOf(message.getMessage()))
                         .addTag("Upload")
                         .setInputData(new Data.Builder()
-                                .putString(UploadWorker.UPLOAD_IDENTITY, String.valueOf(message.getMessageId()))
+                                .putString(UPLOAD_IDENTITY, String.valueOf(message.getMessageId()))
                                 .putString(UploadWorker.UPLOAD_ROOM_ID, String.valueOf(message.getRoomId()))
                                 .putString(UploadWorker.UPLOAD_TOKEN, message.getAttachment() != null ? message.getAttachment().getToken() : "")
                                 .putInt(UploadWorker.UPLOAD_TYPE, message.getMessageType().getNumber())
                                 .putString(UploadWorker.UPLOAD_FILE_ADDRESS, uploadedPath)
                                 .build())
                         .build();
-        upload(uploadWork);
+        upload(uploadWork, onUploadListener);
     }
 
     @Override
@@ -244,7 +278,7 @@ public class UploadWorkerManager implements IUpload {
                         .addTag(String.valueOf(message.getMessageId()))
                         .addTag("Upload")
                         .setInputData(new Data.Builder()
-                                .putString(UploadWorker.UPLOAD_IDENTITY, String.valueOf(message.getMessageId()))
+                                .putString(UPLOAD_IDENTITY, String.valueOf(message.getMessageId()))
                                 .putString(UploadWorker.UPLOAD_ROOM_ID, String.valueOf(message.getRoomId()))
                                 .putString(UploadWorker.UPLOAD_TOKEN, message.getAttachment() != null ? message.getAttachment().getToken() : "")
                                 .putInt(UploadWorker.UPLOAD_TYPE, message.getMessageType().getNumber())
@@ -313,7 +347,7 @@ public class UploadWorkerManager implements IUpload {
                         makeFailed(id);
                         break;
                 }
-                Log.d(TAG, "onChanged upload: " + workInfo.getState().name() + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+                Log.d(TAG, "onChanged upload: " + workInfo.getState().name() + " " + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
             }
         });
     }
@@ -368,7 +402,6 @@ public class UploadWorkerManager implements IUpload {
         if (uploadTask == null) {
             return false;
         } else {
-            Log.d(TAG, "cancelUploading: ");
             WorkManager.getInstance(context).cancelAllWorkByTag(identity);
             return true;
         }

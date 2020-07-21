@@ -4,7 +4,11 @@ import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
+import java.io.File;
+
 public interface IUpload {
+    void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener);
+
     void upload(RealmRoomMessage message, OnUploadListener onUploadListener);
 
     void upload(RealmRoomMessage message, String compressedPass, OnUploadListener onUploadListener);

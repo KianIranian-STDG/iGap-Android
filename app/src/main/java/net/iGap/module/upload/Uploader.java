@@ -7,6 +7,8 @@ import net.iGap.helper.upload.UploadManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
+import java.io.File;
+
 public class Uploader implements IUpload {
     private static Uploader instance;
 
@@ -27,6 +29,11 @@ public class Uploader implements IUpload {
             }
         }
         return instance;
+    }
+
+    @Override
+    public void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener) {
+        getCurrentUploader().upload(identity, file, type, onUploadListener);
     }
 
     @Override
