@@ -153,11 +153,11 @@ public class UploadWorker extends Worker {
                 return Result.failure();
             } else {
 
-                String error = response.errorBody() != null ? response.errorBody().string(): "Unknown Error!";
-                if (error.contains("UPLOAD_RESUME_EXPIRATION_TIME")) {
+                String error = response.errorBody() != null ? response.errorBody().string() : "Unknown Error!";
+                if (error.contains("FILE_UPLOAD_STATUS_FAILED") || response.code() == 407) {
                     error = G.context.getString(R.string.error_resume_file_expired);
-                } else if(error.contains("FILE_UPLOAD_IN_PROGRESS")) {
-                    error = G.context.getString(R.string.try_later);
+                } else if (error.contains("FIlE_UPLOADED_COMPLETELY") || response.code() == 406) {
+                    return Result.success(outputData);
                 }
                 HelperError.showSnackMessage(error, false);
                 return Result.failure(outputData);
