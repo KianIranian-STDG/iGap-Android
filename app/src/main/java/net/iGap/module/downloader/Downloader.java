@@ -3,6 +3,7 @@ package net.iGap.module.downloader;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.G;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmRoomMessage;
@@ -13,16 +14,12 @@ public class Downloader implements IDownloader {
     private IDownloader downloadThroughProto;
     private IDownloader downloadThroughApi;
 
-    // 0 => through proto
-    // 1 => through api
-    private int config = 0;
-
     private Downloader() {
         downloadThroughApi = DownloadThroughApi.getInstance();
         downloadThroughProto = new DownloaderAdapter(HelperDownloadFile.getInstance());
     }
 
-    public static Downloader getInstance(int config) {
+    public static Downloader getInstance() {
         if (instance == null) {
             synchronized (Downloader.class) {
                 if (instance == null) {
@@ -30,7 +27,6 @@ public class Downloader implements IDownloader {
                 }
             }
         }
-        instance.config = config;
         return instance;
     }
 
@@ -63,10 +59,13 @@ public class Downloader implements IDownloader {
     public boolean isDownloading(@NonNull String cacheId) {
         return getCurrentDownloader().isDownloading(cacheId);
     }
+
+    // 0 => through proto
+    // 1 => through api
     private IDownloader getCurrentDownloader() {
-        if (config == 0) {
+        if (G.uploadDownloadConfig == 0) {
             return downloadThroughProto;
-        } else if (config == 1) {
+        } else if (G.uploadDownloadConfig == 1) {
             return downloadThroughApi;
         }
         return downloadThroughProto;

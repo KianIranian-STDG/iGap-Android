@@ -9,6 +9,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.apiService.TokenContainer;
@@ -149,12 +150,16 @@ public class UploadWorker extends Worker {
                     return uploadFileWithOkHttp(isResume, uploadedSize);
                 } else
                     HelperError.showSnackMessage("uploaded size is greater than file size", false);
-                    return Result.failure();
+                return Result.failure();
             } else {
-                HelperError.showSnackMessage(response.errorBody()!= null ? response.errorBody().string(): String.valueOf(response.code()), false);
-                if (response.code() >= 500 && response.code() < 600) {
-                    return Result.failure(outputData);
+
+                String error = response.errorBody() != null ? response.errorBody().string(): "Unknown Error!";
+                if (error.contains("UPLOAD_RESUME_EXPIRATION_TIME")) {
+                    error = G.context.getString(R.string.error_resume_file_expired);
+                } else if(error.contains("FILE_UPLOAD_IN_PROGRESS")) {
+                    error = G.context.getString(R.string.try_later);
                 }
+                HelperError.showSnackMessage(error, false);
                 return Result.failure(outputData);
             }
         } catch (IOException e) {

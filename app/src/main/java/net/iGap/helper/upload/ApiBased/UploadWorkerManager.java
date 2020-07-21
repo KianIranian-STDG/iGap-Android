@@ -286,7 +286,7 @@ public class UploadWorkerManager implements IUpload {
                                 .build())
                         .build();
 
-        if (!pendingUploadTasks.containsKey(uploadWork.getId().toString())) {
+        if (!pendingUploadTasks.containsKey(String.valueOf(message.getMessageId()))) {
             pendingUploadTasks.put(String.valueOf(message.getMessageId()), uploadWork);
             WorkManager.getInstance(context).enqueue(uploadWork);
             HelperSetAction.setActionFiles(message.getRoomId(), message.getMessageId(), HelperSetAction.getAction(message.getMessageType()), roomType);
