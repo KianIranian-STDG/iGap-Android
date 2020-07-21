@@ -14,9 +14,11 @@ import androidx.work.WorkRequest;
 
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
+import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.upload.IUpload;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -28,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class UploadWorkerManager {
+public class UploadWorkerManager implements IUpload {
 
     private static volatile UploadWorkerManager instance = null;
 
@@ -94,11 +96,40 @@ public class UploadWorkerManager {
         });
     }
 
+    @Override
+    public void upload(RealmRoomMessage message, OnUploadListener onUploadListener) {
+        upload(message, message.getAttachment().getLocalFilePath(), onUploadListener);
+    }
+
+    @Override
+    public void upload(RealmRoomMessage message, String uploadedPath, OnUploadListener onUploadListener) {
+        WorkRequest uploadWork =
+                new OneTimeWorkRequest.Builder(UploadWorker.class)
+                        .setConstraints(constraints)
+                        .setBackoffCriteria(
+                                BackoffPolicy.EXPONENTIAL,
+                                OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                                TimeUnit.MILLISECONDS)
+                        .addTag(String.valueOf(message.getMessage()))
+                        .addTag("Upload")
+                        .setInputData(new Data.Builder()
+                                .putString(UploadWorker.UPLOAD_IDENTITY, String.valueOf(message.getMessageId()))
+                                .putString(UploadWorker.UPLOAD_ROOM_ID, String.valueOf(message.getRoomId()))
+                                .putString(UploadWorker.UPLOAD_TOKEN, message.getAttachment() != null ? message.getAttachment().getToken() : "")
+                                .putInt(UploadWorker.UPLOAD_TYPE, message.getMessageType().getNumber())
+                                .putString(UploadWorker.UPLOAD_FILE_ADDRESS, uploadedPath)
+                                .build())
+                        .build();
+        upload(uploadWork);
+    }
+
+    @Override
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
         uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) != 1);
     }
 
-    private void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
+    @Override
+    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
         Log.d("bagi", "uploadMessageAndSend" + message.getMessageId());
         Log.d(TAG, "UploadWorkerManager: " + pendingCompressTasks.size() + " " + pendingUploadTasks.size());
         if (message.isManaged()) {
@@ -313,21 +344,24 @@ public class UploadWorkerManager {
         });
     }
 
-
+    @Override
     public boolean isUploading(String identity) {
         WorkRequest uploadTask = pendingUploadTasks.get(identity);
         return uploadTask != null;
     }
 
+    @Override
     public boolean isCompressing(String identity) {
         WorkRequest compressTask = pendingCompressTasks.get(identity);
         return compressTask != null;
     }
 
+    @Override
     public boolean isCompressingOrUploading(String identity) {
         return isUploading(identity) || isCompressing(identity);
     }
 
+    @Override
     public boolean cancelUploading(String identity) {
         WorkRequest uploadTask = pendingUploadTasks.remove(identity);
 
@@ -340,16 +374,19 @@ public class UploadWorkerManager {
         }
     }
 
+    @Override
     public boolean cancelCompressing(String identity) {
         WorkRequest compressTask = pendingCompressTasks.remove(identity);
         // cancel compress task
         return compressTask != null;
     }
 
+    @Override
     public boolean cancelCompressingAndUploading(String identity) {
         return cancelUploading(identity) || cancelCompressing(identity);
     }
 
+    @Override
     public int getUploadProgress(String identity) {
         WorkRequest uploadTask = pendingUploadTasks.get(identity);
         if (uploadTask != null) {
@@ -358,6 +395,7 @@ public class UploadWorkerManager {
         return 1;
     }
 
+    @Override
     public int getCompressProgress(String identity) {
         WorkRequest compressTask = pendingCompressTasks.get(identity);
         if (compressTask != null) {

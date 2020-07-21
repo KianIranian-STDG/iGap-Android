@@ -388,6 +388,7 @@ public class G extends ApplicationContext {
     public static boolean isLocationFromBot = false;
     public static boolean isNeedToCheckProfileWallpaper = false;
     public static String nationalCode;
+    public static int uploadDownloadConfig = 1;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
     public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();

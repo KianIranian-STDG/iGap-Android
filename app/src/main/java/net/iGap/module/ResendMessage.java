@@ -13,12 +13,12 @@ package net.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.observers.interfaces.IResendMessage;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.upload.Uploader;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -123,7 +123,7 @@ public class ResendMessage implements IResendMessage {
                                                     if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                         new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                                     } else {
-                                                        UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                        Uploader.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
                                                    }
                                                 }
                                             }
@@ -146,7 +146,7 @@ public class ResendMessage implements IResendMessage {
                                             if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                 new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                             } else {
-                                                UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                Uploader.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
                                             }
                                         }
                                     }

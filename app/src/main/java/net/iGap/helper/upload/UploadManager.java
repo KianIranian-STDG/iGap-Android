@@ -63,12 +63,14 @@ public class UploadManager {
         uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) != 1);
     }
 
-    private void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
+    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
         Log.d("bagi", "uploadMessageAndSend" + message.getMessageId());
         if (message.isManaged()) {
             uploadMessageAndSend(
                     roomType,
-                    DbManager.getInstance().doRealmTask(realm -> { return realm.copyFromRealm(message);}),
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        return realm.copyFromRealm(message);
+                    }),
                     ignoreCompress
             );
             return;
@@ -128,7 +130,7 @@ public class UploadManager {
         }
         CompressTask compressTask = pendingCompressTasks.remove(message.getMessageId() + "");
         if ((message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO ||
-                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT ) &&
+                message.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) &&
                 !ignoreCompress &&
                 (compressTask == null || !CompletedCompressFile.exists()))
             return;

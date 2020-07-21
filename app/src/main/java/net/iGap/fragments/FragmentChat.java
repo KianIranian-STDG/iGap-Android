@@ -159,7 +159,6 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
-import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.EmojiView;
@@ -209,6 +208,7 @@ import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructWebView;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IDispatchTochEvent;
@@ -4160,7 +4160,7 @@ public class FragmentChat extends BaseFragment
     public void onUploadOrCompressCancel(View view, final StructMessageInfo message, int pos) {
         HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
 
-        if (UploadWorkerManager.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
+        if (Uploader.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
             deleteItem(message.realmRoomMessage.getMessageId(), pos);
         }
     }
@@ -5374,16 +5374,16 @@ public class FragmentChat extends BaseFragment
             @Override
             public void resendMessage() {
 
-//                for (int i = 0; i < failedMessages.size(); i++) {
-//                    if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
-//                        if (failedMessages.get(i).getAttachment() != null) {
-//                            if (!UploadManager.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
-//                                UploadManager.getInstance().uploadMessageAndSend(chatType, message.realmRoomMessage);
-//                            }
-//                        }
-//                        break;
-//                    }
-//                }
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
+                        if (failedMessages.get(i).getAttachment() != null) {
+                            if (!Uploader.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
+                                Uploader.getInstance().uploadMessageAndSend(chatType, message.realmRoomMessage);
+                            }
+                        }
+                        break;
+                    }
+                }
 
                 mAdapter.updateMessageStatus(message.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SENDING);
 

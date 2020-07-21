@@ -85,6 +85,7 @@ import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IChatItemAttachment;
@@ -385,11 +386,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
 
-            if (!UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
-                UploadWorkerManager.getInstance().uploadMessageAndSend(type, mMessage);
+            if (!Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+                Uploader.getInstance().uploadMessageAndSend(type, mMessage);
             } else {
                 MessageProgress _Progress = ((IProgress) holder).getProgress();
-                _Progress.withProgress(UploadWorkerManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                _Progress.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             }
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -1416,7 +1417,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        if (UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
             return;
         }
 
@@ -1510,7 +1511,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         View thumbnail = ((IThumbNailItem) holder).getThumbNailImageView();
 
 
-        if (UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
             if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
                 if (G.userLogin) {
                     messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
@@ -1721,12 +1722,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
              */
-            if (UploadWorkerManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
+            if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
                 //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
                 hideThumbnailIf(holder);
 
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                progressBar.withProgress(UploadWorkerManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                progressBar.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             } else {
                 checkForDownloading(holder);
             }
