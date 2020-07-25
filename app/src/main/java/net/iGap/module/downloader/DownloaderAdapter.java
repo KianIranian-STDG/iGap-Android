@@ -22,13 +22,14 @@ public class DownloaderAdapter implements IDownloader {
     @Override
     public void download(@NonNull RealmRoomMessage message,
                          @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                         int priority, @Nullable Observer<Resource<Integer>> observer) {
-        RealmRoomMessage finalMessage = RealmRoomMessage.getFinalMessage(message);
-        oldDownloader.startDownload(finalMessage.getMessageType(),
-                String.valueOf(finalMessage.getMessageId()), finalMessage.getAttachment().getToken(),
+                         int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
+        message = RealmRoomMessage.getFinalMessage(message);
+
+        oldDownloader.startDownload(message.getMessageType(),
+                String.valueOf(message.getMessageId()), message.getAttachment().getToken(),
                 message.getAttachment().getUrl(), message.getAttachment().getCacheId(),
                 message.getAttachment().getName(), message.getAttachment().getSize(), selector,
-                generateDownloadFileForRequest(finalMessage.getAttachment().getCacheId(), finalMessage.getAttachment().getName(), finalMessage.getMessageType()).getAbsolutePath(),
+                generateDownloadFileForRequest(message.getAttachment().getCacheId(), message.getAttachment().getName(), message.getMessageType()).getAbsolutePath(),
                 priority, new HelperDownloadFile.UpdateListener() {
                     @Override
                     public void OnProgress(String path, int progress) {
@@ -36,9 +37,9 @@ public class DownloaderAdapter implements IDownloader {
                             return;
 
                         if (progress < 100 && progress >= 0) {
-                            observer.onUpdate(Resource.loading(progress));
+                            observer.onUpdate(Resource.loading(new Request.Progress(progress, path)));
                         } else if (progress == 100) {
-                            observer.onUpdate(Resource.success(progress));
+                            observer.onUpdate(Resource.success(new Request.Progress(progress, path)));
                         }
                     }
 
@@ -51,17 +52,18 @@ public class DownloaderAdapter implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, @NonNull ProtoFileDownload.FileDownload.Selector selector, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message, @NonNull ProtoFileDownload.FileDownload.Selector selector,
+                         @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message,@Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, int priority, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 

@@ -8,20 +8,20 @@ import net.iGap.realm.RealmRoomMessage;
 
 public interface IDownloader {
     void download(@NonNull RealmRoomMessage message,
-                       @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                       int priority,
-                       @Nullable Observer<Resource<Integer>> observer);
+                  @NonNull ProtoFileDownload.FileDownload.Selector selector,
+                  int priority,
+                  @Nullable Observer<Resource<Request.Progress>> observer);
 
     void download(@NonNull RealmRoomMessage message,
                   @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                  @Nullable Observer<Resource<Integer>> observer);
+                  @Nullable Observer<Resource<Request.Progress>> observer);
 
     void download(@NonNull RealmRoomMessage message,
-                  @Nullable Observer<Resource<Integer>> observer);
+                  @Nullable Observer<Resource<Request.Progress>> observer);
 
     void download(@NonNull RealmRoomMessage message,
-             int priority,
-             @Nullable Observer<Resource<Integer>> observer);
+                  int priority,
+                  @Nullable Observer<Resource<Request.Progress>> observer);
 
     void cancelDownload(@NonNull String cacheId);
 

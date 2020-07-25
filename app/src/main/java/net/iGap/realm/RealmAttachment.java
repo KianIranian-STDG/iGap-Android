@@ -10,15 +10,14 @@
 
 package net.iGap.realm;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SUID;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 
@@ -276,10 +275,12 @@ public class RealmAttachment extends RealmObject {
         return localFilePath;
     }
 
-    public void setLocalFilePath(@Nullable String localFilePath) {
-        if (this.localFilePath != null && this.localFilePath.equals(localFilePath))
+    public void setLocalFilePath(@Nullable String path) {
+        if (localFilePath == null)
+            localFilePath = path;
+        else if (localFilePath.equals(path))
             return;
-        this.localFilePath = localFilePath;
+        localFilePath = path;
     }
 
     public long getId() {

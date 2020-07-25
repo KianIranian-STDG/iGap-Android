@@ -31,22 +31,22 @@ public class Downloader implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
         getCurrentDownloader().download(message, selector, priority, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, @NonNull ProtoFileDownload.FileDownload.Selector selector, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message, @NonNull ProtoFileDownload.FileDownload.Selector selector, @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message, @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message, int priority, @Nullable Observer<Resource<Integer>> observer) {
+    public void download(@NonNull RealmRoomMessage message, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 

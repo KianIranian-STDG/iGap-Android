@@ -1,5 +1,6 @@
 package net.iGap.module.downloader;
 
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> {
+    private static final String TAG = "DownloadThroughApi";
     private static DownloadThroughApi instance;
     private Queue<Request> requestsQueue;
     private List<Request> inProgressRequests;
@@ -38,9 +40,9 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     }
 
     public void download(@NonNull RealmRoomMessage message,
-                           @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                           int priority,
-                           @Nullable Observer<Resource<Integer>> observer) {
+                         @NonNull ProtoFileDownload.FileDownload.Selector selector,
+                         int priority,
+                         @Nullable Observer<Resource<Request.Progress>> observer) {
 
         if (validateMessage(message)) {
             message = RealmRoomMessage.getFinalMessage(message);
@@ -63,26 +65,26 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
 
     @Override
     public void download(@NonNull RealmRoomMessage message,
-                           @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                           @Nullable Observer<Resource<Integer>> observer) {
+                         @NonNull ProtoFileDownload.FileDownload.Selector selector,
+                         @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
     public void download(@NonNull RealmRoomMessage message,
-                           @Nullable Observer<Resource<Integer>> observer) {
+                         @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
     public void download(@NonNull RealmRoomMessage message,
-                           int priority,
-                           @Nullable Observer<Resource<Integer>> observer) {
+                         int priority,
+                         @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 
     private boolean validateMessage(RealmRoomMessage message) {
-        return RealmRoomMessage.getFinalMessage(message).getAttachment() != null;
+        return message.getAttachment() != null;
     }
 
     private Request findExistedRequest(String requestId) {
@@ -99,12 +101,14 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
 
     public void cancelDownload(@NonNull String cacheId) {
         for (int i = 0; i < inProgressRequests.size(); i++) {
-            if (cacheId.contains(inProgressRequests.get(i).getRequestId())) {
+            if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
+                Log.i(TAG, "cancelDownload: " + inProgressRequests.get(i).getRequestId());
                 inProgressRequests.get(i).cancelDownload();
+                break;
             }
         }
 
-        for (Request request: requestsQueue) {
+        for (Request request : requestsQueue) {
             if (cacheId.contains(request.getRequestId())) {
                 requestsQueue.remove(request);
                 break;
@@ -115,7 +119,7 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     @Override
     public boolean isDownloading(@NonNull String cacheId) {
         for (int i = 0; i < inProgressRequests.size(); i++) {
-            if (cacheId.contains(inProgressRequests.get(i).getRequestId())) {
+            if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
                 return inProgressRequests.get(i).isDownloading();
             }
         }
@@ -128,6 +132,7 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
 
         for (int i = 0; i < inProgressRequests.size(); i++) {
             if (request.getRequestId().equals(inProgressRequests.get(i).getRequestId())) {
+                Log.i(TAG, "removeDownloadingRequestIfExist: " + inProgressRequests.get(i).getRequestId());
                 inProgressRequests.remove(i);
                 inProgressCount.decrementAndGet();
                 break;
@@ -144,6 +149,7 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
             return;
 
         inProgressRequests.add(request);
+        Log.i(TAG, "scheduleNewDownload: " + request.getRequestId());
         inProgressCount.incrementAndGet();
 
         request.download();

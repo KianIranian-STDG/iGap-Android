@@ -137,7 +137,6 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedBottomSheet;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
@@ -197,6 +196,8 @@ import net.iGap.module.customView.EventEditText;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Status;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -5030,20 +5031,11 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                HelperDownloadFile.getInstance().startDownload(message.realmRoomMessage.getMessageType(), message.realmRoomMessage.getMessageId() + "", fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(String path, int progress) {
-
-                        if (progress == 100) {
-                            if (canUpdateAfterDownload) {
-                                G.handler.post(() -> HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder));
-                            }
+                Downloader.getInstance().download(message.realmRoomMessage, arg -> {
+                    if (arg.data != null && arg.data.getProgress() == 100) {
+                        if (canUpdateAfterDownload) {
+                            G.handler.post(() -> HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder));
                         }
-                    }
-
-                    @Override
-                    public void OnError(String token) {
-
                     }
                 });
             }
@@ -5083,20 +5075,15 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                HelperDownloadFile.getInstance().startDownload(message.realmRoomMessage.getMessageType(), message.realmRoomMessage.getMessageId() + "", fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(String path, int progress) {
-
-                        if (progress == 100) {
-                            if (canUpdateAfterDownload) {
-                                G.handler.post(() -> HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder));
+                Downloader.getInstance().download(message.realmRoomMessage, selector, arg -> {
+                    if (canUpdateAfterDownload) {
+                        G.handler.post(() -> {
+                            if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
+                                if (arg.data != null && arg.data.getProgress() == 100) {
+                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                                }
                             }
-                        }
-                    }
-
-                    @Override
-                    public void OnError(String token) {
-
+                        });
                     }
                 });
             }
@@ -5141,30 +5128,29 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                HelperDownloadFile.getInstance().startDownload(message.realmRoomMessage.getMessageType(), message.realmRoomMessage.getMessageId() + "", fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(String path, int progress) {
-
-                        if (progress == 100) {
-                            if (canUpdateAfterDownload) {
-                                G.handler.post(() -> {
-                                    if (_messageType.toString().contains(VIDEO.toString())) {
-                                        HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                                    } else if (_messageType.toString().contains(GIF.toString())) {
-                                        HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
-                                    } else if (_messageType.toString().contains(IMAGE.toString())) {
-                                        HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                Downloader.getInstance().download(message.realmRoomMessage, selector, arg -> {
+                    if (canUpdateAfterDownload) {
+                        G.handler.post(() -> {
+                            switch (arg.status) {
+                                case SUCCESS:
+                                case LOADING:
+                                    if (arg.data == null)
+                                        return;
+                                    if (arg.data.getProgress() == 100) {
+                                        if (_messageType.toString().contains(VIDEO.toString())) {
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                                        } else if (_messageType.toString().contains(GIF.toString())) {
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
+                                        } else if (_messageType.toString().contains(IMAGE.toString())) {
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                                        }
                                     }
-                                });
+                                    break;
                             }
-                        }
-                    }
-
-                    @Override
-                    public void OnError(String token) {
-
+                        });
                     }
                 });
+
                 mAdapter.notifyItemChanged(pos);
             }
             onDownloadAllEqualCashId(cacheId, message.realmRoomMessage.getMessageId() + "");

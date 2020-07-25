@@ -36,6 +36,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnGroupAvatarDelete;
@@ -574,7 +575,7 @@ public class FragmentShowAvatars extends BaseFragment {
             final RealmAttachment ra = avatarList.get(position).getFile();
 
 
-            if (HelperDownloadFile.getInstance().isDownLoading(ra.getCacheId())) {
+            if (Downloader.getInstance().isDownloading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
                 startDownload(position, progress, zoomableImageView);
             } else {
@@ -629,8 +630,8 @@ public class FragmentShowAvatars extends BaseFragment {
 
                 String _cashId = avatarList.get(position).getFile().getCacheId();
 
-                if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
-                    HelperDownloadFile.getInstance().stopDownLoad(_cashId);
+                if (Downloader.getInstance().isDownloading(_cashId)) {
+                    Downloader.getInstance().cancelDownload(_cashId);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView);
