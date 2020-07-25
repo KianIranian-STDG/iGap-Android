@@ -1,7 +1,6 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -14,7 +13,6 @@ import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperDataUsage;
-import net.iGap.helper.HelperError;
 import net.iGap.helper.upload.UploadRequestBody;
 import net.iGap.model.UploadData;
 import net.iGap.proto.ProtoGlobal;
@@ -58,7 +56,6 @@ public class UploadWorker extends Worker {
     private File file;
     private FileChannel fileChannel;
     private RandomAccessFile randomAccessFile;
-    private String TAG = "Upload Worker http";
     static final String PROGRESS = "PROGRESS";
     static final String UPLOAD_IDENTITY = "UPLOAD_IDENTITY";
     static final String UPLOAD_TOKEN = "UPLOAD_TOKEN";
@@ -78,7 +75,6 @@ public class UploadWorker extends Worker {
     @Override
     public Result doWork() {
         // start progress
-        Log.d(TAG, "doWork: start");
         setProgressAsync(new Data.Builder()
                 .putString(UPLOAD_IDENTITY, identity)
                 .putInt(PROGRESS, 0)
@@ -105,8 +101,6 @@ public class UploadWorker extends Worker {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "path: " + file.getAbsolutePath());
-        Log.d(TAG, "File size: " + file.length());
         return getUploadInfoServer(!token.equals(""));
     }
 
@@ -148,8 +142,7 @@ public class UploadWorker extends Worker {
                             .putInt(PROGRESS, uploadedSize / ((int) file.length()) * 100)
                             .build());
                     return uploadFileWithOkHttp(isResume, uploadedSize);
-                } else
-                    HelperError.showSnackMessage("uploaded size is greater than file size", false);
+                }
                 return Result.failure();
             } else {
 
@@ -159,12 +152,10 @@ public class UploadWorker extends Worker {
                 } else if (error.contains("FIlE_UPLOADED_COMPLETELY") || response.code() == 406) {
                     return Result.success(outputData);
                 }
-                HelperError.showSnackMessage(error, false);
                 return Result.failure(outputData);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            HelperError.showSnackMessage(e.getMessage(), true);
             return Result.failure(outputData);
         }
     }
@@ -181,8 +172,7 @@ public class UploadWorker extends Worker {
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = secureRandom.generateSeed(16);
 
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(iv);
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+        try (FileInputStream fileInputStream = new FileInputStream(file); ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(iv)) {
             if (isResume && offset > 0)
                 fileInputStream.skip(offset);
 
@@ -209,17 +199,14 @@ public class UploadWorker extends Worker {
 
                 releaseSafely();
                 if (!response.isSuccessful()) {
-                    HelperError.showSnackMessage(response.peekBody(100).string(), true);
                     return Result.failure(outputData);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                HelperError.showSnackMessage(e.getMessage(), true);
                 return Result.failure(outputData);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperError.showSnackMessage(e.getMessage(), true);
             return Result.failure(outputData);
         }
         HelperDataUsage.increaseUploadFiles(uploadType);
@@ -229,14 +216,6 @@ public class UploadWorker extends Worker {
                 .putInt(PROGRESS, 100)
                 .build());
         return Result.success(outputData);
-    }
-
-    private void releaseSafely() {
-        try {
-            closeFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Nullable
@@ -255,7 +234,7 @@ public class UploadWorker extends Worker {
         return cipher;
     }
 
-    private void closeFile() throws IOException {
+    private void releaseSafely() {
         try {
             if (fileChannel != null) {
                 fileChannel.close();
@@ -263,6 +242,8 @@ public class UploadWorker extends Worker {
             if (randomAccessFile != null) {
                 randomAccessFile.close();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             fileChannel = null;
             randomAccessFile = null;
