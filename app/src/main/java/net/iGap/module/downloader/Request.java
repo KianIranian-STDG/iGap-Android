@@ -1,6 +1,5 @@
 package net.iGap.module.downloader;
 
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -34,7 +33,6 @@ import static net.iGap.module.AndroidUtils.suitableAppFilePath;
 
 public class Request extends Observable<Resource<Request.Progress>> implements Comparable<Request> {
     public static final String BASE_URL = ApiStatic.UPLOAD_URL + "download/";
-    private static final String TAG = "DownloadThroughApi";
 
     private String requestId;
     private RealmRoomMessage message;
@@ -88,7 +86,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
             }
         }
 
-        isDownloaded = checkIsDownloaded();
+        isDownloaded = downloadedFile.exists();
         isDownloading = false;
     }
 
@@ -114,10 +112,6 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         return new File(G.DIR_TEMP + fileName);
     }
 
-    private boolean checkIsDownloaded() {
-        return downloadedFile.exists();
-    }
-
     public boolean isDownloaded() {
         return isDownloaded;
     }
@@ -131,11 +125,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
             notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADED);
             return;
         }
-        isDownloading = true;
-        notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
-        appExecutors.networkIO().execute(() -> {
-            download(TokenContainer.getInstance().getToken(), message);
-        });
+        appExecutors.networkIO().execute(() -> download(TokenContainer.getInstance().getToken(), message));
     }
 
     public void cancelDownload() {
@@ -148,6 +138,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
 
     @WorkerThread
     private void download(String jwtToken, RealmRoomMessage message) {
+        isDownloading = true;
         notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
         OkHttpClient client = new OkHttpClient();
         String fileToken = RealmRoomMessage.getFinalMessage(message).getAttachment().getToken();
@@ -165,18 +156,16 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
             }
             InputStream inputStream = response.body().byteStream();
             byte[] iv = new byte[16];
-            int c = inputStream.read(iv, 0, 16);
-            InputStream in = new CipherInputStream(inputStream, AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey));
+            int readCount = inputStream.read(iv, 0, 16);
+            InputStream cipherInputStream = new CipherInputStream(inputStream, AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey));
             byte[] data = new byte[4096];
             int count;
             long downloaded = offset;
-            Log.i(TAG, "downloadStarted " + requestId);
-            while ((count = in.read(data)) != -1) {
+            while ((count = cipherInputStream.read(data)) != -1) {
                 downloaded += count;
                 int t = (int) ((downloaded * 100) / size);
                 if (progress < t) {
                     progress = t;
-                    Log.i(TAG, "downloaded: " + progress + " requestId: " + requestId);
                     onProgress(progress);
                 }
                 os.write(data, 0, count);
@@ -186,6 +175,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
                 }
             }
             onDownloadCompleted();
+            cipherInputStream.close();
         } catch (Exception e) {
             onError(e);
         } finally {
@@ -200,7 +190,6 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
             downloadedFile.delete();
         isDownloading = false;
         notifyDownloadStatus(DownloadThroughApi.DownloadStatus.NOT_DOWNLOADED);
-        Log.i(TAG, "safelyCancelDownload: " + requestId);
     }
 
     public String getRequestId() {
@@ -231,16 +220,13 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
 
     public void onError(@NotNull Throwable throwable) {
         throwable.printStackTrace();
-        Log.i(TAG, "onError: " + requestId + ", error:" + throwable.getMessage());
         safelyCancelDownload();
         notifyObservers(Resource.error(throwable.getMessage(), null));
     }
 
     @WorkerThread
     private void moveTempToDownloadedDir() throws IOException {
-        if (!downloadedFile.exists()) {
-            AndroidUtils.cutFromTemp(tempFile.getAbsolutePath(), downloadedFile.getAbsolutePath());
-        }
+        AndroidUtils.cutFromTemp(tempFile.getAbsolutePath(), downloadedFile.getAbsolutePath());
 
         switch (selector) {
             case FILE:

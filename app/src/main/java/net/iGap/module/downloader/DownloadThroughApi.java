@@ -140,7 +140,7 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
         }
     }
 
-    private synchronized void scheduleNewDownload() {
+    private void scheduleNewDownload() {
         if (inProgressCount.get() >= MAX_DOWNLOAD)
             return;
 
