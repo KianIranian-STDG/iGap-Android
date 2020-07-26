@@ -56,6 +56,7 @@ public class RealmAttachment extends RealmObject {
     private String localThumbnailPath;
     @Nullable
     private String localFilePath;
+    private String mimeType;
 
     public static void updateToken(long fakeId, String token) {
         DbManager.getInstance().doRealmTask(realm -> {
@@ -90,6 +91,7 @@ public class RealmAttachment extends RealmObject {
         realmAttachment.setToken(attachment.getToken());
         realmAttachment.setUrl(attachment.getPublicUrl());
         realmAttachment.setWidth(attachment.getWidth());
+        realmAttachment.setMimeType(attachment.getMime());
 
         long smallMessageThumbnail = SUID.id().get();
         RealmThumbnail.put(realm, smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
@@ -113,6 +115,7 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setCacheId(file.getCacheId());
             realmAttachment.setDuration(file.getDuration());
             realmAttachment.setHeight(file.getHeight());
+            realmAttachment.setMimeType(file.getMime());
 
             long largeId = SUID.id().get();
             RealmThumbnail.put(realm, largeId, id, file.getLargeThumbnail());
@@ -163,6 +166,10 @@ public class RealmAttachment extends RealmObject {
 
             if (realmAttachment.size != file.getSize()) {
                 realmAttachment.setSize(file.getSize());
+            }
+
+            if (realmAttachment.mimeType == null || !realmAttachment.mimeType.equals(file.getMime())) {
+                realmAttachment.setMimeType(file.getMime());
             }
 
             String _filePath = realmAttachment.getLocalFilePath();
@@ -300,6 +307,16 @@ public class RealmAttachment extends RealmObject {
             return;
 
         this.token = token;
+    }
+
+    public void setMimeType(String mimeType) {
+        if (this.mimeType != null && this.mimeType.equals(mimeType))
+            return;
+        this.mimeType = mimeType;
+    }
+
+    public String getMimeType() {
+        return mimeType;
     }
 
     public String getUrl() {
