@@ -874,6 +874,17 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 48) {
+
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+
+            if (realmAttachment != null) {
+                realmAttachment.addField("mimeType", String.class);
+            }
+
+            oldVersion++;
+        }
     }
 
     @Override
