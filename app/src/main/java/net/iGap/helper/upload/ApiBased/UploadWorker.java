@@ -13,6 +13,7 @@ import net.iGap.api.UploadsApi;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.helper.upload.UploadRequestBody;
 import net.iGap.model.UploadData;
 import net.iGap.proto.ProtoGlobal;
@@ -29,7 +30,6 @@ import java.io.RandomAccessFile;
 import java.io.SequenceInputStream;
 import java.nio.channels.FileChannel;
 import java.security.SecureRandom;
-import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -121,7 +121,7 @@ public class UploadWorker extends Worker {
             Response<UploadData> response;
             if (token == null || token.isEmpty()) {
                 response = apiService.initUpload(String.valueOf(size),
-                        FilenameUtils.getBaseName(file.getName()), FilenameUtils.getExtension(file.getName()),
+                        FilenameUtils.getName(file.getName()), FilenameUtils.getExtension(file.getName()),
                         roomID, TokenContainer.getInstance().getToken()).execute();
             } else {
                 response = apiService.initResumeUpload(token, TokenContainer.getInstance().getToken()).execute();
@@ -161,11 +161,7 @@ public class UploadWorker extends Worker {
     }
 
     private Result uploadFileWithOkHttp(boolean isResume, int offset) {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .writeTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .build();
+        OkHttpClient client = OkHttpClientInstance.getInstance();
 
         String url = UPLOAD_URL + "upload/" + token;
 

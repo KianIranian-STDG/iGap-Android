@@ -1,5 +1,6 @@
 package net.iGap.module.downloader;
 
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -8,11 +9,10 @@ import androidx.annotation.WorkerThread;
 import net.iGap.G;
 import net.iGap.api.apiService.ApiStatic;
 import net.iGap.api.apiService.TokenContainer;
+import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmRoomMessage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     public static final String BASE_URL = ApiStatic.UPLOAD_URL + "download/";
 
     private String requestId;
-    private RealmRoomMessage message;
+    private Downloader.MessageStruct message;
     private Selector selector;
     private volatile boolean isDownloading;
     private volatile boolean isDownloaded;
@@ -50,22 +50,14 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     private Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> downloadStatusObserver;
     private Call call;
 
-    protected Request(RealmRoomMessage message, Selector selector, int priority) {
+    protected Request(Downloader.MessageStruct message, Selector selector, int priority) {
         this(message, selector);
         this.priority = priority;
     }
 
-    private Request(RealmRoomMessage msg, Selector selector) {
-        msg = RealmRoomMessage.getFinalMessage(msg);
+    private Request(Downloader.MessageStruct msg, Selector selector) {
         this.selector = selector;
-        if (msg.isManaged()) {
-            RealmRoomMessage finalMsg = msg;
-            this.message = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.copyFromRealm(finalMsg);
-            });
-        } else {
-            message = msg;
-        }
+        message = msg;
         requestId = generateRequestId();
         appExecutors = AppExecutors.getInstance();
         initFileRelatedVariables();
@@ -76,7 +68,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         tempFile = generateTempFileForRequest();
         downloadedFile = generateDownloadFileForRequest();
 
-        size = message.getAttachment().getSize();
+        size = message.getFileSize();
 
         if (tempFile.exists()) {
             offset = tempFile.length();
@@ -96,19 +88,14 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     private File generateDownloadFileForRequest() {
-        String name = message.getAttachment().getCacheId();
-        String mediaName = message.getAttachment().getName();
-
-        String mime = ".data";
-        if (mediaName != null && mediaName.contains("."))
-            mime = mediaName.substring(mediaName.lastIndexOf("."));
-
+        String name = message.getCacheId();
+        String mime = message.getMime();
         String path = suitableAppFilePath(message.getMessageType());
         return new File(path + "/" + name + mime);
     }
 
     private File generateTempFileForRequest() {
-        String fileName = message.getAttachment().getCacheId() + selector.toString();
+        String fileName = message.getCacheId() + selector.toString();
         return new File(G.DIR_TEMP + fileName);
     }
 
@@ -137,11 +124,11 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     @WorkerThread
-    private void download(String jwtToken, RealmRoomMessage message) {
+    private void download(String jwtToken, Downloader.MessageStruct message) {
         isDownloading = true;
         notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
-        OkHttpClient client = new OkHttpClient();
-        String fileToken = RealmRoomMessage.getFinalMessage(message).getAttachment().getToken();
+        OkHttpClient client = OkHttpClientInstance.getInstance();
+        String fileToken = message.getToken();
 
         String url = BASE_URL + fileToken;
         okhttp3.Request request = new okhttp3.Request.Builder().url(url).addHeader("Authorization", jwtToken)
@@ -196,15 +183,12 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         return requestId;
     }
 
-    public RealmRoomMessage getMessage() {
-        return message;
-    }
-
     public void onDownloadCompleted() {
         try {
             moveTempToDownloadedDir();
             this.progress = 100;
-            notifyObservers(Resource.success(new Progress(this.progress, downloadedFile.getAbsolutePath())));
+            notifyObservers(Resource.success(new Progress(this.progress, selector == Selector.FILE ? downloadedFile.getAbsolutePath() : tempFile.getAbsolutePath())));
+
             notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADED);
         } catch (Exception e) {
             onError(e);
@@ -212,6 +196,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void onProgress(int progress) {
+        Log.i("amiiiiir", "onProgress: " + getRequestId() + " " + progress);
         if (selector == Selector.FILE)
             notifyObservers(Resource.loading(new Progress(progress, downloadedFile.getAbsolutePath())));
         else
@@ -226,15 +211,15 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
 
     @WorkerThread
     private void moveTempToDownloadedDir() throws IOException {
-        AndroidUtils.cutFromTemp(tempFile.getAbsolutePath(), downloadedFile.getAbsolutePath());
-
+        Log.i("amiiiiir", "moveTempToDownloadedDir: " + downloadedFile.length() + " " + getRequestId());
         switch (selector) {
             case FILE:
-                RealmAttachment.setFilePAthToDataBaseAttachment(message.getAttachment().getCacheId(), downloadedFile.getAbsolutePath());
+                AndroidUtils.cutFromTemp(tempFile.getAbsolutePath(), downloadedFile.getAbsolutePath());
+                RealmAttachment.setFilePAthToDataBaseAttachment(message.getCacheId(), downloadedFile.getAbsolutePath());
                 break;
             case SMALL_THUMBNAIL:
             case LARGE_THUMBNAIL:
-                RealmAttachment.setThumbnailPathDataBaseAttachment(message.getAttachment().getCacheId(), tempFile.getAbsolutePath());
+                RealmAttachment.setThumbnailPathDataBaseAttachment(message.getCacheId(), tempFile.getAbsolutePath());
                 break;
         }
     }
@@ -244,11 +229,8 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         return priority - o.priority;
     }
 
-    public static String generateRequestId(RealmRoomMessage message, Selector selector) {
-        message = RealmRoomMessage.getFinalMessage(message);
-        if (message == null || message.getAttachment() == null)
-            return null;
-        return message.getAttachment().getCacheId() + selector.toString();
+    public static String generateRequestId(Downloader.MessageStruct message, Selector selector) {
+        return message.getCacheId() + selector.toString();
     }
 
     public File getDownloadedFile() {

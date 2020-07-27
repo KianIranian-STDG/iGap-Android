@@ -44,16 +44,21 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
                          int priority,
                          @Nullable Observer<Resource<Request.Progress>> observer) {
 
-        if (validateMessage(message)) {
+        Downloader.MessageStruct messageStruct;
+        if (validateMessage(RealmRoomMessage.getFinalMessage(message))) {
             message = RealmRoomMessage.getFinalMessage(message);
+            messageStruct = new Downloader.MessageStruct(message);
+        } else {
+            Log.i(TAG, "download: invalid message to download");
+            return;
         }
 
         if (requestsQueue == null)
             requestsQueue = new PriorityBlockingQueue<>();
 
-        Request existedRequest = findExistedRequest(Request.generateRequestId(message, selector));
+        Request existedRequest = findExistedRequest(Request.generateRequestId(messageStruct, selector));
         if (existedRequest == null) {
-            existedRequest = new Request(message, selector, priority);
+            existedRequest = new Request(messageStruct, selector, priority);
             existedRequest.setDownloadStatusListener(this);
             requestsQueue.add(existedRequest);
             scheduleNewDownload();

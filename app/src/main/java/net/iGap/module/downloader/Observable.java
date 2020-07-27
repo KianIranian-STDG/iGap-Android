@@ -22,7 +22,7 @@ public class Observable<T> {
         }
     }
 
-    public void removeAdd() {
+    public void removeAll() {
         observers.clear();
     }
 }
