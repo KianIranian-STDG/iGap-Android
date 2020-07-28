@@ -104,11 +104,6 @@
             android:theme="@style/Theme.AppCompat.Translucent"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities.ActivityCall"
-            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
-            android:excludeFromRecents="true"
-            android:launchMode="singleInstance"></activity>
-        <activity
             android:name="org.paygear.WalletActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
