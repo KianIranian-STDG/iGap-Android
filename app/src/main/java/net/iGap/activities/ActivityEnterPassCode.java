@@ -9,7 +9,6 @@ package net.iGap.activities;
  * All rights reserved.
  */
 
-import android.app.KeyguardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
@@ -35,9 +34,9 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
 import net.iGap.helper.HelperError;
-import net.iGap.observers.interfaces.FingerPrint;
 import net.iGap.module.FingerprintHandler;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.observers.interfaces.FingerPrint;
 import net.iGap.viewmodel.ActivityEnterPassCodeViewModel;
 
 import java.util.List;
@@ -48,7 +47,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     private ActivityEnterPassCodeBinding binding;
 
     private FingerprintManager fingerprintManager;
-    private KeyguardManager keyguardManager;
     private FingerprintHandler helper;
 
     private MaterialDialog fingerPrintDialog;
@@ -199,7 +197,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
-            keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
         }
 
     }
