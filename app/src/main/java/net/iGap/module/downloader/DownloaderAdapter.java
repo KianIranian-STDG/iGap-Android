@@ -4,13 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.io.File;
-
-import static net.iGap.module.AndroidUtils.suitableAppFilePath;
 
 public class DownloaderAdapter implements IDownloader {
     private HelperDownloadFile oldDownloader;
@@ -25,11 +24,25 @@ public class DownloaderAdapter implements IDownloader {
                          int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
         message = RealmRoomMessage.getFinalMessage(message);
 
+        long size;
+        String filePath = "";
+        switch (selector) {
+            case SMALL_THUMBNAIL:
+                size = message.getAttachment().getSmallThumbnail().getSize();
+                break;
+
+            case LARGE_THUMBNAIL:
+                size = message.getAttachment().getLargeThumbnail().getSize();
+                break;
+
+            default:
+                size = message.getAttachment().getSize();
+                filePath = generateDownloadFileForRequest(message.getAttachment().getCacheId(), message.getAttachment().getName(), message.getMessageType()).getAbsolutePath();
+        }
         oldDownloader.startDownload(message.getMessageType(),
                 String.valueOf(message.getMessageId()), message.getAttachment().getToken(),
                 message.getAttachment().getUrl(), message.getAttachment().getCacheId(),
-                message.getAttachment().getName(), message.getAttachment().getSize(), selector,
-                generateDownloadFileForRequest(message.getAttachment().getCacheId(), message.getAttachment().getName(), message.getMessageType()).getAbsolutePath(),
+                message.getAttachment().getName(), size, selector, filePath,
                 priority, new HelperDownloadFile.UpdateListener() {
                     @Override
                     public void OnProgress(String path, int progress) {
@@ -58,7 +71,7 @@ public class DownloaderAdapter implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message,@Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull RealmRoomMessage message, @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
@@ -78,11 +91,6 @@ public class DownloaderAdapter implements IDownloader {
     }
 
     private File generateDownloadFileForRequest(String cacheId, String name, ProtoGlobal.RoomMessageType messageType) {
-        String mime = ".data";
-        if (name != null && name.contains("."))
-            mime = name.substring(name.lastIndexOf("."));
-
-        String path = suitableAppFilePath(messageType);
-        return new File(path + "/" + cacheId + mime);
+        return new File(AndroidUtils.getFilePathWithCashId(cacheId, name, messageType));
     }
 }

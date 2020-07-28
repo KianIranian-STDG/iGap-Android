@@ -52,7 +52,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.module.downloader.Downloader;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
@@ -559,7 +558,7 @@ public class FragmentShowImage extends BaseFragment {
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
             if (rm != null && rm.isValid()) {
-                if (Downloader.getInstance().isDownloading(rm.getAttachment().getCacheId())) {
+                if (HelperDownloadFile.getInstance().isDownLoading(rm.getAttachment().getCacheId())) {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView, imgPlay, mTextureView);
                 } else {
@@ -617,22 +616,25 @@ public class FragmentShowImage extends BaseFragment {
                         final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), G.DIR_TEMP, true);
 
                         if (selector != null && fileSize > 0) {
-                            Downloader.getInstance().download(rm, selector, arg -> {
-                                switch (arg.status) {
-                                    case LOADING:
-                                    case SUCCESS:
-                                        if (arg.data == null)
-                                            return;
-                                        if (arg.data.getProgress() == 100) {
+                            HelperDownloadFile.getInstance().startDownload(rm.getMessageType(), System.currentTimeMillis() + "", rm.getAttachment().getToken(), rm.getAttachment().getUrl(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                                @Override
+                                public void OnProgress(final String path, int progress) {
 
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, arg.data.getFilePath());
-                                                }
-                                            });
-                                        }
-                                        break;
+                                    if (progress == 100) {
+
+                                        G.currentActivity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), zoomableImageView);
+                                                ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void OnError(String token) {
+
                                 }
                             });
                         }
@@ -644,8 +646,8 @@ public class FragmentShowImage extends BaseFragment {
 
                 String _cashID = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment().getCacheId() : mFList.get(position).getAttachment().getCacheId();
 
-                if (Downloader.getInstance().isDownloading(_cashID)) {
-                    Downloader.getInstance().cancelDownload(_cashID);
+                if (HelperDownloadFile.getInstance().isDownLoading(_cashID)) {
+                    HelperDownloadFile.getInstance().stopDownLoad(_cashID);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView, imgPlay, mTextureView);
@@ -765,26 +767,28 @@ public class FragmentShowImage extends BaseFragment {
             }));
 
 
-            Downloader.getInstance().download(rm, ProtoFileDownload.FileDownload.Selector.FILE, arg -> {
-                G.handler.post(() -> {
-                    switch (arg.status) {
-                        case SUCCESS:
-                        case LOADING:
-                            if (arg.data == null)
-                                return;
-                            progress.withProgress(arg.data.getProgress());
-                            if (arg.data.getProgress() == 100) {
+            HelperDownloadFile.getInstance().startDownload(rm.getMessageType(), System.currentTimeMillis() + "", rm.getAttachment().getToken(), rm.getAttachment().getUrl(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
+                @Override
+                public void OnProgress(final String path, final int progres) {
+                    G.currentActivity.runOnUiThread(() -> {
+                        progress.withProgress(progres);
+                        if (progres == 100) {
 //                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ZoomableImageView);
-                                ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, arg.data.getFilePath());
-                                ZoomableImageView.setZoomable(true);
-                            }
-                            break;
+                            ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, path);
+                            ZoomableImageView.setZoomable(true);
+                        }
+                    });
 
-                        case ERROR:
-                            progress.withProgress(0);
-                            progress.withDrawable(R.drawable.ic_download, true);
-                    }
-                });
+                }
+
+                @Override
+                public void OnError(String token) {
+                    G.currentActivity.runOnUiThread(() -> {
+                        progress.withProgress(0);
+                        progress.withDrawable(R.drawable.ic_download, true);
+                    });
+
+                }
             });
         }
 

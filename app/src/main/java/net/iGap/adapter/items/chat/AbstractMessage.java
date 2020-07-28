@@ -22,7 +22,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,6 @@ import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.downloader.Downloader;
-import net.iGap.module.downloader.Status;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.upload.Uploader;
@@ -119,9 +117,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, EventListener {
-    private static final String TAG = "Amiiiir";
-    //IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, EventListener {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public RealmRoomMessage mMessage;
@@ -1279,7 +1275,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * runs if message has attachment
          */
-        Log.i(TAG, "prepareAttachmentIfNeeded");
         NewChatItemHolder mHolder;
         if (holder instanceof NewChatItemHolder)
             mHolder = (NewChatItemHolder) holder;
@@ -1287,7 +1282,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
 
         if (structMessage.getAttachment() != null) {
-            Log.i(TAG, "downLoadThumbnail: getattachment");
 
             if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) ((IThumbNailItem) holder).getThumbNailImageView();
@@ -1356,7 +1350,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 mHolder.getContentBloke().getLayoutParams().width = dimens[0];
             }
 
-            Log.i(TAG, "downLoadThumbnail: thumbnail");
+
             if (structMessage.getAttachment().isFileExistsOnLocalAndIsImage()) {
                 onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
@@ -1566,7 +1560,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void downLoadThumbnail(final VH holder) {
-        Log.i(TAG, "downLoadThumbnail: start");
+
         if (structMessage.getAttachment() == null) return;
 
         String token = structMessage.getAttachment().getToken();
@@ -1581,31 +1575,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
         if (structMessage.getAttachment().getCacheId() == null || structMessage.getAttachment().getCacheId().length() == 0) {
-            Log.i(TAG, "downLoadThumbnail: null");
             return;
         }
 
 
         if (token != null && token.length() > 0 && size > 0) {
-            Log.i(TAG, "downLoadThumbnail: download");
-
-            Downloader.getInstance().download(mMessage, selector, arg -> {
-                if (FragmentChat.canUpdateAfterDownload) {
-                    G.handler.post(() -> {
-                        if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
-                            String type;
-                            if (mMessage.getForwardMessage() != null) {
-                                type = mMessage.getForwardMessage().getMessageType().toString().toLowerCase();
-                            } else {
-                                type = mMessage.getMessageType().toString().toLowerCase();
-                            }
-//                                if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-//                                    onLoadThumbnailFromLocal(holder, structMessage.getAttachment().getCacheId(), path, LocalFileType.THUMBNAIL);
-//                                    }
-                        }
-                    });
-                }
-            });
+            Downloader.getInstance().download(mMessage, selector, null);
         }
     }
 

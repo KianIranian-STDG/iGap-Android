@@ -129,8 +129,23 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
         OkHttpClient client = OkHttpClientInstance.getInstance();
         String fileToken = message.getToken();
+        int selector;
+        switch (this.selector) {
+            case LARGE_THUMBNAIL:
+                selector = 1;
+                break;
+            case SMALL_THUMBNAIL:
+                selector = 2;
+                break;
+            case WAVEFORM_THUMBNAIL:
+                selector = 3;
+                break;
+            default:
+                selector = 0;
+        }
+        String qParam = "?selector=" + selector;
 
-        String url = BASE_URL + fileToken;
+        String url = BASE_URL + fileToken + qParam;
         okhttp3.Request request = new okhttp3.Request.Builder().url(url).addHeader("Authorization", jwtToken)
                 .addHeader("Range", String.format("bytes=" + offset + "-" + size)).build();
         Response response = null;

@@ -123,10 +123,17 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
 
     @Override
     public boolean isDownloading(@NonNull String cacheId) {
-        for (int i = 0; i < inProgressRequests.size(); i++) {
-            if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
-                return inProgressRequests.get(i).isDownloading();
+        try {
+            for (int i = 0; i < inProgressRequests.size(); i++) {
+                if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
+                    return inProgressRequests.get(i).isDownloading();
+                }
             }
+        } catch (Exception e) {
+            // array out of bound exception is possible. The use case is when we are checking
+            // if the request is downloading in the loop but the request has just popped out of
+            // inProgressRequests and has threw exception.
+            return false;
         }
         return false;
     }
