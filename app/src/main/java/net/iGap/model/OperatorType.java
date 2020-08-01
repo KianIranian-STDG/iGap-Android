@@ -40,6 +40,7 @@ public class OperatorType {
             put("0937", Type.IRANCELL);
             put("0938", Type.IRANCELL);
             put("0939", Type.IRANCELL);
+            put("0941", Type.IRANCELL);
 
             put("0920", Type.RITEL);
             put("0921", Type.RITEL);
