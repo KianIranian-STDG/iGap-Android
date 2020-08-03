@@ -755,7 +755,6 @@ public class MediaController {
         int len;
         while ((len = in.read(buf)) > 0) {
             out.write(buf, 0, len);
-            Log.i("HHHHHHHHHHHHHHHHHH", "copyFile: ");
         }
         in.close();
         out.close();

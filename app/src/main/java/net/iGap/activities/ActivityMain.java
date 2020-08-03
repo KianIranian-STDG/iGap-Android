@@ -72,6 +72,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.kuknos.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
 import net.iGap.helper.HelperError;
@@ -83,7 +84,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.IGLog;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
@@ -265,7 +265,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("Main activity on destroy");
+            FileLog.i("Main activity on destroy");
         }
 
         if (G.ISRealmOK) {
@@ -407,7 +407,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("Main activity on create");
+            FileLog.i("Main activity on create");
         }
 
         setContentView(R.layout.activity_main);
@@ -655,7 +655,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-            Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
         }
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {

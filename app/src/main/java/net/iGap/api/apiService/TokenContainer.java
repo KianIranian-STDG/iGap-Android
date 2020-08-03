@@ -51,9 +51,6 @@ public class TokenContainer {
                 realmUserInfo.setAccessToken(token);
             updatedTokenCount++;
         });
-
-        if (BuildConfig.DEBUG)
-            Log.i(getClass().getSimpleName(), "UpdateToken successfully " + token + " with updated count -> " + updatedTokenCount);
     }
 
     void getRefreshToken(Delegate delegate) {

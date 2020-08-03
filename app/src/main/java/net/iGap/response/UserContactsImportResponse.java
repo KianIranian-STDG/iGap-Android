@@ -10,15 +10,12 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.module.Contacts;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserContactsImport;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
@@ -61,8 +58,6 @@ public class UserContactsImportResponse extends MessageHandler {
 
 
         if (getContactList) {
-            Log.i("import_contact", "contact import response");
-
             G.serverHashContact = G.localHashContact;
             new RequestUserContactsGetList().userContactGetList();
         }

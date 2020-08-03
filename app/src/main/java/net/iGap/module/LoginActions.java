@@ -9,14 +9,14 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.UserStatusController;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.structs.StructListOfContact;
 import net.iGap.observers.interfaces.OnContactFetchForServer;
 import net.iGap.observers.interfaces.OnSecuring;
 import net.iGap.observers.interfaces.OnUserLogin;
-import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestGeoGetRegisterStatus;
@@ -145,7 +145,6 @@ public class LoginActions {
          * just import contact in each enter to app
          * when user login was done
          */
-        //Log.i("import_contact", "start");
 
         G.onContactFetchForServer = new OnContactFetchForServer() {
             @Override
@@ -153,19 +152,14 @@ public class LoginActions {
 
                 String md5Local = md5(new Gson().toJson(contacts));
                 G.localHashContact = md5Local;
-                //Log.i("import_contact", "l: " + G.localHashContact);
-                //Log.i("import_contact", "s: " + G.serverHashContact);
 
                 if (G.serverHashContact != null && G.serverHashContact.equals(md5Local)) {
                     //request get list
-                    //Log.i("tag", "importContact: " + G.localHashContact);
 
-                    //Log.i("import_contact", "contact are equal with server");
                     new RequestUserContactsGetList().userContactGetList();
                     return;
                 }
 
-                //Log.i("import_contact", "start send contact to server ,, size = " + contacts.size());
                 RealmPhoneContacts.sendContactList(contacts, false, getContactList);
             }
         };
@@ -181,7 +175,6 @@ public class LoginActions {
                         @Override
                         public void run() {
                             G.isSendContact = true;
-                            //Log.i("import_contact", "request");
                             new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     });
@@ -204,7 +197,6 @@ public class LoginActions {
     }
 
     private static String md5(String s) {
-        //Log.i("import_contact", "array " + s);
 
         try {
             // Create MD5 Hash

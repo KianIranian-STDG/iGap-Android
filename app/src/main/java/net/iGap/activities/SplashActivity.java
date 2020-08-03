@@ -9,7 +9,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import net.iGap.Config;
 import net.iGap.G;
-import net.iGap.helper.IGLog;
+import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
@@ -21,7 +21,7 @@ public class SplashActivity extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("Splash activity on create");
+            FileLog.i("Splash activity on create");
         }
 
         if (G.ISRealmOK) {
@@ -79,7 +79,7 @@ public class SplashActivity extends ActivityEnhanced {
         super.onDestroy();
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("Splash activity on destroy");
+            FileLog.i("Splash activity on destroy");
         }
     }
 }

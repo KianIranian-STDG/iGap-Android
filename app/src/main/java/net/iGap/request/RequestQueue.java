@@ -18,10 +18,10 @@ import androidx.annotation.Nullable;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperClassNamePreparation;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.IGLog;
 import net.iGap.module.AESCrypt;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
@@ -101,7 +101,7 @@ public class RequestQueue {
             for (int i = 0; i < requestWrappers.length; i++) {
                 prepareRequest(randomId + "." + i, requestWrappers[i]);
             }
-        } else if (length == 0) {
+        } else {
             Log.e("SOC_REQ", "RequestWrapper length should bigger than zero");
         }
 
@@ -172,9 +172,8 @@ public class RequestQueue {
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
-                    Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("SND MSGR -> " + (30000 + requestWrapper.actionId));
+                        FileLog.i("MSGR " + "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
                     }
                     WebSocketClient.getInstance().sendBinary(message, requestWrapper);
                 } else {

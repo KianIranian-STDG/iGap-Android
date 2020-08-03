@@ -38,8 +38,8 @@ import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
 import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.IGLog;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -376,7 +376,7 @@ public class G extends ApplicationContext {
         super.onCreate();
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.i("Splash activity on destroy");
+            FileLog.i("Splash activity on destroy");
         }
 
         context = getApplicationContext();
@@ -443,10 +443,10 @@ public class G extends ApplicationContext {
         Log.wtf(this.getClass().getName(), "onCreate");
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.i("------------------- CLIENT INFO -------------------");
-            IGLog.i("- account cunt ->       " + AccountManager.getInstance().getUserAccountList().size() + "                         -");
-            IGLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
-            IGLog.i("------------------- CLIENT INFO -------------------");
+            FileLog.i("------------------- CLIENT INFO -------------------");
+            FileLog.i("- account cunt ->       " + AccountManager.getInstance().getUserAccountList().size() + "                         -");
+            FileLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
+            FileLog.i("---------------------------------------------------");
         }
     }
 

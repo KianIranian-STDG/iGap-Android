@@ -99,8 +99,6 @@ public class ConnectionManager {
                                         }
                                     });
                                 }
-                            } else {
-                                // Log.i("HHH", "Connection Not Time Out HeartBeat");
                             }
                         }
                     }

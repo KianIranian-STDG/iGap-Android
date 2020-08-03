@@ -18,16 +18,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
@@ -39,6 +35,9 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.module.StatusBarUtil;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -139,7 +138,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
                 AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-                Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
             }
         }
 

@@ -28,7 +28,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -37,9 +36,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
-import net.iGap.libs.emojiKeyboard.emoji.DispatchQueue;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -737,11 +736,8 @@ public final class AndroidUtils {
                     displaySize.y = newSize;
                 }
             }
-
-            Log.i("abbasiKeyboard", "display size = x -> " + displaySize.x + " y -> " + displaySize.y + " " + displayMetrics.xdpi + " " + displayMetrics.ydpi);
-
         } catch (Exception e) {
-            Log.e("abbasiKeyboard", "checkDisplaySize: ", e);
+            e.printStackTrace();
         }
     }
 

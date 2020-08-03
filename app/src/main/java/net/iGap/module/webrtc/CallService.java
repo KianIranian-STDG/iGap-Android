@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -91,7 +90,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     }
 
     public void setCallStateChange(CallManager.CallStateChange callStateChange) {
-        Log.i(TAG, "setCallStateChange: " + callStateChange);
         this.callStateChange = callStateChange;
     }
 
@@ -104,7 +102,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onCreate: ");
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -113,15 +110,12 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.i(TAG, "onStartCommand: " + intent + flags + startId);
 
         if (instance != null) {
-            Log.e(TAG, "try to restart live service");
             return START_NOT_STICKY;
         }
 
         if (intent == null) {
-            Log.i(TAG, "onStartCommand intent null");
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -171,7 +165,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
         audioManager = CallAudioManager.create(getApplicationContext());
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
-        Log.d(TAG, "Starting the audio manager...");
         // This method will be called each time the number of available audio
         // devices has changed.
         if (!isIncoming && isVoiceCall)
@@ -296,8 +289,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private void showIncomingNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
-        Log.i(TAG, "showIncomingNotification: " + callerInfo.getName());
-
         Intent intent = new Intent(this, CallActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 2218, intent, 0);
@@ -399,8 +390,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
         if (callerInfo == null)
             return;
 
-        Log.i(TAG, "showInCallNotification: " + callerInfo.getName());
-
         Intent intent = new Intent(this, CallActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -465,7 +454,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(CallState.LEAVE_CALL);
@@ -484,12 +472,10 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
         CallManager.getInstance().cleanUp();
 
-        Log.i(TAG, "-----------------------------------------------------");
     }
 
     public void onBroadcastReceived(Intent intent) {
         if (instance != null && intent != null && intent.getAction() != null) {
-            Log.i(TAG, "onBroadcastReceived: " + intent.getAction());
 
             stopSoundAndVibrate();
 
@@ -502,7 +488,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
             } else if (intent.getAction().equals(ACTION_DECLINE_CALL) || intent.getAction().equals(ACTION_END_CALL)) {
                 CallManager.getInstance().endCall();
-                Log.i(getClass().getSimpleName(), "onBroadcastReceived ACTION_DECLINE_CALL");
                 onDestroy();
             }
         }
@@ -510,7 +495,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
     @Override
     public void onCallStateChanged(@NotNull CallState state) {
-        Log.i(TAG, "onCallStateChanged: " + state);
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(state);
@@ -531,7 +515,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
     @Override
     public void onError(int messageID, int major, int minor) {
-        Log.i(TAG, "onError: " + major + " " + minor);
         if (callStateChange != null)
             callStateChange.onError(messageID, major, minor);
     }

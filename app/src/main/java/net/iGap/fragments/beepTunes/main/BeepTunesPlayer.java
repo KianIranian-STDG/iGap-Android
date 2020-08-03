@@ -3,7 +3,6 @@ package net.iGap.fragments.beepTunes.main;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.ProgressDuration;
 import net.iGap.realm.RealmDownloadSong;
@@ -201,12 +200,10 @@ public class BeepTunesPlayer extends BaseFragment {
                         nextSong.setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                         songFromPlayerLiveData.postValue(nextSong);
                     } else {
-                        Log.i(TAG, "have not next song: " + i + " " + realmDownloadSongs.size());
+
                     }
                 }
             }
-        } else {
-            Log.i(TAG, "list just have 1 song: " + realmDownloadSongs.size());
         }
     }
 
@@ -224,12 +221,9 @@ public class BeepTunesPlayer extends BaseFragment {
                         nextSong.setAlbumId(realmDownloadSong.getAlbumId());
                         nextSong.setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                         songFromPlayerLiveData.postValue(nextSong);
-                    } else
-                        Log.i(TAG, "have not previous song: " + i);
+                    }
                 }
             }
-        } else {
-            Log.i(TAG, "list just have 1 song ");
         }
 
     }

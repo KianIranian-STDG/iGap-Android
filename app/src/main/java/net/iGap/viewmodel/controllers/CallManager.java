@@ -14,7 +14,6 @@ import android.os.SystemClock;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
 import android.telecom.TelecomManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import net.iGap.G;
@@ -103,11 +102,9 @@ public class CallManager {
     }
 
     private CallManager() {
-        Log.d(TAG, "CallManager Constructor");
         DbManager.getInstance().doRealmTask(realm -> {
             currentCallConfig = realm.where(RealmCallConfig.class).findFirst();
             if (currentCallConfig == null) {
-                Log.i(TAG, "CallManager currentCallConfig == null");
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });
@@ -119,8 +116,6 @@ public class CallManager {
      * @param response from server
      */
     public void onOffer(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
-        Log.d(TAG, "startCall: **************************************************************");
-        Log.d(TAG, "onOffer: " + response.getCallerUserId() + " " + response.getType().toString());
         if (invalidCallType(response.getType()))
             return;
         // set data for future use.
@@ -151,7 +146,6 @@ public class CallManager {
      */
     public void makeOffer(long called_userId, String callerSdp) {
         if (CallService.getInstance() != null && callType != null && called_userId != 0) {
-            Log.d(TAG, "makeOffer: " + called_userId + " " + callerSdp + " " + callType);
             isRinging = true;
             isCallActive = true;
             new RequestSignalingOffer().signalingOffer(called_userId, callType, callerSdp);
@@ -162,8 +156,6 @@ public class CallManager {
      * this function is step 1 when making a call
      */
     public void startCall(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType) {
-        Log.d(TAG, "startCall: **************************************************************");
-        Log.i(TAG, "startCall: " + callPeerId + " " + callType);
         this.callPeerId = callPeerId;
         this.callType = callType;
         // TODO: 5/12/2020 music player is changed and must be checked
@@ -195,11 +187,8 @@ public class CallManager {
 
     private void startService(long callPeerId, ProtoSignalingOffer.SignalingOffer.Type callType) {
         if (callPeerId <= 0 || callType == null) {
-            Log.e(TAG, "startService returned " + callPeerId + " " + callType);
             return;
         }
-
-        Log.i(TAG, "startService: " + callPeerId + " " + callType);
 
         Intent intent = new Intent(G.context, CallService.class);
         intent.putExtra(CallService.USER_ID, callPeerId);
@@ -214,7 +203,6 @@ public class CallManager {
             }
         } catch (Throwable e) {
             e.printStackTrace();
-            Log.i(TAG, "startService: " + e.getMessage());
         }
     }
 
@@ -222,7 +210,6 @@ public class CallManager {
      * this function is called after ringing response comes from server
      */
     public void onRing() {
-        Log.d(TAG, "onRing: ");
         G.handler.post(() -> changeState(CallState.RINGING));
         if (CallService.getInstance() != null) {
             CallService.getInstance().playSoundWithRes(R.raw.igap_ringing, true);
@@ -235,7 +222,6 @@ public class CallManager {
      * @param response from server
      */
     public void onAccept(ProtoSignalingAccept.SignalingAcceptResponse.Builder response) {
-        Log.d(TAG, "onAccept: ");
         isRinging = false;
         G.handler.post(() -> {
             WebRTC.getInstance().setOfferLocalDescription();
@@ -251,7 +237,6 @@ public class CallManager {
      * this function is called when user decide to answer
      */
     public void makeAccept(String sdp) {
-        Log.d(TAG, "makeAccept: ");
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
         EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
@@ -267,7 +252,6 @@ public class CallManager {
      * @param builder from server
      */
     public void onCandidate(ProtoSignalingCandidate.SignalingCandidateResponse.Builder builder) {
-        Log.d(TAG, "onCandidate: " + builder.getPeerCandidate());
         G.handler.post(() -> WebRTC.getInstance()
                 .peerConnectionInstance()
                 .addIceCandidate(new IceCandidate(builder.getPeerSdpMId(), builder.getPeerSdpMLineIndex(), builder.getPeerCandidate())));
@@ -277,7 +261,6 @@ public class CallManager {
      * this function is called when user wants to send its candidate info to peer
      */
     public void exchangeCandidate(String sdpMId, int sdpMLineIndex, String candidate) {
-        Log.d(TAG, "exchangeCandidate: " + sdpMId + " " + sdpMLineIndex + " " + candidate);
         new RequestSignalingCandidate().signalingCandidate(sdpMId, sdpMLineIndex, candidate);
     }
 
@@ -288,7 +271,6 @@ public class CallManager {
      */
     public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Builder builder) {
         G.handler.post(() -> {
-            Log.d(TAG, "onLeave: " + builder.getType());
             // TODO: 5/6/2020 this part needs to change based on new design
             try {
                 AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
@@ -322,13 +304,11 @@ public class CallManager {
 
     public void leaveCall() {
         if (isRinging || isCallActive) {
-            Log.d(TAG, "leave Call");
             new RequestSignalingLeave().signalingLeave();
         }
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
-        Log.d(TAG, "onHold: lastState -> " + isCallHold + " current state -> " + builder.getHold());
         isCallHold = builder.getHold();
         iHoldCall = !builder.getResponse().getId().isEmpty();
         changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
@@ -336,13 +316,11 @@ public class CallManager {
     }
 
     public void holdCall(boolean state) {
-        Log.d(TAG, "holdCall: " + state);
         if (iHoldCall)
             new RequestSignalingSessionHold().signalingSessionHold(state);
     }
 
     public void onError(int actionId, int major, int minor) {
-        Log.d(TAG, "Error -> " + actionId + " " + major + " " + minor);
         int messageID = R.string.e_call_permision;
         switch (major) {
             case 900://                RINGING_BAD_PAYLOAD
@@ -442,7 +420,6 @@ public class CallManager {
     }
 
     public void toggleMic() {
-        Log.d(TAG, "toggleMic: " + isMicEnable);
         WebRTC.getInstance().toggleSound(!isMicEnable);
         isMicEnable = !isMicEnable;
     }
@@ -452,7 +429,6 @@ public class CallManager {
     }
 
     public void endCall() {
-        Log.d(TAG, "endCall: ");
         leaveCall();
     }
 
@@ -461,7 +437,6 @@ public class CallManager {
     }
 
     public void acceptCall() {
-        Log.d(TAG, "acceptCall: ");
         WebRTC.getInstance().createAnswer();
     }
 
@@ -499,7 +474,6 @@ public class CallManager {
     }
 
     public void onSdpSuccess() {
-        Log.d(TAG, "onSdpSuccess: ");
         if (isCallActive) {
             if (isIncoming)
                 startService(callPeerId, callType);
@@ -526,7 +500,6 @@ public class CallManager {
     }
 
     public void cleanUp() {
-        Log.d(TAG, "cleanUp: ");
         onCallStateChanged = null;
         isCallActive = false;
         isRinging = false;

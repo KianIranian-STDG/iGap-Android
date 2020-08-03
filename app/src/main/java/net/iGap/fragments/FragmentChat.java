@@ -38,7 +38,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -667,14 +666,6 @@ public class FragmentChat extends BaseFragment
         return listOfAllImages;
     }
 
-    public static void isUiThread(String name, int line) {
-        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
-            Log.i("UUU", name + " in line : " + line + " is UI Thread");
-        } else {
-            Log.i("UUU", name + " in line : " + line + " is NOT UI Thread");
-        }
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -975,7 +966,7 @@ public class FragmentChat extends BaseFragment
                 }
 
             } catch (Exception e) {
-                Log.i(TAG, "soundPool error: " + e.getMessage());
+                e.printStackTrace();
             }
 
         }
@@ -3706,7 +3697,6 @@ public class FragmentChat extends BaseFragment
         if (!keyboardVisible) {
             G.cancelRunOnUiThread(openKeyboardRunnable);
             G.runOnUiThread(openKeyboardRunnable, 50);
-            Log.i(TAG, "openKeyboardInternal: height -> " + keyboardHeight);
         }
     }
 
@@ -4430,7 +4420,7 @@ public class FragmentChat extends BaseFragment
                 try {
                     soundPool.play(sendMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
                 } catch (Exception e) {
-                    Log.i(TAG, "playReceiveSound: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
     }
@@ -4441,7 +4431,7 @@ public class FragmentChat extends BaseFragment
                 try {
                     soundPool.play(receiveMessageSound, 1.0f, 1.0f, 1, 0, 1.0f);
                 } catch (Exception e) {
-                    Log.i(TAG, "playReceiveSound: " + e.getMessage());
+                    e.printStackTrace();
                 }
             }
     }
@@ -6424,8 +6414,6 @@ public class FragmentChat extends BaseFragment
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
             layoutAttachBottom.setVisibility(View.GONE);
-            //Log.i(TAG, "sendButtonVisibility: reset");
-
         }
 
         if (visibility && isAttachVisibilityAnimInProcess) {
@@ -6436,23 +6424,17 @@ public class FragmentChat extends BaseFragment
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
             imvSendButton.setVisibility(View.GONE);
-            //Log.i(TAG, "sendButtonVisibility: reset2");
-
         }
 
         if (!visibility && !layoutAttachBottom.isShown()) {
-            //Log.i(TAG, "sendButtonVisibility: in if gone");
             if (isAttachVisibilityAnimInProcess) return;
             attachLayoutAnimateVisible();
         }
-        //Log.i(TAG, "sendButtonVisibility: gone skip");
 
         if (visibility && !imvSendButton.isShown()) {
-            //Log.i(TAG, "sendButtonVisibility: in if visi");
             if (isSendVisibilityAnimInProcess) return;
             sendButtonAnimateVisible();
         }
-        //Log.i(TAG, "sendButtonVisibility: visible");
 
     }
 
@@ -6467,7 +6449,6 @@ public class FragmentChat extends BaseFragment
                 isSendVisibilityAnimInProcess = true;
                 isAttachVisibilityAnimInProcess = false;
                 layoutAttachBottom.setVisibility(View.VISIBLE);
-                //Log.i(TAG, "sendButtonAnimateVisible: anim start");
 
             }
 
@@ -6488,7 +6469,6 @@ public class FragmentChat extends BaseFragment
         animVisible.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                //Log.i(TAG, "sendButtonAnimateVisible: anim22 start");
 
             }
 
@@ -6498,7 +6478,6 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
-                //Log.i(TAG, "sendButtonAnimateVisible: anim end");
 
             }
 
@@ -6520,13 +6499,11 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.setVisibility(View.VISIBLE);
                 isSendVisibilityAnimInProcess = false;
                 isAttachVisibilityAnimInProcess = true;
-                //Log.i(TAG, "onAnimationStart: gone start");
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 imvSendButton.setVisibility(View.GONE);
-                //Log.i(TAG, "onAnimationEnd: gone end");
                 layoutAttachBottom.startAnimation(animVisible);
             }
 
@@ -6540,7 +6517,6 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationStart(Animation animation) {
                 layoutAttachBottom.setVisibility(View.VISIBLE);
-                //Log.i(TAG, "onAnimationStart: gone 2 start");
             }
 
             @Override
@@ -6549,7 +6525,6 @@ public class FragmentChat extends BaseFragment
                 imvSendButton.clearAnimation();
                 layoutAttachBottom.clearAnimation();
                 edtChat.requestLayout();
-                //Log.i(TAG, "onAnimationEnd: gone 2 endded");
 
             }
 

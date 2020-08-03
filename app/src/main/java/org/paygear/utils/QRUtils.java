@@ -3,9 +3,10 @@ package org.paygear.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
@@ -109,8 +110,6 @@ public class QRUtils {
 
 
     public static Bitmap getQR(Context context, String qrData, int pxSize) {
-        //Log.i("GH_QR_size", String.valueOf(RaadCommonUtils.getDp(pxSize, context)));
-
         Bitmap bitmap = null;
         BarcodeEncoder qrEncoder = new BarcodeEncoder();
         try {

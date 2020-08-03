@@ -16,7 +16,7 @@ public class Config {
 
     public static final boolean ALPHA_VERSION = false;
     public static final boolean BETA_VERSION = false;
-    public static final boolean FILE_LOG_ENABLE = ALPHA_VERSION;
+    public static final boolean FILE_LOG_ENABLE = ALPHA_VERSION || BuildConfig.DEBUG;
 
     public static final int ACCEPT = 1;
     public static final int REJECT = 0;

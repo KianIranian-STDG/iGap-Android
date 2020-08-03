@@ -21,8 +21,8 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketState;
 
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperConnectionState;
-import net.iGap.helper.IGLog;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.realm.RealmRoom;
@@ -66,7 +66,7 @@ public class WebSocketClient {
                     );
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("on Connected");
+                        FileLog.i("on Connected");
                     }
 
                     super.onConnected(websocket, headers);
@@ -86,7 +86,7 @@ public class WebSocketClient {
 
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("on onError " + cause.getMessage());
+                        FileLog.e("on Error " + cause.getMessage());
                     }
 
                     super.onError(websocket, cause);
@@ -126,7 +126,7 @@ public class WebSocketClient {
                     );
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("on onDisconnected ");
+                        FileLog.i("on onDisconnected ");
                     }
 
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);

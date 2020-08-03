@@ -51,10 +51,6 @@ public class HelperUnpackMessage {
             return false;
         }
 
-        if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("DES -> " + actionId);
-        }
-
         byte[] payload = (byte[]) objects[1];
         String className = (String) objects[2];
 

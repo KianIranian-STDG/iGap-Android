@@ -10,7 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,13 +19,13 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.repository.StickerRepository;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -79,7 +78,7 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
             }
         });
 
-        String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
         if (new File(path).exists()) {
             holder.stickerCell.playAnimation(path);
         } else {
@@ -106,7 +105,7 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
             stickerCell.setFailureListener(new LottieListener<Throwable>() {
                 @Override
                 public void onResult(Throwable result) {
-                    Log.e(getClass().getName(), "onResult: ", result);
+
                 }
             });
 

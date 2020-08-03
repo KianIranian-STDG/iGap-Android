@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -93,15 +92,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "start onCreate ");
 
         if (CallService.getInstance() == null) {
-            Log.e(TAG, "on Create SERVICE == NULL");
             finish();
         }
 
         if (!CallManager.getInstance().isCallAlive()) {
-            Log.e(TAG, "on Create isCallAlive == false");
             finish();
         }
 
@@ -130,7 +126,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             checkForBluetoothAvailability(CallService.getInstance().getActiveAudioDevices());
         }
 
-        Log.i(TAG, "onCreate finish");
     }
 
     private boolean checkPermissions() {
@@ -163,7 +158,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private View createRootView() {
-        Log.i(TAG, "start createRootView");
 
         if (CallService.getInstance() == null)
             finish();
@@ -570,7 +564,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     protected void onResume() {
         super.onResume();
         if (isVideoCall()) {
-            Log.d(TAG, "onResume: start capture");
             WebRTC.getInstance().startVideoCapture();
         }
     }
@@ -579,7 +572,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     protected void onPause() {
         super.onPause();
         if (isVideoCall()) {
-            Log.d(TAG, "onPause: pause capture");
             WebRTC.getInstance().pauseVideoCapture();
         }
     }
@@ -596,7 +588,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     @Override
     public void onCallStateChanged(CallState state) {
-        Log.i(TAG, "onCallStateChanged: " + state);
 
         if (isFinishing())
             return;
@@ -703,12 +694,11 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     @Override
     public void onError(int messageID, int major, int minor) {
-        Log.e(TAG, "onError: " + major + " " + minor + " " + getResources().getString(messageID));
+
     }
 
     @Override
     public void onTimeChange(long time) {
-        Log.i(TAG, "on Time Change: " + AndroidUtils.formatLongDuration((int) (time / 1000)));
         String humanReadableTime = AndroidUtils.formatLongDuration((int) (time / 1000));
         // update time in activity
         durationTextView.setText(humanReadableTime);
@@ -719,15 +709,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     @Override
-    public void finish() {
-        super.finish();
-        Log.i(TAG, "finish: service state -> " + (CallService.getInstance() == null));
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
 
         if (isVideoCall()) {
             if (surfaceRemote != null) {

@@ -339,7 +339,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             barcodeScannerView.decodeSingle(new BarcodeCallback() {
                 @Override
                 public void barcodeResult(BarcodeResult result) {
-                    //Log.i("ScannerFragment", "barcodeResult: " + result.getText());
                     if (!isVisible) {
                         restartDecoding();
                         return;
@@ -383,10 +382,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                                 matcher.find();
                                 loadQrData(matcher.group());
                             }
-                            //int i = Integer.valueOf(matcher.group());
-
-                            //Log.i("PostCameraFragment", "barcodeResult: data: " + matcher.group());
-
                         }
                     } else {
                         Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();

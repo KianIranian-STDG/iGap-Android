@@ -12,7 +12,6 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +25,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -34,6 +32,7 @@ import net.iGap.fragments.FragmentCallAction;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -270,7 +269,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
                     contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
             });
 
-            Log.i("aabolfazl", "getContactInfo: " + contactStatus);
         }
 
         private String getContactName() {

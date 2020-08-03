@@ -18,15 +18,14 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.yalantis.ucrop.util.FileUtils;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
+import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -254,8 +253,6 @@ public class HelperSaveFile {
                 // immediately available to the user.
                 MediaScannerConnection.scanFile(G.context, new String[]{file.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
                     public void onScanCompleted(String mPath, Uri uri) {
-                        Log.i("ExternalStorage", "Scanned " + mPath + ":");
-                        Log.i("ExternalStorage", "-> uri=" + uri);
                     }
                 });
 
@@ -263,7 +260,7 @@ public class HelperSaveFile {
             } catch (IOException e) {
                 // Unable to create file, likely because external storage is
                 // not currently mounted.
-                Log.w("ExternalStorage", "Error writing " + file, e);
+                e.printStackTrace();
             }
         }
     }

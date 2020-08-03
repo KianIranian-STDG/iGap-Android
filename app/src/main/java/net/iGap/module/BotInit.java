@@ -119,7 +119,6 @@ public class BotInit implements MakeButtons.OnClickListener {
                             RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
                             for (RealmRoom room : roomList) {
                                 if (!promoteIds.contains(room.getPromoteId())) {
-                                    //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
                                     room.setFromPromote(false);
                                     new RequestClientPinRoom().pinRoom(room.getId(), false);
                                 }

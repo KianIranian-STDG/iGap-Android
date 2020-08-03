@@ -1,7 +1,5 @@
 package net.iGap.observers.rx;
 
-import android.util.Log;
-
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
@@ -19,9 +17,7 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     public void onResponseError(Throwable throwable) {
-//        Log.i("abbasiResponse", "onResponseError START ---------------------------------");
-//        throwable.printStackTrace();
-//        Log.i("abbasiResponse", "onResponseError END ---------------------------------");
+
     }
 
     @Override
@@ -42,7 +38,6 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     public void onDestroyView() {
-        Log.i(getClass().getName(), "onDestroyView: ");
         EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
         if (mainThreadDisposable != null && !mainThreadDisposable.isDisposed()) {
             mainThreadDisposable.dispose();
@@ -51,7 +46,6 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     public void onDestroy() {
-        Log.i(getClass().getName(), "onDestroy: ");
         EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
         if (backgroundDisposable != null && !backgroundDisposable.isDisposed()) {
             backgroundDisposable.dispose();
