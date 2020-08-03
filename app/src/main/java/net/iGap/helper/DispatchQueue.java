@@ -6,7 +6,7 @@
  * Copyright Nikolai Kudashov, 2013-2018.
  */
 
-package net.iGap.libs.emojiKeyboard.emoji;
+package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -42,7 +42,7 @@ public class DispatchQueue extends Thread {
             syncLatch.await();
             handler.removeCallbacks(runnable);
         } catch (Exception e) {
-//            FileLog.e(e);
+            FileLog.e(e);
         }
     }
 
@@ -53,7 +53,7 @@ public class DispatchQueue extends Thread {
                 handler.removeCallbacks(runnables[i]);
             }
         } catch (Exception e) {
-//            FileLog.e(e);
+            FileLog.e(e);
         }
     }
 
@@ -65,7 +65,7 @@ public class DispatchQueue extends Thread {
         try {
             syncLatch.await();
         } catch (Exception e) {
-//            FileLog.e(e);
+            FileLog.e(e);
         }
         if (delay <= 0) {
             handler.post(runnable);
@@ -79,7 +79,7 @@ public class DispatchQueue extends Thread {
             syncLatch.await();
             handler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
-//            FileLog.e(e);
+            FileLog.e(e);
         }
     }
 

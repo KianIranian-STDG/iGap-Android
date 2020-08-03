@@ -1,39 +1,41 @@
 
 package net.iGap.helper;
 
+import android.util.Log;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.downloadFile.time.FastDateFormat;
-import net.iGap.libs.emojiKeyboard.emoji.DispatchQueue;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
 
-public class IGLog {
+public class FileLog {
+    private static final String TAG = "iGapMessenger";
     private OutputStreamWriter streamWriter = null;
     private FastDateFormat dateFormat = null;
     private DispatchQueue logQueue = null;
     private File currentFile = null;
     private boolean inInitial;
 
-    private static volatile IGLog instance = null;
+    private static volatile FileLog instance = null;
 
-    public static IGLog getInstance() {
-        IGLog localInstance = instance;
+    public static FileLog getInstance() {
+        FileLog localInstance = instance;
         if (localInstance == null) {
-            synchronized (IGLog.class) {
+            synchronized (FileLog.class) {
                 localInstance = instance;
                 if (localInstance == null) {
-                    instance = localInstance = new IGLog();
+                    instance = localInstance = new FileLog();
                 }
             }
         }
         return localInstance;
     }
 
-    public IGLog() {
+    public FileLog() {
         init();
     }
 
@@ -76,6 +78,7 @@ public class IGLog {
         }
 
         initied();
+        Log.e(TAG, message, exception);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -95,6 +98,7 @@ public class IGLog {
         }
 
         initied();
+        Log.e(TAG, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -113,6 +117,7 @@ public class IGLog {
         }
 
         initied();
+        Log.i(TAG, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
@@ -131,7 +136,7 @@ public class IGLog {
         }
 
         initied();
-        e.printStackTrace();
+        Log.e(TAG, "", e);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
