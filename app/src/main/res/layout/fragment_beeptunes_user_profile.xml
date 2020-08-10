@@ -52,7 +52,6 @@
             app:layout_constraintTop_toTopOf="@+id/iv_userProfile_userImage" />
 
         <TextView
-            android:id="@+id/tv_userProfile_userScore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"

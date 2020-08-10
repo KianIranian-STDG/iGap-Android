@@ -5,21 +5,13 @@
 
 
     <dimen name="messageContainerPadding">6dp</dimen>
-    <dimen name="messageContainerPaddingBottom">4dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">10dp</dimen>
-
-    <dimen name="chatBoxMaxWidth">270dp</dimen>
 
     <dimen name="design_fab_size_mini">24pt</dimen>
     <dimen name="design_fab_size_normal">30pt</dimen>
 
     <dimen name="messageBox_cornerRadius">7dp</dimen>
-    <dimen name="messageBox_elevation">4dp</dimen>
 
-    <dimen name="messageBox_minusLeftRightMargin">-5dp</dimen>
-
-    <dimen name="dp14_Popup">14dp</dimen>
-    <dimen name="dp1_minus">-1dp</dimen>
     <dimen name="dp1">1dp</dimen>
     <dimen name="dp2">1.5dp</dimen>
     <dimen name="dp4">4dp</dimen>
@@ -49,7 +41,6 @@
     <dimen name="dp88">88dp</dimen>
     <dimen name="dp100">100dp</dimen>
     <dimen name="dp120">120dp</dimen>
-    <dimen name="dp130">130dp</dimen>
     <dimen name="dp140">140dp</dimen>
     <dimen name="dp160">160dp</dimen>
     <dimen name="dp180">180dp</dimen>
@@ -57,7 +48,6 @@
     <dimen name="dp220">220dp</dimen>
     <dimen name="dp240">240dp</dimen>
     <dimen name="dp260">260dp</dimen>
-    <dimen name="dp280">280dp</dimen>
     <dimen name="dp300">300dp</dimen>
 
 

@@ -65,7 +65,6 @@
             android:textSize="@dimen/dp22" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/fc_selected_mode_btn_share"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"

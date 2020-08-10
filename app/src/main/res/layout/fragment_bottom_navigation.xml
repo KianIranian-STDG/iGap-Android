@@ -25,7 +25,6 @@
         app:layout_constraintStart_toStartOf="@id/viewpager">
 
         <net.iGap.libs.bottomNavigation.TabItem
-            android:id="@+id/ti_main_contact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -37,7 +36,6 @@
             app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
-            android:id="@+id/ti_main_call"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -49,7 +47,6 @@
             app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
-            android:id="@+id/ti_main_chat"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -63,7 +60,6 @@
             app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
 
         <net.iGap.libs.bottomNavigation.TabItem
-            android:id="@+id/ti_main_dashboard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -76,7 +72,6 @@
 
 
         <net.iGap.libs.bottomNavigation.TabItem
-            android:id="@+id/ti_main_setting"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

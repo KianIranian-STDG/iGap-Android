@@ -7,173 +7,146 @@
     <string name="md_attachment_clip">@string/attach_icon</string>  <!-- igap_attachment  -->
     <string name="md_bot">\uf757</string>
     <string name="md_voice_message_microphone_button">@string/mic_on_icon</string> <!-- igap_microphone  -->
-    <string name="md_flaticon_volume_off_indicator">\uf581</string> <!-- igap_volume-off  -->
-    <string name="md_share_button">\uf497</string>  <!-- igap_share-variant  -->
+    <!-- igap_volume-off  -->
+    <!-- igap_share-variant  -->
     <string name="md_show_more_button">\uf1d9</string>  <!-- igap_dots-vertical  -->
     <string name="md_close_button">@string/close_icon</string>  <!-- igap_close  -->
-    <string name="md_right_arrow_button">\uf28d</string>  <!-- igap_forward  -->
-    <string name="md_forward">\ue969</string>  <!-- igap_forward  -->
-    <string name="md_right_arrow_button1">\uf142</string> <!-- igap_chevron-right  -->
+    <!-- igap_forward  -->
+    <!-- igap_forward  -->
+    <!-- igap_chevron-right  -->
     <string name="md_refresh_button">\uf0e8</string> <!-- igap_cached  -->
-    <string name="md_round_info_button">\uf2fd</string>  <!-- igap_information-outline  -->
+    <!-- igap_information-outline  -->
     <string name="md_back_arrow">\uf141</string> <!-- igap_chevron-left  -->
-    <string name="md_right_arrow">\uf142</string> <!-- igap_chevron-right  -->
+    <!-- igap_chevron-right  -->
     <string name="md_crop_button">\ue91f</string>  <!-- igap_crop  -->
-    <string name="md_add_user_button">\uf014</string>  <!-- igap_account-plus  -->
+    <!-- igap_account-plus  -->
     <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->
     <string name="md_user_account_box">@string/group_icon</string>  <!-- igap_account  -->
-    <string name="md_apps">\uf640</string>  <!-- igap_apps  -->
-    <string name="md_igap_contacts">\uf6ca</string>  <!-- igap_apps  -->
-    <string name="md_nearby">\uf352</string>  <!-- igap_map-marker-radius -->
-    <string name="md_chat_box">\uf366</string>  <!-- igap_message-processing -->
-    <string name="md_satellite_variant">\uf471</string>  <!--igap_satellite-variant-->
-
-    <string name="md_tick">\uf5e1</string>
+    <!-- igap_apps  -->
+    <!-- igap_apps  -->
+    <!-- igap_map-marker-radius -->
+    <!-- igap_message-processing -->
+    <!--igap_satellite-variant-->
 
 
     <string name="md_try_agin">\uf450</string>  <!--igap_satellite-variant-->
-    <string name="md_users_social_symbol">\uf00e</string>  <!-- igap_account-multiple  -->
-    <string name="md_chat_tab">\uf17a</string>  <!-- igap_account-multiple  -->
+    <!-- igap_account-multiple  -->
+    <!-- igap_account-multiple  -->
     <string name="md_settings_cogwheel_button">\uf493</string>  <!-- igap_settings  -->
-    <string name="md_help_round_button">\uf2d7</string>  <!-- igap_help-circle  -->
-    <string name="md_menu_button">\uf35c</string>  <!-- igap_menu  -->
-    <string name="md_searching_magnifying_glass">\uf349</string>  <!-- igap_magnify  -->
-    <string name="md_rubbish_delete_file">\uf1c0</string> <!-- igap_delete  -->
-    <string name="md_right_arrow_forward">\uf054</string>  <!-- igap_arrow-right  -->
-    <string name="md_copy">\uf18f</string>  <!-- igap_content-copy  -->
-    <string name="md_back_arrow_reply">\ue96a</string>  <!-- igap_reply  -->
-    <string name="md_play_rounded_button">\uf40c</string>  <!-- igap_play-circle  -->
-    <string name="md_round_pause_button">\uf3e5</string>  <!-- igap_pause-circle  -->
-    <string name="md_play_next_button">\uf4ad</string>  <!-- igap_skip-next  -->
-    <string name="md_previous_track">\uf4ae</string>  <!-- igap_skip-previous  -->
+    <!-- igap_help-circle  -->
+    <!-- igap_menu  -->
+    <!-- igap_magnify  -->
+    <!-- igap_delete  -->
+    <!-- igap_arrow-right  -->
+    <!-- igap_content-copy  -->
+    <!-- igap_reply  -->
+    <!-- igap_play-circle  -->
+    <!-- igap_pause-circle  -->
+    <!-- igap_skip-next  -->
+    <!-- igap_skip-previous  -->
     <string name="md_play_arrow">\uf40a</string>  <!-- igap_play  -->
     <string name="md_pause_button">\uf3e4</string> <!-- igap_pause  -->
-    <string name="md_shuffle_mode">\uf49d</string> <!-- igap_shuffle  -->
+    <!-- igap_shuffle  -->
     <string name="md_synchronization_arrows">\uf4e6</string> <!-- igap_sync  -->
     <string name="md_expand_arrow">\uf143</string>  <!-- igap_chevron-up  -->
     <string name="md_downwards_arrow">@string/down_arrow_icon</string>  <!-- igap_chevron-down  -->
-    <string name="md_check_box">\uf132</string>  <!-- igap_checkbox-marked  -->
-    <string name="md_rate_star">\ue905</string>  <!-- igap_star  -->
+    <!-- igap_checkbox-marked  -->
+    <!-- igap_star  -->
     <string name="md_muted">\uf581</string>  <!-- igap_volume-off  -->
-    <string name="md_unMuted">\uf57e</string> <!--  igap_volume-high  -->
-    <string name="md_Mute">\uf57f</string>  <!-- igap_volume-low  -->
-    <string name="md_clearHistory">\uf2da</string>  <!-- igap_history  -->
+    <!--  igap_volume-high  -->
+    <!-- igap_volume-low  -->
+    <!-- igap_history  -->
     <string name="md_exit_app">\uf206</string>  <!-- igap_exit-to-app  -->
     <string name="md_delete_acc">\ue924</string>  <!-- igap_minus-circle-outline  -->
-    <string name="md_go_back_left_arrow">\uf04d</string>  <!-- igap_arrow-left  -->
-    <string name="md_channel_icon">\ue900</string> <!-- igap_channel  -->
-    <string name="md_trending_flat">\uf534</string>  <!-- igap_trending-neutral  -->
+    <!-- igap_arrow-left  -->
+    <!-- igap_channel  -->
+    <!-- igap_trending-neutral  -->
     <string name="md_camera_alt">\ue913</string>  <!-- igap_camera  -->
     <string name="md_colorize">\uf20b</string> <!-- igap_eyedropper  -->
-    <string name="md_rss_feed">\uf46b</string>  <!-- igap_rss  -->
+    <!-- igap_rss  -->
     <string name="md_brush">\ue936</string>  <!-- igap_brush  -->
     <string name="md_pic_library">\uf254</string> <!--  igap_folder-multiple-image  -->
-    <string name="md_thumb_down">\uf511</string> <!--  igap_thumb-down  -->
-    <string name="md_thumb_up">\uf513</string>  <!-- igap_thumb-up  -->
-    <string name="md_visibility">\uf208</string> <!-- igap_eye  -->
-    <string name="md_room">\ue957</string> <!--  igap_map-marker  -->
-    <string name="md_cloud">\uf304</string>  <!-- igap_cloud-circle  -->
+    <!--  igap_thumb-down  -->
+    <!-- igap_thumb-up  -->
+    <!-- igap_eye  -->
+    <!--  igap_map-marker  -->
+    <!-- igap_cloud-circle  -->
     <string name="md_save">\uf193</string> <!--  igap_content-save  -->
-    <string name="md_videocam">\uf567</string>  <!-- igap_video  -->
-    <string name="md_library_music">\uf333</string>  <!-- igap_library-music  -->
-    <string name="md_folder">\uf24b</string> <!-- igap_folder  -->
-    <string name="md_edit">\uf3eb</string>  <!-- igap_pencil  -->
-    <string name="md_convert_to_public">\uf3cc</string>  <!-- igap_open-in-new  -->
-    <string name="md_convert_to_private">\uf0fa</string> <!--  igap_call-received  -->
-    <string name="md_unblock">\uf565</string>  <!-- igap_verified  -->
-    <string name="md_block">\uf0ad</string>  <!-- igap_block-helper  -->
+    <!-- igap_video  -->
+    <!-- igap_library-music  -->
+    <!-- igap_folder  -->
+    <!-- igap_pencil  -->
+    <!-- igap_open-in-new  -->
+    <!--  igap_call-received  -->
+    <!-- igap_verified  -->
+    <!-- igap_block-helper  -->
 
-    <string name="md_log_out">\uf5fc</string> <!-- igap_login-variant  -->
+    <!-- igap_login-variant  -->
     <string name="md_clean_up">\uf06a</string>  <!-- igap_autorenew  -->
-    <string name="md_phone">\uf3f2</string> <!-- igap_phone  -->
-    <string name="md_photo">\uf24f</string>  <!-- igap_folder-image  -->
-    <string name="md_video_library">\uf22b</string> <!-- igap_file-video  -->
-    <string name="md_file_library">\uf332</string>  <!-- igap_apps  -->
-    <string name="md_perm_camera">\uf36f</string>  <!-- igap_microphone-settings  -->
-    <string name="md_gif">\uf230</string><!-- igap_filmstrip  -->
-    <string name="md_link">\uf337</string>  <!-- igap_link  -->
+    <!-- igap_phone  -->
+    <!-- igap_folder-image  -->
+    <!-- igap_file-video  -->
+    <!-- igap_apps  -->
+    <!-- igap_microphone-settings  -->
+    <!-- igap_filmstrip  -->
+    <!-- igap_link  -->
     <string name="md_call_made">\uf3fb</string> <!-- igap_call-made  -->
-    <string name="md_call_received">\uf3f7</string>  <!-- igap_phone-incoming  -->
-    <string name="md_call_missed">\uf3fa</string>  <!-- igap_call-missed  -->
-    <string name="md_call_missed_outgoing">\uf3fb</string>  <!-- igap_phone-outgoing  -->
-    <string name="md_call_end">\uf3f5</string>  <!-- igap_phone-hangup  -->
-    <string name="md_stay_current_portrait">\uf1a1</string>   <!-- igap_crop-portrait  -->
-    <string name="md_surround_sound">\uf5c5</string>   <!-- igap_surround_sound  -->
-    <string name="md_emby">\uf6b3</string>   <!-- igap_surround_sound  -->
+    <!-- igap_phone-incoming  -->
+    <!-- igap_call-missed  -->
+    <!-- igap_phone-outgoing  -->
+    <!-- igap_phone-hangup  -->
+    <!-- igap_crop-portrait  -->
+    <!-- igap_surround_sound  -->
+    <!-- igap_surround_sound  -->
 
-    <string name="md_hearing">\uf5cb</string> <!-- igap_headphones-box  -->
+    <!-- igap_headphones-box  -->
 
-    <string name="md_mic">\uf36c</string>  <!-- igap_microphone  -->
-    <string name="md_mic_off">\uf36d</string>  <!-- igap_microphone-off  -->
-    <string name="md_chat">\uf369</string>  <!-- igap_message-text  -->
+    <!-- igap_microphone  -->
+    <!-- igap_microphone-off  -->
+    <!-- igap_message-text  -->
 
-    <string name="md_pin">\ue901</string>
     <string name="add_icon_2">\ue904</string>
-    <string name="md_circlePin">\ue902</string>
 
     <string name="icon_music">\ue963</string>  <!-- igap_music  -->
-    <string name="icon_file">\uf214</string>  <!-- igap_file  -->
-    <string name="icon_file_empty">\uf224</string><!--  igap_file-outline  -->
-    <string name="iconCardToCard">\uf19b</string>  <!-- igap_folder-open  -->
-    <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->
+    <!-- igap_file  -->
+    <!--  igap_file-outline  -->
+    <!-- igap_folder-open  -->
+    <!--  igap_image-filter  -->
     <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
-    <string name="md_qrCode">\uf433</string> <!-- igap_qrCode  -->
-    <string name="md_file_video">\uf567</string> <!-- igap_eraser  -->
-    <string name="md_file_music">\ue928</string> <!-- igap_eraser  -->
-    <string name="igap_file_text2">\ue926</string> <!-- igap_eraser  -->
+    <!-- igap_qrCode  -->
+    <!-- igap_eraser  -->
+    <!-- igap_eraser  -->
+    <!-- igap_eraser  -->
     <string name="md_igap_file">\ue92a</string> <!-- igap_eraser  -->
-    <string name="igap_chevron_double_down">\uf13c</string> <!-- igap_eraser  -->
+    <!-- igap_eraser  -->
     <string name="md_igap_folder_image">\ue94c</string> <!-- igap_eraser  -->
-    <string name="md_map">\uf24f</string> <!-- igap_map  -->
-    <string name="md_igap_pencil_box_outline">\uf3ed</string> <!-- igap_map  -->
+    <!-- igap_map  -->
+    <!-- igap_map  -->
     <string name="md_igap_crosshairs_gps">\uf1a4</string> <!-- igap_gps  -->
-    <string name="md_gap_eye_off">\uf209</string> <!-- igap_eye_off  -->
-    <string name="md_igap_map_marker_minus">\uf650</string> <!-- igap_eye_off  -->
-    <string name="md_igap_check">\uf12c</string> <!-- igap_eye_off  -->
-    <string name="md_igap_alert">\uf026</string> <!-- igap_eye_off  -->
-    <string name="md_igap_map_marker_multiple">\uf350</string>
-    <string name="md_igap_map_marker_off">\uf351</string>
+    <!-- igap_eye_off  -->
+    <!-- igap_eye_off  -->
+    <!-- igap_eye_off  -->
+    <!-- igap_eye_off  -->
     <string name="md_igap_lock">@string/lock_icon</string>
     <string name="md_igap_lock_open_outline">@string/lock_icon</string>
     <string name="md_igap_fingerprint">\uf237</string>
-    <string name="md_igap_account_alert">\uf005</string>
-    <string name="md_igap_alert_box">\uf027</string>
-    <string name="md_igap_chevron_double_up">\uf13f</string>
     <string name="md_igap_tune">\ue934</string>
     <string name="md_igap_paint">\ue935</string>
-    <string name="md_igap_credit_card">\uf19b</string>
-    <string name="md_payment">\uf72c</string>
-    <string name="md_barcode_scan">\uf072</string>
-    <string name="md_newspaper">\uf395</string>
-    <string name="md_deskphone">\uf1c3</string>
-    <string name="md_beaker">\uf68f</string>
-    <string name="md_cell_phone">\uf121</string>
-    <string name="md_currency_usd">\uf1b3</string>
     <string name="md_format_list_bulleted">\ue926</string>
     <string name="md_dialpad">\ue912</string>
-    <string name="md_twitch">\uf543</string>
-    <string name="md_igap_sync">\uf4e6</string>
-    <string name="igap_cash_usd">\uf115</string>
-    <string name="md_igap_export">\uf207</string>
-    <string name="md_solid_colors">\uf266</string>  <!-- igap_magnify  -->
-    <string name="md_wallpapers">\ue927</string>  <!-- igap_magnify  -->
-    <string name="md_email">\uf1f0</string>
-    <string name="md_swich_video">\uf569</string>
-    <string name="md_igap_bluetooth">\uf0af</string>
-    <string name="md_igap_stop">\uf4db</string>
+    <!-- igap_magnify  -->
+    <!-- igap_magnify  -->
 
     <string name="md_igap_arrow_up_thick">\ue99f</string>
     <string name="md_igap_arrow_down_thick">\ue933</string>
     <string name="md_igap_minus">\ue924</string>
 
 
-    <string name="md_get_score_ok">\uf5e0</string>
     <string name="md_get_score_failed">\uf159</string>
 
     <!--
     chat cell icon
     -->
-    <string name="igap_verified">\uf565</string>
 
     <!--New Font Icon-->
     <string name="cloud_icon">\ue91a</string>
@@ -188,7 +161,6 @@
     <string name="dark_mode_icon">\ue920</string>
     <string name="faq_icon">\ue93a</string>
     <string name="setting_icon">\ue989</string>
-    <string name="hamburger_menu_icon">\ue95e</string>
     <string name="search_icon">\ue982</string>
     <string name="back_icon">\ue908</string>
     <string name="check_icon">\ue988</string>
@@ -207,8 +179,6 @@
     <string name="delete_icon">\ue923</string>
     <string name="share_icon">\ue98a</string>
     <string name="close_icon">\ue919</string>
-    <string name="language_icon">\ue953</string>
-    <string name="camera_icon">\ue913</string>
     <string name="camera2_icon">\ue950</string>
     <string name="mute_icon">\ue964</string>
     <string name="verify_icon">\ue910</string>
@@ -218,19 +188,12 @@
     <string name="reply_icon">\ue97f</string>
     <string name="message_icon">\ue911</string>
     <string name="mic_on_icon">\ue960</string>
-    <string name="mic_off_icon">\ue95f</string>
-    <string name="speaker_on_icon">\ue998</string>
     <string name="unmute_icon">\ue998</string>
-    <string name="speaker_off_icon">\ue997</string>
-    <string name="switch_camera_icon">\ue995</string>
-    <string name="end_voice_call_icon">\ue937</string>
-    <string name="end_video_call_icon">\ue9a2</string>
     <string name="play_icon">\ue977</string>
     <string name="pause_icon">\ue973</string>
     <string name="igap_fa_icon">\ue95a</string>
     <string name="igap_en_icon">\ue95c</string>
     <string name="attach_icon">\ue907</string>
-    <string name="voice_not_downloaded_icon">å</string>
     <string name="music_icon">\ue963</string>
     <string name="retry_icon">\ue97d</string>
     <string name="player_next_icon">\ue93c</string>
@@ -256,10 +219,7 @@
     <string name="channel_main_icon">\ue916</string>
     <string name="icon_card_to_card">\ue915</string>
 
-    <string name="icon_beeptunes_next">\ue909</string>
     <string name="icon_beeptunes_play">\ue90a</string>
-    <string name="icon_beeptunes_prv">\ue90b</string>
-    <string name="icon_beeptunes_song">\ue90c</string>
     <string name="icon_beeptunes_sync">\ue90d</string>
     <string name="icon_beeptunes_like">\ue954</string>
     <string name="horizontal_more_icon">\ue9b8</string>
@@ -268,18 +228,6 @@
     <string name="valid_icon">\ue9a9</string>
     <string name="download_ic">\ue933</string>
     <string name="upload_ic">\ue99f</string>
-    <string name="cheque_icon">\ue9fa</string>
-    <string name="bank_facilities_icon">\ue9fb</string>
-    <string name="bank_service_icon">\ue9fc</string>
-    <string name="sheba_icon">\ue9fd</string>
-    <string name="new_seporde_icon">\uea21</string>
-    <string name="post_icon">\uea22</string>
-    <string name="pooya_password_icon">\uea23</string>
-    <string name="transfer_money_icon">\uea24</string>
-    <string name="take_turn_icon">\uea25</string>
-    <string name="transaction_icon">\uea26</string>
-    <string name="protect_icon">\uea27</string>
-    <string name="inventory_icon">\uea28</string>
 
     <string name="bank_withdraw_ic">\ue9ad</string>
     <string name="bank_income_ic">\ue9ac</string>

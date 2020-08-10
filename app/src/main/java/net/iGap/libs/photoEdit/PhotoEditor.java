@@ -5,16 +5,11 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
-import androidx.annotation.UiThread;
 import androidx.lifecycle.MutableLiveData;
-
-import net.iGap.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -169,24 +164,6 @@ public class PhotoEditor implements BrushViewChangeListener {
     }
 
     /**
-     * Remove all helper boxes from views
-     */
-    @UiThread
-    public void clearHelperBox() {
-        for (int i = 0; i < parentView.getChildCount(); i++) {
-            View childAt = parentView.getChildAt(i);
-            FrameLayout frmBorder = childAt.findViewById(R.id.frmBorder);
-            if (frmBorder != null) {
-                frmBorder.setBackgroundResource(0);
-            }
-            ImageView imgClose = childAt.findViewById(R.id.imgPhotoEditorClose);
-            if (imgClose != null) {
-                imgClose.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
      * A callback to save the edited image asynchronously
      */
     public interface OnSaveListener {
@@ -315,7 +292,6 @@ public class PhotoEditor implements BrushViewChangeListener {
                     @Override
                     protected void onPreExecute() {
                         super.onPreExecute();
-                        clearHelperBox();
                         parentView.setDrawingCacheEnabled(false);
                     }
 

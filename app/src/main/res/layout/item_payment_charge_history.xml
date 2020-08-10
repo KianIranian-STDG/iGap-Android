@@ -40,7 +40,6 @@
         tools:text="091211111111" />
 
     <View
-        android:id="@+id/view_line"
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:background="?iGapDividerLine"

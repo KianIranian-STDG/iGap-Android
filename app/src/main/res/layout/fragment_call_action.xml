@@ -42,7 +42,6 @@
                 app:srcCompat="@drawable/ic_telephone" />
 
             <TextView
-                android:id="@+id/tv_callAction_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/call"
@@ -67,7 +66,6 @@
                 app:srcCompat="@drawable/ic_chat" />
 
             <TextView
-                android:id="@+id/tv_callAction_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/message"

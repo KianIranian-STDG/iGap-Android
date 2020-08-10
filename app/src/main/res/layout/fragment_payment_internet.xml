@@ -116,7 +116,6 @@
                         app:srcCompat="@drawable/ic_contact_new" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_contact"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -165,7 +164,6 @@
                         app:srcCompat="@drawable/ic_recent" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_history"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -347,7 +345,6 @@
                     app:layout_constraintWidth_percent=".9">
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/appCompatTextView7"
                         style="@style/myIconTextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -356,7 +353,6 @@
                         android:textColor="@color/white" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/appCompatTextView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_call_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/iv_app_icon"
@@ -56,7 +55,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_call_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_info"

@@ -8,7 +8,6 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView3"
         android:layout_width="@dimen/dp160"
         android:layout_height="@dimen/dp160"
         android:layout_gravity="center"
@@ -16,7 +15,6 @@
         app:srcCompat="@drawable/empty_chat" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

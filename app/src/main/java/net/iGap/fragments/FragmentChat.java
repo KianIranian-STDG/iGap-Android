@@ -126,7 +126,6 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
-import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -415,7 +414,6 @@ public class FragmentChat extends BaseFragment
     public TextView txtFloatingTime;
     public boolean rcTouchListener;
     BotInit botInit;
-    PaymentDialogBinding paymentDialogBinding;
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
     private boolean isShareOk = true;

@@ -39,7 +39,6 @@
             app:cardElevation="1dp">
 
             <ImageView
-                android:id="@+id/fragment_ivand_profile_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
@@ -65,7 +64,6 @@
         app:srcCompat="@drawable/ic_more_toolbar" />
 
     <ImageView
-        android:id="@+id/fragment_ivand_profile_toolbar_btn_edit"
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
         android:layout_marginTop="@dimen/toolbar_icon_margin"
@@ -79,7 +77,6 @@
         app:srcCompat="@drawable/ic_edit_toolbar" />
 
     <ImageView
-        android:id="@+id/fragment_ivand_profile_toolbar_btn_back"
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
         android:layout_marginTop="@dimen/toolbar_icon_margin"
@@ -152,7 +149,6 @@
         android:text="@string/wallet_Your_credit" />
 
     <TextView
-        android:id="@+id/fragment_ivand_profile_txt_credit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -218,7 +214,6 @@
         android:text="@string/your_rate" />
 
     <TextView
-        android:id="@+id/fragment_ivand_profile_txt_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -271,7 +266,6 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_score_splitter" />
 
     <TextView
-        android:id="@+id/fragment_ivand_profile_txt_inviteFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -298,7 +292,6 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_inviteFriend" />
 
     <TextView
-        android:id="@+id/fragment_ivand_profile_txt_payment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -325,7 +318,6 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_payment" />
 
     <TextView
-        android:id="@+id/fragment_ivand_profile_txt_scan_qr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -352,7 +344,6 @@
         app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_scan_qrCode" />
 
     <TextView
-        android:id="@+id/fragment_ivand_profile_txt_bot_channels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

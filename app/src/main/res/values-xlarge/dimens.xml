@@ -5,21 +5,13 @@
     <bool name="isTablet">true</bool>
 
     <dimen name="messageContainerPadding">12dp</dimen>
-    <dimen name="messageContainerPaddingBottom">8dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">20dp</dimen>
-
-    <dimen name="chatBoxMaxWidth">540dp</dimen>
 
     <dimen name="design_fab_size_mini">28pt</dimen>
     <dimen name="design_fab_size_normal">60pt</dimen>
 
     <dimen name="messageBox_cornerRadius">13dp</dimen>
-    <dimen name="messageBox_elevation">8dp</dimen>
 
-    <dimen name="messageBox_minusLeftRightMargin">-10dp</dimen>
-
-    <dimen name="dp14_Popup">14dp</dimen>
-    <dimen name="dp1_minus">-2dp</dimen>
     <dimen name="dp1">2dp</dimen>
     <dimen name="dp2">4dp</dimen>
     <dimen name="dp4">8dp</dimen>
@@ -49,7 +41,6 @@
     <dimen name="dp88">196dp</dimen>
     <dimen name="dp100">200dp</dimen>
     <dimen name="dp120">240dp</dimen>
-    <dimen name="dp130">260dp</dimen>
     <dimen name="dp140">280dp</dimen>
     <dimen name="dp160">320dp</dimen>
     <dimen name="dp180">360dp</dimen>
@@ -57,7 +48,6 @@
     <dimen name="dp220">440dp</dimen>
     <dimen name="dp240">480dp</dimen>
     <dimen name="dp260">520dp</dimen>
-    <dimen name="dp280">560dp</dimen>
     <dimen name="dp300">600dp</dimen>
 
 

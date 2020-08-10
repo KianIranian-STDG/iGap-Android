@@ -46,7 +46,6 @@
         app:layout_constraintTop_toBottomOf="@+id/ll_mplTransaction_toolBar">
 
         <LinearLayout
-            android:id="@+id/fc_layout_calls_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

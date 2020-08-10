@@ -12,7 +12,6 @@
         android:scaleType="centerCrop" />
 
     <View
-        android:id="@+id/view7"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent_player"

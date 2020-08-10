@@ -4,12 +4,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import net.iGap.databinding.ActivityPaymentBinding;
-
 public class PaymentActivity extends AppCompatActivity {
-
-    ActivityPaymentBinding mBinding;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

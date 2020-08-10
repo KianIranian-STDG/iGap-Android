@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:endColor="@color/navigation_dark_mode_bg"
-        android:startColor="@color/players_dark_background"
-        android:angle="90" />
-    <corners android:radius="@dimen/dp12" />
-</shape>

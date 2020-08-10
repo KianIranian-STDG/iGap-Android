@@ -5,7 +5,6 @@
     tools:context=".fragments.filterImage.FragmentPaintImage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/paint_root_ll"
     android:focusable="true"
     android:clickable="true"
     android:background="@color/rg_text_dark_verify">
@@ -30,7 +29,6 @@
         app:layout_constraintBottom_toBottomOf="@id/lytToolbar" />
 
     <TextView
-        android:id="@+id/stfaq_txt_titleToolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -93,7 +91,6 @@
         app:layout_constraintBottom_toTopOf="@id/color_seek_bar" />
 
     <TextView
-        android:id="@+id/colorTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="NotificationText" parent="android:TextAppearance.Material.Notification" />
-
-    <style name="NotificationTitle" parent="android:TextAppearance.Material.Notification.Title" />
-
-    <style name="NotificationTime" parent="android:TextAppearance.Material.Notification.Time" />
-
 
     <style name="AppTheme" parent="BaseTheme">
         <item name="android:colorEdgeEffect">@color/gray</item>

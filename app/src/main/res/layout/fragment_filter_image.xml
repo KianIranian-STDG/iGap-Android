@@ -21,7 +21,6 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/stfaq_allLayout_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -36,7 +35,6 @@
                     android:textColor="@color/whit_background" />
 
                 <TextView
-                    android:id="@+id/stfaq_txt_titleToolbar"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

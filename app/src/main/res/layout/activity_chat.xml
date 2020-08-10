@@ -276,7 +276,6 @@
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/ac_txt_join"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/dp6"
@@ -499,7 +498,6 @@
                         app:rv_ripplePadding="5dp">
 
                         <net.iGap.module.MaterialDesignTextView
-                            android:id="@+id/ac_btn_clear_message_search"
                             style="@style/myIconToolbarStyle"
                             android:layout_width="@dimen/toolbar_icon_size"
                             android:layout_height="match_parent"

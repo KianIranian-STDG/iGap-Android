@@ -14,7 +14,6 @@
         android:textSize="@dimen/dp13" />
 
     <LinearLayout
-        android:id="@+id/dialog_root_item1_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

@@ -56,7 +56,6 @@
             android:textSize="@dimen/dp15" />
 
         <View
-            android:id="@+id/stda_line_below_editText"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/pu_edt_nikeName"

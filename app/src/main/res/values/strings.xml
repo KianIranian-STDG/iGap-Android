@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Check connect to internet Page introduce app -->
-    <string name="text_i_introduce_page1">i</string>
-    <string name="text_line_1_introduce_page1">Gap</string>
-    <string name="text_line_2_introduce_page1">Limitless Connection</string>
-    <string name="text_line_3_introduce_page1">Build your own world by iGap right now.</string>
-    <string name="text_line_4_introduce_page1">It takes only few minutes to join iGap community!</string>
 
     <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">Security &amp; Privacy</string>
@@ -21,13 +16,9 @@
     <string name="text_line_2_introduce_page4">iLand! without limitation\nwith wonderful events as taking a taxi, pay bills and booking hotels and flights . Oh Also you can play games, watch films and listen to music</string>
 
     <!-- Page 5 introduce app -->
-    <string name="text_line_1_introduce_page5">Voice and video Call</string>
-    <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice and video calls to anyone on iGap and save your money. iGap voice and video call is P2P-based with no server\'s interference in voice and video transmission.</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">Start Now</string>
-    <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
-    <string name="text_line_2_introduce_page6">Let’s stop waiting! \n iGap is thoroughly free. So, just now build your own world freely.</string>
 
     <string name="text_line_1_introduce_page7">Nearby Feature</string>
     <string name="text_line_2_introduce_page7">Leave a new world around me. Around you, find your friends, entertainment centers, art, business and other and enjoy your moments ...</string>
@@ -36,52 +27,35 @@
     <!--Fill Profile User -->
     <string name="pu_title_profileUser">Complete Your User Profile</string>
     <string name="pu_desc_profileUser">Enter your Nickname and select a photo as your Profile Avatar/Picture</string>
-    <string name="pu_addPhoto_profileUser">Profile Picture</string>
     <string name="pu_nikname_profileUser">First Name</string>
     <string name="pu_Lets_Go">Continue</string>
 
     <!-- Register Page -->
-    <string name="rg_title_register">Registration</string>
     <string name="rg_confirm_text_register">Please confirm your country name and code then enter your phone number without its first zero/0</string>
     <string name="rg_Start">Let\'s Go</string>
     <string name="rg_Select_Country">Select your Country</string>
-    <string name="rg_agreement_text_register">Recheck and confirm your phone number! We\'re sending a verification code to this number</string>
-    <string name="rg_verify_register1">Connecting</string>
-    <string name="rg_verify_register2">Waiting for the Code</string>
-    <string name="rg_verify_register3">Creating Security Key</string>
-    <string name="rg_verify_register4">Finalizing Registration</string>
-    <string name="rg_verify_dialog_try_code">I entered manually</string>
-    <string name="rg_verify_dialog_resend_code">Resend Code</string>
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
-    <string name="Re_Enter_Verify_Code_Please">Please enter the verification code</string>
     <string name="verify_socket_message">Please enter verification code sent by iGap</string>
     <string name="verify_sms_message">Please enter verification code sent by sms</string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
     <string name="verify_invalid_code_message">Unfortunately; the verification code is invalid , Please enter the correct one manually.</string>
-    <string name="resend_message">Resending the verification code</string>
     <string name="phone_number">Phone Number</string>
-    <string name="Re_Phone_Verification">Verifying the entered phone number</string>
 
     <!--Reagent-->
-    <string name="ra_title">"referral"</string>
     <string name="ra_enter_reagent_code">enter referral code(Optional)</string>
     <string name="ra_confirm">"Confirm"</string>
-    <string name="ra_skip">"Skip"</string>
     <string name="reagent_error_message">The number entered is incorrect for the referral.</string>
 
 
     <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">Connecting and getting Info...</string>
     <string name="Toast_Location_Not_Found">Location not found.</string>
     <string name="Toast_First_0">Don\'t need 0 at the beginning</string>
-    <string name="Toast_Enter_Phone_Number">Please enter your phone number without the first zero/0</string>
     <string name="Toast_Minimum_Characters">The number of characters is less than the limit</string>
     <string name="Toast_Enter_Code">Please enter the verification code</string>
     <string name="Toast_Number_Block">This number is blocked</string>
     <string name="Toast_time_wait">please wait until:</string>
-    <string name="Toast_Invalid_nickname">Invalid Nickname,Please change it.</string>
     <string name="Toast_Write_NickName">Please enter your nickname</string>
 
     <!-- Destruction -->
@@ -130,33 +104,26 @@
 
     <!-- Public String -->
     <string name="search">Search</string>
-    <string name="d_of_d" formatted="false">%d of %d</string>
     <string name="add_to_contact">Add to Contact</string>
     <string name="app_name">iGap</string>
-    <string name="call_name">iGap Voice Call</string>
 
 
     <string name="chat">Chat</string>
     <string name="group">Group</string>
     <string name="channel">Channel</string>
     <string name="igap">iGap</string>
-    <string name="igapChanel">iGap</string>
 
     <string name="clear_history_content">Are you sure you want to clear history?</string>
     <string name="delete_chat_content">Are you sure you want to delete this chat?</string>
     <string name="delete_text">Are you sure you want to delete this contact?</string>
     <string name="cancel">Cancel</string>
     <string name="B_cancel">Cancel</string>
-    <string name="B_skip">Skip</string>
-    <string name="B_finish">Finish</string>
     <string name="ok">Ok</string>
     <string name="B_ok">Ok</string>
     <string name="set">Confirm</string>
     <string name="am_camera">Camera</string>
     <string name="am_music">Music</string>
-    <string name="am_paint">Paint</string>
     <string name="am_picture">Picture</string>
-    <string name="am_document">Document</string>
     <string name="am_location">Location</string>
     <string name="am_video">Video</string>
     <string name="am_file">File</string>
@@ -165,7 +132,6 @@
     <string name="device_dosenot_camera_en">This device does not have a camera.</string>
     <string name="device_dosenot_support">This device does not have an app for this action.</string>
     <string name="do_you_want_to_turn_on_gps">Your GPS is off, do you want to turn it on?</string>
-    <string name="picture_is_saved_en">The Picture was Saved.</string>
     <string name="select_picture_en">Select Picture</string>
     <string name="cannot_load_data_en">Unable to load data.</string>
     <string name="do_you_want_exit">Do you want to exit?</string>
@@ -173,24 +139,12 @@
     <string name="video_duration" formatted="false">%s (%s)</string>
 
     <!-- setting -->
-    <string name="st_Info">Account Info</string>
-    <string name="st_Language">Language</string>
-    <string name="st_titleToolbar">Settings</string>
-    <string name="st_title_general">General Settings</string>
     <string name="st_username">Username</string>
-    <string name="st_nickname">First Name</string>
-    <string name="st_contactName">Contact Name</string>
-    <string name="st_phoneNumber">Phone Number</string>
-    <string name="st_represent">Referral:</string>
-    <string name="st_title_info">Information</string>
-    <string name="st_title_notification_sounds">Notifications and Sounds</string>
     <string name="st_title_Clear_Cache">Clear Cache</string>
     <string name="st_title_Privacy_Security">Privacy and Security</string>
     <string name="st_title_message">Message Room</string>
     <string name="st_title_message_textSize">Text Message Size</string>
-    <string name="st_stickers">Stickers and Pictures</string>
     <string name="st_chatBackground">Chat Background</string>
-    <string name="st_Enable_Animation">Enable Animations</string>
     <string name="st_inApp_Browser">In-App browser</string>
     <string name="st_crop">Crop and Resize Photo</string>
     <string name="st_send_by_enter">Send by Enter Key</string>
@@ -202,14 +156,7 @@
     <string name="st_auto_download_roaming">Auto-download (When Roaming)</string>
     <string name="title_auto_download_roaming">Auto-download\n(Using Data Roaming)</string>
     <string name="st_auto_gif">Auto Play GIFs</string>
-    <string name="st_save_to_gallery">Save to Gallery</string>
-    <string name="st_title_support">iGap Support</string>
-    <string name="st_ask_question">Ask a Question</string>
-    <string name="st_About_iGap">About iGap</string>
-    <string name="st_privacy_policy">Privacy Policy</string>
     <string name="st_keepMedia">Store Multimedia Files</string>
-    <string name="st_dialog_content_keepMedia">Photos, videos and all other files saved on your cloud storage could be removed from your device in order to free up space. All these removed files and media are stored on cloud storage and could be downloaded and saved again if needed.</string>
-    <string name="st_titleToolbar_page_Notification_and_sounds">Notification &amp; Sounds</string>
     <string name="st_title_messageNotification">Message Notifications</string>
     <string name="st_alert">Alert</string>
     <string name="st_messagePreview">Message Preview</string>
@@ -223,16 +170,9 @@
     <string name="st_in_app_vibrate">In-App Vibration</string>
     <string name="st_in_app_preview">In-App Preview</string>
     <string name="st_in_chat_sound">Sounds in Chat</string>
-    <string name="st_title_Events">Events</string>
-    <string name="st_Contact_joined_igap">Recently Joined iGap.</string>
-    <string name="st_pinned_message">Pinned Messages</string>
     <string name="st_title_other">Other</string>
     <string name="st_text_keep_alive_service">Relaunch app if shut down by user or system. This will ensure you all notifications will be shown.</string>
     <string name="st_keep_alive_service">Keep Service Running all time</string>
-    <string name="st_background_connection">Background Connection</string>
-    <string name="st_text_background_connection">Keep a low impact background connection to iGap to receive notifications. Enable for reliable notifications.</string>
-    <string name="st_badge_counter">Pinned Messages</string>
-    <string name="st_Repeat_Notifications">Pinned Messages</string>
     <string name="st_title_reset">Reset</string>
     <string name="st_reset_all_notification">Reset all Notifications</string>
     <string name="st_text_reset_all_notification">Undo all custom notification settings for all your contacts and groups</string>
@@ -240,7 +180,6 @@
     <string name="st_dialog_reset_all_notification_yes">YES</string>
     <string name="st_dialog_reset_all_notification_no">NO</string>
     <string name="st_title_Background">Chat Background</string>
-    <string name="st_stickers_and_picture">Stickers and Pictures</string>
 
     <!-- privacy and security -->
     <string name="privacy">Privacy</string>
@@ -257,36 +196,21 @@
     <string name="ntg_title_toolbar">Notifications &amp; Sounds</string>
     <string name="ntg_notifications">Notifications</string>
     <string name="ntg_Sound">Sound</string>
-    <string name="ntg_smart_notifications">Smart Notifications</string>
 
     <!-- chanel_info -->
     <string name="chi_shared_Media">Shared Media</string>
-    <string name="chi_clearChat">Clear Chat History</string>
-    <string name="chi_blockContact">Block this contact</string>
-    <string name="chi_title_setting">Settings</string>
     <string name="chi_popup_call">Voice Call</string>
     <string name="chi_popup_copy">Copy</string>
-    <string name="chi_NEXT_STEP">Next Step</string>
 
     <!-- fragment add contact -->
-    <string name="fac_Add_Contact">Add Contact</string>
-    <string name="fac_contact_info">Contact Info</string>
     <string name="fac_First_Name">First Name</string>
     <string name="fac_Last_Name">Last Name</string>
-    <string name="fac_Phone_Number">Phone Number</string>
-    <string name="fac_Find_in_Page">Find in Page</string>
-    <string name="fac_Open_in_Chrome">Complete Action Using Chrome</string>
-    <string name="fac_Powered_by_iGap">Powered by iGap</string>
     <string name="menu_add_contact">Add Contact</string>
     <string name="shared_media">Shared Media</string>
     <string name="shared_files">Shared Files</string>
     <string name="shared_links">Shared Links</string>
-    <string name="shared_music">Shared Music</string>
     <string name="save_to_Music">Save to Music</string>
-    <string name="show_all_media">Show all Media</string>
     <string name="save_to_gallery">Save to Gallery</string>
-    <string name="delete_from_gallery">Delete from Gallery</string>
-    <string name="select_room">Select Room</string>
     <string name="edited">Edited</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
@@ -300,10 +224,7 @@
     <string name="array_File">File</string>
     <string name="array_Music">Music</string>
     <string name="array_GIF">GIF</string>
-    <string name="array_Add_to_Contact">Add to Contact List</string>
-    <string name="array_Call">Call</string>
     <string name="array_Copy">Copy</string>
-    <string name="array_Off">Off</string>
     <string name="array_No_popup">No pop-up</string>
     <string name="array_Only_when_screen_on">Only when the screen is on</string>
     <string name="array_Only_when_screen_off">Only when the screen is off</string>
@@ -317,12 +238,7 @@
     <string name="array_From_Gallery">Gallery</string>
     <string name="array_From_Camera">Camera</string>
     <string name="array_Delete_photo">Delete Photo</string>
-    <string name="array_5_minutes">5 Minutes</string>
-    <string name="array_10_minutes">10 Minutes</string>
-    <string name="array_30_minutes">30 Minutes</string>
     <string name="array_1_hour">1 Hour</string>
-    <string name="array_2_hour">2 Hours</string>
-    <string name="array_4_hour">4 Hours</string>
     <string name="Default_Notification_tone">Default Notifications Tone</string>
     <string name="replay_item_dialog">Reply</string>
     <string name="copy_item_dialog">Copy</string>
@@ -334,26 +250,20 @@
     <string name="Search">Search</string>
     <string name="Delete_and_leave_Group">Delete and Leave Group</string>
     <string name="New_Chanel">New Channel</string>
-    <string name="New_Group">New Group</string>
 
     <!-- tarjome nashavad -->
-    <string name="test">Will likely mark this as an error despite being correct. You may want to add 91211111 will likely mark this as an error despite being correct. You may want to add</string>
 
     <string name="of">Of</string>
     <string name="save_to_music_folder">Save to music folder successfully</string>
-    <string name="no_comment">No Comment</string>
-    <string name="comment">Comment</string>
     <string name="choose_picture">Choose Picture from</string>
     <string name="cansel">Cancel</string>
     <string name="from_camera">Camera</string>
     <string name="please_check_your_camera">Please Check your Device Camera.</string>
-    <string name="delete_photo">Delete Photo</string>
     <string name="group_name">Group Name</string>
     <string name="group_link">Group Link</string>
     <string name="save">Save</string>
     <string name="please_enter_group_name">Please enter group name</string>
     <string name="group_description">Group Description</string>
-    <string name="please_enter_group_description">Please enter a description about group</string>
     <string name="do_you_want_to_set_admin_role_to_member">Are you sure you want to remove the admin role from this member?</string>
     <string name="do_you_want_to_kick_this_member">Are you sure you want to kick this member?</string>
     <string name="do_you_want_to_set_modereator_role_to_member">Are you sure you want to remove the moderator role from this member?</string>
@@ -369,8 +279,6 @@
     <string name="please_enter_phone_number">Please enter your phone number</string>
     <string name="please_enter_correct_phone_number">Please enter correct phone number</string>
     <string name="please_enter_firstname_or_lastname">Please enter your first name or last name</string>
-    <string name="new_chanel">New Channel</string>
-    <string name="can_not_save_picture_pleas_try_again">Can\'t save picture, please try again</string>
     <string name="chats">Chats</string>
     <string name="contacts">Contacts</string>
     <string name="messages">Messages</string>
@@ -380,10 +288,6 @@
     <string name="from">From</string>
     <string name="new_message">New Message</string>
     <string name="new_messages">New Messages</string>
-    <string name="new_message_recicve">New Message Received</string>
-    <string name="my_Position_is">My Location is:</string>
-    <string name="latitude">Latitude :</string>
-    <string name="longitude">Longitude :</string>
     <string name="unknown_artist">Unknown Artist</string>
     <string name="add_new_member">Add New Members</string>
     <string name="set_admin">Assign Admin</string>
@@ -391,7 +295,6 @@
     <string name="set_modereator">Assign Moderator</string>
     <string name="add_modereator">Add Moderator</string>
     <string name="set_kick">Kick out</string>
-    <string name="member_can_add_new_member">Members Can Add New Members</string>
     <string name="notificaion_and_sound">Notifications and Sounds</string>
     <string name="your_link">Your Link</string>
     <string name="public_channel">Public Channel</string>
@@ -403,7 +306,6 @@
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">User is blocked, no possibility to verify</string>
     <string name="destroy_enter_code">Destruction Code</string>
-    <string name="E_2">Need to Log in</string>
     <string name="E_335">Bad payload</string>
     <string name="E_336">Internal Server Error</string>
     <string name="E_337">This operation is not permitted.</string>
@@ -453,8 +355,6 @@
     <string name="E_122">Bad payload: Invalid phone number</string>
     <string name="E_123">Internal Server Error</string>
 
-    <string name="E_163">USER_PROFILE_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
-
     <string name="E_218">Bad payload: Invalid room ID</string>
     <string name="E_219">Internal Server Error</string>
     <string name="E_220">This operation is not permitted.</string>
@@ -464,30 +364,14 @@
     <string name="E_301">Internal Server Error</string>
     <string name="E_379">You cannot invite this user to groups because of the protected privacy for the request</string>
 
-    <string name="E_373">GROUP_REVOKE_LINK_BAD_PAYLOAD</string>
-    <string name="E_374">GROUP_REVOKE_LINK_INTERNAL_SERVER_ERROR</string>
-    <string name="E_375">GROUP_REVOKE_LINK_FORBIDDEN</string>
-
-    <string name="E_453">CHANNEL_CHECK_USERNAME_BAD_PAYLOAD</string>
-    <string name="E_454">CHANNEL_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
-
-    <string name="E_455">CHANNEL_UPDATE_USERNAME_BAD_PAYLOAD</string>
-    <string name="E_456">CHANNEL_UPDATE_USERNAME_INTERNAL_SERVER_ERROR</string>
-    <string name="E_457">CHANNEL_UPDATE_USERNAME_UPDATE_LOCK</string>
-    <string name="E_458">CHANNEL_UPDATE_USERNAME_FORBIDDEN</string>
-
-    <string name="E_468">channel update signature forbidden</string>
     <string name="E_478">You cannot invite this user to groups because of the protected privacy for the request</string>
 
     <string name="E_610">Bad payload</string>
     <string name="E_611">Internal Server Error</string>
     <string name="E_612">Bad payload</string>
     <string name="E_613">Internal Server Error</string>
-    <string name="E_614">The Conversation not found.</string>
-    <string name="E_615_1">Bad payload: Invalid room ID</string>
     <string name="E_615_2">Bad payload: Invalid ID of the first message</string>
     <string name="E_616">Internal Server Error</string>
-    <string name="E_617">No Other Messages to be Viewed.</string>
     <string name="E_623">Client Resolve Username Not Found</string>
     <string name="E_713_1">Bad payload: Invalid token</string>
     <string name="E_713_2">Bad payload: Invalid offset</string>
@@ -499,27 +383,6 @@
 
     <string name="E_658">You have already sent report.</string>
     <string name="E_659">You are forbidden to send a report.</string>
-
-    <string name="E_9002">Unable to get initialize id</string>
-    <string name="E_9006">Communication with the server is not possible</string>
-    <string name="E_9007">Communication with the server is not possible</string>
-    <string name="E_9008">Connection with recipient failed</string>
-    <string name="E_9009">Communication with the server is not possible</string>
-    <string name="E_9010">The recipient has not registered</string>
-    <string name="E_9013">Your registration is forbidden</string>
-
-    <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
-    <string name="E_10109">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
-    <string name="E_10110">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
-    <string name="E_10111">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_EXPIRED_TOKEN</string>
-    <string name="E_10112">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_NO_PASSWORD</string>
-    <string name="E_10113">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INVALID_TOKEN</string>
-    <string name="E_10114">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_BAD_PAYLOAD</string>
-    <string name="E_10115">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
-    <string name="E_10116">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
-    <string name="E_10117">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_NO_PASSWORD</string>
-    <string name="E_10118"> USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INVALID_PASSWORD</string>
-    <string name="E_10119">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_CONFIRMED_BEFORE</string>
 
     <string name="E_10165">Bad payload: User report</string>
     <string name="E_10166">ServerError: User report internal</string>
@@ -539,8 +402,6 @@
     <string name="resend_all_messages" formatted="false">Resend %d messages</string>
     <string name="resend_chat_message" formatted="false">Resend messages</string>
     <string name="if_you_are_away_for">Away for</string>
-    <string name="st_Gander">Gender:</string>
-    <string name="st_email">Email:</string>
     <string name="month_1">1 month</string>
     <string name="month_3">3 months</string>
     <string name="month_6">6 months</string>
@@ -565,16 +426,12 @@
     <string name="desc">Description</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="receive_code_text">Did not you receive a text message?</string>
     <string name="please_wait">Please Wait.</string>
-    <string name="New_Chat">New Chat</string>
     <string name="Invite_Friends">Invite Friends</string>
     <string name="iGap_FAQ">iGap FAQs</string>
     <string name="Documents">Documents</string>
     <string name="remove_admin">Remove Admin</string>
     <string name="remove_moderator">Remove Moderator</string>
-    <string name="Male">Male</string>
-    <string name="Female">Female</string>
     <string name="from_beginning">From the Beginning</string>
     <string name="from_Now">From Now</string>
     <string name="last_50_Messages">Last 50 Messages</string>
@@ -594,14 +451,11 @@
     <string name="last_month">last month</string>
     <string name="last_week">last week</string>
     <string name="online">online</string>
-    <string name="exactly">Exactly</string>
     <string name="recently">Recently</string>
     <string name="support">Support</string>
     <string name="service_notification">Notification Services</string>
     <string name="B_edit">Edit</string>
     <string name="left">Leave</string>
-    <string name="Channel_name">New Channel</string>
-    <string name="arrow">Arrow</string>
     <string name="Ringtone">Ringtone</string>
     <string name="DISCARD">Discard</string>
     <string name="unknown">Unknown</string>
@@ -610,26 +464,21 @@
 
     <string name="delete_account_text">Are you sure you want to delete your account?</string>
     <string name="delete_account_text_desc">(If you delete your account, all sort of files received as messages will be deleted permanently!)</string>
-    <string name="text_kick_admin">Are you sure you want to kick this admin out?</string>
-    <string name="text_kick_moderator">Are you sure you want to kick this moderator out?</string>
     <string name="dialog_readonly_chat">Sorry, you are not allowed to send any messages to this chat.</string>
     <string name="to_delete_contact">Delete Contact</string>
 
     <string name="capture_image">Capture Image</string>
     <string name="capture_video">Capture Video</string>
     <string name="set_gender">Set Gander</string>
-    <string name="set_email">Set Email</string>
     <string name="delete_contact">Delete Contact</string>
     <string name="error_email">Wrong Email Address</string>
     <string name="active_session_title">Terminate the Active Session</string>
     <string name="active_session_all_title">Terminate all Active Sessions</string>
     <string name="active_session_content">Are you sure you want to terminate this active session?</string>
     <string name="active_session_all_content">Are you sure you want to terminate all active sessions?</string>
-    <string name="USER_VERIFY_GIVEN_USERNAME">There is no registered user with given username.</string>
     <string name="USER_VERIFY_MANY_TRIES">Verification code is locked for a while due to too many tries.</string>
     <string name="USER_VERIFY_MANY_TRIES_SEND">Verification code has been forwarded frequently.</string>
     <string name="USER_VERIFY_EXPIRED">Verification code is expired.</string>
-    <string name="USER_VERIFY_BLOCK">User is blocked for his/her request</string>
     <string name="convert_chat_to_group_content">Do you want to convert this chat to a group?</string>
     <string name="convert_chat_to_group_title">Convert chat to group</string>
     <string name="minute_ago">minute ago</string>
@@ -640,34 +489,23 @@
     <string name="ip">IP:</string>
     <string name="current_session">Current Session</string>
     <string name="Active_session">Active Session</string>
-    <string name="terminate">Terminate</string>
     <string name="terminate_all">Terminate all other Active Sessions</string>
     <string name="forwarded_from">Forwarded from</string>
-    <string name="more">more ...</string>
-    <string name="do_you_want_to_delet_this_chat">Do you want to delete this chat?</string>
-    <string name="sound_at_most">Sound at most</string>
-    <string name="number">Number</string>
     <string name="photo">Photo</string>
     <string name="music_name">Music Name</string>
-    <string name="times">Times</string>
     <string name="info">Info</string>
     <string name="description">Description</string>
     <string name="type_message">Message...</string>
     <string name="place">Place</string>
-    <string name="minutes">Minutes</string>
     <string name="channel_link">Channel Link</string>
-    <string name="group_profile">Group Profile</string>
     <string name="iran">Iran</string>
-    <string name="naturemagazine">Nature Magazine</string>
     <string name="everybody">Everybody</string>
     <string name="music_time">Music Time</string>
     <string name="new_group">New Group</string>
-    <string name="delete_from_cache">Delete From Cache</string>
     <string name="leave_channel">Leave Channel</string>
     <string name="report">Report</string>
     <string name="replay">Reply</string>
     <string name="members">Members</string>
-    <string name="skip">Skip</string>
     <string name="settings">Settings</string>
     <string name="iGap_settings">iGap Account Settings</string>
     <string name="please_write_your_message">Please type your message!</string>
@@ -680,84 +518,47 @@
     <string name="text_copied">Text Copied</string>
 
     <string name="message">Message</string>
-    <string name="future_done">will be offered in the future</string>
     <string name="nick_name_not_exist">Name not exist</string>
-    <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="block_this_contact">Block This Contact?</string>
     <string name="block">Block</string>
     <string name="clear_this_chat">Are you sure you want to clear this chat history?</string>
     <string name="clear">Clear</string>
     <string name="can_not_save_image">Can\'t Save image</string>
     <string name="just_owner_can_delete">Just Creator can delete</string>
 
-    <string name="shate_audio_file">Share audio File</string>
     <string name="last_seen">Last seen</string>
     <string name="remove">Remove</string>
     <string name="please_check_your_connenction">Please check your connection</string>
-    <string name="errore_verification_sms">Error verification SMS</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="share_via">Share via</string>
     <string name="error">Error</string>
     <string name="please_enter_code_for_verify">"Enter Code."</string>
     <string name="server_do_not_response">Server don\'t response</string>
     <string name="share_image_from_igap">Share image from iGap</string>
     <string name="share_video_from_igap">Share video from iGap</string>
     <string name="TERMINATE">"TERMINATE"</string>
-    <string name="iGap_version">"iGap Android Client V"</string>
-    <string name="Bazzar">"Bazaar"</string>
 
     <string name="do_you_want_to_delete_this_group">Are you sure you want to delete this group?</string>
     <string name="do_you_want_to_leave_this_group">Are you sure you want to leave this group?</string>
     <string name="waiting_for_connection">Waiting for Connecting to Server</string>
-    <string name="array_delete_photo_group">Delete Photo</string>
-    <string name="to_delete_chat">Delete Chat</string>
     <string name="picture_save_to_galary">"picture saved to gallery"</string>
-    <string name="my_location_title">My Location</string>
     <string name="shared_image">Shared Images</string>
     <string name="shared_video">Shared Videos</string>
     <string name="shared_audio">Shared Audios</string>
     <string name="shared_voice">Shared Voices</string>
     <string name="shared_gif">Shared Gifs</string>
-    <string name="shared_file">Shared Files</string>
     <string name="images">Images</string>
-    <string name="qr_payment">QR Payment</string>
-    <string name="charge_balance">Charge balance</string>
-    <string name="total_balance">Total balance</string>
-    <string name="rials">Rial</string>
     <string name="amount_rials">%s Rials</string>
-    <string name="unverified">Unverified/</string>
-    <string name="send_documents">Sending documents</string>
     <string name="charge">Charge</string>
-    <string name="transaction_history">Transaction history</string>
     <string name="transfer_mony">Transfer Money</string>
-    <string name="create_qr_code">Create QR code</string>
-    <string name="pay_via_qr_code">Pay via QR code</string>
-    <string name="charge_out">Charge out</string>
-    <string name="e_commerce">E-Commerce</string>
-    <string name="agrement">Agreement</string>
-    <string name="payment_charge_out_text">Message of Charging out</string>
-    <string name="description_optional">Description(optional)</string>
-    <string name="enter_the_code_here">Enter the code here</string>
-    <string name="transfer_to">Transfer to</string>
-    <string name="transfer_to_wallet">Transfer to wallet</string>
     <string name="gift_message">Gift Amount *.
 Want to get it?</string>
     <string name="toast_success_gift">Wait a few moments to apply gift credit.</string>
 
     <string name="amount_to_pay_factor">Amount to pay factor (Rials) :</string>
     <string name="price">Price</string>
-    <string name="amunt">Amount</string>
-    <string name="email_optional">Email(optional)</string>
-    <string name="create">Create</string>
     <string name="gif_selected_for_send">the GIF selected to send</string>
-    <string name="log_message">Log message</string>
-    <string name="iranian_rials">Iranian Rial(IRR)</string>
-    <string name="your_login_code_is">"Your login code is:"</string>
     <string name="there_is_no_sheared_media">There are no shared media</string>
-    <string name="pending">Pending</string>
-    <string name="completed">Completed</string>
     <string name="payment_userScore">Your Score</string>
     <string name="payment_spentScore">Spending Score: </string>
     <string name="payment_price">discount: </string>
@@ -768,26 +569,20 @@ Want to get it?</string>
     <string name="channel_description">Channel Description</string>
     <string name="channel_delete"> Delete Channel</string>
     <string name="channel_left">Leave Channel</string>
-    <string name="please_enter_channel_description">Please Enter Channel Description</string>
-    <string name="delete_and_leave_channel">Delete and Leave Channel</string>
     <string name="txt_draft">Draft: </string>
     <string name="txt_you">You</string>
     <string name="you">You</string>
-    <string name="st_data_shams">Persian Date</string>
     <string name="do_you_want_left_this">"Are you sure you want to leave this room?"</string>
     <string name="do_you_want_delete_this">Are you sure you want to delete this room?</string>
     <string name="do_you_want_delete_this_channel">Are you sure you want to delete this channel?</string>
     <string name="do_you_want_leave_this_channel">Are you sure you want to leave this channel?</string>
     <string name="do_you_want_clear_history_this">Are you sure you want to clear history of this room?</string>
     <string name="content_log_out">Are you sure you want to sign out of your iGap account?</string>
-    <string name="st_signature">Signature</string>
-    <string name="one_day">Last day</string>
     <string name="two_day">Two days ago</string>
     <string name="three_day">Three days ago</string>
     <string name="four_day">Four days ago</string>
     <string name="five_day">Five days ago</string>
     <string name="six_day">Six days ago</string>
-    <string name="at">at</string>
     <string name="new_channel_hint">You can provide an optional description for your channel.</string>
     <string name="new_group_hint">You can provide an optional description for your group.</string>
 
@@ -804,13 +599,10 @@ Want to get it?</string>
     <string name="bahman">Bahman</string>
     <string name="esfand">Esfand</string>
 
-    <string name="group_link_copy">Copy</string>
-    <string name="group_link_revoke">Change Link</string>
     <string name="join">Join</string>
     <string name="do_you_want_to_join_to_this">"Do you want to join this "</string>
     <string name="block_user">Block User</string>
     <string name="un_block_user">"Unblock User"</string>
-    <string name="spam">Spam</string>
 
     <string name="sunday">"Sunday"</string>
     <string name="monday">Monday</string>
@@ -839,13 +631,6 @@ Want to get it?</string>
     <string name="MISSED_VIDEO_CALL">"Missed Video Call"</string>
 
 
-    <string name="delete_account_text1">other</string>
-    <string name="delete_account_text2">other</string>
-    <string name="delete_account_text3">other</string>
-    <string name="delete_account_text4">other</string>
-    <string name="revoke">Revoke</string>
-    <string name="channel_link_title_revoke">Invitation Link</string>
-    <string name="channel_link_hint_revoke">Channel Invitation Link</string>
     <string name="group_link_hint_revoke">Group Invitation Link</string>
     <string name="self_destructs">Self-destruct</string>
     <string name="channel_title_convert_to_private">Convert to private</string>
@@ -872,21 +657,14 @@ Want to get it?</string>
     <string name="permission_location">Location</string>
     <string name="permission_record_audio">Record Audio</string>
     <string name="permission_phone">Call Phone</string>
-    <string name="permission_sms">Received Messages</string>
 
-    <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
     <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
     <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">Dear user, you have just updated, please wait</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
-    <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
 
     <string name="channel_public_hint_revoke">Channel Public Link</string>
-    <string name="st_privacy_blog">iGap Official Blog</string>
-    <string name="st_privacy_create_ticket">Support Request</string>
-    <string name="st_privacy_iGap_home">iGap Official Home</string>
-    <string name="you_have_to_get_storage_permision_for_continue">You need the storage permission for going on.</string>
     <string name="clean_up_chat_rooms">Clean Up All</string>
     <string name="clean_up">Clean Up</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">Are you sure you want to clean up all data in local chat rooms?</string>
@@ -919,9 +697,6 @@ Want to get it?</string>
     <string name="who_can_invite_you_to_group_s">Who can invite me to Groups?</string>
     <string name="no_body">Nobody</string>
     <string name="my_contacts">My Contacts</string>
-    <string name="privacy_setting">Privacy Setting</string>
-    <string name="igap_search">Look and Find</string>
-    <string name="set_color_to_default">Reset Colors Back to Default</string>
     <string name="empty_message">Please try to enter the first 5 characters of username</string>
     <string name="empty_message3">Enter at least 5 characters to search</string>
     <string name="there_is_no_any_result">No Result</string>
@@ -942,7 +717,6 @@ Want to get it?</string>
     <string name="keep_media_1month">1 Month</string>
     <string name="keep_media_6month">6 Month</string>
     <string name="file_save_to_download_folder">"File save to download folder"</string>
-    <string name="first_download_file">First download file</string>
     <string name="file_save_to_galary_folder">File save to galary folder</string>
     <string name="file_can_not_save_to_selected_folder">File can not save to selected folder</string>
     <string name="file_save_to_video_folder">File save to video folder</string>
@@ -952,17 +726,13 @@ Want to get it?</string>
     <string name="title_limit_Create_Group">Restriction in Number of Rooms</string>
     <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
     <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
-    <string name="calls">Call list</string>
     <string name="voice_calls">iGap Voice Call</string>
     <string name="video_calls">iGap Video Call</string>
     <string name="map">Map</string>
     <string name="igap_nearby">Nearby</string>
-    <string name="igap_call">iGap Voice Call</string>
     <string name="No_messages_here_yet">No messages here yet…</string>
     <string name="mandatory">(Required)</string>
-    <string name="optional">(Optional)</string>
     <string name="desc_group_chanel">Description (Optional)</string>
-    <string name="set_additional_password">Set Additional Password</string>
     <string name="two_step_verification_title">Two-Step Verification</string>
     <string name="two_step_verification_description">You can set a password that will be required when you log in on a new device in addition to the code you get via SMS.</string>
     <string name="two_step_verification_disable">Two-Step Verification is disable</string>
@@ -976,12 +746,9 @@ Want to get it?</string>
     <string name="password_Question_one">eg: Who is your Favorite teacher?</string>
     <string name="password_Question_title_two">Question two (Required)</string>
     <string name="title_toolbar_password_Question">New Security Questions</string>
-    <string name="password_Question_explain">Change old question with answers for recovering password.</string>
     <string name="password_Question_two">eg: Who is your best friend?</string>
     <string name="password_answer">Answer</string>
-    <string name="password_Question_title">Password Question</string>
     <string name="recovery_email">Recovery E-mail</string>
-    <string name="your_email">Your Email (Optional)</string>
     <string name="recovery_question">Recovery Question</string>
     <string name="two_step_verification">Two-Step Verification</string>
     <string name="forgot_password">Forgot password?</string>
@@ -1009,9 +776,7 @@ Want to get it?</string>
 
     <string name="recovery_Password">Recovery Password</string>
     <string name="your_email_desc">Please add your valid e-mail! It is another way to recover your forgotten password</string>
-    <string name="call_with">Select Contact</string>
     <string name="please_enter_code">Please enter code</string>
-    <string name="please_enter_all_item">Please enter code</string>
     <string name="Hint_cant_the_same_password">Hint can\'t be the same as password</string>
     <string name="please_complete_all_item">"Please complete all items</string>
     <string name="Password_dose_not_match">"Password does not match</string>
@@ -1039,11 +804,9 @@ Want to get it?</string>
     <string name="not_answer">Unanswered Call</string>
     <string name="un_answered">Unanswered</string>
 
-    <string name="nothing">Nothing</string>
     <string name="are_you_sure_clear_call_logs">Are you sure you want to clear all calls?</string>
     <string name="are_you_sure_clear_call_log">Are you sure you want to clear selected calls?</string>
     <string name="please_write_your_reasons">Please write your reasons</string>
-    <string name="your_confirm_email">Enter the confirmation code sent to Email</string>
     <string name="confirm_email_title">Confirmation email</string>
     <string name="confirm_email_text">A code has been sent to your email in order that your email address will be verified and confirmed then.</string>
     <string name="your_confirm_email_skip">Skip</string>
@@ -1059,7 +822,6 @@ Want to get it?</string>
     <string name="no">"No"</string>
 
 
-    <string name="not_answered">Not Answered ANSWERED</string>
     <string name="unavalable">Unavailable</string>
     <string name="too_long">Too Long</string>
     <string name="signaling">Signaling</string>
@@ -1082,7 +844,6 @@ Want to get it?</string>
     <string name="QrCode_Scan">Login With QR Scan</string>
     <string name="Call_Quality">Call Quality</string>
     <string name="desc_self_destroy">"If you choose one of the periods in the following and never use your iGap account during the certain time, your account will be destructed and deleted spontaneously."</string>
-    <string name="color_default">Are you sure you want to reset all changes with color to default?</string>
 
     <string name="crop_image_menu_rotate_right">Rotate</string>
     <string name="crop_image_menu_crop">Crop</string>
@@ -1105,26 +866,14 @@ Want to get it?</string>
 
 
     <string name="audio">Audio</string>
-    <string name="total_size">Total Size</string>
 
-    <string name="manage_spacing">Manage Spacing</string>
-    <string name="local_database">Local Database</string>
     <string name="data_storage">Data Storage</string>
-    <string name="keep_media">Keep Media</string>
 
-
-    <string name="invite_friend">This user dose not have iGap yet, send an invitation?</string>
-    <string name="clean_up_description">Clearing the local database will delete the texts of cached messages and compress the database to save internal disk space. iGap needs some data to work, so database size will not reach zero. \n\n This operation can take few minutes to complete.</string>
-    <string name="list_contacts">List of Phone Contacts</string>
 
     <string name="limit_for_set_username">Limit time for change Username</string>
-    <string name="clear_cache_desc">Cached data on your device are the uploaded and/or downloaded files as photos, videos or documents, which must be cleared occasionally not to stop your device working or slow it down. Whenever you want to see them again, it is sufficient only to tap on them for downloading.</string>
     <string name="name">Name</string>
 
     <string name="turn_on_gps_explain">The location status and other features of map are disabled. To use all the capabilities, turn the switch on first.</string>
-    <string name="turn_off_map">turn off</string>
-    <string name="turn_on_map">turn on</string>
-    <string name="positioning">positioning</string>
     <string name="nearby">Manually Update the Map</string>
     <string name="list_user_map">List of People Nearby</string>
     <string name="map_registration">Disable "Nearby" Visibility</string>
@@ -1145,7 +894,6 @@ Want to get it?</string>
 
     <string name="exceed_4_line">Your status cannot exceed 4 lines.</string>
 
-    <string name="st_Auto_Rotate">Auto-Rotate Screen</string>
     <string name="st_24_Clock">24 hour clock</string>
     <string name="Theme_Dark">Dark Theme</string>
     <string name="two_step_pass_code">PassCode Lock</string>
@@ -1189,15 +937,12 @@ Want to get it?</string>
     <string name="send_forward_to">Are you sure send forward for</string>
 
     <string name="st_bio">Bio</string>
-    <string name="st_des_bio">You can add a few lines about yourself. anyone who opens your profile will see this text.</string>
-    <string name="st_Report">Report</string>
     <string name="st_Spam">Spam</string>
     <string name="st_Violence">Violence</string>
     <string name="st_Pornography">Pornography</string>
     <string name="st_Other">Other</string>
     <string name="st_Abuse">Abuse</string>
     <string name="st_FakeAccount">Fake Account</string>
-    <string name="st_limit_bio">You have exceeded the allowed number of characters. You can use only 70 characters for Bio.</string>
     <string name="st_checkbox_delete">Delete for</string>
     <string name="st_desc_delete">Are you sure you want to delete %1$s message(s)?</string>
     <string name="st_send_report">Report was successfully sent.</string>
@@ -1221,7 +966,6 @@ Want to get it?</string>
     <string name="zighade">Thul Qidah</string>
     <string name="zihaje">Thul Hijjah</string>
 
-    <string name="st_multi_tab">Multi Tab</string>
     <string name="st_dark_theme">Dark Theme</string>
     <string name="dont_ask_again">Understood</string>
     <string name="attention">Attention</string>
@@ -1230,10 +974,8 @@ Want to get it?</string>
     <string name="open_default_player">Open video with default player</string>
     <string name="show_channel_vote">Channel Reaction</string>
     <string name="verify_channel">Verified Channel</string>
-    <string name="verify_user">Verified User</string>
     <string name="another_room">Another Room</string>
     <string name="send">Send</string>
-    <string name="do_not_send">Don\'t Send</string>
     <string name="save_data_in_sd_card">Save data in sd card</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="are_you_sure_request">Are you sure you want to submit your request?</string>
@@ -1256,7 +998,6 @@ Want to get it?</string>
     <string name="can_not_open_file">This file can not be opened</string>
     <string name="pin_messages_content" formatted="false">"Do you want to %s this message?"</string>
     <string name="unpin">UnPin</string>
-    <string name="pin_message">Pin</string>
     <string name="pined_message">Pinned Message</string>
     <string name="all_member">All Members</string>
     <string name="this_page">This Page</string>
@@ -1266,12 +1007,8 @@ Want to get it?</string>
     <string name="to_theme">Until: </string>
     <string name="automatic">Automatic</string>
     <string name="automatic_description_theme">The night mode was activated from 19 to 8 with automatic mode selection</string>
-    <string name="setting_dark_theme">Setting Dark Theme</string>
     <string name="Select_Time">Select Time</string>
     <string name="financial_services">Financial Services</string>
-    <string name="install_app">Install App</string>
-    <string name="text_top">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
-    <string name="text_paygear">Follow up, pick up your wallet and instant cash deposit, pay your gifts, buy from stores and pay tax limousines.</string>
     <string name="customization">Customization</string>
     <string name="Apply_colors_to_customize">Apply colors to customize</string>
     <string name="channel_name_notification">iGap Notification</string>
@@ -1281,30 +1018,22 @@ Want to get it?</string>
     <string name="pay_bills_crime">Pay traffic tickets</string>
     <string name="barcode_reader">Barcode reader</string>
     <string name="billing_id">Billing ID</string>
-    <string name="enter">enter</string>
     <string name="payment_code">Payment code</string>
     <string name="amount">Amount(Rial)</string>
-    <string name="buy">pay</string>
-    <string name="select">Select</string>
     <string name="hamrahe_aval">Hamrahe Aval</string>
     <string name="irancell">IranCell</string>
     <string name="ritel">Ritel</string>
     <string name="normal_charge">Normal charge</string>
-    <string name="amazing_charge">Amazing charge</string>
     <string name="youth_charge">Youth charge</string>
     <string name="ladies_charge">Ladies charge</string>
     <string name="amazing">Amazing charge</string>
     <string name="Exciting">Amazing charge</string>
-    <string name="wimax_charging">WiMAX charge</string>
-    <string name="permanently_charge">Charge permanent SIM cards</string>
 
     <string name="get_gifts">Get Gift</string>
     <string name="congratulations">Congratulations</string>
     <string name="unsuccessful">Failed</string>
     <string name="disabled_qr_voucher">This voucher is disabled or used before. </string>
 
-    <string name="charge_1"> 10,000 Rials</string>
-    <string name="charge_2"> 20,000 Rials</string>
     <string name="charge_5"> 50,000 Rials</string>
     <string name="charge_10"> 100,000 Rials</string>
     <string name="charge_20"> 200,000 Rials</string>
@@ -1312,16 +1041,9 @@ Want to get it?</string>
     <string name="charge_100"> 1,000,000 Rials</string>
 
     <string name="value_added">Value added</string>
-    <string name="charge_1_ir">10,000 Rials + 9% Value Added = 10,900 Rials</string>
-    <string name="charge_2_ir">20,000 Rials + 9% Value Added = 21,180 Rials</string>
-    <string name="charge_5_ir">50,000 Rials + 9% Value Added = 54,500 Rials</string>
-    <string name="charge_10_ir">100,000 Rials + 9% Value Added = 109,000 Rials</string>
-    <string name="charge_20_ir">200,000 Rials + 9% Value Added = 218,000 Rials</string>
     <string name="biling_id_not_valid">Billing id is not valid</string>
     <string name="pay_id_is_not_valid">Payment Id is not valid</string>
     <string name="charge_type">Charge type</string>
-    <string name="operator">operator</string>
-    <string name="trabord">\tPorted subscriber</string>
     <string name="time_out_error">time out error</string>
     <string name="connection_error">no connection error</string>
     <string name="server_error">Server Error</string>
@@ -1331,7 +1053,6 @@ Want to get it?</string>
     <string name="phone_number_is_not_valid">phone number is not valid</string>
     <string name="please_select_operator">please select operator</string>
     <string name="wallet">Wallet</string>
-    <string name="loading_wallet_agreement">Loading wallet agreement …</string>
     <string name="i_agree_with_the_terms">\tI agree with the terms</string>
     <string name="accept_the_terms">Accept the terms</string>
     <string name="wallet_agrement">Wallet agreement</string>
@@ -1340,7 +1061,6 @@ Want to get it?</string>
     <string name="amount_in_rial">Amount in Rial</string>
     <string name="pay">Pay</string>
     <string name="transfer_to_dialog">Transfer to :%s</string>
-    <string name="am_money">money</string>
     <string name="trace_number">Trace number</string>
     <string name="amount_2">amount:</string>
     <string name="payment_canceled">payment is canceled</string>
@@ -1348,9 +1068,7 @@ Want to get it?</string>
     <string name="bills_inquiry_mci">MCI subscribers bill inquiry </string>
     <string name="bills_inquiry_telecom">Home phones bill inquiry</string>
     <string name="bills_inquiry">Bills inquiry mci and telecom</string>
-    <string name="bills_inquiry_title">Bills inquiry</string>
     <string name="bill_type">Bill type</string>
-    <string name="telecom">Home phone</string>
     <string name="phone">Phone number</string>
     <string name="area_code">Area code</string>
     <string name="inquiry">Inquiry</string>
@@ -1368,8 +1086,6 @@ Want to get it?</string>
     <string name="ex_area">Ex : 021</string>
     <string name="ex_phone">Ex : 44567899</string>
     <string name="sync_contact">Sync Contact</string>
-    <string name="satellite_view">Satellite View</string>
-    <string name="default_view">Default View</string>
     <string name="send_location_text">Send selected location</string>
     <string name="map_distance">m away</string>
     <string name="calculation">Calculating...</string>
@@ -1383,14 +1099,8 @@ Want to get it?</string>
     <string name="wallet_from">From</string>
     <string name="wallet_to">To</string>
     <string name="wallet_amount">Amount</string>
-    <string name="wallet_trace">Trace Number</string>
-    <string name="wallet_invoice">Invoice Number</string>
-    <string name="wallet_data">Pay Time</string>
-    <string name="wallet_desc">---Description---</string>
-    <string name="wallet_toman">Toman</string>
     <string name="wallet_Your_credit">Your credit : </string>
     <string name="wallet_Reial">%d Rial </string>
-    <string name="payment_rial">Price: %s Rial</string>
     <string name="wallet_error_server">Error communicating with server</string>
 
     <string name="IP_blocked">Due to overuse, your IP has been blocked for a while.</string>
@@ -1417,16 +1127,11 @@ Want to get it?</string>
 
     <string name="verify_register_sms">SMS</string>
     <string name="verify_register_call">Call</string>
-    <string name="way_receive_register_code">Way to receive code: </string>
     <string name="separate_notifications">Separate Notifications</string>
     <string name="mark_as_unread">Mark as read</string>
-    <string name="reply_label">Answer</string>
     <string name="solid_colors">Solid colors</string>
     <string name="wallpapers">Wallpapers</string>
     <string name="planDB">iGapLocalDatabase.realm</string>
-    <string name="realmDatabaseEncrypt">iGapLocalDatabaseEncrypted.realm</string>
-    <string name="realmDatabaseNonEncrypt">iGapLocalDatabase.realm</string>
-    <string name="check_internet_connection">check internet connection</string>
     <string name="start">Start</string>
     <string name="bot">Bot</string>
     <string name="back_to_menu">back to main menu</string>
@@ -1440,7 +1145,6 @@ Want to get it?</string>
     <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
     <string name="dont_show_again">Do not show again</string>
     <string name="invitation_message">\Hey Join iGap : http://d.igap.net/invite I\'m waiting for you!\ \n Referred Number is : </string>
-    <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">Please enter a valid folder name</string>
     <string name="This_folder_already_exists">"This folder already exists.\n Please provide another name for the folder"</string>
     <string name="Select_directory">Select a directory</string>
@@ -1451,11 +1155,9 @@ Want to get it?</string>
     <string name="Default_Dir">Default Dir</string>
     <string name="Select">Select</string>
     <string name="Create_new_Folder_here">Create a new Folder here</string>
-    <string name="Powered_by_iGap">Powered by iGap</string>
     <string name="on_hold">call on hold...</string>
     <string name="disconnecting">Disconnecting...</string>
     <string name="poor_connection">poor connection!</string>
-    <string name="switchTo">switch To :</string>
     <string name="stop">Stop Bot</string>
     <string name="stop_message_bot">Are you sure you want to stop this bot?</string>
     <string name="startUpdate">update</string>
@@ -1465,34 +1167,20 @@ Want to get it?</string>
     <string name="remove_sticker">Remove Sticker</string>
     <string name="remove_sticker_with_size">Remove %s Sticker</string>
     <string name="remove_sticker_text">Are you sure you want to remove this stickers?</string>
-    <string name="add_sticker_text">Are you sure you want to install this stickers?</string>
     <string name="access_phone_number">Are you sure to send your phone number?</string>
     <string name="access_location">Are you sure to send your location?</string>
     <string name="sticker_message">Sticker message</string>
-    <string name="Sticker_added_successfully">Sticker added successfully</string>
     <string name="Add">Add</string>
     <string name="Remove">Remove</string>
-    <string name="Recently">Recently</string>
-    <string name="Favorite">Favorite</string>
-    <string name="Please_select_an_option">Please select an option</string>
-
-    <string name="try_later">Try some second later</string>
-    <string name="representer">Set Referral</string>
-    <string name="representer_code">Please set your representative phone number here</string>
 
     <string name="unknown_type">not supported card</string>
     <string name="order_history">Score History</string>
-    <string name="your_point">Your Score:</string>
-    <string name="score_title">Score</string>
 
     <string name="dialog_ok">Ok</string>
     <string name="error_submit_qr_code">There is an error with the request!</string>
     <string name="not_exist_activities">Your history is empty.</string>
-    <string name="ivand_profile_title">My Score</string>
     <string name="ivand_activities_title">Score History</string>
     <string name="scan_barcode">Scan Barcode</string>
-    <string name="st_ivand">iGap Club</string>
-    <string name="st_ivand_text_setting">Your Score:</string>
     <string name="E_10183">The entered code is invalid</string>
     <string name="share_link_item_dialog">Share Link</string>
     <string name="not_found_message">This message is missing.</string>
@@ -1500,7 +1188,6 @@ Want to get it?</string>
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
     <string name="card_to_card">Request card to card</string>
-    <string name="your_device_is_root">Sorry! Your device is root.</string>
     <string name="top_sheet_behavior" translatable="false">net.iGap.module.dialog.topsheet.TopSheetBehavior</string>
     <string name="change_language_title">Change Language</string>
     <string name="terms_condition_title">Terms and Condition</string>
@@ -1521,52 +1208,22 @@ Want to get it?</string>
     <string name="rial">Rials</string>
     <string name="toman">Toman</string>
 
-    <string name="verify_fragment_hint">We sent an activation code to your phone. If you didn\'t receive any code, request again after 1 minute.</string>
-    <string name="new_user_pass_fragment_hint">Specify a passcode for your card. You can change it later in Settings.</string>
-    <string name="code_resend_text">* seconds to resend code</string>
     <string name="resend_code">Resend code</string>
-    <string name="new_otp_requested">New code sent to your phone</string>
-    <string name="request_again">Request again</string>
-    <string name="sending_code_to_x">Code sent to your phone \n*</string>
-    <string name="select_your_city">Select your city</string>
     <string name="enter_username">Enter your username</string>
-    <string name="enter_code_correctly">Enter the activation code correctly</string>
-    <string name="enter_mobile_correctly">Enter your phone number correctly</string>
-    <string name="enter_your_mobile">Enter your phone number</string>
-    <string name="enter_your_mobile_without_zero">Enter your phone number without zero</string>
-    <string name="enter_your_activation_code">Enter the activation code</string>
     <string name="country_code_not_valid">The country code is not valid</string>
-    <string name="four_digits_activation_code">4 digits activation code</string>
-    <string name="confirm_password">Repeat Password</string>
-    <string name="enter_your_confirm_password">Reenter your password</string>
     <string name="enter_your_password">Enter your password</string>
-    <string name="select_your_password">Select your password</string>
-    <string name="enter_your_referral_code">Enter your Referral code</string>
-    <string name="select_your_province">Select your province</string>
     <string name="referral_code">Referral code</string>
-    <string name="province_name">Province Name</string>
-    <string name="account_password">Account Password</string>
 
-    <string name="full_name">Full Name</string>
     <string name="user_name">Username</string>
-    <string name="birth_date">Birth Date</string>
     <string name="email">Email</string>
-    <string name="province">Province</string>
     <string name="edit_profile_hint"> </string>
-    <string name="username">Username</string>
     <string name="username_copied">Username Copied</string>
-    <string name="select_city">Select City</string>
     <string name="select_province">Select Province</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="paygear_user">Wallet User</string>
-    <string name="authorization_not_valid">User authentication is not valid</string>
-    <string name="already_read">I already read</string>
     <string name="login">Login</string>
     <string name="next">Next</string>
     <string name="back">Back</string>
-    <string name="code">Code</string>
-    <string name="never_mind">Never Mind</string>
-    <string name="not_now">Not Now!</string>
 
     <string name="no_item">No Item</string>
     <string name="retry">Retry</string>
@@ -1581,7 +1238,6 @@ Want to get it?</string>
     <string name="edit">Edit</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
-    <string name="delete_image">Delete Picture</string>
 
     <string name="charge_wallet">Wallet Charge</string>
     <string name="charge_paygear">Charge Wallet</string>
@@ -1591,18 +1247,13 @@ Want to get it?</string>
     <string name="enter_info_completely">Enter info correctly</string>
     <string name="source_card">Source Card</string>
     <string name="destination_card">Destination Card</string>
-    <string name="destination_card_number">Destination Card Number</string>
     <string name="destination_sheba_number">Destination IBAN Number</string>
     <string name="trace_no">Trace No</string>
     <string name="reference_code">Reference No</string>
-    <string name="has">Has</string>
-    <string name="not_has">Has not</string>
-    <string name="see_details">See Details</string>
     <string name="request_time">Request Time</string>
     <string name="settlement_time">Settlement Time</string>
     <string name="requested_amount">Requested Price</string>
     <string name="requested_amount_rial">Requested Price (Rial)</string>
-    <string name="settlement_wage">کارمزد تسویه</string>
     <string name="deposits">Deposited</string>
     <string name="wage">Wage</string>
     <string name="bank">Bank</string>
@@ -1616,14 +1267,10 @@ Want to get it?</string>
     <string name="tax">Tax</string>
     <string name="paymentTax">Tax: %S Rial</string>
     <string name="delivery_price">Delivery</string>
-    <string name="payable_price_rial">Payable Price (Rial)</string>
     <string name="final_price_rial">Final Price (Rial)</string>
     <string name="payable_price">Payment Price</string>
-    <string name="withdraw_price">مبلغ برداشت</string>
     <string name="qr_not_detected">QR not recognized</string>
-    <string name="payment_price_rial">Payment Price (Rial)</string>
     <string name="price_rial">Amount (Rial)</string>
-    <string name="amount_must_be_greater_1000">Amount must be greter than 1000 rials</string>
     <string name="amount_must_be_greater_10000">Amount must be greter than 10000 rials</string>
     <string name="amount_not_valid">Amount is not valid</string>
     <string name="payment_history">Payment History</string>
@@ -1634,17 +1281,13 @@ Want to get it?</string>
     <string name="pay_to">Paid To</string>
     <string name="pay_with_raad_card_to">Paid with Wallet card to</string>
     <string name="pay_charge_for_raad_card_to">پرداخت شارژ پیگیرکارت به</string>
-    <string name="charge_paygear_card">Wallet Charge</string>
     <string name="purchase_club_plan_from">خرید طرح باشگاه از</string>
     <string name="receive_from">Received From</string>
     <string name="receive_sale_share_from">دریافت سهم فروش از</string>
     <string name="receive_charge_for_raad_card_from">دریافت شارژ پیگیرکارت از</string>
     <string name="settled">Cashout</string>
     <string name="settled_pending">Cashout Pending</string>
-    <string name="settlement">تسویه</string>
     <string name="payment_pending">Payment pending</string>
-
-    <string name="taxi">Taxi</string>
 
     <string name="successful_payment">Successful Payment</string>
     <string name="unsuccessful_payment">Unsuccessful Payment</string>
@@ -1659,7 +1302,6 @@ Want to get it?</string>
     <string name="how_to_get_sheba">How to get IBAN</string>
     <string name="my_qr_hint">Show this QR to others so they scan and pay money to you.</string>
     <string name="my_qr">My QR</string>
-    <string name="credit">Credit</string>
 
     <string name="card_16_digits">16 digits card number</string>
     <string name="sheba_20_digits">24 digits IBAN number</string>
@@ -1675,9 +1317,7 @@ Want to get it?</string>
     <string name="cash_in_paygear">Charge</string>
     <string name="cash_out_paygear">Cashout</string>
     <string name="cashable">Cashable</string>
-    <string name="not_cashable">Non Cashable</string>
     <string name="gift">Gift</string>
-    <string name="withdraw">Cashout</string>
     <string name="cards">Cards</string>
     <string name="my_cards">My Cards</string>
     <string name="cashout_today_limit">Today Cashout Limit</string>
@@ -1687,8 +1327,6 @@ Want to get it?</string>
     <string name="qr">QR</string>
     <string name="scanner">Scanner</string>
 
-    <string name="x_people">* People</string>
-    <string name="enter_receiver_code">Enter the merchant code</string>
     <string name="receiver_code">Merchant Code</string>
     <string name="pay_with_price_x">Payment Price\n*</string>
 
@@ -1713,7 +1351,6 @@ Want to get it?</string>
     <string name="enter_card_number">Enter card number correctly</string>
     <string name="enter_cvv2">Enter your card CVV2 number</string>
     <string name="enter_your_second_pin">Enter your card second pin</string>
-    <string name="enter_expire_date">Enter your card exp date</string>
     <string name="enter_expire_date_year">Enter your card exp year</string>
     <string name="enter_expire_date_month">Enter your card exp month</string>
     <string name="enter_expire_date_month_correctly">Enter your card exp month correctly</string>
@@ -1724,34 +1361,8 @@ Want to get it?</string>
     <string name="enter_your_sheba_number">Enter your IBAN number</string>
 
     <string name="language">Language</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="security_privacy_policy">Security and Privacy Policy</string>
     <string name="app_version">Version</string>
-    <string name="about_app">About App</string>
-    <string name="terms_and_conditions">Terms and Conditions</string>
-    <string name="terms_condition">Terms and Conditions</string>
-    <string name="contact_us">Contact Us</string>
-    <string name="faq">FAQ</string>
-    <string name="logout_from_account">Logout from Account</string>
-    <string name="logout_prompt">Are you sure you want to logout from your account?</string>
     <string name="logout">Logout</string>
-
-    <array name="onboard_titles">
-        <item>Mobile Wallet</item>
-        <item>Pay with QR</item>
-    </array>
-
-    <array name="onboard_descriptions">
-        <item>
-            With Wallet you dont need to carry cash or physical card anymore.
-        </item>
-        <item>
-            In stores or taxis or everywhere else that has Wallet, you can scan their QR and pay
-            them easily.
-        </item>
-    </array>
-
-    <string name="top_company">Tejarat Electronic Parsian</string>
 
     <string name="bank_parsian">Parsian Bank</string>
     <string name="bank_saman">Saman Bank</string>
@@ -1791,11 +1402,7 @@ Want to get it?</string>
     <string name="paygear_card">Wallet Card</string>
     <string name="set_password">Set Password</string>
     <string name="change_password">Change Wallet Password</string>
-    <string name="text_forgot">Wallet password sent to you.
-(The password will expire after 2 minutes, please change it after retrieving it)</string>
-    <string name="text_forgot_title">Resend Password</string>
     <string name="Forgot_Passwords">Wallet Password recovery</string>
-    <string name="enter_your_province">select your province</string>
 
     <string name="cashier">finance</string>
     <string name="balance_low">Your wallet balance is not enough.please top-up it.</string>
@@ -1831,7 +1438,6 @@ Want to get it?</string>
     <string name="purchase">Purchase</string>
     <string name="remaining_balance">Remaining balance</string>
     <string name="refound">money transferred to your wallet</string>
-    <string name="Recently_Sticker">Recently Sticker</string>
     <string name="Favorite_Sticker">My Stickers</string>
     <string name="subscribers_title">Subscribers</string>
     <string name="invite_link_title">invite link</string>
@@ -1839,21 +1445,12 @@ Want to get it?</string>
     <string name="channel_type">Channel Type</string>
     <string name="sign_message_title">Sign Messages</string>
     <string name="sign_channel_message_description">Add names of the admins to the messages they post.</string>
-    <string name="recent_action">Recent Actions</string>
-    <string name="get_money_title">Get Money</string>
-    <string name="payment_for">for</string>
     <string name="payment_continue_title">Continue</string>
-    <string name="shabe_title">Shaba Card</string>
-    <string name="bank_account_charge">Account Charge</string>
-    <string name="last_ten_transaction">Last 10 transaction</string>
     <string name="Inventory">Inventory</string>
-    <string name="pay_bills_title">Pay Bills</string>
-    <string name="mobile_bills_title">Mobile Bills</string>
     <string name="bills">Bills</string>
     <string name="charge_amount">Charge amount(Rial)</string>
     <string name="buy_internet_package_title">Buy Internet Package</string>
     <string name="charity_title">Charity</string>
-    <string name="charity_confirm">You have set the %1$s Rial to help charity %2$s</string>
     <string name="disk_and_network_usage">Disk and Network Usage</string>
     <string name="cache">Cache</string>
     <string name="auto_play_media">Auto-play Media</string>
@@ -1863,7 +1460,6 @@ Want to get it?</string>
     <string name="terms_and_condition_clickable">rules and regulations</string>
     <string name="add_bank_card">Add Your Card Here!</string>
     <string name="chat_setting_title">Chat Setting</string>
-    <string name="refresh">Refresh</string>
     <string name="mark_as_several">Mark as several</string>
     <string name="add_new_subscriber">Add Subscriber</string>
     <string name="financial_report">Financial Report</string>
@@ -1880,7 +1476,6 @@ Want to get it?</string>
     <string name="payment_message">Payment Message</string>
 
     <string name="available_merchants">See merchants that accepts this card</string>
-    <string name="available_merchants_title">See merchants that accepts this card</string>
     <string name="balance_title">balance : </string>
 
     <string name="WALLET_TRANSFER_MONEY">Wallet Money Transfer</string>
@@ -1892,8 +1487,6 @@ Want to get it?</string>
     <string name="cardToCardInvoiceNumber">Billing number</string>
     <string name="cardToCardTrace">Trace Number</string>
     <string name="WalletRrnNumber">Reference No</string>
-    <string name="cardToCardRequest">Write your text for card to card.</string>
-    <string name="amCardToCardIconText">Transfer Request</string>
     <string name="cardToCardBtnText">Card to Card</string>
     <string name="crad_to_card_dest_name">Account Owner Name</string>
     <string name="groups_in_common">Groups in Common</string>
@@ -1930,7 +1523,6 @@ Want to get it?</string>
     <string name="all">All</string>
     <string name="missed">Missed</string>
     <string name="incoming">Incoming</string>
-    <string name="canceled">Canceled</string>
     <string name="outgoing">Outgoing</string>
     <string name="no_item_selected">No item selected.</string>
     <string name="subscriber">Subscribers</string>
@@ -1950,33 +1542,20 @@ Want to get it?</string>
     <string name="download_icon">\ue933</string>
     <string name="igasht_title">آیگشت</string>
     <string name="igasht_choose_province_title">Select the city you want</string>
-    <string name="igasht_search_by_location">جستجو بر اساس موقعیت</string>
-    <string name="igasht_add_to_favorite_title">به لیست علاقمندی ها اضافه کن</string>
     <string name="igasht_buy_ticket_title">Buy tickets</string>
     <string name="detail_title">Details</string>
-    <string name="igasht_place_of_visit_title">محل بازدید</string>
     <string name="igasht_addـexternal_visits">اضافه کردن بازدید خارجی </string>
-    <string name="igasht_ticket_type_title">Specify the type of ticket</string>
-    <string name="igasht_enter_ticket_count_title">تعداد بازدید کننده را وارد کنید.</string>
-    <string name="igasht_add_ticket_count_button_title">ثبت</string>
-    <string name="igasht_favorites_title">Favorites</string>
-    <string name="igasht_history_title">History</string>
     <string name="igasht_total_ticket_price">Total Price: %d Rials</string>
     <string name="igasht_add_ticket_error">Please Add Ticket</string>
-    <string name="igasht_buy_ticket_successful">Buy Ticket Successful</string>
     <string name="money_request">Card To Card Request to: %s</string>
     <string name="cardtocard_descriotion_error">Description can not be empty</string>
     <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
     <string name="cardtocard_cartnumber_error">Card number must be 16 digits</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
-    <string name="payment_order_id_title">Order ID : %s</string>
     <string name="payment_rrn_title">Transaction ID: %.0f</string>
-    <string name="mci_topup_payment_title">MCI TopUp</string>
     <string name="insert_amount_in_rial">insert amount in rial</string>
     <string name="enter_16_digit_card_number">Enter the 16-digit card number</string>
-    <string name="buy_internet_package_type_title">Package Type</string>
-    <string name="buy_internet_package_time_type_title">Time</string>
     <string name="buy_internet_package_volume_type_title">Volume</string>
     <string name="buy_internet_package_daily_filter_title">%.0f Day</string>
     <string name="buy_internet_package_weekly_filter_title">%.0f Week</string>
@@ -2013,7 +1592,6 @@ Want to get it?</string>
     <string name="app_version_change_log">Change Log</string>
     <string name="updated_version_title">Your Version Is Update</string>
     <string name="check_update_title">Check Update</string>
-    <string name="unblock">Unblock</string>
     <string name="view_profile">View Profile</string>
     <string name="there_is_no_car_available">There is no car available.</string>
     <string name="add_car">Add Car</string>
@@ -2030,7 +1608,6 @@ Want to get it?</string>
     <string name="cpay_title">C-Pay</string>
     <string name="link_not_valid">Invalid link</string>
     <string name="popular_channel">Interesting channels</string>
-    <string name="referral_code_invalid">Referral code invalid</string>
     <string name="already_registered">You have already registered referral code</string>
     <string name="scan_barcode_to_enter_visit">Scan the barcode above to enter and visit</string>
     <string name="Your_purchase_code">Your purchase code %s</string>
@@ -2050,15 +1627,8 @@ Want to get it?</string>
     <string name="prayerRoom_textView">Prayer room</string>
 
     <!-- kuknos -->
-    <string name="kuknos_login_messge_str">Please enter your info for registration.</string>
     <string name="kuknos_login_id_str">ID Number *</string>
     <string name="kuknos_login_tel_str">Phone Number *</string>
-    <string name="kuknos_login_name_str">Name</string>
-    <string name="kuknos_login_email_str">Email</string>
-    <string name="kuknos_login_submit_str">Register</string>
-    <string name="kuknos_login_error_empty_str">Enter your ID number</string>
-    <string name="kuknos_login_error_invalid_str">Enter a Valid ID number</string>
-    <string name="kuknos_login_error_server_str">Server Error: User already exists.</string>
     <string name="kuknos_login_progress_str">Checking...</string>
     <string name="kuknos_Entry_NT_str">New Wallet</string>
     <string name="kuknos_Entry_RT_str">Retrieve Wallet With Recovery Key</string>
@@ -2081,12 +1651,10 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_desc">Please complete the fields:</string>
     <string name="kuknos_SignupInfo_username">Username *</string>
     <string name="kuknos_SignupInfo_name">Name *</string>
-    <string name="kuknos_SignupInfo_family">Family *</string>
     <string name="kuknos_SignupInfo_email">Email Address *</string>
     <string name="kuknos_SignupInfo_submitBtn">Submit</string>
     <string name="kuknos_SignupInfo_checkUsername">checking....</string>
     <string name="kuknos_SignupInfo_submitConnecting">Saving...</string>
-    <string name="kuknos_SignupInfo_advSettingBtn">Advanced Security ></string>
     <string name="kuknos_SignupInfo_errorUsernameInvalid">This username is not available.</string>
     <string name="kuknos_SignupInfo_ValidUsername">Good to go</string>
     <string name="kuknos_SignupInfo_errorEmailInvalid">Email Format is incorrect.</string>
@@ -2102,8 +1670,6 @@ Want to get it?</string>
     <string name="kuknos_RecoverySK_languageTitle">Recovery keys\' language: </string>
     <string name="kuknos_RecoverySK_lengthTitle">Recovery keys\' length: </string>
     <string name="kuknos_RecoverySK_Hint">water Blue brown ...</string>
-    <string name="kuknos_RecoverySK_Error_empty_str">Enter your key stream</string>
-    <string name="kuknos_RecoverySK_Error_invalid_str">Your key stream length is not long enough.</string>
     <string name="kuknos_RecoverySK_Error_Snack">Ok</string>
     <string name="kuknos_accountInfo_title">Account Info</string>
     <string name="kuknos_accountInfo_desc">Here is all of the information related to your account in Kuknos platform.</string>
@@ -2128,7 +1694,6 @@ Want to get it?</string>
     <string name="kuknos_panelStr_kyc">KYC</string>
     <string name="kuknos_panelStr_buyPeyman">Buy Token</string>
     <string name="kuknos_panelStr_setting">Setting</string>
-    <string name="kuknos_develop">developing</string>
     <string name="kuknos_recieve_title">For receiving credit from others, you must send your wallet ID to others.</string>
     <string name="kuknos_recieve_walletID">Your wallet Address is:</string>
     <string name="kuknos_recieve_copyBtn">Copy Wallet Address</string>
@@ -2157,28 +1722,10 @@ Want to get it?</string>
     <string name="kuknos_wHistory_dialogTitle">Error</string>
     <string name="kuknos_wHistory_error">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_setting_title">Setting</string>
-    <string name="kuknos_setting_changePin">Change PIN</string>
     <string name="kuknos_setting_viewRecoveryP">Show Account Info</string>
     <string name="kuknos_setting_logout">Logout</string>
-    <string name="kuknos_changePIN_title">Change PIN code</string>
-    <string name="kuknos_changePIN_message">This 4-numeric PIN will used to encrypt your secret keys.
-        Please make sure you choose a PIN that is difficult to guess for others.</string>
-    <string name="kuknos_changePIN_oldP">Current PIN* :</string>
-    <string name="kuknos_changePIN_newP">New PIN* :</string>
-    <string name="kuknos_changePIN_rnewP">Confirm PIN* :</string>
-    <string name="kuknos_changePIN_submit">Submit</string>
-    <string name="kuknos_changePIN_load">changing...</string>
-    <string name="kuknos_changePIN_emptyCP">Current PIN must NOT be empty.</string>
-    <string name="kuknos_changePIN_emptyNP">New PIN must NOT be empty.</string>
-    <string name="kuknos_changePIN_emptyRNP">Re-enter new PIN to verify it.</string>
-    <string name="kuknos_changePIN_wrongCP">Current PIN is a 4-digit number.</string>
-    <string name="kuknos_changePIN_wrongNP">New PIN must be 4-digit.</string>
-    <string name="kuknos_changePIN_wrongRNP">Confirm PIN ust be 4-digit.</string>
-    <string name="kuknos_changePIN_notEqual">New and confirm PIN does Not match.</string>
     <string name="kuknos_changePIN_successTitle">Success</string>
     <string name="kuknos_changePIN_failTitle">Fail</string>
-    <string name="kuknos_changePIN_successM">PIN code successfully changed.</string>
-    <string name="kuknos_changePIN_failM">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_viewRecoveryEP_title">Show Recovery Keys</string>
     <string name="kuknos_viewRecoveryEP_message">Please enter your PIN to view your recovery phrase.</string>
     <string name="kuknos_viewRecoveryEP_pin">PIN</string>
@@ -2212,10 +1759,8 @@ Want to get it?</string>
     <string name="kuknos_buyP_emptyAmount">Number of %1$s can NOT be empty.</string>
     <string name="kuknos_buyP_zeroAmount">Number of %1$s can NOT be zero.</string>
     <string name="kuknos_buyP_failS">The connection to server is lost. Please try again in a few moments.</string>
-    <string name="kuknos_buyP_failB">Bank payment servers are not responding. Please try again in a few moments.</string>
     <string name="kuknos_buyP_MaxAmount">You are exceeding the maximum buyable value of this token.</string>
     <string name="kuknos_buyP_MinAmount">Your order is less than the minimum buyable value of this token.</string>
-    <string name="kuknos_buyP_currency">IRR</string>
     <string name="kuknos_trade_origin">Selling*</string>
     <string name="kuknos_trade_dest">Buying*</string>
     <string name="kuknos_trade_btn">Submit</string>
@@ -2230,7 +1775,6 @@ Want to get it?</string>
     <string name="kuknos_trade_recieve">Receiving</string>
     <string name="kuknos_trade_amount">Amount</string>
     <string name="kuknos_trade_price">Price</string>
-    <string name="kuknos_trade_delete"></string>
     <string name="kuknos_trade_date">Date</string>
     <string name="kuknos_tradePager_trade">Trade</string>
     <string name="kuknos_tradePager_active">Open Orders</string>
@@ -2255,15 +1799,11 @@ Want to get it?</string>
     <string name="kuknos_setting_copySFailWriteFile">Something went wrong. Please try again later.</string>
     <string name="kuknos_setting_copySSuccessMessage">Your Seed key is ready and available in Download folder.</string>
     <string name="kuknos_setting_copySSuccessTitle">Success</string>
-    <string name="kuknos_login_progress_load">Loading...</string>
-    <string name="kuknos_login_progress_next">Next</string>
     <string name="kuknos_panel_addAsset">Add Asset</string>
-    <string name="kuknos_login_error_server_ErrorStr">Server Error: No response. please try again later.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateMn">Sorry we can NOT generate keys. Kuknos wallet is NOT supported in your phone.</string>
     <string name="kuknos_RecoverySK_ErrorGenerateKey">Sorry we can NOT generate keys. Kuknos wallet is NOT supported in your phone.</string>
     <string name="kuknos_recieve_walletCopy">My Kuknus wallet address is: \n\n</string>
     <string name="kuknos_recieve_error">Your Qr-Code can not be generated. make sure you are logged in.</string>
-    <string name="kuknos_soon_error">Trade will be active soon.</string>
     <string name="kuknos_panelStr_firstUser">Your account is not active. Use Receive or Buy Peyman menu to get credits.</string>
     <string name="Kuknos_transaction_error1">Transaction is not successful. Please try again later.</string>
     <string name="Kuknos_transaction_error2">Server Error. Please try again later.</string>
@@ -2296,7 +1836,6 @@ Want to get it?</string>
     <string name="kuknos_Restore_checkBtn">Next</string>
     <string name="kuknos_Entry_RTSeedKey_str">Retrieve Wallet With Seed Key</string>
     <string name="kuknos_SignupInfo_friendlyTial">*igap.net</string>
-    <string name="kuknos_RecoverySK_CheckPIN">I want to set a PIN code for extra security.</string>
     <string name="kuknos_buyAsset">Buy Asset</string>
     <string name="kuknos_recoveryKey_fa">Fa</string>
     <string name="kuknos_recoveryKey_en">En</string>
@@ -2310,8 +1849,6 @@ Want to get it?</string>
     <string name="kuknos_payment_assetPrice">Asset Price: </string>
     <string name="kuknos_payment_totalAmount">Total Amount: </string>
     <string name="kuknos_payment_hash">Kuknus Hash: </string>
-    <string name="kuknos_support_error">Kuknus platform is NOT available for your device.</string>
-    <string name="kuknos_Mnemonic_error">Recovery keys are NOT set.</string>
     <string name="kuknos_Currency">Token</string>
     <string name="kuknos_AddAsset_nullEntry">This asset can NOT be added.</string>
     <string name="kuknos_parsianTerms_title">Parsian Terms And Conditions</string>
@@ -2323,7 +1860,6 @@ Want to get it?</string>
     <string name="kuknos_regulations_title">Regulations and Terms: You must incline to all of the term of this token to add it to your wallet.</string>
     <string name="kuknos_buy_noPrice">Token\'s price is not available.</string>
     <string name="kuknos_addAsset_alreadyTrusted">You already have this token in your wallet.</string>
-    <string name="user_edited">User Edited</string>
     <string name="edit_contact">Edit Contact</string>
     <string name="default_theme_title">Default</string>
     <string name="dark_theme_title">Dark</string>
@@ -2369,18 +1905,11 @@ Want to get it?</string>
     <string name="elecBill_pay_billImage">Show bill\'s image</string>
     <string name="elecBill_Entry_nameError">Bill\'s name can NOT be empty. for example: Home</string>
     <string name="elecBill_Entry_billIDError">Bill\'s ID can NOT be empty.</string>
-    <string name="elecBill_Entry_phoneError">Your phone number can NOT be empty.</string>
-    <string name="elecBill_Entry_phoneLengthError">Your phone number must be 11 character.</string>
-    <string name="elecBill_Entry_phoneFormatError">Your phone number must starts with 09.</string>
     <string name="elecBill_Entry_userIDError">Your national ID can NOT be empty.</string>
     <string name="elecBill_Entry_userIDLengthError">Your national ID must be 10 character.</string>
-    <string name="elecBill_Entry_emailFormatError">Your Email format is wrong.</string>
     <string name="elecBill_add_form">Bill Info</string>
     <string name="elecBill_add_name">Bill\'s name *</string>
     <string name="elecBill_add_billID">Bill\'s ID *</string>
-    <string name="elecBill_add_phone">Your Mobile Number *</string>
-    <string name="elecBill_add_UserNID">Your National ID *</string>
-    <string name="elecBill_add_Email">Your Email Address</string>
     <string name="elecBill_add_addBtn">Add bill</string>
     <string name="elecBill_cell_showDetail">Detail</string>
     <string name="elecBill_cell_addNewBill">Add new bill</string>
@@ -2394,10 +1923,6 @@ Want to get it?</string>
     <string name="elecBill_deleteAccount_pos">Delete</string>
     <string name="elecBill_deleteAccount_neg">No, don\'t delete.</string>
     <string name="elecBill_image_Directory">IGap - Electricity Bill</string>
-    <string name="elecBill_image_success">Download is complete.</string>
-    <string name="elecBill_image_fail">Download has failed.</string>
-    <string name="elecBill_image_open">Open File</string>
-    <string name="elecBill_image_close">Dismiss</string>
     <string name="elecBill_edit_saveBtn">Save Changes</string>
     <string name="elecBill_edit_Btn">Edit Bill</string>
     <string name="elecBill_searchCell_billID">Bill ID</string>
@@ -2471,25 +1996,12 @@ Want to get it?</string>
     <string name="delete_from_storage">Delete Attachment from Storage</string>
 
 
-    <string name="your_profile">Your Profile</string>
-    <string name="dialog_done">Done</string>
-    <string name="new_text">new</string>
-    <string name="set_as_default_card">Set as Default Card</string>
-    <string name="driver_wallet_balance">Balance of Driver\'s Wallet</string>
-    <string name="wallet_store_balance">Balance of Shop\'s Wallet</string>
-    <string name="gift_is_used">This Gift Barcode Is Already Used</string>
-    <string name="please_fill_form_data_correctly">Please fill the form information correctly</string>
-    <string name="qr_code_scanner">Qr Code Scanner</string>
-    <string name="msg_security_two_step_verification">In Order to retrieve your accountPlease Answer the following security questions,after answering correctly your two step verification password will be disabled and need to be activated again</string>
-    <string name="show_and_login_using_qr_title">Scan this QR Code using your other device to log in to your iGap Account</string>
-    <string name="two_step_verficatiion_header">You have enabled Two-Step verification; so your account is protected with an additional password</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
     <string name="install_latest_version">Install the latest version to use this feature</string>
     <string name="parsian_bank">My Parsian</string>
     <string name="temporary_password">POOYA Password</string>
     <string name="transactions">Transactions</string>
-    <string name="deposit">Deposit</string>
     <string name="sheba_number">SHEBA Number</string>
     <string name="get_temporary_password">Get POOYA Password</string>
     <string name="accounts">Accounts</string>
@@ -2501,18 +2013,10 @@ Want to get it?</string>
     <string name="page_count">pages</string>
     <string name="reject_count">Reject :</string>
     <string name="pass_count">Passed :</string>
-    <string name="cash_count"> Cashed :</string>
-    <string name="temporary_block">Temporary blocked :</string>
-    <string name="permanent_block">Permanent blocked :</string>
     <string name="usable_count">Unused :</string>
-    <string name="mobileBankSorat">Bills List</string>
     <string name="mobile_bank_sorathesab">Bills List</string>
-    <string name="mobile_bank_balance_cardNumber">Card Number: </string>
     <string name="mobile_bank_balance_title">Bank Card Balance</string>
-    <string name="mobile_bank_balance_pass">Password:</string>
-    <string name="mobile_bank_balance_cvv">CVV2:</string>
     <string name="mobile_bank_balance_expireDate">Expire Date: (year/month)</string>
-    <string name="mobile_bank_balance_expireDate2">Expire Date:</string>
     <string name="mobile_bank_balance_cardError">please enter your Parsian card number.</string>
     <string name="mobile_bank_balance_cardLengthError">your card number must be 16 digits.</string>
     <string name="mobile_bank_balance_passwordError">please enter your password.</string>
@@ -2520,12 +2024,7 @@ Want to get it?</string>
     <string name="mobile_bank_balance_CVVError">please enter your CVV2 number.</string>
     <string name="mobile_bank_balance_CVVLengthError">your CVV2 number must be at least 3 digits.</string>
     <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
-    <string name="mobile_bank_balance_dateLengthError">please enter your expire date completely.</string>
     <string name="mobile_bank_balance_message">Your balance is %1$s.</string>
-    <string name="mobile_bank_cheque_balance">Balance: %1$s </string>
-    <string name="mobile_bank_cheque_number">Cheque Number: %1$s</string>
-    <string name="mobile_bank_cheque_status">Status: %1$s</string>
-    <string name="enter_loan_number">Enter Loan Number.</string>
     <string name="loan_number">Loan number: </string>
     <string name="branch_name">Branch Name:</string>
     <string name="start_date">Start date:</string>
@@ -2584,10 +2083,8 @@ Want to get it?</string>
     <string name="mobile_bank_load_detail_unpaidInfo">Unpaid Info</string>
     <string name="mobile_bank_load_detail_paymentList">Loan Payment List</string>
 
-    <string name="order_id">Order id</string>
     <string name="requester_mobile_number">Requester mobile number</string>
     <string name="charger_mobile_number">Receiver\'s mobile number</string>
-    <string name="topUp_type">TopUp type</string>
     <string name="terminal_No">Terminal no</string>
     <string name="rrn">Reference no</string>
     <string name="bill_id">Bill id</string>
@@ -2612,8 +2109,6 @@ Want to get it?</string>
     <string name="active_gift_sticker_title">Active digital gift card</string>
     <string name="national_code_not_match_with_phone_number_error">National code inconsistency with SIM card information</string>
     <string name="gift_sticker_visit">See</string>
-    <string name="gift_sticker_add_archive">Add to archive</string>
-    <string name="gift_cart_title">Digital gift card</string>
     <string name="my_gift_sticker">My Cards</string>
     <string name="my_recived_gift_sticker">Activated digital gift card</string>
     <string name="expire_date">Expiration date</string>
@@ -2621,9 +2116,6 @@ Want to get it?</string>
     <string name="gift_sticker_send_to_other">Send to another</string>
     <string name="gift_sticker_card_info_title">Digital Gift Card Information</string>
     <string name="click_for_copy_title">Click to copy</string>
-    <string name="gift_sticker_creator_phone_number">Manufacturer\'s mobile number</string>
-    <string name="gift_sticker_national_code_title">National Code of Constructor</string>
-    <string name="gift_sticker_activation_title">Activate Gift Card</string>
     <string name="gift_sticker_empty_list_message">There is no digital gift card</string>
     <string name="inquiry_and_shopping">Inquiry and shopping</string>
     <string name="activate_or_send_as_message">Activate or send as message</string>
@@ -2685,14 +2177,11 @@ Want to get it?</string>
     <string name="previousـpurchases">Previous purchases</string>
     <string name="operator_selection">Operator selection</string>
     <string name="select_the_amount">Select the amount</string>
-    <string name="Select_from_contact_numbers">Select from contact numbers</string>
     <string name="list_empty">There is no pre-number in your list</string>
     <string name="Select_from_previous_numbers">Select from previous numbers</string>
     <string name="Select_the_type_of_charge">Select the type of charge</string>
     <string name="order_by">Order by</string>
-    <string name="recently_used_packages">Recently used packages</string>
     <string name="suggested_packages">Suggested packages</string>
-    <string name="other_internet_packages">Other Packages</string>
     <string name="all_packages">All Packages</string>
     <string name="sim_type_not_choosed">SIM card not been chosen</string>
     <string name="credit_sim">Credit SIM</string>
@@ -2702,7 +2191,6 @@ Want to get it?</string>
     <string name="data_sim">Data SIM</string>
     <string name="no_history_found">No history found</string>
     <string name="no_number_found">No number found</string>
-    <string name="save_internet_package_dialog">Do you want to save bought package?</string>
     <string name="no_package_selected">No package selected</string>
     <string name="save_purchase">Do you want to save the purchase in history?</string>
     <string name="tarabord">If you have transferred, select your new operator</string>

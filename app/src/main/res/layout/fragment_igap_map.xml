@@ -55,7 +55,6 @@
                             app:rv_ripplePadding="5dp">
 
                             <net.iGap.module.MaterialDesignTextView
-                                android:id="@+id/txt_back_map"
                                 android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
@@ -65,7 +64,6 @@
                         </net.iGap.libs.rippleeffect.RippleView>
 
                         <TextView
-                            android:id="@+id/txt_titleToolbar_map"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -196,7 +194,6 @@
                     android:visibility="visible">
 
                     <LinearLayout
-                        android:id="@+id/rootTurnOnGps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"

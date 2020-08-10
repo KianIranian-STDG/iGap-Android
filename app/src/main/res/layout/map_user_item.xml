@@ -93,7 +93,6 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/view_topLine_map"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/dp60"

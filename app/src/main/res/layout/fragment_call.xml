@@ -74,7 +74,6 @@
             android:scrollbars="none">
 
             <LinearLayout
-                android:id="@+id/fc_layout_calls_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -215,7 +214,6 @@
         app:srcCompat="@drawable/ic_call" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textEmptyCal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

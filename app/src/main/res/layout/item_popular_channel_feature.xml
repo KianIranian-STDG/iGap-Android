@@ -33,7 +33,6 @@
             android:layout_centerVertical="true">
 
             <ImageView
-                android:id="@+id/iv_item_popular_more"
                 android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

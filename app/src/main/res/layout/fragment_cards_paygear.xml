@@ -127,7 +127,6 @@
             android:text="+" />
 
         <LinearLayout
-            android:id="@+id/gift_bal_layout"
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_width="0dp"

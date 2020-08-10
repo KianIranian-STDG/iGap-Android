@@ -19,7 +19,6 @@
         android:layout_marginTop="@dimen/dp8">
 
         <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/searchIcon"
             style="@style/myIconTextViewStyle"
             android:layout_width="@dimen/dp28"
             android:layout_height="@dimen/dp28"
@@ -64,7 +63,6 @@
         app:layout_constraintTop_toBottomOf="@id/edtSearch" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/copyLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp8"

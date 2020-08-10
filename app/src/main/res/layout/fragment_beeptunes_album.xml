@@ -2,7 +2,6 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cl_album"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,7 +13,6 @@
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/ct_beepTunes_album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -31,7 +29,6 @@
                 app:layout_collapseMode="parallax" />
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tb_beepTunes_album"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_gravity="bottom"

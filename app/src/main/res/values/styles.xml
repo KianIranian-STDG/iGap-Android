@@ -19,11 +19,7 @@
         <item name="android:windowBackground">@drawable/theme</item>
     </style>
 
-    <style name="AppTheme.Widget" />
-
     <style name="AppTheme" parent="BaseTheme" />
-
-    <style name="AppThemeTranslucent" parent="BaseTheme" />
 
     <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:editTextColor">?attr/iGapTitleTextColor</item>
@@ -31,33 +27,6 @@
         <item name="android:tint">?attr/iGapPrimaryIconTextColor</item>
         <item name="android:gravity">end|right</item>
         <item name="android:textColor">?attr/iGapTitleTextColor</item>
-    </style>
-
-    <style name="ChatMessages" />
-
-    <style name="ChatMessages.CardView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">5dp</item>
-    </style>
-
-    <style name="ChatMessages.MaterialDesignTextView" />
-
-    <style name="ChatMessages.Time">
-        <item name="android:textColor">@color/colorChatMessageTime</item>
-        <item name="android:textSize">@dimen/dp10</item>
-    </style>
-
-    <style name="ChatMessages.MaterialDesignTextView.Tick">
-
-    </style>
-
-    <style name="ChatMessages.MaterialDesignTextView.BottomIcon">
-        <item name="android:textSize">@dimen/dp22</item>
-    </style>
-
-    <style name="ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn" parent="ChatMessages.MaterialDesignTextView.BottomIcon">
-        <item name="android:textColor">@color/green</item>
     </style>
 
     <style name="error_appearance" parent="@android:style/TextAppearance">
@@ -90,10 +59,6 @@
         <item name="android:textSize">@dimen/dp22</item>
     </style>
 
-    <style name="NotificationText" parent="android:TextAppearance.StatusBar.EventContent" />
-
-    <style name="NotificationTitle" parent="android:TextAppearance.StatusBar.Title" />
-
 
     <style name="DialogAnimationUp">
         <item name="android:windowEnterAnimation">@anim/translate_enter_up</item>
@@ -113,10 +78,6 @@
     </style>
 
     <!--custom theme-->
-
-    <style name="dialog_dark">
-        <item name="md_dark_theme">true</item>
-    </style>
 
     <style name="iGapEditTextStyle">
         <item name="android:textColorHint">?attr/iGapHintTextColor</item>
@@ -146,22 +107,6 @@
         <item name="android:windowExitAnimation">@anim/top_sheet_slide_out</item>
     </style>
 
-    <style name="BaseIGapGrayButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textAppearance">@android:style/TextAppearance</item>
-        <item name="cornerRadius">@dimen/dp8</item>
-        <item name="android:textSize">@dimen/dp16</item>
-    </style>
-
-    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@drawable/dialog_background</item>
-    </style>
-
-
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
-
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
@@ -189,13 +134,6 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="textButtonFontIcon" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="fontFamily">@font/font_icon</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">@dimen/dp22</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
     <style name="chatAttachmentAnimation" parent="android:Animation">
         <item name="android:windowEnterAnimation">@anim/translate_enter_down</item>
         <item name="android:windowExitAnimation">@anim/translate_exit_down</item>
@@ -206,12 +144,6 @@
         <item name="android:layoutDirection">locale</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-    </style>
-
-    <style name="iGapEmojiChatStyle">
-        <item name="android:textColor">?iGapTitleTextColor</item>
-        <item name="android:textColorHint">?iGapHintTextColor</item>
-        <item name="android:textSize">@dimen/dp22</item>
     </style>
 
     <style name="BaseIGapButtonStyle" parent="@style/Widget.MaterialComponents.Button">
@@ -258,16 +190,6 @@ z
 
     <style name="primaryIconTextViewStyle" parent="baseFontIcon">
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
-    </style>
-
-    <style name="WarningTextViewInternetPayment">
-        <item name="android:textColor">@color/secondary_text_light</item>
-    </style>
-
-    <style name="Widget.WaveView" parent="@android:style/Widget">
-        <item name="waveStrokeWidth">1dp</item>
-        <item name="wavesColor">@color/black</item>
-        <item name="waveGap">@dimen/dp26</item>
     </style>
 
 </resources>

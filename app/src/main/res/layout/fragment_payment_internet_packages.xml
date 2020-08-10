@@ -48,7 +48,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_packageSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/buy_internet_package_volume_type_title"

@@ -9,15 +9,7 @@
     <dimen name="margin_for_below_layouts_of_toolbar_with_search">@dimen/dp52</dimen>
     <dimen name="margin_for_below_layouts_of_toolbar_with_music_player">@dimen/dp105</dimen>
     <dimen name="margin_for_below_layouts_of_toolbar_with_call_layout">@dimen/dp88</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_room_selected_mode">@dimen/dp88</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media">@dimen/dp95</dimen>
-    <dimen name="margin_for_below_layouts_of_toolbar_with_shared_media_with_player">@dimen/dp140
-    </dimen>
-    <dimen name="toolbar_height_call_state">60dp</dimen>
-    <dimen name="toolbar_height_with_search">@dimen/dp60</dimen>
     <dimen name="toolbar_height_root_with_search">@dimen/dp80</dimen>
-    <dimen name="toolbar_height_with_avatar">@dimen/dp80</dimen>
-    <dimen name="toolbar_height_root_with_avatar">@dimen/dp160</dimen>
     <dimen name="toolbar_icon_size">@dimen/dp40</dimen>
     <dimen name="toolbar_icon_padding">@dimen/dp10</dimen>
     <dimen name="toolbar_icon_margin">@dimen/dp4</dimen>
@@ -26,34 +18,19 @@
     <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
     <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
     <dimen name="ivand_profile_toolbar_bottom_radius">20dp</dimen>
-    <dimen name="ivand_profile_setting_buttons_marginRight">32dp</dimen>
-    <dimen name="ivand_profile_setting_buttons_marginTop">16dp</dimen>
-    <dimen name="ivand_profile_setting_buttons_textSize">16sp</dimen>
-    <dimen name="ivand_profile_shared_content_txt_mTop">4dp</dimen>
-    <dimen name="ivand_profile_shared_contents_txt_textSize">14sp</dimen>
-    <dimen name="ivand_profile_more_buttons_mTop">4dp</dimen>
 
     <!-- Audio Item Id -->
 
     <bool name="isTablet">false</bool>
 
     <dimen name="messageContainerPadding">6dp</dimen>
-    <dimen name="messageContainerPaddingBottom">4dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">10dp</dimen>
-
-    <dimen name="chatBoxMaxWidth">270dp</dimen>
 
     <dimen name="design_fab_size_mini">24pt</dimen>
     <dimen name="design_fab_size_normal">30pt</dimen>
-    <dimen name="action_button_margin">30pt</dimen>
 
     <dimen name="messageBox_cornerRadius">7dp</dimen>
-    <dimen name="messageBox_elevation">4dp</dimen>
 
-    <dimen name="messageBox_minusLeftRightMargin">-5dp</dimen>
-
-    <dimen name="dp14_Popup">14dp</dimen>
-    <dimen name="dp1_minus">-1dp</dimen>
     <dimen name="dp1">1dp</dimen>
     <dimen name="dp2">2dp</dimen>
     <dimen name="dp4">4dp</dimen>
@@ -83,7 +60,6 @@
     <dimen name="dp88">88dp</dimen>
     <dimen name="dp100">100dp</dimen>
     <dimen name="dp120">120dp</dimen>
-    <dimen name="dp130">130dp</dimen>
     <dimen name="dp140">140dp</dimen>
     <dimen name="dp160">160dp</dimen>
     <dimen name="dp180">180dp</dimen>
@@ -91,7 +67,6 @@
     <dimen name="dp220">220dp</dimen>
     <dimen name="dp240">240dp</dimen>
     <dimen name="dp260">260dp</dimen>
-    <dimen name="dp280">280dp</dimen>
     <dimen name="dp300">300dp</dimen>
 
 
@@ -108,18 +83,13 @@
     <dimen name="md_title_textsize" tools:override="true">18dp</dimen>
     <dimen name="md_content_padding_bottom" tools:override="true">6dp</dimen>
     <dimen name="ivand_profile_icon_padding">5dp</dimen>
-    <dimen name="fup_items_textSize">16sp</dimen>
     <dimen name="fup_items_icon_padding">@dimen/dp4</dimen>
-    <dimen name="fup_items_icon_size">50dp</dimen>
 
 
     <dimen name="coupon_qr_size">140dp</dimen>
-    <dimen name="app_bar_card_view_elevation">0dp</dimen>
-    <dimen name="image">64dp</dimen>
     <dimen name="multi_select_icon_size">@dimen/largeTextSize</dimen>
     <dimen name="multi_select_icon_margin">@dimen/dp4</dimen>
     <dimen name="multi_select_icon_height">@dimen/dp40</dimen>
-    <dimen name="main_rooms_selected_action_padding">@dimen/dp8</dimen>
 
     <dimen name="discovery_radius">@dimen/dp12</dimen>
     <dimen name="discovery_margin">@dimen/dp4</dimen>
@@ -139,9 +109,6 @@
 
     <dimen name="toolbar_chat_avatar_size">@dimen/dp40</dimen>
     <dimen name="toolbar_txt_name_max_width">@dimen/dp140</dimen>
-    <dimen name="toolbar_txt_name_max_width2">@dimen/dp130</dimen>
-    <dimen name="toolbar_txt_name_max_width3">@dimen/dp160</dimen>
-    <dimen name="toolbar_txt_name_max_width4">@dimen/dp180</dimen>
     <dimen name="round_button_max_width">@dimen/dp88</dimen>
     <dimen name="round_buttons_margin">@dimen/dp6</dimen>
     <dimen name="round_buttons_large_padding">10dp</dimen>
@@ -158,7 +125,6 @@
     <dimen name="default_indicator_margins">5dp</dimen>
     <dimen name="default_dash_indicator_width">12dp</dimen>
     <dimen name="round_square_indicator_radius">2dp</dimen>
-    <dimen name="max_slider_indicator_size">16dp</dimen>
     <dimen name="pager_margin">50dp</dimen>
 
 </resources>

@@ -33,7 +33,6 @@
                 app:rv_ripplePadding="5dp">
 
                 <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/chl_imv_back_Button"
                     style="@style/myIconToolbarStyle"
                     android:layout_width="@dimen/toolbar_icon_size"
                     android:layout_height="@dimen/toolbar_icon_size"
