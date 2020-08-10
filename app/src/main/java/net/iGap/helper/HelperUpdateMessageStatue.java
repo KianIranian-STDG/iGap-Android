@@ -10,15 +10,13 @@
 
 package net.iGap.helper;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-
-import io.realm.Realm;
 
 public class HelperUpdateMessageStatue {
 

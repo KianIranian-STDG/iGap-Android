@@ -828,6 +828,17 @@ public class HelperNotification {
         showNotification.notificationManager.cancelAll();
     }
 
+    public void cancelNotification(long roomId) {
+        if (settingValue.separateNotification) {
+            SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.KEY_NOTIF_KEYS, Context.MODE_PRIVATE);
+            int roomNotifId = sharedPreferences.getInt(String.valueOf(roomId), -1);
+            if (roomNotifId == -1) {
+                return;
+            }
+            showNotification.notificationManager.cancel(roomNotifId);
+        }
+    }
+
     public static class RemoteActionReceiver extends BroadcastReceiver {
 
         public RemoteActionReceiver() {
