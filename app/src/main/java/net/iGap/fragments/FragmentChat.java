@@ -3865,11 +3865,27 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    private boolean checkEmptyMessageWithSemiSapce(String[] messages) {
+        boolean haveCharacterExceptSemiSpace = false;
+
+        char[] message = messages[0].toCharArray();
+        for (int i = 0; i < message.length; i++) {
+
+            if (message[i] != 8204) {
+                haveCharacterExceptSemiSpace = true;
+            }
+        }
+
+        return haveCharacterExceptSemiSpace;
+    }
+
     private void sendNewMessage() {
         String[] messages = HelperString.splitStringEvery(getWrittenMessage(), Config.MAX_TEXT_LENGTH);
         if (messages.length == 0) {
             edtChat.setText("");
             Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+        } else if (!checkEmptyMessageWithSemiSapce(messages)) {
+            return;
         } else {
             for (int i = 0; i < messages.length; i++) {
                 final String message = messages[i];
