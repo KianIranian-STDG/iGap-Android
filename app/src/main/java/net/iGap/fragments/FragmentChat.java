@@ -3920,6 +3920,10 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    private void openWebViewFragmentForSpecialUrlChat(String mUrl) {
+        getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.ac_ll_parent, FragmentWebView.newInstance(mUrl)).commit();
+    }
+
     private void openWebViewForSpecialUrlChat(String mUrl) {
 
 
@@ -4739,7 +4743,7 @@ public class FragmentChat extends BaseFragment
             mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(new StructMessageInfo((RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
             scrollToEnd();
         } else if (message instanceof String) {
-            openWebViewForSpecialUrlChat(message.toString());
+            openWebViewFragmentForSpecialUrlChat(message.toString());
         }
     }
 
