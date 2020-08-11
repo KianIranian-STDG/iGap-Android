@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.DataStorageViewModel" />
+    </data>
+
+    <LinearLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp16">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/networkTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/disk_and_network_usage"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/wifiTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.onWifiDataUsageClick()}"
+                    android:text="@string/wifi_data_usage"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/networkTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/mobileDataTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.onMobileDataUsageClick()}"
+                    android:text="@string/mobile_data_usage"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wifiTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/keepMediaTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/st_keepMedia"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/keepMedia"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mobileDataTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/keepMedia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.keepMediaTime}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/keepMediaTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/keepMediaTitle"
+                    app:layout_constraintTop_toTopOf="@id/keepMediaTitle" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickKeepMedia()}"
+                    app:layout_constraintBottom_toBottomOf="@id/keepMediaTitle"
+                    app:layout_constraintEnd_toEndOf="@id/keepMedia"
+                    app:layout_constraintStart_toStartOf="@id/keepMediaTitle"
+                    app:layout_constraintTop_toTopOf="@id/keepMediaTitle" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/keepMediaTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/autoDownloadMediaTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/auto_download_media"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/autoDownloadData"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.onClickAutoDownloadData()}"
+                    android:text="@string/st_auto_download_data"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoDownloadMediaTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/autoDownloadWifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.onClickAutoDownloadWifi()}"
+                    android:text="@string/st_auto_download_wifi"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoDownloadData" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/autoDownloadRoaming"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:onClick="@{()->viewModel.onClickAutoDownloadRoaming()}"
+                    android:text="@string/st_auto_download_roaming"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoDownloadWifi" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoDownloadRoaming" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/autoPlayMediaTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/auto_play_media"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/autoGifTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_auto_gif"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/autoGif"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoPlayMediaTitle" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/autoGif"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isAutoGif}"
+                    android:onCheckedChanged="@{(switch, checked) -> viewModel.onCheckedChangeAutoGif(checked)}"
+                    app:layout_constraintBottom_toBottomOf="@id/autoGifTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/autoGifTitle"
+                    app:layout_constraintTop_toTopOf="@id/autoGifTitle" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickAutoGif(autoGif.isChecked())}"
+                    app:layout_constraintBottom_toBottomOf="@id/autoGifTitle"
+                    app:layout_constraintEnd_toEndOf="@id/autoGif"
+                    app:layout_constraintStart_toStartOf="@id/autoGifTitle"
+                    app:layout_constraintTop_toTopOf="@id/autoGifTitle" />
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/autoGifTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cacheTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:paddingTop="@dimen/dp8"
+                    android:paddingBottom="@dimen/dp8"
+                    android:text="@string/cache"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/clearCacheTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/st_title_Clear_Cache"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/clearCache"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cacheTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/clearCache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.clearCacheSize}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/clearCacheTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/clearCacheTitle"
+                    app:layout_constraintTop_toTopOf="@id/clearCacheTitle" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/st_layout_clearCache"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickClearCache()}"
+                    app:layout_constraintBottom_toBottomOf="@id/clearCacheTitle"
+                    app:layout_constraintEnd_toEndOf="@id/clearCache"
+                    app:layout_constraintStart_toStartOf="@id/clearCacheTitle"
+                    app:layout_constraintTop_toTopOf="@id/clearCacheTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cleanUpTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/clean_up_chat_rooms"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/cleanUp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/clearCacheTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/cleanUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.cleanUpSize}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/cleanUpTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cleanUpTitle"
+                    app:layout_constraintTop_toTopOf="@id/cleanUpTitle" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->viewModel.onClickCleanUp()}"
+                    app:layout_constraintBottom_toBottomOf="@id/cleanUpTitle"
+                    app:layout_constraintEnd_toEndOf="@id/cleanUp"
+                    app:layout_constraintStart_toStartOf="@id/cleanUpTitle"
+                    app:layout_constraintTop_toTopOf="@id/cleanUpTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/useSdkTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:gravity="center_vertical"
+                    android:text="@string/save_data_in_sd_card"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.showLayoutSdk}"
+                    app:layout_constraintEnd_toStartOf="@id/useSdk"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cleanUpTitle" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/useSdk"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@{viewModel.isSdkEnable}"
+                    android:visibility="@{viewModel.showLayoutSdk}"
+                    android:clickable="false"
+                    app:layout_constraintBottom_toBottomOf="@id/useSdkTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/useSdkTitle"
+                    app:layout_constraintTop_toTopOf="@id/useSdkTitle" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:onClick="@{()->viewModel.onClickSdkEnable()}"
+                    android:visibility="@{viewModel.showLayoutSdk}"
+                    app:layout_constraintStart_toStartOf="@id/useSdkTitle"
+                    app:layout_constraintEnd_toEndOf="@id/useSdk"
+                    app:layout_constraintTop_toTopOf="@id/useSdkTitle"
+                    app:layout_constraintBottom_toBottomOf="@id/useSdkTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+</layout>

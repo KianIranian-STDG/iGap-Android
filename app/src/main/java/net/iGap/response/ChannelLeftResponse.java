@@ -1,16 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmMember;
@@ -35,7 +36,7 @@ public class ChannelLeftResponse extends MessageHandler {
         super.handler();
         ProtoChannelLeft.ChannelLeftResponse.Builder builder = (ProtoChannelLeft.ChannelLeftResponse.Builder) message;
 
-        if (G.userId == builder.getMemberId()) {
+        if (AccountManager.getInstance().getCurrentUser().getId() == builder.getMemberId()) {
             RealmRoom.deleteRoom(builder.getRoomId());
 
             if (G.onChannelLeft != null) {

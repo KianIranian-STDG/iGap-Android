@@ -1,10 +1,6 @@
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,30 +10,35 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyDistance;
 
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 
-import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static net.iGap.G.context;
-import static net.iGap.G.inflater;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
@@ -51,7 +52,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
     private RippleView rippleBack;
-    private Realm realmMapUsers;
 
     public FragmentMapUsers() {
         // Required empty public constructor
@@ -63,7 +63,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        realmMapUsers = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.fragment_map_users, container, false);
     }
 
@@ -77,44 +76,45 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         }
     }
 
-    private Realm getRealmMapUsers() {
-        if (realmMapUsers == null || realmMapUsers.isClosed()) {
-            realmMapUsers = Realm.getDefaultInstance();
-        }
-        return realmMapUsers;
-    }
-
     private void initComponent(View view) {
+        ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
 
-        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
-        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
-        rippleBack = (RippleView) view.findViewById(R.id.rippleBackMapUser);
-        view.findViewById(R.id.toolbarMapUsers).setBackgroundColor(Color.parseColor(G.appBarColor));
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.igap_nearby))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (ActivityMain.onBackPressedListener != null) {
+                            ActivityMain.onBackPressedListener.doBack();
+                        }
+                        popBackStackFragment();
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fmu_toolbar);
+        layoutToolbar.addView(toolbar.getView());
+
+        imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
+        txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
+        mRecyclerView = view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
-        getRealmMapUsers().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
-            }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
         });
 
-        mAdapter = new MapUserAdapter(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll(), true);
+        mAdapter = new MapUserAdapter(DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmGeoNearbyDistance.class).findAll();
+        }), true);
 
         //fastAdapter
         //mAdapter = new MapUserAdapterA();
         mRecyclerView.setAdapter(mAdapter);
-        ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityMain.onBackPressedListener != null) {
-                    ActivityMain.onBackPressedListener.doBack();
-                }
-                popBackStackFragment();
-            }
-        });
+
 
         if (mAdapter.getItemCount() > 0) {
             imvNothingFound.setVisibility(View.GONE);
@@ -306,9 +306,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (realmMapUsers != null && !realmMapUsers.isClosed()) {
-            realmMapUsers.close();
-        }
         ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
     }
 
@@ -320,7 +317,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             FragmentiGapMap.rippleMoreMap.setVisibility(View.GONE);
         }
         if (FragmentiGapMap.fabGps != null) {
-            FragmentiGapMap.fabGps.setVisibility(View.GONE);
+            FragmentiGapMap.fabGps.show();
         }
     }
 
@@ -335,9 +332,10 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             super(data, autoUpdate);
         }
 
+        @NotNull
         @Override
         public MapUserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MapUserAdapter.ViewHolder(inflater.inflate(R.layout.map_user_item, parent, false));
+            return new MapUserAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.map_user_item, parent, false));
         }
 
         @Override
@@ -346,17 +344,18 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             if (item == null) {
                 return;
             }
-            Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
+            RealmRegisteredInfo registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
+            });
+
             if (registeredInfo == null) {
-                realm.close();
                 return;
             }
 
-            if (G.selectedLanguage.equals("en")) {
-                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
+            if (!G.isAppRtl) {
+                holder.arrow.setRotation(270);
             } else {
-                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
+                holder.arrow.setRotation(90);
             }
 
 //            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
@@ -364,15 +363,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //for close FragmentMapUsers
-                    //if (btnBack != null){
-                    //    btnBack.performClick();
-                    //}
-                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
-                    //for close FragmentiGapMap
-                    //if (G.onMapClose != null) {
-                    //    G.onMapClose.onClose();
-                    //}
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                    }
                 }
             });
 
@@ -400,8 +393,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             }
 
             avatarHandler.getAvatar(new ParamWithAvatarType(holder.avatar, item.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
-
-            realm.close();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -416,13 +407,12 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             public ViewHolder(View itemView) {
                 super(itemView);
 
-                layoutMap = (LinearLayout) itemView.findViewById(R.id.lyt_map_user);
+                layoutMap = itemView.findViewById(R.id.lyt_map_user);
                 avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
-                username = (TextView) itemView.findViewById(R.id.txt_user_name_map);
-                comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);
+                username = itemView.findViewById(R.id.txt_user_name_map);
+                comment = itemView.findViewById(R.id.txt_user_comment_map);
                 arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
                 distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
-
             }
         }
     }

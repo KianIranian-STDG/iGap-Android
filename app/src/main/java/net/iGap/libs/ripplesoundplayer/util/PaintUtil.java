@@ -1,7 +1,8 @@
 package net.iGap.libs.ripplesoundplayer.util;
 
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
+
+import androidx.annotation.ColorInt;
 
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;

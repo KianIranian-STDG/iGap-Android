@@ -1,140 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:layout_margin="0dp"
-  android:clickable="true"
-  android:orientation="vertical"
-  android:padding="0dp"
-  tools:ignore="MissingPrefix">
-
-  <LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <net.iGap.module.MaterialDesignTextView
-      android:id="@+id/txt_info_back_map"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:gravity="right"
-      android:text="@string/md_right_arrow"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
-      android:textColor="@color/iGapColor"
-      android:visibility="gone" />
-
-    <net.iGap.module.MaterialDesignTextView
-      android:id="@+id/txt_close_map"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:gravity="right"
-      android:text="@string/md_close_button"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
-      android:textColor="@color/gray_5c"
-      android:visibility="visible" />
-  </LinearLayout>
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp6">
+    android:layout_height="match_parent"
+    android:layout_margin="0dp"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:padding="0dp"
+    tools:ignore="MissingPrefix">
 
     <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight="1"
-      android:orientation="vertical"
-      android:padding="@dimen/dp6">
-
-      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp6"
+        android:paddingRight="@dimen/dp6">
 
         <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/txt_chat_map"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/md_chat_box"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/iGapColor" />
+            android:id="@+id/txt_info_back_map"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/close_icon"
+            android:textColor="@color/iGapColor"
+            android:visibility="gone" />
 
         <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/txt_call_map"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp4"
-          android:text="@string/md_phone"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/iGapColor" />
-
-        <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/txt_video_call_map"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp4"
-          android:text="@string/md_file_video"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/iGapColor" />
-
-        <View
-          android:layout_width="0dip"
-          android:layout_height="0dp"
-          android:layout_weight="1" />
-
-        <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/txt_name_info_map"
-          fontPath="fonts/IRANSansMobile_Bold.ttf"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:singleLine="true"
-          android:text="Display Name"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp18" />
-      </LinearLayout>
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp4"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/txt_open_comment_map"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/md_back_arrow"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/iGapColor" />
-
-        <TextView
-          android:id="@+id/txt_info_comment"
-          fontPath="fonts/IRANSansMobile.ttf"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_vertical"
-          android:layout_weight="1"
-          android:ellipsize="end"
-          android:gravity="right"
-          android:maxLines="1"
-          style="?textSubColorSettingTheme"
-          android:text="Comment"
-          android:textSize="@dimen/dp16" />
-      </LinearLayout>
+            android:id="@+id/txt_close_map"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/md_close_button"
+            android:textColor="@color/gray_5c"
+            android:visibility="visible" />
     </LinearLayout>
 
-    <net.iGap.module.CircleImageView
-      android:id="@+id/img_info_avatar_map"
-      android:layout_width="@dimen/dp60"
-      android:layout_height="@dimen/dp60" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp6">
 
-  </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="@dimen/dp6">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/txt_chat_map"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/message_icon"
+                    android:textColor="@color/iGapColor" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/txt_call_map"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text="@string/voice_call_icon"
+                    android:textColor="@color/iGapColor" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/txt_video_call_map"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp4"
+                    android:text="@string/video_call_icon"
+                    android:textColor="@color/iGapColor" />
+
+                <View
+                    android:layout_width="0dip"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/txt_name_info_map"
+                    android:fontFamily="@font/main_font_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Display Name"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp18" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/txt_open_comment_map"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:rotation="90"
+                    android:text="@string/down_arrow_icon"
+                    android:textColor="@color/iGapColor" />
+
+                <TextView
+                    android:id="@+id/txt_info_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <net.iGap.module.CircleImageView
+            android:id="@+id/img_info_avatar_map"
+            android:layout_width="@dimen/dp60"
+            android:layout_height="@dimen/dp60" />
+
+    </LinearLayout>
 </LinearLayout>

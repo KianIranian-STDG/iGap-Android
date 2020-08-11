@@ -1,81 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:clickable="true"
-  android:layoutDirection="ltr"
-  android:orientation="vertical">
-
-  <LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp40"
-    style="?backgroundSubChatTheme"
-    android:gravity="left|center">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-    <net.iGap.module.MaterialDesignTextView
-      android:id="@+id/mls_btn_play_music"
-      android:layout_width="@dimen/dp40"
-      android:layout_height="match_parent"
-      android:layout_marginLeft="@dimen/dp8"
-      android:background="@null"
-      android:gravity="center"
-      android:paddingRight="@dimen/dp8"
-      android:text="@string/md_play_arrow"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
-      android:textColor="@color/toolbar_background"
-      android:textSize="@dimen/dp20" />
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/mls_btn_play_music"
+            style="@style/myIconToolbarStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/play_icon"
+            android:textColor="@color/toolbar_player_base_color"
+            android:textSize="@dimen/dp20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-      android:id="@+id/mls_txt_music_name"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp4"
-      android:layout_weight="1"
-      android:singleLine="true"
-      android:text=""
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp14" />
 
-    <TextView
-      android:id="@+id/mls_txt_music_time_counter"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="5dp"
-      android:minWidth="@dimen/dp28"
-      android:text=""
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp12" />
+        <TextView
+            android:id="@+id/mls_txt_music_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical|left"
+            android:singleLine="true"
+            android:textColor="@color/toolbar_player_base_color"
+            android:textSize="@dimen/dp13"
+            app:layout_constraintBottom_toTopOf="@+id/mls_txt_music_info"
+            app:layout_constraintEnd_toStartOf="@+id/mls_txt_music_time_counter"
+            app:layout_constraintStart_toEndOf="@+id/mls_btn_play_music"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="abolfazl abbasi" />
 
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginRight="@dimen/dp4"
-      android:text="/"
-      android:textColor="#888"
-      android:textSize="@dimen/dp12" />
+        <TextView
+            android:id="@+id/mls_txt_music_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|left"
+            android:singleLine="true"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/mls_txt_music_name"
+            app:layout_constraintStart_toStartOf="@+id/mls_txt_music_name"
+            app:layout_constraintTop_toBottomOf="@+id/mls_txt_music_name"
+            tools:text="abolfazl abbasi" />
 
-    <TextView
-      android:id="@+id/mls_txt_music_time"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginRight="@dimen/dp4"
-      android:text="time"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp12" />
 
-    <net.iGap.module.MaterialDesignTextView
-      android:id="@+id/mls_btn_close"
-      android:layout_width="@dimen/dp40"
-      android:layout_height="match_parent"
-      android:layout_marginRight="@dimen/dp8"
-      android:background="@null"
-      android:gravity="center"
-      android:text="@string/md_close_button"
-      android:textAppearance="@style/TextIconAppearance_toolbar"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp20" />
+        <TextView
+            android:id="@+id/mls_txt_music_time_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/dp28"
+            android:text="00:00"
+            android:textColor="@color/toolbar_player_base_color"
+            android:textSize="@dimen/dp12"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toStartOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
 
-  </LinearLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" | "
+            android:textColor="@color/toolbar_player_base_color"
+            android:textSize="@dimen/dp12"
+            app:layout_constraintBottom_toBottomOf="@+id/mls_txt_music_time"
+            app:layout_constraintEnd_toStartOf="@+id/mls_txt_music_time"
+            app:layout_constraintTop_toTopOf="@+id/mls_txt_music_time" />
+
+        <TextView
+            android:id="@+id/mls_txt_music_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="@color/toolbar_player_base_color"
+            android:textSize="@dimen/dp12"
+            app:layout_constraintBottom_toBottomOf="@+id/mls_btn_close"
+            app:layout_constraintEnd_toStartOf="@+id/mls_btn_close"
+            app:layout_constraintTop_toTopOf="@+id/mls_btn_close" />
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/mls_btn_close"
+            style="@style/myIconToolbarStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:gravity="center"
+            android:text="@string/close_icon"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@color/toolbar_player_base_color"
+            android:textSize="@dimen/dp20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

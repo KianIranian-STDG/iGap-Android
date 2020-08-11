@@ -11,30 +11,25 @@
 package net.iGap.fragments;
 
 import android.content.res.Configuration;
-import android.databinding.DataBindingUtil;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.mikepenz.fastadapter.IAdapter;
-import com.mikepenz.fastadapter.IItem;
+import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter_extensions.items.ProgressItem;
 import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -44,14 +39,15 @@ import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
 import net.iGap.databinding.ActivityMediaPlayerLandBinding;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.interfaces.OnClientSearchRoomHistory;
-import net.iGap.interfaces.OnComplete;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -61,10 +57,11 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientSearchRoomHistory;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -89,7 +86,6 @@ public class FragmentMediaPlayer extends BaseFragment {
     private int offset;
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<RealmRoomMessage> mediaList;
-    private static Realm mRealm;
     private RecyclerView.OnScrollListener onScrollListener;
     private boolean canUpdateAfterDownload = false;
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
@@ -98,9 +94,8 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
-
         if (G.twoPaneMode) {
             fragmentMediaPlayerBinding = DataBindingUtil.inflate(inflater, R.layout.activity_media_player, container, false);
             return fragmentMediaPlayerBinding.getRoot();
@@ -116,7 +111,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
@@ -180,8 +175,8 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         try {
             if (!G.twoPaneMode) {
-                if (isAdded()) {
-                    G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+                if (getActivity() != null && isAdded()) {
+                    getActivity().getSupportFragmentManager().beginTransaction().detach(this).attach(this).commit();
                 }
             }
         } catch (Exception e) {
@@ -203,7 +198,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void initComponent(final View view) {
 
-        final ImageView img_MusicImage = (ImageView) view.findViewById(R.id.ml_img_music_picture);
+        final ImageView img_MusicImage = view.findViewById(R.id.ml_img_music_picture);
         onSetImage = new OnSetImage() {
             @Override
             public void setImage() {
@@ -212,18 +207,23 @@ public class FragmentMediaPlayer extends BaseFragment {
         };
 
         musicSeekbar = view.findViewById(R.id.ml_seekBar1);
-        musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
+
+        musicSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) MusicPlayer.setMusicProgress(progress);
+            }
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                MusicPlayer.pauseSound();
+            }
 
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
-                }
-                return false;
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                MusicPlayer.playAndPause();
             }
         });
-
 
         onBackFragment = new OnBackFragment() {
             @Override
@@ -232,8 +232,8 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         };
 
-        rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
-        final SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
+        rcvListMusicPlayer = view.findViewById(R.id.rcvListMusicPlayer);
+        final SlidingUpPanelLayout slidingUpPanelLayout = view.findViewById(R.id.sliding_layout);
 
         footerAdapter = new ItemAdapter<>();
         fastItemAdapter = new FastItemAdapter();
@@ -317,12 +317,12 @@ public class FragmentMediaPlayer extends BaseFragment {
                 holder.messageProgress.setVisibility(View.GONE);
 
                 if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (realmRoomMessagesList.getMessageId())) {
-                    holder.iconPlay.setText(R.string.md_round_pause_button);
+                    holder.iconPlay.setText(R.string.pause_icon);
                 } else {
-                    holder.iconPlay.setText(R.string.md_play_rounded_button);
+                    holder.iconPlay.setText(R.string.play_icon);
                 }
                 //holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
-                MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+                MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
                 String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                 if (artist != null) {
                     holder.txtMusicplace.setText(artist);
@@ -452,20 +452,9 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                //+final Realm realm = Realm.getDefaultInstance();
-
-                getRealm().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                            RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
-                        }
-                    }
-                });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setFromShareMedia());
             }
         });
     }
@@ -476,7 +465,9 @@ public class FragmentMediaPlayer extends BaseFragment {
             mRealmList.removeAllChangeListeners();
         }
 
-        mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, type);
+        mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRoomMessage.filterMessage(realm, MusicPlayer.roomId, type);
+        });
 
         changeSize = mRealmList.size();
 
@@ -484,14 +475,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         isThereAnyMoreItemToLoad = true;
         getDataFromServer(filter);
         return mRealmList;
-    }
-
-    private static Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
     }
 
     private void downloadFile(int position, MessageProgress messageProgress) {
@@ -538,7 +521,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         });
 
 
-        HelperDownloadFile.getInstance().startDownload(messageType,MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+        HelperDownloadFile.getInstance().startDownload(messageType, MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
             @Override
             public void OnProgress(String path, final int progress) {
 
@@ -627,18 +610,20 @@ public class FragmentMediaPlayer extends BaseFragment {
         List<RealmRoomMessage> realmRoomMessages = null;
 
         try {
-            realmRoomMessages = getRealm().where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
-                    .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                    .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
-                    .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
-                    .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
+                        .notEqualTo(RealmRoomMessageFields.DELETED, true)
+                        .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
+                        .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                        .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            });
         } catch (IllegalStateException e) {
         }
 
         if (realmRoomMessages != null && realmRoomMessages.size() > 0) {
 
-//                                mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
+//                                mRealmList = RealmRoomMessage.filterMessage(getUiRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
             if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
                 realmRoomMessages = realmRoomMessages.subList(0, MusicPlayer.limitMediaList);
             } else {

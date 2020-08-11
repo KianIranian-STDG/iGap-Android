@@ -10,22 +10,21 @@
 
 package net.iGap.helper;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import net.iGap.G;
-import net.iGap.Theme;
-import net.iGap.activities.ActivityRegisteration;
+import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.request.RequestClientGetRoomList;
-
-import ir.radsense.raadcore.model.Auth;
-
-import static org.paygear.utils.Utils.signOutWallet;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnUserSessionLogout;
+import net.iGap.request.RequestUserSessionLogout;
 
 
 /**
@@ -36,36 +35,70 @@ public final class HelperLogout {
     /**
      * truncate realm and go to ActivityIntroduce for register again
      */
-    public static void logout() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                signOutWallet();
-                HelperRealm.realmTruncate();
+    private void logout() {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.deleteAll();
+        });
+
+        AppUtils.cleanBadge();
+        new LoginActions();
+    }
+
+    public boolean logoutAllUser() {
+        boolean tmp = new AccountHelper().logoutAccount();
+        if (tmp) {
+            return logoutAllUser();
+        } else {
+            return false;
+        }
+    }
+
+    public boolean logoutUser(AccountUser accountUser) {
+        if (accountUser.isAssigned()) {
+            logout();
+            boolean tmp = AccountManager.getInstance().removeUser(accountUser);
+            if (!tmp) {
                 clearPreferences();
                 resetStaticField();
+            }
+            return tmp;
+        } else {
+            return false;
+        }
+    }
 
-                AppUtils.cleanBadge();
-                Intent intent = new Intent(G.context, ActivityRegisteration.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    public boolean logoutUser() {
+        Log.wtf(this.getClass().getName(), "logoutUser");
+        return logoutUser(AccountManager.getInstance().getCurrentUser());
+    }
+
+    public void logoutUserWithRequest(LogOutUserCallBack logOutUserCallBack) {
+        new RequestUserSessionLogout().userSessionLogout(new OnUserSessionLogout() {
+            @Override
+            public void onUserSessionLogout() {
+                logOutUserCallBack.onLogOut();
                 new LoginActions();
-                if (G.currentActivity != null) {
-                    G.currentActivity.finish();
-                }
-                G.context.startActivity(intent);
+            }
 
+            @Override
+            public void onError() {
+                logOutUserCallBack.onError();
+            }
 
-                try {
-                    NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    nMgr.cancelAll();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
+            @Override
+            public void onTimeOut() {
+                logOutUserCallBack.onError();
             }
         });
     }
 
-    private static void clearPreferences(){
+    public interface LogOutUserCallBack {
+        void onLogOut();
+
+        void onError();
+    }
+
+    private void clearPreferences() {
         SharedPreferences sharedPreferencesFile = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         sharedPreferencesFile.edit().clear().apply();
 
@@ -74,14 +107,16 @@ public final class HelperLogout {
     }
 
 
-    private static void resetStaticField() {
-        Theme.setThemeColor();
+    private void resetStaticField() {
         G.userLogin = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
-        G.isPassCode = false;
-        G.isDarkTheme = false;
         G.isSaveToGallery = false;
         G.showSenderNameInGroup = false;
+        G.themeColor = Theme.DEFAULT;
+        G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE).edit()
+                .putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT)
+                .putBoolean(SHP_SETTING.KEY_THEME_DARK, false)
+                .apply();
     }
 }

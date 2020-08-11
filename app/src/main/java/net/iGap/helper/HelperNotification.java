@@ -19,9 +19,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.RemoteInput;
 import android.view.Display;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.RemoteInput;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -29,26 +30,29 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.libs.Tuple;
+import net.iGap.model.AccountUser;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static net.iGap.G.context;
 import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.PINNED_MESSAGE;
 
@@ -82,7 +86,7 @@ public class HelperNotification {
         public ProtoGlobal.Room.Type roomType;
         public String name = "";
         public String message = "";
-        public String time = "";
+        public long time;
         public String initialize;
         public String color;
     }
@@ -157,6 +161,7 @@ public class HelperNotification {
         private int delayAlarm = 5000;
         private long currentAlarm;
         private int notificationIconSrc;
+        private long mTime = 0;
 
         int vibrator;
         int sound;
@@ -165,7 +170,7 @@ public class HelperNotification {
         Realm realm;
 
         ShowNotification() {
-            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.
                 @SuppressLint("WrongConstant") NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
@@ -173,7 +178,7 @@ public class HelperNotification {
             }
         }
 
-        private void show(int vibrator, int sound, int led, boolean messagePreview, Realm realm) {
+        private void show(int vibrator, int sound, int led, boolean messagePreview, Realm realm, AccountUser accountUser) {
             int[] result = AppUtils.updateBadgeOnly(realm, -1);
             unreadMessageCount = result[0];
             countUniqueChat = result[1];
@@ -184,10 +189,10 @@ public class HelperNotification {
             this.messagePreview = messagePreview;
             this.realm = realm;
 
-            setNotification();
+            setNotification(accountUser);
         }
 
-        private void setNotification() {
+        private void setNotification(AccountUser accountUser) {
             int notificationId = 21;
             if (settingValue.separateNotification) {
                 SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.KEY_NOTIF_KEYS, Context.MODE_PRIVATE);
@@ -206,6 +211,7 @@ public class HelperNotification {
 
             if (countUniqueChat == 1 || settingValue.separateNotification) {
                 intent.putExtra(ActivityMain.openChat, messageList.get(0).roomId);
+                intent.putExtra(ActivityMain.userId, accountUser.getId());
             }
 
             pi = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -227,7 +233,16 @@ public class HelperNotification {
                     .setStyle(getBigStyle())
                     .setContentIntent(pi);
 
-            if (settingValue.separateNotification) {
+            if (AccountManager.getInstance().getUserAccountList().size() > 2) {
+                builder.setSubText(accountUser.getName());
+            }
+
+            //maybe time not set , this if not work and time of notify will set .
+            if (mTime != 0) {
+                builder.setWhen(mTime * 1000);
+            }
+
+            if (settingValue.separateNotification && AccountManager.getInstance().getCurrentUser().equals(accountUser)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && messageList.get(0).roomType != ProtoGlobal.Room.Type.CHANNEL) {
                     builder.addAction(getReplayAction(notificationId));
                 }
@@ -322,9 +337,11 @@ public class HelperNotification {
 
                 mHeader = messageList.get(0).name;
                 mContent = messageList.get(0).message;
+                mTime = messageList.get(0).time;
             } else {
                 mHeader = context.getString(R.string.igap);
                 mContent = messageList.get(0).message;
+                mTime = messageList.get(0).time;
 
                 String s = "";
                 if (countUniqueChat == 1) {
@@ -508,7 +525,7 @@ public class HelperNotification {
     private class ShowPopUp {
 
 
-        void checkPopUp(int popUpMod) {
+        void checkPopUp(int popUpMod, long id) {
 
             boolean result = false;
 
@@ -536,7 +553,7 @@ public class HelperNotification {
             }
 
 
-            if (result) {
+            if (result && id == AccountManager.getInstance().getCurrentUser().getId()) {
                 if (getForegroundApp() || ActivityPopUpNotification.isPopUpVisible) { //check that any other program is in background
 
                     if (ActivityPopUpNotification.isPopUpVisible) {
@@ -545,6 +562,7 @@ public class HelperNotification {
                         }
                     } else {
                         Intent intent = new Intent(context, ActivityPopUpNotification.class);
+                        intent.putExtra(ActivityMain.userId, id);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity(intent);
                     }
@@ -574,11 +592,11 @@ public class HelperNotification {
 
         private boolean getForegroundApp() {
 
-            ActivityManager am = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
 
             try {
-                if (taskInfo.get(0).topActivity.getClassName().toString().toLowerCase().contains("launcher"))
+                if (taskInfo.get(0).topActivity.getClassName().toLowerCase().contains("launcher"))
                     return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -610,7 +628,14 @@ public class HelperNotification {
         showPopUp = new ShowPopUp();
     }
 
-    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
+    public void addMessage(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, AccountUser accountUser) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null) {
+            addMessage(roomId, roomMessage, roomType, room, realm, accountUser);
+        }
+    }
+
+    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm, AccountUser accountUser) {
 
         if (roomId == FragmentChat.lastChatRoomId) {
             return;
@@ -685,13 +710,12 @@ public class HelperNotification {
 
 
             if ((!G.isAppInFg && !AttachFile.isInAttach) || settingValue.inAppPreview || settingValue.inAppSound || settingValue.inAppVibration || settingValue.soundInChat) {
-                showNotification.show(vibrator, sound, led, messagePreview, realm);
+                showNotification.show(vibrator, sound, led, messagePreview, realm, accountUser);
             }
 
             if (!G.isAppInFg && !AttachFile.isInAttach) {
-                showPopUp.checkPopUp(popUpMode);
+                showPopUp.checkPopUp(popUpMode, accountUser.getId());
             }
-
 
         }
 
@@ -704,7 +728,7 @@ public class HelperNotification {
         sn.roomId = roomId;
         sn.roomMessage = roomMessage;
         sn.roomType = roomType;
-        sn.time = TimeUtils.toLocal(roomMessage.getUpdateTime(), G.CHAT_MESSAGE_TIME);
+        sn.time = roomMessage.getUpdateTime();
         sn.message = parseMessage(roomMessage);
         sn.name = room.getTitle() + ":";
         sn.senderId = room.getType() == ProtoGlobal.Room.Type.CHAT ? room.getChatRoom().getPeerId() : room.getId();
@@ -744,7 +768,7 @@ public class HelperNotification {
     }
 
     private String parseMessage(ProtoGlobal.RoomMessage roomMessage) {
-        if (G.isPassCode && ActivityMain.isLock) {
+        if (PassCode.getInstance().isPassCode() && ActivityMain.isLock) {
             return context.getString(R.string.new_message_notif);
         }
 
@@ -763,7 +787,7 @@ public class HelperNotification {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_LEFT) {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
-                }  else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VIDEO_CALL) {
                     text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
@@ -834,9 +858,9 @@ public class HelperNotification {
                     }
 
                     if (message != null && message.length() > 0 && roomId > 0) {
-                        String identity = Long.toString(System.currentTimeMillis());
-                        RealmRoomMessage.makeTextMessage(roomId, Long.parseLong(identity), message);
-                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(identity);
+                        RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
+                        HelperRealm.copyOrUpdateToRealm(roomMessage);
+                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
                     }
 
                     break;
@@ -853,35 +877,23 @@ public class HelperNotification {
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Realm realm = Realm.getDefaultInstance();
-                                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
-                                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
-                                        public void sendSeenStatus(RealmRoomMessage message) {
-                                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                        public void execute(Realm realm) {
+                                            RealmRoom.setCount(realm, roomId, 0);
                                         }
+                                    }, () -> {
 
-                                        @Override
-                                        public void resendMessage(RealmRoomMessage message) {
+                                        DbManager.getInstance().doRealmTask(realm2 -> {
+                                            if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                                                RealmRoomMessage.makeSeenAllMessageOfRoom(roomId);
+                                            }
+                                            AppUtils.updateBadgeOnly(realm2, roomId);
+                                        });
 
-                                        }
-
-                                        @Override
-                                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
-
-                                        }
                                     });
-                                }
-
-                                RealmRoom.setCount(roomId, 0);
-
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AppUtils.updateBadgeOnly(realm, roomId);
-                                        realm.close();
-                                    }
-                                }, 250);
+                                });
                             }
                         }, 5);
                     }
@@ -890,4 +902,44 @@ public class HelperNotification {
         }
     }
 
+
+    @SuppressLint("WrongConstant")
+    public static void sendDeepLink(Map<String, String> data, String title, String body) {
+
+        String CHANNEL_ID = "1032";
+        String deepLink = data.get(ActivityMain.DEEP_LINK);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+
+        Intent intent = new Intent(context, ActivityMain.class);
+        intent.setAction(ActivityMain.OPEN_DEEP_LINK);
+        intent.putExtra(ActivityMain.DEEP_LINK, deepLink);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, title, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+        Notification notification;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notification = new Notification.Builder(context, CHANNEL_ID)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setSmallIcon(R.mipmap.icon)
+                    .setContentIntent(pendingIntent)
+                    .build();
+        } else {
+            notification = new Notification.Builder(context)
+                    .setContentTitle(title)
+                    .setContentText(body)
+                    .setSmallIcon(R.mipmap.icon)
+                    .setContentIntent(pendingIntent)
+                    .build();
+        }
+
+        notificationManager.notify(1032, notification);
+    }
 }

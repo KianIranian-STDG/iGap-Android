@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="#40aaaaaa">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -35,18 +35,18 @@
                         android:layout_height="64dp"
                         android:layout_marginTop="8dp"
                         android:scaleType="centerInside"
-                        app:srcCompat="@drawable/dance"/>
+                        app:srcCompat="@drawable/dance" />
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/congratulations"
-                    android:textColor="#fff"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/congratulations"
+                        android:textColor="#fff"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
 
                 </LinearLayout>
 
@@ -72,11 +72,10 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/green_bottom_rounded"
                     android:text="@string/ok"
-                    android:textColor="@color/colorWhite"
-                    />
+                    android:textColor="@color/colorWhite" />
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 

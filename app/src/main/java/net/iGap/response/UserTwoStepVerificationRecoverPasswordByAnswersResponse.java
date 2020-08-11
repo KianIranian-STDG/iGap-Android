@@ -1,16 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.observers.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserTwoStepVerificationRecoverPasswordByAnswers;
 
@@ -18,9 +18,9 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserTwoStepVerificationRecoverPasswordByAnswersResponse(int actionId, Object protoClass, String identity) {
+    public UserTwoStepVerificationRecoverPasswordByAnswersResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -32,8 +32,10 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
     public void handler() {
         super.handler();
         ProtoUserTwoStepVerificationRecoverPasswordByAnswers.UserTwoStepVerificationRecoverPasswordByAnswersResponse.Builder builder = (ProtoUserTwoStepVerificationRecoverPasswordByAnswers.UserTwoStepVerificationRecoverPasswordByAnswersResponse.Builder) message;
-        if (G.onRecoverySecurityPassword != null) {
-            G.onRecoverySecurityPassword.recoveryByQuestion(builder.getToken());
+        if (identity instanceof TwoStepVerificationRecoverPasswordByAnswersCallback) {
+            ((TwoStepVerificationRecoverPasswordByAnswersCallback) identity).recoveryByQuestion(builder.getToken());
+        } else {
+            throw new ClassCastException("identity must be: " + TwoStepVerificationRecoverPasswordByAnswersCallback.class.getName());
         }
     }
 
@@ -45,18 +47,12 @@ public class UserTwoStepVerificationRecoverPasswordByAnswersResponse extends Mes
     @Override
     public void error() {
         super.error();
-
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-
-
-        if (majorCode == 10134) {
-            if (G.onRecoverySecurityPassword != null) {
-                G.onRecoverySecurityPassword.errorRecoveryByQuestion();
-            }
+        if (identity instanceof TwoStepVerificationRecoverPasswordByAnswersCallback) {
+            ((TwoStepVerificationRecoverPasswordByAnswersCallback) identity).errorRecoveryByQuestion(errorResponse.getMajorCode(), errorResponse.getMinorCode());
+        } else {
+            throw new ClassCastException("identity must be: " + TwoStepVerificationRecoverPasswordByAnswersCallback.class.getName());
         }
-
     }
 }
 

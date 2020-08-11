@@ -1,16 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
 import net.iGap.helper.HelperString;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
@@ -64,125 +65,106 @@ public class RealmChannelRoom extends RealmObject {
      */
 
     public static void createChannelRoom(final long roomId, final String inviteLink, final String channelName) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom == null) {
-                    realmRoom = realm.createObject(RealmRoom.class, roomId);
-                }
-                if (channelName != null) {
-                    realmRoom.setTitle(channelName);
-                }
-                realmRoom.setType(RoomType.CHANNEL);
-                RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
-                realmChannelRoom.setInviteLink(inviteLink);
-                realmChannelRoom.setRole(ChannelChatRole.MEMBER);// set default role
-
-                realmRoom.setChannelRoom(realmChannelRoom);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom == null) {
+                realmRoom = realm.createObject(RealmRoom.class, roomId);
             }
+            if (channelName != null) {
+                realmRoom.setTitle(channelName);
+            }
+            realmRoom.setType(RoomType.CHANNEL);
+            RealmChannelRoom realmChannelRoom = realm.createObject(RealmChannelRoom.class);
+            realmChannelRoom.setInviteLink(inviteLink);
+            realmChannelRoom.setRole(ChannelChatRole.MEMBER);// set default role
+
+            realmRoom.setChannelRoom(realmChannelRoom);
         });
-        realm.close();
     }
 
     public static void revokeLink(long roomId, final String inviteLink, final String inviteToken) {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-            if (realmChannelRoom != null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmChannelRoom.setInviteLink(inviteLink);
-                        realmChannelRoom.setInvite_token(inviteToken);
-                    }
-                });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                if (realmChannelRoom != null) {
+                    realmChannelRoom.setInviteLink(inviteLink);
+                    realmChannelRoom.setInvite_token(inviteToken);
+                }
             }
-        }
-        realm.close();
+        });
     }
 
     public static void removeUsername(final long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                    if (realmChannelRoom != null) {
-                        realmChannelRoom.setPrivate(true);
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                if (realmChannelRoom != null) {
+                    realmChannelRoom.setPrivate(true);
                 }
             }
         });
-        realm.close();
     }
 
     public static ProtoGlobal.ChannelRoom.Role detectMineRole(long roomId) {
-        ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-            if (realmChannelRoom != null) {
-                role = realmChannelRoom.getMainRole();
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                if (realmChannelRoom != null) {
+                    role = realmChannelRoom.getMainRole();
+                }
             }
-        }
-        realm.close();
-        return role;
+            return role;
+        });
     }
 
     public static ChannelChatRole detectMemberRole(long roomId, long messageSenderId) {
-        ChannelChatRole role = ChannelChatRole.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getChannelRoom() != null) {
-                RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
-                for (RealmMember realmMember : realmMembers) {
-                    if (realmMember.getPeerId() == messageSenderId) {
-                        role = ChannelChatRole.valueOf(realmMember.getRole());
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ChannelChatRole role = ChannelChatRole.UNRECOGNIZED;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getChannelRoom() != null) {
+                    RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
+                    for (RealmMember realmMember : realmMembers) {
+                        if (realmMember.getPeerId() == messageSenderId) {
+                            role = ChannelChatRole.valueOf(realmMember.getRole());
+                        }
                     }
                 }
             }
-        }
-        realm.close();
-        return role;
+            return role;
+        });
     }
 
     public static ProtoGlobal.ChannelRoom.Role detectMemberRoleServerEnum(long roomId, long messageSenderId) {
-        ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getChannelRoom() != null) {
-                RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
-                for (RealmMember realmMember : realmMembers) {
-                    if (realmMember.getPeerId() == messageSenderId) {
-                        role = ProtoGlobal.ChannelRoom.Role.valueOf(realmMember.getRole());
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getChannelRoom() != null) {
+                    RealmList<RealmMember> realmMembers = realmRoom.getChannelRoom().getMembers();
+                    for (RealmMember realmMember : realmMembers) {
+                        if (realmMember.getPeerId() == messageSenderId) {
+                            role = ProtoGlobal.ChannelRoom.Role.valueOf(realmMember.getRole());
+                        }
                     }
                 }
             }
-        }
-        realm.close();
-        return role;
+            return role;
+
+        });
     }
 
     public static void updateReactionStatus(final long roomId, final boolean statusReaction) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                    realmRoom.getChannelRoom().setReactionStatus(statusReaction);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                realmRoom.getChannelRoom().setReactionStatus(statusReaction);
             }
         });
-        realm.close();
     }
 
     public ChannelChatRole getRole() {
@@ -190,6 +172,9 @@ public class RealmChannelRoom extends RealmObject {
     }
 
     public void setRole(ChannelChatRole role) {
+        if (role == ChannelChatRole.MODERATOR) {
+            role = ChannelChatRole.ADMIN;
+        }
         this.role = role.toString();
     }
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/provinceIcon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/dp4"
+        android:src="@drawable/ic_city"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".2" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/locationCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:padding="@dimen/dp2"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintBottom_toBottomOf="@+id/provinceIcon"
+        app:layout_constraintEnd_toEndOf="@id/provinceName"
+        app:layout_constraintStart_toStartOf="@+id/provinceName"
+        app:layout_constraintTop_toBottomOf="@+id/provinceName" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/provinceName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:padding="@dimen/dp2"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintBottom_toTopOf="@id/locationCount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/provinceIcon"
+        app:layout_constraintTop_toTopOf="@+id/provinceIcon" />
+</androidx.constraintlayout.widget.ConstraintLayout>

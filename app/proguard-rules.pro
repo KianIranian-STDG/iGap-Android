@@ -18,6 +18,8 @@
 
 
 ########## My Tricks
+-keep class net.iGap.model.popularChannel.**
+-keep class net.iGap.payment.**
 -keep class net.iGap.proto.** , com.neovisionaries.ws.client.** { *; }
 -keep class net.iGap.helper.HelperFillLookUpClass { *; }
 -keep public class * extends net.iGap.response.MessageHandler
@@ -291,7 +293,12 @@
 #Gson
 # Gson specific classes
 -dontwarn sun.misc.**
-#-keep class com.google.gson.stream.** { *; }
+-keep class com.google.gson.stream.** { *; }
+-keep class sun.misc.Unsafe { *; }
+-keepclassmembers,allowobfuscation class * {
+                                    @com.google.gson.annotations.SerializedName <fields>;
+                                  }
+
 
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
@@ -304,3 +311,6 @@
 -dontwarn android.content.pm.PackageInfo
 -keep public class com.android.installreferrer.** { *; }
 
+# prevent proguard from destroying bouncy castle for kuknos
+-dontwarn org.bouncycastle.**
+-keep class org.bouncycastle.**

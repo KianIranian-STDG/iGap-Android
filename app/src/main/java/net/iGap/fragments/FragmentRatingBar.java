@@ -1,19 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,6 +21,10 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -71,7 +73,7 @@ public class FragmentRatingBar extends BaseFragment {
 
     private void initComponent(View view) {
         openDialogForRating();
-        LinearLayout layoutRoot = (LinearLayout) view.findViewById(R.id.arb_layout_root);
+        LinearLayout layoutRoot = view.findViewById(R.id.arb_layout_root);
         layoutRoot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,16 +98,16 @@ public class FragmentRatingBar extends BaseFragment {
         }).build();
         View view = dialog.getView();
 
-        dialog.getTitleView().setTypeface(G.typeface_IRANSansMobile);
-        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(G.typeface_IRANSansMobile);
-        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(G.typeface_IRANSansMobile);
+        dialog.getTitleView().setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
+        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
+        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
 
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
-        ratingBar = (RatingBar) view.findViewById(R.id.arb_ratingBar_call);
-        edtResponse = (EditText) view.findViewById(R.id.arb_edt_resone);
+        ratingBar = view.findViewById(R.id.arb_ratingBar_call);
+        edtResponse = view.findViewById(R.id.arb_edt_resone);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {

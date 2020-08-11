@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.FragmentProfileIvand">
+
+    <!--
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
+    -->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fragment_ivand_profile_right_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/ivand_profile_toolbar_txt_margin_left"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/fragment_ivand_profile_avatar_box"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-20dp"
+            app:cardCornerRadius="@dimen/ivand_profile_toolbar_bottom_radius"
+            app:cardElevation="1dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/fragment_ivand_profile_toolbar_btn_more"
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:layout_marginTop="@dimen/toolbar_icon_margin"
+        android:layout_marginEnd="@dimen/toolbar_icon_margin"
+        android:layout_marginRight="@dimen/toolbar_icon_margin"
+        android:contentDescription="@null"
+        android:padding="@dimen/toolbar_icon_padding"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/fragment_ivand_profile_avatar_box"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_avatar_box"
+        app:srcCompat="@drawable/ic_more_toolbar" />
+
+    <ImageView
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:layout_marginTop="@dimen/toolbar_icon_margin"
+        android:layout_marginEnd="@dimen/toolbar_icon_margin"
+        android:layout_marginRight="@dimen/toolbar_icon_margin"
+        android:contentDescription="@null"
+        android:padding="@dimen/toolbar_icon_padding"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@id/fragment_ivand_profile_toolbar_btn_more"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_avatar_box"
+        app:srcCompat="@drawable/ic_edit_toolbar" />
+
+    <ImageView
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:layout_marginTop="@dimen/toolbar_icon_margin"
+        android:layout_marginEnd="@dimen/toolbar_icon_margin"
+        android:layout_marginRight="@dimen/toolbar_icon_margin"
+        android:contentDescription="@null"
+        android:padding="@dimen/toolbar_icon_padding"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_avatar_box"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_avatar_box"
+        app:srcCompat="@drawable/ic_back_btn" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/profile_avatar_hover"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_avatar_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_toolbar_user_name" />
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_toolbar_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="status"
+        android:textColor="@color/white"
+        android:textSize="@dimen/ivand_profile_toolbar_txt_textSize"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_avatar_box"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_right_vertical_guideline" />
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_toolbar_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="user name"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/fragment_ivand_profile_toolbar_status"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_right_vertical_guideline" />
+
+
+    <ImageView
+        android:id="@+id/fragment_ivand_profile_img_credit"
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@null"
+        android:padding="@dimen/ivand_profile_icon_padding"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_right_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_avatar_box"
+        app:srcCompat="@drawable/ic_wallet" />
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_lbl_credit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_img_credit"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_img_credit"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_img_credit"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/wallet_Your_credit" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="16,000 Toman"
+        android:textColor="@color/gray_4c"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_credit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_credit"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_credit" />
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_btn_increase_credit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/increase_credit"
+        android:textColor="@color/ivand_green_text_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_img_credit"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_credit" />
+
+    <View
+        android:id="@+id/fragment_ivand_profile_credit_splitter"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp1"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_btn_increase_credit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <ImageView
+        android:id="@+id/fragment_ivand_profile_img_score"
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@null"
+        android:padding="@dimen/ivand_profile_icon_padding"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_right_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_credit_splitter"
+        app:srcCompat="@drawable/ic_rate_img" />
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_lbl_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_img_score"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_img_score"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_img_score"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:text="@string/your_rate" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="168"
+        android:textColor="@color/gray_4c"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_score"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_score"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_score" />
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_btn_increase_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/increase_score"
+        android:textColor="@color/ivand_green_text_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/fragment_ivand_profile_img_score"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_score" />
+
+    <View
+        android:id="@+id/fragment_ivand_profile_score_splitter"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp1"
+        android:background="@color/gray"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_btn_increase_score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_lbl_inviteFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/your_rate"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_score_splitter" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="20 point"
+        android:textColor="@color/ivand_green_text_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_inviteFriend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_inviteFriend"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_inviteFriend" />
+
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_lbl_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/payment"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_inviteFriend" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="10 point"
+        android:textColor="@color/ivand_green_text_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_payment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_payment"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_payment" />
+
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_lbl_scan_qrCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/QrCode_Scan"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_payment" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="50 point"
+        android:textColor="@color/ivand_green_text_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_scan_qrCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_scan_qrCode"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_scan_qrCode" />
+
+
+    <TextView
+        android:id="@+id/fragment_ivand_profile_lbl_bot_channels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/bots_and_channels"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_right_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/fragment_ivand_profile_lbl_scan_qrCode" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="150 point"
+        android:textColor="@color/ivand_green_text_color"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fragment_ivand_profile_lbl_bot_channels"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.866"
+        app:layout_constraintStart_toEndOf="@id/fragment_ivand_profile_lbl_bot_channels"
+        app:layout_constraintTop_toTopOf="@id/fragment_ivand_profile_lbl_bot_channels" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

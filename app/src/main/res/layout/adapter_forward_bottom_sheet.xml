@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/root_forward_bottom_sheet"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
-
-  <LinearLayout
-    android:id="@+id/main"
-    android:layout_width="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_forward_bottom_sheet"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="@dimen/dp10">
+    android:layout_margin="@dimen/dp10">
 
     <net.iGap.module.CircleImageView
-      android:id="@+id/imageView_forward_bottomSheet"
-      android:layout_width="@dimen/dp48"
-      android:layout_height="@dimen/dp48" />
+        android:id="@+id/imageView_forward_bottomSheet"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="@dimen/dp2"
+        app:civ_border_width="@dimen/dp2"
+        app:civ_border_padding="@dimen/dp1"
+        app:civ_border_color="@color/transparent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".7" />
 
-    <net.iGap.module.EmojiTextViewE
-      android:id="@+id/txtTitle_forward_bottomSheet"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      android:singleLine="true"
-      android:text="Dominika"
-      android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp13" />
+    <TextView
+        android:id="@+id/txtTitle_forward_bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp4"
+        android:gravity="center"
+        android:lines="2"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/dp13"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView_forward_bottomSheet" />
 
-  </LinearLayout>
+    <com.hanks.library.AnimateCheckBox
+        android:id="@+id/checkBox_forward_bottomSheet"
+        android:layout_width="@dimen/dp24"
+        android:layout_height="@dimen/dp24"
+        android:layout_gravity="center"
+        android:clickable="false"
+        app:animDuration="50"
+        app:checkedColor="?attr/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@id/imageView_forward_bottomSheet"
+        app:layout_constraintRight_toRightOf="@id/imageView_forward_bottomSheet"
+        app:lineColor="#fff"
+        app:lineWidth="1.2dp"
+        app:unCheckColor="?attr/colorPrimary" />
 
-  <com.hanks.library.AnimateCheckBox
-    android:id="@+id/checkBox_forward_bottomSheet"
-    android:layout_width="@dimen/dp24"
-    android:layout_height="@dimen/dp24"
-    android:layout_alignBottom="@+id/main"
-    android:layout_alignEnd="@+id/main"
-    android:layout_alignRight="@+id/main"
-    android:layout_gravity="center"
-    android:clickable="false"
-    android:visibility="visible"
-    app:animDuration="200"
-    app:checkedColor="@color/green"
-    app:lineColor="#fff"
-    app:lineWidth="1.2dp"
-    app:unCheckColor="#ff0" />
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

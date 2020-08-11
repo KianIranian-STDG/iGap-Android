@@ -1,19 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:clickable="true"
-  style="?backgroundColorSettingTheme_2"
-  android:orientation="vertical">
-
-  <TextView
-    android:id="@+id/smslt_txt_time"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp4"
-    android:paddingLeft="@dimen/dp20"
-    android:paddingTop="@dimen/dp4"
-    android:text="New Text"
-    style="?textSubColorSettingTheme"
-    android:textSize="@dimen/dp16" />
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dp1"
+    android:clickable="true"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/smslt_txt_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp4"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingTop="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
+        android:text="Images"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/dp20"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/smslt_time_shared_splitter"
+        android:background="?iGapDividerLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp1"
+        android:layout_marginLeft="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp4"
+        android:layout_marginBottom="@dimen/dp4"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/smslt_txt_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp4"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingTop="@dimen/dp4"
+        android:paddingRight="@dimen/dp10"
+        android:text="New Text"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/dp16" />
 </LinearLayout>

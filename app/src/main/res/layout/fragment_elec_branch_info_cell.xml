@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Container"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/billTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp16"
+            android:justificationMode="inter_word"
+            android:text="@string/elecBill_pay_billID"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp16"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:ellipsize="end"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/billValue" />
+
+        <View
+            android:id="@+id/followUp"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?attr/iGapDividerLine"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/billTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/billValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:justificationMode="inter_word"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp16"
+            android:gravity="left"
+            android:ellipsize="end"
+            android:text="this is value"
+            android:singleLine="true"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/billTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,24 +2,24 @@ package org.paygear.fragment;
 
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -28,7 +28,6 @@ import org.paygear.web.Web;
 import org.paygear.widget.OrderView;
 
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.model.PaginateList;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
@@ -109,19 +108,32 @@ public class PaymentHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_payment_history, container, false);
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
-        }
-        RaadToolBar appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.setTitle(getString(R.string.payment_history));
-        appBar.showBack();
+        rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.payment_history))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
         if (!mShowAppBar)
-            appBar.hide();
+            lytToolbar.setVisibility(View.GONE);
 
         mList = view.findViewById(R.id.list);
         mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        lytToolbar.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         DividerItemDecoration divider = new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
@@ -247,7 +259,7 @@ public class PaymentHistoryFragment extends Fragment {
             OrderView orderView = new OrderView(getContext());
             orderView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            orderView.setBackgroundResource(R.drawable.simple_selector);
+            orderView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
             orderView.setTag("OrderView");
             root.addView(orderView);
 

@@ -15,42 +15,50 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.support.multidex.MultiDexApplication;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.view.LayoutInflater;
+import android.util.Log;
+import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.multidex.MultiDex;
+
+import com.caspian.otpsdk.context.ApplicationContext;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
 import net.iGap.activities.ActivityMain;
+import net.iGap.api.webservice.JobServiceReconnect;
+import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.IGLog;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.interfaces.*;
+import net.iGap.model.PassCode;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
-import net.iGap.module.MultiDexUtils;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.interfaces.*;
 import net.iGap.proto.ProtoClientCondition;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestWrapper;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
-import org.paygear.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,15 +71,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
-import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import ir.metrix.sdk.Metrix;
-import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
-public class G extends MultiDexApplication {
+public class G extends ApplicationContext {
 
     public static final String IGAP = "/iGap";
     public static final String IMAGES = "/iGap Images";
@@ -85,14 +91,14 @@ public class G extends MultiDexApplication {
     public static final String IMAGE_USER = "/.image_user";
     public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static boolean ISOK = true;
+    public static boolean ISRealmOK = true;
     public static Context context;
     public static Handler handler;
     public static boolean isCalling = false;
+    @Deprecated
     public static boolean isVideoCallRinging = false;
     //public static OnRejectCallStatus onRejectCallStatus;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
-    public static LayoutInflater inflater;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
@@ -130,45 +136,14 @@ public class G extends MultiDexApplication {
     public static String CHAT_MESSAGE_TIME = "H:mm";
     public static String selectedLanguage = null;
     public static String symmetricMethod;
-    public static String appBarColor; // default color
-    public static String bubbleChatSend; // default color
-    public static String bubbleChatReceive; // default color
-    public static String fabBottom; // default color
-    public static String bubbleChatMusic; // default color
-    public static String textChatMusic;
-    public static String notificationColor;
-    public static String toggleButtonColor;
-    public static String roomSenderTextColor;
-    public static String SeenTickColor;
-    public static String attachmentColor;
-    public static String roomMessageTypeColor;
-    //    public static String iconColorBottomSheet;
-    public static String progressColor;
-    public static String headerTextColor;
-    public static String backgroundTheme;
-    public static String backgroundTheme_2;
-    public static String logLineTheme;
-    public static String voteIconTheme;
-    public static String textTitleTheme;
-    public static String textBubble;
-    public static String linkColor;
-    public static String txtIconCheck;
-    //    public static String textBubbleSend;
-    public static String textSubTheme;
-    public static String tintImage;
-    public static String lineBorder;
     public static Ipromote ipromote;
     //    public static String menuBackgroundColor;
-    public static String authorHash;
-    public static String displayName;
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
     public static boolean isUserStatusOnline = false;
     public static boolean isSecure = false;
-    public static boolean allowForConnect = true; //set allowForConnect to realm , if don't set client try for connect
     public static boolean userLogin = false;
-    public static boolean socketConnection = false;
     public static boolean canRunReceiver = false;
     public static boolean firstTimeEnterToApp = true; // use this field for get room list
     public static boolean firstEnter = true;
@@ -178,7 +153,7 @@ public class G extends MultiDexApplication {
     public static boolean latestMobileDataState;
     public static boolean showVoteChannelLayout = true;
     public static boolean showSenderNameInGroup = false;
-    public static boolean needGetSignalingConfiguration = true;
+    @Deprecated
     public static boolean isInCall = false;
     public static boolean isShowRatingDialog = false;
     public static boolean isUpdateNotificaionColorMain = false;
@@ -191,10 +166,7 @@ public class G extends MultiDexApplication {
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
     public static boolean isLinkClicked = false;
-    public static boolean isMplActive = false;
-    public static boolean isWalletActive = false;
     public static boolean isWalletRegister = false;
-    public static boolean isDarkTheme = false;
     public static int themeColor;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;
@@ -203,7 +175,8 @@ public class G extends MultiDexApplication {
     public static int maxChatBox = 0;
     public static int bothChatDeleteTime = DEFAULT_BOTH_CHAT_DELETE_TIME;
     public static long currentTime;
-    public static long userId;
+    public static String serverHashContact = null;
+    public static String localHashContact = null;
     public static long latestHearBeatTime = System.currentTimeMillis();
     public static long currentServerTime;
     public static long latestResponse = System.currentTimeMillis();
@@ -216,17 +189,15 @@ public class G extends MultiDexApplication {
     public static OnConnectionChangeState onConnectionChangeState;
     public static OnConnectionChangeStateChat onConnectionChangeStateChat;
     public static OnUpdating onUpdating;
-    public static OnReceiveInfoLocation onReceiveInfoLocation;
-    public static OnUserRegistration onUserRegistration;
+    /*public static OnReceiveInfoLocation onReceiveInfoLocation;*/
+    /*public static OnUserRegistration onUserRegistration;*/
     public static OnClientSearchRoomHistory onClientSearchRoomHistory;
-    public static OnUserVerification onUserVerification;
-    public static OnReceivePageInfoTOS onReceivePageInfoTOS;
-    public static OnReceivePageInfoWalletAgreement onReceivePageInfoWalletAgreement;
+    /*public static OnUserVerification onUserVerification;*/
     public static OnUserLogin onUserLogin;
-    public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;
-    public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;
+    /*public static OnUserProfileSetEmailResponse onUserProfileSetEmailResponse;*/
+    /*public static OnUserProfileSetGenderResponse onUserProfileSetGenderResponse;*/
     public static OnUserProfileSetNickNameResponse onUserProfileSetNickNameResponse;
-    public static OnInfoCountryResponse onInfoCountryResponse;
+    /*public static OnInfoCountryResponse onInfoCountryResponse;*/
     public static OnInfoTime onInfoTime;
     public static OnUserContactEdit onUserContactEdit;
     public static OnUserContactDelete onUserContactdelete;
@@ -243,28 +214,21 @@ public class G extends MultiDexApplication {
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;
     public static OnGroupAddMember onGroupAddMember;
-    public static OnGroupAddAdmin onGroupAddAdmin;
-    public static OnGroupAddModerator onGroupAddModerator;
     //    public static OnGroupClearMessage onGroupClearMessage;
-    public static OnGroupEdit onGroupEdit;
-    public static OnGroupKickAdmin onGroupKickAdmin;
-    public static OnGroupKickMember onGroupKickMember;
-    public static OnGroupKickModerator onGroupKickModerator;
+    /*public static OnGroupEdit onGroupEdit;*/
+//    public static OnGroupKickMember onGroupKickMember;
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
-    public static OnChangeUserPhotoListener onChangeUserPhotoListener;
     public static OnClearChatHistory onClearChatHistory;
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
-    public static OnUserDelete onUserDelete;
-    public static OnUserProfileCheckUsername onUserProfileCheckUsername;
-    public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
+    /*public static OnUserProfileCheckUsername onUserProfileCheckUsername;*/
+    /*public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;*/
     public static OnGroupGetMemberList onGroupGetMemberList;
-    public static OnUserGetDeleteToken onUserGetDeleteToken;
     public static OnGroupDelete onGroupDelete;
     public static OpenFragment onConvertToGroup;
     public static OnChatConvertToGroup onChatConvertToGroup;
@@ -276,31 +240,27 @@ public class G extends MultiDexApplication {
     public static OnSetActionInRoom onSetActionInRoom;
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;
-    public static OnUserSessionLogout onUserSessionLogout;
+    /*public static OnUserSessionLogout onUserSessionLogout;*/
     //    public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
     public static OnChannelCreate onChannelCreate;
     public static OnChannelDelete onChannelDelete;
     public static OnChannelLeft onChannelLeft;
     public static OnChannelAddMember onChannelAddMember;
-    public static OnChannelKickMember onChannelKickMember;
-    public static OnChannelAddAdmin onChannelAddAdmin;
-    public static OnChannelKickAdmin onChannelKickAdmin;
-    public static OnChannelAddModerator onChannelAddModerator;
-    public static OnChannelKickModerator onChannelKickModerator;
     public static OnChannelGetMemberList onChannelGetMemberList;
-    public static OnChannelEdit onChannelEdit;
+    /*public static OnChannelEdit onChannelEdit;*/
     public static OnChannelAvatarAdd onChannelAvatarAdd;
     public static OnChannelAvatarDelete onChannelAvatarDelete;
     public static OnChannelCheckUsername onChannelCheckUsername;
-    public static OnGroupCheckUsername onGroupCheckUsername;
-    public static OnGroupUpdateUsername onGroupUpdateUsername;
+    /*public static OnGroupCheckUsername onGroupCheckUsername;*/
+    /*public static OnGroupUpdateUsername onGroupUpdateUsername;*/
     public static OnChannelUpdateUsername onChannelUpdateUsername;
     public static OnGroupAvatarDelete onGroupAvatarDelete;
-    public static OnRefreshActivity onRefreshActivity;
+    /*public static OnRefreshActivity onRefreshActivity;*/
     //    public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
     public static OnStickerDownloaded onStickerDownloaded;
+    public static OnStickerDownload onStickerDownload;
     public static OnUserInfoMyClient onUserInfoMyClient;
     public static OnChannelAddMessageReaction onChannelAddMessageReaction;
     public static OnChannelGetMessagesStats onChannelGetMessagesStats;
@@ -311,36 +271,39 @@ public class G extends MultiDexApplication {
     public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
-    public static OnClientJoinByUsername onClientJoinByUsername;
     public static OnClientResolveUsername onClientResolveUsername;
     public static OnClientSubscribeToRoom onClientSubscribeToRoom;
     public static OnClientUnsubscribeFromRoom onClientUnsubscribeFromRoom;
-    public static OnGroupRemoveUsername onGroupRemoveUsername;
-    public static OnGroupRevokeLink onGroupRevokeLink;
+    /*public static OnGroupRemoveUsername onGroupRemoveUsername;*/
+    /*public static OnGroupRevokeLink onGroupRevokeLink;*/
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;
     public static OnGetWallpaper onGetWallpaper;
-    public static OnTwoStepPassword onTwoStepPassword;
-    public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;
-    public static OnSecurityCheckPassword onSecurityCheckPassword;
+    public static OnGetWallpaper onGetProfileWallpaper;
+    /*public static OnTwoStepPassword onTwoStepPassword;*/
+    /*public static TwoStepSecurityConfirmEmail twoStepSecurityConfirmEmail;*/
+    /*public static OnSecurityCheckPassword onSecurityCheckPassword;*/
     public static OnRecoverySecurityPassword onRecoverySecurityPassword;
     public static OnRecoveryEmailToken onRecoveryEmailToken;
-    public static OnQrCodeNewDevice onQrCodeNewDevice;
+    /*public static OnQrCodeNewDevice onQrCodeNewDevice;*/
     public static OnVerifyNewDevice onVerifyNewDevice;
     public static OnPushLoginToken onPushLoginToken;
     public static OnPushTwoStepVerification onPushTwoStepVerification;
-    public static OnBackgroundChanged onBackgroundChanged;
     public static IClientSearchUserName onClientSearchUserName;
+    @Deprecated
     public static OnCallLeaveView onCallLeaveView;
+    @Deprecated
     public static OnVideoCallFrame onVideoCallFrame;
+    @Deprecated
     public static ICallFinish iCallFinishChat;
+    @Deprecated
     public static ICallFinish iCallFinishMain;
     //    public static IMainFinish iMainFinish;
 //    public static IActivityFinish iActivityFinish;
     public static OnBlockStateChanged onBlockStateChanged;
     public static OnContactsGetList onContactsGetList;
-    public static OnCallLogClear onCallLogClear;
+    //public static OnCallLogClear onCallLogClear;
     public static OnMapUsersGet onMapUsersGet;
     public static OnPinedMessage onPinedMessage;
     //    public static OnSelectMenu onSelectMenu;
@@ -360,7 +323,6 @@ public class G extends MultiDexApplication {
     public static ISendPosition iSendPositionChat;
     public static ITowPanModDesinLayout iTowPanModDesinLayout;
     public static OnDateChanged onDateChanged;
-    public static IOnBackPressed onBackPressedExplorer;
     public static OnLocationChanged onLocationChanged;
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
@@ -376,38 +338,45 @@ public class G extends MultiDexApplication {
     public static OnPayment onPayment;
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
-    public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;
+    public static OnContactImport onContactImport;
+    public static OnMplTransaction onMplTransaction;
+    public static OnMplTransactionInfo onMplTransactionInfo;
+    /*public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;*/
+    @Deprecated
     public static ISignalingOffer iSignalingOffer;
+    @Deprecated
     public static ISignalingRinging iSignalingRinging;
+    @Deprecated
     public static ISignalingAccept iSignalingAccept;
+    @Deprecated
     public static ISignalingCandidate iSignalingCandidate;
+    @Deprecated
     public static ISignalingLeave iSignalingLeave;
+    @Deprecated
     public static ISignalingSessionHold iSignalingSessionHold;
     public static ISignalingGetCallLog iSignalingGetCallLog;
+    @Deprecated
     public static ISignalingCallBack iSignalingCallBack;
+    @Deprecated
     public static ISignalingErrore iSignalingErrore;
-    public static Typeface typeface_IRANSansMobile;
-    public static Typeface typeface_IRANSansMobile_Bold;
-    public static Typeface typeface_Fontico;
-    public static Typeface typeface_neuropolitical;
-    public static boolean isPassCode;
-    public static FingerPrint fingerPrint;
     public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
-    public static boolean isFirstPassCode = true; // for check passCode
+    public static boolean isFirstPassCode = true; // for check passCodeG.backgroundTheme
     public static boolean isTimeWhole = false;
-    public static FragmentManager fragmentManager;
     public static Account iGapAccount;
     public static Card selectedCard = null;
     public static long cardamount;
     public static String jwt = null;
-    public static boolean isBluetoothConnected = false;
-    public static boolean isHandsFreeConnected = false;
-    public static SpeakerControlListener speakerControlListener;
+    /*public static boolean isBluetoothConnected = false;
+    public static boolean isHandsFreeConnected = false;*/
+    /*public static SpeakerControlListener speakerControlListener;*/
+    @Deprecated
     public static VideoCallListener videoCallListener;
     public static RefreshWalletBalance refreshWalletBalance;
+    @Deprecated
     public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
+    @Deprecated
     public static boolean isWebRtcConnected = false;
     public static boolean isDepricatedApp = false;
     public static int rotationState;
@@ -415,9 +384,13 @@ public class G extends MultiDexApplication {
     public static boolean appChangeRinggerMode = false;
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
+    public static boolean isNeedToCheckProfileWallpaper = false;
+    public static String nationalCode;
 
-    public static OnCountryCode onCountryCode;
-    //public static LocationListenerResponse locationListenerResponse;
+    public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
+    public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();
+
+    public static String downloadDirectoryPath;
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {
@@ -429,33 +402,28 @@ public class G extends MultiDexApplication {
 
     public static void refreshRealmUi() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.refresh();
-            realm.close();
+            refreshUiRealm();
         } else {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.refresh();
-                    realm.close();
+                    refreshUiRealm();
                 }
             });
         }
     }
 
-    public static int getTheme2BackgroundColor() {
-        return makeColorTransparent100(backgroundTheme_2);
-    }
-
-    public static int getThemeBackgroundColor() {
-        return makeColorTransparent100(backgroundTheme);
+    private static void refreshUiRealm() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            realm.refresh();
+        });
     }
 
     public static Context updateResources(Context baseContext) {
         if (G.selectedLanguage == null) {
-            G.selectedLanguage = Locale.getDefault().getLanguage();
+            G.selectedLanguage = "fa";
         }
+
         Locale locale = new Locale(G.selectedLanguage);
         Locale.setDefault(locale);
 
@@ -479,65 +447,124 @@ public class G extends MultiDexApplication {
         return baseContext;
     }
 
+    public static String getNationalCode() {
+
+        if (G.nationalCode == null)
+            return DbManager.getInstance().doRealmTask(realm -> {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null)
+                    G.nationalCode = realmUserInfo.getNationalCode();
+                return G.nationalCode;
+            });
+        else
+            return G.nationalCode;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        RaadApp.onCreate(getApplicationContext());
-        LooperThreadHelper.getInstance();
 
-        Metrix.initialize(this, "jpbnabzrmeqvxme");
-
-        // dont remove below line please
-        if (!BuildConfig.DEBUG && BuildConfig.Token.length() > 1) {
-            Metrix.getInstance().setDefaultTracker(BuildConfig.Token);
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.i("Splash activity on destroy");
         }
 
-        Metrix.getInstance().enableLogging(true);
-//        Metrix.getInstance().setLogLevel(Log.DEBUG);
-        Metrix.getInstance().setEventUploadPeriodMillis(30000);
+        context = getApplicationContext();
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
+        CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
 
-        // not exist in dashboard
-        Metrix.getInstance().setScreenFlowsAutoFill(true);
+        JobServiceReconnect.scheduleJob(getApplicationContext());
+        PassCode.initPassCode(getApplicationContext());
+
+        AndroidUtils.density = getApplicationContext().getResources().getDisplayMetrics().density;
+
+        //init account manager for handle multi account
+
+        try {
+            Realm.init(this);
+        } catch (Exception e) {
+            G.ISRealmOK = false;
+        } catch (Error e) {
+            G.ISRealmOK = false;
+        }
+        AccountManager.initial(this);
+
+        LooperThreadHelper.getInstance();
+        Metrix.initialize(this, "YOUR_API_KEY");
+        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
+
+        if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
+//            Metrix.getInstance().setStore(BuildConfig.Store);
+//            Metrix.getInstance().setAppSecret();
+        }
+
+        handler = new Handler();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
+                RaadApp.onCreate(getApplicationContext());
+                WebBase.apiKey = "YOUR_API_KEY";
             }
         }).start();
 
-        context = getApplicationContext();
-        handler = new Handler();
-        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        Raad.init(getApplicationContext());
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
-
         try {
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mainRingerMode = am.getRingerMode();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         new StartupActions();
-     /*   try {
-            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
-            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
-        } catch (Exception e) {
-        }*/
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+        downloadDirectoryPath = context.getFilesDir().getAbsolutePath() + "/stickers";
+
+        if (!new File(downloadDirectoryPath).exists())
+            new File(downloadDirectoryPath).mkdirs();
+
+        Log.wtf(this.getClass().getName(), "onCreate");
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.i("------------------- CLIENT INFO -------------------");
+            IGLog.i("- account cunt ->       " + AccountManager.getInstance().getUserAccountList().size() + "                         -");
+            IGLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
+            IGLog.i("------------------- CLIENT INFO -------------------");
+        }
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(updateResources(base));
-        new MultiDexUtils().getLoadedExternalDexClasses(this);
+        MultiDex.install(this);
+        /*new MultiDexUtils().getLoadedExternalDexClasses(this);*/
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        updateResources(getBaseContext());
+        updateResources(this);
+        try {
+            AndroidUtils.checkDisplaySize(G.context, newConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showToast(String message) {
+        G.handler.post(() -> Toast.makeText(G.context, message, Toast.LENGTH_SHORT).show());
+    }
+
+    public static void runOnUiThread(Runnable runnable, long delay) {
+        if (handler != null)
+            handler.postDelayed(runnable, delay);
+    }
+
+    public static void runOnUiThread(Runnable runnable) {
+        if (handler != null)
+            handler.post(runnable);
+    }
+
+    public static void cancelRunOnUiThread(Runnable runnable) {
+        if (handler != null)
+            handler.removeCallbacks(runnable);
     }
 }

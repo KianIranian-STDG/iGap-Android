@@ -10,10 +10,7 @@
 
 package net.iGap.realm;
 
-import android.util.Log;
-
-import com.google.protobuf.InvalidProtocolBufferException;
-
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingGetLog;
 
 import java.util.List;
@@ -27,43 +24,39 @@ public class RealmCallLog extends RealmObject {
 
     @PrimaryKey
     private long id;
-    private String name;
-    private long time;
-    private byte[] logProto;
+    private long logId;
+    private String type;
+    private String status;
+    private RealmRegisteredInfo user;
+    private int offerTime;
+    private int duration;
+    // log id
 
-    public static void addLog(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog, Realm realm) {
+    private static void addLog(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog, Realm realm) {
         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
         if (realmCallLog == null) {
             realmCallLog = realm.createObject(RealmCallLog.class, callLog.getId());
         }
-
-        realmCallLog.setLogProto(callLog);
-        realmCallLog.setName(callLog.getPeer().getDisplayName());
-        realmCallLog.setTime(callLog.getOfferTime());
+        realmCallLog.setType(callLog.getType().toString());
+        realmCallLog.setStatus(callLog.getStatus().toString());
+        realmCallLog.setUser(RealmRegisteredInfo.putOrUpdate(realm, callLog.getPeer()));
+        realmCallLog.setOfferTime(callLog.getOfferTime());
+        realmCallLog.setDuration(callLog.getDuration());
+        realmCallLog.setLogId(callLog.getLogId());
     }
 
     public static void addLogList(final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> list) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
-                    addLog(item, realm);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item : list) {
+                addLog(item, realm);
             }
         });
-        realm.close();
     }
 
     public static void clearCallLog(final long clearId) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
-            }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
         });
-        realm.close();
     }
 
     public long getId() {
@@ -74,37 +67,51 @@ public class RealmCallLog extends RealmObject {
         this.id = id;
     }
 
-    public long getTime() {
-        return time;
+    public String getType() {
+        return type;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getName() {
-        return name;
+    public String getStatus() {
+        return status;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog getLogProto() {
-        try {
-            return logProto == null ? null : (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.parseFrom(logProto));
-        } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            return null;
-
-        } catch (Exception e) {
-            return null;
-        }
-        return null;
+    public RealmRegisteredInfo getUser() {
+        return user;
     }
 
-    public void setLogProto(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog logProto) {
-        this.logProto = logProto.toByteArray();
+    public void setUser(RealmRegisteredInfo user) {
+        this.user = user;
+    }
+
+    public int getOfferTime() {
+        return offerTime;
+    }
+
+    public void setOfferTime(int offerTime) {
+        this.offerTime = offerTime;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public long getLogId() {
+        return logId;
+    }
+
+    public void setLogId(long logId) {
+        this.logId = logId;
     }
 }

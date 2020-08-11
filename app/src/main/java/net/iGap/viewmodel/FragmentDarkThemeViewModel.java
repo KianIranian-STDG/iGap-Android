@@ -2,19 +2,19 @@ package net.iGap.viewmodel;
 
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
-import android.databinding.InverseMethod;
-import android.databinding.ObservableField;
 import android.view.View;
 import android.widget.TimePicker;
 
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
-import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.viewmodel.FragmentThemColorViewModel.resetApp;
 
 /*
  * This is the source code of iGap for Android
@@ -25,22 +25,22 @@ import static net.iGap.viewmodel.FragmentThemColorViewModel.resetApp;
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
-public class FragmentDarkThemeViewModel {
+public class FragmentDarkThemeViewModel extends ViewModel {
 
     private boolean isDisable;
     private boolean isAuto;
     private boolean isScheduled;
     private SharedPreferences sharedPreferences;
-    private FragmentDarkTheme fragmentDarkTheme;
 
     public ObservableField<String> callbackFromTime = new ObservableField<>("");
     public ObservableField<String> callbackToTime = new ObservableField<>("");
     public ObservableField<Integer> isScheduledDarkTheme = new ObservableField<>();
     public ObservableField<Integer> isAutoDarkTheme = new ObservableField<>();
     public ObservableField<Integer> isDisableDarkTheme = new ObservableField<>();
+    public MutableLiveData<Boolean> resetApp = new MutableLiveData<>();
 
-    public FragmentDarkThemeViewModel(FragmentDarkTheme fragmentDarkTheme) {
-        this.fragmentDarkTheme = fragmentDarkTheme;
+
+    public FragmentDarkThemeViewModel() {
         getInfo();
     }
 
@@ -88,8 +88,8 @@ public class FragmentDarkThemeViewModel {
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
         editor.apply();
 
-        Theme.setThemeColor();
-        resetApp();
+        /*Theme.setThemeColor();*/
+        resetApp.setValue(true);
 
     }
 

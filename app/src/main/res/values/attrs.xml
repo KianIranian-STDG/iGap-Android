@@ -1,124 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="CircleImageView">
-    <attr name="civ_border_width" format="dimension" />
-    <attr name="civ_border_color" format="color" />
-    <attr name="civ_border_overlay" format="boolean" />
-    <attr name="civ_fill_color" format="color" />
-  </declare-styleable>
 
-  <declare-styleable name="GifMoviewView">
-    <attr name="gif" format="reference" />
-    <attr name="paused" format="boolean" />
-  </declare-styleable>
+    <declare-styleable name="CollapsingImageBehavior">
+        <attr name="collapsedTarget" format="reference" />
+    </declare-styleable>
 
-  <declare-styleable name="CustomTheme">
-    <attr name="gifMoviewViewStyle" format="reference" />
-  </declare-styleable>
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_padding" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_fill_color" format="color" />
+    </declare-styleable>
 
-  <declare-styleable name="RatioImageView">
-    <attr name="groupId" format="string" />
-    <attr name="adjustWidth" format="boolean" />
-  </declare-styleable>
+    <declare-styleable name="PhotoEditorView">
+        <attr name="photo_src" format="integer" />
+    </declare-styleable>
 
-  <declare-styleable name="ArcMenu">
-    <attr name="menu_scr" format="integer" />
-    <attr name="menu_color" format="reference|color" />
-    <attr name="menu_ripple_color" format="color" />
-    <attr name="menu_radius" format="dimension" />
-    <attr name="menu_margin" format="dimension" />
-    <attr name="menu_open" format="enum">
-      <enum name="arc_left" value="0" />
-      <enum name="arc_right" value="1" />
-    </attr>
-    <attr name="menu_animation_time" format="integer" />
-    <attr name="menu_elevation" format="dimension" />
-    <attr name="menu_angle" format="dimension" />
-    <attr name="menu_config" format="boolean" />
-  </declare-styleable>
+    <declare-styleable name="ColorSeekBar">
+        <attr name="colorSeeds" format="reference" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="barHeight" format="dimension" />
+        <attr name="thumbBorder" format="dimension" />
+        <attr name="thumbBorderColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="GifMoviewView">
+        <attr name="gif" format="reference" />
+        <attr name="paused" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomTheme">
+        <attr name="gifMoviewViewStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="RatioImageView">
+        <attr name="groupId" format="string" />
+        <attr name="adjustWidth" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="ArcMenu">
+        <attr name="menu_scr" format="integer" />
+        <attr name="menu_color" format="reference|color" />
+        <attr name="menu_ripple_color" format="color" />
+        <attr name="menu_radius" format="dimension" />
+        <attr name="menu_margin" format="dimension" />
+        <attr name="menu_open" format="enum">
+            <enum name="arc_left" value="0" />
+            <enum name="arc_right" value="1" />
+        </attr>
+        <attr name="menu_animation_time" format="integer" />
+        <attr name="menu_elevation" format="dimension" />
+        <attr name="menu_angle" format="dimension" />
+        <attr name="menu_config" format="boolean" />
+    </declare-styleable>
+
+    <!--ripple library-->
+    <declare-styleable name="RippleView">
+        <attr name="rv_alpha" format="integer" />
+        <attr name="rv_framerate" format="integer" />
+        <attr name="rv_rippleDuration" format="integer" />
+        <attr name="rv_zoomDuration" format="integer" />
+        <attr name="rv_color" format="color" />
+        <attr name="rv_centered" format="boolean" />
+        <attr name="rv_type" format="enum">
+            <enum name="simpleRipple" value="0" />
+            <enum name="doubleRipple" value="1" />
+            <enum name="rectangle" value="2" />
+        </attr>
+        <attr name="rv_ripplePadding" format="dimension" />
+        <attr name="rv_zoom" format="boolean" />
+        <attr name="rv_zoomScale" format="float" />
+
+    </declare-styleable>
+
+    <declare-styleable name="PaintImageView">
+        <attr name="strokeColor" format="color" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="inEditMode" format="boolean" />
+        <attr name="touchTolerance" format="float" />
+    </declare-styleable>
+
+    <!--=======================custom theme=====================-->
+    <attr name="colorPrimaryLight" format="reference|color" />
+    <attr name="colorAccentDark" format="reference|color" />
+    <!--general color-->
+    <attr name="rootBackgroundColor" format="reference|color" />
+    <attr name="iGapTitleTextColor" format="reference|color" />
+    <attr name="iGapSubtitleTextColor" format="reference|color" />
+    <attr name="iGapPrimaryTextColor" format="reference|color" />
+    <attr name="iGapDividerLine" format="reference|color" />
+    <attr name="iGapHintTextColor" format="reference|color" />
+    <attr name="iGapButtonColor" format="reference|color" />
+    <attr name="iGapButtonTextColor" format="reference|color" />
+    <attr name="iGapPrimaryIconTextColor" format="reference|color" />
+    <attr name="iGapLogoutButtonColor" format="reference|color" />
+    <attr name="iGapCardViewColor" format="reference|color" />
+    <attr name="iGapEditTxtColor" format="reference|color" />
+    <attr name="iGapRadioButtonUncheckedColor" format="reference|color" />
+    <!--chat item color-->
+    <attr name="iGapReceivedMessageTextColor" format="reference|color" />
+    <attr name="iGapReceivedOtherTextColor" format="reference|color" />
+    <attr name="iGapReceivedReplayColor" format="reference|color" />
+    <attr name="iGapSendMessageTextColor" format="reference|color" />
+    <attr name="iGapSendMessageOtherTextColor" format="reference|color" />
+    <attr name="iGapSendMessageBubbleColor" format="reference|color" />
+    <attr name="iGapSendReplayColor" format="reference|color" />
+    <attr name="iGapLinkColor" format="reference|color" />
+    <attr name="iGapDefaultChatBackground" format="reference|color" />
+    <!--bottom navigation item icon color-->
+    <attr name="iGapBottomNavigationIconStart" format="reference|color" />
+    <attr name="iGapBottomNavigationIconEnd" format="reference|color" />
+    <!--for support theme under android version 21-->
+    <attr name="iGapToolbarBackground" format="reference" />
+    <attr name="iGapSpinnerShape" format="reference" />
+    <attr name="iGapToolbarBackgroundSharp" format="reference" />
+    <attr name="iGapAvatarBackground" format="reference" />
+    <attr name="iGapReceivedReplayBackground" format="reference" />
+    <attr name="iGapSendReplayBackground" format="reference" />
+    <attr name="iGapButtonSelector" format="reference" />
+    <attr name="iGapBottomSheetBackground" format="reference" />
+    <attr name="iGapTopRoundButtonPrimary" format="reference" />
+    <attr name="iGapCardToCardBackground" format="reference" />
+    <attr name="iGapCardToCardButtonBackground" format="reference" />
+    <attr name="iGapCardToCardButton" format="reference" />
+    <attr name="iGapCardToCardIconBackground" format="reference" />
+    <attr name="iGapBottomSheetHeaderLine" format="reference" />
+    <attr name="iGapScrollerHandler" format="reference" />
+    <attr name="iGapChatSendMessageBackground" format="reference" />
+    <attr name="iGapCheckButton" format="reference" />
+    <attr name="iGapProfileStroke" format="reference" />
+    <attr name="iGapProfileToolbar" format="reference" />
+    <attr name="iGapTimerPinter" format="reference" />
+
+    <!--=======================custom theme=====================-->
 
 
-  <declare-styleable name="SelectableRoundedImageView">
-    <attr name="sriv_left_top_corner_radius" format="dimension" />
-    <attr name="sriv_right_top_corner_radius" format="dimension" />
-    <attr name="sriv_left_bottom_corner_radius" format="dimension" />
-    <attr name="sriv_right_bottom_corner_radius" format="dimension" />
-    <attr name="sriv_border_width" format="dimension" />
-    <attr name="sriv_border_color" format="color" />
-    <attr name="sriv_oval" format="boolean" />
-    <attr name="android:scaleType" />
-  </declare-styleable>
+    <!--bottom navigation-->
+    <declare-styleable name="BottomNavigation">
+        <attr name="background_color" format="color" />
+        <attr name="corner_radius" format="integer" />
+    </declare-styleable>
 
+    <declare-styleable name="TabItem">
+        <attr name="selected_icon" format="reference" />
+        <attr name="unselected_icon" format="reference" />
+        <attr name="dark_selected_icon" format="reference" />
+        <attr name="dark_unselected_icon" format="reference" />
+        <attr name="item_text" format="reference" />
+        <attr name="item_text_size" format="dimension" />
+        <attr name="haveAvatarImage" format="boolean" />
+        <attr name="hasUnreadBadge" format="boolean" />
+    </declare-styleable>
 
-  <!--ripple library-->
-  <declare-styleable name="RippleView">
-    <attr name="rv_alpha" format="integer" />
-    <attr name="rv_framerate" format="integer" />
-    <attr name="rv_rippleDuration" format="integer" />
-    <attr name="rv_zoomDuration" format="integer" />
-    <attr name="rv_color" format="color" />
-    <attr name="rv_centered" format="boolean" />
-    <attr name="rv_type" format="enum">
-      <enum name="simpleRipple" value="0" />
-      <enum name="doubleRipple" value="1" />
-      <enum name="rectangle" value="2" />
-    </attr>
-    <attr name="rv_ripplePadding" format="dimension" />
-    <attr name="rv_zoom" format="boolean" />
-    <attr name="rv_zoomScale" format="float" />
+    <declare-styleable name="PlaqueView">
+        <attr name="pv_edit_mode" format="boolean" />
+    </declare-styleable>
 
-  </declare-styleable>
+    <!--circle-->
+    <declare-styleable name="CircleSeekBar">
+        <attr name="csb_progress" format="integer" />
+        <attr name="csb_min" format="integer" />
+        <attr name="csb_max" format="integer" />
+        <attr name="csb_step" format="integer" />
 
-  <!--NavigationTabStrip library-->
-  <declare-styleable name="NavigationTabStrip">
-    <attr name="nts_color" format="color" />
-    <attr name="nts_size" format="dimension" />
-    <attr name="nts_weight" format="dimension" />
-    <attr name="nts_factor" format="float" />
-    <attr name="nts_titles" format="reference" />
-    <attr name="nts_type" format="enum">
-      <enum name="line" value="0" />
-      <enum name="point" value="1" />
-    </attr>
-    <attr name="nts_gravity" format="enum">
-      <enum name="bottom" value="0" />
-      <enum name="top" value="1" />
-    </attr>
-    <attr name="nts_typeface" format="string" />
-    <attr name="nts_corners_radius" format="dimension" />
-    <attr name="nts_animation_duration" format="integer" />
-    <attr name="nts_inactive_color" format="color" />
-    <attr name="nts_active_color" format="color" />
-  </declare-styleable>
+        <attr name="csb_thumbDrawable" format="reference" />
+        <attr name="csb_thumbSize" format="dimension" />
 
+        <attr name="csb_progressColor" format="color" />
+        <attr name="csb_progressWidth" format="dimension" />
 
-  <!--=======================custom theme=====================-->
+        <attr name="csb_arcColor" format="color" />
+        <attr name="csb_arcWidth" format="dimension" />
 
-  <attr name="pageBackgroundTheme" format="reference" />
-  <attr name="textColorTheme" format="reference" />
+        <attr name="csb_textSize" format="dimension" />
+        <attr name="csb_textColor" format="color" />
 
-  <!--Menu-->
-  <attr name="textColorMenuTheme" format="reference" />
-  <attr name="textColorBottomSheet" format="reference" />
-  <attr name="iconColorMenuTheme" format="reference" />
-  <attr name="backgroundColorMenuTheme" format="reference" />
+        <attr name="csb_isShowText" format="boolean" />
 
-  <!--setting-->
+    </declare-styleable>
 
-  <attr name="backgroundColorSettingTheme" format="reference" />
-  <attr name="backgroundColorSettingTheme_2" format="reference" />
-  <attr name="textTitleColorSettingTheme" format="reference" />
-  <attr name="textSubColorSettingTheme" format="reference" />
-  <attr name="lineColorSettingTheme" format="reference" />
-  <attr name="hintColorSettingTheme" format="reference" />
-  <attr name="textBackgroundColor" format="reference" />
-  <attr name="textBackgroundColor_2" format="reference" />
-  <attr name="textSecurityColor" format="reference" />
-  <attr name="textColorCall" format="reference" />
-  <attr name="backgroundColorCall" format="reference" />
-  <attr name="emojiChat" format="reference" />
-  <attr name="backgroundSubChatTheme" format="reference" />
-  <attr name="fabButtoniGap" format="reference" />
-  <attr name="backgroundPassCode" format="reference" />
+    <declare-styleable name="AudioWave">
+        <attr name="waveColor" format="color" />
+        <attr name="chunkWidth" format="dimension" />
+        <attr name="chunkHeight" format="dimension" />
+        <attr name="minChunkHeight" format="dimension" />
+        <attr name="chunkRadius" format="dimension" />
+        <attr name="chunkSpacing" format="dimension" />
+        <attr name="progress" format="float" />
+        <attr name="animateExpansion" format="boolean" />
+        <attr name="touchable" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="BannerSlider">
+        <attr name="slider_hideIndicators" format="boolean" />
+        <attr name="slider_indicatorSize" format="dimension" />
+        <attr name="slider_selectedSlideIndicator" format="reference" />
+        <attr name="slider_unselectedSlideIndicator" format="reference" />
+        <attr name="slider_animateIndicators" format="boolean" />
+        <attr name="slider_interval" format="integer" />
+        <attr name="slider_loopSlides" format="boolean" />
+        <attr name="slider_defaultBanner" format="integer" />
+        <attr name="slider_emptyView" format="reference" />
+    </declare-styleable>
+
+    <attr name="wavesViewStyle" format="reference" />
+
+    <declare-styleable name="WavesView">
+        <attr name="wavesColor" format="color" />
+        <attr name="waveStrokeWidth" format="dimension" />
+        <attr name="waveGap" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomCheckBox">
+        <attr name="duration" format="integer" />
+        <attr name="stroke_width" format="dimension" />
+        <attr name="color_tick" format="color" />
+        <attr name="color_checked" format="color" />
+        <attr name="color_unchecked" format="color" />
+        <attr name="color_unchecked_stroke" format="color" />
+        <attr name="small_tick" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="RadiusImageView">
+        <attr name="riv_radius" format="dimension" />
+        <attr name="riv_radius_right_side" format="boolean" />
+    </declare-styleable>
 
 </resources>

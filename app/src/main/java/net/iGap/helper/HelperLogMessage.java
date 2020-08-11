@@ -1,16 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -24,13 +24,16 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
-import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SerializationUtils;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
@@ -76,7 +79,7 @@ public class HelperLogMessage {
         return SerializationUtils.serialize(log);
     }
 
-    public static SpannableStringBuilder deserializeLog(byte[] logs, boolean withLink) {
+    public static SpannableStringBuilder deserializeLog(Context context, byte[] logs, boolean withLink) {
 
 
         if (logs == null) {
@@ -85,24 +88,34 @@ public class HelperLogMessage {
         try {
             StructMyLog log = (StructMyLog) SerializationUtils.deserialize(logs);
             if (log != null) {
-                return extractLog(log, withLink);
+                return extractLog(context, log, withLink);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             return new SpannableStringBuilder("");
         }
 
         return new SpannableStringBuilder("");
     }
 
-    private static SpannableStringBuilder extractLog(StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
-        Realm realm = Realm.getDefaultInstance();
-        String authorName = getAuthorName(log, realm);
-        String targetName = getTargetName(log, realm);
-        String finalTypeRoom = getRoomTypeString(log, realm);
-        String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
-        realm.close();
-        return getLogMessage(authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+    private static SpannableStringBuilder extractLog(Context context, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
+        SpannableStringBuilder spannableStringBuilder = DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                String authorName = getAuthorName(log, realm);
+                String targetName = getTargetName(log, realm);
+                String finalTypeRoom = getRoomTypeString(log, realm);
+                String LogMessageTypeString = getLogTypeString(ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType(), ProtoGlobal.RoomMessage.Author.parseFrom(log.author));
+                return getLogMessage(context, authorName, targetName, finalTypeRoom, LogMessageTypeString, log, withLink);
+            } catch (Exception e) {
+                return null;
+            }
+        });
+
+        if (spannableStringBuilder == null) {
+            throw new InvalidProtocolBufferException("Bug");
+        } else {
+            return spannableStringBuilder;
+        }
     }
 
     private static String getAuthorName(StructMyLog log, Realm realm) throws InvalidProtocolBufferException {
@@ -196,7 +209,7 @@ public class HelperLogMessage {
                 messageID = R.string.Room_Deleted_log;
                 break;
             case MISSED_VOICE_CALL:
-                if (G.authorHash.equals(author.getHash())) {
+                if (RealmUserInfo.getCurrentUserAuthorHash().equals(author.getHash())) {
                     messageID = R.string.not_answerd_call;
                 } else {
                     messageID = R.string.MISSED_VOICE_CALL;
@@ -224,7 +237,7 @@ public class HelperLogMessage {
         return "";
     }
 
-    private static SpannableStringBuilder getLogMessage(String authorName, String targetName, String finalTypeRoom, String LogMessageTypeString, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
+    private static SpannableStringBuilder getLogMessage(Context context, String authorName, String targetName, String finalTypeRoom, String LogMessageTypeString, StructMyLog log, boolean withLink) throws InvalidProtocolBufferException {
 
 //        if (authorName == null || authorName.length() == 0) {
 //            return "";
@@ -252,9 +265,9 @@ public class HelperLogMessage {
         SpannableStringBuilder strBuilder = new SpannableStringBuilder();
 
         strBuilder.append("\u200E");
-        insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+        insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
         strBuilder.append(LogMessageTypeString);
-        insertClickSpanLink(strBuilder, targetName, true, targetId);
+        insertClickSpanLink(context, strBuilder, targetName, true, targetId);
 
         switch (ProtoGlobal.RoomMessageLog.parseFrom(log.messageLog).getType()) {
 
@@ -263,10 +276,10 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(G.context.getString(R.string.prefix));
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                 } else {
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                     strBuilder.append(LogMessageTypeString);
                     strBuilder.append(finalTypeRoom);
                 }
@@ -276,9 +289,9 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                     strBuilder.append(G.context.getString(R.string.prefix));
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                 }
                 break;
@@ -286,7 +299,7 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(LogMessageTypeString);
                 }
@@ -300,14 +313,14 @@ public class HelperLogMessage {
                 } else {
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(LogMessageTypeString);
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                 }
                 break;
             case MEMBER_JOINED_BY_INVITE_LINK:
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(G.context.getString(R.string.MEMBER_ADDED));
@@ -318,7 +331,7 @@ public class HelperLogMessage {
                     strBuilder.clear();
                     strBuilder.append(finalTypeRoom);
                     strBuilder.append(G.context.getString(R.string.prefix));
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
                 }
                 break;
@@ -331,7 +344,7 @@ public class HelperLogMessage {
                 break;
             case PINNED_MESSAGE:
                 strBuilder.clear();
-                String temp = log.message + "  " + LogMessageTypeString;
+                String temp = LogMessageTypeString + " " + log.message.replace("\n", "");
                 strBuilder.append(temp);
                 break;
             case USER_JOINED:
@@ -339,9 +352,9 @@ public class HelperLogMessage {
                 if (HelperCalander.isPersianUnicode) {
                     strBuilder.clear();
                     strBuilder.append("\u200F");
-                    insertClickSpanLink(strBuilder, authorName, isAuthorUser, authorId);
+                    insertClickSpanLink(context, strBuilder, authorName, isAuthorUser, authorId);
                     strBuilder.append(LogMessageTypeString);
-                    insertClickSpanLink(strBuilder, targetName, true, targetId);
+                    insertClickSpanLink(context, strBuilder, targetName, true, targetId);
                 }
                 break;
             case UNRECOGNIZED:
@@ -364,7 +377,7 @@ public class HelperLogMessage {
     }
 
 
-    private static void insertClickSpanLink(SpannableStringBuilder strBuilder, String message, final boolean isUser, final long id) {
+    private static void insertClickSpanLink(Context context, SpannableStringBuilder strBuilder, String message, final boolean isUser, final long id) {
 
         if (message.length() == 0) {
             return;
@@ -391,12 +404,8 @@ public class HelperLogMessage {
 
                 @Override
                 public void updateDrawState(TextPaint ds) {
-                    if (G.isDarkTheme) {
-                        ds.linkColor = Color.parseColor(G.textTitleTheme);
-                    } else {
-                        ds.linkColor = Color.DKGRAY;
-                    }
-
+                    //ToDo: fixed it and pass color to this function
+                    ds.linkColor = Theme.getInstance().getLinkColor(context);
                     super.updateDrawState(ds);
                 }
             };
@@ -406,76 +415,76 @@ public class HelperLogMessage {
     }
 
     private static void gotToUserRoom(final long id) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+            if (realmRoom != null) {
+                //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
+                //intent.putExtra("RoomId", realmRoom.getId());
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //G.currentActivity.startActivity(intent);
 
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
-        if (realmRoom != null) {
-            //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
-            //intent.putExtra("RoomId", realmRoom.getId());
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //G.currentActivity.startActivity(intent);
+                //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
+                //intent.putExtra("peerId", id);
+                //intent.putExtra("RoomId", realmRoom.getId());
+                //intent.putExtra("enterFrom", "GROUP");
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //G.currentActivity.startActivity(intent);
 
-            //Intent intent = new Intent(G.context, ActivityContactsProfile.class);
-            //intent.putExtra("peerId", id);
-            //intent.putExtra("RoomId", realmRoom.getId());
-            //intent.putExtra("enterFrom", "GROUP");
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //G.currentActivity.startActivity(intent);
+                FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
+                Bundle bundle = new Bundle();
+                bundle.putLong("peerId", id);
+                bundle.putLong("RoomId", realmRoom.getId());
+                bundle.putString("enterFrom", "GROUP");
+                contactsProfile.setArguments(bundle);
+                //ToDo:fixed it and change to do not use G.currentActivity
+                new HelperFragment(G.currentActivity.getSupportFragmentManager(), contactsProfile).setReplace(false).load();
 
-            FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
-            Bundle bundle = new Bundle();
-            bundle.putLong("peerId", id);
-            bundle.putLong("RoomId", realmRoom.getId());
-            bundle.putString("enterFrom", "GROUP");
-            contactsProfile.setArguments(bundle);
+            } else {
+                G.onChatGetRoom = new OnChatGetRoom() {
+                    @Override
+                    public void onChatGetRoom(final ProtoGlobal.Room room) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong("peerId", id);
+                                bundle.putLong("RoomId", room.getId());
+                                bundle.putString("enterFrom", "GROUP");
+                                contactsProfile.setArguments(bundle);
+                                //ToDo:fixed it and change to do not use G.currentActivity
+                                new HelperFragment(G.currentActivity.getSupportFragmentManager(), contactsProfile).setReplace(false).load();
+                                G.onChatGetRoom = null;
+                            }
+                        });
+                    }
 
-            new HelperFragment(contactsProfile).setReplace(false).load();
+                    @Override
+                    public void onChatGetRoomTimeOut() {
 
-        } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
-                            Bundle bundle = new Bundle();
-                            bundle.putLong("peerId", id);
-                            bundle.putLong("RoomId", room.getId());
-                            bundle.putString("enterFrom", "GROUP");
-                            contactsProfile.setArguments(bundle);
-                            new HelperFragment(contactsProfile).setReplace(false).load();
-                            G.onChatGetRoom = null;
-                        }
-                    });
-                }
+                    }
 
-                @Override
-                public void onChatGetRoomTimeOut() {
+                    @Override
+                    public void onChatGetRoomError(int majorCode, int minorCode) {
 
-                }
+                    }
+                };
 
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(id);
-        }
-
-        realm.close();
+                new RequestChatGetRoom().chatGetRoom(id);
+            }
+        });
     }
 
     private static void goToRoom(Long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            new GoToChatActivity(realmRoom.getId()).startActivity();
-        } else {
-            RealmRoom.needUpdateRoomInfo(roomId);
-        }
-        realm.close();
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            //ToDo:fixed it and change to do not use G.currentActivity
+            if (realmRoom != null) {
+                new GoToChatActivity(realmRoom.getId()).startActivity(G.currentActivity);
+            } else {
+                RealmRoom.needUpdateRoomInfo(roomId);
+            }
+        });
     }
 
 

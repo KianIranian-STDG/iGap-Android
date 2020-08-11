@@ -1,51 +1,18 @@
 package org.paygear.utils;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import net.iGap.G;
-import net.iGap.R;
 
 import org.paygear.RaadApp;
-import org.paygear.WalletActivity;
-import org.paygear.model.Contact;
 import org.paygear.web.Web;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Random;
 
-import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.model.Auth;
-
-import static ir.radsense.raadcore.utils.RaadCommonUtils.RTL_CHAR;
 
 /**
  * Created by Software1 on 9/19/2017.
@@ -53,7 +20,7 @@ import static ir.radsense.raadcore.utils.RaadCommonUtils.RTL_CHAR;
 
 public class Utils {
 
-    public static boolean isValidJson(String string) {
+    /*public static boolean isValidJson(String string) {
         try {
             Gson gson = new Gson();
             gson.fromJson(string, Object.class);
@@ -61,7 +28,7 @@ public class Utils {
         } catch(com.google.gson.JsonSyntaxException ex) {
             return false;
         }
-    }
+    }*/
 
 
     public static void hideKeyboard(Context context, View view) {
@@ -130,7 +97,7 @@ public class Utils {
     }
 */
 
-    public static void setShadow(View view, Drawable sd) {
+    /*public static void setShadow(View view, Drawable sd) {
         RoundRectShape rss = new RoundRectShape(new float[] { 12f, 12f, 12f,
                 12f, 12f, 12f, 12f, 12f }, null, null);
         ShapeDrawable sds = new ShapeDrawable(rss);
@@ -153,13 +120,13 @@ public class Utils {
         ld.setLayerInset(1, 0, 0, 5, 5); // inset the top drawable so we can leave a bit of space for the shadow to use
 
         view.setBackgroundDrawable(ld);
-    }
+    }*/
 
-    public static int getAColor() {
+    /*public static int getAColor() {
         Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         return color;
-    }
+    }*/
 
     public static String formatCardNumber(String number) {
         int c = number.length();
@@ -183,7 +150,7 @@ public class Utils {
         return formatted;
     }
 
-    public static void showCustomTab(Context context, String url) {
+    /*public static void showCustomTab(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -210,9 +177,9 @@ public class Utils {
         } catch (Exception e) {
             Toast.makeText(context, "No browser found", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
-    public static void showNotification(Context context, Intent intent, String title, String message, int type) {
+    /*public static void showNotification(Context context, Intent intent, String title, String message, int type) {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, type, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
@@ -233,9 +200,9 @@ public class Utils {
         NotificationManager manager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(type, builder.build());
-    }
+    }*/
 
-    public static void cancelAllNotification(Context context) {
+    /*public static void cancelAllNotification(Context context) {
         NotificationManager manager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.cancel(RaadApp.NOTIFICATION_TYPE_LIKE);
@@ -245,7 +212,7 @@ public class Utils {
         manager.cancel(RaadApp.NOTIFICATION_TYPE_COUPON);
         manager.cancel(RaadApp.NOTIFICATION_TYPE_DELIVERY);
         manager.cancel(RaadApp.NOTIFICATION_TYPE_FOLLOW);
-    }
+    }*/
 
     public static void deleteFile(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory())
@@ -256,7 +223,6 @@ public class Utils {
     }
 
     public static void signOutAndGoLogin(Activity activity) {
-        AppCompatActivity act = (AppCompatActivity) activity;
 
         RaadApp.paygearCard = null;
         RaadApp.cards = null;
@@ -268,10 +234,6 @@ public class Utils {
         deleteAllUserData(activity);
         Auth.release();
         Web.getInstance().release();
-//        cancelAllNotification(activity);
-//        Intent i = new Intent(act, LoginActivity.class);
-//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        act.startActivity(i);
     }
 
     public static void signOutWallet() {
@@ -306,11 +268,9 @@ public class Utils {
         SettingHelper.remove(activity.getApplicationContext(), "service_token");
 
         SettingHelper.remove(activity.getApplicationContext(), SettingHelper.USER_ACCOUNT);
-
-
     }
 
-    public static String getDeviceName() {
+    /*public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
         if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
@@ -318,10 +278,10 @@ public class Utils {
         } else {
             return capitalize(manufacturer) + " " + model;
         }
-    }
+    }*/
 
 
-    private static String capitalize(String s) {
+    /*private static String capitalize(String s) {
         if (s == null || s.length() == 0) {
             return "";
         }
@@ -331,9 +291,9 @@ public class Utils {
         } else {
             return Character.toUpperCase(first) + s.substring(1);
         }
-    }
+    }*/
 
-    public static ArrayList<Contact> loadContacts(Context context) {
+    /*public static ArrayList<Contact> loadContacts(Context context) {
         ArrayList<Contact> contacts = new ArrayList<>();
         Cursor phones = context.getContentResolver().query(
                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -352,9 +312,9 @@ public class Utils {
             phone = phone.replace("+", "").replace(" ", "");
 
             Contact contact = new Contact(name, phone);
-            /*int len = contact.phone.length();
+            *//*int len = contact.phone.length();
             if (len >= 10 && contact.phone.substring(len - 10, len).equals(auth.phone))
-                continue;*/
+                continue;*//*
             //Log.i("GH_Contact", "ID: " + id + "\nName: " + name + "\nNumber: " + phone);
 
             if (previousContact == null || !previousContact.mobile.equals(contact.mobile))
@@ -364,9 +324,5 @@ public class Utils {
         }
         phones.close();
         return contacts;
-    }
-
-
-
-
+    }*/
 }

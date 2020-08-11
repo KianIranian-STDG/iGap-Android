@@ -2,27 +2,27 @@ package org.paygear.fragment;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -32,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.QR;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
@@ -43,7 +42,6 @@ public class MyQRFragment extends Fragment {
     File sdDir;
     File file;
 
-    private RaadToolBar appBar;
 
     public MyQRFragment() {
     }
@@ -55,39 +53,51 @@ public class MyQRFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_qr, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        if (RaadApp.selectedMerchant==null) {
-            appBar.setTitle(getString(R.string.my_qr));
-        }else {
+
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.share_icon)
+                .setDefaultTitle(getString(R.string.my_qr))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        if (isStoragePermissionGranted()) {
+
+                            Bitmap qrBitmap = QRUtils.getQR(getContext(), QRUtils.generateQRContent(QR.QR_TYPE_DIRECT_PAY, RaadApp.me), RaadCommonUtils.getPx(200, getContext()));
+                            share(qrBitmap);
+                        }
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
+        if (RaadApp.selectedMerchant == null) {
+            toolbar.setDefaultTitle(getString(R.string.my_qr));
+        } else {
             if (RaadApp.selectedMerchant.getName() != null && !RaadApp.selectedMerchant.getName().equals("")) {
-                appBar.setTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getName());
+                toolbar.setDefaultTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getName());
             } else {
-                appBar.setTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getUsername());
+                toolbar.setDefaultTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getUsername());
             }
         }
-        appBar.addRightButton(R.drawable.ic_share_whire_24dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               if (isStoragePermissionGranted()) {
-
-                   Bitmap qrBitmap = QRUtils.getQR(getContext(), QRUtils.generateQRContent(QR.QR_TYPE_DIRECT_PAY, RaadApp.me), RaadCommonUtils.getPx(200, getContext()));
-                   share(qrBitmap);
-               }
-
-
-            }
-        });
 
 
         ViewGroup root_current = view.findViewById(R.id.root_current);
         root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
 
-        appBar.showBack();
 
 
 
@@ -120,20 +130,22 @@ public class MyQRFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
-                MyQRFragment.this, null, ScannerFragment.class);
+        if (getActivity() instanceof NavigationBarActivity)
+            ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
+                    MyQRFragment.this, null, ScannerFragment.class);
     }
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
+
+    private Uri getImageUri(Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(getContext().getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+        return path != null ? Uri.parse(path) : null;
     }
 
     private void share(Bitmap bitmap) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, getImageUri(getContext(),bitmap));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, getImageUri(bitmap));
         shareIntent.setType("image/jpeg");
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.my_qr)));
 

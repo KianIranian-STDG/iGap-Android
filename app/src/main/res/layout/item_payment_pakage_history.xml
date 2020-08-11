@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp4"
+    android:orientation="vertical"
+    android:background="@drawable/selector_payment_dialog_item">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_itemInternetPackage_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="@dimen/dp4"
+        android:textSize="@dimen/standardTextSize"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ellipsize="end"
+        android:gravity="clip_vertical"
+        android:maxLength="15"
+        tools:text="0912454545"
+        android:textColor="?iGapSubtitleTextColor" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_itemInternetPackage_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:textSize="@dimen/smallTextSize"
+        android:layout_marginTop="@dimen/dp4"
+        android:gravity="center_vertical"
+        android:textColor="?iGapSubtitleTextColor"
+        tools:text="abolfazl abbasi iran" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?iGapDividerLine" />
+
+</LinearLayout>

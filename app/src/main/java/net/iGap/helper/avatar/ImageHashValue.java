@@ -1,11 +1,11 @@
 package net.iGap.helper.avatar;
 
 class ImageHashValue {
-    long avatarId;
+    long avatarOwnerId;
     OnAvatarChange onChangeAvatar;
 
-    ImageHashValue(long avatarId, OnAvatarChange onChangeAvatar) {
-        this.avatarId = avatarId;
+    ImageHashValue(long avatarOwnerId, OnAvatarChange onChangeAvatar) {
+        this.avatarOwnerId = avatarOwnerId;
         this.onChangeAvatar = onChangeAvatar;
     }
 

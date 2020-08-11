@@ -11,15 +11,7 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.ContentLoadingProgressBar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +19,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
@@ -40,12 +38,11 @@ import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.IClientSearchUserName;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.CircleImageView;
-import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.IClientSearchUserName;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -60,20 +57,20 @@ import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientSearchUsername;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.realm.Case;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static net.iGap.fragments.FragmentChat.messageId;
 
-public class SearchFragment extends BaseFragment {
+public class SearchFragment extends BaseFragment implements ToolbarListener {
 
-    MaterialDesignTextView btnClose;
-    RippleView rippleDown;
     private FastAdapter fastAdapter;
     private EditText edtSearch;
     private ArrayList<StructSearch> list = new ArrayList<>();
@@ -84,6 +81,7 @@ public class SearchFragment extends BaseFragment {
     private long index = 500;
     private String preventRepeatSearch = "";
     private ContentLoadingProgressBar loadingProgressBar;
+    private HelperToolbar toolbar;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -91,12 +89,12 @@ public class SearchFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.search_fragment_layout, container, false));
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.search_fragment_layout, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
@@ -106,12 +104,27 @@ public class SearchFragment extends BaseFragment {
     private void initComponent(View view) {
 
         index = 500;
-        view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
-        imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
+
+        toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setSearchBoxShown(true, true)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.sfl_layout_toolbar);
+        layoutToolbar.addView(toolbar.getView());
+
+        edtSearch = toolbar.getEditTextSearch();
+
+        toolbar.resizeSearchBoxWithAnimation(true, true);
+
+        loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
+        imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
         imvNothingFound.setImageResource(R.drawable.find1);
-        txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
+        txtEmptyListComment = view.findViewById(R.id.sfl_txt_empty_list_comment);
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -123,45 +136,7 @@ public class SearchFragment extends BaseFragment {
 
         txtEmptyListComment.setText(R.string.empty_message3);
 
-        edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                fillList(editable.toString());
-            }
-        });
-        edtSearch.requestFocus();
-        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
-
-
-        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
-        rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
-        rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                if (edtSearch.getText().toString().length() == 0) {
-                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(rippleDown.getWindowToken(), 0);
-                    G.fragmentActivity.onBackPressed();
-                } else {
-                    edtSearch.setText("");
-                }
-            }
-        });
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.sfl_recycleview);
+        recyclerView = view.findViewById(R.id.sfl_recycleview);
     }
 
     private void initRecycleView() {
@@ -232,9 +207,9 @@ public class SearchFragment extends BaseFragment {
                     preventRepeatSearch = text;
                 }
             } else {
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
-        }else {
+        } else {
             preventRepeatSearch = "";
         }
 
@@ -258,8 +233,13 @@ public class SearchFragment extends BaseFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (getContext() == null) {
+                            return;
+                        }
+
                         loadingProgressBar.setVisibility(View.GONE);
                         fillAfterResponse();
+                        HelperError.showSnackMessage(getString(R.string.connection_error), false);
                     }
                 });
             }
@@ -267,7 +247,7 @@ public class SearchFragment extends BaseFragment {
 
     }
 
-    private void fillAfterResponse(){
+    private void fillAfterResponse() {
         String text = edtSearch.getText().toString();
         if (text.startsWith("@")) {
             fillListItemAtsign(text.substring(1));
@@ -319,49 +299,46 @@ public class SearchFragment extends BaseFragment {
 
     }
 
-    private void fillHashtag(String text) {
+    private void fillHashtag(String tt) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String text = tt;
+            if (!text.startsWith("#")) {
+                text = "#" + text;
+            }
+            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
 
-        Realm realm = Realm.getDefaultInstance();
+            if (results != null && results.size() > 0) {
 
-        if (!text.startsWith("#")) {
-            text = "#" + text;
-        }
-        final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
-
-        if (results != null && results.size() > 0) {
-
-            addHeader(G.fragmentActivity.getResources().getString(R.string.hashtag));
-            for (RealmRoomMessage roomMessage : results) {
+                addHeader(G.fragmentActivity.getResources().getString(R.string.hashtag));
+                for (RealmRoomMessage roomMessage : results) {
 
 
-                StructSearch item = new StructSearch();
+                    StructSearch item = new StructSearch();
 
-                item.time = roomMessage.getUpdateTime();
-                item.comment = roomMessage.getMessage();
-                item.id = roomMessage.getRoomId();
-                item.type = SearchType.message;
-                item.messageId = roomMessage.getMessageId();
+                    item.time = roomMessage.getUpdateTime();
+                    item.comment = roomMessage.getMessage();
+                    item.id = roomMessage.getRoomId();
+                    item.type = SearchType.message;
+                    item.messageId = roomMessage.getMessageId();
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
 
-                if (realmRoom != null) { // room exist
-                    item.name = realmRoom.getTitle();
-                    item.initials = realmRoom.getInitials();
-                    item.color = realmRoom.getColor();
-                    item.roomType = realmRoom.getType();
-                    item.avatar = realmRoom.getAvatar();
-                    if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
-                        item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
-                    } else {
-                        item.idDetectAvatar = realmRoom.getId();
+                    if (realmRoom != null) { // room exist
+                        item.name = realmRoom.getTitle();
+                        item.initials = realmRoom.getInitials();
+                        item.color = realmRoom.getColor();
+                        item.roomType = realmRoom.getType();
+                        item.avatar = realmRoom.getAvatar();
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
+                            item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
+                        } else {
+                            item.idDetectAvatar = realmRoom.getId();
+                        }
+                        list.add(item);
                     }
-                    list.add(item);
                 }
             }
-        }
-
-        realm.close();
-
+        });
     }
 
 
@@ -391,260 +368,30 @@ public class SearchFragment extends BaseFragment {
     }
 
     private void fillRoomListGroup(String text) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            final RealmResults<RealmRoom> results;
 
-        Realm realm = Realm.getDefaultInstance();
+            if (edtSearch.getText().toString().startsWith("@")) {
+                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "GROUP", Case.INSENSITIVE).findAll();
 
-        final RealmResults<RealmRoom> results;
-
-        if (edtSearch.getText().toString().startsWith("@")) {
-            results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "GROUP", Case.INSENSITIVE).findAll();
-
-        } else {
-            results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).or().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "GROUP", Case.INSENSITIVE).findAll();
-        }
-
-        if (results != null) {
-
-            if (results.size() > 0)
-                addHeader(G.fragmentActivity.getResources().getString(R.string.Groups));
-
-
-            for (RealmRoom realmRoom : results) {
-
-                StructSearch item = new StructSearch();
-
-                item.roomType = realmRoom.getType();
-                item.name = realmRoom.getTitle();
-                item.time = realmRoom.getUpdatedTime();
-                item.id = realmRoom.getId();
-                if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
-                    item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
-                } else {
-
-                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
-                        item.userName = realmRoom.getGroupRoom().getUsername();
-
-                    } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
-                        item.userName = realmRoom.getChannelRoom().getUsername();
-
-                    }
-
-                    item.idDetectAvatar = realmRoom.getId();
-                }
-                item.type = SearchType.room;
-                item.initials = realmRoom.getInitials();
-                item.color = realmRoom.getColor();
-                item.avatar = realmRoom.getAvatar();
-
-                list.add(item);
+            } else {
+                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).or().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "GROUP", Case.INSENSITIVE).findAll();
             }
-        }
 
-        realm.close();
-    }
+            if (results != null) {
 
-    private void fillRoomListChannel(String text) {
-
-        Realm realm = Realm.getDefaultInstance();
-
-        final RealmResults<RealmRoom> results;
-
-        if (edtSearch.getText().toString().startsWith("@")) {
-            results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "CHANNEL", Case.INSENSITIVE).findAll();
-
-        } else {
-            results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).or().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "CHANNEL", Case.INSENSITIVE).findAll();
-        }
-
-        if (results != null && results.size() > 0) {
-
-            addHeader(G.fragmentActivity.getResources().getString(R.string.channel));
-
-            for (RealmRoom realmRoom : results) {
-
-                StructSearch item = new StructSearch();
-
-                item.roomType = realmRoom.getType();
-                item.name = realmRoom.getTitle();
-                item.time = realmRoom.getUpdatedTime();
-                item.id = realmRoom.getId();
-                if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
-                    item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
-                } else {
-
-                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
-                        item.userName = realmRoom.getGroupRoom().getUsername();
-
-                    } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
-                        item.userName = realmRoom.getChannelRoom().getUsername();
-
-                    }
-
-                    item.idDetectAvatar = realmRoom.getId();
-                }
-                item.type = SearchType.room;
-                item.initials = realmRoom.getInitials();
-                item.color = realmRoom.getColor();
-                item.avatar = realmRoom.getAvatar();
-
-                list.add(item);
-            }
-        }
-
-        realm.close();
-    }
-
-    private void fillBot(String text) {
-
-        Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRegisteredInfo> results;
-
-        if (edtSearch.getText().toString().startsWith("@")) {
-            results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, true).findAll();
-
-        } else {
-            results = realm.where(RealmRegisteredInfo.class).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text).endGroup().equalTo(RealmRegisteredInfoFields.IS_BOT, true).findAll();
-        }
-
-        if (results != null && results.size() > 0) {
-
-            addHeader(G.fragmentActivity.getResources().getString(R.string.bot));
-
-            for (RealmRegisteredInfo contact : results) {
+                if (results.size() > 0)
+                    addHeader(edtSearch.getContext().getString(R.string.Groups));
 
 
-                StructSearch item = new StructSearch();
+                for (RealmRoom realmRoom : results) {
 
-                item.name = contact.getDisplayName();
-                item.time = contact.getLastSeen();
-                item.userName = contact.getUsername();
-                item.comment = "";
-                item.id = contact.getId();
-                item.idDetectAvatar = contact.getId();
-                item.type = SearchType.contact;
-                item.initials = contact.getInitials();
-                item.color = contact.getColor();
-                item.avatar = contact.getLastAvatar();
-                list.add(item);
-            }
-        }
+                    StructSearch item = new StructSearch();
 
-        realm.close();
-    }
-
-    private void fillChat(String text) {
-
-        Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRegisteredInfo> results;
-
-        if (edtSearch.getText().toString().startsWith("@")) {
-            results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, false).findAll();
-
-        } else {
-            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text,Case.INSENSITIVE).endGroup().findAll();
-        }
-
-        if (results != null && results.size() > 0) {
-
-            addHeader(G.fragmentActivity.getResources().getString(R.string.member));
-
-            for (RealmRegisteredInfo contact : results) {
-
-
-                StructSearch item = new StructSearch();
-
-                item.name = contact.getDisplayName();
-                item.time = contact.getLastSeen();
-                item.userName = contact.getUsername();
-                item.comment = "";
-                item.id = contact.getId();
-                item.idDetectAvatar = contact.getId();
-                item.type = SearchType.contact;
-                item.initials = contact.getInitials();
-                item.color = contact.getColor();
-                item.avatar = contact.getLastAvatar();
-                list.add(item);
-            }
-        }
-
-        realm.close();
-    }
-
-    private void fillContacts(String text) {
-        int size = list.size();
-
-        Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmContacts> results;
-
-        if (edtSearch.getText().toString().startsWith("@")) {
-            results = realm.where(RealmContacts.class).contains(RealmContactsFields.USERNAME, text, Case.INSENSITIVE).findAll();
-
-        } else {
-            results = realm.where(RealmContacts.class).beginGroup().contains(RealmContactsFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmContactsFields.DISPLAY_NAME, text).endGroup().findAll();
-        }
-
-        if (results != null) {
-
-            for (RealmContacts contact : results) {
-                Long phone = contact.getPhone();
-                String str = phone.toString().replaceAll(" ", "");
-                if (str.length() > 10) {
-                    str = str.substring(str.length() - 10, str.length());
-                }
-
-                StructSearch item = new StructSearch();
-
-                item.name = contact.getDisplay_name();
-                item.time = contact.getLast_seen();
-                item.comment = str;
-                item.userName = contact.getUsername();
-                item.id = contact.getId();
-                item.idDetectAvatar = contact.getId();
-                item.type = SearchType.contact;
-                item.initials = contact.getInitials();
-                item.color = contact.getColor();
-                item.avatar = contact.getAvatar();
-                list.add(item);
-            }
-        }
-
-//        if (size == list.size()) list.remove(size - 1);
-        realm.close();
-    }
-
-    private void addHeader(String header) {
-        StructSearch item = new StructSearch();
-        item.name = header;
-        item.type = SearchType.header;
-        list.add(item);
-    }
-
-    private void fillMessages(String text) {
-
-        int size = list.size();
-        Realm realm = Realm.getDefaultInstance();
-
-        final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
-        if (results != null && results.size() > 0) {
-            addHeader(G.fragmentActivity.getResources().getString(R.string.messages));
-            for (RealmRoomMessage roomMessage : results) {
-
-                StructSearch item = new StructSearch();
-
-                item.time = roomMessage.getUpdateTime();
-                item.comment = roomMessage.getMessage();
-                item.id = roomMessage.getRoomId();
-                item.type = SearchType.message;
-                item.messageId = roomMessage.getMessageId();
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-
-                if (realmRoom != null) { // room exist
-                    item.name = realmRoom.getTitle();
-                    item.initials = realmRoom.getInitials();
-                    item.color = realmRoom.getColor();
                     item.roomType = realmRoom.getType();
-                    item.avatar = realmRoom.getAvatar();
+                    item.name = realmRoom.getTitle();
+                    item.time = realmRoom.getUpdatedTime();
+                    item.id = realmRoom.getId();
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
                         item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
                     } else {
@@ -659,79 +406,288 @@ public class SearchFragment extends BaseFragment {
 
                         item.idDetectAvatar = realmRoom.getId();
                     }
+                    item.type = SearchType.room;
+                    item.initials = realmRoom.getInitials();
+                    item.color = realmRoom.getColor();
+                    item.avatar = realmRoom.getAvatar();
+
                     list.add(item);
                 }
             }
-        }
+        });
+    }
 
-//        if (size == list.size()) {
-//            list.remove(size - 1);
-//        }
+    private void fillRoomListChannel(String text) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            final RealmResults<RealmRoom> results;
 
-        realm.close();
+            if (edtSearch.getText().toString().startsWith("@")) {
+                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "CHANNEL", Case.INSENSITIVE).findAll();
+
+            } else {
+                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).or().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "CHANNEL", Case.INSENSITIVE).findAll();
+            }
+
+            if (results != null && results.size() > 0) {
+
+                addHeader(G.fragmentActivity.getResources().getString(R.string.channel));
+
+                for (RealmRoom realmRoom : results) {
+
+                    StructSearch item = new StructSearch();
+
+                    item.roomType = realmRoom.getType();
+                    item.name = realmRoom.getTitle();
+                    item.time = realmRoom.getUpdatedTime();
+                    item.id = realmRoom.getId();
+                    if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
+                        item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
+                    } else {
+
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
+                            item.userName = realmRoom.getGroupRoom().getUsername();
+
+                        } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
+                            item.userName = realmRoom.getChannelRoom().getUsername();
+
+                        }
+
+                        item.idDetectAvatar = realmRoom.getId();
+                    }
+                    item.type = SearchType.room;
+                    item.initials = realmRoom.getInitials();
+                    item.color = realmRoom.getColor();
+                    item.avatar = realmRoom.getAvatar();
+
+                    list.add(item);
+                }
+            }
+        });
+    }
+
+    private void fillBot(String text) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            final RealmResults<RealmRegisteredInfo> results;
+
+            if (edtSearch.getText().toString().startsWith("@")) {
+                results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, true).findAll();
+
+            } else {
+                results = realm.where(RealmRegisteredInfo.class).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text).endGroup().equalTo(RealmRegisteredInfoFields.IS_BOT, true).findAll();
+            }
+
+            if (results != null && results.size() > 0) {
+
+                addHeader(G.fragmentActivity.getResources().getString(R.string.bot));
+
+                for (RealmRegisteredInfo contact : results) {
+
+
+                    StructSearch item = new StructSearch();
+
+                    item.name = contact.getDisplayName();
+                    item.time = contact.getLastSeen();
+                    item.userName = contact.getUsername();
+                    item.comment = "";
+                    item.id = contact.getId();
+                    item.idDetectAvatar = contact.getId();
+                    item.type = SearchType.contact;
+                    item.initials = contact.getInitials();
+                    item.color = contact.getColor();
+                    item.avatar = contact.getLastAvatar(realm);
+                    list.add(item);
+                }
+            }
+        });
+    }
+
+    private void fillChat(String text) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            final RealmResults<RealmRegisteredInfo> results;
+
+            if (edtSearch.getText().toString().startsWith("@")) {
+                results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, false).findAll();
+
+            } else {
+                results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text, Case.INSENSITIVE).endGroup().findAll();
+            }
+
+            if (results != null && results.size() > 0) {
+
+                addHeader(G.fragmentActivity.getResources().getString(R.string.member));
+
+                for (RealmRegisteredInfo contact : results) {
+
+
+                    StructSearch item = new StructSearch();
+
+                    item.name = contact.getDisplayName();
+                    item.time = contact.getLastSeen();
+                    item.userName = contact.getUsername();
+                    item.comment = "";
+                    item.id = contact.getId();
+                    item.idDetectAvatar = contact.getId();
+                    item.type = SearchType.contact;
+                    item.initials = contact.getInitials();
+                    item.color = contact.getColor();
+                    item.avatar = contact.getLastAvatar(realm);
+                    list.add(item);
+                }
+            }
+        });
+    }
+
+    private void fillContacts(String text) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            final RealmResults<RealmContacts> results;
+
+            if (edtSearch.getText().toString().startsWith("@")) {
+                results = realm.where(RealmContacts.class).contains(RealmContactsFields.USERNAME, text, Case.INSENSITIVE).findAll();
+
+            } else {
+                results = realm.where(RealmContacts.class).beginGroup().contains(RealmContactsFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmContactsFields.DISPLAY_NAME, text).endGroup().findAll();
+            }
+
+            if (results != null) {
+
+                for (RealmContacts contact : results) {
+                    Long phone = contact.getPhone();
+                    String str = phone.toString().replaceAll(" ", "");
+                    if (str.length() > 10) {
+                        str = str.substring(str.length() - 10);
+                    }
+
+                    StructSearch item = new StructSearch();
+
+                    item.name = contact.getDisplay_name();
+                    item.time = contact.getLast_seen();
+                    item.comment = str;
+                    item.userName = contact.getUsername();
+                    item.id = contact.getId();
+                    item.idDetectAvatar = contact.getId();
+                    item.type = SearchType.contact;
+                    item.initials = contact.getInitials();
+                    item.color = contact.getColor();
+                    item.avatar = contact.getAvatar();
+                    list.add(item);
+                }
+            }
+        });
+    }
+
+    private void addHeader(String header) {
+        StructSearch item = new StructSearch();
+        item.name = header;
+        item.type = SearchType.header;
+        list.add(item);
+    }
+
+    private void fillMessages(String text) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.DELETED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
+            if (results != null && results.size() > 0) {
+                addHeader(G.fragmentActivity.getResources().getString(R.string.messages));
+                for (RealmRoomMessage roomMessage : results) {
+
+                    StructSearch item = new StructSearch();
+
+                    item.time = roomMessage.getUpdateTime();
+                    item.comment = roomMessage.getMessage();
+                    item.id = roomMessage.getRoomId();
+                    item.type = SearchType.message;
+                    item.messageId = roomMessage.getMessageId();
+
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+
+                    if (realmRoom != null) { // room exist
+                        item.name = realmRoom.getTitle();
+                        item.initials = realmRoom.getInitials();
+                        item.color = realmRoom.getColor();
+                        item.roomType = realmRoom.getType();
+                        item.avatar = realmRoom.getAvatar();
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
+                            item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
+                        } else {
+
+                            if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
+                                item.userName = realmRoom.getGroupRoom().getUsername();
+
+                            } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
+                                item.userName = realmRoom.getChannelRoom().getUsername();
+
+                            }
+
+                            item.idDetectAvatar = realmRoom.getId();
+                        }
+                        list.add(item);
+                    }
+                }
+            }
+        });
     }
 
     private void goToRoom(final long id, SearchType type, long messageId, String userName) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRoom realmRoom = null;
 
-        final Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = null;
-
-        if (type == SearchType.message) {
-            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-            goToRoomWithRealm(realmRoom, type, id);
-        } else if (type == SearchType.contact) {
-            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
-            goToRoomWithRealm(realmRoom, type, id);
-        } else if (type == SearchType.room) {
-
-            HelperUrl.checkUsernameAndGoToRoom(userName, HelperUrl.ChatEntry.profile);
-            popBackStackFragment();
-
-        }
-        realm.close();
-
+            if (type == SearchType.message) {
+                realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                goToRoomWithRealm(realmRoom, type, id);
+            } else if (type == SearchType.contact) {
+                realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+                goToRoomWithRealm(realmRoom, type, id);
+            } else if (type == SearchType.room) {
+                if (userName != null && userName.length() > 1) {
+                    HelperUrl.checkUsernameAndGoToRoom(getActivity(), userName, HelperUrl.ChatEntry.profile);
+                    /*Log.wtf(this.getClass().getName(),"goTo chat");
+                    popBackStackFragment();*/
+                } else {
+                    realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                    goToRoomWithRealm(realmRoom, type, id);
+                }
+            }
+        });
     }
 
 
     public void goToRoomWithRealm(RealmRoom realmRoom, SearchType type, long id) {
 
         if (realmRoom != null) {
-            removeFromBaseFragment(SearchFragment.this);
+            G.refreshRealmUi();
+            /*Log.wtf(this.getClass().getName(),"goTo chat");
+            removeFromBaseFragment(SearchFragment.this);*/
             if (type == SearchType.message) {
-                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
+                new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(getActivity());
             } else {
-                new GoToChatActivity(realmRoom.getId()).startActivity();
+                new GoToChatActivity(realmRoom.getId()).startActivity(getActivity());
             }
 
         } else {
-            G.onChatGetRoom = new OnChatGetRoom() {
+            new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    RealmRoom.putOrUpdate(room);
+                public void onReady(ProtoGlobal.Room room) {
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmRoom room2 = RealmRoom.putOrUpdate(room, realm);
+                        room2.setDeleted(true);
+                    });
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (G.fragmentActivity != null) {
+                            G.refreshRealmUi();
+                            /*if (G.fragmentActivity != null) {
+                                Log.wtf(this.getClass().getName(),"goTo chat");
                                 removeFromBaseFragment(SearchFragment.this);
-                            }
-                            new GoToChatActivity(room.getId()).setPeerID(id).startActivity();
-                            G.onChatGetRoom = null;
+                            }*/
+                            new GoToChatActivity(room.getId()).setPeerID(id).startActivity(getActivity());
                         }
                     });
                 }
 
                 @Override
-                public void onChatGetRoomTimeOut() {
+                public void onError(int major, int minor) {
 
                 }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(id);
+            });
         }
 
 
@@ -757,5 +713,82 @@ public class SearchFragment extends BaseFragment {
         public RealmAvatar avatar;
         public ProtoGlobal.Room.Type roomType;
         public SearchType type = SearchType.header;
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+        if (getContext() != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
+        }
+
+    }
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+        cancelSearchTimer();
+        if (getActivity() != null) {
+            getActivity().onBackPressed();
+        }
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+        if (text.trim().length() < 5) {
+            cancelSearchTimer();
+            fillList("");
+            preventRepeatSearch = "";
+            return;
+        }
+        startOrReStartSearchTimer();
+    }
+
+    private Timer mTimerSearch;
+    private TimerTask mTimerTaskSearch;
+    private byte mSearchCurrentTime = 0;
+
+    private void startOrReStartSearchTimer() {
+
+        mSearchCurrentTime = 0;
+        cancelSearchTimer();
+
+        if (mTimerSearch == null) {
+
+            mTimerTaskSearch = new TimerTask() {
+                @Override
+                public void run() {
+
+                    //search after 0.5 sec
+                    if (mSearchCurrentTime > 0) {
+                        String text = toolbar.getEditTextSearch().getText().toString().trim();
+                        G.handler.post(() -> fillList(text));
+                        cancelSearchTimer();
+                    } else {
+                        mSearchCurrentTime++;
+                    }
+                }
+            };
+
+            mTimerSearch = new Timer();
+            mTimerSearch.schedule(mTimerTaskSearch, 500, 5);
+        }
+    }
+
+    private void cancelSearchTimer() {
+
+        if (mTimerSearch != null) {
+            mSearchCurrentTime = 0;
+            mTimerSearch.cancel();
+            mTimerTaskSearch = null;
+            mTimerSearch = null;
+        }
+
     }
 }

@@ -1,19 +1,19 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
 import net.iGap.helper.HelperString;
 import net.iGap.module.AppUtils;
 import net.iGap.module.StringListParcelConverter;
-import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;
@@ -36,8 +36,7 @@ public class RealmRoomMessageContact extends RealmObject {
     @PrimaryKey
     private long id;
 
-    public static RealmRoomMessageContact put(final ProtoGlobal.RoomMessageContact input) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageContact put(Realm realm, final ProtoGlobal.RoomMessageContact input) {
         RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class, AppUtils.makeRandomId());
         messageContact.setLastName(input.getLastName());
         messageContact.setFirstName(input.getFirstName());
@@ -48,17 +47,8 @@ public class RealmRoomMessageContact extends RealmObject {
         for (String email : input.getEmailList()) {
             messageContact.addEmail(email);
         }
-        realm.close();
 
         return messageContact;
-    }
-
-    public static RealmRoomMessageContact put(Realm realm, StructMessageInfo structMessageInfo) {
-        RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class, AppUtils.makeRandomId());
-        realmRoomMessageContact.setFirstName(structMessageInfo.userInfo.firstName);
-        realmRoomMessageContact.setLastName(structMessageInfo.userInfo.lastName);
-        realmRoomMessageContact.addPhone(structMessageInfo.userInfo.phone);
-        return realmRoomMessageContact;
     }
 
     public long getId() {
@@ -115,15 +105,15 @@ public class RealmRoomMessageContact extends RealmObject {
     }
 
     public void addPhone(String phone) {
-        Realm realm = Realm.getDefaultInstance();
-        phones.add(RealmString.string(realm, phone));
-        realm.close();
+        DbManager.getInstance().doRealmTask(realm -> {
+            phones.add(RealmString.string(realm, phone));
+        });
     }
 
     public void addEmail(String email) {
-        Realm realm = Realm.getDefaultInstance();
-        phones.add(RealmString.string(realm, email));
-        realm.close();
+        DbManager.getInstance().doRealmTask(realm -> {
+            phones.add(RealmString.string(realm, email));
+        });
     }
 
     public String getLastPhoneNumber() {

@@ -1,29 +1,29 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.databinding.DataBindingUtil;
-import android.graphics.Color;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ProgressBar;
+import android.view.animation.AlphaAnimation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.textfield.TextInputLayout;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -31,53 +31,56 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.ImageHelper;
+import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.OnAvatarChange;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnAvatarAdd;
-import net.iGap.interfaces.OnAvatarDelete;
-import net.iGap.interfaces.OnChannelAvatarAdd;
-import net.iGap.interfaces.OnChannelAvatarDelete;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.module.AndroidUtils;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AppUtils;
-import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.FileUploadStructure;
-import net.iGap.module.SUID;
-import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.request.RequestChannelAvatarAdd;
+import net.iGap.module.MEditText;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.OnChannelAvatarDelete;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import org.jetbrains.annotations.NotNull;
 
-public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarAdd, OnChannelAvatarDelete {
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.RealmObjectChangeListener;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 
-    public static final String FRAGMENT_TAG = "FragmentChannelProfile";
+public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarDelete {
+
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
-    public static OnBackFragment onBackFragment;
-    private static ProgressBar prgWait;
-    private CircleImageView imgCircleImageView;
-    private TextView titleToolbar;
-    private String pathSaveImage;
-    private AttachFile attachFile;
-    private Fragment fragment;
-    private FragmentChannelProfileViewModel fragmentChannelProfileViewModel;
-    private ActivityProfileChannelBinding fragmentProfileChannelBinding;
 
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
+    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private final int ALPHA_ANIMATIONS_DURATION = 200;
+
+    private boolean mIsTheTitleVisible = false;
+    private boolean mIsTheTitleContainerVisible = true;
+    private long roomId = -1;
+
+    private FragmentChannelProfileViewModel viewModel;
+    private ActivityProfileChannelBinding binding;
+    private CircleImageView imvChannelAvatar;
+
+    private RealmRoomAccess currentRoomAccess;
+    private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
 
     public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -88,153 +91,311 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isNeedResume = true;
+
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                boolean v = false;
+                if (getArguments() != null) {
+                    roomId = getArguments().getLong(ROOM_ID);
+                    v = getArguments().getBoolean(IS_NOT_JOIN);
+                }
+                return (T) new FragmentChannelProfileViewModel(FragmentChannelProfile.this, roomId, v);
+            }
+        }).get(FragmentChannelProfileViewModel.class);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_profile_channel, container, false);
 
-        fragmentProfileChannelBinding = DataBindingUtil.inflate(inflater, R.layout.activity_profile_channel, container, false);
-        return attachToSwipeBack(fragmentProfileChannelBinding.getRoot());
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+
+        currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+        });
+
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
-        fragment = this;
-        G.onChannelAvatarAdd = this;
-        G.onChannelAvatarDelete = this;
+        if (currentRoomAccess != null) {
+            checkRoomAccess(currentRoomAccess);
+            roomAccessChangeListener = (realmRoomAccess, changeSet) -> checkRoomAccess(realmRoomAccess);
+            currentRoomAccess.addChangeListener(roomAccessChangeListener);
+        }
 
+        imvChannelAvatar = binding.toolbarAvatar;
+        imvChannelAvatar.setOnClickListener(v -> viewModel.onClickCircleImage());
 
-        FloatingActionButton fab = fragmentProfileChannelBinding.pchFabAddToChannel;
+        binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
+        binding.toolbarMore.setOnClickListener(v -> showPopUp());
+        binding.toolbarEdit.setOnClickListener(v -> {
+            if (getActivity() != null && viewModel.checkIsEditableAndReturnState()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), EditChannelFragment.newInstance(viewModel.roomId)).setReplace(false).load();
+            }
+        });
 
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fab.setColorFilter(Color.WHITE);
+        viewModel.channelName.observe(getViewLifecycleOwner(), s -> {
+            binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(s, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
+            binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(s, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
+        });
 
-        prgWait = fragmentProfileChannelBinding.agpPrgWaiting;
-        AppUtils.setProgresColler(prgWait);
+        viewModel.channelSecondsTitle.observe(getViewLifecycleOwner(), s -> binding.toolbarTxtStatusExpanded.setText(s));
 
-        onBackFragment = new OnBackFragment() {
-            @Override
-            public void onBack() {
+        viewModel.menuPopupVisibility.observe(getViewLifecycleOwner(), integer -> {
+            if (integer != null) {
+                binding.toolbarMore.setVisibility(integer);
+            }
+        });
+
+        viewModel.channelDescription.observe(getViewLifecycleOwner(), description -> {
+            if (getActivity() != null && description != null) {
+                binding.description.setText(HelperUrl.setUrlLink(getActivity(), description, true, false, null, true));
+            }
+        });
+
+        viewModel.goBack.observe(getViewLifecycleOwner(), goBack -> {
+            if (goBack != null && goBack) {
                 popBackStackFragment();
             }
-        };
+        });
 
-        AppBarLayout appBarLayout = fragmentProfileChannelBinding.pchAppbar;
+        viewModel.muteNotifListener.observe(getViewLifecycleOwner(), isMute -> {
+            new RequestClientMuteRoom().muteRoom(viewModel.roomId, isMute);
+            binding.enableNotification.setChecked(isMute);
+        });
 
-        titleToolbar = fragmentProfileChannelBinding.pchTxtTitleToolbar;
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        viewModel.goToRoomListPage.observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() instanceof ActivityMain && isGo != null && isGo) {
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(2);*/
+            }
+        });
 
-                ViewGroup viewGroup = fragmentProfileChannelBinding.pchRootCircleImage;
-                if (verticalOffset < -5) {
-                    viewGroup.animate().alpha(0).setDuration(700);
-                    viewGroup.setVisibility(View.GONE);
-                    titleToolbar.setVisibility(View.VISIBLE);
-                    titleToolbar.animate().alpha(1).setDuration(300);
-                } else {
-                    viewGroup.setVisibility(View.VISIBLE);
-                    viewGroup.animate().alpha(1).setDuration(700);
-                    titleToolbar.setVisibility(View.GONE);
-                    titleToolbar.animate().alpha(0).setDuration(500);
+        viewModel.goToShowMemberList.observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                new HelperFragment(
+                        getActivity().getSupportFragmentManager(),
+                        FragmentShowMember.newInstance2(this, data.getRoomId(), data.getRole(), data.getUserId(), data.getSelectedRole(), data.isNeedGetMemberList(), false)
+                ).setReplace(false).load();
+            }
+        });
+
+        viewModel.showDialogCopyLink.observe(getViewLifecycleOwner(), link -> {
+            if (getActivity() != null && link != null) {
+
+                LinearLayout layoutChannelLink = new LinearLayout(getActivity());
+                layoutChannelLink.setOrientation(LinearLayout.VERTICAL);
+                View viewRevoke = new View(getActivity());
+                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+                TextInputLayout inputChannelLink = new TextInputLayout(getActivity());
+                MEditText edtLink = new MEditText(getActivity());
+                edtLink.setHint(R.string.channel_public_hint_revoke);
+                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
+                edtLink.setText(link);
+                edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
+                edtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
+                edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                edtLink.setPadding(0, 8, 0, 8);
+                edtLink.setEnabled(false);
+                edtLink.setSingleLine(true);
+                inputChannelLink.addView(edtLink);
+                inputChannelLink.addView(viewRevoke, viewParams);
+
+                TextView txtLink = new AppCompatTextView(getActivity());
+                txtLink.setText(link);
+                txtLink.setTextColor(new Theme().getTitleTextColor(getActivity()));
+
+                viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                layoutChannelLink.addView(inputChannelLink, layoutParams);
+                layoutChannelLink.addView(txtLink, layoutParams);
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.channel_link)
+                        .positiveText(R.string.array_Copy)
+                        .customView(layoutChannelLink, true)
+                        .widgetColor(new Theme().getAccentColor(getContext()))
+                        .negativeText(R.string.B_cancel)
+                        .onPositive((dialog1, which) -> {
+                            if (getActivity() != null) {
+                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        })
+                        .build();
+
+                dialog.show();
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                startDialogSelectPicture(R.array.profile);
+        viewModel.goToSharedMediaPage.observe(getViewLifecycleOwner(), typeModel -> {
+            if (getActivity() != null && typeModel != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(typeModel)).setReplace(false).load();
             }
         });
 
-        imgCircleImageView = fragmentProfileChannelBinding.pchImgCircleImage;
+        viewModel.goToShowAvatarPage.observe(getViewLifecycleOwner(), roomId -> {
+            if (getActivity() != null && roomId != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel)).setReplace(false).load();
+            }
+        });
 
-        fragmentProfileChannelBinding.txtDescription.setMovementMethod(LinkMovementMethod.getInstance());
-        attachFile = new AttachFile(G.fragmentActivity);
+        viewModel.showDialogLeaveChannel.observe(getViewLifecycleOwner(), isShow -> showDialogLeaveChannel());
+
+        viewModel.goToChatRoom.observe(getViewLifecycleOwner(), isGo -> {
+            if (getActivity() != null && isGo != null && isGo) {
+                ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+            }
+        });
+
+        viewModel.showErrorMessage.observe(getViewLifecycleOwner(), errorMessageResId -> {
+            if (errorMessageResId != null) {
+                HelperError.showSnackMessage(getString(errorMessageResId), false);
+            }
+        });
+
+        BetterLinkMovementMethod
+                .linkify(Linkify.ALL, binding.description)
+                .setOnLinkClickListener((tv, url) -> {
+                    return false;
+                })
+                .setOnLinkLongClickListener((tv, url) -> {
+                    if (HelperUrl.isTextLink(url)) {
+                        G.isLinkClicked = true;
+
+                        HelperUrl.openLinkDialog(getActivity(), url);
+                    }
+                    return true;
+                });
+
+        //binding.description.setMovementMethod(LinkMovementMethod.getInstance());
+
+        AppUtils.setProgresColler(binding.loading);
+
+        FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
+
+            long mAvatarId = 0;
+            if (messageOne != null && !messageOne.equals("")) {
+                mAvatarId = Long.parseLong(messageOne);
+            }
+            avatarHandler.avatarDelete(new ParamWithAvatarType(imvChannelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM), mAvatarId);
+        };
 
         setAvatar();
 
-        FragmentShowAvatars.onComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-
-                //                showImage();
-                long mAvatarId = 0;
-                if (messageOne != null && !messageOne.equals("")) {
-                    mAvatarId = Long.parseLong(messageOne);
-                }
-
-                final long finalMAvatarId = mAvatarId;
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId)
-                                .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
-                                    @Override
-                                    public void onChange(boolean fromCache) {
-                                        imgCircleImageView.setPadding(0, 0, 0, 0);
-                                    }
-                                }), finalMAvatarId);
-                    }
-                });
-            }
-        };
-
-
-        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
-            @Override
-            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
-                pathSaveImage = null;
-                pathSaveImage = path;
-                long avatarId = SUID.id().get();
-                long lastUploadedAvatarId = avatarId + 1L;
-
-                showProgressBar();
-                HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(int progress, FileUploadStructure struct) {
-                        if (progress < 100) {
-                            prgWait.setProgress(progress);
-                        } else {
-                            new RequestChannelAvatarAdd().channelAvatarAdd(fragmentChannelProfileViewModel.roomId, struct.token);
-                        }
-                    }
-
-                    @Override
-                    public void OnError() {
-                        hideProgressBar();
-                    }
-                });
-            }
-        };
-
+        initialToolbar();
     }
 
-    private void initDataBinding() {
-        fragmentChannelProfileViewModel = new FragmentChannelProfileViewModel(getArguments(), this);
-        fragmentProfileChannelBinding.setFragmentChannelProfileViewModel(fragmentChannelProfileViewModel);
+    private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {
+        if (realmRoomAccess != null) {
+            binding.subscribers.setVisibility(realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+            binding.subscribersCount.setVisibility(realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+
+            binding.toolbarEdit.setVisibility(realmRoomAccess.isCanModifyRoom() ? View.VISIBLE : View.GONE);
+
+            binding.administrators.setVisibility(realmRoomAccess.isCanAddNewAdmin() ? View.VISIBLE : View.GONE);
+            binding.administratorsCount.setVisibility(realmRoomAccess.isCanAddNewAdmin() ? View.VISIBLE : View.GONE);
+
+            binding.members.setVisibility(realmRoomAccess.isCanAddNewAdmin() || realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+            binding.divider3.setVisibility(realmRoomAccess.isCanAddNewAdmin() || realmRoomAccess.isCanGetMemberList() ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void initialToolbar() {
+
+        binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
+            int maxScroll = appBarLayout.getTotalScrollRange();
+            float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+            handleAlphaOnTitle(percentage);
+            handleToolbarTitleVisibility(percentage);
+        });
+        startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
+        binding.toolbarTxtNameExpanded.setSelected(true);
+    }
+
+    private void showDialogLeaveChannel() {
+        if (getActivity() != null) {
+            new MaterialDialog.Builder(getActivity()).title(R.string.channel_left).content(R.string.do_you_want_leave_this_channel).positiveText(R.string.yes).onPositive((dialog, which) -> {
+                viewModel.leaveChannel();
+            }).negativeText(R.string.no).show();
+        }
+    }
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if (!mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if (mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, 100, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
+        if (visibility == View.VISIBLE) v.setVisibility(View.VISIBLE);
+
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        fragmentChannelProfileViewModel.onResume();
+        setAvatar();
+        viewModel.checkChannelIsEditable();
+        viewModel.onResume();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        fragmentChannelProfileViewModel.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        fragmentChannelProfileViewModel.onDestroy();
+        viewModel.onStop();
     }
 
     @Override
@@ -246,276 +407,81 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        removeRoomAccessChangeListener();
+    }
+
     private void setAvatar() {
-        avatarHandler.getAvatar(new ParamWithAvatarType(imgCircleImageView, fragmentChannelProfileViewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+        avatarHandler.getAvatar(new ParamWithAvatarType(imvChannelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
     }
 
-
-    //********** select picture
-    private void startDialogSelectPicture(int r) {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.from_camera))) {
-
-                    if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-
-                        try {
-                            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                @Override
-                                public void Allow() {
-                                    // this dialog show 2 way for choose image : gallery and camera
-                                    dialog.dismiss();
-                                    useCamera();
-                                }
-
-                                @Override
-                                public void deny() {
-
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(G.fragmentActivity, R.string.please_check_your_camera, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    try {
-                        new AttachFile(G.fragmentActivity).requestOpenGalleryForImageSingleSelect(FragmentChannelProfile.this);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).show();
-    }
-
-    private void useCamera() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentChannelProfile.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                new AttachFile(G.fragmentActivity).requestTakePicture(FragmentChannelProfile.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    ////************************************************** interfaces
-    //
-    ////***On Add Avatar Response From Server
-
-    @Override
-    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-        /**
-         * if another account do this action we haven't avatar source and have
-         * to download avatars . for do this action call HelperAvatar.getAvatar
-         */
-
-        hideProgressBar();
-        if (pathSaveImage == null) {
-            setAvatar();
-        } else {
-            avatarHandler.avatarAdd(roomId, pathSaveImage, avatar, new OnAvatarAdd() {
-                @Override
-                public void onAvatarAdd(final String avatarPath) {
-
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideProgressBar();
-                            setImage(avatarPath);
-                        }
-                    });
-                }
-            });
-            pathSaveImage = null;
-        }
-    }
-
-    @Override
-    public void onAvatarAddError() {
-        hideProgressBar();
-    }
-
-    //***On Avatar Delete
-
-    @Override
-    public void onChannelAvatarDelete(final long roomId, final long avatarId) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                avatarHandler.avatarDelete(new ParamWithAvatarType(imgCircleImageView, roomId)
-                        .avatarType(AvatarHandler.AvatarType.ROOM).turnOffCache().onAvatarChange(new OnAvatarChange() {
-                            @Override
-                            public void onChange(boolean fromCache) {
-                                imgCircleImageView.setPadding(0, 0, 0, 0);
-                            }
-                        }), avatarId);
-            }
-        });
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-        hideProgressBar();
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
-            }
-        });
-    }
-
-    @Override
-    public void onTimeOut() {
-        hideProgressBar();
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
-            }
-        });
-    }
-
-
-    //*** set avatar image
-
-    private void setImage(final String imagePath) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (new File(imagePath).exists()) {
-                    imgCircleImageView.setPadding(0, 0, 0, 0);
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgCircleImageView);
-                }
-            }
-        });
-    }
-
-    //*** notification and sounds
-
-
-    //*** onActivityResult
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        /**
-         * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
-         * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
-         */
-        if (G.isPassCode) ActivityMain.isUseCamera = true;
-
-        if (resultCode == Activity.RESULT_OK) {
-            String filePath = null;
-            long avatarId = SUID.id().get();
-
-            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
-            if (FragmentEditImage.itemGalleryList != null)
-                FragmentEditImage.itemGalleryList.clear();
-
-            switch (requestCode) {
-                case AttachFile.request_code_TAKE_PICTURE:
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-
-                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
-                        new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
-                    } else {
-                        ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-
-                        FragmentEditImage.insertItemList(AttachFile.imagePath, false);
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
-                    }
-                    break;
-                case AttachFile.request_code_image_from_gallery_single_select:
-                    if (data.getData() == null) {
-                        return;
-                    }
-                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true); //rotate image
-                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
-                    new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
-                    break;
-            }
+    private void showPopUp() {
+        if (getActivity() != null) {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.add_to_home_screen));
+            new TopSheetDialog(getActivity()).setListData(items, -1, position -> {
+                //ToDo: add code for add to home screen
+            }).show();
         }
     }
 
 
     //********* kick user from roles
     public void kickMember(final Long peerId) {
-
-        new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_kick_this_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestChannelKickMember().channelKickMember(fragmentChannelProfileViewModel.roomId, peerId);
-            }
-        }).show();
-
+        if (getActivity() != null) {
+            new MaterialDialog.Builder(getActivity())
+                    .content(R.string.do_you_want_to_kick_this_member)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onPositive((dialog, which) -> new RequestChannelKickMember().channelKickMember(viewModel.roomId, peerId))
+                    .show();
+        }
     }
 
     public void kickModerator(final Long peerId) {
-
-        new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_set_modereator_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestChannelKickModerator().channelKickModerator(fragmentChannelProfileViewModel.roomId, peerId);
-            }
-        }).show();
+        if (getActivity() != null) {
+            new MaterialDialog.Builder(getActivity()).
+                    content(R.string.do_you_want_to_set_modereator_role_to_member)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onPositive((dialog, which) -> new RequestChannelKickModerator().channelKickModerator(viewModel.roomId, peerId))
+                    .show();
+        }
     }
 
     public void kickAdmin(final Long peerId) {
+        if (getActivity() != null) {
+            new MaterialDialog.Builder(getActivity())
+                    .content(R.string.do_you_want_to_set_admin_role_to_member)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onPositive((dialog, which) -> new RequestChannelKickAdmin().channelKickAdmin(viewModel.roomId, peerId))
+                    .show();
+        }
+    }
 
-        new MaterialDialog.Builder(G.fragmentActivity).content(R.string.do_you_want_to_set_admin_role_to_member).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+    @Override
+    public void onChannelAvatarDelete(long roomId, long avatarId) {
+        setAvatar();
+    }
 
-                new RequestChannelKickAdmin().channelKickAdmin(fragmentChannelProfileViewModel.roomId, peerId);
-            }
-        }).show();
-
+    @Override
+    public void onError(int majorCode, int minorCode) {
 
     }
 
-    private void showProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (prgWait != null) {
-                    prgWait.setVisibility(View.VISIBLE);
-                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            }
-        });
+    @Override
+    public void onTimeOut() {
+
     }
 
-    private void hideProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (prgWait != null) {
-                    prgWait.setVisibility(View.GONE);
-                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            }
-        });
+    private void removeRoomAccessChangeListener() {
+        if (currentRoomAccess != null && roomAccessChangeListener != null) {
+            currentRoomAccess.removeChangeListener(roomAccessChangeListener);
+            currentRoomAccess = null;
+            roomAccessChangeListener = null;
+        }
     }
-
-    public interface OnBackFragment {
-        void onBack();
-    }
-
 }

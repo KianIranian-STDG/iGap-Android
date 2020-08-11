@@ -7,199 +7,224 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.google.zxing.integration.android.IntentIntegrator;
+import androidx.annotation.DrawableRes;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentPaymentBillBinding;
-import net.iGap.fragments.FragmentPaymentBill;
-import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnMplResult;
+import net.iGap.helper.HelperNumerical;
 import net.iGap.request.RequestMplGetBillToken;
 
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
 
-import static net.iGap.activities.ActivityMain.requestCodeBarcode;
+public class FragmentPaymentBillViewModel extends ViewModel {
 
+    private ObservableInt haveAmount = new ObservableInt(View.VISIBLE);
+    private ObservableInt showLoadingView = new ObservableInt(View.INVISIBLE);
+    private ObservableInt showScannerButton = new ObservableInt(View.GONE);
+    private ObservableBoolean enabledPaymentButton = new ObservableBoolean(true);
+    private ObservableField<String> payId = new ObservableField<>("");
+    private ObservableField<String> billId = new ObservableField<>("");
+    private ObservableField<String> billAmount = new ObservableField<>("");
+    private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goToScannerPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    private MutableLiveData<Boolean> hideKeyword = new MutableLiveData<>();
+    private MutableLiveData<Integer> billTypeImage = new MutableLiveData<>();
 
-public class FragmentPaymentBillViewModel {
+    private boolean isPolice;
 
-    private FragmentPaymentBill fragmentPaymentBill;
-    private FragmentPaymentBillBinding fragmentPaymentBillBinding;
-    public ObservableInt observeCompany = new ObservableInt(View.GONE);
-    public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
-    public ObservableField<String> PID = new ObservableField<>("");
-    public ObservableField<String> BID = new ObservableField<>("");
-    public ObservableBoolean observePolice = new ObservableBoolean(false);
-    public ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
-    public ObservableBoolean observeAmount = new ObservableBoolean(false);
+    public FragmentPaymentBillViewModel(boolean isPolice, String PID_Str, String BID_Str) {
 
-    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
-
-    private boolean isPolice = false;
-
-    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId, String PID_Str, String BID_Str) {
-        this.fragmentPaymentBill = fragmentPaymentBill;
-        this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
-        observeTitleToolbar.set(G.context.getString(resTitleId));
-
-        isPolice = resTitleId == R.string.pay_bills_crime;
+        this.isPolice = isPolice;
 
         if (isPolice) {
-            observePolice.set(true);
-            observeAmount.set(false);
+            haveAmount.set(View.GONE);
+            billTypeImage.setValue(R.mipmap.trafic_police);
+        } else {
+            showScannerButton.set(View.VISIBLE);
         }
 
-        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
-        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
-        observeBackGround.set(myIcon);
         if (PID_Str != null) {
-            PID.set(PID_Str);
+            payId.set(PID_Str);
         } else {
-            PID.set("");
+            payId.set("");
         }
 
         if (BID_Str != null) {
-            BID.set(BID_Str);
+            billId.set(BID_Str);
         } else {
-            BID.set("");
+            billId.set("");
         }
     }
 
+    public MutableLiveData<Integer> getBillTypeImage() {
+        return billTypeImage;
+    }
 
-    public void onTextChangedBillId(CharSequence s, int start, int before, int count) {
-        if (isPolice) {
-            return;
-        }
-        if (s.length() == 13) {
-            observeCompany.set(View.VISIBLE);
-            fragmentPaymentBillBinding.fpbImvCompany.setImageResource(getCompany(s.toString().substring(11, 12)));
-        } else {
-            observeCompany.set(View.GONE);
+    public ObservableInt getHaveAmount() {
+        return haveAmount;
+    }
+
+    public ObservableInt getShowLoadingView() {
+        return showLoadingView;
+    }
+
+    public ObservableInt getShowScannerButton() {
+        return showScannerButton;
+    }
+
+    public ObservableBoolean getEnabledPaymentButton() {
+        return enabledPaymentButton;
+    }
+
+    public ObservableField<String> getPayId() {
+        return payId;
+    }
+
+    public ObservableField<String> getBillId() {
+        return billId;
+    }
+
+    public ObservableField<String> getBillAmount() {
+        return billAmount;
+    }
+
+    public MutableLiveData<Integer> getShowErrorMessage() {
+        return showErrorMessage;
+    }
+
+    public MutableLiveData<Boolean> getGoToScannerPage() {
+        return goToScannerPage;
+    }
+
+    public MutableLiveData<Boolean> getGoBack() {
+        return goBack;
+    }
+
+    public MutableLiveData<Boolean> getHideKeyword() {
+        return hideKeyword;
+    }
+
+    public void onTextChangedBillId(String s) {
+        if (!isPolice) {
+            if (s.length() == 13) {
+                billTypeImage.setValue(getCompany(s.substring(11, 12)));
+            }
         }
     }
 
+    public void onTextChangedPaymentCode(String s) {
+        if (s != null && s.length() > 5 && s.length() < 12) {
+            int price = Integer.parseInt(s.substring(0, s.length() - 5)) * 1000;
+            billAmount.set(new HelperNumerical().getCommaSeparatedPrice(price));
+        }
+    }
 
-    public void onClickBarCode(View v) {
+    public void onClickBarCode() {
+        goToScannerPage.setValue(true);
+    }
 
-        try {
-            HelperPermission.getCameraPermission(G.currentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException, IllegalStateException {
-                    IntentIntegrator integrator = IntentIntegrator.forSupportFragment(fragmentPaymentBill);
-                    integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128);
-                    integrator.setRequestCode(requestCodeBarcode);
-                    integrator.setBeepEnabled(false);
-                    integrator.setPrompt("");
-                    integrator.initiateScan();
+    public void onPayBillClick(String billId, String payId) {
+        hideKeyword.setValue(true);
+        if (G.userLogin) {
+            if (isPolice) {
+                if (billId.length() == 0) {
+                    showErrorMessage.setValue(R.string.biling_id_not_valid);
+                    return;
                 }
 
-                @Override
-                public void deny() {
+            } else {
+                if (billId.length() != 13) {
+                    showErrorMessage.setValue(R.string.biling_id_not_valid);
+                    return;
                 }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void onPayBillClick(View v) {
-
-        if (!G.userLogin) {
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-            return;
-        }
-
-        String billId = fragmentPaymentBillBinding.fpbEdtBillId.getText().toString();
-
-        if (isPolice) {
-            if (billId.length() == 0) {
-                HelperError.showSnackMessage(G.context.getResources().getString(R.string.biling_id_not_valid), false);
-                return;
             }
 
-        } else {
-            if (billId.length() != 13) {
-                HelperError.showSnackMessage(G.context.getResources().getString(R.string.biling_id_not_valid), false);
-                return;
+            if (isPolice) {
+                if (payId.length() == 0) {
+                    showErrorMessage.setValue(R.string.pay_id_is_not_valid);
+                    return;
+                }
+            } else {
+                if (payId.length() > 13 || payId.length() < 5) {
+                    showErrorMessage.setValue(R.string.pay_id_is_not_valid);
+                    return;
+                }
             }
-        }
 
 
-        String payId = fragmentPaymentBillBinding.fpbEdtPayId.getText().toString();
-
-        if (isPolice) {
-            if (payId.length() == 0) {
-                HelperError.showSnackMessage(G.context.getResources().getString(R.string.pay_id_is_not_valid), false);
-                return;
-            }
-        } else {
-            if (payId.length() > 13 || payId.length() < 5) {
-                HelperError.showSnackMessage(G.context.getResources().getString(R.string.pay_id_is_not_valid), false);
-                return;
-            }
-        }
-
-
-        G.onMplResult = new OnMplResult() {
-            @Override
-            public void onResult(boolean error) {
-
+            G.onMplResult = error -> {
+                showLoadingView.set(View.INVISIBLE);
                 if (error) {
-                    observeEnabledPayment.set(true);
+                    enabledPaymentButton.set(true);
                 } else {
-                    fragmentPaymentBillBinding.getBackHandler().onBack();
+                    goBack.setValue(true);
                 }
 
-            }
-        };
+            };
 
-        RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
+            showLoadingView.set(View.VISIBLE);
 
-        observeEnabledPayment.set(false);
+            RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
+
+            enabledPaymentButton.set(false);
+        } else {
+            showErrorMessage.setValue(R.string.there_is_no_connection_to_server);
+        }
     }
 
+    public void setDataFromBarcodeScanner(String result) {
+        if (result != null) {
+            if (result.length() == 26) {
+                String billId = result.substring(0, 13);
+                String payId = result.substring(13, 26);
+                String company_type = result.substring(11, 12);
+                String price = result.substring(13, 21);
+                while (payId.startsWith("0")) {
+                    payId = payId.substring(1);
+                }
+                this.billId.set(billId);
+                this.payId.set(payId);
+                this.billTypeImage.setValue(getCompany(company_type));
+                this.haveAmount.set(View.VISIBLE);
+                this.billAmount.set(new HelperNumerical().getCommaSeparatedPrice((Integer.parseInt(price) * 1000)));
+            }
+        }
+    }
 
-    public static int getCompany(String value) {
-
-        int result = 0;
+    private @DrawableRes
+    int getCompany(@NotNull String value) {
         switch (value) {
             case "1":
-                result = R.drawable.bill_water_pec;
-                break;
+                return R.drawable.bill_water_pec;
             case "2":
-                result = R.drawable.bill_elc_pec;
-                break;
+                return R.drawable.bill_elc_pec;
             case "3":
-                result = R.drawable.bill_gaz_pec;
-                break;
+                return R.drawable.bill_gaz_pec;
             case "4":
-                result = R.drawable.bill_telecom_pec;
-                break;
+                return R.drawable.bill_telecom_pec;
             case "5":
-                result = R.drawable.bill_mci_pec;
-                break;
+                return R.drawable.bill_mci_pec;
             case "6":
-                result = R.drawable.bill_shahrdari_pec;
-                break;
+                return R.drawable.bill_shahrdari_pec;
+            default:
+                return R.mipmap.empty;
         }
-
-        return result;
     }
 
-
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        G.onMplResult = null;
+    }
 }

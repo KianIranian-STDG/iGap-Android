@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_item_pop_rows"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@drawable/shape_favorite_channel_dark"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_item_popular_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_margin="@dimen/dp2"
+        android:textColor="?attr/iGapPrimaryTextColor"
+        android:textSize="@dimen/smallTextSize" />
+
+    <RelativeLayout
+
+        android:id="@+id/rl_item_pop_rows"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_favorite_channel_all">
+
+        <FrameLayout
+            android:id="@+id/frame_more_one"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp2"
+                android:layout_marginEnd="@dimen/dp2"
+                android:adjustViewBounds="true"
+                android:tint="?attr/iGapTitleTextColor"
+                app:srcCompat="@drawable/ic_more_popular_channel" />
+        </FrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_popular_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@+id/frame_more_one"
+            android:layout_toLeftOf="@+id/frame_more_one"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp4" />
+
+    </RelativeLayout>
+</LinearLayout>

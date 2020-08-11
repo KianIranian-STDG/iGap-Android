@@ -10,13 +10,8 @@
 
 package net.iGap.response;
 
-import android.content.pm.PackageManager;
-import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
-
-import net.iGap.G;
 import net.iGap.helper.HelperTracker;
+import net.iGap.observers.interfaces.OnUserRegistration;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserRegister;
 
@@ -25,7 +20,7 @@ public class UserRegisterResponse extends MessageHandler {
     public int actionId;
     public Object message;
 
-    public UserRegisterResponse(int actionId, Object protoClass, String identity) {
+    public UserRegisterResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -37,21 +32,11 @@ public class UserRegisterResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
-        if (G.onUserRegistration != null)
-            G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported());
-
-        G.userId = builder.getUserId();
-        G.authorHash = builder.getAuthorHash();
-        G.displayName = builder.getUsername();
-
-        PackageManager pm = G.context.getPackageManager();
-        String installationSource = pm.getInstallerPackageName(G.context.getPackageName());
-
-        if (installationSource == null) {
-            installationSource = "(Unknown Market)";
+        if (identity instanceof OnUserRegistration) {
+            ((OnUserRegistration) identity).onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported());
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
         }
-
-        Crashlytics.logException(new Exception("installationSource : " + installationSource));
 
         HelperTracker.sendTracker(HelperTracker.TRACKER_SUBMIT_NUMBER);
     }
@@ -64,7 +49,10 @@ public class UserRegisterResponse extends MessageHandler {
         final int minorCode = errorResponse.getMinorCode();
         final int getWait = errorResponse.getWait();
 
-        if (G.onUserRegistration != null)
-            G.onUserRegistration.onRegisterError(majorCode, minorCode, getWait);
+        if (identity instanceof OnUserRegistration) {
+            ((OnUserRegistration) identity).onRegisterError(majorCode, minorCode, getWait);
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
+        }
     }
 }

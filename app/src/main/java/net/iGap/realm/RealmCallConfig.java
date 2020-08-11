@@ -10,7 +10,6 @@
 
 package net.iGap.realm;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
 
 import java.util.List;
@@ -27,36 +26,21 @@ public class RealmCallConfig extends RealmObject {
     private boolean screen_sharing;
     private RealmList<RealmIceServer> realmIceServer = null;
 
-    public static void updateSignalingConfiguration(final ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder) {
+    public static RealmCallConfig putOrUpdate(Realm asyncRealm, ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder) {
 
-        Realm realm = Realm.getDefaultInstance();
+        RealmCallConfig callConfig = asyncRealm.where(RealmCallConfig.class).findFirst();
 
-        final RealmCallConfig realmCall = realm.where(RealmCallConfig.class).findFirst();
+        if (callConfig == null) {
+            callConfig = asyncRealm.createObject(RealmCallConfig.class);
+        }
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        callConfig.setVoice_calling(builder.getVoiceCalling());
+        callConfig.setVideo_calling(builder.getVideoCalling());
+        callConfig.setScreen_sharing(builder.getScreenSharing());
 
-                RealmCallConfig item;
+        callConfig.setIceServer(asyncRealm, builder.getIceServerList());
 
-                if (realmCall == null) {
-                    RealmCallConfig _rc = new RealmCallConfig();
-                    item = realm.copyToRealm(_rc);
-                } else {
-                    item = realmCall;
-                }
-
-                item.setVoice_calling(builder.getVoiceCalling());
-                item.setVideo_calling(builder.getVideoCalling());
-                item.setScreen_sharing(builder.getScreenSharing());
-
-                item.setIceServer(realm, builder.getIceServerList());
-
-                G.needGetSignalingConfiguration = false;
-            }
-        });
-
-        realm.close();
+        return callConfig;
     }
 
     public boolean isVoice_calling() {
@@ -88,8 +72,7 @@ public class RealmCallConfig extends RealmObject {
         return realmIceServer;
     }
 
-    public void setIceServer(Realm realm, List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer> iceServer) {
-
+    private void setIceServer(Realm realm, List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer> iceServer) {
         for (ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer mIceService : iceServer) {
             RealmIceServer iceProto = realm.createObject(RealmIceServer.class);
             iceProto.setUrl(mIceService.getUrl());
@@ -97,8 +80,6 @@ public class RealmCallConfig extends RealmObject {
             iceProto.setCredential(mIceService.getCredential());
             realmIceServer.add(iceProto);
         }
-
-
     }
 }
 

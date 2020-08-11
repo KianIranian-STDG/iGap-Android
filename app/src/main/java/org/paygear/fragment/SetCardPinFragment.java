@@ -3,27 +3,25 @@ package org.paygear.fragment;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -31,11 +29,9 @@ import org.paygear.model.Card;
 import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.web.PostRequest;
@@ -46,7 +42,6 @@ import retrofit2.Response;
 
 public class SetCardPinFragment extends Fragment {
 
-    private RaadToolBar appBar;
     private EditText currentPass;
     private EditText newPass;
     private EditText confirmPass;
@@ -106,21 +101,36 @@ public class SetCardPinFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setTitle(getString(R.string.paygear_card_pin));
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.paygear_card_pin))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
         if (RaadApp.selectedMerchant != null) {
             if (RaadApp.selectedMerchant.getName() != null && !RaadApp.selectedMerchant.getName().equals("")) {
-                appBar.setTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getName());
+                toolbar.setDefaultTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getName());
             } else {
-                appBar.setTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getUsername());
+                toolbar.setDefaultTitle(getString(R.string.paygear_card_pin) + " " + RaadApp.selectedMerchant.getUsername());
             }
         } else {
-            appBar.setTitle(getString(R.string.paygear_card_pin));
+            toolbar.setDefaultTitle(getString(R.string.paygear_card_pin));
         }
 
-        appBar.showBack();
         ViewGroup root_current = view.findViewById(R.id.root_current);
         root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
 
@@ -134,13 +144,13 @@ public class SetCardPinFragment extends Fragment {
         confirmPass = view.findViewById(R.id.confirm_pass);
 
         button = view.findViewById(R.id.button);
-        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+        /*Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
         if (mDrawableSkip != null) {
             mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 button.setBackground(mDrawableSkip);
             }
-        }
+        }*/
 
         if (WalletActivity.isDarkTheme) {
             currentPass.setHintTextColor(Color.parseColor(WalletActivity.textTitleTheme));

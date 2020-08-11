@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground"
+    android:padding="@dimen/dp4">
+
+    <net.iGap.module.RadiusImageView
+        android:id="@+id/sle_sub_imageView1"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:padding="@dimen/dp14"
+        android:layout_margin="@dimen/dp6"
+        android:background="@drawable/shape_file_manager_file_bg"
+        app:srcCompat="@drawable/ic_fm_file"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <net.iGap.module.customView.CheckBox
+        android:id="@+id/checkSelect"
+        android:layout_width="@dimen/dp20"
+        android:layout_height="@dimen/dp20"
+        android:visibility="visible"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="@id/sle_sub_imageView1"
+        app:layout_constraintRight_toRightOf="@id/sle_sub_imageView1" />
+
+    <TextView
+        android:id="@+id/sle_sub_textView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp10"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        android:singleLine="true"
+        android:gravity="left"
+        android:textStyle="bold"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@id/sle_sub_imageView1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/sle_sub_textView2" />
+
+    <TextView
+        android:id="@+id/sle_sub_textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/smallTextSize"
+        android:singleLine="true"
+        android:gravity="left"
+        app:layout_constraintLeft_toRightOf="@id/sle_sub_imageView1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sle_sub_textView1"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:background="?iGapDividerLine"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

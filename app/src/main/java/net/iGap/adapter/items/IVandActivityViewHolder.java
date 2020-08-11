@@ -1,26 +1,26 @@
 package net.iGap.adapter.items;
 
-import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.module.CustomTextViewMedium;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.Calendar;
 
 public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
-    private CustomTextViewMedium txt_subject;
-    private CustomTextViewMedium txt_date;
-    private CustomTextViewMedium txt_score;
-    private MaterialDesignTextView image;
+    private AppCompatTextView txt_subject;
+    private AppCompatTextView txt_date;
+    private AppCompatTextView txt_score;
+    private AppCompatTextView image;
 
     public IVandActivityViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -31,9 +31,6 @@ public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindView(ProtoGlobal.IVandActivity item) {
-        txt_subject.setTextColor(Color.parseColor(G.textTitleTheme));
-        txt_score.setTextColor(Color.parseColor(G.textTitleTheme));
-        txt_date.setTextColor(Color.parseColor(G.textTitleTheme));
 
         txt_subject.setText(item.getTitle());
         txt_score.setText(String.valueOf(Math.abs(item.getScore())));
@@ -51,14 +48,14 @@ public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (item.getScore() > 0) {
-            image.setText(G.context.getString(R.string.md_igap_arrow_up_thick));
-            image.setTextColor(G.context.getResources().getColor(R.color.green));
+            image.setText(R.string.md_igap_arrow_up_thick);
+            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.green));
         } else if (item.getScore() < 0) {
-            image.setText(G.context.getString(R.string.md_igap_arrow_down_thick));
-            image.setTextColor(G.context.getResources().getColor(R.color.red));
+            image.setText(R.string.md_igap_arrow_down_thick);
+            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.red));
         } else {
-            image.setText(G.context.getString(R.string.md_igap_minus));
-            image.setTextColor(G.context.getResources().getColor(R.color.gray));
+            image.setText(R.string.md_igap_minus);
+            image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.gray));
         }
     }
 }

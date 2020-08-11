@@ -7,22 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -41,6 +31,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
@@ -48,10 +46,15 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.CongratulationsDialogBinding;
 import net.iGap.databinding.QrVoucherDialogBinding;
 import net.iGap.databinding.UnsuccessfulDialogBinding;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmUserInfo;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
@@ -68,7 +71,6 @@ import java.util.regex.Pattern;
 import ir.radsense.raadcore.OnFragmentInteraction;
 import ir.radsense.raadcore.app.AlertDialog;
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.QR;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
@@ -88,7 +90,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     CongratulationsDialogBinding successfulDialogBinding;
     UnsuccessfulDialogBinding unsuccessfulDialogBinding;
     private View rootView;
-    private RaadToolBar appBar;
     private ImageView appBarImage;
     private TextView appBarTitle;
     private RelativeLayout contentLayout;
@@ -123,32 +124,48 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //setupTheme();
+
         View view = rootView = inflater.inflate(R.layout.fragment_scanner, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
-        appBar = view.findViewById(R.id.app_bar);
 
-        setAppBar();
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.scan_qr_code_icon)
+                .setDefaultTitle(getString(R.string.scanner))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
 
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            isVisible = false;
+                            ((NavigationBarActivity) getActivity()).pushFullFragment(new MyQRFragment(), "MyQRFragment");
+                        } else {
+                            isVisible = false;
+                            new HelperFragment(getActivity().getSupportFragmentManager(), new MyQRFragment()).setReplace(false).load();
+                        }
+                    }
+                });
 
-        ViewGroup root_current = view.findViewById(R.id.root_current);
-        root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
 
-        appBar.addButton(getString(R.string.my_qr), false, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getActivity() instanceof NavigationBarActivity) {
-                    isVisible = false;
-                    ((NavigationBarActivity) getActivity()).pushFullFragment(new MyQRFragment(), "MyQRFragment");
-                }
-            }
-        }, false);
 
-        appBar.showBack();
+        //ViewGroup root_current = view.findViewById(R.id.root_current);
+        //root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+
 
         balanceText = view.findViewById(R.id.balance);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -183,6 +200,9 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         if (RaadApp.paygearCard != null) {
             balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
                     RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, true));
+        } else {
+            balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
+                    String.format(getString(R.string.wallet_Reial), RealmUserInfo.queryWalletAmount()));
         }
 
         flashImage.setOnClickListener(new View.OnClickListener() {
@@ -203,6 +223,27 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         });
 
         return view;
+    }
+
+    private void setupTheme() {
+
+        try {
+            //     WalletActivity.backgroundTheme = G.backgroundTheme;
+            //  WalletActivity.backgroundTheme_2 = G.backgroundTheme_2;
+
+            if (WalletActivity.backgroundTheme.length() == 9) {
+                WalletActivity.backgroundTheme = "#FF" + WalletActivity.backgroundTheme.substring(3);
+            }
+
+            if (WalletActivity.backgroundTheme_2.length() == 9) {
+                WalletActivity.backgroundTheme_2 = "#FF" + WalletActivity.backgroundTheme_2.substring(3);
+            }
+
+            //   WalletActivity.primaryColor = G.appBarColor ;
+
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -415,40 +456,6 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         flashImage.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void setAppBar() {
-        FrameLayout appBarView = appBar.getBack();
-
-        Context context = getContext();
-        int dp8 = RaadCommonUtils.getPx(8, context);
-        int dp16 = RaadCommonUtils.getPx(16, context);
-
-        LinearLayout titleLayout = new LinearLayout(context);
-        titleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        FrameLayout.LayoutParams titleLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        titleLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-        titleLayout.setLayoutParams(titleLayoutParams);
-        titleLayout.setGravity(Gravity.CENTER_VERTICAL);
-        appBarView.addView(titleLayout);
-
-        appBarImage = new AppCompatImageView(context);
-        int dp40 = RaadCommonUtils.getPx(40, context);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp40, dp40);
-        imageParams.rightMargin = dp16;
-        imageParams.leftMargin = dp16;
-        appBarImage.setLayoutParams(imageParams);
-        titleLayout.addView(appBarImage);
-
-        appBarTitle = new AppCompatTextView(context);
-        appBarTitle.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        //appBarTitle.setGravity(Gravity.CENTER);
-        appBarTitle.setTextColor(Color.WHITE);
-        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
-        titleLayout.addView(appBarTitle);
-
-    }
 
     private void addTipText(String text, int gravity, boolean above, View anchorView) {
         Context context = getContext();
@@ -501,7 +508,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             return;
         Account myAccount = RaadApp.me;
         appBarTitle.setText(getString(R.string.scanner));
-        Picasso.get()
+        Picasso.with(G.context)
                 .load(RaadCommonUtils.getImageUrl(myAccount.profilePicture))
                 .transform(new CircleImageTransform())
                 .error(R.drawable.ic_person_outline_black_24dp)
@@ -605,7 +612,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         qrVoucherDialogBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.qr_voucher_dialog, null, false);
         qrVoucherDialog.setContentView(qrVoucherDialogBinding.getRoot());
         qrVoucherDialog.setCanceledOnTouchOutside(false);
-        String message = "اعتبار هدیه پیگیر به مبلغ *.\nمایل به دریافت آن هستید؟";
+        String message = getString(R.string.gift_message);
         try {
             message = message.replace("*", RaadCommonUtils.formatPrice(Long.parseLong(qrData.value), true));
         } catch (Exception e) {
@@ -650,11 +657,11 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
                             if (success) {
                                 try {
-                                    showSuccessfulDialog(response.body().message);
-                                    if (getActivity() instanceof NavigationBarActivity) {
+                                    showSuccessfulDialog(response.body().message, qrData);
+                              /*      if (getActivity() instanceof NavigationBarActivity) {
                                         ((NavigationBarActivity) getActivity()).broadcastMessage(
                                                 ScannerFragment.this, null, CardsFragment.class);
-                                    }
+                                    }*/
                                 } catch (Exception e) {
 
                                 }
@@ -691,7 +698,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
 
     }
 
-    private void showSuccessfulDialog(String message) {
+    private void showSuccessfulDialog(String message, QRResponse qrData) {
         isVisible = false;
         final Context context = getContext();
         if (context == null)
@@ -718,12 +725,29 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         successfulDialogBinding.confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "برای اعمال اعتبار هدیه چند لحظه صبر کنید.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getString(R.string.toast_success_gift), Toast.LENGTH_LONG).show();
                 if (getActivity() instanceof NavigationBarActivity) {
-                    ((NavigationBarActivity) getActivity()).broadcastMessage(
-                            ScannerFragment.this, null, CardsFragment.class);
+                 /*     for (int i = 0; i < RaadApp.cards.size(); i++) {
+
+                          if (qrData.accountId.equals(RaadApp.cards.get(i).clubId)) {
+                              ((NavigationBarActivity) getActivity()).pushFullFragment(CardsFragment.newInstance(true,i),"CardsFragment");
+                              break;
+                          }else {
+
+                                  if (getActivity() instanceof NavigationBarActivity) {
+                                        ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                                ScannerFragment.this, null, CardsFragment.class);
+                                    }
+
+                          }
+
+                      }*/
+
+                    ((NavigationBarActivity) getActivity()).pushFullFragment(CardsFragment.newInstance(true, qrData.accountId), "CardsFragment");
+
+
                 }
-                isVisible = true;
+                isVisible = false;
                 successfulDialog.dismiss();
             }
         });

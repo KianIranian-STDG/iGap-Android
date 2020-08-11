@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/dp4"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="1dp">
+
+    <net.iGap.libs.bannerslider.BannerSlider
+        android:id="@+id/bs_advertisementItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:slider_animateIndicators="true"
+        app:slider_indicatorSize="5dp"
+        app:slider_loopSlides="true"
+        app:slider_selectedSlideIndicator="@drawable/indicator_circle_selected"
+        app:slider_unselectedSlideIndicator="@drawable/indicator_circle_unselected" />
+
+
+</androidx.cardview.widget.CardView>

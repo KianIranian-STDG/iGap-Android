@@ -3,7 +3,8 @@ package net.iGap.libs.ripplesoundplayer.renderer;
 import android.animation.ArgbEvaluator;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Created by jkimab on 2017. 8. 31..

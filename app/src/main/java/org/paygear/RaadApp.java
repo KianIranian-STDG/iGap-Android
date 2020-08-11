@@ -1,17 +1,15 @@
 package org.paygear;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
-import android.arch.lifecycle.ProcessLifecycleOwner;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 import org.paygear.fragment.PaymentHistoryFragment;
-
-import net.iGap.R;
-
 import org.paygear.model.Card;
 import org.paygear.model.SearchedAccount;
 import org.paygear.utils.SettingHelper;
@@ -19,24 +17,14 @@ import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.model.Account;
-import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.socket.RaadWebSocket;
-import ir.radsense.raadcore.web.PostRequest;
 import ir.radsense.raadcore.web.WebBase;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-
-/**
- * Created by Software1 on 8/29/2017.
- */
 
 public class RaadApp {
 
@@ -64,7 +52,7 @@ public class RaadApp {
     public static boolean hasRefreshTokenRequest = false;
     public static boolean appIsInBackground = false;
 
-//    @Override
+    //    @Override
     public static void onCreate(Context applicationContext) {
 //        if (Auth.getCurrentAuth() != null) {
 //            Config config = new Config(Auth.getCurrentAuth().accessToken, "");
@@ -79,7 +67,7 @@ public class RaadApp {
         WebBase.isDebug = false;
         WebBase.onResponseListener = new OnWebResponseListener() {
             @Override
-            public boolean onResponse(final Context context, Response response, final android.support.v4.app.Fragment fragment) {
+            public boolean onResponse(final Context context, Response response, final Fragment fragment) {
                 if (context instanceof NavigationBarActivity) {
                     if (response.raw().request().url().url().getPath().contains("refresh") && response.code() == 403) {
                         Utils.signOutAndGoLogin(fragment.getActivity());
@@ -205,6 +193,7 @@ public class RaadApp {
 
     public static class AppLifecycleListener implements LifecycleObserver {
         Context context;
+
         AppLifecycleListener(Context context) {
             this.context = context;
         }

@@ -1,74 +1,120 @@
 package net.iGap.viewmodel;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import android.view.Gravity;
 import android.view.View;
+
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentContactsProfileBinding;
-import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentShearedMedia;
-import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnUserContactEdit;
-import net.iGap.interfaces.OnUserInfoResponse;
-import net.iGap.interfaces.OnUserUpdateStatus;
+import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LastSeenTimeUtil;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnUserContactDelete;
+import net.iGap.observers.interfaces.OnUserContactEdit;
+import net.iGap.observers.interfaces.OnUserInfoResponse;
+import net.iGap.observers.interfaces.OnUserUpdateStatus;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestSignalingGetConfiguration;
+import net.iGap.request.RequestUserContactsDelete;
+import net.iGap.request.RequestUserInfo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
+import io.realm.RealmObjectChangeListener;
 
-import static net.iGap.G.context;
+public class FragmentContactsProfileViewModel extends ViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
 
-public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUserUpdateStatus, OnUserInfoResponse {
-
-    public long shearedId = -2;
-    public String firstName;
-    public String lastName;
-    public boolean isBlockUser = false;
-    public boolean disableDeleteContact = false;
-    public boolean isVerified = false;
-    public ObservableInt videoCallVisibility = new ObservableInt(View.GONE);
-    public ObservableInt callVisibility = new ObservableInt(View.GONE);
-    public ObservableInt menuVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableInt toolbarVisibility = new ObservableInt(View.GONE);
     public ObservableInt bioVisibility = new ObservableInt(View.VISIBLE);
     public ObservableBoolean showNumber = new ObservableBoolean(true);
     public ObservableField<String> username = new ObservableField<>();
-    public ObservableField<String> contactName = new ObservableField<>();
-    public ObservableField<String> lastSeen = new ObservableField<>();
     public ObservableField<String> phone = new ObservableField<>("0");
     public ObservableField<String> bio = new ObservableField<>();
-    public ObservableField<String> sharedMedia = new ObservableField<>();
-    public ObservableField<Integer> verifyTextVisibility = new ObservableField<>(View.VISIBLE);
-    private Realm realm;
+    public ObservableInt verifyTextVisibility = new ObservableInt(View.VISIBLE);
+    public ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
+
+    public ObservableInt sharedPhotoVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedPhotoCount = new ObservableInt(0);
+    public ObservableInt sharedVideoVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedVideoCount = new ObservableInt(0);
+    public ObservableInt sharedAudioVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedAudioCount = new ObservableInt(0);
+    public ObservableInt sharedVoiceVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedVoiceCount = new ObservableInt(0);
+    public ObservableInt sharedGifVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedGifCount = new ObservableInt(0);
+    public ObservableInt sharedFileVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedFileCount = new ObservableInt(0);
+    public ObservableInt sharedLinkVisibility = new ObservableInt(View.GONE);
+    public ObservableInt sharedLinkCount = new ObservableInt(0);
+    public ObservableInt userBlockState = new ObservableInt(R.string.block);
+    public ObservableInt sharedEmptyVisibility = new ObservableInt(View.VISIBLE);
+    public MutableLiveData<Integer> callVisibility = new MutableLiveData<>();
+    public MutableLiveData<Integer> videoCallVisibility = new MutableLiveData<>();
+    public MutableLiveData<Integer> menuVisibility = new MutableLiveData<>();
+    public MutableLiveData<Boolean> cloudVisibility = new MutableLiveData<>();
+
+    public ObservableBoolean isMuteNotification = new ObservableBoolean(false);
+    public MutableLiveData<Boolean> isMuteNotificationChangeListener = new MutableLiveData<>();
+    public ObservableBoolean isShowReportView = new ObservableBoolean(false);
+
+    //ui event and observed
+    public MutableLiveData<Boolean> showMenu = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showClearChatDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToCustomNotificationPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goToShowAvatarPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> setAvatar = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDeleteContactDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogReportContact = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showDialogStartSecretChat = new MutableLiveData<>();
+    public MutableLiveData<Boolean> showPhoneNumberDialog = new MutableLiveData<>();
+    public MutableLiveData<String> contactName = new MutableLiveData<>();
+    public MutableLiveData<String> lastSeen = new MutableLiveData<>();
+    public MutableLiveData<Long> goToChatPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goBack = new MutableLiveData<>();
+    public MutableLiveData<GoToSharedMediaModel> goToShearedMediaPage = new MutableLiveData<>();
+    public MutableLiveData<Boolean> blockDialogListener = new MutableLiveData<>();
+    public MutableLiveData<String> copyUserNameToClipBoard = new MutableLiveData<>();
+    public MutableLiveData<Boolean> editContactListener = new MutableLiveData<>();
+
+    public List<String> items;
     private RealmRoom mRoom;
     private RealmRegisteredInfo registeredInfo;
     private RealmList<RealmAvatar> avatarList;
     private RealmChangeListener<RealmModel> changeListener;
-    private FragmentContactsProfileBinding fragmentContactsProfileBinding;
-    private long userId;
-    private long roomId;
+    public long shearedId = -2;
+    public String firstName;
+    public String lastName;
+    public String phoneNumber = "+0";
+    public boolean isBlockUser = false;
+    public boolean disableDeleteContact = false;
+    public boolean isVerified = false;
+    public long userId;
+    public long roomId;
     private long lastSeenValue;
     private String enterFrom;
     private String initials;
@@ -77,9 +123,13 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     private String avatarPath;
     private AvatarHandler avatarHandler;
     private boolean isBot = false;
+    private boolean isCloud;
 
-    public FragmentContactsProfileViewModel(FragmentContactsProfileBinding fragmentContactsProfileBinding, long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
-        this.fragmentContactsProfileBinding = fragmentContactsProfileBinding;
+    public FragmentContactsProfileViewModel() {
+
+    }
+
+    public void init(long roomId, long userId, String enterFrom, AvatarHandler avatarHandler) {
         this.roomId = roomId;
         this.userId = userId;
         this.enterFrom = enterFrom;
@@ -87,6 +137,151 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
         mainStart();
         startInitCallbacks();
+        getUserInfo(); // client should send request for get user info because need to update user online timing
+    }
+
+    private void getUserInfo() {
+        new RequestUserInfo().userInfo(userId);
+    }
+
+    public void onNotificationCheckChange(boolean isChecked) {
+        isMuteNotification.set(isChecked);
+
+    }
+
+    public void onNotificationClick() {
+        isMuteNotification.set(!isMuteNotification.get());
+        isMuteNotificationChangeListener.setValue(isMuteNotification.get());
+    }
+
+    public void onMoreButtonClick() {
+        //todo: fixed string list
+        items = new ArrayList<>();
+        /*if (G.userId != userId) {
+            if (isBlockUser) {
+                items.add(G.fragmentActivity.getString(R.string.un_block_user));
+            } else {
+                items.add(G.fragmentActivity.getString(R.string.block_user));
+            }
+        }*/
+        /*items.add(G.fragmentActivity.getString(R.string.clear_history));*/
+        if (AccountManager.getInstance().getCurrentUser().getId() != userId && !disableDeleteContact) {
+            items.add(G.fragmentActivity.getString(R.string.delete_contact));
+            items.add(G.fragmentActivity.getString(R.string.edit_contact));
+        }
+        showMenu.setValue(true);
+    }
+
+    public void onMenuItemClick(int position) {
+        /*if (items.get(position).equals(G.fragmentActivity.getString(R.string.un_block_user)) || items.get(position).equals(G.fragmentActivity.getString(R.string.block_user))) {
+            blockOrUnblockUser();
+        } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.clear_history))) {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    if (FragmentChat.onComplete != null) {
+                        FragmentChat.onComplete.complete(false, roomId + "", "");
+                    }
+                }
+            }).negativeText(R.string.B_cancel).show();
+        } else*/
+        if (items.get(position).equals(G.fragmentActivity.getString(R.string.delete_contact))) {
+            showDeleteContactDialog.setValue(true);
+        } else if (items.get(position).equals(G.fragmentActivity.getString(R.string.edit_contact))) {
+            editContactListener.setValue(true);
+        }
+    }
+
+    public void onClickGoToChat() {
+        if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            });
+
+            if (realmRoom != null) {
+                goToChatPage.setValue(realmRoom.getId());
+            } else {
+                new RequestChatGetRoom().chatGetRoom(userId, new RequestChatGetRoom.OnChatRoomReady() {
+                    @Override
+                    public void onReady(ProtoGlobal.Room room) {
+                        DbManager.getInstance().doRealmTransaction(realm -> {
+                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
+                            realmRoom1.setDeleted(true);
+                        });
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                goToChatPage.setValue(room.getId());
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int major, int minor) {
+
+                    }
+                });
+            }
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    public void onClearChatClick() {
+        showClearChatDialog.setValue(true);
+    }
+
+    public void onPhoneNumberClick() {
+        showPhoneNumberDialog.setValue(true);
+    }
+
+    public void onCustomNotificationClick() {
+        goToCustomNotificationPage.setValue(true);
+    }
+
+    public void onReportButtonClick() {
+        showDialogReportContact.setValue(true);
+    }
+
+    public void onBlockButtonClick() {
+
+        //todo: move view code to fragment
+        blockDialogListener.postValue(isBlockUser);
+
+    }
+
+    public void onSecretChatClick() {
+        showDialogStartSecretChat.setValue(true);
+    }
+
+    public void deleteContact() {
+        G.onUserContactdelete = new OnUserContactDelete() {
+            @Override
+            public void onContactDelete() {
+                getUserInfo();
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+        new RequestUserContactsDelete().contactsDelete(phone.get());
+    }
+
+    public void onUserNameClicked() {
+
+        if (registeredInfo != null) {
+            copyUserNameToClipBoard.postValue(registeredInfo.getUsername());
+        }
+
+    }
+
+    //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
+    public void onSharedMediaItemClick(int type) {
+        goToShearedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));
     }
 
     //===============================================================================
@@ -95,7 +290,9 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
     private void mainStart() {
         if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || roomId == 0) {
-            RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            });
             if (realmRoom != null) {
                 shearedId = realmRoom.getId();
             }
@@ -103,52 +300,77 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             shearedId = roomId;
         }
 
-        registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
+        if (!RealmRoom.isNotificationServices(roomId)) {
+            isShowReportView.set(true);
+        } else {
+            isShowReportView.set(false);
+        }
 
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
+            cloudVisibility.postValue(true);
+        } else
+            cloudVisibility.postValue(false);
+
+        registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        });
         if (registeredInfo != null) {
-
+            registeredInfo.addChangeListener((RealmObjectChangeListener<RealmRegisteredInfo>) (realmModel, changeSet) -> {
+                if (changeSet != null) {
+                    for (int i = 0; i < changeSet.getChangedFields().length; i++) {
+                        if (changeSet.getChangedFields()[i].equals(RealmRegisteredInfoFields.BLOCK_USER)) {
+                            userBlockState.set(realmModel.isBlockUser() ? R.string.un_block_user : R.string.block);
+                        }
+                    }
+                }
+            });
             isBot = registeredInfo.isBot();
-            if (isBot) {
-                callVisibility.set(View.GONE);
-                menuVisibility.set(View.GONE);
-                videoCallVisibility.set(View.GONE);
+            if (isBot || userId == AccountManager.getInstance().getCurrentUser().getId()) {
+                callVisibility.setValue(View.GONE);
+                menuVisibility.setValue(View.GONE);
+                videoCallVisibility.setValue(View.GONE);
+            } else {
+                callVisibility.setValue(View.VISIBLE);
+                menuVisibility.setValue(View.VISIBLE);
+                videoCallVisibility.setValue(View.VISIBLE);
             }
 
             isBlockUser = registeredInfo.isBlockUser();
-            registeredInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
-                @Override
-                public void onChange(RealmModel element) {
-                    isBlockUser = registeredInfo.isBlockUser();
+            userBlockState.set(isBlockUser ? R.string.un_block_user : R.string.block);
+            registeredInfo.addChangeListener(element -> isBlockUser = registeredInfo.isBlockUser());
+            DbManager.getInstance().doRealmTask(realm -> {
+                if (registeredInfo.getLastAvatar(realm) != null) {
+                    String mainFilePath = registeredInfo.getLastAvatar(realm).getFile().getLocalFilePath();
+                    if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
+                        avatarPath = mainFilePath;
+                    } else {
+                        avatarPath = registeredInfo.getLastAvatar(realm).getFile().getLocalThumbnailPath();
+                    }
+                    avatarList = registeredInfo.getAvatars(realm);
                 }
             });
-
-            if (registeredInfo.getLastAvatar() != null) {
-                String mainFilePath = registeredInfo.getLastAvatar().getFile().getLocalFilePath();
-                if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
-                    avatarPath = mainFilePath;
-                } else {
-                    avatarPath = registeredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
-                }
-                avatarList = registeredInfo.getAvatars();
-            }
         }
 
-        RealmContacts realmUser = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        RealmContacts realmUser = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        });
 
         if (registeredInfo != null) {
             if (registeredInfo.getDisplayName() != null && !registeredInfo.getDisplayName().equals("")) {
-                contactName.set(registeredInfo.getDisplayName());
+                contactName.setValue(registeredInfo.getDisplayName());
             } else {
-                contactName.set(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
+                contactName.setValue(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
             }
 
             if (registeredInfo.getBio() == null || registeredInfo.getBio().length() == 0) {
                 bioVisibility.set(View.GONE);
             } else {
+                bioVisibility.set(View.VISIBLE);
                 bio.set(registeredInfo.getBio());
             }
             username.set(registeredInfo.getUsername());
             phone.set(registeredInfo.getPhoneNumber());
+            phoneNumber = "+" + registeredInfo.getPhoneNumber();
 
             firstName = registeredInfo.getFirstName();
             lastName = registeredInfo.getLastName();
@@ -159,12 +381,13 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             isVerified = registeredInfo.isVerified();
         } else if (realmUser != null) {
             if (realmUser.getDisplay_name() != null && !realmUser.getDisplay_name().equals("")) {
-                contactName.set(realmUser.getDisplay_name());
+                contactName.setValue(realmUser.getDisplay_name());
             } else {
-                contactName.set(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
+                contactName.setValue(G.fragmentActivity.getResources().getString(R.string.nick_name_not_exist));
             }
             username.set(realmUser.getUsername());
             phone.set(Long.toString(realmUser.getPhone()));
+            phoneNumber = "+" + realmUser.getPhone();
 
             firstName = realmUser.getFirst_name();
             lastName = realmUser.getLast_name();
@@ -176,6 +399,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             if (realmUser.getBio() == null || realmUser.getBio().length() == 0) {
                 bioVisibility.set(View.GONE);
             } else {
+                bioVisibility.set(View.VISIBLE);
                 bio.set(realmUser.getBio());
             }
         }
@@ -186,21 +410,24 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             verifyTextVisibility.set(View.INVISIBLE);
         }
 
-        if (userId != 134 && G.userId != userId) {
-            RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
+        //todo: fixed it two times check it and first and her
+        if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
+            RealmCallConfig callConfig = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmCallConfig.class).findFirst();
+            });
             if (callConfig != null) {
 
                 if (isBot) {
-                    callVisibility.set(View.GONE);
-                    videoCallVisibility.set(View.GONE);
+                    callVisibility.setValue(View.GONE);
+                    videoCallVisibility.setValue(View.GONE);
                 } else {
 
                     if (callConfig.isVoice_calling()) {
-                        callVisibility.set(View.VISIBLE);
+                        callVisibility.setValue(View.VISIBLE);
                     }
 
                     if (callConfig.isVideo_calling()) {
-                        videoCallVisibility.set(View.VISIBLE);
+                        videoCallVisibility.setValue(View.VISIBLE);
                     }
                 }
 
@@ -208,8 +435,13 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             } else {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
+        } else {
+            callVisibility.setValue(View.GONE);
+            videoCallVisibility.setValue(View.GONE);
         }
-        RealmContacts realmContacts = getRealm().where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
+        RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone.get())).findFirst();
+        });
 
         /**
          * if this user isn't in my contacts don't show phone number
@@ -217,11 +449,25 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber.set(false);
             disableDeleteContact = true;
+            menuVisibility.setValue(View.GONE);
+        }
+
+        if (!G.isAppRtl) {
+            textsGravity.set(Gravity.LEFT);
+        } else {
+            textsGravity.set(Gravity.RIGHT);
         }
 
         setUserStatus(userStatus, lastSeenValue);
-        setAvatar();
+        setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
+        //todo: change it
         FragmentShearedMedia.getCountOfSharedMedia(shearedId);
+
+        if (registeredInfo == null) {
+            callVisibility.setValue(View.GONE);
+            menuVisibility.setValue(View.GONE);
+            videoCallVisibility.setValue(View.GONE);
+        }
     }
 
     private void startInitCallbacks() {
@@ -234,25 +480,14 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     //================================Event Listeners================================
     //===============================================================================
 
-    public void onCallClick(View view) {
-        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
-    }
 
-    public void onVideoCallClick(View view) {
-        FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
-    }
-
-    public void onImageClick(View view) {
-        if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst() != null) {
-            FragmentShowAvatars fragment;
-            if (userId == G.userId) {
-                fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.setting);
-            } else {
-                fragment = FragmentShowAvatars.newInstance(userId, FragmentShowAvatars.From.chat);
-            }
-
-            //fragment.appBarLayout = fab; //TODO- check
-            new HelperFragment(fragment).setReplace(false).load();
+    public void onImageClick() {
+        if (userId == AccountManager.getInstance().getCurrentUser().getId())
+            return; //dont work when profile was cloud
+        if (DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
+        }) != null) {
+            goToShowAvatarPage.setValue(userId == AccountManager.getInstance().getCurrentUser().getId());
         }
     }
 
@@ -267,10 +502,9 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                 @Override
                 public void run() {
                     if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
-                        contactName.set(user.getDisplayName());
+                        contactName.setValue(user.getDisplayName());
                     }
-
-                    setAvatar();
+                    setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
                 }
             });
         }
@@ -288,11 +522,11 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
 
     @Override
     public void onContactEdit(final String firstName, final String lastName, String initials) {
-        setAvatar();
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                contactName.set(firstName + " " + lastName);
+                setAvatar.setValue(userId != AccountManager.getInstance().getCurrentUser().getId());
+                contactName.setValue(firstName + " " + lastName);
             }
         });
     }
@@ -319,6 +553,14 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         }
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (registeredInfo != null) {
+            registeredInfo.removeAllChangeListeners();
+        }
+    }
+
     //===============================================================================
     //====================================Methods====================================
     //===============================================================================
@@ -328,56 +570,102 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         this.lastSeenValue = time;
 
         if (isBot) {
-            lastSeen.set(G.context.getResources().getString(R.string.bot));
+            lastSeen.setValue(G.context.getResources().getString(R.string.bot));
             return;
         }
 
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                String status = LastSeenTimeUtil.computeTime(userId, time, false);
+                String status = LastSeenTimeUtil.computeTime(G.context, userId, time, false);
 
-                lastSeen.set(status);
+                lastSeen.setValue(status);
             } else {
-                lastSeen.set(userStatus);
+                lastSeen.setValue(userStatus);
             }
         }
     }
 
-    private void setAvatar() {
-        avatarHandler.getAvatar(new ParamWithAvatarType(fragmentContactsProfileBinding.chiImgCircleImage, userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
-    }
-
-    private Realm getRealm() {
-        if (realm == null || realm.isClosed()) {
-            realm = Realm.getDefaultInstance();
-        }
-        return realm;
-    }
-
     public void onResume() {
-        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
-        if (mRoom != null) {
-            if (changeListener == null) {
-                changeListener = new RealmChangeListener<RealmModel>() {
-                    @Override
-                    public void onChange(final RealmModel element) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!((RealmRoom) element).isValid()) {
-                                    return;
-                                }
+        mRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, shearedId).findFirst();
+        });
 
-                                sharedMedia.set(((RealmRoom) element).getSharedMediaCount());
+        if (mRoom != null) {
+            isMuteNotification.set(mRoom.getMute());
+            if (changeListener == null) {
+                changeListener = element -> G.handler.post(() -> {
+                    if (((RealmRoom) element).isValid()) {
+                        String countText = ((RealmRoom) element).getSharedMediaCount();
+                        if (HelperCalander.isPersianUnicode) {
+                            countText = HelperCalander.convertToUnicodeFarsiNumber(countText);
+                        }
+                        if (countText == null || countText.length() == 0) {
+                            sharedEmptyVisibility.set(View.VISIBLE);
+                        } else {
+                            String[] countList = countText.split("\n");
+                            int countOFImage = Integer.parseInt(countList[0]);
+                            int countOFVIDEO = Integer.parseInt(countList[1]);
+                            int countOFAUDIO = Integer.parseInt(countList[2]);
+                            int countOFVOICE = Integer.parseInt(countList[3]);
+                            int countOFGIF = Integer.parseInt(countList[4]);
+                            int countOFFILE = Integer.parseInt(countList[5]);
+                            int countOFLink = Integer.parseInt(countList[6]);
+                            if (countOFImage > 0 || countOFVIDEO > 0 || countOFAUDIO > 0 || countOFVOICE > 0 || countOFGIF > 0 || countOFFILE > 0 || countOFLink > 0) {
+                                sharedEmptyVisibility.set(View.GONE);
+                                if (countOFImage > 0) {
+                                    sharedPhotoVisibility.set(View.VISIBLE);
+                                    sharedPhotoCount.set(countOFImage);
+                                } else {
+                                    sharedPhotoVisibility.set(View.GONE);
+                                }
+                                if (countOFVIDEO > 0) {
+                                    sharedVideoVisibility.set(View.VISIBLE);
+                                    sharedVideoCount.set(countOFVIDEO);
+                                } else {
+                                    sharedVideoVisibility.set(View.GONE);
+                                }
+                                if (countOFAUDIO > 0) {
+                                    sharedAudioVisibility.set(View.VISIBLE);
+                                    sharedAudioCount.set(countOFAUDIO);
+                                } else {
+                                    sharedAudioVisibility.set(View.GONE);
+                                }
+                                if (countOFVOICE > 0) {
+                                    sharedVoiceVisibility.set(View.VISIBLE);
+                                    sharedVoiceCount.set(countOFVOICE);
+                                } else {
+                                    sharedVoiceVisibility.set(View.GONE);
+                                }
+                                if (countOFGIF > 0) {
+                                    sharedGifVisibility.set(View.VISIBLE);
+                                    sharedGifCount.set(countOFGIF);
+                                } else {
+                                    sharedGifVisibility.set(View.GONE);
+                                }
+                                if (countOFFILE > 0) {
+                                    sharedFileVisibility.set(View.VISIBLE);
+                                    sharedFileCount.set(countOFFILE);
+                                } else {
+                                    sharedFileVisibility.set(View.GONE);
+                                }
+                                if (countOFLink > 0) {
+                                    sharedLinkVisibility.set(View.VISIBLE);
+                                    sharedLinkCount.set(countOFLink);
+                                } else {
+                                    sharedLinkVisibility.set(View.GONE);
+                                }
+                            } else {
+                                sharedEmptyVisibility.set(View.VISIBLE);
                             }
-                        });
+                        }
                     }
-                };
+                });
             }
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
         } else {
-            sharedMedia.set(context.getString(R.string.there_is_no_sheared_media));
+            /*sharedMedia.set(context.getString(R.string.there_is_no_sheared_media));*/
+            sharedEmptyVisibility.set(View.VISIBLE);
         }
     }
 
@@ -397,10 +685,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         }
     }
 
-    public void onDestroy() {
-        if (realm != null && !realm.isClosed()) {
-            realm.close();
-        }
+    public MutableLiveData<Boolean> getCloudVisibility() {
+        return cloudVisibility;
     }
-
 }

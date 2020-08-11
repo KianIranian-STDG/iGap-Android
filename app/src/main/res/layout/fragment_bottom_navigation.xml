@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bn_main_bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <net.iGap.libs.bottomNavigation.BottomNavigation
+        android:id="@+id/bn_main_bottomNavigation"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:background_color="?attr/iGapDividerLine"
+        app:corner_radius="15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/viewpager"
+        app:layout_constraintStart_toStartOf="@id/viewpager">
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_contacts_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_contacts_off_darkmode"
+            app:item_text="@string/contacts"
+            app:selected_icon="@drawable/ic_bottomnavigation_contact_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_contact_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_call_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_call_off_darkmode"
+            app:item_text="@string/all_calls"
+            app:selected_icon="@drawable/ic_bottomnavigation_call_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_call_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_chat_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_chat_off_darkmode"
+            app:haveAvatarImage="false"
+            app:hasUnreadBadge="true"
+            app:item_text="@string/chat"
+            app:selected_icon="@drawable/ic_bottomnavigation_chat_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_chat_off" />
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:dark_selected_icon="@drawable/ic_bottomnavigation_discovery_on_darkmode"
+            app:dark_unselected_icon="@drawable/ic_bottomnavigation_discovery_off_darkmode"
+            app:item_text="@string/iland"
+            app:selected_icon="@drawable/ic_bottomnavigation_discovery_on"
+            app:unselected_icon="@drawable/ic_bottomnavigation_discovery_off" />
+
+
+        <net.iGap.libs.bottomNavigation.TabItem
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            app:haveAvatarImage="true"
+            app:item_text="@string/profile" />
+    </net.iGap.libs.bottomNavigation.BottomNavigation>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

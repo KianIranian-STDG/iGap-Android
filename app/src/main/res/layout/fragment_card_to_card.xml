@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+
+        <net.iGap.module.CircleImageView
+            android:id="@+id/userAvatar"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_chat_card_amountText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_cardToCard_transferTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:lines="1"
+            android:text="@string/money_request"
+            android:textColor="?iGapTitleTextColor"
+            app:layout_constraintBottom_toBottomOf="@+id/userAvatar"
+            app:layout_constraintStart_toEndOf="@+id/userAvatar"
+            app:layout_constraintTop_toTopOf="@+id/userAvatar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_chat_card_amountText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/amount_in_rial"
+            android:textColor="?attr/iGapTitleTextColor"
+            app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardamount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userAvatar" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_chat_card_cardamount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_edittext_money_action"
+            android:hint="@string/insert_amount_in_rial"
+            android:inputType="phone"
+            android:lines="1"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            style="@style/iGapEditTextStyle"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/et_chat_card_cardNumberTv"
+            app:layout_constraintEnd_toEndOf="@+id/tv_chat_card_amountText"
+            app:layout_constraintStart_toStartOf="@+id/tv_chat_card_amountText"
+            app:layout_constraintTop_toBottomOf="@+id/tv_chat_card_amountText" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/et_chat_card_cardNumberTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/destination_card"
+            android:textColor="?attr/iGapTitleTextColor"
+            app:layout_constraintBottom_toTopOf="@+id/et_chat_card_cardNumber"
+            app:layout_constraintEnd_toStartOf="@+id/tv_chat_card_bankName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardamount" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_chat_card_bankName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/et_chat_card_cardNumberTv"
+            app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
+            app:layout_constraintTop_toTopOf="@+id/et_chat_card_cardNumberTv" />
+
+        <com.vicmikhailau.maskededittext.MaskedEditText
+            android:id="@+id/et_chat_card_cardNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_edittext_money_action"
+            android:hint="@string/enter_16_digit_card_number"
+            android:inputType="phone"
+            android:lines="1"
+            android:maxLength="19"
+            android:maxLines="1"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            style="@style/iGapEditTextStyle"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/tv_chat_card_desc"
+            app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardamount"
+            app:layout_constraintStart_toStartOf="@+id/et_chat_card_cardNumberTv"
+            app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumberTv"
+            app:mask="####-####-####-####" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_chat_card_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/desc"
+            android:textColor="?attr/iGapTitleTextColor"
+            app:layout_constraintBottom_toTopOf="@+id/et_chat_card_desc"
+            app:layout_constraintEnd_toEndOf="@+id/et_chat_card_cardNumber"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_chat_card_cardNumber" />
+
+        <EditText
+            android:id="@+id/et_chat_card_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/background_edittext_money_action"
+            android:gravity="top"
+            android:hint="@string/desc"
+            android:padding="6dp"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            style="@style/iGapEditTextStyle"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/btn_cardToCard_confirm"
+            app:layout_constraintEnd_toEndOf="@+id/tv_chat_card_desc"
+            app:layout_constraintStart_toStartOf="@+id/tv_chat_card_desc"
+            app:layout_constraintTop_toBottomOf="@+id/tv_chat_card_desc" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cardToCard_confirm"
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/send"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_cardToCard_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/et_chat_card_desc" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cardToCard_cancel"
+            style="@style/iGapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="@string/cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_cardToCard_confirm"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_cardToCard_confirm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

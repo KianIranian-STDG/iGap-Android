@@ -19,14 +19,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 
@@ -34,7 +36,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static net.iGap.G.context;
@@ -315,48 +316,31 @@ public final class ContactUtils {
             HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(final Realm realm) {
 
-                            final RealmResults<RealmContacts> realmContacts = realm.where(RealmContacts.class).findAll();
+                    final MaterialDialog[] dialog = new MaterialDialog[1];
+                    dialog[0] = new MaterialDialog.Builder(G.currentActivity)
+                            .title(R.string.sync_contact)
+                            .content(R.string.just_wait_en)
+                            .progress(false, 0, true)
+                            .show();
+
+                    new Thread(() -> {
+                        DbManager.getInstance().doRealmTransaction(realm1 -> {
+                            final RealmResults<RealmContacts> realmContacts = realm1.where(RealmContacts.class).findAll();
                             final int contactsSize = realmContacts.size();
-                            final MaterialDialog[] dialog = new MaterialDialog[1];
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog[0] = new MaterialDialog.Builder(G.currentActivity)
-                                            .title(R.string.sync_contact)
-                                            .content(R.string.just_wait_en)
-                                            .progress(false, contactsSize, true)
-                                            .show();
-                                }
-                            });
-
+                            dialog[0].setMaxProgress(contactsSize);
                             for (RealmContacts realmContacts1 : realmContacts) {
                                 addContactToPhoneBook(realmContacts1);
                                 if (dialog[0].isCancelled()) {
                                     break;
                                 }
 
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dialog[0].incrementProgress(1);
-                                    }
-                                });
+                                G.handler.post(() -> dialog[0].incrementProgress(1));
                             }
 
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dialog[0].dismiss();
-                                }
-                            }, 500);
-                        }
-                    });
-                    realm.close();
+                            G.handler.postDelayed(() -> dialog[0].dismiss(), 500);
+                        });
+                    }).start();
                 }
 
                 @Override

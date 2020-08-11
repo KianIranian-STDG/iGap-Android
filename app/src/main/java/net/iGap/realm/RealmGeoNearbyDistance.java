@@ -1,16 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
-import io.realm.Realm;
+import net.iGap.module.accountManager.DbManager;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -23,17 +24,12 @@ public class RealmGeoNearbyDistance extends RealmObject {
     private String comment;
 
     public static void updateComment(final long roomId, final String comment) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, roomId).findFirst();
-                if (realmGeoNearbyDistance != null) {
-                    realmGeoNearbyDistance.setComment(comment);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, roomId).findFirst();
+            if (realmGeoNearbyDistance != null) {
+                realmGeoNearbyDistance.setComment(comment);
             }
         });
-        realm.close();
     }
 
     public long getUserId() {

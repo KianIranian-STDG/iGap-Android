@@ -11,23 +11,22 @@
 package net.iGap.response;
 
 import android.os.Looper;
-import android.util.Log;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperConnectionState;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
+import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
-import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestWalletGetAccessToken;
-
-import java.util.logging.Handler;
-
-import io.realm.Realm;
 
 public class UserLoginResponse extends MessageHandler {
 
@@ -51,10 +50,10 @@ public class UserLoginResponse extends MessageHandler {
         super.handler();
         HelperConnectionState.connectionState(ConnectionState.IGAP);
         ProtoUserLogin.UserLoginResponse.Builder builder = (ProtoUserLogin.UserLoginResponse.Builder) message;
+        G.serverHashContact = builder.getContactHash();
       /*builder.getDeprecatedClient();
         builder.getSecondaryNodeName();
         builder.getUpdateAvailable();*/
-
 
         if (builder.getUpdateAvailable() && !isUpdateAvailable) {
             new android.os.Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -87,37 +86,44 @@ public class UserLoginResponse extends MessageHandler {
         }
 
 
+        G.isNeedToCheckProfileWallpaper = true;
         G.currentServerTime = builder.getResponse().getTimestamp();
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
-        G.isMplActive = builder.getMplActive();
-        G.isWalletActive = builder.getWalletActive();
-        G.isWalletRegister = builder.getWalletAgreementAccepted();
 
-        if (G.onPayment != null) {
-            G.onPayment.onFinance(G.isMplActive, G.isWalletActive);
-        }
+        TokenContainer.getInstance().updateToken(builder.getAccessToken());
+
         /**
          * get Signaling Configuration
          * (( hint : call following request after set G.userLogin=true ))
          */
+        DbManager.getInstance().doRealmTask(realm -> {
+            if (realm.where(RealmCallConfig.class).findFirst() == null) {
+                new RequestSignalingGetConfiguration().signalingGetConfiguration();
+            }
+        });
 
-        Realm realm = Realm.getDefaultInstance();
-        if (G.needGetSignalingConfiguration || realm.where(RealmCallConfig.class).findFirst() == null) {
-            new RequestSignalingGetConfiguration().signalingGetConfiguration();
-        }
-        realm.close();
+        new Thread(() -> {
+            G.clientConditionGlobal = RealmClientCondition.computeClientCondition(null);
+            new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
 
-        WebSocketClient.waitingForReconnecting = false;
-        WebSocketClient.allowForReconnecting = true;
+        }).start();
+
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
 
-        if (G.isWalletActive && G.isWalletRegister) {
+        if (builder.getWalletActive() && builder.getWalletAgreementAccepted()) {
             new RequestWalletGetAccessToken().walletGetAccessToken();
         }
 
-
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setWalletActive(builder.getWalletActive());
+                realmUserInfo.setMplActive(builder.getMplActive());
+                realmUserInfo.setWalletRegister(builder.getWalletAgreementAccepted());
+            }
+        });
     }
 
     @Override
@@ -125,14 +131,9 @@ public class UserLoginResponse extends MessageHandler {
         super.timeOut();
 
         if (G.isSecure) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
-                new RequestUserLogin().userLogin(userInfo.getToken());
-            }
-            realm.close();
+            retryLogin();
         } else {
-            WebSocketClient.getInstance().disconnect();
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
     }
 
@@ -142,7 +143,23 @@ public class UserLoginResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        if (majorCode == 110 || (majorCode == 10 && minorCode == 100)) {
+            retryLogin();
+//            G.handler.postDelayed(this::retryLogin, 1000);
+        }
         G.onUserLogin.onLoginError(majorCode, minorCode);
+    }
+
+    private void retryLogin() {
+        if (WebSocketClient.getInstance().isConnect()) {
+            WebSocketClient.getInstance().disconnectSocket(true);
+        }
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+//            if (!G.userLogin && userInfo != null && userInfo.getUserRegistrationState()) {
+//                new RequestUserLogin().userLogin(userInfo.getToken());
+//            }
+//        });
     }
 
 

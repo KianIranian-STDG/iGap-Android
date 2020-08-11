@@ -15,19 +15,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,12 +31,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.collection.ArrayMap;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
@@ -51,50 +51,52 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.helper.CardToCardHelper;
-import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
-import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.IChatItemAttachment;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnProgressUpdate;
+import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.Tuple;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
+import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MakeButtons;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
+import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
-import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.IChatItemAttachment;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnProgressUpdate;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmChannelExtra;
-import net.iGap.realm.RealmChannelExtraFields;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
@@ -103,7 +105,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,138 +115,41 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
-import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, EventListener {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
-    public StructMessageInfo mMessage;
+    public RealmRoomMessage mMessage;
+    public StructMessageInfo structMessage;
     public boolean directionalBased;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
-    SpannableString myText;
-    private RealmAttachment realmAttachment;
-    private RealmRoom realmRoom;
-    private RealmChannelExtra realmChannelExtra;
+    private SpannableString myText;
     private RealmRoom realmRoomForwardedFrom;
-    private MessagesAdapter<AbstractMessage> mAdapter;
-
+    public MessagesAdapter<AbstractMessage> mAdapter;
+    private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
+    private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
+    protected Theme theme;
+    private VH holder;
 
     /**
      * add this prt for video player
      */
-    //@Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
-    //    // empty
-    //}
+
     public AbstractMessage(MessagesAdapter<AbstractMessage> mAdapter, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        //this.realmChat = realmChat;
         this.directionalBased = directionalBased;
         this.type = type;
         this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
-
+        this.theme = Theme.getInstance();
     }
 
-    public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
-
-        MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
-            @Override
-            public void compress(final long percent, String path) {
-
-                if (mMessage.getAttachment().getLocalFilePath() == null || !mMessage.getAttachment().getLocalFilePath().equals(path)) {
-                    return;
-                }
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (percent < 98) {
-
-                            String p = percent + "";
-
-                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                                p = convertToUnicodeFarsiNumber(p);
-                            }
-                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
-                        } else {
-                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.Uploading)));
-                        }
-                    }
-                });
-            }
-        };
-    }
-
-    protected ProtoGlobal.Room.Type getRoomType() {
-        return type;
-    }
-
-    @Override
-    public void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException {
-        // empty
-    }
-
-    protected void setTextIfNeeded(TextView view) {
-        if (!TextUtils.isEmpty(myText)) {
-            view.setText(myText);
-            // if this not work then use view.requestLayout();
-            view.forceLayout();
-            view.setVisibility(View.VISIBLE);
-        } else {
-            view.setVisibility(View.GONE);
-        }
-    }
-
-    public AbstractMessage setMessage(StructMessageInfo message) {
-        this.mMessage = message;
-
-        if ((mMessage.forwardedFrom != null)) {
-            long messageId = mMessage.forwardedFrom.getMessageId();
-            if (mMessage.forwardedFrom.getMessageId() < 0) {
-                messageId = messageId * (-1);
-            }
-
-            RealmRoom realmRoomForwardedFrom22 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
-                this.realmRoomForwardedFrom = getRealmChat().copyFromRealm(realmRoomForwardedFrom22);
-
-            RealmChannelExtra realmChannelExtra22 = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-            if (realmChannelExtra22 != null && realmChannelExtra22.isValid())
-                this.realmChannelExtra = getRealmChat().copyFromRealm(realmChannelExtra22);
-
-        } else {
-            realmRoomForwardedFrom = null;
-            realmChannelExtra = null;
-        }
-
-        RealmRoom realmRoom22 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
-        if (realmRoom22 != null && realmRoom22.isValid())
-            this.realmRoom = getRealmChat().copyFromRealm(realmRoom22);
-
-        RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
-                equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
-        if (f != null) {
-            realmAttachment = f.getAttachment();
-        }
-        if (mMessage.forwardedFrom != null) {
-            myText = new SpannableString(mMessage.forwardedFrom.getMessage());
-        } else if (mMessage.messageText != null) {
-            myText = new SpannableString(mMessage.messageText);
-        } else {
-            myText = new SpannableString("");
-        }
-
-        updateMessageText();
-
-        return this;
-    }
 
     public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
         ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
         int start = -1;
         for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i+1) == '*') {
+            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i + 1) == '*') {
                 if (start == -1) {
                     start = i;
                 } else {
@@ -260,12 +164,65 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return result;
     }
 
+    protected ProtoGlobal.Room.Type getRoomType() {
+        return type;
+    }
+
+    @Override
+    public void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException {
+        // empty
+    }
+
+    protected void setTextIfNeeded(TextView view) {
+        if (!TextUtils.isEmpty(myText)) {
+            view.setText(EmojiManager.getInstance().replaceEmoji(myText, view.getPaint().getFontMetricsInt(), LayoutCreator.dp(20), false));
+            // if this not work then use view.requestLayout();
+            view.forceLayout();
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    public AbstractMessage setMessage(StructMessageInfo message) {
+        return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<AbstractMessage>) realm -> {
+            structMessage = message;
+
+            AbstractMessage.this.mMessage = message.realmRoomMessage;
+
+            if ((mMessage.getForwardMessage() != null)) {
+                long messageId = mMessage.getForwardMessage().getMessageId();
+                if (mMessage.getForwardMessage().getMessageId() < 0) {
+                    messageId = messageId * (-1);
+                }
+
+                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+                if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
+                    AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
+            } else {
+                realmRoomForwardedFrom = null;
+            }
+
+            if (mMessage.getForwardMessage() != null) {
+                myText = new SpannableString(mMessage.getForwardMessage().getMessage());
+            } else if (mMessage.getMessage() != null) {
+                myText = new SpannableString(mMessage.getMessage());
+            } else {
+                myText = new SpannableString("");
+            }
+
+            updateMessageText();
+
+            return AbstractMessage.this;
+        });
+    }
+
     public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
         StringBuilder stringBuilder = new StringBuilder();
         if (boldPlaces.size() == 0)
             stringBuilder.append(text);
         else {
-            for (int i = 0 ; i < boldPlaces.size(); i++) {
+            for (int i = 0; i < boldPlaces.size(); i++) {
                 Tuple<Integer, Integer> point = boldPlaces.get(i);
                 Tuple<Integer, Integer> previousPoint = null;
 
@@ -287,7 +244,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void updateBoldPlaces(ArrayList<Tuple<Integer, Integer>> boldPlaces) {
-        for (int i = 0 ; i < boldPlaces.size(); i++) {
+        for (int i = 0; i < boldPlaces.size(); i++) {
             Tuple<Integer, Integer> point = boldPlaces.get(i);
             point.x = point.x - i * 4;
             point.y = point.y - i * 4 - 2;
@@ -309,11 +266,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void updateMessageText() {
         if (!TextUtils.isEmpty(myText)) {
             ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
-            if (mMessage.hasLinkInMessage) {
-                myText = SpannableString.valueOf(HelperUrl.getLinkText(myText.toString(), mMessage.linkInfo, mMessage.messageID));
-            } else {
+            if (structMessage.hasLinkInMessage()) {
+                myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), structMessage.getLinkInfo(), mMessage.getMessageId() + ""));
+            } /*else {
                 myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
-            }
+            }*/
 
             for (int i = 0; i < results.size(); i++) {
                 Tuple<Integer, Integer> point = results.get(i);
@@ -327,7 +284,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return super.withIdentifier(identifier);
     }
 
-    private void OnClickRow(ChatItemHolder holder, View view) {
+    private void OnClickRow(NewChatItemHolder holder, View view) {
         new CountDownTimer(300, 100) {
 
             public void onTick(long millisUntilFinished) {
@@ -347,17 +304,59 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 return;
             }
 
-            if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
-                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+            if (messageClickListener != null && mMessage != null && mMessage.getUserId() != -1L) {
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                     return;
                 }
-                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(view, structMessage, holder.getAdapterPosition());
                 } else {
-                    messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
+                    messageClickListener.onContainerClick(view, structMessage, holder.getAdapterPosition());
                 }
             }
         }
+    }
+
+
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        if (id == EventManager.ON_UPLOAD_PROGRESS) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (message[0].equals(mMessage.getMessageId() + "")) {
+                        MessageProgress _Progress = ((IProgress) holder).getProgress();
+                        if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
+                            int progress = (int) message[1];
+                            if (progress >= 1 && progress != 100) {
+                                _Progress.withProgress(progress);
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (id == EventManager.ON_UPLOAD_COMPRESS) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (message[0].equals(mMessage.getMessageId() + "") && holder instanceof VideoWithTextItem.ViewHolder) {
+                        int percent = (int) message[1];
+                        if (percent <= 99) {
+
+                            String p = percent + "";
+
+                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
+                                p = HelperCalander.convertToUnicodeFarsiNumber(p);
+                            }
+                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
+                        } else {
+                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                        }
+                    }
+                }
+            });
+        }
+
     }
 
     @Override
@@ -365,13 +364,40 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
-        else
+        NewChatItemHolder mHolder;
+        if (holder instanceof NewChatItemHolder) {
+            mHolder = (NewChatItemHolder) holder;
+        } else if (holder instanceof LogItem.ViewHolder ||
+                holder instanceof LogWalletCardToCard.ViewHolder ||
+                holder instanceof LogWalletBill.ViewHolder ||
+                holder instanceof LogWalletTopup.ViewHolder ||
+                holder instanceof LogWallet.ViewHolder) {
+            messageClickListener.onItemShowingMessageId(structMessage);
             return;
+        } else {
+            return;
+        }
+        this.holder = holder;
 
-        mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
+        if (mMessage.getForwardMessage() == null && mMessage.isSenderMe() && mMessage.getAttachment() != null &&
+                mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())
+        ) {
+            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+
+            if (!UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+                UploadManager.getInstance().uploadMessageAndSend(type, mMessage);
+            } else {
+                MessageProgress _Progress = ((IProgress) holder).getProgress();
+                _Progress.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+            }
+        } else {
+            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+        }
+
+        structMessage.addAttachmentChangeListener(this, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
+        mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 OnClickRow(mHolder, view);
@@ -385,25 +411,70 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         });
 
+        if (holder instanceof CardToCardItem.ViewHolder) {
+            CardToCardItem.ViewHolder cardToCardHolder = (CardToCardItem.ViewHolder) holder;
+            cardToCardHolder.getRootView().setMinWidth(G.maxChatBox - i_Dp(R.dimen.dp100));
+            cardToCardHolder.getInnerLayout().setMinimumWidth(G.maxChatBox - i_Dp(R.dimen.dp100));
+
+            if (mMessage.getForwardMessage() == null && structMessage.getAdditional().getAdditionalData() != null && structMessage.getAdditional().getAdditionalType() == AdditionalType.CARD_TO_CARD_MESSAGE) {
+
+                CardToCardValue value = new CardToCardValue();
+                try {
+                    JSONArray rootJsonArray = new JSONArray(structMessage.getAdditional().getAdditionalData());
+                    for (int i = 0; i < rootJsonArray.length(); i++) {
+                        JSONArray valuJsonArray = rootJsonArray.getJSONArray(i);
+                        for (int j = 0; j < valuJsonArray.length(); j++) {
+
+                            JSONObject rootJsonObject = new JSONObject(valuJsonArray.getJSONObject(i).toString());
+                            JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                            String cardNumber = valueObject.getString("cardNumber");
+                            int amount = valueObject.getInt("amount");
+                            long userId = valueObject.getLong("userId");
+
+                            value.setAmount(amount);
+                            value.setCardNumber(cardNumber);
+                            value.setUserId(userId);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                cardToCardHolder.setValue(value);
+            }
+
+            cardToCardHolder.setOnCardToCard(cardToCard -> {
+                CardToCardHelper.NewCallCardToCard(G.currentActivity, cardToCard.getUserId(), cardToCard.getAmount(), cardToCard.getCardNumber());
+            });
+        }
 
         if (holder instanceof ChatItemWithTextHolder) {
             ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
-            withTextHolder.messageView.setHasEmoji(mMessage.hasEmojiInText);
+//            withTextHolder.messageView.setHasEmoji(structMessage.hasEmojiInText());
 
             int maxsize = 0;
             withTextHolder.removeButtonLayout();
-            if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
-                maxsize = G.maxChatBox;
+            if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.getForwardMessage() != null) {
+                maxsize = G.maxChatBox - 16;
             }
             if (maxsize > 0)
                 withTextHolder.messageView.setMaxWidth(maxsize);
-            if (mMessage.hasLinkInMessage) {
+            if (structMessage.hasLinkInMessage()) {
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, withTextHolder.messageView)
                         .setOnLinkClickListener((tv, url) -> {
                             return FragmentChat.isInSelectionMode;
                         })
                         .setOnLinkLongClickListener((tv, url) -> {
+
+                            if (!FragmentChat.isInSelectionMode) {
+                                if (HelperUrl.isTextLink(url)) {
+                                    G.isLinkClicked = true;
+                                    messageClickListener.onOpenLinkDialog(url);
+                                }
+
+                            }
                             return true;
                         });
             } else {
@@ -411,34 +482,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             try {
-                if (mMessage.forwardedFrom == null && mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-                    HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
-                    Gson gson = new GsonBuilder().create();
-                    for (int i = 0; i < buttonList.size(); i++) {
-                        LinearLayout childLayout = MakeButtons.createLayout();
-                        for (int j = 0; j < buttonList.get(i).length(); j++) {
-                            try {
-                                JSONObject json = new JSONObject(buttonList.get(i).get(j).toString());
-                                ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
-                                }.getType());
-                                if (btnEntery.getActionType() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                                    btnEntery.setLongValue(json.getLong("value"));
+                if (mMessage.getForwardMessage() == null && structMessage.getAdditional() != null && structMessage.getAdditional().getAdditionalType() == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                    HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(structMessage.getAdditional().getAdditionalData());
+
+                    int rowSize = buttonList.size();
+
+                    for (int i = 0; i < rowSize; i++) {
+                        int columSize = buttonList.get(i).length();
+                        LinearLayout childLayout = MakeButtons.createLayout(((ChatItemWithTextHolder) holder).getContext());
+                        for (int j = 0; j < columSize; j++) {
+                            ButtonEntity buttonEntity = new Gson().fromJson(buttonList.get(i).get(j).toString(), ButtonEntity.class);
+                            buttonEntity.setJsonObject(buttonList.get(i).get(j).toString());
+
+                            childLayout = MakeButtons.addButtons(theme, buttonEntity, buttonList.get(i).length(), 1f, childLayout, (view, btnEntity) -> {
+                                if (FragmentChat.isInSelectionMode) {
+                                    holder.itemView.performLongClick();
+                                    return;
                                 }
-                                btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (FragmentChat.isInSelectionMode) {
-                                            holder.itemView.performLongClick();
-                                            return;
-                                        }
-                                        onBotBtnClick(view);
-                                    }
-                                }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
-                                //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                                mAdapter.onBotButtonClicked(() -> onBotBtnClick(view, btnEntity));
+                            });
                         }
                         withTextHolder.addButtonLayout(childLayout);
                     }
@@ -448,13 +510,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
+            ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessage() : mMessage.getMessage()) ? Gravity.RIGHT : Gravity.LEFT;
         }
 
         /**
          * for return message that start showing to view
          */
-        messageClickListener.onItemShowingMessageId(mMessage);
+        messageClickListener.onItemShowingMessageId(structMessage);
 
         /**
          * this use for select foreground in activity chat for search item and hash item
@@ -465,7 +527,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * noinspection RedundantCast
          */
 
-        if (isSelected() || mMessage.isSelected) {
+        if (isSelected() || structMessage.isSelected) {
             ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
             ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
@@ -475,55 +537,59 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * only will be called when message layout is directional-base (e.g. single chat)
          */
         if (directionalBased) {
-            if ((mMessage.sendType == MyType.SendType.recvive) || type == ProtoGlobal.Room.Type.CHANNEL) {
+            if ((structMessage.getSendType() == MyType.SendType.recvive) || type == ProtoGlobal.Room.Type.CHANNEL) {
                 updateLayoutForReceive(holder);
-            } else if (mMessage.sendType == MyType.SendType.send) {
+            } else if (structMessage.getSendType() == MyType.SendType.send) {
                 updateLayoutForSend(holder);
             }
         }
 
-        if (!mMessage.isTimeOrLogMessage()) {
+        if (!structMessage.isTimeOrLogMessage()) {
             /**
              * check failed state ,because if is failed we want show to user even is in channel
              */
-            if (realmRoom != null && realmRoom.isValid() && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status)) {
-                mHolder.cslr_txt_tic.setVisibility(View.GONE);
+            if (mAdapter.getRealmRoom() != null && mAdapter.getRealmRoom().isValid() && mAdapter.getRealmRoom().getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus())) {
+                mHolder.getMessageStatusTv().setVisibility(View.GONE);
             } else {
-                mHolder.cslr_txt_tic.setVisibility(View.VISIBLE);
-                AppUtils.rightMessageStatus(mHolder.cslr_txt_tic, ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
+                mHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
+                AppUtils.rightMessageStatus(mHolder.getMessageStatusTv(), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType(), mMessage.isSenderMe());
             }
         }
         /**
          * display 'edited' indicator beside message time if message was edited
          */
-        if (mMessage.isEdited) {
-            mHolder.txtEditedIndicator.setVisibility(View.VISIBLE);
-        } else {
-            mHolder.txtEditedIndicator.setVisibility(View.GONE);
-        }
+
+        if (mMessage.isEdited())
+            if (structMessage.getChannelExtraWithoutForward() != null && structMessage.getChannelExtraWithoutForward().getSignature() != null && structMessage.getChannelExtraWithoutForward().getSignature().length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + structMessage.getChannelExtraWithoutForward().getSignature());
+            else {
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
+            }
+        else
+            mHolder.getSignatureTv().setText("");
         /**
          * display user avatar only if chat type is GROUP
          */
-        View messageSenderAvatar = mHolder.mainContainer.findViewById(R.id.messageSenderAvatar);
+        View messageSenderAvatar = mHolder.getItemContainer().findViewById(R.id.messageSenderAvatar);
         if (messageSenderAvatar != null) {
             messageSenderAvatar.setVisibility(View.GONE);
         }
 
-        replyMessageIfNeeded(holder, getRealmChat());
-        forwardMessageIfNeeded(holder, getRealmChat());
+        replyMessageIfNeeded(holder);
+        forwardMessageIfNeeded(holder);
 
-        View messageSenderName = mHolder.m_container.findViewById(R.id.messageSenderName);
+        View messageSenderName = mHolder.getContentBloke().findViewById(R.id.messageSenderName);
         if (messageSenderName != null) {
             messageSenderName.setVisibility(View.GONE);
         }
 
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
-                addSenderNameToGroupIfNeed(mHolder, getRealmChat());
+                addSenderNameToGroupIfNeed(mHolder);
 
                 if (messageSenderAvatar == null) {
                     messageSenderAvatar = ViewMaker.makeCircleImageView();
-                    mHolder.mainContainer.addView(messageSenderAvatar, 0);
+                    mHolder.getItemContainer().addView(messageSenderAvatar, 0);
                 }
                 messageSenderAvatar.setVisibility(View.VISIBLE);
 
@@ -535,66 +601,112 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             return;
                         }
 
-                        messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onSenderAvatarClick(v, structMessage, holder.getAdapterPosition());
                     }
                 });
 
                 messageSenderAvatar.setOnLongClickListener(getLongClickPerform(holder));
 
-                //  String[] initialize =
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
-                mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, Long.parseLong(mMessage.senderID)).avatarType(AvatarHandler.AvatarType.USER));
-                //if (initialize != null && initialize[0] != null && initialize[1] != null) {
-                //    ((ImageView) holder.itemView.findViewById(R.id.messageSenderAvatar)).setImageBitmap(
-                //        net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initialize[0], initialize[1]));
-                //}
+                mAdapter.avatarHandler.getAvatar(new ParamWithAvatarType(copyMessageSenderAvatar, mMessage.getUserId()).avatarType(AvatarHandler.AvatarType.USER));
+            }
+        } else {
+            FrameLayout forwardContainer = mHolder.getItemContainer().findViewById(R.id.messageForwardContainer);
+            ContextThemeWrapper wrapper = new ContextThemeWrapper(holder.itemView.getContext(), Theme.getInstance().getTheme(holder.itemView.getContext()));
+
+            if (forwardContainer == null) {
+                forwardContainer = new FrameLayout(holder.itemView.getContext());
+                forwardContainer.setId(R.id.messageForwardContainer);
+
+                if (mAdapter.getRealmRoom() != null && mAdapter.getRealmRoom().getChatRoom() != null && mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                    mHolder.getItemContainer().addView(forwardContainer, 0, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+                } else {
+                    mHolder.getItemContainer().addView(forwardContainer, 1, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.BOTTOM));
+                }
+
+                forwardContainer.addView(mHolder.getChannelForwardIv(), LayoutCreator.createFrame(26, 26, Gravity.BOTTOM, 4, 4, 8, 4));
+                forwardContainer.setVisibility(View.GONE);
+            }
+
+            if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_channel_forward_light, wrapper.getTheme()));
+                forwardContainer.setVisibility(View.VISIBLE);
+                mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                    if (isAllowToForward(mMessage))
+                        messageClickListener.onForwardClick(structMessage);
+                });
+            }
+
+            if (type == ProtoGlobal.Room.Type.CHAT && mAdapter.getRealmRoom().getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId() && !structMessage.isGiftSticker()) {
+                mHolder.getChannelForwardIv().setImageDrawable(VectorDrawableCompat.create(holder.itemView.getContext().getResources(), R.drawable.ic_cloud_forward, wrapper.getTheme()));
+                forwardContainer.setVisibility(View.VISIBLE);
+                mHolder.getChannelForwardIv().setOnClickListener(v -> {
+                    if (isAllowToForward(mMessage))
+                        messageClickListener.onForwardFromCloudClick(structMessage);
+                });
             }
         }
+
+
         /**
          * set message time
          */
 
-        String time = HelperCalander.getClocktime(mMessage.time, false);
+        String time = HelperCalander.getClocktime(mMessage.getCreateTime(), false);
         if (HelperCalander.isPersianUnicode) {
-            mHolder.cslr_txt_time.setText(HelperCalander.convertToUnicodeFarsiNumber(time));
+            mHolder.getMessageTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(time));
         } else {
-            mHolder.cslr_txt_time.setText(time);
+            mHolder.getMessageTimeTv().setText(time);
         }
 
-        prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+        prepareAttachmentIfNeeded(holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
 
         /**
          * show vote layout for channel otherwise hide layout also get message state for channel
          */
 
-        mHolder.lyt_vote.setVisibility(View.GONE);
-        mHolder.lyt_see.setVisibility(View.GONE);
-        if (!(holder instanceof StickerItem.ViewHolder)) {
+        mHolder.getVoteContainer().setVisibility(View.GONE);
+        mHolder.getViewContainer().setVisibility(View.GONE);
+        if (!(holder instanceof StickerItem.ViewHolder /*|| mHolder instanceof AnimatedStickerItem.ViewHolder*/)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-                showVote(holder, getRealmChat());
-            } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
-                if (mMessage.forwardedFrom != null) {
-                    if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
+                showVote(holder);
+            } else {
+                if (mMessage.getForwardMessage() != null) {
+                    if (mMessage.getForwardMessage().getAuthorRoomId() > 0) {
                         if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                            showVote(holder, getRealmChat());
+                            showVote(holder);
 
                             if (mMessage.isSenderMe()) {
-                                mHolder.cslm_view_left_dis.setVisibility(View.VISIBLE);
+                                mHolder.getCslm_view_left_dis().setVisibility(View.VISIBLE);
                             }
                         }
                     }
                 }
             }
         }
+
+
+        if (structMessage.getChannelExtraWithoutForward() != null && structMessage.getChannelExtraWithoutForward().getSignature() != null && structMessage.getChannelExtraWithoutForward().getSignature().length() > 0) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
+        } else if (mMessage.isEdited()) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
+        }
+    }
+
+    private boolean isAllowToForward(RealmRoomMessage message) {
+        return !FragmentChat.isInSelectionMode &&
+                message != null &&
+                !message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) &&
+                !message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString());
     }
 
     /**
      * show vote views
      */
-    private void showVote(VH holder, Realm realm) {
+    private void showVote(VH holder) {
         // add layout seen in channel
-        ((ChatItemHolder) holder).lyt_see.setVisibility(View.VISIBLE);
-        voteAction(((ChatItemHolder) holder), getRealmChat());
+        ((NewChatItemHolder) holder).getViewContainer().setVisibility(View.VISIBLE);
+        voteAction(((NewChatItemHolder) holder));
         getChannelMessageState();
     }
 
@@ -603,57 +715,44 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * need send request for getMessageState even show vote layout is hide
      */
     private void getChannelMessageState() {
-        if ((mMessage.forwardedFrom != null)) {
+        if ((mMessage.getForwardMessage() != null)) {
             ProtoGlobal.Room.Type roomType = null;
             if (realmRoomForwardedFrom != null) {
                 roomType = realmRoomForwardedFrom.getType();
             }
-            if ((mMessage.forwardedFrom != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
+            if ((mMessage.getForwardMessage() != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
                 /**
                  * if roomType is Channel don't consider forward
                  *
                  * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
                  * so i need to (replyMessageId * (-1)) again for use this messageId
                  */
-                long messageId = mMessage.forwardedFrom.getMessageId();
-                if (mMessage.forwardedFrom.getMessageId() < 0) {
+                long messageId = mMessage.getForwardMessage().getMessageId();
+                if (mMessage.getForwardMessage().getMessageId() < 0) {
                     messageId = messageId * (-1);
                 }
-                HelperGetMessageState.getMessageState(mMessage.forwardedFrom.getAuthorRoomId(), messageId);
+                HelperGetMessageState.getMessageState(mMessage.getForwardMessage().getAuthorRoomId(), messageId);
             } else {
-                HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+                HelperGetMessageState.getMessageState(mMessage.getRoomId(), mMessage.getMessageId());
             }
         } else {
-            HelperGetMessageState.getMessageState(mMessage.roomId, Long.parseLong(mMessage.messageID));
+            HelperGetMessageState.getMessageState(mMessage.getRoomId(), mMessage.getMessageId());
         }
     }
 
-    private void addSenderNameToGroupIfNeed(final ChatItemHolder holder, Realm realm) {
+    private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder) {
 
         if (G.showSenderNameInGroup) {
-            View messageSenderName = holder.m_container.findViewById(R.id.messageSenderName);
+            View messageSenderName = holder.getContentBloke().findViewById(R.id.messageSenderName);
             if (messageSenderName != null) {
-                holder.m_container.removeView(messageSenderName);
+                holder.getContentBloke().removeView(messageSenderName);
             }
 
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), Long.parseLong(mMessage.senderID));
+            RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getUserId());
+            });
             if (realmRegisteredInfo != null) {
-                final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
-
-                //_tv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                //    @Override
-                //    public void onGlobalLayout() {
-                //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-                //            _tv.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                //        } else {
-                //            _tv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                //        }
-                //
-                //        if (_tv.getWidth() < mContainer.getWidth()) {
-                //            _tv.setWidth(mContainer.getWidth());
-                //        }
-                //    }
-                //});
+                final AppCompatTextView _tv = ViewMaker.makeHeaderTextView(holder.getContext(), realmRegisteredInfo.getDisplayName());
 
                 _tv.measure(0, 0);       //must call measure!
                 int maxWith = 0;
@@ -662,8 +761,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (minWith < maxWith) {
                     minWith = maxWith;
                 }
-                holder.m_container.setMinimumWidth(Math.min(minWith, G.maxChatBox));
-                holder.m_container.addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                holder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+                holder.getContentBloke().addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
         }
     }
@@ -678,12 +777,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         };
     }
 
-    protected void voteAction(ChatItemHolder mHolder, Realm realm) {
+    protected void voteAction(NewChatItemHolder mHolder) {
         boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
         if (showThump) {
-            mHolder.lyt_vote.setVisibility(View.VISIBLE);
+            mHolder.getVoteContainer().setVisibility(View.VISIBLE);
         } else {
-            mHolder.lyt_vote.setVisibility(View.INVISIBLE);
+            mHolder.getVoteContainer().setVisibility(View.GONE);
         }
 
         /**
@@ -691,38 +790,26 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * because for chat and group userId will be set
          */
 
-        if ((mMessage.forwardedFrom != null)) {
-            if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                if (realmChannelExtra != null) {
-                    mHolder.txt_vote_up.setText(realmChannelExtra.getThumbsUp());
-                    mHolder.txt_vote_down.setText(realmChannelExtra.getThumbsDown());
-                    mHolder.txt_views_label.setText(realmChannelExtra.getViewsLabel());
-                    mHolder.txt_signature.setText(realmChannelExtra.getSignature());
-                }
-            } else {
-                mHolder.txt_vote_up.setText(mMessage.channelExtra.thumbsUp);
-                mHolder.txt_vote_down.setText(mMessage.channelExtra.thumbsDown);
-                mHolder.txt_views_label.setText(mMessage.channelExtra.viewsLabel);
-                mHolder.txt_signature.setText(mMessage.channelExtra.signature);
-            }
-        } else {
-            mHolder.txt_vote_up.setText(mMessage.channelExtra.thumbsUp);
-            mHolder.txt_vote_down.setText(mMessage.channelExtra.thumbsDown);
-            mHolder.txt_views_label.setText(mMessage.channelExtra.viewsLabel);
-            mHolder.txt_signature.setText(mMessage.channelExtra.signature);
-        }
+        mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
+        mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
+        mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
+        if (mMessage.isEdited())
+            mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + (structMessage.getChannelExtra() != null ? structMessage.getChannelExtra().getSignature() : ""));
+        else
+            mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
 
-        if (mHolder.txt_signature.getText().length() > 0) {
-            mHolder.lyt_signature.setVisibility(View.VISIBLE);
+
+        if (mHolder.getSignatureTv().getText().length() > 0) {
+            mHolder.getSignatureTv().setVisibility(View.VISIBLE);
         }
 
         if (HelperCalander.isPersianUnicode) {
-            mHolder.txt_views_label.setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.txt_views_label.getText().toString()));
-            mHolder.txt_vote_down.setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.txt_vote_down.getText().toString()));
-            mHolder.txt_vote_up.setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.txt_vote_up.getText().toString()));
+            mHolder.getViewsLabelTv().setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.getViewsLabelTv().getText().toString()));
+            mHolder.getVoteDownTv().setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.getVoteDownTv().getText().toString()));
+            mHolder.getVoteUpTv().setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.getVoteUpTv().getText().toString()));
         }
 
-        mHolder.lyt_vote_up.setOnClickListener(new View.OnClickListener() {
+        mHolder.getVoteUpContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (FragmentChat.isInSelectionMode) {
@@ -733,7 +820,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         });
 
-        mHolder.lyt_vote_down.setOnClickListener(new View.OnClickListener() {
+        mHolder.getVoteDownContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (FragmentChat.isInSelectionMode) {
@@ -751,198 +838,119 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @param reaction Up or Down
      */
     private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
-        long authorRoomId = 0;
-        long messageId = 0;
-        if (mMessage.forwardedFrom != null) {
-            authorRoomId = mMessage.forwardedFrom.getAuthorRoomId();
-            messageId = mMessage.forwardedFrom.getMessageId();
-        }
+        if ((mMessage.getForwardMessage() != null)) {
+            long forwardMessageId = mMessage.getForwardMessage().getMessageId();
 
-        if (messageId < 0) {
-            messageId = messageId * (-1);
-        }
-
-        long finalAuthorRoomId = authorRoomId;
-        long finalMessageId = messageId;
-
-        getRealmChat().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
-                if (realmRoomMessage != null) {
-                    /**
-                     * userId != 0 means that this message is from channel
-                     * because for chat and group userId will be set
-                     */
-
-                    if ((mMessage.forwardedFrom != null)) {
-                        ProtoGlobal.Room.Type roomType = null;
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, finalAuthorRoomId).findFirst();
-                        if (realmRoom != null) {
-                            roomType = realmRoom.getType();
-                        }
-                        if ((roomType == ProtoGlobal.Room.Type.CHANNEL)) {
-                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReactionForward(finalAuthorRoomId, Long.parseLong(mMessage.messageID), reaction, finalMessageId));
-                        } else {
-                            G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
-                        }
-                    } else {
-                        G.handler.post(() -> new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.roomId, Long.parseLong(mMessage.messageID), reaction));
-                    }
-                }
+            if (forwardMessageId < 0) {
+                forwardMessageId = forwardMessageId * (-1);
             }
-        });
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+            });
+            if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId(), reaction, forwardMessageId);
+            } else {
+                new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.getRoomId(), mMessage.getMessageId(), reaction);
+            }
+        } else {
+            new RequestChannelAddMessageReaction().channelAddMessageReaction(mMessage.getRoomId(), mMessage.getMessageId(), reaction);
+        }
     }
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
+        NewChatItemHolder viewHolder;
+        if (holder instanceof NewChatItemHolder)
+            viewHolder = (NewChatItemHolder) holder;
         else
             return;
 
-        LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
-        timeLayout.setGravity(Gravity.LEFT);
-
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(theme.getReceivedMessageColor(viewHolder.getContext()));
         }
-        //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).gravity = Gravity.LEFT;
-
-        ((LinearLayout.LayoutParams) mHolder.contentContainer.getLayoutParams()).gravity = Gravity.LEFT;
-
-        if (G.isDarkTheme) {
-            setTextColor(mHolder.cslr_txt_tic, R.color.white);
-            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round_dark);
-        } else {
-            setTextColor(mHolder.cslr_txt_tic, R.color.colorOldBlack);
-            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round);
-        }
+        viewHolder.getChatBloke().setBackground(theme.tintDrawable(RECEIVED_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.colorPrimaryLight));
 
         /**
          * add main layout margin to prevent getting match parent completely
-         * set to mainContainer not itemView because of selecting item foreground
+         * set to getItemContainer() not itemView because of selecting item foreground
          */
 
-        GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.contentContainer.getParent()).getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.bubbleChatReceive));
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.LEFT;
 
-        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
-        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
-    }
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
+        viewHolder.getMessageTimeTv().setTextColor(theme.getReceivedMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getSignatureTv().setTextColor(theme.getReceivedMessageOtherTextColor(viewHolder.getContext()));
 
-    private void setTextColor(ImageView imageView, int color) {
-
-        try {
-            imageView.setColorFilter(ContextCompat.getColor(G.context, color));
-        } catch (NullPointerException e) {
-            // imageView.setColorFilter(color,android.graphics.PorterDuff.Mode.MULTIPLY);
-            try {
-                imageView.setColorFilter(G.context.getResources().getColor(color));
-            } catch (Exception e1) {
-            }
+        if (type == ProtoGlobal.Room.Type.CHANNEL) {
+            ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp15);
+        } else {
+            ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
         }
+
     }
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
+        NewChatItemHolder viewHolder;
+        if (holder instanceof NewChatItemHolder)
+            viewHolder = (NewChatItemHolder) holder;
         else
             return;
-        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).gravity = Gravity.RIGHT;
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).gravity = Gravity.RIGHT;
 
-        ((LinearLayout.LayoutParams) mHolder.contentContainer.getLayoutParams()).gravity = Gravity.RIGHT;
-
-        LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
-        timeLayout.setGravity(Gravity.RIGHT);
-
-        //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
 
         if (holder instanceof ChatItemWithTextHolder) {
-            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(theme.getSendMessageTextColor(((ChatItemWithTextHolder) holder).getContext()));
         }
-        //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
 
         ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
-        if (mMessage.status != null) {
+        if (mMessage.getStatus() != null) {
             try {
-                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status);
+                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus());
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
         }
 
-        if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-            mHolder.cslr_txt_tic.setColorFilter(Color.parseColor(G.SeenTickColor));
-
-        } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            // iconHearing.setVisibility(View.VISIBLE);
-            if (G.isDarkTheme) {
-                setTextColor(mHolder.cslr_txt_tic, R.color.iGapColor);
-            } else {
-                setTextColor(mHolder.cslr_txt_tic, R.color.backgroundColorCall2);
-            }
-
-            mHolder.cslr_txt_tic.setVisibility(View.VISIBLE);
-        } else {
-//            setTextColor(imgTick, Color.parseColor(G.txtIconCheck));
-            mHolder.cslr_txt_tic.setColorFilter(Color.parseColor(G.txtIconCheck));
+        if (status != ProtoGlobal.RoomMessageStatus.SEEN) {
+            viewHolder.getMessageStatusTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
         }
-
-
-        if (G.isDarkTheme) {
-            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
-        } else {
-            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
-        }
-        GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.contentContainer.getParent()).getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.bubbleChatSend));
-
-        /**
-         * add main layout margin to prevent getting match parent completely
-         * set to mainContainer not itemView because of selecting item foreground
-         */
-        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
-        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
-
-        //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
-        //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = 0;
+        viewHolder.getChatBloke().setBackground(theme.tintDrawable(SEND_ITEM_BACKGROUND, viewHolder.getContext(), R.attr.iGapSendMessageBubbleColor));
+        viewHolder.getMessageTimeTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
+        viewHolder.getSignatureTv().setTextColor(theme.getSendMessageOtherTextColor(viewHolder.getContext()));
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp36);
+        ((FrameLayout.LayoutParams) viewHolder.getItemContainer().getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp4);
     }
 
     @CallSuper
-    protected void replyMessageIfNeeded(VH holder, Realm realm) {
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
+    protected void replyMessageIfNeeded(VH holder) {
+        NewChatItemHolder mHolder;
+        if (holder instanceof NewChatItemHolder)
+            mHolder = (NewChatItemHolder) holder;
         else
             return;
 
-        mHolder.m_container.setMinimumWidth(0);
-        mHolder.m_container.setMinimumHeight(0);
+        mHolder.getContentBloke().setMinimumWidth(0);
+        mHolder.getContentBloke().setMinimumHeight(0);
 
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
-        View cslr_replay_layout = ((ChatItemHolder) holder).m_container.findViewById(R.id.cslr_replay_layout);
+        View cslr_replay_layout = ((NewChatItemHolder) holder).getContentBloke().findViewById(R.id.cslr_replay_layout);
 
         if (cslr_replay_layout != null) {
-            mHolder.m_container.removeView(cslr_replay_layout);
+            mHolder.getContentBloke().removeView(cslr_replay_layout);
         }
 
-        if (mMessage.replayTo != null && mMessage.replayTo.isValid()) {
+        if (mMessage.getReplyTo() != null && mMessage.getReplyTo().isValid()) {
 
-            final View replayView = ViewMaker.getViewReplay();
+            final View replayView = ViewMaker.getViewReplay(((NewChatItemHolder) holder).getContext());
 
             if (replayView != null) {
-                final TextView replyFrom = (TextView) replayView.findViewById(R.id.chslr_txt_replay_from);
-                final EmojiTextViewE replayMessage = (EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message);
+                final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
+                final AppCompatTextView replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -951,53 +959,41 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             return;
                         }
 
-                        messageClickListener.onReplyClick(mMessage.replayTo);
+                        messageClickListener.onReplyClick(mMessage.getReplyTo());
                     }
                 });
 
                 replayView.setOnLongClickListener(getLongClickPerform(holder));
 
                 try {
-                    AppUtils.rightFileThumbnailIcon(((ImageView) replayView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
+                    AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), mMessage.getReplyTo().getForwardMessage() == null ? mMessage.getReplyTo().getMessageType() : mMessage.getReplyTo().getForwardMessage().getMessageType(), mMessage.getReplyTo().getForwardMessage() == null ? mMessage.getReplyTo() : mMessage.getReplyTo().getForwardMessage());
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
 
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                    if (realmRoom != null) {
-                        replyFrom.setText(realmRoom.getTitle());
+                    if (mAdapter.getRealmRoom() != null) {
+                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(mAdapter.getRealmRoom().getTitle(), replyFrom.getPaint().getFontMetricsInt()));
                     }
                 } else {
-                    RealmRegisteredInfo replayToInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.replayTo.getUserId());
+                    RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
+                        return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getReplyTo().getUserId());
+                    });
                     if (replayToInfo != null) {
-                        replyFrom.setText(replayToInfo.getDisplayName());
+                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
                     }
                 }
 
-                String replayText = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
-                replayMessage.setText(replayText);
+                String replayText = AppUtils.replyTextMessage(mMessage.getReplyTo(), holder.itemView.getResources());
+                replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-
-                    replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
-//
-                    GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
-                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));
-
-                    replyFrom.setTextColor(Color.parseColor(G.textBubble));
-                    replayMessage.setTextColor(Color.parseColor(G.textBubble));
-
+                    replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
                 } else {
-
-                    replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
-
-                    GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
-                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));
-
-                    replyFrom.setTextColor(Color.parseColor(G.textBubble));
-                    replayMessage.setTextColor(Color.parseColor(G.textBubble));
-
+                    replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
                 }
+                replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
+                replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
 
                 replyFrom.measure(0, 0);       //must call measure!
                 replayMessage.measure(0, 0);
@@ -1012,9 +1008,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 minWith = maxWith;
-                mHolder.m_container.setMinimumWidth(Math.min(minWith, G.maxChatBox));
+                mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
 
-                mHolder.m_container.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                mHolder.getContentBloke().addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -1023,23 +1019,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @CallSuper
-    protected void forwardMessageIfNeeded(VH holder, Realm realm) {
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
+    protected void forwardMessageIfNeeded(VH holder) {
+        NewChatItemHolder mHolder;
+        if (holder instanceof NewChatItemHolder && !(holder instanceof GiftStickerItem.ViewHolder))
+            mHolder = (NewChatItemHolder) holder;
         else
             return;
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
-        View cslr_ll_forward22 = ((ChatItemHolder) holder).m_container.findViewById(R.id.cslr_ll_forward);
+        View cslr_ll_forward22 = ((NewChatItemHolder) holder).getContentBloke().findViewById(R.id.cslr_ll_forward);
         if (cslr_ll_forward22 != null) {
-            mHolder.m_container.removeView(cslr_ll_forward22);
+            mHolder.getContentBloke().removeView(cslr_ll_forward22);
         }
 
-        if (mMessage.forwardedFrom != null) {
+        if (mMessage.getForwardMessage() != null) {
 
-            View forwardView = ViewMaker.getViewForward();
+            View forwardView = ViewMaker.getViewForward(((NewChatItemHolder) holder).getContext());
             forwardView.setOnLongClickListener(getLongClickPerform(holder));
 
             forwardView.setOnClickListener(new View.OnClickListener() {
@@ -1048,61 +1044,58 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();
                     } else {
-                        if (mMessage.username.length() > 0) {
-                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, (mMessage.forwardedFrom.getMessageId() * (-1)));
+                        if (structMessage.username.length() > 0) {
+                            //TODO: fixed this and do not use G.currentActivity
+                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, structMessage.username, HelperUrl.ChatEntry.profile, (mMessage.getForwardMessage().getMessageId() * (-1)));
                         }
                     }
                 }
             });
 
-            TextView txtPrefixForwardFrom = (TextView) forwardView.findViewById(R.id.cslr_txt_prefix_forward);
-            txtPrefixForwardFrom.setTypeface(G.typeface_IRANSansMobile);
-            TextView txtForwardFrom = (TextView) forwardView.findViewById(R.id.cslr_txt_forward_from);
-            txtForwardFrom.setTypeface(G.typeface_IRANSansMobile);
+            AppCompatTextView txtPrefixForwardFrom = forwardView.findViewById(R.id.cslr_txt_prefix_forward);
+            txtPrefixForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
+            AppCompatTextView txtForwardFrom = forwardView.findViewById(R.id.cslr_txt_forward_from);
+            txtForwardFrom.setTypeface(ResourcesCompat.getFont(txtPrefixForwardFrom.getContext(), R.font.main_font));
 
             /**
              * if forward message from chat or group , sender is user
              * but if message forwarded from channel sender is room
              */
-            RealmRegisteredInfo info = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.forwardedFrom.getUserId());
+            RealmRegisteredInfo info = DbManager.getInstance().doRealmTask(realm -> {
+                return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getForwardMessage().getUserId());
+            });
             if (info != null) {
 
                 if (RealmRegisteredInfo.needUpdateUser(info.getId(), info.getCacheId())) {
                     if (!updateForwardInfo.containsKey(info.getId())) {
-                        updateForwardInfo.put(info.getId(), mMessage.messageID);
+                        updateForwardInfo.put(info.getId(), mMessage.getMessageId() + "");
                     }
                 }
 
-                txtForwardFrom.setText(info.getDisplayName());
-                mMessage.username = info.getUsername();
-                if (mMessage.isSenderMe()) {
-                    txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
-                } else {
-                    txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
-                }
-            } else if (mMessage.forwardedFrom.getUserId() != 0) {
+                txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(info.getDisplayName(), txtForwardFrom.getPaint().getFontMetricsInt()));
+                structMessage.username = info.getUsername();
+                txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+            } else if (mMessage.getForwardMessage().getUserId() != 0) {
 
-                if (RealmRegisteredInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null)) {
-                    if (!updateForwardInfo.containsKey(mMessage.forwardedFrom.getUserId())) {
-                        updateForwardInfo.put(mMessage.forwardedFrom.getUserId(), mMessage.messageID);
+                if (RealmRegisteredInfo.needUpdateUser(mMessage.getForwardMessage().getUserId(), null)) {
+                    if (!updateForwardInfo.containsKey(mMessage.getForwardMessage().getUserId())) {
+                        updateForwardInfo.put(mMessage.getForwardMessage().getUserId(), mMessage.getMessageId() + "");
                     }
                 }
             } else {
-                RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getRoomId()).findFirst();
+                RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getRoomId()).findFirst();
+                });
                 if (realmRoom != null) {
-                    txtForwardFrom.setText(realmRoom.getTitle());
-                    if (mMessage.isSenderMe()) {
-                        txtForwardFrom.setTextColor(Color.parseColor(G.textBubble));
-                    } else {
-                        txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
-                    }
+                    txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
+                    txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
 
                     switch (realmRoom.getType()) {
                         case CHANNEL:
-                            mMessage.username = realmRoom.getChannelRoom().getUsername();
+                            structMessage.username = realmRoom.getChannelRoom().getUsername();
                             break;
                         case GROUP:
-                            mMessage.username = realmRoom.getGroupRoom().getUsername();
+                            structMessage.username = realmRoom.getGroupRoom().getUsername();
                             break;
                     }
                 } else {
@@ -1111,33 +1104,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         switch (realmRoomForwardedFrom.getType()) {
                             case CHANNEL:
                                 if (realmRoomForwardedFrom.getChannelRoom() != null && realmRoomForwardedFrom.getChannelRoom().getUsername() != null) {
-                                    mMessage.username = realmRoomForwardedFrom.getChannelRoom().getUsername();
+                                    structMessage.username = realmRoomForwardedFrom.getChannelRoom().getUsername();
                                 } else {
-                                    mMessage.username = holder.itemView.getResources().getString(R.string.private_channel);
+                                    structMessage.username = holder.itemView.getResources().getString(R.string.private_channel);
                                 }
 
                                 break;
                             case GROUP:
-                                mMessage.username = realmRoomForwardedFrom.getGroupRoom().getUsername();
+                                structMessage.username = realmRoomForwardedFrom.getGroupRoom().getUsername();
                                 break;
                         }
 
                         if (RealmRoom.needUpdateRoomInfo(realmRoomForwardedFrom.getId())) {
                             if (!updateForwardInfo.containsKey(realmRoomForwardedFrom.getId())) {
-                                updateForwardInfo.put(realmRoomForwardedFrom.getId(), mMessage.messageID);
+                                updateForwardInfo.put(realmRoomForwardedFrom.getId(), mMessage.getMessageId() + "");
                             }
                         }
 
-                        txtForwardFrom.setText(realmRoomForwardedFrom.getTitle());
-                        if (mMessage.isSenderMe()) {
-                            txtForwardFrom.setTextColor(Color.parseColor(G.textBubble));
-                        } else {
-                            txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
-                        }
+                        txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoomForwardedFrom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
+                        txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
                     } else {
-                        if (RealmRoom.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId())) {
-                            if (!updateForwardInfo.containsKey(mMessage.forwardedFrom.getAuthorRoomId())) {
-                                updateForwardInfo.put(mMessage.forwardedFrom.getAuthorRoomId(), mMessage.messageID);
+                        if (RealmRoom.needUpdateRoomInfo(mMessage.getForwardMessage().getAuthorRoomId())) {
+                            if (!updateForwardInfo.containsKey(mMessage.getForwardMessage().getAuthorRoomId())) {
+                                updateForwardInfo.put(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId() + "");
                             }
                         }
                     }
@@ -1151,8 +1140,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (minWith < maxWith) {
                 minWith = maxWith;
             }
-            mHolder.m_container.setMinimumWidth(Math.min(minWith, G.maxChatBox));
-            mHolder.m_container.addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+            mHolder.getContentBloke().addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 
@@ -1163,20 +1152,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @return true if item has a progress
      */
     private boolean hasProgress(VH holder) {
-        if (holder instanceof IProgress){
-            return true;
-        } else {
-            return false;
-        }
+        return holder instanceof IProgress;
     }
 
-    private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder, final RealmAttachment attachment) {
+    private void setClickListener(SharedPreferences sharedPreferences, String key, final VH holder) {
 
         /**
          * if type was gif auto file start auto download
          */
         if (sharedPreferences.getInt(key, ((key.equals(SHP_SETTING.KEY_AD_DATA_GIF) || key.equals(SHP_SETTING.KEY_AD_WIFI_GIF)) ? 5 : -1)) != -1) {
-            autoDownload(holder, attachment);
+            autoDownload(holder);
         } else {
 
             MessageProgress _Progress = ((IProgress) holder).getProgress();
@@ -1185,44 +1170,44 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    forOnCLick(holder, attachment);
+                    forOnCLick(holder);
                 }
             });
         }
     }
 
-    private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
+    private void checkAutoDownload(final VH holder, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
 
-        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(attachment.getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
+        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(structMessage.getAttachment().getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
             return;
         }
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         ProtoGlobal.RoomMessageType messageType;
-        if (mMessage.forwardedFrom != null) {
-            messageType = mMessage.forwardedFrom.getMessageType();
+        if (mMessage.getForwardMessage() != null) {
+            messageType = mMessage.getForwardMessage().getMessageType();
         } else {
-            messageType = mMessage.messageType;
+            messageType = mMessage.getMessageType();
         }
         switch (messageType) {
             case IMAGE:
             case IMAGE_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_PHOTO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_PHOTO, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_PHOTO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_PHOTO, holder);
                         break;
                 }
                 break;
             case VOICE:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VOICE_MESSAGE, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VOICE_MESSAGE, holder);
                         break;
                 }
                 break;
@@ -1230,10 +1215,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case VIDEO_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VIDEO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_VIDEO, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VIDEO, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_VIDEO, holder);
                         break;
                 }
                 break;
@@ -1241,10 +1226,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case FILE_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_FILE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_FILE, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_FILE, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_FILE, holder);
                         break;
                 }
                 break;
@@ -1252,10 +1237,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case AUDIO_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_MUSIC, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_MUSIC, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_MUSIC, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_MUSIC, holder);
                         break;
                 }
                 break;
@@ -1263,10 +1248,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             case GIF_TEXT:
                 switch (connectionMode) {
                     case MOBILE:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_GIF, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_DATA_GIF, holder);
                         break;
                     case WIFI:
-                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_GIF, holder, attachment);
+                        setClickListener(sharedPreferences, SHP_SETTING.KEY_AD_WIFI_GIF, holder);
                         break;
                 }
                 break;
@@ -1278,47 +1263,47 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
+                        forOnCLick(holder);
                     }
                 });
                 break;
         }
     }
 
-    private void prepareAttachmentIfNeeded(final VH holder, final RealmAttachment attachment, final ProtoGlobal.RoomMessageType messageType) {
+    private void prepareAttachmentIfNeeded(final VH holder, final ProtoGlobal.RoomMessageType messageType) {
         /**
          * runs if message has attachment
          */
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
+        NewChatItemHolder mHolder;
+        if (holder instanceof NewChatItemHolder)
+            mHolder = (NewChatItemHolder) holder;
         else
             return;
 
-        if (attachment != null) {
+        if (structMessage.getAttachment() != null) {
 
-            if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder || mHolder instanceof StickerItem.ViewHolder) {
+            if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) ((IThumbNailItem) holder).getThumbNailImageView();
-                int _with = attachment.getWidth();
-                int _hight = attachment.getHeight();
+                int _with = structMessage.getAttachment().getWidth();
+                int _hight = structMessage.getAttachment().getHeight();
 
                 if (_with == 0) {
-                    if (attachment.getSmallThumbnail() != null) {
-                        _with = attachment.getSmallThumbnail().getWidth();
-                        _hight = attachment.getSmallThumbnail().getHeight();
+                    if (structMessage.getAttachment().getSmallThumbnail() != null) {
+                        _with = structMessage.getAttachment().getSmallThumbnail().getWidth();
+                        _hight = structMessage.getAttachment().getSmallThumbnail().getHeight();
                     }
                 }
 
                 boolean setDefualtImage = false;
 
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    if (attachment.getLocalFilePath() == null && attachment.getLocalThumbnailPath() == null && _with == 0) {
+                    if (structMessage.getAttachment().getLocalFilePath() == null && structMessage.getAttachment().getLocalThumbnailPath() == null && _with == 0) {
                         _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         setDefualtImage = true;
                     }
                 } else {
-                    if (attachment.getLocalThumbnailPath() == null && _with == 0) {
+                    if (structMessage.getAttachment().getLocalThumbnailPath() == null && _with == 0) {
                         _with = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         _hight = (int) G.context.getResources().getDimension(R.dimen.dp120);
                         setDefualtImage = true;
@@ -1327,52 +1312,57 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
                 if (dimens[0] != 0 && dimens[1] != 0) {
-                    mHolder.m_container.getLayoutParams().width = dimens[0];
+                    mHolder.getContentBloke().getLayoutParams().width = dimens[0];
                 }
 
                 if (setDefualtImage) {
                     imageViewReservedSpace.setImageResource(R.mipmap.difaultimage);
                 }
+
+                if (holder instanceof VideoWithTextItem.ViewHolder) {
+                    ((VideoWithTextItem.ViewHolder) holder).getMoreButton().setOnClickListener(v -> {
+                        OnClickRow(((VideoWithTextItem.ViewHolder) holder), v);
+                    });
+                }
+
+                if (holder instanceof ImageWithTextItem.ViewHolder) {
+                    ((ImageWithTextItem.ViewHolder) holder).getMoreButton().setOnClickListener(v -> {
+                        OnClickRow(((ImageWithTextItem.ViewHolder) holder), v);
+                    });
+                }
+
+
             } else if (messageType == ProtoGlobal.RoomMessageType.GIF || messageType == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                 ReserveSpaceGifImageView imageViewReservedSpace = (ReserveSpaceGifImageView) ((IThumbNailItem) holder).getThumbNailImageView();
-                int _with = attachment.getWidth();
-                int _hight = attachment.getHeight();
+                int _with = structMessage.getAttachment().getWidth();
+                int _hight = structMessage.getAttachment().getHeight();
 
                 if (_with == 0) {
                     _with = (int) G.context.getResources().getDimension(R.dimen.dp200);
+                }
+
+                if (_hight == 0) {
                     _hight = (int) G.context.getResources().getDimension(R.dimen.dp200);
                 }
 
                 int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
-                ((ViewGroup) mHolder.m_container).getLayoutParams().width = dimens[0];
+                mHolder.getContentBloke().getLayoutParams().width = dimens[0];
             }
 
-            /**
-             * if file already exists, simply show the local one
-             */
-            if (attachment.isFileExistsOnLocalAndIsThumbnail()) {
-                /**
-                 * load file from local
-                 */
-                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
+
+            if (structMessage.getAttachment().isFileExistsOnLocalAndIsImage()) {
+                onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE || messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT) {
-                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalFilePath(), LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else {
-                /**
-                 * file doesn't exist on local, I check for a thumbnail
-                 * if thumbnail exists, I load it into the view
-                 */
-                if (attachment.isThumbnailExistsOnLocal()) {
-                    /**
-                     * load thumbnail from local
-                     */
-                    onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
+                if (structMessage.getAttachment().isThumbnailExistsOnLocal()) {
+                    onLoadThumbnailFromLocal(holder, getCacheId(structMessage), structMessage.getAttachment().getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                        if (mHolder instanceof StickerItem.ViewHolder) {
-                            downLoadFile(holder, attachment, 0);
+                        if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder) {
+
                         } else {
-                            downLoadThumbnail(holder, attachment);
+                            downLoadThumbnail(holder);
                         }
                     }
                 }
@@ -1380,10 +1370,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (hasProgress(holder)) {
                 final MessageProgress _Progress = ((IProgress) holder).getProgress();
-                _Progress.setTag(mMessage.messageID);
+                _Progress.setTag(mMessage.getMessageId());
                 _Progress.setVisibility(View.GONE);
 
-                if (mHolder instanceof StickerItem.ViewHolder)
+                if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder)
                     return;
 
                 AppUtils.setProgresColor(_Progress.progressBar);
@@ -1391,110 +1381,123 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
+                        forOnCLick(holder);
                     }
                 });
 
-                if (!attachment.isFileExistsOnLocal()) {
+                if (!structMessage.getAttachment().isFileExistsOnLocal()) {
                     if (HelperCheckInternetConnection.currentConnectivityType == null) {
-                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
-                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
+                        checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
+                        checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
                     } else {
-                        checkAutoDownload(holder, attachment, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
+                        checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.currentConnectivityType);
                     }
                 }
 
                 _Progress.withOnProgress(new OnProgress() {
                     @Override
                     public void onProgressFinished() {
-
-                        if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.messageID)) {
-                            return;
-                        }
-                        _Progress.setVisibility(View.GONE);
-                        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
-                        thumbnailView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (FragmentChat.isInSelectionMode) {
-                                    holder.itemView.performLongClick();
-                                }
-                            }
-                        });
-
-                        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
-
-                        _Progress.withDrawable(null, true);
-
-                        switch (messageType) {
-                            case VIDEO:
-                            case VIDEO_TEXT:
-                                ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                                _Progress.withDrawable(R.drawable.ic_play, true);
-                                break;
-                            case AUDIO:
-                            case AUDIO_TEXT:
-                                break;
-                            case FILE:
-                            case FILE_TEXT:
-                            case IMAGE:
-                            case IMAGE_TEXT:
-                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        forOnCLick(holder, attachment);
-                                    }
-                                });
-                                break;
-                            case VOICE:
-                                break;
-                            case GIF:
-                            case GIF_TEXT:
-                                thumbnailView.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        forOnCLick(holder, attachment);
-                                    }
-                                });
-
-                                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
-                                    ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                                    _Progress.withDrawable(R.mipmap.photogif, true);
-                                } else {
-                                    ((IProgress) holder).getProgress().setVisibility(View.INVISIBLE);
-                                }
-                                break;
-                        }
+                        onProgressFinish(holder, messageType);
                     }
                 });
 
-                prepareProgress(holder, attachment);
+                prepareProgress(holder);
             }
 
         }
     }
 
+    public void onProgressFinish(VH holder, ProtoGlobal.RoomMessageType messageType) {
 
-    private void autoDownload(VH holder, RealmAttachment attachment) {
-        if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
+        final MessageProgress _Progress = ((IProgress) holder).getProgress();
+
+
+        if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.getMessageId())) {
+            return;
+        }
+
+        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+            return;
+        }
+
+        if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
+            return;
+        }
+
+        _Progress.setVisibility(View.GONE);
+        View thumbnailView = ((IThumbNailItem) holder).getThumbNailImageView();
+        thumbnailView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                }
+            }
+        });
+
+        thumbnailView.setOnLongClickListener(getLongClickPerform(holder));
+
+        _Progress.withDrawable(null, true);
+
+        switch (messageType) {
+            case VIDEO:
+            case VIDEO_TEXT:
+                ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
+                _Progress.withDrawable(R.drawable.ic_play, true);
+                break;
+            case AUDIO:
+            case VOICE:
+            case AUDIO_TEXT:
+                break;
+            case FILE:
+            case FILE_TEXT:
+            case IMAGE:
+            case IMAGE_TEXT:
+                thumbnailView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        forOnCLick(holder);
+                    }
+                });
+                break;
+            case GIF:
+            case GIF_TEXT:
+                thumbnailView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        forOnCLick(holder);
+                    }
+                });
+
+                SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 0) {
+                    ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
+                    _Progress.withDrawable(R.mipmap.photogif, true);
+                } else {
+                    ((IProgress) holder).getProgress().setVisibility(View.INVISIBLE);
+                }
+                break;
+        }
+    }
+
+
+    private void autoDownload(VH holder) {
+        if (mMessage.getMessageType() == ProtoGlobal.RoomMessageType.FILE || mMessage.getMessageType() == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             ((IThumbNailItem) holder).getThumbNailImageView().setVisibility(View.INVISIBLE);
         }
 
-        downLoadFile(holder, attachment, 0);
+        downLoadFile(holder, 0);
     }
 
     public boolean hasFileSize(String filPath) {
         if (filPath != null) {
             File file = new File(filPath);
-            if (file.exists() && file.length() > 0) {
-                return true;
-            }
+            return file.exists() && file.length() > 0;
         }
         return false;
     }
 
-    private void forOnCLick(VH holder, RealmAttachment attachment) {
+    private void forOnCLick(VH holder) {
 
         if (FragmentChat.isInSelectionMode) {
             holder.itemView.performLongClick();
@@ -1506,60 +1509,46 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         View thumbnail = ((IThumbNailItem) holder).getThumbNailImageView();
 
-        //if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
-        //    if (thumbnail != null) {
-        //        thumbnail.setVisibility(View.INVISIBLE);
-        //    }
-        //}
 
-        if (HelperUploadFile.isUploading(mMessage.messageID)) {
-            if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(attachment.getLocalFilePath())) {
+        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+            if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
                 if (G.userLogin) {
-                    messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
-
-                    //HelperUploadFile.reUpload(mMessage.messageID);
-                    //progress.withDrawable(R.drawable.ic_cancel, false);
-                    //holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
 
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
             } else {
-                messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);
+                messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition());
             }
-        } else if (HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId())) {
-            HelperDownloadFile.getInstance().stopDownLoad(attachment.getCacheId());
+        } else if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+            HelperDownloadFile.getInstance().stopDownLoad(structMessage.getAttachment().getCacheId());
         } else {
             thumbnail.setVisibility(View.VISIBLE);
 
 
-            if (attachment.isFileExistsOnLocal()) {
-                String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
-                ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+            if (structMessage.getAttachment().isFileExistsOnLocal()) {
+                String _status = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getStatus() : mMessage.getStatus();
+                ProtoGlobal.RoomMessageType _type = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
 
                 if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
-                } else if (FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
-                    messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.COMPRESSING);
-                } else if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                    messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+                    messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
                 } else {
                     /**
                      * avoid from show GIF in fragment show image
                      */
                     if (_type == ProtoGlobal.RoomMessageType.GIF || _type == ProtoGlobal.RoomMessageType.GIF_TEXT) {
                         try {
-                            onPlayPauseGIF(holder, attachment.getLocalFilePath());
+                            onPlayPauseGIF(holder, structMessage.getAttachment().getLocalFilePath());
                         } catch (ClassCastException e) {
                             e.printStackTrace();
                         }
                     } else {
-                        progress.performProgress();
-                        messageClickListener.onOpenClick(progress, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(progress, structMessage, holder.getAdapterPosition());
                     }
                 }
             } else {
-                downLoadFile(holder, attachment, 2);
+                downLoadFile(holder, 2);
             }
         }
     }
@@ -1570,29 +1559,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     }
 
-    private void downLoadThumbnail(final VH holder, final RealmAttachment attachment) {
+    private void downLoadThumbnail(final VH holder) {
 
-        if (attachment == null) return;
+        if (structMessage.getAttachment() == null) return;
 
-        String token = attachment.getToken();
-        String url = attachment.getUrl();
-        String name = attachment.getName();
+        String token = structMessage.getAttachment().getToken();
+        String url = structMessage.getAttachment().getUrl();
+        String name = structMessage.getAttachment().getName();
 
         long size = 0;
 
-        if (attachment.getSmallThumbnail() != null) size = attachment.getSmallThumbnail().getSize();
+        if (structMessage.getAttachment().getSmallThumbnail() != null)
+            size = structMessage.getAttachment().getSmallThumbnail().getSize();
 
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
-        if (attachment.getCacheId() == null || attachment.getCacheId().length() == 0) {
+        if (structMessage.getAttachment().getCacheId() == null || structMessage.getAttachment().getCacheId().length() == 0) {
             return;
         }
 
-        //  final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, G.DIR_TEMP, true);
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.getInstance().startDownload(mMessage.messageType, mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(mMessage.getMessageType(), mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, int progress) {
 
@@ -1602,14 +1591,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 @Override
                                 public void run() {
                                     String type;
-                                    if (mMessage.forwardedFrom != null) {
-                                        type = mMessage.forwardedFrom.getMessageType().toString().toLowerCase();
+                                    if (mMessage.getForwardMessage() != null) {
+                                        type = mMessage.getForwardMessage().getMessageType().toString().toLowerCase();
                                     } else {
-                                        type = mMessage.messageType.toString().toLowerCase();
+                                        type = mMessage.getMessageType().toString().toLowerCase();
                                     }
-                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.THUMBNAIL);
-                                    }
+//                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
+//                                        onLoadThumbnailFromLocal(holder, structMessage.getAttachment().getCacheId(), path, LocalFileType.THUMBNAIL);
+//                                    }
                                 }
                             });
                         }
@@ -1623,27 +1612,27 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    void downLoadFile(final VH holder, final RealmAttachment attachment, int priority) {
+    void downLoadFile(final VH holder, int priority) {
 
-        if (attachment == null || attachment.getCacheId() == null) {
+        if (structMessage.getAttachment() == null || structMessage.getAttachment().getCacheId() == null) {
             return;
         }
 
-        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId());
+        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId());
 
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
 
 
-        final String token = attachment.getToken();
-        final String url = attachment.getUrl();
-        String name = attachment.getName();
-        Long size = attachment.getSize();
+        final String token = structMessage.getAttachment().getToken();
+        final String url = structMessage.getAttachment().getUrl();
+        String name = structMessage.getAttachment().getName();
+        long size = structMessage.getAttachment().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-        final ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+        final ProtoGlobal.RoomMessageType messageType = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
 
-        final String _path = AndroidUtils.getFilePathWithCashId(attachment.getCacheId(), name, messageType);
+        final String _path = AndroidUtils.getFilePathWithCashId(structMessage.getAttachment().getCacheId(), name, messageType);
 
         if (token != null && token.length() > 0 && size > 0) {
 
@@ -1651,7 +1640,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
 
-            HelperDownloadFile.getInstance().startDownload(messageType, mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
@@ -1659,17 +1648,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                                    progressBar.withProgress(progress);
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
+                                    if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
+                                        if (progress != 100) {
+                                            progressBar.withProgress(progress);
+                                        } else {
+                                            progressBar.withProgress(99);
+                                        }
+                                    }
 
                                     if (progress == 100) {
 
                                         if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
-                                            if (mMessage.roomId == MusicPlayer.roomId) {
+                                            if (mMessage.getRoomId() == MusicPlayer.roomId) {
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
-                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+//                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
                                     }
                                 }
                             }
@@ -1685,8 +1680,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                                    progressBar.withProgress(0);
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
+                                    progressBar.withProgress(1);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
 
                                 }
@@ -1699,7 +1694,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             if (!_isDownloading) {
-                messageClickListener.onDownloadAllEqualCashId(attachment.getCacheId(), mMessage.messageID);
+                messageClickListener.onDownloadAllEqualCashId(structMessage.getAttachment().getCacheId(), mMessage.getMessageId() + "");
             }
         }
     }
@@ -1713,8 +1708,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      *
      * @param holder VH
      */
-    private void prepareProgress(final VH holder, RealmAttachment attachment) {
-        if (mMessage.sendType == MyType.SendType.send) {
+    public void prepareProgress(final VH holder) {
+        if (structMessage.getSendType() == MyType.SendType.send) {
 
             final MessageProgress progressBar = ((IProgress) holder).getProgress();
             AppUtils.setProgresColor(progressBar.progressBar);
@@ -1726,115 +1721,53 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
              */
-            if (HelperUploadFile.isUploading(mMessage.messageID) || (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID)))) {
+            if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
                 //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
                 hideThumbnailIf(holder);
 
-                HelperUploadFile.AddListener(mMessage.messageID, new HelperUploadFile.UpdateListener() {
-                    @Override
-                    public void OnProgress(final int progress, FileUploadStructure struct) {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                //float p = progress;
-                                //if ((mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) && FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
-                                //    if (progress < mMessage.uploadProgress) {
-                                //        p = mMessage.uploadProgress;
-                                //    }
-                                //}
-                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID) && !(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                                    if (progress >= 1) {
-                                        progressBar.withProgress(progress);
-
-                                    }
-                                    if (progress == 100) {
-                                        progressBar.performProgress();
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void OnError() {
-                        if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
-                                    progressBar.withProgress(0);
-                                    progressBar.withDrawable(R.drawable.upload, true);
-                                }
-                            });
-                        }
-                    }
-                });
-
-                //if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-                //
-                //    MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
-                //        @Override
-                //        public void compress(final long percent, String path) {
-                //
-                //            G.handler.post(new Runnable() {
-                //                @Override
-                //                public void run() {
-                //                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                //                        int p = (int) (percent / 10);
-                //                        progressBar.withProgress(p);
-                //                        mMessage.uploadProgress = p;
-                //                    }
-                //                }
-                //            });
-                //        }
-                //    };
-                //}
-
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                progressBar.withProgress(HelperUploadFile.getUploadProgress(mMessage.messageID));
+                progressBar.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             } else {
-                checkForDownloading(holder, attachment);
+                checkForDownloading(holder);
             }
 
-            String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
+            String _status = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getStatus() : mMessage.getStatus();
             if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 onFaildUpload(holder);
             }
         } else {
-            checkForDownloading(holder, attachment);
+            checkForDownloading(holder);
         }
     }
 
     private void onFaildUpload(VH holder) {
 
         MessageProgress progressBar = ((IProgress) holder).getProgress();
-        if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+        if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
             AppUtils.setProgresColor(progressBar.progressBar);
-            progressBar.withProgress(0);
+            progressBar.withProgress(1);
             progressBar.withDrawable(R.drawable.upload, true);
         }
     }
 
     private void hideThumbnailIf(VH holder) {
-        if (mMessage.messageType == ProtoGlobal.RoomMessageType.FILE || mMessage.messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
+        if (mMessage.getMessageType() == ProtoGlobal.RoomMessageType.FILE || mMessage.getMessageType() == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             ((IThumbNailItem) holder).getThumbNailImageView().setVisibility(View.INVISIBLE);
         }
     }
 
-    private void checkForDownloading(VH holder, RealmAttachment attachment) {
+    private void checkForDownloading(VH holder) {
 
         MessageProgress progress = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progress.progressBar);
 
-        if (HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId())) {
+        if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
             hideThumbnailIf(holder);
 
-            downLoadFile(holder, attachment, 0);
+            downLoadFile(holder, 0);
         } else {
-            if (attachment.isFileExistsOnLocal()) {
-                if (!(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())))) {
+            if (structMessage.getAttachment().isFileExistsOnLocal()) {
+                if (!(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())))) {
                     progress.performProgress();
                 }
             } else {
@@ -1846,134 +1779,148 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     public String getCacheId(StructMessageInfo mMessage) {
-        if (mMessage.forwardedFrom != null && mMessage.forwardedFrom.getAttachment() != null && mMessage.forwardedFrom.getAttachment().getCacheId() != null) {
-            return mMessage.forwardedFrom.getAttachment().getCacheId();
-        } else if (mMessage.getAttachment() != null && mMessage.getAttachment().cashID != null) {
-            return mMessage.getAttachment().cashID;
+        if (mMessage.realmRoomMessage.getForwardMessage() != null && mMessage.realmRoomMessage.getForwardMessage().getAttachment() != null && mMessage.realmRoomMessage.getForwardMessage().getAttachment().getCacheId() != null) {
+            return mMessage.realmRoomMessage.getForwardMessage().getAttachment().getCacheId();
+        } else if (structMessage.getAttachment() != null && structMessage.getAttachment().getCacheId() != null) {
+            return structMessage.getAttachment().getCacheId();
         }
 
         return "";
     }
 
-    public void onBotBtnClick(View v) {
-        try (final Realm realm = Realm.getDefaultInstance()) {
-            if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
-            } else if (v.getId() == ButtonActionType.BOT_ACTION) {
-                Long identity = System.currentTimeMillis();
+    public void onBotBtnClick(View v, ButtonEntity buttonEntity) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            try {
+                if (v.getId() == ButtonActionType.USERNAME_LINK) {
+                    //TODO: fixed this and do not use G.currentActivity
+                    HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
+                } else if (v.getId() == ButtonActionType.BOT_ACTION) {
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
-                        G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
-                        messageClickListener.sendFromBot(realmRoomMessage);
+                    long messageId = System.currentTimeMillis();
+                    RealmRoomMessage roomMessage = new RealmRoomMessage();
+                    roomMessage.setMessageId(messageId);
+                    roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                    roomMessage.setRoomId(mMessage.getRoomId());
+                    roomMessage.setMessage(((ArrayList<String>) v.getTag()).get(1));
+                    roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                    roomMessage.setUserId(AccountManager.getInstance().getCurrentUser().getId());
+                    roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+
+                    if (((ArrayList<String>) v.getTag()).get(2) != null) {
+                        RealmAdditional additional = new RealmAdditional();
+                        additional.setId(AppUtils.makeRandomId());
+                        additional.setAdditionalData(((ArrayList<String>) v.getTag()).get(2));
+                        additional.setAdditionalType(3);
+                        roomMessage.setRealmAdditional(additional);
                     }
-                });
 
-            } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+                    new Thread(() -> {
+                        DbManager.getInstance().doRealmTransaction(realm12 -> {
+                            realm12.copyToRealmOrUpdate(roomMessage);
+                        });
+                    }).start();
 
-            } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage);
+                    messageClickListener.sendFromBot(roomMessage);
 
-            } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
-            } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
-                try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Long identity = System.currentTimeMillis();
+                } else if (v.getId() == ButtonActionType.JOIN_LINK) {
+                    //TODO: fixed this and do not use G.currentActivity
+                    HelperUrl.checkAndJoinToRoom(G.currentActivity, ((ArrayList<String>) v.getTag()).get(0).substring(14));
 
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                    G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
-                                    messageClickListener.sendFromBot(realmRoomMessage);
-                                }
-                            });
-                        }
-                    }).show();
+                } else if (v.getId() == ButtonActionType.WEB_LINK) {
+                    HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
 
+                } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
+                    messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0));
+                } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
+                    try {
+                        new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Long identity = System.currentTimeMillis();
 
-                } catch (Exception e) {
-                }
-
-            } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
-                try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            if (G.locationListener != null){
-                                isLocationFromBot=true;
-                                G.locationListener.requestLocation();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
+                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage);
+                                        messageClickListener.sendFromBot(realmRoomMessage);
+                                    }
+                                });
                             }
+                        }).show();
 
 
+                    } catch (Exception e) {
+                    }
 
-                   /*         G.locationListenerResponse = new LocationListenerResponse() {
-                                @Override
-                                public void setLocationResponse(Double latitude, Double longitude) {
-                                    Long identity = System.currentTimeMillis();
+                } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
+                    try {
+                        new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, latitude + "," + longitude, ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                            G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
-                                            messageClickListener.sendFromBot(realmRoomMessage);
-                                        }
-                                    });
+                                if (G.locationListener != null) {
+                                    isLocationFromBot = true;
+                                    G.locationListener.requestLocation();
                                 }
-                            };*/
+                            }
+                        }).show();
 
 
-                        }
-                    }).show();
+                    } catch (Exception e) {
+                    }
 
 
-                } catch (Exception e) {
-                }
-
-
-            } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
-                JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
-                long peerId;
-                if (room != null && room.getChatRoom() != null) {
-                    peerId = room.getChatRoom().getPeerId();
-                } else {
-                    peerId = Long.parseLong(mMessage.senderID);
-                }
-                DirectPayHelper.directPayBot(jsonObject, peerId);
-            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
-                CardToCardHelper.CallCardToCard(G.currentActivity, Long.parseLong(((ArrayList<String>) v.getTag()).get(0)));
-            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
-                try {
+                } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
-                } catch (JSONException e) {
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
+                    long peerId;
+                    if (room != null && room.getChatRoom() != null) {
+                        peerId = room.getChatRoom().getPeerId();
+                    } else {
+                        peerId = mMessage.getUserId();
+                    }
+                    new HelperFragment(G.currentActivity.getSupportFragmentManager()).loadPayment(room.getTitle(), jsonObject.getString("token"), null);
+                } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.CARD_TO_CARD.getNumber()) {
+                    JSONObject rootJsonObject = new JSONObject(buttonEntity.getJsonObject());
+                    JSONObject valueObject = rootJsonObject.getJSONObject("value");
+
+                    String cardNumber = valueObject.getString("cardNumber");
+                    int amount = valueObject.getInt("amount");
+                    long userId = valueObject.getLong("userId");
+
+                    CardToCardHelper.NewCallCardToCard(G.currentActivity, userId, amount, cardNumber);
+
+                } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.BILL_MENU.getNumber()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills, jsonObject)).setReplace(false).load();
+                    } catch (JSONException e) {
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
+                    }
+                } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
+                    } catch (JSONException e) {
+                        new HelperFragment(G.currentActivity.getSupportFragmentManager(), FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+                    }
                 }
-            } else if (v.getId() == ProtoGlobal.DiscoveryField.ButtonActionType.TRAFFIC_BILL_MENU.getNumber()) {
-                try {
-                    JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime, jsonObject)).setReplace(false).load();
-                } catch (JSONException e) {
-                    new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
             }
+        });
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
-        }
-
+        /**
+         * The data was sent via the button via the view tag. Right now I only do this for the card due to lack of time with the new object
+         * */
     }
 
+    @FunctionalInterface
+    public interface OnAllowBotCommand {
+        void allow();
+    }
 }

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.UserProfileViewModel" />
+    </data>
+
+    <ScrollView
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:hint="@string/name"
+                android:textColorHint="?iGapHintTextColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".9">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="@={viewModel.name}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:hint="@string/user_name"
+                android:textColorHint="?iGapHintTextColor"
+                app:errorEnabled="@{viewModel.usernameErrorEnable}"
+                app:errorText="@{viewModel.usernameErrorMessage}"
+                app:layout_constraintEnd_toEndOf="@id/name"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/userNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="@={viewModel.userName}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/bio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:hint="@string/st_bio"
+                android:textColorHint="?attr/iGapHintTextColor"
+                app:counterEnabled="true"
+                app:counterMaxLength="70"
+                app:layout_constraintEnd_toEndOf="@id/name"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/userName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bioEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="70"
+                    android:text="@={viewModel.bio}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:hint="@string/email"
+                android:textColorHint="?iGapHintTextColor"
+                app:errorEnabled="@{viewModel.emailErrorEnable}"
+                app:errorText="@{viewModel.emailErrorMessage}"
+                app:layout_constraintEnd_toEndOf="@id/name"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/bio">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.email}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/countryCode"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="bottom"
+                android:onClick="@{() -> viewModel.onCountryCodeClick()}"
+                android:paddingBottom="6dp"
+                android:text="@{viewModel.referralCountryCodeObservableField}"
+                android:textColor="?iGapTitleTextColor"
+                app:layout_constraintBottom_toBottomOf="@id/referralView"
+                app:layout_constraintEnd_toEndOf="@id/name"
+                app:layout_constraintTop_toTopOf="@id/referralView" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/referralView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
+                android:hint="@string/referral_code"
+                android:textColorHint="?iGapHintTextColor"
+                app:errorEnabled="@{viewModel.showReferralErrorLiveData}"
+                app:errorText="@{viewModel.referralError}"
+                app:layout_constraintEnd_toStartOf="@id/countryCode"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/referralEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="@{viewModel.referralEnableLiveData}"
+                    android:inputType="phone"
+                    android:text="@={viewModel.referralNumberObservableField}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:paddingStart="@dimen/dp4"
+                android:paddingTop="@dimen/dp4"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingBottom="@dimen/dp32"
+                android:text="@string/set_gender"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/referralView" />
+
+            <RadioGroup
+                android:id="@+id/genderValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:checkedButton="@{viewModel.gender}"
+                android:onCheckedChanged="@{(group,checkId)->viewModel.genderCheckedListener(checkId)}"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/dp32"
+                app:layout_constraintBottom_toBottomOf="@id/gender"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/gender"
+                app:layout_constraintTop_toTopOf="@id/gender">
+
+                <RadioButton
+                    android:id="@+id/male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/check_box_background"
+                    android:text="@string/male"
+                    android:textColor="?iGapSubtitleTextColor" />
+
+                <RadioButton
+                    android:id="@+id/female"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/check_box_background"
+                    android:text="@string/female"
+                    android:textColor="?iGapSubtitleTextColor" />
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp52"
+    android:layout_marginTop="@dimen/dp4"
+    android:layout_marginRight="@dimen/dp52"
+    android:layout_marginBottom="@dimen/dp4"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp4"
+    app:cardBackgroundColor="#E6E5E1DC"
+    app:cardCornerRadius="12dp"
+    app:cardPreventCornerOverlap="false">
+
+    <LinearLayout
+        android:id="@+id/ll_bill"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?rootBackgroundColor"
+        android:orientation="vertical">
+
+        <net.iGap.module.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/pink"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp6"
+            android:text="@string/bill_title"
+            android:paddingBottom="@dimen/dp6"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp15" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/amount"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/bill_type"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_billType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/bill_id"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_billId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/pay_id"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_payId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/card_number"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_cardNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/mpl_transaction_order_id"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_orderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/terminal_No"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_terminalNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/rrn"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_referenceNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp32"
+                android:layout_marginRight="@dimen/dp32"
+                android:background="?iGapDividerLine" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/trace_number"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/tv_bill_traceNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp14" />
+        </LinearLayout>
+
+        <net.iGap.module.CustomTextViewMedium
+            android:id="@+id/tv_bill_requestDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/pink"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp6"
+            android:paddingBottom="@dimen/dp6"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp15" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

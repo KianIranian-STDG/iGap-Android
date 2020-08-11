@@ -5,52 +5,35 @@
     <!-- Check connect to internet Page introduce app -->
 
 
-    <string name="text_i_introduce_page1">"كب"</string>
-
-    <string name="text_line_1_introduce_page1">"آي"</string>
-
-    <string name="text_line_2_introduce_page1">"علاقات دون حدود"</string>
-
-    <string name="text_line_3_introduce_page1">"إصنع عالمك بواسطة آي كب ."</string>
-
-    <string name="text_line_4_introduce_page1">" إنضمامك إلى مجموعة مستخدمي "آي كب" لايستغرق إلّا بضع دقائق ."</string>
-
     <!-- Page 2 introduce app -->
 
 
-    <string name="text_line_1_introduce_page2">"الأمان في آي كب"</string>
+    <string name="text_line_1_introduce_page2">"الأمان في آیکب"</string>
 
-    <string name="text_line_2_introduce_page2">"تطبيق آي كب يوفّر لك اتصالا آمناً و موثوقاً به بينك و بين أصدقائك و أسرتك. و كذلك يوفّر تطبيق آي كب الحدّ الأقصى للأمان في الحفاظ على خصوصيتك بواسطة استخدام خوارزمية تشفير متميزة في نقل البيانات."</string>
+    <string name="text_line_2_introduce_page2">"تطبيق آیکب يوفّر لك اتصالا آمناً و موثوقاً به بينك و بين أصدقائك و أسرتك. و كذلك يوفّر تطبيق آیکب الحدّ الأقصى للأمان في الحفاظ على خصوصيتك بواسطة استخدام خوارزمية تشفير متميزة في نقل البيانات."</string>
 
     <!-- Page 3 introduce app -->
 
 
-    <string name="text_line_1_introduce_page3">"المحادثة في آي كب"</string>
+    <string name="text_line_1_introduce_page3">"المحادثة في آیکب"</string>
 
-    <string name="text_line_2_introduce_page3">"يمكنك المحادثة في آي كب بين شخصين أو بين مجموعة من الأشخاص و كُن مرتاح البال أنّ محادثاتك متوفّرة لديك دائماً، إضافة إلى ذلك يمكنك انشاء القنوات و الانضمام إليها و اشتراك معلوماتك مع ملايين الأشخاص من المستخدمين الآخرين.."</string>
+    <string name="text_line_2_introduce_page3">"يمكنك المحادثة في آیکب بين شخصين أو بين مجموعة من الأشخاص و كُن مرتاح البال أنّ محادثاتك متوفّرة لديك دائماً، إضافة إلى ذلك يمكنك انشاء القنوات و الانضمام إليها و اشتراك معلوماتك مع ملايين الأشخاص من المستخدمين الآخرين.."</string>
 
     <!-- Page 4 introduce app -->
 
+    <!--TODO:// translate-->
+    <string name="text_line_1_introduce_page4">"آیلند"</string>
 
-    <string name="text_line_1_introduce_page4">"نقل الملفات في آي كب"</string>
-
-    <string name="text_line_2_introduce_page4">"يمكنك نقل الملفات المختلفة بالأنواع و الأحجام المتنوعة أو حفظها في الفضاء الاسفنجي. يمكنك اشتراك كلّما تحبّ مع الآخرين دون أية محدودية.."</string>
+    <string name="text_line_2_introduce_page4">آیلند! على سبيل المثال لا الحصر\n
+مع الأحداث الكبرى مثل أخذ سيارة أجرة ، ودفع الفواتير وحجز الفنادق والرحلات الجوية يمكنك أيضًا ممارسة الألعاب ومشاهدة الأفلام والاستماع إلى الموسيقى</string>
 
     <!-- Page 5 introduce app -->
 
-
-    <string name="text_line_1_introduce_page5">"الصوت والفيديو مكالمة في آي كب"</string>
-
-    <string name="text_line_2_introduce_page5">"يمكنك الصوت والفيديو مكالمة بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آي كب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الصوت والفيديو مكالمة لطبيق آي كب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
 
     <!-- Page 6 introduce app -->
 
 
     <string name="btn_start_page6">"إبدأ الآن "</string>
-
-    <string name="text_line_1_introduce_page6">"كلّ شيء مجان في آي كب!"</string>
-
-    <string name="text_line_2_introduce_page6">"آي كب كان ولايزال مجانا. فتعالوا لانتمهّل أكثر من هذا. فاصنع عالمك بواسطة آي كب الآن."</string>
 
 
     <string name="text_line_1_introduce_page7">ميزة قريبة</string>
@@ -63,8 +46,6 @@
 
     <string name="pu_desc_profileUser">"قم بادخال اسمك و اختيار الصورة لملفّك الشخصي"</string>
 
-    <string name="pu_addPhoto_profileUser">"صورة الملف الشخصي"</string>
-
     <string name="pu_nikname_profileUser">"الإسم"</string>
 
     <string name="pu_Lets_Go">"الاستمرار"</string>
@@ -72,50 +53,27 @@
     <!-- Register Page -->
 
 
-    <string name="rg_title_register">"التسجيل"</string>
-
     <string name="rg_confirm_text_register">"من فضلك قم بتأييد اسم بلدك و رمز بلدك و قم بادخال رقم هاتفك إلّا صفر بداية الرقم."</string>
 
     <string name="rg_Start">"هيّا نذهب"</string>
 
     <string name="rg_Select_Country">"إختر بلدك"</string>
 
-    <string name="rg_agreement_text_register">"التأييد النهائي لرقم هاتفك، نحن نريد ارسال رقم التشغيل إلى هذا الرقم."</string>
-
-    <string name="rg_verify_register1">"جاري الاتصال"</string>
-
-    <string name="rg_verify_register2">"بانتظار استلام رمز التأكيد"</string>
-
-    <string name="rg_verify_register3">"جاري انتاج رمز الأمان"</string>
-
-    <string name="rg_verify_register4">"التأييد النهائي للتسجيل"</string>
-
-    <string name="rg_verify_dialog_try_code">"قمتُ بالإدخال يدوياً"</string>
-
-    <string name="rg_verify_dialog_resend_code">"إعادة ارسال رمز التأكيد"</string>
-
     <string name="Re_dialog_verify_number_part1">"قد قُمت بإدخال الرقم التالي:</string>
 
     <string name="Re_dialog_verify_number_part2">"في حال صحة رقم الهاتف قم بتأييده و إلّا قُم بتغييره بسهولة"</string>
 
-    <string name="Re_Enter_Verify_Code_Please">"من فضلك أدخل رمز التأكيد يدوياً"</string>
-
-    <string name="verify_socket_message">‫قد  دخلت حسابك بواسطة جهاز آخر، قد أرسل آي كب رمز التفعيل بواسطة نظام الاعلان إلى حسابك، من فضلك تحقّق في الجهاز الآخر و ادخل الرمز يدوياً..</string>
-    ‬‬‬‬‬‬
-    <string name="verify_time_out_message">"تطبيق آي كب يعرف رسالة التأكيد و يقوم بادخالها تلقائياَ و إلّا يتمّ استلامه بواسطتكم و يمكنكم ادخاله يدوياً. في حال عدم استلام رمز التأكيد قم باختيار اعادة الارسال. ."</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap</string>
+    <string name="verify_sms_message">Please enter verification code sent by sms</string>
+    <string name="verify_call_message">Please enter verification code sent by call</string>
+    <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
 
     <string name="verify_invalid_code_message">مع الأسف إنّ رمز التأكيد غير صالح، من فضلك أدخل رمز التأكيد الصالح .</string>
 
-    <string name="resend_message">"إعادة ارسال رمز التشغيل"</string>
-
     <string name="phone_number">"رقم الهاتف "</string>
-
-    <string name="Re_Phone_Verification">"تأكيد رقم الهاتف"</string>
 
     <!-- Toast -->
 
-
-    <string name="Toast_waiting_fot_get_info">"في انتظار الاتصال و تحديد الموقع"</string>
 
     <string name="Toast_Location_Not_Found">"لايوجد موقعك"</string>
 
@@ -123,13 +81,9 @@
 
     <string name="Toast_Minimum_Characters">عدد الأحرف أقل من الحد</string>
 
-    <string name="Toast_Enter_Phone_Number">"من فضلك أدخل رقم الهاتف دون صفر البداية"</string>
-
     <string name="Toast_Enter_Code">"من فضلك أدخل رمز التأكيد"</string>
 
     <string name="Toast_Number_Block">"تمّ حظر الرقم الّذي قُمت بادخاله"</string>
-
-    <string name="Toast_Invalid_nickname">"الإسم غير صالح، قُم بتغيير الإسم "</string>
 
     <string name="Toast_Write_NickName">"من فضلك أدخل اسمك "</string>
 
@@ -142,9 +96,9 @@
 
     <string name="Destruction_Code">التدمير</string>
 
-    <string name="Destruction_Des">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
+    <string name="destroy_description">أنت الآن في حال تدمير حسابك، رقم هاتفك هو  : </string>
 
-    <string name="iGap_autofill_Destruction_Code">آي كب يعرف الرمز بشكل آلي ويقوم بملء الفراغ، في حال عدم ملء الفراغ قُم بملئها يدوياً.</string>
+    <string name="iGap_autofill_Destruction_Code">آیکب يعرف الرمز بشكل آلي ويقوم بملء الفراغ، في حال عدم ملء الفراغ قُم بملئها يدوياً.</string>
 
     <!-- Message Type and Status -->
 
@@ -212,8 +166,6 @@
 
     <string name="clear_history">"مسح الذاكرة"</string>
 
-    <string name="to_delete_chat">"مسح المحادثة  "</string>
-
     <string name="left_group">مغادرة المجموعة </string>
 
     <string name="delete_group">حذف المجموعة </string>
@@ -221,9 +173,7 @@
     <!-- Public String -->
 
 
-    <string name="app_name">"آي كب"</string>
-
-    <string name="call_name">الاتصال الصوتي لتطبيق آي كب</string>
+    <string name="app_name">آیکب</string>
 
     <string name="chat">"المحادثة "</string>
 
@@ -231,23 +181,15 @@
 
     <string name="channel">"القناة"</string>
 
-    <string name="igap">"آي كب"</string>
-
-    <string name="igapChanel">"آي كب"</string>
+    <string name="igap">آیکب</string>
 
     <string name="search">"البحث "</string>
-
-    <string name="d_of_d" formatted="false">"%d من %d"</string>
 
     <string name="add_to_contact">"الإضافة إلى جهات الاتصال "</string>
 
     <string name="cancel">"الإلغاء "</string>
 
     <string name="B_cancel">"الإلغاء "</string>
-
-    <string name="B_skip">"التخطي "</string>
-
-    <string name="B_finish">"الانتهاء"</string>
 
     <string name="ok">"حسناً"</string>
 
@@ -259,11 +201,7 @@
 
     <string name="am_music">"الموسيقى "</string>
 
-    <string name="am_paint">"الرسم "</string>
-
     <string name="am_picture">"الصورة "</string>
-
-    <string name="am_document">"الوثيقة "</string>
 
     <string name="am_location">"الموقع "</string>
 
@@ -284,10 +222,9 @@
     <string name="just_wait_en">"من فضلك انتظر"</string>
 
     <string name="device_dosenot_camera_en">"لايتوفّر الكاميرا في هذا الجهاز"</string>
+    <string name="device_dosenot_support">"لا يحتوي هذا الجهاز على تطبيق لهذا الإجراء"</string>
 
     <string name="do_you_want_to_turn_on_gps">"نظام تحديد الواقع العالمي (GPS) مغلق، هل تريد تشغليه؟"</string>
-
-    <string name="picture_is_saved_en">"تمّ حفظ الصورة "</string>
 
     <string name="select_picture_en">"إختيار الصورة "</string>
 
@@ -302,27 +239,7 @@
     <!-- setting -->
 
 
-    <string name="st_Info">"معلومات الحساب"</string>
-
-    <string name="st_Language">"اللغة "</string>
-
-    <string name="st_titleToolbar">"الإعدادات"</string>
-
-    <string name="st_title_general">الإعدادات العامة</string>
-
     <string name="st_username">"إسم المستخدم"</string>
-
-    <string name="st_nickname">"الإسم"</string>
-
-    <string name="st_contactName">"إسم جهة الاتصال"</string>
-
-    <string name="st_phoneNumber">"رقم الهاتف "</string>
-
-    <string name="st_represent">الكاشف:</string>
-
-    <string name="st_title_info">"المعلومات"</string>
-
-    <string name="st_title_notification_sounds">"الإشعارات و الأصوات"</string>
 
     <string name="st_title_Clear_Cache">"مسح الذاكرة الخفية"</string>
 
@@ -332,11 +249,7 @@
 
     <string name="st_title_message_textSize">"مقاس الرسالة النصية"</string>
 
-    <string name="st_stickers">"الملصقات و الصور "</string>
-
     <string name="st_chatBackground">"خلفية صفحة المحادثة "</string>
-
-    <string name="st_Enable_Animation">"تشغيل الرسوم المتحركة"</string>
 
     <string name="st_inApp_Browser">"متصفح داخل التطبيق"</string>
 
@@ -360,21 +273,7 @@
 
     <string name="st_auto_gif">"التشغيل التلقائي للصور المتحركة "</string>
 
-    <string name="st_save_to_gallery">"الحفظ في ألبوم الصور "</string>
-
-    <string name="st_title_support">"دعم البرنامج"</string>
-
-    <string name="st_ask_question">"إسأل سؤالاً"</string>
-
-    <string name="st_About_iGap">"حول آي كب"</string>
-
-    <string name="st_privacy_policy">"سياسات الخصوصية "</string>
-
     <string name="st_keepMedia">"حفظ الملفات المتعددة الوسائط "</string>
-
-    <string name="st_dialog_content_keepMedia">"‫يتمّ حذف الصور، و الفيديوهات و الملفات الأخرى المحفوظة في الفضاء الاسفنجي من أجل ايجاد فضاء فارغ. تمّ حفظ جميع الوسائط في الفضاء الاسفنجي و في حال الحاجة إليها يمكن تحميلها من جديد‬‬‬‬‬‬ "</string>
-
-    <string name="st_titleToolbar_page_Notification_and_sounds">"الإشعارات و الأصوات"</string>
 
     <string name="st_title_messageNotification">"إشعارات الرسالة"</string>
 
@@ -402,25 +301,11 @@
 
     <string name="st_in_chat_sound">"الأصوات داخل المحادثة "</string>
 
-    <string name="st_title_Events">"الأحداث"</string>
-
-    <string name="st_Contact_joined_igap">"قد انضمّت جهة اتصال إلى آي كب في الآونة الأخيرة"</string>
-
-    <string name="st_pinned_message">"الرسائل الملصقة"</string>
-
     <string name="st_title_other">"الحالات الأخرى "</string>
 
     <string name="st_text_keep_alive_service">"في حال اخراج التطبيق من وضع التشغيل بواسطة المستخدم أو النظام يجب التشغيل من جديد للوثوق من مشاهدة جميع الاشعارات"</string>
 
     <string name="st_keep_alive_service">"الخدمة قيد التنفيذ"</string>
-
-    <string name="st_background_connection">"اتصال الخلفية"</string>
-
-    <string name="st_text_background_connection" />
-
-    <string name="st_badge_counter">"الرسائل الملصقة"</string>
-
-    <string name="st_Repeat_Notifications">"الرسائل الملصقة"</string>
 
     <string name="st_title_reset">"إعادة التعيين"</string>
 
@@ -435,8 +320,6 @@
     <string name="st_dialog_reset_all_notification_no">"لا"</string>
 
     <string name="st_title_Background">"خلفية المحادثة "</string>
-
-    <string name="st_stickers_and_picture">"الملصقات و الصورة"</string>
 
     <!-- privacy and security -->
 
@@ -468,43 +351,21 @@
 
     <string name="ntg_Sound">"الصوت "</string>
 
-    <string name="ntg_smart_notifications">"الإشعارات الذكية "</string>
-
     <!-- chanel_info -->
 
 
     <string name="chi_shared_Media">"الوسائط المشتركة  "</string>
 
-    <string name="chi_clearChat">"مسح ذاكرة المحادثة "</string>
-
-    <string name="chi_blockContact">"حظر جهة الاتصال هذه"</string>
-
-    <string name="chi_title_setting">"الإعدادات "</string>
-
     <string name="chi_popup_call">"الاتصال "</string>
 
     <string name="chi_popup_copy">"النسخ "</string>
 
-    <string name="chi_NEXT_STEP">"الخطوة التالية"</string>
-
     <!-- fragment add contact -->
 
-
-    <string name="fac_Add_Contact">"إنشاء جهة الاتصال "</string>
-
-    <string name="fac_contact_info">"معلومات جهة الاتصال "</string>
 
     <string name="fac_First_Name">"الإسم"</string>
 
     <string name="fac_Last_Name">"الإسم العائلي"</string>
-
-    <string name="fac_Phone_Number">"رقم الهاتف "</string>
-
-    <string name="fac_Find_in_Page">"البحث في صفحة "</string>
-
-    <string name="fac_Open_in_Chrome">"الفتح في متصفح كروم "</string>
-
-    <string name="fac_Powered_by_iGap">"المقوّى بواسطة تطبيق آي كب"</string>
 
     <string name="menu_add_contact">"إنشاء جهة الاتصال "</string>
 
@@ -514,17 +375,9 @@
 
     <string name="shared_links">"الرابط المشترك "</string>
 
-    <string name="shared_music">"الموسيقى المشترك "</string>
-
     <string name="save_to_Music">"الحفظ في قسم الموسيقى "</string>
 
-    <string name="show_all_media">"إظهار جميع الوسائط"</string>
-
     <string name="save_to_gallery">"الحفظ في ألبوم الصور"</string>
-
-    <string name="delete_from_gallery">"الحذف من ألبوم الصور "</string>
-
-    <string name="select_room">"إختيار المحادثة"</string>
 
     <string name="edited">"المعدّل "</string>
 
@@ -547,13 +400,7 @@
 
     <string name="array_GIF">"الصورة المتحركة "</string>
 
-    <string name="array_Add_to_Contact">"الإضافة إلى قائمة جهات الاتصال"</string>
-
-    <string name="array_Call">"الاتصال "</string>
-
     <string name="array_Copy">"النسخ"</string>
-
-    <string name="array_Off">"الإيقاف "</string>
 
     <string name="array_No_popup">"دون منفذ الإعلان"</string>
 
@@ -581,19 +428,9 @@
 
     <string name="array_Delete_photo">"حذف الصورة "</string>
 
-    <string name="array_5_minutes">"۵ دقائق "</string>
-
-    <string name="array_10_minutes">"۱۰ دقائق"</string>
-
-    <string name="array_30_minutes">"۳۰ دقيقة"</string>
-
     <string name="array_1_hour">"۱ ساعة "</string>
 
-    <string name="array_2_hour">"۲ ساعة"</string>
-
-    <string name="array_4_hour">"۴ ساعات"</string>
-
-    <string name="array_Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
+    <string name="Default_Notification_tone">"النغمة الافتراضية للاشعارات "</string>
 
     <string name="replay_item_dialog">"الردّ"</string>
 
@@ -615,20 +452,12 @@
 
     <string name="New_Chanel">"القناة الجديدة "</string>
 
-    <string name="New_Group">"المجموعة الجديدة"</string>
-
     <!-- tarjome nashavad -->
 
-
-    <string name="test">"الإختبار"</string>
 
     <string name="of">"من"</string>
 
     <string name="save_to_music_folder">"الحفظ بالنجاح في ملفّ الموسيقى "</string>
-
-    <string name="no_comment">"لاتوجد أية تعليقات"</string>
-
-    <string name="comment">"التعليق"</string>
 
     <string name="choose_picture">"اختيار الصورة من "</string>
 
@@ -638,8 +467,6 @@
 
     <string name="please_check_your_camera">"يُرجي التحقق من الكاميرا"</string>
 
-    <string name="delete_photo">"حذف الصورة"</string>
-
     <string name="group_name">"إسم المجموعة "</string>
 
     <string name="save">"الحفظ "</string>
@@ -647,8 +474,6 @@
     <string name="please_enter_group_name">"يُرجي إدخال اسم المجموعة"</string>
 
     <string name="group_description">"شرح ملخص حول المجموعة"</string>
-
-    <string name="please_enter_group_description">"يُرجى ادخال شرح ملخص عن المجموعة"</string>
 
     <string name="do_you_want_to_delete_this_group">"هل أنت متأكد من مسح هذه المحادثة؟"</string>
 
@@ -684,10 +509,6 @@
 
     <string name="confirm_email_text">تمّ ارسال رمز التأكيد إلى بريدكم الالكتروني لأجل التحقق من البريد الالكتروني.</string>
 
-    <string name="new_chanel">"القناة الجديدة"</string>
-
-    <string name="can_not_save_picture_pleas_try_again">"عدم امكان حفظ الصورة، من فضلك حاول من جديد"</string>
-
     <string name="chats">"المحادثة"</string>
 
     <string name="contacts">"جهات الاتصال"</string>
@@ -706,14 +527,6 @@
 
     <string name="new_messages">"رسالة جديدة"</string>
 
-    <string name="new_message_recicve">"تم استلام رسالة جديدة"</string>
-
-    <string name="my_Position_is">"موقعي:"</string>
-
-    <string name="latitude">"العرض الجغرافي:"</string>
-
-    <string name="longitude">"الطول الجغرافي:"</string>
-
     <string name="unknown_artist">"الفنان غير المعروف"</string>
 
     <string name="add_new_member">"إضافة عضو/الأغضاء الجديدة"</string>
@@ -723,8 +536,6 @@
     <string name="set_modereator">"تحديد المشرف"</string>
 
     <string name="set_kick">"الإزالة"</string>
-
-    <string name="member_can_add_new_member">"يمكن للإعضاء إضافة أعضاء جديدة"</string>
 
     <string name="notificaion_and_sound">"الإشعارات و الصوت"</string>
 
@@ -745,9 +556,7 @@
 
     <string name="USER_VERIFY_BLOCKED_USER">"تمّ حظر هذه الجهة للاتصال و لايمكن تأييدها"</string>
 
-    <string name="Enter_Code">"رمز التدمير "</string>
-
-    <string name="E_2">الحاجة إلى الدخول إلى النظام </string>
+    <string name="destroy_enter_code">"رمز التدمير "</string>
 
     <string name="E_335">"خطأ من الزبون "</string>
 
@@ -857,8 +666,6 @@
 
     <string name="E_301">"خطأ من مزود خدمة الانترنت"</string>
 
-    <string name="E_468">توقيع تحديث القناة ممنوع</string>
-
     <string name="E_610">"خطأ من الزبون"</string>
 
     <string name="E_611">"خطأ من مزود خدمة الانترنت"</string>
@@ -867,15 +674,9 @@
 
     <string name="E_613">"خطأ من مزود خدمة الانترنت"</string>
 
-    <string name="E_614">"لم يتمّ العثور على محادثة كهذه."</string>
-
-    <string name="E_615_1">"خطأ من الزبون: رمز الغرفة غير صحيح"</string>
-
     <string name="E_615_2">"خطأ من الزبون: رمز بداية الرسالة غير صحيح"</string>
 
     <string name="E_616">"خطأ من مزود خدمة الانترنت"</string>
-
-    <string name="E_617">"لاتوجد رسالة للمشاهدة بعد."</string>
 
     <string name="E_623">"لم يتمّ العثور على اسم المستخدم ."</string>
 
@@ -896,14 +697,6 @@
     <string name="E_658">قد تم ارسال الابلاغ سابقاً.</string>
 
     <string name="E_659">لايجوز لك ارسال الابلاغ في الوقت الحالي .</string>
-
-    <string name="E_9002">غير قادر على الحصول على معرف</string>
-    <string name="E_9006">التواصل مع الخادم غير ممكن</string>
-    <string name="E_9007">التواصل مع الخادم غير ممكن</string>
-    <string name="E_9008">فشل الاتصال مع المستلم</string>
-    <string name="E_9009">التواصل مع الخادم غير ممكن</string>
-    <string name="E_9010">لم يتم تسجيل المستلم</string>
-    <string name="E_9013">التسجيل ممنوع عليك</string>
 
     <string name="E_10165">Bad payload: User report</string>
 
@@ -943,6 +736,8 @@
 
     <string name="E_158">تدمير الحساب: المحاولة الكثيرة جداً</string>
 
+    <string name="E_4_14">ليس لديك حق الوصول!</string>
+
     <string name="time_out">عدم امكان الاتصال بمزود خدمة الانترنت</string>
 
     <string name="resend_all_messages">"‫إعادة ارسال %d الرسالة</string>
@@ -950,10 +745,6 @@
     <string name="resend_chat_message">"‫ارسال دوباإعادة ارسال الرسالة</string>
     ‬‬‬‬‬‬
     <string name="if_you_are_away_for">"بعد "</string>
-
-    <string name="st_Gander">"الجنس:"</string>
-
-    <string name="st_email">"البريد الالكتروني:"</string>
 
     <string name="month_1">" 1 شهر"</string>
 
@@ -969,8 +760,6 @@
 
     <string name="E_116">"خطأ من الزبون: نوع الجنس غير صحيح."</string>
 
-    <string name="E_117">"خطأ من مزود خدمة الانترنت"</string>
-
     <string name="list_admin">قائمةالمدراء </string>
 
     <string name="list_modereator">قائمة المشرفين</string>
@@ -979,25 +768,17 @@
 
     <string name="hello_blank_fragment">الاختبار</string>
 
-    <string name="receive_code_text">لم تستلم الرسالة النصية؟ </string>
-
     <string name="please_wait">إنتظر .</string>
-
-    <string name="New_Chat">محادثة جديدة</string>
 
     <string name="Invite_Friends">دعوة الأصدقاء</string>
 
-    <string name="iGap_FAQ">‫الأسئلة الشائعة لآي كب</string>
+    <string name="iGap_FAQ">‫الأسئلة الشائعة لآیکب</string>
     ‬‬‬‬‬‬
     <string name="Documents">الوثاشق</string>
 
     <string name="remove_admin">إزالة المدير</string>
 
     <string name="remove_moderator">إزالة الاشراف </string>
-
-    <string name="Male">الذكر </string>
-
-    <string name="Female">الأنثى</string>
 
     <string name="from_beginning">من البداية </string>
 
@@ -1037,8 +818,6 @@
 
     <string name="online">متصل </string>
 
-    <string name="exactly">بالضبط </string>
-
     <string name="recently">أخيراً </string>
 
     <string name="support">الدعم </string>
@@ -1048,10 +827,6 @@
     <string name="B_edit">التعديل </string>
 
     <string name="left">المغادرة </string>
-
-    <string name="Channel_name">قناة جديدة </string>
-
-    <string name="arrow">السهم </string>
 
     <string name="Ringtone">نغمة الرنين</string>
 
@@ -1065,29 +840,16 @@
 
     <string name="delete_account_text">هل أنت متأكد من إزالة هذا الحساب؟</string>
 
-    <string name="text_kick_admin">هل أنت متأكد من إزالة المدير؟ </string>
-
-    <string name="text_kick_moderator">هل أنت متأكد من إزالة هذا المشرف؟</string>
-
     <string name="dialog_readonly_chat">مع الأسف لايمكنك ارسال الرسالة خلال المحادثة.</string>
 
     <string name="delete_chat">مسح المحادثة </string>
-
-    <string name="delete_account_text1">الآخر </string>
-
-    <string name="delete_account_text2">الآخر</string>
-
-    <string name="delete_account_text3">الآخر</string>
-
-    <string name="delete_account_text4">الآخر</string>
+    <string name="delete">إزالة</string>
 
     <string name="capture_image">التقاط الصورة </string>
 
     <string name="capture_video">تصوير الفيديو </string>
 
     <string name="set_gender">تنظیم و تعديل الجنس  </string>
-
-    <string name="set_email">تنظیم و تعديل البريد الالكتروني</string>
 
     <string name="delete_contact">إزالة جهة الاتصال </string>
 
@@ -1109,15 +871,11 @@
 
     <string name="active_session_all_content">هل أنت واثق من الغاء جميع الجلسات النسطة؟</string>
 
-    <string name="USER_VERIFY_GIVEN_USERNAME">لم يسجّل أي مستخدم باسم المستخدم المعروض.</string>
-
     <string name="USER_VERIFY_MANY_TRIES">تم حظر رمز التأكيد بسبب الادخال لعدة مرات.</string>
 
     <string name="USER_VERIFY_MANY_TRIES_SEND">تم ارسال رمز التأكيد لعدة مرات .</string>
 
     <string name="USER_VERIFY_EXPIRED">رمز التأكيد قد انتهى.</string>
-
-    <string name="USER_VERIFY_BLOCK">تم حظر المستخدم حسب طلبه.</string>
 
     <string name="convert_chat_to_group_content">هل تريد نقل هذه المحادثة إلى المجموعة؟</string>
 
@@ -1137,51 +895,31 @@
 
     <string name="Active_session">الجلسة النشطة </string>
 
-    <string name="terminate">إلغاء التفعيل</string>
-
     <string name="terminate_all">إلغاء جميع الجلسات النشطة </string>
 
     <string name="forwarded_from">تم الإرسال من </string>
-
-    <string name="more">المزيد </string>
-
-    <string name="do_you_want_to_delet_this_chat">هل تريد إزالة هذه المحادثة؟</string>
-
-    <string name="sound_at_most">الصوت العالي </string>
-
-    <string name="number">العدد </string>
 
     <string name="photo">الصورة </string>
 
     <string name="music_name">عنوان الموسيقى </string>
 
-    <string name="times">الأزمنة </string>
-
     <string name="info">المعلومات </string>
 
     <string name="description">التفاصيل</string>
 
-    <string name="type_message">كتابة الرسالة </string>
+    <string name="type_message">رسالة...</string>
 
     <string name="place">المكان </string>
 
-    <string name="minutes">الدقائق </string>
-
     <string name="channel_link">رابط القناة </string>
 
-    <string name="group_profile">ملف المجموعة </string>
-
     <string name="iran">إيران </string>
-
-    <string name="naturemagazine">مجلة نيجر </string>
 
     <string name="everybody">الجميع </string>
 
     <string name="music_time">زمان الموسيقى </string>
 
     <string name="new_group">المجموعة الجديدة </string>
-
-    <string name="delete_from_cache">الإزالة من الذاكرة المختبئة </string>
 
     <string name="leave_channel">مغادرةالقناة </string>
 
@@ -1190,8 +928,6 @@
     <string name="replay">الرد</string>
 
     <string name="members">الأعضاء </string>
-
-    <string name="skip">التخطي</string>
 
     <string name="settings">الإعدادات</string>
 
@@ -1214,15 +950,9 @@
 
     <string name="message">الرسالة </string>
 
-    <string name="future_done">سيتم تقديم هذه الميزة في المستقبل </string>
-
     <string name="nick_name_not_exist">لايوجد هذا الاسم</string>
 
-    <string name="first_name">الإسم </string>
-
     <string name="last_name">الإسم العائلي </string>
-
-    <string name="block_this_contact">هل تريد حظر هذه الجهة للاتصال؟ </string>
 
     <string name="block">الحظر </string>
 
@@ -1234,21 +964,15 @@
 
     <string name="just_owner_can_delete">لا يمكن الازالة إلّا بواسطة مالك المجموعة.</string>
 
-    <string name="shate_audio_file">اشتراك الملف الصوتي </string>
-
     <string name="last_seen">آخر ظهور</string>
 
     <string name="remove">الإزالة</string>
 
     <string name="please_check_your_connenction">من فضلك تحقق في ظروف تواصلك</string>
 
-    <string name="errore_verification_sms">رسالة الخطأ في التأكيد</string>
-
     <string name="male">الذكر </string>
 
     <string name="female">الأنثى </string>
-
-    <string name="share_via">الاشتراك عبر </string>
 
     <string name="error">خطأ </string>
 
@@ -1256,13 +980,11 @@
 
     <string name="server_do_not_response">لم يتم استلام الرد من مزود خدمة الانترنت.</string>
 
-    <string name="share_image_from_igap">اشتراك الصورة من آي كب </string>
+    <string name="share_image_from_igap">اشتراك الصورة من آیکب </string>
 
-    <string name="share_video_from_igap">اشتراك الفيديو من آي كب </string>
+    <string name="share_video_from_igap">اشتراك الفيديو من آیکب </string>
 
     <string name="TERMINATE">الإلغاء </string>
-
-    <string name="iGap_version">إصدار أندرويد آي كب </string>
 
     <string name="do_you_want_left_this">هل أنت واثق من مغادرة المكون المختار؟ </string>
 
@@ -1272,9 +994,9 @@
 
     <string name="picture_save_to_galary">"حفظ الصورة في ألبوم الصور "</string>
 
-    <string name="my_location_title">موقعي </string>
-
     <string name="shared_image">الصورة المشتركة </string>
+
+    <string name="images">الصورة</string>
 
     <string name="shared_video">الفيديو المشترك </string>
 
@@ -1284,73 +1006,24 @@
 
     <string name="shared_gif">الصورة المتحركة المشتركة </string>
 
-    <string name="shared_file">الملف المشترك </string>
-
-    <string name="qr_payment">دفع كيو آر </string>
-
-    <string name="charge_balance">مستوى الشحن  </string>
-
-    <string name="total_balance">النسبة الاجمالية </string>
-
-    <string name="rials">ریال</string>
-
-    <string name="unverified">لم يُحدّد /</string>
-
-    <string name="send_documents">إرسال الوثائق و المستندات </string>
+    <string name="amount_rials">%s ریال</string>
 
     <string name="charge">الشحن </string>
 
-    <string name="transaction_history">ذاكرة المعاملات </string>
+    <string name="gift_message">مبلغ رصيد الهدية *.
+تريد الحصول عليها؟</string>
 
-    <string name="transfer_mony">نقل النقود</string>
+    <string name="toast_success_gift">انتظر لحظة حتى يتم التحقق من صحة الهدية.</string>
 
-    <string name="create_qr_code">إنشاء رمز كيو آر </string>
-
-    <string name="pay_via_qr_code">الدفع عبر رمز كيو آر </string>
-
-    <string name="charge_out">التشحين </string>
-
-    <string name="e_commerce">التجارةالالكترونية </string>
-
-    <string name="agrement">الإتفاق </string>
-
-    <string name="payment_charge_out_text">رسالة التشحين </string>
-
-    <string name="description_optional">التوضيح (اختياري) </string>
-
-    <string name="enter_the_code_here">أدخل الرمز هنا.</string>
-
-    <string name="transfer_to">انتقال به</string>
-
-    <string name="transfer_to_wallet">نقل إلى المحفظة</string>
+    <string name="amount_to_pay_factor">فاتورة مستحقة الدفع (ریال) :</string>
 
     <string name="price">السعر </string>
 
-    <string name="amunt">النسبة </string>
-
-    <string name="email_optional">البريد الالكتروني (اختياري)  </string>
-
-    <string name="create">الإنشاء </string>
-
     <string name="gif_selected_for_send">الصورة المتحركة المختارة للإرسال </string>
-
-    <string name="log_message">التسجيل </string>
-
-    <string name="iranian_rials">ريال ايراني (IRR)</string>
-
-    <string name="your_login_code_is">"هل هذا رمز دخولك؟: "</string>
 
     <string name="there_is_no_sheared_media">لم يتم اشتراك أية وسائط .</string>
 
-    <string name="pending">قيد الانتظار</string>
-
-    <string name="completed">قد اكتمل </string>
-
-    <string name="st_data_shams">التاريخ الشمسي</string>
-
     <string name="content_log_out">هل أنت متأكد من الخروج من الحساب؟ </string>
-
-    <string name="one_day">قبل يوم واحد </string>
 
     <string name="two_day">قبل يومين </string>
 
@@ -1362,21 +1035,11 @@
 
     <string name="six_day">قبل ستة أيام </string>
 
-    <string name="at">في</string>
-
-    <string name="group_link_copy">النسخ </string>
-
-    <string name="group_link_revoke">إلغاء الرابط </string>
-
     <string name="group_link">رابط المجموعة </string>
-
-    <string name="normal_error">can\'t do it please try later</string>
 
     <string name="channel_description">تفاصيل القناة</string>
 
     <string name="channel_name">إسم القناة </string>
-
-    <string name="delete_and_leave_channel">إزالة و مغادرة القناة </string>
 
     <string name="channel_delete">إزالة القناة </string>
 
@@ -1386,9 +1049,7 @@
 
     <string name="channel_left">"مغادة القناة"</string>
 
-    <string name="please_enter_channel_description">"من فضلك أدخل شرحاً ملخصاً عن القناة ."</string>
-
-    <string name="txt_you">"أنت : "</string>
+    <string name="txt_you">"أنت"</string>
 
     <string name="you">"أنت "</string>
 
@@ -1422,10 +1083,6 @@
 
     <string name="txt_draft">المسودة : </string>
 
-    <string name="st_signature">التوقيع </string>
-
-    <string name="spam">Spam</string>
-
     <string name="sunday">"الأحد "</string>
 
     <string name="monday">الاثنين </string>
@@ -1446,9 +1103,9 @@
 
     <string name="prefix">"بواسطة"</string>
 
-    <string name="USER_JOINED">"إنضمّ إلى آي كب "</string>
+    <string name="USER_JOINED">"إنضمّ إلى آیکب "</string>
 
-    <string name="USER_DELETED">" غادر آي كب "</string>
+    <string name="USER_DELETED">" غادر آیکب "</string>
 
     <string name="ROOM_CREATED">"تم الإنشاء "</string>
 
@@ -1465,8 +1122,6 @@
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"بالدعوة إلى "</string>
 
     <string name="Room_Deleted_log">"تم الحذف "</string>
-
-    <string name="revoke">الإبطال </string>
 
     <string name="conversation">الصفحة </string>
 
@@ -1496,27 +1151,13 @@
 
     <string name="permission_phone">اذن الهاتف </string>
 
-    <string name="permission_sms">اذن الرسائل </string>
-
-    <string name="st_privacy_blog">المدونة الرسمية لآي كب </string>
-
-    <string name="st_privacy_create_ticket">طلب الدعم </string>
-
-    <string name="st_privacy_iGap_home">الصفحة الرسمية لآي كب </string>
-
     <string name="channel_public_hint_revoke">الرابط العام للقناة </string>
-
-    <string name="channel_link_title_revoke">رابط الدعوة </string>
-
-    <string name="channel_link_hint_revoke">رابط الدعوة إلى القناة </string>
 
     <string name="self_destructs">التدمير الذاتي </string>
 
     <string name="save_ok">تم الحفظ </string>
 
     <string name="Toast_time_wait">من فضلك انتظر حتى  :</string>
-
-    <string name="array_delete_photo_group">إزالة الصورة </string>
 
     <string name="group_link_hint_revoke">رابط دعوة المجموعة </string>
 
@@ -1541,8 +1182,6 @@
     <string name="group_title_set_username">تحديد اسم المستخدم </string>
 
     <string name="permission_storage">اذن موقع الحفظ </string>
-
-    <string name="you_have_to_get_storage_permision_for_continue">أنت بحاجة إلى رخصة الحفظ لأجل الاستمرار</string>
 
     <string name="clean_up_chat_rooms">التنظيف العام</string>
 
@@ -1574,9 +1213,9 @@
 
     <string name="room_not_exist">لم يتمّ العثور على أية صفحة بهذا الرمز</string>
 
-    <string name="app_theme">لون موضوع آي كب </string>
+    <string name="app_theme">لون موضوع آیکب </string>
 
-    <string name="app_notif_color">لون الإشعارات في آي كب </string>
+    <string name="app_notif_color">لون الإشعارات في آیکب </string>
     g>
     <string name="theme">الألوان</string>
 
@@ -1604,11 +1243,7 @@
 
     <string name="my_contacts">جهات اتصالي</string>
 
-    <string name="privacy_setting">الإعدادات الخاصة </string>
-
-    <string name="igap_search">‫إبحث </string>
     ‬‬‬‬‬‬
-    <string name="set_color_to_default">إعادة الألوان إلى الإفتراضي </string>
 
     <string name="empty_message"> من فضلك إدخل 5 حروف بداية اسم المستخدم</string>
     ‬‬‬‬‬‬
@@ -1648,8 +1283,6 @@
 
     <string name="file_save_to_download_folder">"تمّ حفظ الملف في مجلد التحميل"</string>
 
-    <string name="first_download_file">حمّل الملف بداية </string>
-
     <string name="file_save_to_galary_folder">تمّ حفظ الملف في ألبوم الصور</string>
 
     <string name="file_can_not_save_to_selected_folder">لا يمكن حفظ الملف في المجلد المختار.</string>
@@ -1668,7 +1301,6 @@
 
     <string name="show_sender_name_in_group">إظهار اسم المرسل في المجموعة </string>
 
-    <string name="calls">قائمة المكالمات </string>
     <string name="voice_calls">مكالمة الصوتي ای کب</string>
     <string name="video_calls"> مكالمة فيديو ای کب</string>
 
@@ -1676,23 +1308,19 @@
 
     <string name="igap_nearby">أصدقاء الجوار </string>
 
-    <string name="igap_call">الاتصال الصوتي لآي كب </string>
-
     <string name="No_messages_here_yet">لا توجد رسالة حالياً </string>
 
     <string name="clean_log">مسح ذاكرة الاتصال الصوتي </string>
 
     <string name="mandatory">(الواجب )</string>
 
-    <string name="optional">الإختياري</string>
-
     <string name="desc_group_chanel">التفاصيل (اختياري) </string>
-
-    <string name="set_additional_password">تحديد رمز المرور</string>
 
     <string name="two_step_verification_title">التفعيل بمرحلتين  </string>
 
     <string name="two_step_verification_description">يمكنك تحديد رمز المرور لحسابك و في حال الدخول إلى الحساب بواسطة جهاز آخر تحتاج إلى ادخال هذا الرمز. إضافة إلى ذلك هذا الرمز ستستلم رمزاً للتأكيد عبر الرسالة القصيرة أثناء الدخول إلى حسابك بواسطة جهاز آخر.. </string>
+
+    <string name="two_step_verification_disable">التحقق من خطوتين معطل</string>
 
     <string name="enter_a_password"> أدخل رمز المرور</string>
 
@@ -1714,17 +1342,11 @@
 
     <string name="title_toolbar_password_Question">أسئلة الأمان الجديدة </string>
 
-    <string name="password_Question_explain">من فضلك أدخل الأسئلة و الأجوبة الجديدة من أجل استعادة رمز المرور </string>
-
     <string name="password_Question_two">على سبيل المثال: من هو أفضل أصدقائك؟</string>
 
     <string name="password_answer">الإجابة  </string>
 
-    <string name="password_Question_title">سؤال رمز المرور</string>
-
     <string name="recovery_email">الإستعادة عبر البريد الالكتروني</string>
-
-    <string name="your_email">البريد الالكتروني (اختياري) </string>
 
     <string name="recovery_question">الإستعادة عبر سؤال الأمان </string>
 
@@ -1770,11 +1392,7 @@
 
     <string name="your_email_desc">من فضلك أدخل بريداً الكترونياً صالحاً. تمّ نسيان هذا الخيار لاستعادة رمز المرور.</string>
 
-    <string name="call_with">اختيار جهةالاتصال  </string>
-
     <string name="please_enter_code">من فضلك أدخل الرمز  </string>
-
-    <string name="please_enter_all_item">من فضلك أدخل جميع المكونات </string>
 
     <string name="Hint_cant_the_same_password">العلامة المختارة لرمز المرور يجب أن لا تشبة رمز المرور </string>
 
@@ -1809,24 +1427,22 @@
     <string name="miss">الفائت </string>
 
     <string name="not_answer">دون الرد </string>
+    <string name="un_answered">دون الرد </string>
 
     <string name="e_906_1">لا يجوز لك الاتصال بهذه الجهة.</string>
 
-    <string name="iGap_has_crashed">قد عالج آي كب الخطأ غير المتوقع !</string>
+    <string name="iGap_has_crashed">قد عالج آیکب الخطأ غير المتوقع !</string>
 
     <string name="iGap_has_crashed_reload">إعادة البدء </string>
 
     <string name="iGap_has_crashed_desc">حدث خطأ غير متوقع أدى إلى تعطيل التطبيق، نحن نعرف الخطأ و في حال إزالته، الخطوة الوحيدة الّتي تجب عليك هو الضغط على زرّ "إعادة البدء" .</string>
 
-    <string name="nothing">لا بأس !</string>
-
-    <string name="are_you_sure_clear_call_logs">هل أنت متأكد من حذف جميع الاتصالات الواردة و الصادرة؟</string>
+    <string name="are_you_sure_clear_call_logs">هل أنت متأكد من حذف جميع الاتصالات؟</string>
+    <string name="are_you_sure_clear_call_log">هل أنت متأكد من حذف الاتصالات؟</string>
 
     <string name="please_write_your_reasons">من فضلك اكتب السبب</string>
 
     <string name="error_check_password">تمّ تعطيل رمز المرور بسبب المحاولات المتتالية</string>
-
-    <string name="your_confirm_email">من فضلك أدخل رمز تأكيد البريد الالكتروني </string>
 
     <string name="your_confirm_email_skip">التخطّي </string>
 
@@ -1886,13 +1502,11 @@
 
     <string name="Input_device_specification">الدخول الناجح إلى الجهاز </string>
 
-    <string name="QrCode_Scan">الماسح الضوئي للباركود </string>
+    <string name="QrCode_Scan"> الدخول مع مسح الباركود </string>
 
     <string name="Call_Quality">جودة الاتصال </string>
 
     <string name="desc_self_destroy">"في حال عدم استخدام الحساب بأي شكل من الأشكال طوال الفترات المحددة يتمّ التدمير التلقائي للحساب و يتمّ حذفه للأبد."</string>
-
-    <string name="color_default">هل ترغب في عودة ألوان جميع أقسام التطبيق إلى الحالة الافتراضية؟</string>
 
     <string name="crop_image_menu_rotate_right">التدوير</string>
 
@@ -1928,35 +1542,13 @@
 
     <string name="audio">الملف الصوتي</string>
 
-    <string name="total_size">إجمالي الحجم</string>
-
-    <string name="manage_spacing">ضبط ذاكرة الجهاز</string>
-
-    <string name="local_database">قاعدة البيانات المحلية</string>
-
     <string name="data_storage">تخزين البيانات</string>
 
-    <string name="keep_media">حفظ الوسائط </string>
-
-    <string name="invite_friend">لم تنضمّ هذه الجهة إلى آي كب بعد. هل ترغب في دعوته؟</string>
-
-    <string name="clean_up_description">تنظيف قاعدة البيانات يؤدي إلى حذف الرسائل النصية المحفوظة في الذاكرة المختبئة و تضغيط قاعدة البيانات من أجل توفير الفضاء الداخلي. و آي كب بحاجة إلى بعض المعلومات من أجل التنفيذ فبالتالي لا يتمّ تفريغ قاعدة البيانات بشكل كامل و لا يصل إلى مستوى الصفر. هذا الأمر يستغرق بضع دقائق.</string>
-
-    <string name="list_contacts">قائمة جهات اتصالك</string>
-
     <string name="limit_for_set_username">المحدودية الزمنية لتغيير اسم المستخدم</string>
-
-    <string name="clear_cache_desc">المعلومات المحفوظة في الذاكرة المختبئة تشمل على ملفات الصورة و الفيديو و الوثائق الّتي قمتَ بارسالها أو استلامها، فيجب تنظيف هذه الملفات بين أحياناً حتّى لا تسبّب بطء أو ايقاف برامج التطبيق. في حال رغبتك في الحصول على هذه المعلومات يمكنك تحميل الملفات من جديد و مشاهدتها..</string>
 
     <string name="name">الإسم </string>
 
     <string name="turn_on_gps_explain">تحديد الموقع و الميزات الأخرى للخريطة غير نشطة، بالضغط على الزر التالي يمكنك استخدام هذه الميزات..</string>
-
-    <string name="turn_off_map">ايقاف التشغيل</string>
-
-    <string name="turn_on_map">التشغيل</string>
-
-    <string name="positioning">تحديد الوضع</string>
 
     <string name="nearby">التحديث يدوياً</string>
 
@@ -1990,9 +1582,9 @@
 
     <string name="info_map">يمكنك مشاهدة المستخدمين الّذين يبعدون عنك 5 كيلومترات فقط و قد قاموا بتفعيل ميزة تحديد الموقع</string>
 
-    <string name="st_Auto_Rotate">التدوير التلقائي للصفحة</string>
-
     <string name="two_step_pass_code">قفل الدخول إلى البرنامج</string>
+
+    <string name="show_line_pattern">إظهار نمط الخط</string>
 
     <string name="unlock_with_fingerPrint">فتح القفل بواسطة البصمة</string>
 
@@ -2060,10 +1652,6 @@
 
     <string name="st_bio">البيو</string>
 
-    <string name="st_des_bio">يمكنك ذكر شرح ملخص لك في ملفك الشخصي. جدير بالذكر أنّ كل مستخدم يدخل إلى ملفك الشخصي يمكنه قراءة هذا الشرح.</string>
-
-    <string name="st_Report">إبلاغ الإساءة</string>
-
     <string name="st_Spam">رسالة مزعجة</string>
 
     <string name="st_Violence">المحتوى العنيف</string>
@@ -2075,8 +1663,6 @@
     <string name="st_Abuse">المحتوى المسيء و المؤذي</string>
 
     <string name="st_FakeAccount">الحساب المزوّر</string>
-
-    <string name="st_limit_bio">المكوّنات المستخدمة أكثر من النسبة المسموحة. لا يمكن استخدام أكثر من 70 مكوّن في هذا القسم</string>
 
     <string name="st_checkbox_delete">الحذف لــ</string>
 
@@ -2105,7 +1691,6 @@
     <string name="zighade">ذیقعده</string>
     <string name="zihaje">ذیحجه</string>
 
-    <string name="st_multi_tab">تبويب متعدد</string>
     <string name="st_dark_theme">موضوع الظلام</string>
     <string name="dont_ask_again">حصلت عليه</string>
     <string name="attention">اهتمام</string>
@@ -2114,12 +1699,12 @@
     <string name="open_default_player">فتح الفيديو باستخدام المشغل الافتراضي</string>
     <string name="show_channel_vote">تفاعل القناة</string>
     <string name="verify_channel">تم التحقق من القناة</string>
-    <string name="verify_user">تم التحقق من المستخدم</string>
     <string name="another_room">غرفة أخرى</string>
     <string name="send">إرسال</string>
-    <string name="do_not_send">لا ترسل</string>
     <string name="save_data_in_sd_card">حفظ المعلومات على البطاقة الجانبية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
+    <string name="are_you_sure_request">هل أنت متأكد أنك تريد تسجيل طلبك؟</string>
+    <string name="are_you_sure_edit_contact">هل أنت متأكد من تحرير الاتصال؟</string>
     <string name="change_storage_place">تغيير موقع التخزين</string>
     <string name="other_files">ملفات اخرى</string>
     <string name="title_import_contact_limit">دخول قائمة الاتصال</string>
@@ -2127,15 +1712,18 @@
 
     <string name="filter_cancel_content">هل تخليت عن التغييرات؟</string>
     <string name="lbl_brightness">سطوع</string>
+    <string name="clr_adjust">تعديل اللون</string>
+    <string name="lbl_magnify">تكبير</string>
+    <string name="dsgn_on_photo_title">التصميم</string>
     <string name="lbl_contrast">تباين</string>
     <string name="lbl_saturation">التشبع</string>
     <string name="tab_filters">مرشح اللون</string>
+    <string name="filter">مرشح</string>
     <string name="tab_edit">تحرير</string>
     <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
     <string name="st_24_Clock">24 ساعة</string>
     <string name="pin_messages_content" formatted="false">"ترید %s هذه الرسالة?"</string>
     <string name="unpin">غير دبوس</string>
-    <string name="pin_message">دبوس</string>
     <string name="pined_message">دبوس</string>
     <string name="all_member">جميع الأعضاء</string>
     <string name="this_page">ههذه الصفحة</string>
@@ -2145,12 +1733,8 @@
     <string name="to_theme">يصل الى:</string>
     <string name="automatic">تلقائيا</string>
     <string name="automatic_description_theme">تم تنشيط الوضع الليلي من 19 إلى 8 عن طريق تحديد الوضع التلقائي</string>
-    <string name="setting_dark_theme">إعدادات قذيفة الظلام</string>
     <string name="Select_Time">اختر الوقت</string>
     <string name="financial_services">الخدمات المالية</string>
-    <string name="install_app">ثبّت التطبيق</string>
-    <string name="text_top">لاستخدام الخدمة: لتثبيت التطبيق للبطاقة ، وشراء تذكرة الحافلة ، وشراء تهمة ، ودفع الفواتير ، وشراء مجموعة وخدمات الدفع الأخرى.</string>
-    <string name="text_paygear">لاستخدام الخدمة: لتثبيت التطبيق للبطاقة ، وشراء تذكرة الحافلة ، وشراء تهمة ، ودفع الفواتير ، وشراء مجموعة وخدمات الدفع الأخرى.</string>
     <string name="customization">التخصيص</string>
     <string name="Apply_colors_to_customize">تطبيق الألوان لتخصيصها</string>
 
@@ -2160,41 +1744,31 @@
     <string name="pay_bills_crime">دفع فواتير مخالفات المرور</string>
     <string name="barcode_reader">قارئ الباركود</string>
     <string name="billing_id">معرف الفواتير</string>
-    <string name="enter">أدخل</string>
     <string name="payment_code">رمز الدفع</string>
     <string name="amount">قدر</string>
-    <string name="buy">يشترى</string>
-    <string name="select">انتخب</string>
     <string name="hamrahe_aval">همراه اول</string>
     <string name="irancell">ایرانسل</string>
     <string name="ritel">رایتل</string>
-    <string name="normal_charge">شحنة عادية</string>
+    <string name="normal_charge">التهمة العادية</string>
+    <string name="youth_charge">تهمة الشباب</string>
+    <string name="ladies_charge">تهمة المرأة</string>
     <string name="amazing">تهمة مذهلة</string>
-    <string name="wimax_charging">شحن وایمکس</string>
-    <string name="permanently_charge">قم بشحن بطاقة  بشكل دائم</string>
+    <string name="Exciting">تهمة مذهلة</string>
 
     <string name="get_gifts">دریافت هدیه</string>
     <string name="congratulations">مبارک باشد</string>
     <string name="unsuccessful">موفقیت آمیز نبود</string>
     <string name="disabled_qr_voucher">متاسفانه این Qr قابل استفاده نیست یا قبلا استفاده شده است</string>
 
-    <string name="charge_1"> 10.000 ریالی</string>
-    <string name="charge_2"> 20.000 ریالی</string>
     <string name="charge_5"> 50.000 ریالی</string>
     <string name="charge_10"> 100.000 ریالی</string>
     <string name="charge_20"> 200.000 ریالی</string>
-
-    <string name="charge_1_ir">10.000 ریالی +  9%  القيمة المضافة = 10.900 ریال</string>
-    <string name="charge_2_ir">20.000 ریالی +  9%  القيمة المضافة = 21.180 ریال</string>
-    <string name="charge_5_ir">50.000 ریالی +  9%  القيمة المضافة = 54.500 ریال</string>
-    <string name="charge_10_ir">100.000 ریالی +  9%  القيمة المضافة = 109.000 ریال</string>
-    <string name="charge_20_ir">200.000 ریالی +  9%  القيمة المضافة = 218.000 ریال</string>
+    <string name="charge_50"> 500.000 ریالی</string>
+    <string name="charge_100"> 1.000.000 ریالی</string>
 
     <string name="biling_id_not_valid">معرف الفوترة غير صالح</string>
     <string name="pay_id_is_not_valid">معرف الدفع غير صالح</string>
     <string name="charge_type">نوع التهمة</string>
-    <string name="operator">عامل</string>
-    <string name="trabord">ترابرد</string>
     <string name="time_out_error">مهلة خطأ</string>
     <string name="connection_error">لا يوجد خطأ اتصال</string>
     <string name="server_error">خطأ في الخادم</string>
@@ -2204,25 +1778,21 @@
     <string name="phone_number_is_not_valid">رقم الهاتف غير صالح</string>
     <string name="please_select_operator">يرجى اختيار المشغل</string>
     <string name="wallet">محفظة</string>
-    <string name="loading_wallet_agreement">تحميل اتفاقية المحفظة</string>
-    <string name="i_agree_with_the_terms">أنا أتفق مع الشروط</string>
+    <string name="i_agree_with_the_terms">\tأنا أتفق مع الشروط</string>
     <string name="accept_the_terms">اقبل الشروط</string>
     <string name="wallet_agrement">اتفاقية المحفظة</string>
     <string name="SendMoney">إرسال الأموال</string>
-    <string name="transfer_amount_hint">أدخل مبلغ الإيداع:</string>
+    <string name="transfer_amount_hint">أدخل مبلغ الإيداع</string>
     <string name="amount_in_rial">المبلغ بالريال:</string>
     <string name="pay">دفع</string>
-    <string name="transfer_to_dialog">الانتقال إلى:</string>
-    <string name="am_money">نقود</string>
+    <string name="transfer_to_dialog">الانتقال إلى:%s</string>
     <string name="trace_number">رمز التتبع</string>
     <string name="amount_2">مبشر:</string>
     <string name="payment_canceled">تم إلغاء الدفعة</string>
     <string name="PayGear_unavailable">المحفظة غير متاحة</string>
     <string name="bills_inquiry_mci">فواتير استفسار همراه اول </string>
     <string name="bills_inquiry_telecom">فواتير استفسار ثائق الهاتف </string>
-    <string name="bills_inquiry_title">فواتير التحقيق</string>
     <string name="bill_type">نوع الفاتورة</string>
-    <string name="telecom">ثائق الهاتف</string>
     <string name="phone">هاتف</string>
     <string name="area_code">رمز المنطقة</string>
     <string name="inquiry">استعلام</string>
@@ -2234,13 +1804,12 @@
     <string name="responsible_for_all_financial_services">مسؤول عن جميع الخدمات المالية</string>
     <string name="parsian_e_commerce_company_top">شركة پارسیان للتجارة الإلكترونية (تاپ)</string>
     <string name="is_empty">is</string>
+    <string name="empty_error_message"></string>
     <string name="customer_response_center_021_2318">مركز استجابة العملاء: 021-2318</string>
     <string name="ex_mobile_phone">مثال : 09123456789</string>
     <string name="ex_area">مثال : 021</string>
     <string name="ex_phone">مثال : 44567899</string>
     <string name="sync_contact">اتصالات المزامنة</string>
-    <string name="satellite_view">عرض القمر الصناعي</string>
-    <string name="default_view">العرض الافتراضي</string>
     <string name="send_location_text">إرسال الموقع المحدد</string>
     <string name="map_distance">متر بعيدا</string>
     <string name="calculation">حساب ...</string>
@@ -2254,50 +1823,20 @@
     <string name="wallet_from">من عند</string>
     <string name="wallet_to">إلى</string>
     <string name="wallet_amount">كمية</string>
-    <string name="wallet_trace">تتبع عدد</string>
-    <string name="wallet_invoice">رقم الفاتورة</string>
-    <string name="wallet_data">وقت الدفع</string>
-    <string name="wallet_desc">---وصف---</string>
-    <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">رصيدك: </string>
-    <string name="wallet_Reial"> ریال </string>
+    <string name="wallet_Reial">%d ریال </string>
     <string name="wallet_error_server">حدث خطأ في الاتصال بالخادم</string>
 
 
-    <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
     <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
-    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">عزيزي المستخدم ، لقد قمت للتو بالتحديث ، يرجى الانتظار</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
-    <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
 
     <string name="E_379">You cannot invite this user to groups because of the protected privacy for the request</string>
-    <string name="E_373">GROUP_REVOKE_LINK_BAD_PAYLOAD</string>
-    <string name="E_374">GROUP_REVOKE_LINK_INTERNAL_SERVER_ERROR</string>
-    <string name="E_375">GROUP_REVOKE_LINK_FORBIDDEN</string>
-    <string name="E_453">CHANNEL_CHECK_USERNAME_BAD_PAYLOAD</string>
-    <string name="E_454">CHANNEL_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
-    <string name="E_455">CHANNEL_UPDATE_USERNAME_BAD_PAYLOAD</string>
-    <string name="E_456">CHANNEL_UPDATE_USERNAME_INTERNAL_SERVER_ERROR</string>
-    <string name="E_457">CHANNEL_UPDATE_USERNAME_UPDATE_LOCK</string>
-    <string name="E_458">CHANNEL_UPDATE_USERNAME_FORBIDDEN</string>
     <string name="E_478">You cannot invite this user to groups because of the protected privacy for the request</string>
-    <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
-    <string name="E_10109">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
-    <string name="E_10110">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
-    <string name="E_10111">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_EXPIRED_TOKEN</string>
-    <string name="E_10112">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_NO_PASSWORD</string>
-    <string name="E_10113">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INVALID_TOKEN</string>
-    <string name="E_10114">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_BAD_PAYLOAD</string>
-    <string name="E_10115">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
-    <string name="E_10116">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
-    <string name="E_10117">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_NO_PASSWORD</string>
-    <string name="E_10118"> USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INVALID_PASSWORD</string>
-    <string name="E_10119">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_CONFIRMED_BEFORE</string>
-    <string name="E_163">USER_PROFILE_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
     <string name="send_forward_to">Are you sure send forward for</string>
-    <string name="Bazzar">"Bazaar"</string>
     <string name="channel_name_notification">iGap Notification</string>
     <string name="keep_media_6month">6 Month</string>
     <string name="minutes_ago">minutes ago</string>
@@ -2325,13 +1864,9 @@
     <string name="solid_colors">ألوان الخلفیه</string>
     <string name="wallpapers">خلفيات</string>
 
-    <string name="ra_title">"الكاشف"</string>
     <string name="verify_register_sms">SMS</string>
     <string name="verify_register_call">Call</string>
-    <string name="way_receive_register_code">Way to receive code: </string>
-    <string name="reply_label">Answer</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
     <string name="start">بداية</string>
     <string name="bot">بوت</string>
     <string name="back_to_menu">العودة إلى القائمة الرئيسية</string>
@@ -2346,10 +1881,9 @@
     <string name="dont_show_again">لا تظهر مرة أخرى</string>
     <string name="invitation_message">مرحبا!
     يمكنك تسجيل الدخول عبر الرابط أدناه
-    https://www.igap.net
+    http://d.igap.net/invite
 هناك معرف عضوية:   </string>
 
-    <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">يرجى إدخال اسم مجلد صالح</string>
     <string name="This_folder_already_exists">هذا المجلد موجود بالفعل.يرجى تقديم اسم آخر للمجلد</string>
     <string name="Select_directory">اختر دليلا</string>
@@ -2360,283 +1894,196 @@
     <string name="Default_Dir">الافتراضي دير</string>
     <string name="Select">تحديد</string>
     <string name="Create_new_Folder_here">قم بإنشاء مجلد جديد هنا</string>
-    <string name="Powered_by_iGap">مدعوم من آی کب</string>
-    <string name="on_hold">call on hold...</string>
-    <string name="switchTo">switch To :</string>
+    <string name="on_hold">دعوة معلقة...</string>
+    <string name="switchTo">التبديل إلى :</string>
     <string name="stop">توقف</string>
     <string name="stop_message_bot">هل أنت متأكد من أنك تريد إيقاف الروبوت؟</string>
     <string name="startUpdate">تحديث</string>
     <string name="access_phone_number">هل أنت متأكد من إرسال رقم هاتفك؟</string>
     <string name="access_location">هل أنت متأكد من إرسال موقعك؟</string>
     <string name="sticker_message">رسالة لاصقة</string>
-    <string name="Sticker_added_successfully">تمت إضافة الملصق بنجاح</string>
     <string name="sticker">لاصقة</string>
     <string name="add_sticker">أضف ملصقا</string>
+    <string name="add_sticker_with_size">أضف %s ملصقا</string>
     <string name="remove_sticker">إزالة اللاصق</string>
+    <string name="remove_sticker_with_size">إزالة %s اللاصق</string>
     <string name="remove_sticker_text">هل أنت متأكد من أنك تريد إزالة هذه الملصقات؟</string>
-    <string name="add_sticker_text">هل أنت متأكد من أنك تريد تثبيت هذه الملصقات؟</string>
     <string name="Add">إضافة</string>
     <string name="Remove">إزالة</string>
-    <string name="Please_select_an_option">يرجى تحديد خيار</string>
-
-    <string name="try_later">حاول بعض الثانية في وقت لاحق</string>
 
     <string name="unknown_type">هذا النوع من البطاقات غير مدعوم.</string>
-    <string name="representer">ريسبنتر</string>
-    <string name="representer_code">يرجى ضبط رقم هاتفك التمثيلي هنا</string>
     <string name="order_history">سجل التاريخ</string>
-    <string name="your_point">درجاتك:</string>
 
     <string name="dialog_ok">"حسناً"</string>
     <string name="error_submit_qr_code">لقد حدث خط مع طلبك</string>
 
     <string name="not_exist_activities">السجل الخاص بك فارغ.</string>
 
-    <string name="ivand_profile_title">تقييمي</string>
-
     <string name="ivand_activities_title">يسجل السجلات</string>
     <string name="scan_barcode">مسح الرمز الشريطى</string>
 
-    <string name="st_ivand">النادي آیکپ</string>
-    <string name="st_ivand_text_setting">درجاتك:</string>
     <string name="E_10183">الكود المدخل غير صحيح</string>
 
     <string name="share_link_item_dialog">ربط الاشتراك</string>
     <string name="not_found_message">هذه الرسالة مفقودة.</string>
     <string name="ivnalid_data_provided">قيم الإدخال غير صحيحة.</string>
+    <string name="secret_chat">محادثة سرية</string>
     <string name="new_message_notif">پیام جدید</string>
-    <string name="card_to_card">بطاقة إلى بطاقة</string>
-    <string name="your_device_is_root">آسف! جهازك هو الجذر.</string>
+    <string name="card_to_card">طلب بطاقة إلى بطاقة</string>
 
 
     <string name="rial">ریال</string>
     <string name="toman">تومان</string>
 
-    <string name="verify_fragment_hint">ما از طریق پیامک برای شما یک کد فعالسازی ارسال کرده‌ایم، در صورت عدم دریافت کد بعد از ۱ دقیقه دوباره درخواست دهید.</string>
-    <string name="new_user_pass_fragment_hint">برای حساب کیف پول خود یک رمز عبور تعیین کنید، شما بعدا می‌توانید از تنظیمات رمز خود را تغییر دهید.</string>
-    <string name="code_resend_text">* ثانیه تا ارسال دوباره پیامک</string>
-    <string name="resend_code">ارسال دوباره پیامک</string>
-    <string name="new_otp_requested">درخواست کد جدید ارسال شد</string>
-    <string name="request_again">درخواست مجدد</string>
-    <string name="sending_code_to_x">در حال ارسال پیامک به شماره\n*</string>
-    <string name="select_your_city">شهر خود را انتخاب کنید</string>
-    <string name="enter_username">شناسه کاربری خود را وارد کنید</string>
-    <string name="enter_code_correctly">کد ارسال شده را کامل وارد کنید</string>
-    <string name="enter_mobile_correctly">شماره موبایل خود را کامل وارد کنید</string>
-    <string name="enter_your_mobile">شماره موبایل خود را وارد کنید</string>
-    <string name="enter_your_mobile_without_zero">شماره موبایل خود را بدون صفر وارد کنید</string>
-    <string name="enter_your_activation_code">کد فعال‌سازی خود را وارد کنید</string>
-    <string name="country_code_not_valid">کد کشور صحیح نیست</string>
-    <string name="four_digits_activation_code">کد فعال‌سازی ۴ رقمی</string>
-    <string name="confirm_password">تکرار رمز عبور</string>
-    <string name="enter_your_confirm_password">تکرار رمز عبور خود را وارد کنید</string>
-    <string name="enter_your_password">رمز عبور خود را وارد کنید</string>
-    <string name="select_your_password">رمز عبور خود را انتخاب کنید</string>
-    <string name="enter_your_referral_code">کد معرف خود را وارد کنید</string>
-    <string name="select_your_province">استان خود را انتخاب کنید</string>
-    <string name="referral_code">کد معرف</string>
-    <string name="province_name">نام استان</string>
-    <string name="account_password">رمز حساب کاربری</string>
+    <string name="resend_code">إعادة إرسال الرسائل القصيرة</string>
+    <string name="country_code_not_valid">كود البلد غير صحيح</string>
+    <string name="enter_your_password">أدخل كلمة مرورك</string>
+    <string name="referral_code">رمز المرجع</string>
 
-    <string name="full_name">نام و نام خانوادگی</string>
-    <string name="user_name">نام کاربری</string>
-    <string name="birth_date">تاریخ تولد</string>
-    <string name="email">ایمیل</string>
-    <string name="province">استان</string>
-    <string name="edit_profile_hint">این اطلاعات به صورت رمزنگاری شده روی سرورهای امن کیف پول ذخیره می‌شوند و فقط در صورت نیاز با مجوز شما به سایر نرم افزارهای طرف سوم انتقال داده خواهد شد. کاربرد این اطلاعات به منظور راحتی فرآیندهای خرید می‌باشد.</string>
-    <string name="username">شناسه کاربری</string>
-    <string name="select_city">انتخاب شهر</string>
-    <string name="select_province">انتخاب استان</string>
-    <string name="mobile_number">شماره موبایل</string>
-    <string name="paygear_user">کاربر کیف پول</string>
-    <string name="authorization_not_valid">مجوز دسترسی معتبر نیست</string>
-    <string name="already_read">قبلا خواندم</string>
-    <string name="login">ورود</string>
-    <string name="next">بعدی</string>
-    <string name="back">بازگشت</string>
-    <string name="code">کد</string>
-    <string name="never_mind">بی خیال</string>
-    <string name="not_now">الان نه!</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="edit_profile_hint">يتم تخزين هذه المعلومات مشفرة على خوادم محفظة آمنة ولن يتم إرسالها إلا إلى برامج طرف ثالث إذا لزم الأمر. يتم استخدام هذه المعلومات لتسهيل عمليات الشراء.</string>
+    <string name="username_copied">اسم المستخدم نسخ</string>
+    <string name="select_province">اختر المقاطعة</string>
+    <string name="mobile_number">رقم الجوال</string>
+    <string name="paygear_user">محفظة المستخدم</string>
+    <string name="login">دخول</string>
+    <string name="next">إضافي</string>
+    <string name="back">عودة</string>
 
-    <string name="no_item">موردی یافت نشد</string>
-    <string name="retry">تلاش مجدد</string>
+    <string name="no_item">لا توجد عناصر</string>
+    <string name="retry">إعادة المحاولة</string>
 
-    <string name="charge_wallet">شارژ کیف پول</string>
-    <string name="charge_paygear">شارژ کیف پول</string>
-    <string name="immediate_cash_out">برداشت فوری</string>
-    <string name="normal_cash_out">برداشت عادی</string>
+    <string name="charge_wallet">شحن المحفظة</string>
+    <string name="charge_paygear">شحن المحفظة</string>
+    <string name="immediate_cash_out">انسحاب فوري</string>
+    <string name="normal_cash_out">الحصاد العادي</string>
 
-    <string name="enter_info_completely">اطلاعات را به صورت کامل وارد کنید</string>
-    <string name="source_card">کارت مبدا</string>
-    <string name="destination_card">کارت مقصد</string>
-    <string name="destination_card_number">شماره کارت مقصد</string>
-    <string name="destination_sheba_number">شماره شبای مقصد</string>
-    <string name="trace_no">کد رهگیری</string>
-    <string name="reference_code">شماره مرجع</string>
-    <string name="has">دارد</string>
-    <string name="not_has">ندارد</string>
-    <string name="see_details">مشاهده جزییات</string>
-    <string name="request_time">زمان درخواست</string>
-    <string name="settlement_time">زمان تسویه</string>
-    <string name="requested_amount">مبلغ درخواستی</string>
-    <string name="requested_amount_rial">مبلغ درخواستی(ریال)</string>
-    <string name="settlement_wage">کارمزد تسویه</string>
-    <string name="deposits">واریزی</string>
-    <string name="wage">کارمزد</string>
-    <string name="bank">بانک</string>
-    <string name="destination_bank">بانک مقصد</string>
-    <string name="card_owner">صاحب کارت</string>
-    <string name="total_price">مبلغ کل</string>
-    <string name="discount">تخفیف</string>
-    <string name="service_price">حق سرویس</string>
-    <string name="tax">مالیات</string>
-    <string name="delivery_price">هزینه ارسال</string>
-    <string name="payable_price_rial">قابل پرداخت (ریال)</string>
-    <string name="final_price_rial">مبلغ نهایی (ریال)</string>
-    <string name="payable_price">مبلغ پرداختی</string>
-    <string name="withdraw_price">مبلغ برداشت</string>
-    <string name="qr_not_detected">نماد قابل شناسایی نیست</string>
-    <string name="payment_price_rial">مبلغ پرداختی به ریال</string>
-    <string name="price_rial">مبلغ (ریال)</string>
-    <string name="amount_must_be_greater_1000">مبلغ باید بیشتر از 1000 ریال باشد</string>
-    <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
-    <string name="payment_history">تاریخچه تراکنش‌ها</string>
-    <string name="set_card_pin">تعریف رمز امنیتی</string>
-    <string name="credit_card_set_pin_confirm">برای استفاده از کیف پولکارت ابتدا باید برای آن رمز تعریف کنید. آیا می‌خواهید رمز را فعال نمایید؟</string>
+    <string name="enter_info_completely">أدخل المعلومات بالكامل</string>
+    <string name="source_card">بطاقة الأصل</string>
+    <string name="destination_card">بطاقة الوجهة</string>
+    <string name="destination_sheba_number">رقم شبا الوجهة</string>
+    <string name="trace_no">شفرة التتبع</string>
+    <string name="reference_code">الرقم المرجعي</string>
+    <string name="request_time">وقت التسوية</string>
+    <string name="settlement_time">وقت التسوية</string>
+    <string name="requested_amount">المبلغ المطلوب</string>
+    <string name="requested_amount_rial">المبلغ المطلوب(ریال)</string>
+    <string name="deposits">الوديعة</string>
+    <string name="wage">الأجور</string>
+    <string name="bank">مصرف</string>
+    <string name="destination_bank">بنك الوجهة</string>
+    <string name="card_owner">حامل البطاقة</string>
+    <string name="total_price">المبلغ الإجمالي</string>
+    <string name="discount">خصم</string>
+    <string name="service_price">حق الخدمة</string>
+    <string name="tax">ضريبة</string>
+    <string name="delivery_price">تكلفة الشحن</string>
+    <string name="final_price_rial">المبلغ النهائي (ریال)</string>
+    <string name="payable_price">مبلغ الدفع</string>
+    <string name="qr_not_detected">لا يمكن تحديد الأيقونة</string>
+    <string name="price_rial">مبشر (ریال)</string>
+    <string name="amount_must_be_greater_10000">يجب أن يكون المبلغ أكثر من 10000 ريال</string>
+    <string name="amount_not_valid">أدخل المبلغ بشكل صحيح</string>
+    <string name="payment_history">سجل المعاملات</string>
+    <string name="set_card_pin">تحديد كلمة السر الأمن</string>
+    <string name="credit_card_set_pin_confirm">لاستخدام محفظتك ، يجب عليك أولاً تحديد كلمة المرور. هل تريد تمكين كلمة المرور؟</string>
 
-    <string name="order_info">اطلاعات تراکنش</string>
-    <string name="pay_to">پرداخت به</string>
-    <string name="pay_with_raad_card_to">پرداخت با کیف پولکارت به</string>
-    <string name="pay_charge_for_raad_card_to">پرداخت شارژ کیف پولکارت به</string>
-    <string name="charge_paygear_card">شارژ کیف پولکارت</string>
-    <string name="purchase_club_plan_from">خرید طرح باشگاه از</string>
-    <string name="receive_from">دریافت از</string>
-    <string name="receive_sale_share_from">دریافت سهم فروش از</string>
-    <string name="receive_charge_for_raad_card_from">دریافت شارژ کیف پولکارت از</string>
-    <string name="settled">تسویه حساب شده</string>
-    <string name="settled_pending">در انتظار تسویه حساب</string>
-    <string name="settlement">تسویه</string>
-    <string name="payment_pending">در انتظار پرداخت</string>
+    <string name="order_info">معلومات المعاملة</string>
+    <string name="pay_to">دفع ل</string>
+    <string name="pay_with_raad_card_to">دفع مع محفظة</string>
+    <string name="pay_charge_for_raad_card_to">دفع رسوم المحفظة ل</string>
+    <string name="purchase_club_plan_from">شراء تصميم نادي من</string>
+    <string name="receive_from">الحصول عليها من</string>
+    <string name="receive_sale_share_from">الحصول على حصة المبيعات من</string>
+    <string name="receive_charge_for_raad_card_from">الحصول على شحن بطاقة المحفظة من</string>
+    <string name="settled">ترجمة حرفية حتى</string>
+    <string name="settled_pending">في انتظار التسوية</string>
+    <string name="payment_pending">في انتظار الدفع</string>
 
-    <string name="taxi">تاکسی</string>
+    <string name="successful_payment">الدفع الناجح</string>
+    <string name="unsuccessful_payment">فشل الدفع</string>
+    <string name="save_receipt">حفظ الاستلام</string>
+    <string name="receipt_saved">تم حفظ الإيصال</string>
 
-    <string name="successful_payment">پرداخت موفق</string>
-    <string name="unsuccessful_payment">پرداخت ناموفق</string>
-    <string name="save_receipt">ذخیره رسید</string>
-    <string name="receipt_saved">رسید ذخیره شد</string>
+    <string name="scan">تفحص</string>
 
-    <string name="scan">اسکن کنید</string>
+    <string name="cash_in_hint">أدخل المبلغ الذي تريده وشحن حسابك باستخدام بطاقتك المصرفية وكلمة مرور الخط الثاني.</string>
+    <string name="cash_out_normal_hint">يتم الحصاد العادي بواسطة شبكة شاپرک ورقم شبا. عند الطلب ، سيتم إيداع ما يصل إلى ساعتين في حسابك.</string>
+    <string name="cash_out_immediate_hint">سيتم فرض رسوم على حسابك وفقًا لتعليمات شاپرک.</string>
+    <string name="how_to_get_sheba">كيفية الحصول على معلومات من شبا</string>
+    <string name="my_qr_hint">أظهر رمز صورتك للآخرين لمسحها ضوئيًا ومنحك المال!</string>
+    <string name="my_qr">بلدي ريال قطري</string>
 
-    <string name="cash_in_hint">مبلغ مورد نظر خود را وارد کرده و با استفاده از کارت بانکی و رمز دوم اینترنتی خود حساب خود را شارژ کنید.</string>
-    <string name="cash_out_normal_hint">برداشت عادی بوسیله شبکه شاپرک و شماره شبا صورت میگیرد. بعد از درخواست تا حداکثر ۲۴ ساعت پول به حساب شما واریز خواهد شد.</string>
-    <string name="cash_out_immediate_hint">کارمزد مطابق دستورالعمل‌های شاپرک از حساب شما کسر می‌گردد.</string>
-    <string name="how_to_get_sheba">نحوه اطلاع از شماره شبا</string>
-    <string name="my_qr_hint">کد تصویری خود را به دیگران نشان دهید تا آن را اسکن کنند و به شما پول بدهند!</string>
-    <string name="my_qr">کیوآر من</string>
-    <string name="credit">اعتباری</string>
+    <string name="card_16_digits">بطاقة 16 رقما</string>
+    <string name="sheba_20_digits">شبا 16 رقما</string>
 
-    <string name="card_16_digits">شماره ۱۶ رقمی کارت</string>
-    <string name="sheba_20_digits">شماره ۲۴ رقمی شبا</string>
+    <string name="no_camera_found">كاميرا الجهاز غير موجود</string>
 
-    <string name="no_camera_found">دوربین دستگاه یافت نشد</string>
-
-    <string name="paygear_balance">موجودی کیف پول</string>
-    <string name="paygear_card_balance">موجودی کیف پول</string>
-    <string name="paygear_account_balance">موجودی حساب کیف پول</string>
-    <string name="cashable_balance">موجودی قابل برداشت</string>
-    <string name="cashable_price">مبلغ قابل برداشت</string>
-    <string name="cash_in_paygear">شارژ حساب کیف پول</string>
-    <string name="cash_out_paygear">برداشت از کیف پول</string>
-    <string name="cashable">قابل برداشت</string>
-    <string name="not_cashable">غیر قابل برداشت</string>
-    <string name="gift">هدیه</string>
-    <string name="withdraw">برداشت</string>
-    <string name="cards">کارت‌ها</string>
-    <string name="my_cards">کارت‌های من</string>
-    <string name="cashout_today_limit">سقف برداشت امروز</string>
-    <string name="cash_out_request_done">درخواست تسویه انجام شد</string>
-    <string name="cashout_request">درخواست تسویه</string>
-    <string name="paygear_card_pin">رمز کیف پول</string>
+    <string name="paygear_balance">جرد المحفظة</string>
+    <string name="paygear_card_balance">جرد المحفظة</string>
+    <string name="paygear_account_balance">رصيد حساب المحفظة</string>
+    <string name="cashable_balance">المخزون القابل للإزالة</string>
+    <string name="cashable_price">المبلغ القابل للخصم</string>
+    <string name="cash_in_paygear">شحن حساب محفظة</string>
+    <string name="cash_out_paygear">السحوبات من المحفظة</string>
+    <string name="cashable">قابل للنقل</string>
+    <string name="gift">هدية</string>
+    <string name="my_cards">بطاقاتي</string>
+    <string name="cashout_today_limit">سقف الحصاد اليوم</string>
+    <string name="cash_out_request_done">تم استكمال طلب التسوية</string>
+    <string name="cashout_request">طلب التماس</string>
+    <string name="paygear_card_pin">كلمة مرور المحفظة</string>
     <string name="qr">کیوآر</string>
-    <string name="scanner">اسکنر</string>
+    <string name="scanner">الماسحات الضوئية</string>
 
-    <string name="default_card">کارت پیش‌فرض</string>
-    <string name="delete_card">حذف کارت</string>
-    <string name="add_new_card">افزودن کارت جدید</string>
-    <string name="delete_card_confirm">آیا از حذف این کارت بانکی مطمئن هستید؟</string>
-    <string name="card_number">شماره کارت</string>
-    <string name="month">ماه</string>
-    <string name="year">سال</string>
-    <string name="edit">ویرایش</string>
-    <string name="camera">دوربین</string>
-    <string name="gallery">گالری</string>
-    <string name="delete_image">حذف تصویر</string>
-    <string name="click_here_for_adding_card">برای افزودن کارت اینجا را لمس کنید</string>
+    <string name="default_card">البطاقة الافتراضية</string>
+    <string name="delete_card">أزل البطاقة</string>
+    <string name="add_new_card">أضف بطاقة جديدة</string>
+    <string name="delete_card_confirm">هل أنت متأكد من أنك تريد حذف هذه البطاقة المصرفية؟</string>
+    <string name="card_number">رقم البطاقة</string>
+    <string name="month">شهر</string>
+    <string name="year">عام</string>
+    <string name="edit">التحرير</string>
+    <string name="camera">كاميرا</string>
+    <string name="gallery">رواق</string>
+    <string name="click_here_for_adding_card">المس هنا لإضافة بطاقة</string>
 
-    <string name="x_people">* نفر</string>
-    <string name="enter_receiver_code">کد پذیرنده را وارد کنید</string>
-    <string name="receiver_code">کد پذیرنده</string>
-    <string name="pay_with_price_x">پرداخت به مبلغ\n*</string>
+    <string name="receiver_code">رمز المتقبل</string>
+    <string name="pay_with_price_x">دفع في المبلغ\n*</string>
 
-    <string name="internet_pin_2">رمز دوم اینترنتی</string>
+    <string name="internet_pin_2">كلمة مرور الإنترنت الثانية</string>
     <string name="cvv2">CVV2</string>
-    <string name="select_card">انتخاب کارت</string>
+    <string name="select_card">اختيار البطاقة</string>
 
 
-    <string name="new_pass">رمز جدید</string>
-    <string name="confirm_pass">تکرار رمز</string>
-    <string name="current_pass">رمز فعلی</string>
-    <string name="passwords_not_match">رمزها یکسان نیستند</string>
-    <string name="card_pin_saved">رمز کیف پول ثبت شد</string>
-    <string name="card_pin_changed">رمز کیف پول تغییر یافت</string>
+    <string name="new_pass">كلمة مرور جديدة</string>
+    <string name="confirm_pass">كرر كلمة المرور</string>
+    <string name="current_pass">كلمة المرور الحالية</string>
+    <string name="passwords_not_match">كلمات المرور ليست هي نفسها</string>
+    <string name="card_pin_saved">كلمة مرور المحفظة المسجلة</string>
+    <string name="card_pin_changed">تم تغيير كلمة مرور المحفظة</string>
 
-    <string name="flash_light">چراغ قوه</string>
-    <string name="entering_driver_code">ورود دستی کد راننده یا مغازه</string>
-    <string name="scan_driver_or_store_qr">کیوآر را اسکن کنید</string>
-    <string name="data_unknown">اطلاعات دریافتی نامشخص است</string>
+    <string name="flash_light">مصباح يدوي</string>
+    <string name="entering_driver_code">أدخل رمز السائق أو المتجر يدويًا</string>
+    <string name="scan_driver_or_store_qr">تفحص کیوآر</string>
+    <string name="data_unknown">المعلومات الواردة غير واضحة</string>
 
-    <string name="enter_card_number">شماره کارت را به طور کامل وارد کنید</string>
-    <string name="enter_cvv2">کد cvv2 کارت خود را وارد کنید</string>
-    <string name="enter_your_second_pin">رمز دوم کارت خود را وارد نمایید</string>
-    <string name="enter_expire_date">تاریخ انقضای کارت خود را وارد کنید</string>
-    <string name="enter_expire_date_year">سال انقضای کارت خود را وارد کنید</string>
-    <string name="enter_expire_date_month">ماه انقضای کارت خود را وارد کنید</string>
-    <string name="enter_expire_date_month_correctly">ماه انقضای کارت خود را به درستی وارد کنید</string>
+    <string name="enter_card_number">أدخل رقم البطاقة تماما</string>
+    <string name="enter_cvv2">أدخل رمز cvv2 الخاص بطاقتك</string>
+    <string name="enter_your_second_pin">أدخل كلمة المرور الثانية من بطاقتك</string>
+    <string name="enter_expire_date_year">أدخل السنة التي تنتهي فيها بطاقتك</string>
+    <string name="enter_expire_date_month">أدخل شهر انتهاء بطاقتك</string>
+    <string name="enter_expire_date_month_correctly">أدخل شهر انتهاء بطاقتك بشكل صحيح</string>
 
-    <string name="enter_cash_in_price">مبلغ واریزی را مشخص نمایید</string>
-    <string name="enter_cash_out_price">مبلغ برداشت را مشخص نمایید</string>
-    <string name="enter_your_card_number">شماره کارت خود را وارد کنید</string>
-    <string name="enter_your_sheba_number">شماره شبا خود را وارد کنید</string>
-    <string name="enter_your_province">استان خود را مشخص کنید</string>
+    <string name="enter_cash_in_price">حدد مبلغ الإيداع</string>
+    <string name="enter_cash_out_price">حدد مبلغ السحب</string>
+    <string name="enter_your_card_number">أدخل رقم بطاقتك</string>
+    <string name="enter_your_sheba_number">أدخل شبا رقمك</string>
 
-    <string name="language">زبان برنامه</string>
-    <string name="privacy_policy">حریم خصوصی</string>
-    <string name="security_privacy_policy">امنیت و حریم خصوصی</string>
-    <string name="app_version">نسخه برنامه</string>
-    <string name="about_app">درباره برنامه</string>
-    <string name="terms_condition">قوانین و مقررات</string>
-    <string name="terms_and_conditions">قوانین و نحوه استفاده</string>
-    <string name="contact_us">تماس با ما</string>
-    <string name="faq">سوالات متداول</string>
-    <string name="logout_from_account">خروج از حساب کاربری</string>
-    <string name="logout_prompt">آیا میخواهید از حساب خود خارج شوید؟</string>
+    <string name="language">لغة التطبيق</string>
+    <string name="app_version">إصدار التطبيق</string>
     <string name="logout">خروج</string>
-
-    <array name="onboard_titles">
-        <item>کیف پول موبایلی</item>
-        <item>خرید با QR</item>
-    </array>
-
-    <array name="onboard_descriptions">
-        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف
-            پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.
-        </item>
-        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن
-            استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.
-        </item>
-    </array>
-
-    <string name="top_company">شرکت تجارت الکترونیک پارسیان</string>
 
     <string name="bank_parsian">بانک پارسیان</string>
     <string name="bank_saman">بانک سامان</string>
@@ -2672,59 +2119,96 @@
     <string name="bank_etebari_kosar">موسسه اعتباری کوثر</string>
     <string name="bank_etebari_tosee">موسسه اعتباری توسعه</string>
     <string name="bank_etebari_asgarieh">موسسه اعتباری عسگریه</string>
-    <string name="card_bank">کارت بانک</string>
-    <string name="paygear_card">کیف پول</string>
-    <string name="set_password">ثبت رمز عبور</string>
-    <string name="change_password">تغییر رمز عبور کیف پول</string>
-    <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
-( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
-    <string name="text_forgot_title">ارسال مجدد رمز</string>
-    <string name="Forgot_Passwords">بازیابی رمز عبور کیف پول</string>
+    <string name="card_bank">بطاقة البنك</string>
+    <string name="paygear_card">محفظة</string>
+    <string name="set_password">تسجيل كلمة المرور</string>
+    <string name="change_password">تغيير كلمة مرور المحفظة</string>
+    <string name="Forgot_Passwords">استعادة كلمة السر المحفظة</string>
     <string name="cashier">المالية</string>
     <string name="admin">مشرف</string>
-    <string name="taxi_balance">موجودی تاکسی</string>
-    <string name="shop_balance">موجودی فروشگاه</string>
-    <string name="cashout_taxi">برداشت از موجودی</string>
-    <string name="balance_low">موجودی کیف پول شما کم است. موجودی کیف پول خود را افزایش دهید.</string>
-    <string name="bank_card">کارت بانکی</string>
-    <string name="wallet_card">کیف پول</string>
-    <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
-    <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
-    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
-    <string name="total_amount">مبلغ کل (ریال) :</string>
-    <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
+    <string name="taxi_balance">جرد سيارة أجرة</string>
+    <string name="shop_balance">جرد المتجر</string>
+    <string name="cashout_taxi">انطباعات المخزون</string>
+    <string name="balance_low">محفظتك منخفضة. زيادة رصيد محفظتك.</string>
+    <string name="bank_card">بطاقة البنك</string>
+    <string name="wallet_card">محفظة</string>
+    <string name="amount_to_pay">المبلغ المستحق (ریال) :</string>
+    <string name="club_balance">رصيد بطاقة النادي (ریال)</string>
+    <string name="wallet_balance">جرد المحفظة (ریال)</string>
+    <string name="total_amount">المبلغ الإجمالي (ریال) :</string>
+    <string name="discount_amount">مبلغ الخصم (ریال) :</string>
 
     <string name="personalAccountType">الشخصية</string>
     <string name="taxiAccountType">سائق</string>
     <string name="shopAccountType">متجر</string>
 
-    <string name="default_sheba_number">Default IBAN number</string>
-    <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
-    <string name="recover_password">Recover password</string>
-    <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
-    <string name="cash_to_wallet">to Personal wallet</string>
-    <string name="person">person</string>
+    <string name="default_sheba_number">رقم الآيبان الافتراضي</string>
+    <string name="default_sheba_number_message">هل تريد حفظ رقم IBAN هذا كرقم IBAN الافتراضي؟ \\ n انتباه! ستستخدم جميع نقاط السحب الآلي التلقائية رقم IBAN هذا حتى تقوم بتغييره ،</string>
+    <string name="recover_password">إستعادة كلمة المرور</string>
+    <string name="cash_out_two_wallet_hint">أدخل مبلغ "السحب النقدي" ثم سيتم تحويل رصيد التاجر إلى محفظتك الشخصية</string>
+    <string name="cash_to_wallet">إلى المحفظة الشخصية</string>
+    <string name="person">شخص</string>
     <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">Enter Six digits code that we`ve sent to your phone number</string>
-    <string name="four_digit_code">Six digit code</string>
-    <string name="show_receipt">مشاهده رسید</string>
-    <string name="reciever_name">Receiver</string>
-    <string name="date_time">date and time</string>
-    <string name="transaction_type">Transaction Type</string>
-    <string name="purchase">Purchase</string>
-    <string name="remaining_balance">Remaining balance</string>
-    <string name="refound">money transferred to your wallet</string>
-    <string name="Recently_Sticker">مؤخرا</string>
-    <string name="Favorite_Sticker">مفضل</string>
+    <string name="enter_four_digit_code">أدخل الرمز المكون من ستة أرقام الذي أرسلناه إلى رقم هاتفك</string>
+    <string name="four_digit_code">رمز من ستة أرقام</string>
+    <string name="show_receipt">عرض الاستلام</string>
+    <string name="reciever_name">المتلقي</string>
+    <string name="date_time">التاريخ و الوقت</string>
+    <string name="transaction_type">نوع المعاملة</string>
+    <string name="purchase">شراء</string>
+    <string name="remaining_balance">الرصيد المتبقي</string>
+    <string name="refound">تحويل الأموال إلى محفظتك</string>
+    <string name="Favorite_Sticker">ملصقاتي</string>
+    <string name="new_channel_hint">يمكنك تقديم وصف اختياري لقناتك.</string>
+    <string name="new_group_hint">يمكنك تقديم وصف اختياري لمجموعتك.</string>
+    <string name="permanent_link">وصلة دائمة</string>
+    <string name="change_language_title">غير اللغة</string>
+    <string name="terms_condition_title">القواعد واللوائح</string>
+    <string name="welcome_title">مرحبا بكم في iGap</string>
+    <string name="add_modereator">أضف المشرف</string>
+    <string name="add_admin">إضافة المسؤول</string>
+    <string name="subscribers_title">مشتركين</string>
+    <string name="invite_link_title">دعوة الرابط</string>
+    <string name="add_to_home_screen">إضافة إلى الشاشة الرئيسية</string>
+    <string name="channel_type">نوع القناة</string>
+    <string name="payment_continue_title">استمر</string>
+    <string name="sign_message_title">توقيع الرسائل</string>
+    <string name="sign_channel_message_description">أضف أسماء المسؤولين إلى الرسائل التي ينشرونها.</string>
+    <string name="bills">فواتير</string>
+    <string name="charge_amount">مستوى الشحن(ریال)</string>
+    <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
+    <string name="charity_title">الاعمال الخيرية</string>
+    <string name="item_selected">العنصر المحدد</string>
+    <string name="disk_and_network_usage">استخدام القرص والشبكة</string>
+    <string name="cache">مخبأ</string>
+    <string name="auto_play_media">تشغيل الوسائط تلقائيًا</string>
+    <string name="auto_download_media">التحميل التلقائي للوسائط</string>
+    <string name="chat_setting">إعدادات المحادثة</string>
+    <string name="mark_as_several">بمناسبة عدة</string>
+    <string name="terms_and_condition">أقبل %s</string>
+    <string name="terms_and_condition_clickable">القواعد واللوائح</string>
+    <string name="warning">تحذير</string>
+    <string name="accept_terms_and_condition_error_message">تنسى قبول الشروط والأحكام</string>
+    <string name="chat_setting_title">إعداد الدردشة</string>
+    <!--todo: translate these below lines-->
+    <string name="new_channels_rules">إذا قمت بتعيين رابط دائم ، فسيتمكن الأشخاص الآخرون من العثور على قناتك والانضمام إليها.\nيمكنك استخدام أ-ي و 0-9 و الشرطة السفلية.\nالحد الأدنى للطول هو 5 أحرف.</string>
+    <string name="financial_report">تقرير مالي</string>
+    <string name="fag">التعليمات</string>
+
+    <string name="add_new_subscriber">إضافة المشترك</string>
+    <string name="cloud">غيم</string>
+    <string name="score">أحرز هدفا</string>
+    <string name="Credit">ائتمان</string>
+    <string name="make_as_read">اجعله مقروء</string>
+    <string name="read_all">اقرأ كل شيء</string>
 
     <string name="wallet_message">رسالة المحفظة</string>
     <string name="unknown_message">هذه الرسالة غير مدعومة!</string>
     <string name="card_to_card_message">بطاقة إلى رسالة بطاقة</string>
     <string name="payment_message">رسالة الدفع</string>
 
-    <string name="available_merchants">مشاهده فروشگاه های پذیرنده این کارت</string>
-    <string name="available_merchants_title">پذیرندگان این کارت</string>
-    <string name="balance_title">موجودی :</string>
+    <string name="available_merchants">عرض المتاجر التي تقبل هذه البطاقة</string>
+    <string name="balance_title"> الأوراق المالية:</string>
 
     <string name="WALLET_TRANSFER_MONEY">محفظة تحويل الأموال</string>
     <string name="CARD_TRANSFER_MONEY">بطاقة إلى بطاقة تحويل الأموال</string>
@@ -2735,16 +2219,303 @@
     <string name="cardToCardInvoiceNumber">رقم الفواتير</string>
     <string name="cardToCardTrace">تتبع عدد</string>
     <string name="WalletRrnNumber">الرقم المرجعي</string>
-    <string name="cardToCardRequest">اكتب نصك للبطاقة.</string>
-    <string name="amCardToCardIconText">طلب نقل</string>
     <string name="cardToCardBtnText">بطاقة إلى بطاقة</string>
 
     <string name="crad_to_card_dest_name">اسم صاحب الحساب</string>
+    <string name="groups_in_common">المجموعات المشتركة</string>
+    <string name="register_with_barcode_scan">تسجيل الدخول مع مسح الباركود</string>
+    <string name="one_number">١</string>
+    <string name="two_number">٢</string>
+    <string name="three_number">٣</string>
+    <string name="four_number">٤</string>
+    <string name="five_number">٥</string>
+    <string name="six_number">٦</string>
+    <string name="seven_number">٧</string>
+    <string name="eight_number">٨</string>
+    <string name="nine_number">٩</string>
+    <string name="star_number">*</string>
+    <string name="zero_number">٠</string>
+    <string name="administrators_title">المسؤولين</string>
+    <string name="moderators_title">المشرفين</string>
+    <string name="view_contact">عرض الاتصال</string>
+    <string name="new_group_call">مكالمة جماعية جديدة</string>
+    <string name="dial_number">رقم الطلب</string>
+    <string name="Select_Country">حدد الدولة</string>
+    <string name="call">مكالمة</string>
+    <string name="ra_enter_reagent_code">أدخل رمز الكاشف (اختياري)</string>
+    <string name="reagent_error_message">الرقم الذي تم إدخاله غير صحيح للرفض.</string>
+    <string name="enter_wallet_password">أدخل كلمة مرور المحفظة</string>
+    <string name="videos">أشرطة فيديو</string>
+    <string name="audios">صوتيات</string>
+    <string name="voices">أصوات</string>
+    <string name="gifs">متحركة</string>
+    <string name="files">ملفات</string>
+    <string name="links">الروابط</string>
+    <string name="size">بحجم</string>
+    <string name="copy_link_title">انسخ الرابط</string>
     <string name="location_dialog_message">هل تريد استخدام موقعك؟</string>
+    <string name="reaction_message_detail">أضف أسماء المسؤولين إلى الرسائل التي ينشرونها.</string>
+    <string name="chat_history_for_new_member_title">سجل الدردشة للأعضاء الجدد</string>
+    <string name="permissions_title">أذونات</string>
+    <string name="all">الكل</string>
+    <string name="missed">افتقد</string>
+    <string name="incoming">الوارد</string>
+    <string name="outgoing">المنتهية</string>
+    <string name="no_item_selected">لم يتم تحديد عنصر.</string>
+    <string name="subscriber">مشتركين</string>
+    <string name="point">نقاط</string>
+    <string name="rank">مرتبة</string>
+    <string name="tablet_empty_chat_description">البدء مرحباً بك في آی کب. يمكنك تعيين صورة ملفك الشخصي و / أو تغيير اسمك في قسم الإعدادات.</string>
+    <string name="make_call">مكالمة</string>
+    <string name="create_chat">إنشاء الدردشة</string>
+    <string name="delete_all">حذف الكل</string>
+
     <string name="maximum_poll">لقد وصلت إلى حد تصويتك.</string>
     <string name="before_try">لقد قمت بالفعل بتسجيل صوتك.</string>
     <string name="poll_ok">تم تسجيل صوتك بنجاح.</string>
+    <string name="igasht_title">آیگشت</string>
+    <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
+    <string name="igasht_buy_ticket_title">خرید بلیط</string>
+    <string name="detail_title">جزئیات</string>
+    <string name="igasht_addـexternal_visits">اضافه کردن بازدید خارجی </string>
+    <string name="igasht_total_ticket_price">مبلغ نهایی: %d ریال</string>
+    <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
     <string name="str_frag_sync_contactTitle">قل مرحبا لأصدقائك</string>
     <string name="str_frag_sync_contactWelcome">مرحبا بك في آی کب</string>
     <string name="str_frag_sync_skipBtn">البدء</string>
+    <string name="str_frag_sync_error">هناك خطأ ما. حاول مرة اخرى.</string>
+    <string name="money_request">طلب بطاقة إلى بطاقة إلى:%s</string>
+    <string name="cardtocard_descriotion_error">Description can not be empty</string>
+    <string name="cardtocard_amount_empty_error">Amount can not be empty</string>
+    <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
+    <string name="cardtocard_cartnumber_error">Card number must be 4 digits</string>
+    <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید</string>
+    <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید</string>
+    <string name="buy_internet_package_volume_type_title">الصوت</string>
+    <string name="buy_internet_package_volume_filter_gb_title">%.2f GB</string>
+    <string name="buy_internet_package_volume_filter_mb_title">%.2f MB</string>
+    <string name="buy_internet_package_daily_filter_title">%.0f يوم</string>
+    <string name="buy_internet_package_weekly_filter_title">%.0f أسبوع</string>
+    <string name="buy_internet_package_month_filter_title">%.0f شهر</string>
+    <string name="buy_internet_package_year_filter_title">%.0f عام</string>
+    <string name="buy_internet_package_choose_title">اختيار البند</string>
+    <string name="beeptunes_purchase_song">Purchase Song</string>
+    <string name="beeptunes_sync_song">Sync Song</string>
+    <string name="beeptunesـfavorite_song">Favorite Song</string>
+    <string name="play_sound_in_chat">تشغيل رسالة إرسال صوت في الدردشة</string>
+    <string name="charge_type_error_message">يرجى اختيار نوع الشحن.</string>
+    <string name="charge_price_error_message">يرجى تحديد مبلغ التهمة.</string>
+    <string name="no_channels_in_category">لا توجد قنوات في هذه الفئة!</string>
+    <string name="message_decline_write_new">إنشاء رسالة جديدة …</string>
+    <string name="message_decline_call_later">أنا ، أنا أتصل بك مرة أخرى.</string>
+    <string name="message_decline_Please_call_later">يمكنك الاتصال مرة أخرى في وقت لاحق؟</string>
+    <string name="message_decline_please_text_me">يرجى نص لي.</string>
+    <string name="mpl_transaction_rrn">إعادة الرقم</string>
+    <string name="mpl_transaction_trace">تتبع عدد</string>
+    <string name="mpl_transaction_order_id">رقم التعريف الخاص بالطلب</string>
+    <string name="pay_id">معرف الدفع</string>
+    <string name="mpl_transaction_sales">مبيعات</string>
+    <string name="mpl_transaction_topup">ائتمان</string>
+    <string name="mpl_transaction_card">بطاقة إلى بطاقة</string>
+    <string name="mpl_transaction_empty">لا توجد معلومات متاحة</string>
+    <string name="mpl_terminal_no">رقم المحطة</string>
+    <string name="mpl_do_you_want_save_receipt">هل تريد حفظ الإيصال؟</string>
+    <string name="mpl_transaction_nul">ليس لديك أي معاملات في آخر 5 أيام!</string>
+    <string name="mpl_transaction_merchent_name">اسم التاجر</string>
+
+    <string name="of_from_total">فی %s</string>
+    <string name="app_version_change_log">قائمة التغييرات</string>
+    <string name="updated_version_title">الإصدار الخاص بك هو التحديث</string>
+    <string name="check_update_title">اختر التحديث</string>
+    <string name="view_profile">عرض المستخدم</string>
+    <string name="there_is_no_car_available">لا يوجد سيارة متاحة.</string>
+    <string name="add_car">أضف سيارة</string>
+    <string name="cars_plaque">لوحة سيارات</string>
+    <string name="car_plaque">لوحة سياره</string>
+    <string name="c_pay_title">خدمة السيارات</string>
+    <string name="add_plaque">تقديم البلاك</string>
+    <string name="from_first">من الاول</string>
+    <string name="national_code">المدونة الوطنية</string>
+    <string name="plaque_is_not_valid">البلاك غير صالح.</string>
+    <string name="complete_correct">المعلومات غير صالحة.</string>
+    <string name="plaque_added">تمت إضافة البلاك.</string>
+    <string name="at_least_cpay_amout">المبلغ (لا يقل عن 20 ألف ريال)</string>
+    <string name="cpay_title">سی پی</string>
+    <string name="link_not_valid">رابط غير صالح</string>
+    <string name="popular_channel">قنوات جذابة</string>
+    <string name="already_registered">لقد قمت بالفعل بتسجيل رمز الإحالة الخاص بك</string>
+    <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
+    <string name="Your_purchase_code">کد خرید شما %s</string>
+    <string name="igasht_count_title">تعداد</string>
+    <string name="igasht_service_title">سرویس</string>
+    <string name="igasht_select_location_button_title">انتخاب محل</string>
+    <string name="igasht_selected_location_title">المناطق الترفيهية في محافظة %s</string>
+    <string name="igasht_location_found_count">%d سلعة موجودة</string>
+    <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
+    <string name="noDetail_textView">فاقد توضیحات</string>
+    <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
+    <string name="Restaurant_textView">رستوران</string>
+    <string name="parking_textView">پارکینگ</string>
+    <string name="wifi_textView">وای فای</string>
+    <string name="coffeeShop_textView">کافی شاپ</string>
+    <string name="wheelchair_textView">ویلچر</string>
+    <string name="prayerRoom_textView">نمازخانه</string>
+    <string name="edit_contact">تحرير الاتصال</string>
+
+    <string name="error_ivand_limit_gift">لسوء الحظ ، فإن الهدايا مجموعة قد انتهت.</string>
+    <string name="referral_error_yourself">لا يمكن تسجيل رقمك كمرجع.</string>
+    <string name="iland">آیلند</string>
+    <string name="all_calls">المكالمات</string>
+    <string name="open_url">رابط مفتوح</string>
+    <string name="copied">تم نسخ </string>
+    <string name="default_theme_title">إفتراضي</string>
+    <string name="message_is_long">Your message is too long  Message will covert to</string>
+
+    <string name="elecBill_Entry_lengthError">يجب أن يكون رقم الفاتورة 13 حرفًا.</string>
+    <string name="elecBill_Entry_barcodeError">فشل مسح الباركود. حاول مرة اخرى.</string>
+    <string name="elecBill_Entry_companyError">نحن ندعم فقط فاتورة الكهرباء.</string>
+    <string name="elecBill_main_billTitle">الاستعلام عن فاتورة الكهرباء ودفع سريع</string>
+    <string name="elecBill_main_billIDHint">رقم فاتورة الكهرباء</string>
+    <string name="elecBill_main_billPay">التحقيق بلدي بيل</string>
+    <string name="elecBill_main_billMyList">فواتير الكهرباء الخاصة بي</string>
+    <string name="elecBill_main_billSearch">بحث فواتير</string>
+    <string name="elecBill_main_billBranchInfo">معلومات المتفرعة عن الكهرباء</string>
+    <string name="elecBill_pay_billID">معرف الفاتورة</string>
+    <string name="elecBill_pay_billPayID">فاتورة الدفع معرف</string>
+    <string name="elecBill_pay_billPrice">الاجمالي المستحق</string>
+    <string name="elecBill_pay_billTime">المهلة</string>
+    <string name="elecBill_pay_billPay">دفع</string>
+    <string name="elecBill_pay_billBranchInfo">معلومات المتفرعة عن الكهرباء</string>
+    <string name="elecBill_pay_billAddBillList">أضف إلى قائمة فاتورتي</string>
+    <string name="elecBill_pay_billImage">إظهار صورة الفاتورة</string>
+    <string name="elecBill_Entry_nameError">لا يمكن أن يكون اسم الفاتورة فارغًا. على سبيل المثال: الصفحة الرئيسية</string>
+    <string name="elecBill_Entry_billIDError">لا يمكن أن يكون معرف الفاتورة فارغًا.</string>
+    <string name="elecBill_add_form">يرجى ملء النموذج.</string>
+    <string name="elecBill_add_name">اسم الفاتورة *</string>
+    <string name="elecBill_add_billID">معرف الفاتورة *</string>
+    <string name="elecBill_add_addBtn">أضف فاتورة</string>
+    <string name="elecBill_cell_showDetail">التفاصيل</string>
+    <string name="elecBill_cell_addNewBill">أضف فاتورة جديدة</string>
+    <string name="elecBill_cell_deleteAccount">حذف الحساب</string>
+    <string name="elecBill_deleteBill_title">حذف بيل</string>
+    <string name="elecBill_deleteBill_desc">هل أنت متأكد من حذف هذه الفاتورة؟</string>
+    <string name="elecBill_deleteBill_pos">حذف</string>
+    <string name="elecBill_deleteBill_neg">لا ، لا تحذف.</string>
+    <string name="elecBill_deleteAccount_title">حذف الحساب</string>
+    <string name="elecBill_deleteAccount_desc">هل أنت متأكد من حذف حسابك؟</string>
+    <string name="elecBill_deleteAccount_pos">حذف</string>
+    <string name="elecBill_deleteAccount_neg">لا ، لا تحذف.</string>
+    <string name="elecBill_image_Directory">iGap - فاتورة الكهرباء</string>
+    <string name="elecBill_edit_saveBtn">حفظ التغييرات</string>
+    <string name="elecBill_edit_Btn">تحرير بيل</string>
+    <string name="elecBill_searchCell_billID">معرف الفاتورة</string>
+    <string name="elecBill_searchCell_CustomerName">اسم الزبون</string>
+    <string name="elecBill_searchCell_CustomerAddress">عنوان العميل</string>
+    <string name="elecBill_search_billSerial">رقم الجسم السلطة متر</string>
+    <string name="elecBill_search_billCompany">شركة مزود الكهرباء</string>
+    <string name="elecBill_search_billSearch">العثور على فاتورتي</string>
+    <string name="elecBill_search_billSpinner">أختر</string>
+    <string name="elecBill_error_billMissing">لا توجد بيانات كافية لدفع الفاتورة.</string>
+    <string name="elecBill_error_bellowMin">لا يمكن دفع الفواتير أقل من 10،000 ريال.</string>
+    <string name="elecBill_error_MPLError">لا يمكن الاتصال بخدمة الدفع.</string>
+    <string name="elecBill_error_title">خطأ</string>
+    <string name="elecBill_error_listView">لا توجد بيانات لإظهارها. الرجاء معاودة المحاولة في وقت لاحق.</string>
+    <string name="elecBill_error_company">يجب عليك اختيار مزود الخدمة.</string>
+    <string name="elecBill_error_billSerial">فاتورة المسلسل لا يمكن أن تكون فارغة.</string>
+    <string name="elecBill_error_billSerialLength">يجب ألا يقل حجم الفاتورة عن 7 أحرف.</string>
+    <string name="elecBill_error_openCompanySpinner">افتح</string>
+    <string name="elecBill_error_zeroResultSearch">النتيجة: لا توجد فواتير.</string>
+    <string name="elecBill_error_zeroResultBill">لا توجد فواتير مسجلة باسمك.</string>
+    <string name="elecBill_success_title">نجاح</string>
+    <string name="elecBill_success_pay">الدفع ناجح</string>
+    <string name="add_new_account">أضف حساب جديد</string>
+    <string name="profile">الشخصي</string>
+    <string name="login_exist_account_error">هذا الحساب هو تسجيل الدخول على هذا الجهاز</string>
+    <string name="delete_from_storage">حذف من التخزين</string>
+    <string name="map_registration_enable">تمكين الرؤية القريبة</string>
+    <string name="need_browser">يتطلب متصفح للاستخدام.</string>
+    <string name="install_latest_version">قم بتثبيت أحدث إصدار لاستخدام هذه الميزة</string>
+
+    <string name="requester_mobile_number">رقم هاتف مقدم الطلب</string>
+    <string name="charger_mobile_number">رقم الجوال القابلة لإعادة الشحن</string>
+    <string name="terminal_No">رقم المحطة</string>
+    <string name="rrn">الرقم المرجعي</string>
+    <string name="bill_id">معرف الفاتورة</string>
+    <string name="topUp_title">شراء الشحن</string>
+    <string name="bill_title">دفع الفاتورة</string>
+    <string name="topUp_message">رسالة شراء الشحن</string>
+    <string name="bill_message">رسالة دفع الفواتير</string>
+    <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
+    <string name="sticker_setting">إعداد الملصقات</string>
+    <string name="empty_sticker">لم تقم بإضافة أي ملصقات بعد!</string>
+    <string name="emoji_category_activity">نشاط</string>
+    <string name="emoji_category_animal">الحيوانات والطبيعة</string>
+    <string name="emoji_category_Flags">أعلام الفئة</string>
+    <string name="emoji_category_food">طعام و شراب</string>
+    <string name="emoji_category_object">شيء</string>
+    <string name="emoji_category_smileys">الوجوه الضاحكة والناس</string>
+    <string name="emoji_category_symbols">حرف او رمز</string>
+    <string name="emoji_category_travel">السفر والمكان</string>
+    <string name="gift_sticker_title">ملصق هدية</string>
+    <string name="gift_sticker_visit">ملاحظة</string>
+
+    <string name="poll_dialog_question">هل أنت متأكد من رأيك </string>
+    <string name="delete_recent_emoji">حذف الرموز التعبيرية الحديثة</string>
+    <string name="activated">المنشط</string>
+    <string name="internal_desc">تصفح نظام الملفات الخاص بك</string>
+    <string name="external_desc">تصفح التخزين الخارجية الخاصة بك</string>
+    <string name="file_manager_app_desc">تصفح مجلد التطبيق</string>
+    <string name="file_manager_image_desc">لإرسال ملف الصور</string>
+    <string name="file_manager_video_desc">لإرسال ملف الفيديو</string>
+    <string name="file_manager_music">لإرسال ملف صوتيات</string>
+    <string name="folder">مجلد</string>
+    <string name="internal_storage">التخزين الداخلي</string>
+    <string name="external_storage">تخزين خارجي</string>
+    <string name="file_manager">مدير الملفات</string>
+    <string name="trim_error">التقليم قصير جدًا ، يرجى المحاولة بمدة صالحة.</string>
+    <string name="restrictions_on_sending_stickers">قيود على إرسال الملصقات!</string>
+    <string name="restrictions_on_sending_multimedia_messages">قيود على إرسال رسائل الوسائط المتعددة!</string>
+    <string name="post_message">أرسل رسالة</string>
+    <string name="pin_message_1">حذف الرسالة</string>
+    <string name="edit_message">تحرير الرسالة</string>
+    <string name="delete_message">حذف الرسالة</string>
+    <string name="modify_room">تحرير المعلومات</string>
+    <string name="send_text">إرسال نص</string>
+    <string name="send_media">إرسال الوسائط</string>
+    <string name="send_gif">إرسال Gif</string>
+    <string name="send_sticker">إرسال ملصق</string>
+    <string name="send_link">إرسال الارتباط</string>
+    <string name="remove_user">حذف المستخدم</string>
+    <string name="admin_rights">وصول المسؤول</string>
+    <string name="edit_rights">تحرير الوصول</string>
+    <string name="edit_admin_rights">تحرير وصول المسؤول</string>
+    <string name="edit_member_rights">تحرير حقوق العضو</string>
+    <string name="edit_room_rights">تحديد الوصول العام للمجموعة</string>
+    <string name="restrictions_on_sending_messages">قيود على إرسال الرسائل!</string>
+    <string name="change_group_rights">تحديد الوصول العام للمجموعة</string>
+    <string name="owner">مالك</string>
+    <string name="choose_frome_contacts">اختر من جهات الاتصال</string>
+    <string name="previousـpurchases">مشتريات سابقة</string>
+    <string name="operator_selection">اختيار عامل التشغيل</string>
+    <string name="select_the_amount">حدد المبلغ</string>
+    <string name="list_empty">لا يوجد رقم مسبق في قائمتك</string>
+    <string name="Select_from_previous_numbers">اختر من الأرقام السابقة</string>
+    <string name="Select_the_type_of_charge">حدد نوع الرسوم</string>
+    <string name="order_by">فرز حسب</string>
+    <string name="suggested_packages">الحزم المقترحة</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="credit_sim">سیمکارت اعتباری</string>
+    <string name="permanent_sim">سیمکارت دائمی</string>
+    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
+    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
+    <string name="data_sim">سیمکارت دیتا</string>
+    <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
+    <string name="no_number_found">شماره ای از قبل موجود نیست</string>
+    <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
+    <string name="mic">Mic</string>
+    <string name="hold">Hold</string>
+
+    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
 </resources>

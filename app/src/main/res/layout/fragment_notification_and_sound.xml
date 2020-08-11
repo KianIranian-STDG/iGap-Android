@@ -1,1243 +1,912 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <data>
+    <data>
 
-    <import type="android.graphics.Color" />
+        <import type="android.graphics.Color" />
 
-    <import type="net.iGap.G" />
+        <import type="net.iGap.G" />
 
-    <variable
-      name="FragmentNotificationAndSoundViewModel"
-      type="net.iGap.viewmodel.FragmentNotificationAndSoundViewModel" />
-  </data>
+        <variable
+            name="FragmentNotificationAndSoundViewModel"
+            type="net.iGap.viewmodel.FragmentNotificationAndSoundViewModel" />
+    </data>
 
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:orientation="vertical"
-    tools:ignore="MissingPrefix">
-
-    <android.support.design.widget.AppBarLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-      <android.support.v7.widget.Toolbar
-        android:id="@+id/asn_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp60"
-        android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-        android:layoutDirection="ltr"
-        android:padding="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-
-        >
-
-        <RelativeLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="horizontal">
-
-          <net.iGap.libs.rippleeffect.RippleView
-            android:id="@+id/stns_ripple_back"
-            rv_centered="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:rv_alpha="200"
-            app:rv_centered="true"
-            app:rv_rippleDuration="0"
-            app:rv_ripplePadding="5dp">
-
-            <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/stns_txt_back"
-              android:layout_width="@dimen/dp52"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:text="@string/md_back_arrow"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
-              android:textColor="@color/whit_background" />
-          </net.iGap.libs.rippleeffect.RippleView>
-
-          <TextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/stns_ripple_back"
-            android:layout_toRightOf="@+id/stns_ripple_back"
-            android:gravity="center"
-            android:text="@string/st_titleToolbar_page_Notification_and_sounds"
-            android:textColor="@color/whit_background"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal"
-            android:visibility="visible" />
-
-        </RelativeLayout>
-      </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
-
-    <ScrollView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <LinearLayout
+    <LinearLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
-          style="?backgroundColorSettingTheme"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingBottom="@dimen/dp4"
-          android:paddingTop="@dimen/dp8"
-          android:visibility="visible">
-
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp16"
-            android:paddingTop="@dimen/dp12"
-            android:text="@string/st_title_messageNotification"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal" />
+            android:layout_height="@dimen/toolbar_height"
+            android:orientation="horizontal" />
 
-
-          <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickAlertMessage}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-            <TextView
-              android:id="@+id/stns_txt_alert"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical|start"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_alert"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_alert"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertMassage)}"
-              android:gravity="start"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"
-              android:textOff=""
-              android:textOn="" />
-            <!--android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertMessage(checked)}"-->
-            <!--android:onCheckedChanged="@{() -> FragmentNotificationAndSoundViewModel.setAlertMassage(checked)}"-->
-
-
-          </LinearLayout>
-
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickMessagePreView}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_messagePreview"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_messagePreview"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_messagePreview"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMassagePreview)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMassagePreview(checked)}"
-              android:textOff=""
-              android:textOn=""
-
-              />
-
-          </LinearLayout>
-
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_ledColorMessage"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickLedColorMessage}"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_led_color"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-
-            <ImageView
-              android:id="@+id/stns_img_ledColorMessage"
-              android:layout_width="@dimen/dp24"
-              android:layout_height="@dimen/dp24"
-              android:layout_gravity="center_vertical"
-              android:layout_marginLeft="@dimen/dp16"
-              android:layout_marginRight="@dimen/dp16"
-              android:background="@drawable/circle_color_notificatin_setting"
-              android:gravity="center" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_vibrate_message"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickVibrationMessage}"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_vibrate"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_vibrate_message_text"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-              android:gravity="center_vertical|top"
-              android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_popupNotification_message"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickPopUpNotificationMessage}"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_popupNotification"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_popupNotification_message_text"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-              android:gravity="center_vertical|top"
-              android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage , default=@string/st_sound}"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_sound_message"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSoundMessage}"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_sound"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_sound_text"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-              android:gravity="center_vertical|top"
-              android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage , default = @string/st_sound}"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-
-        </LinearLayout>
-
-
-        <!--group-->
-        <LinearLayout
-          style="?backgroundColorSettingTheme_2"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingBottom="@dimen/dp4"
-          android:paddingTop="@dimen/dp8"
-          android:visibility="visible">
-
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp16"
-            android:paddingTop="@dimen/dp12"
-            android:text="@string/st_title_groupNotification"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickAlertGroup}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_alert_group"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_alert"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_alert_group"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAlertGroup)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertGroup(checked)}"
-              android:textOff=""
-              android:textOn="" />
-
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickMessagePreViewGroup}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_messagePreview_group"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_messagePreview"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_messagePreview_group"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isMessagePreViewGroup)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMessagePreViewGroup(checked)}"
-              android:textOff=""
-              android:textOn="" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_ledColor_group"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:gravity="center_vertical"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickLedGroup}"
-            android:orientation="horizontal">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingLeft="@dimen/dp16"
-              android:paddingRight="@dimen/dp16"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_led_color"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ImageView
-              android:id="@+id/stns_img_ledColor_group"
-              android:layout_width="@dimen/dp24"
-              android:layout_height="@dimen/dp24"
-              android:layout_gravity="center_vertical"
-              android:layout_marginLeft="@dimen/dp16"
-              android:layout_marginRight="@dimen/dp16"
-              android:background="@drawable/circle_color_notificatin_setting"
-              android:gravity="center" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_vibrate_group"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickVibrationGroup}"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_vibrate"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_vibrate_group_text"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-              android:gravity="center_vertical|top"
-              android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup , default=@string/array_Default}"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_popupNotification_group"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickPopUpNotificationGroup}"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_popupNotification"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_popupNotification_group_text"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-              android:gravity="center_vertical|top"
-              android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup,default = @string/st_sound}"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:id="@+id/stns_layout_sound_group"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSoundGroup}"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_sound"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_sound_group_text"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-
-              android:gravity="center_vertical|top"
-              android:text="@{FragmentNotificationAndSoundViewModel.callBackSoundGroup , default =@string/st_sound}"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal"
-
-              />
-
-          </LinearLayout>
-        </LinearLayout>
-
-
-        <!--in app notification-->
-        <LinearLayout
-          style="?backgroundColorSettingTheme"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingBottom="@dimen/dp4"
-          android:paddingTop="@dimen/dp8"
-          android:visibility="visible">
-
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp16"
-            android:paddingTop="@dimen/dp12"
-            android:text="@string/st_title_in_app_notification"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal" />
-
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickInAppSound}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_app_sound"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_in_app_sound"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_app_sound"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAppSound)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAppSound(checked)}"
-              android:textOff=""
-              android:textOn=""
-
-              />
-
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickInAppVibration}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16"
-
-            >
-
-
-            <TextView
-              android:id="@+id/stns_txt_app_vibrate"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_in_app_vibrate"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_app_vibrate"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppVibration)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppVibration(checked)}"
-              android:textOff=""
-              android:textOn=""
-
-              />
-
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickInAppPreView}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_app_preview"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_in_app_preview"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_app_preview"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppPreView)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppPreView(checked)}"
-              android:textOff=""
-              android:textOn=""
-
-              />
-
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSoundInChat}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_chat_sound"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_in_chat_sound"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_chat_sound"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSoundInChat)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedSoundInChat(checked)}"
-              android:textOff=""
-              android:textOn=""
-
-              />
-
-
-          </LinearLayout>
-        </LinearLayout>
-
-        <!--this part is Gone-->
-        <LinearLayout
-          style="?backgroundColorSettingTheme_2"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingBottom="@dimen/dp4"
-          android:paddingTop="@dimen/dp8"
-          android:visibility="gone">
-
-          <TextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp16"
-            android:paddingTop="@dimen/dp12"
-            android:text="@string/st_title_Events"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <TextView
-              android:id="@+id/stns_txt_Contact_joined"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_Contact_joined_igap"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_Contact_joined"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:textOff=""
-              android:textOn="" />
-
-
-          </LinearLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-          <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-            <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true">
-
-              <ToggleButton
-                android:id="@+id/stns_toggle_pinned_message"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn="" />
-            </LinearLayout>
-
-            <TextView
-              android:id="@+id/stns_txt_pinned_message"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_centerInParent="true"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_pinned_message"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-
-          </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-          style="?backgroundColorSettingTheme_2"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{FragmentNotificationAndSoundViewModel::onClickKeepService}"
-          android:orientation="vertical"
-          android:paddingBottom="@dimen/dp4"
-          android:paddingTop="@dimen/dp8"
-          android:visibility="visible">
-
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp12"
-            android:text="@string/st_title_other"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{FragmentNotificationAndSoundViewModel::onClickSeparateNotification}"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/dp16"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-            <TextView
-              android:id="@+id/stns_txt_separate_notifications"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/separate_notifications"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_separate_notifications"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSeparateNotification)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setSeparateNotification(checked)}"
-              android:textOff=""
-              android:textOn="" />
-
-          </LinearLayout>
-
-          <TextView
-            android:id="@+id/stns_txt_title_keep_alive_service"
-            style="?textTitleColorSettingTheme"
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16"
-            android:text="@string/st_keep_alive_service"
-            android:textSize="@dimen/dp16"
-            android:textStyle="normal" />
-
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/dp12"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16">
-
-
-            <com.uncopt.android.widget.text.justify.JustifiedTextView
-              android:id="@+id/stns_txt_keep_alive_service"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_text_keep_alive_service"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-            <ToggleButton
-              android:id="@+id/stns_toggle_keep_alive_service"
-              android:layout_width="@dimen/dp40"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isKeepService)}"
-              android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedKeepService(checked)}"
-              android:textOff=""
-              android:textOn="" />
-
-
-          </LinearLayout>
-
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:visibility="gone" />
-
-          <!--this part is Gone-->
-          <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/dp12"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16"
-            android:visibility="gone">
-
-            <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true">
-
-              <ToggleButton
-                android:id="@+id/stns_toggle_background_connection"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn="" />
-
-            </LinearLayout>
-
-            <TextView
-              android:id="@+id/stns_txt_title_background_connection"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/st_background_connection"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/stns_txt_background_connection"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/stns_txt_title_background_connection"
-              android:paddingEnd="@dimen/dp52"
-              android:paddingRight="@dimen/dp52"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_text_background_connection"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-
-          </RelativeLayout>
-
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:visibility="gone" />
-
-          <!--this part is Gone-->
-          <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16"
-            android:visibility="gone">
-
-            <LinearLayout
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true">
-
-              <ToggleButton
-                android:id="@+id/stns_badge_counter"
-                android:layout_width="@dimen/dp40"
-                android:layout_height="@dimen/dp40"
-                android:background="@drawable/st_switch_button"
-                android:textOff=""
-                android:textOn="" />
-            </LinearLayout>
-
-            <TextView
-              android:id="@+id/stns_txt_badge_countent"
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_centerInParent="true"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/st_badge_counter"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-          </RelativeLayout>
-
-          <!--this part is Gone-->
-          <View
-            style="?lineColorSettingTheme"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:visibility="gone" />
-
-
-          <!--this part is Gone-->
-          <LinearLayout
-            android:id="@+id/st_layout_Repeat_Notifications"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:visibility="gone">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".6"
-              android:gravity="center_vertical"
-              android:text="@string/st_Repeat_Notifications"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              android:id="@+id/st_txt_Repeat_Notifications"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="0dp"
-              android:layout_weight=".4"
-              android:gravity="center_vertical|top"
-              android:text="@string/st_sound"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-          style="?backgroundColorSettingTheme"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:paddingBottom="@dimen/dp16"
-          android:paddingTop="@dimen/dp8"
-          android:visibility="visible">
-
-          <net.iGap.module.HeaderTextView
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp16"
-            android:paddingTop="@dimen/dp12"
-            android:text="@string/st_title_reset"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="normal" />
-
-          <LinearLayout
-            android:id="@+id/st_layout_reset_all_notification"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_vertical"
-              android:text="@string/st_reset_all_notification"
-              android:textSize="@dimen/dp16"
-              android:textStyle="normal" />
-
-            <TextView
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_vertical|top"
-              android:text="@string/st_text_reset_all_notification"
-              android:textSize="@dimen/dp13"
-              android:textStyle="normal" />
-
-          </LinearLayout>
-        </LinearLayout>
-      </LinearLayout>
-    </ScrollView>
-  </LinearLayout>
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dp16">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_title_messageNotification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="@dimen/dp12"
+                    android:text="@string/st_title_messageNotification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_alert"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_alert"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_alert"
+                    app:layout_constraintEnd_toStartOf="@id/toggle_alert"
+                    app:layout_constraintStart_toStartOf="@id/view_alert"
+                    app:layout_constraintTop_toTopOf="@id/view_alert" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_alert"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isAlertMassage}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertMessage(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_alert"
+                    app:layout_constraintEnd_toEndOf="@id/view_alert"
+                    app:layout_constraintTop_toTopOf="@id/view_alert" />
+
+                <View
+                    android:id="@+id/view_alert"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_messageNotification" />
+
+                <TextView
+                    android:id="@+id/tv_messagePreview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_messagePreview"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_messagePreview"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_messagePreview"
+                    app:layout_constraintStart_toStartOf="@id/view_messagePreview"
+                    app:layout_constraintTop_toTopOf="@+id/view_messagePreview" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_messagePreview"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isMassagePreview}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setMessagePreview(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_messagePreview"
+                    app:layout_constraintEnd_toEndOf="@id/view_messagePreview"
+                    app:layout_constraintTop_toTopOf="@id/view_messagePreview" />
+
+                <View
+                    android:id="@+id/view_messagePreview"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreView()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_alert" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_led_color"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_led_message"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_led_message"
+                    app:layout_constraintStart_toStartOf="@+id/ll_led_message"
+                    app:layout_constraintTop_toTopOf="@id/ll_led_message" />
+
+                <ImageView
+                    android:id="@+id/iv_led_message"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_margin="@dimen/dp16"
+                    android:background="@drawable/circle_color_notificatin_setting"
+                    android:gravity="end"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_led_message"
+                    app:layout_constraintEnd_toEndOf="@+id/ll_led_message"
+                    app:layout_constraintTop_toTopOf="@id/ll_led_message" />
+
+                <View
+                    android:id="@+id/ll_led_message"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessageLed()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_messagePreview" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_vibrate"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_vibration_message"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_vibration_message"
+                    app:layout_constraintStart_toStartOf="@id/rl_vibration_message"
+                    app:layout_constraintTop_toTopOf="@id/rl_vibration_message" />
+
+                <TextView
+                    android:id="@+id/tv_vibration_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="end"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_vibration_message"
+                    app:layout_constraintEnd_toEndOf="@id/rl_vibration_message"
+                    app:layout_constraintTop_toTopOf="@id/rl_vibration_message" />
+
+                <View
+                    android:id="@+id/rl_vibration_message"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessageVibration()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_led_message" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_popupNotification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_pop_sound_message"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_pop_sound_message"
+                    app:layout_constraintStart_toStartOf="@+id/rl_pop_sound_message"
+                    app:layout_constraintTop_toTopOf="@id/rl_pop_sound_message" />
+
+                <TextView
+                    android:id="@+id/tv_pop_sound_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="end"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_pop_sound_message"
+                    app:layout_constraintEnd_toEndOf="@id/rl_pop_sound_message"
+                    app:layout_constraintTop_toTopOf="@id/rl_pop_sound_message" />
+
+                <View
+                    android:id="@+id/rl_pop_sound_message"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePopUpNotification()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_vibration_message" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_sound"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_sound_message"
+                    app:layout_constraintEnd_toStartOf="@id/tv_sound_message"
+                    app:layout_constraintStart_toStartOf="@id/rl_pop_sound_message"
+                    app:layout_constraintTop_toTopOf="@id/rl_sound_message" />
+
+                <TextView
+                    android:id="@+id/tv_sound_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="end"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage,  default =@string/Default_Notification_tone}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_sound_message"
+                    app:layout_constraintEnd_toEndOf="@id/rl_sound_message"
+                    app:layout_constraintTop_toTopOf="@id/rl_sound_message" />
+
+                <View
+                    android:id="@+id/rl_sound_message"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundMessage()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_message" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:layout_marginEnd="@dimen/dp10"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_sound_message" />
+
+                <TextView
+                    android:id="@+id/tv_groupNotification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="@dimen/dp12"
+                    android:text="@string/st_title_groupNotification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view1" />
+
+
+                <TextView
+                    android:id="@+id/tv_alert_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_alert"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_alert_group"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_alert_group"
+                    app:layout_constraintStart_toStartOf="@id/view_alert_group"
+                    app:layout_constraintTop_toTopOf="@+id/view_alert_group" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_alert_group"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isAlertGroup}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setAlertGroup(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_alert_group"
+                    app:layout_constraintEnd_toEndOf="@id/view_alert_group"
+                    app:layout_constraintTop_toTopOf="@+id/view_alert_group" />
+
+                <View
+                    android:id="@+id/view_alert_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickAlertGroup()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_groupNotification" />
+
+
+                <TextView
+                    android:id="@+id/tv_messagePreview_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_messagePreview"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_messagePreview_group"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_messagePreview_group"
+                    app:layout_constraintStart_toStartOf="@+id/view_messagePreview_group"
+                    app:layout_constraintTop_toTopOf="@id/view_messagePreview_group" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_messagePreview_group"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{FragmentNotificationAndSoundViewModel.isGroupPreView}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setMessagePreviewGroup(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_messagePreview_group"
+                    app:layout_constraintEnd_toEndOf="@+id/view_messagePreview_group"
+                    app:layout_constraintTop_toTopOf="@id/view_messagePreview_group" />
+
+                <View
+                    android:id="@+id/view_messagePreview_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickMessagePreViewGroup()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_alert_group" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_led_color"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_led_group"
+                    app:layout_constraintEnd_toStartOf="@id/iv_led_group"
+                    app:layout_constraintStart_toStartOf="@id/ll_led_group"
+                    app:layout_constraintTop_toTopOf="@+id/ll_led_group" />
+
+                <ImageView
+                    android:id="@+id/iv_led_group"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:layout_margin="@dimen/dp16"
+                    android:background="@drawable/circle_color_notificatin_setting"
+                    android:gravity="end"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_led_group"
+                    app:layout_constraintEnd_toEndOf="@id/ll_led_group"
+                    app:layout_constraintTop_toTopOf="@id/ll_led_group" />
+
+                <View
+                    android:id="@+id/ll_led_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickGroupLed()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_messagePreview_group" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_vibrate"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_vibration_group"
+                    app:layout_constraintEnd_toStartOf="@id/tv_vibration_group"
+                    app:layout_constraintStart_toStartOf="@id/rl_vibration_group"
+                    app:layout_constraintTop_toTopOf="@id/rl_vibration_group" />
+
+                <TextView
+                    android:id="@+id/tv_vibration_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="end"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_vibration_group"
+                    app:layout_constraintEnd_toEndOf="@id/rl_vibration_group"
+                    app:layout_constraintTop_toTopOf="@id/rl_vibration_group" />
+
+                <View
+                    android:id="@+id/rl_vibration_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickGroupVibration()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_led_group" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_popupNotification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/rl_pop_sound_group"
+                    app:layout_constraintEnd_toStartOf="@id/tv_pop_sound_group"
+                    app:layout_constraintStart_toStartOf="@+id/rl_pop_sound_group"
+                    app:layout_constraintTop_toTopOf="@+id/rl_pop_sound_group" />
+
+                <TextView
+                    android:id="@+id/tv_pop_sound_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="end"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/rl_pop_sound_group"
+                    app:layout_constraintEnd_toEndOf="@+id/rl_pop_sound_group"
+                    app:layout_constraintTop_toTopOf="@+id/rl_pop_sound_group" />
+
+                <View
+                    android:id="@+id/rl_pop_sound_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickGroupPopUpNotification()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_vibration_group" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_sound"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_sound_group"
+                    app:layout_constraintEnd_toStartOf="@id/tv_sound_group"
+                    app:layout_constraintStart_toStartOf="@id/rl_sound_group"
+                    app:layout_constraintTop_toTopOf="@id/rl_sound_group" />
+
+                <TextView
+                    android:id="@+id/tv_sound_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="end"
+                    android:text="@{FragmentNotificationAndSoundViewModel.callBackSoundGroup , default =@string/Default_Notification_tone}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/dp12"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/rl_sound_group"
+                    app:layout_constraintEnd_toEndOf="@id/rl_sound_group"
+                    app:layout_constraintTop_toTopOf="@id/rl_sound_group" />
+
+                <View
+                    android:id="@+id/rl_sound_group"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundGroup()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rl_pop_sound_group" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/dp10"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_sound_group" />
+
+                <TextView
+                    android:id="@+id/title_sound_app"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="@dimen/dp12"
+                    android:text="@string/st_title_in_app_notification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
+                <TextView
+                    android:id="@+id/tv_sound_app"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_in_app_sound"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_sound_app"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_sound_app"
+                    app:layout_constraintStart_toStartOf="@id/view_sound_app"
+                    app:layout_constraintTop_toTopOf="@id/view_sound_app" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_sound_app"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isAppSound)}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAppSound(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_sound_app"
+                    app:layout_constraintEnd_toEndOf="@id/view_sound_app"
+                    app:layout_constraintTop_toTopOf="@id/view_sound_app" />
+
+                <View
+                    android:id="@+id/view_sound_app"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppSound()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title_sound_app" />
+
+                <TextView
+                    android:id="@+id/tv_vibration_app"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_in_app_vibrate"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_vibration_app"
+                    app:layout_constraintEnd_toStartOf="@id/toggle_vibration_app"
+                    app:layout_constraintStart_toStartOf="@id/view_vibration_app"
+                    app:layout_constraintTop_toTopOf="@id/view_vibration_app" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_vibration_app"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppVibration)}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppVibration(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_vibration_app"
+                    app:layout_constraintEnd_toEndOf="@id/view_vibration_app"
+                    app:layout_constraintTop_toTopOf="@id/view_vibration_app" />
+
+                <View
+                    android:id="@+id/view_vibration_app"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppVibration()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_sound_app" />
+
+
+                <TextView
+                    android:id="@+id/tv_preview_app"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_in_app_preview"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_preview_app"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_preview_app"
+                    app:layout_constraintStart_toStartOf="@+id/view_preview_app"
+                    app:layout_constraintTop_toTopOf="@+id/view_preview_app" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_preview_app"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isInAppPreView)}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppPreView(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@+id/view_preview_app"
+                    app:layout_constraintEnd_toEndOf="@+id/view_preview_app"
+                    app:layout_constraintTop_toTopOf="@+id/view_preview_app" />
+
+                <View
+                    android:id="@+id/view_preview_app"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickInAppPreView()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_vibration_app" />
+
+
+                <TextView
+                    android:id="@+id/tv_chatSound"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_in_chat_sound"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_chatSound"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_chatSound"
+                    app:layout_constraintStart_toStartOf="@+id/view_chatSound"
+                    app:layout_constraintTop_toTopOf="@+id/view_chatSound" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_chatSound"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSoundInChat)}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedSoundInChat(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@+id/view_chatSound"
+                    app:layout_constraintEnd_toEndOf="@+id/view_chatSound"
+                    app:layout_constraintTop_toTopOf="@+id/view_chatSound" />
+
+                <View
+                    android:id="@+id/view_chatSound"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSoundInChat()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_preview_app" />
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_margin="@dimen/dp12"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toggle_chatSound" />
+
+
+                <TextView
+                    android:id="@+id/tv_separate_notification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="@dimen/dp12"
+                    android:text="@string/st_title_other"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view3" />
+
+
+                <TextView
+                    android:id="@+id/tv_separate_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/separate_notifications"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/view_separate_notifications"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_separate_notifications"
+                    app:layout_constraintStart_toStartOf="@id/view_separate_notifications"
+                    app:layout_constraintTop_toTopOf="@+id/view_separate_notifications" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_separate_notifications"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isSeparateNotification)}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.setSeparateNotification(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@id/view_separate_notifications"
+                    app:layout_constraintEnd_toEndOf="@id/view_separate_notifications"
+                    app:layout_constraintTop_toTopOf="@id/view_separate_notifications" />
+
+
+                <View
+                    android:id="@+id/view_separate_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickSeparateNotification()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_separate_notification" />
+
+                <TextView
+                    android:id="@+id/tv_title_keepService"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginBottom="@dimen/dp16"
+                    android:gravity="start"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
+                    android:text="@string/st_keep_alive_service"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view_separate_notifications" />
+
+                <com.uncopt.android.widget.text.justify.JustifiedTextView
+                    android:id="@+id/tv_description_keepService"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_text_keep_alive_service"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@+id/view_description_keepService"
+                    app:layout_constraintEnd_toStartOf="@+id/toggle_keepService"
+                    app:layout_constraintStart_toStartOf="@+id/view_description_keepService"
+                    app:layout_constraintTop_toTopOf="@+id/view_description_keepService" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/toggle_keepService"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:layout_margin="@dimen/dp16"
+                    android:checked="@{safeUnbox(FragmentNotificationAndSoundViewModel.isKeepService)}"
+                    android:gravity="end"
+                    android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedKeepService(checked)}"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_constraintBottom_toBottomOf="@+id/view_description_keepService"
+                    app:layout_constraintEnd_toEndOf="@+id/view_description_keepService"
+                    app:layout_constraintTop_toTopOf="@+id/view_description_keepService" />
+
+                <View
+                    android:id="@+id/view_description_keepService"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp48"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{()->FragmentNotificationAndSoundViewModel.onClickKeepService()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_keepService" />
+
+                <View
+                    android:id="@+id/view5"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/dp10"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view_description_keepService" />
+
+                <TextView
+                    android:id="@+id/tv_title_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_title_reset"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+
+                <TextView
+                    android:id="@+id/tv_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_reset_all_notification"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="@+id/ll_reset_notifications"
+                    app:layout_constraintStart_toStartOf="@id/ll_reset_notifications"
+                    app:layout_constraintTop_toTopOf="@id/ll_reset_notifications" />
+
+                <TextView
+                    android:id="@+id/description_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="start"
+                    android:text="@string/st_text_reset_all_notification"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_reset_notifications"
+                    app:layout_constraintEnd_toEndOf="@id/ll_reset_notifications"
+                    app:layout_constraintStart_toStartOf="@id/ll_reset_notifications"
+                    app:layout_constraintTop_toBottomOf="@id/tv_reset" />
+
+                <View
+                    android:id="@+id/ll_reset_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp80"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title_reset" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </LinearLayout>
 </layout>

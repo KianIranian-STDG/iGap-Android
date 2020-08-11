@@ -1,22 +1,23 @@
 package net.iGap.fragments.emoji;
 
-import android.os.Handler;
 import android.util.Log;
 
 import net.iGap.G;
-import net.iGap.adapter.items.chat.LogItem;
-import net.iGap.interfaces.OnStickerDownloaded;
+import net.iGap.observers.interfaces.OnStickerDownloaded;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestFileDownload;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class HelperDownloadSticker {
 
 
     public static ConcurrentHashMap<String, UpdateStickerListener> hashMap = new ConcurrentHashMap<>();
+    private static HashMap<String, String> downloadingQueue = new HashMap<>();
+    private static String TAG = "abbasiStickerDownloader";
 
     public interface UpdateStickerListener {
         void OnProgress(String path, String token, int progress);
@@ -25,6 +26,8 @@ public class HelperDownloadSticker {
     }
 
     public static void stickerDownload(String token, String extention, long avatarSize, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, UpdateStickerListener updateStickerListener) {
+
+        Log.i(TAG, "stickerDownload: " + token + " " + extention);
 
         try {
             String filePath = "";
@@ -46,7 +49,7 @@ public class HelperDownloadSticker {
                 }
             };
 
-            filePath = createPathFile(token, extention);
+            filePath = downloadStickerPath(token, extention);
             if (new File(filePath).exists()) {
                 if (updateStickerListener != null)
                     updateStickerListener.OnProgress(filePath, token, 100);
@@ -59,14 +62,17 @@ public class HelperDownloadSticker {
         }
     }
 
-    public static String createPathFile(String token, String extension) {
+    public static String downloadStickerPath(String token, String extension) {
 
-        String _mimeType = ".png";
+        String mimeType = ".png";
         int index = extension.lastIndexOf(".");
         if (index >= 0) {
-            _mimeType = extension.substring(index);
+            mimeType = extension.substring(index);
         }
-        return G.DIR_STICKER + "/" + token + _mimeType;
+
+        Log.i(TAG, "createPathFile: " + G.downloadDirectoryPath + "/" + token + mimeType);
+
+        return G.downloadDirectoryPath + "/" + token + mimeType;
     }
 
 

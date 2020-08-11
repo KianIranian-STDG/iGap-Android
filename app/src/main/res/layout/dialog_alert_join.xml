@@ -1,44 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="@dimen/dp80"
-  android:clickable="true"
-  android:gravity="center"
-  android:background="@android:color/transparent"
-  android:orientation="horizontal">
-
-
-  <net.iGap.module.CircleImageView
-    android:id="@+id/daj_img_room_picture"
-    android:layout_width="@dimen/dp60"
-    android:layout_height="@dimen/dp60"
-    android:layout_margin="@dimen/dp12"
-    android:src="@mipmap/difaultimage"
-
-    />
-
-  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:clickable="true"
+    android:gravity="center_horizontal">
+
+    <View
+        android:id="@+id/lineViewTop"
+        android:layout_width="@dimen/dp100"
+        android:layout_height="@dimen/dp4"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_gravity="center"
+        android:background="?iGapBottomSheetHeaderLine" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp6"
+        android:singleLine="true"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize" />
+
+    <net.iGap.module.CircleImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="@dimen/dp60"
+        android:layout_height="@dimen/dp60"
+        android:layout_margin="@dimen/dp12"
+        android:src="@mipmap/difaultimage" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/largeTextSize" />
 
     <TextView
-      android:id="@+id/daj_txt_room_name"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true"
-      android:text="hame khoba"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp18" />
+        android:id="@+id/tvMemberCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginBottom="@dimen/dp10"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textSize="@dimen/smallTextSize"
+        android:textColor="?iGapSubtitleTextColor" />
 
-    <TextView
-      android:id="@+id/daj_txt_member_count"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:singleLine="true"
-      style="?textSubColorSettingTheme"
-      android:text="12 member" />
-  </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:padding="@dimen/dp10">
 
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnJoin"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            android:text="@string/cancel"
+            android:textSize="@dimen/standardTextSize"
+            android:padding="@dimen/dp10"
+            android:textColor="?iGapSubtitleTextColor" />
+
+        <TextView
+            android:id="@+id/btnJoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnCancel"
+            android:text="@string/join"
+            android:textSize="@dimen/standardTextSize"
+            android:padding="@dimen/dp10"
+            android:textColor="?iGapPrimaryIconTextColor" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

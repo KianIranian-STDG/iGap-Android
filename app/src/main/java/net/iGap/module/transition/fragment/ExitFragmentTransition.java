@@ -22,10 +22,11 @@ import android.animation.ArgbEvaluator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+
+import androidx.fragment.app.FragmentManager;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -35,7 +36,7 @@ import net.iGap.module.transition.core.TransitionAnimation;
 public class ExitFragmentTransition {
     private final MoveData moveData;
     private Fragment fragment;
-    private android.support.v4.app.Fragment supportFragment;
+    private androidx.fragment.app.Fragment supportFragment;
     private TimeInterpolator interpolator;
     private Animator.AnimatorListener listener;
 
@@ -45,7 +46,7 @@ public class ExitFragmentTransition {
         this.moveData = moveData;
     }
 
-    public ExitFragmentTransition(final android.support.v4.app.Fragment fragment, MoveData moveData) {
+    public ExitFragmentTransition(final androidx.fragment.app.Fragment fragment, MoveData moveData) {
         this.supportFragment = fragment;
         this.moveData = moveData;
     }

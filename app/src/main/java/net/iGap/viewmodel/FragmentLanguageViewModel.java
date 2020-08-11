@@ -7,10 +7,13 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import android.content.SharedPreferences;
 import android.view.View;
+
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentLanguage;
@@ -18,129 +21,251 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 
 import java.util.Locale;
 
-import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.onRefreshActivity;
-
-public class FragmentLanguageViewModel {
+public class FragmentLanguageViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
-    private FragmentLanguage fragmentLanguage;
-    private String textLanguage;
 
+    private ObservableInt isFarsi = new ObservableInt(View.GONE);
+    private ObservableInt isEnglish = new ObservableInt(View.GONE);
+    private ObservableInt isArabic = new ObservableInt(View.GONE);
+    private ObservableInt isFrance = new ObservableInt(View.GONE);
+    private ObservableInt isRussian = new ObservableInt(View.GONE);
+    private ObservableInt isKurdi = new ObservableInt(View.GONE);
+    private ObservableInt isAzeri = new ObservableInt(View.GONE);
+    private SingleLiveEvent<String> refreshActivityForChangeLanguage = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> goBack = new SingleLiveEvent<>();
 
-    public FragmentLanguageViewModel(FragmentLanguage fragmentLanguage) {
-        this.fragmentLanguage = fragmentLanguage;
-        getInfo();
+    public FragmentLanguageViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+        String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        if (textLanguage != null) {
+            switch (textLanguage) {
+                case "English":
+                    isEnglish.set(View.VISIBLE);
+                    break;
+                case "فارسی":
+                    isFarsi.set(View.VISIBLE);
+                    break;
+                case "العربی":
+                    isArabic.set(View.VISIBLE);
+                    break;
+                case "Français":
+                    isFrance.set(View.VISIBLE);
+                    break;
+                case "Russian":
+                    isRussian.set(View.VISIBLE);
+                    break;
+                case "کوردی":
+                    isKurdi.set(View.VISIBLE);
+                    break;
+                case "آذری":
+                    isAzeri.set(View.VISIBLE);
+                    break;
+            }
+        }
     }
 
-    //===============================================================================
-    //================================Event Listeners================================
-    //===============================================================================
+    public ObservableInt getIsFarsi() {
+        return isFarsi;
+    }
 
-    public void onClickEnglish(View v) {
+    public ObservableInt getIsEnglish() {
+        return isEnglish;
+    }
+
+    public ObservableInt getIsArabic() {
+        return isArabic;
+    }
+
+    public ObservableInt getIsFrance() {
+        return isFrance;
+    }
+
+    public ObservableInt getIsRussian() {
+        return isRussian;
+    }
+
+    public ObservableInt getIsKurdi() {
+        return isKurdi;
+    }
+
+    public ObservableInt getIsAzeri() {
+        return isAzeri;
+    }
+
+    public SingleLiveEvent<String> getRefreshActivityForChangeLanguage() {
+        return refreshActivityForChangeLanguage;
+    }
+
+    public SingleLiveEvent<Boolean> getGoBack() {
+        return goBack;
+    }
+
+    public void onClickEnglish() {
         if (!G.selectedLanguage.equals("en")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "English").apply();
             G.selectedLanguage = "en";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = false;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = false;
-            if (onRefreshActivity != null) {
-                FragmentLanguage.languageChanged = true;
-                G.isRestartActivity = true;
-                onRefreshActivity.refresh("en");
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("en");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
         }
-
-        if (MusicPlayer.updateName != null) {
-            MusicPlayer.updateName.rename();
-        }
-
-        fragmentLanguage.removeFromBaseFragment(fragmentLanguage);
     }
 
-    public void onClickFarsi(View v) {
-        if (!G.selectedLanguage.equals("fa")) {
+    public void onClickRussian() {
+        if (!G.selectedLanguage.equals("ru")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
+            editor.putString(SHP_SETTING.KEY_LANGUAGE, "Russian");
             editor.apply();
+            G.selectedLanguage = "ru";
+            HelperCalander.isPersianUnicode = false;
+            HelperCalander.isLanguagePersian = false;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = false;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("ru");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+            updateLocalDateTime();
+        }
+        goBack.setValue(true);
+    }
+
+    public void onClickFrance() {
+        if (!G.selectedLanguage.equals("fr")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "Français").apply();
+            G.selectedLanguage = "fr";
+            HelperCalander.isPersianUnicode = false;
+            HelperCalander.isLanguagePersian = false;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = false;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("fr");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    public void onClickFarsi() {
+        if (!G.selectedLanguage.equals("fa")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "فارسی").apply();
             G.selectedLanguage = "fa";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = true;
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = true;
-            if (onRefreshActivity != null) {
-                FragmentLanguage.languageChanged = true;
-                G.isRestartActivity = true;
-                onRefreshActivity.refresh("fa");
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("fa");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
         }
-
-        if (MusicPlayer.updateName != null) {
-            MusicPlayer.updateName.rename();
-        }
-
-        fragmentLanguage.removeFromBaseFragment(fragmentLanguage);
     }
 
-    public void onClickArabi(View v) {
-
+    public void onClickArabic() {
         if (!G.selectedLanguage.equals("ar")) {
             HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SHP_SETTING.KEY_LANGUAGE, "العربی");
-            editor.apply();
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "العربی").apply();
             G.selectedLanguage = "ar";
-            G.updateResources(G.currentActivity.getBaseContext());
             HelperCalander.isPersianUnicode = true;
             HelperCalander.isLanguagePersian = false;
             HelperCalander.isLanguageArabic = true;
             G.isAppRtl = true;
-
-            if (onRefreshActivity != null) {
-                FragmentLanguage.languageChanged = true;
-                G.isRestartActivity = true;
-                onRefreshActivity.refresh("ar");
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("ar");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
             }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+    public void onClickKurdi() {
+        if (!G.selectedLanguage.equals("ur")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "کوردی").apply();
+            G.selectedLanguage = "ur";
+            HelperCalander.isPersianUnicode = true;
+            HelperCalander.isLanguagePersian = true;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = true;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("ur");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    //آذری - باکو لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+    public void onClickAzeri() {
+        if (!G.selectedLanguage.equals("iw")) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE);
+            sharedPreferences.edit().putString(SHP_SETTING.KEY_LANGUAGE, "آذری").apply();
+            G.selectedLanguage = "iw";
+            HelperCalander.isPersianUnicode = true;
+            HelperCalander.isLanguagePersian = true;
+            HelperCalander.isLanguageArabic = false;
+            G.isAppRtl = true;
+            FragmentLanguage.languageChanged = true;
+            refreshActivityForChangeLanguage.setValue("iw");
+            if (MusicPlayer.updateName != null) {
+                MusicPlayer.updateName.rename();
+            }
+            updateLocalDateTime();
+        } else {
+            goBack.setValue(true);
+        }
+    }
+
+    private void updateLocalDateTime() {
+
+        switch (G.selectedLanguage) {
+            case "fa":
+            case "iw": //azeri
+            case "ur"://kurdi
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 1).apply();//shamsi
+                break;
+            case "ar":
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 2).apply();//hijri
+                break;
+            default:
+                sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, 0).apply();//miladi
         }
 
-        if (MusicPlayer.updateName != null) {
-            MusicPlayer.updateName.rename();
+        if (G.onDateChanged != null) {
+            G.onDateChanged.onChange();
         }
-
-        fragmentLanguage.removeFromBaseFragment(fragmentLanguage);
     }
-
-    public boolean isEnglish() {
-        return textLanguage.equals("English") ? true : false;
-    }
-
-    public boolean isFarsi() {
-        return textLanguage.equals("فارسی") ? true : false;
-    }
-
-    public boolean isArabi() {
-        return textLanguage.equals("العربی") ? true : false;
-    }
-
-
-    //===============================================================================
-    //====================================Methods====================================
-    //===============================================================================
-
-    private void getInfo() {
-        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
-    }
-
 
 }

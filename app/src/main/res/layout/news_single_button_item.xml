@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/iGapButton"
+        android:id="@+id/btn1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp52"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/dp12"
+        android:layout_marginLeft="@dimen/dp12"
+        android:layout_marginEnd="@dimen/dp12"
+        android:layout_marginRight="@dimen/dp12"
+        android:layout_marginTop="@dimen/dp1"
+        android:layout_marginBottom="@dimen/dp1"
+        android:textSize="@dimen/dp16"
+        android:text="..."
+        app:backgroundTint="@color/news_red"
+        app:cornerRadius="3dp"
+        app:cardUseCompatPadding="true" />
+
+</LinearLayout>

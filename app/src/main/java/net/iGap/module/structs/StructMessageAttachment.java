@@ -1,27 +1,27 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module.structs;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
+import androidx.annotation.Nullable;
+
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmAvatar;
 
 import java.io.File;
-
-import io.realm.Realm;
 
 public class StructMessageAttachment implements Parcelable {
     public static final Parcelable.Creator<StructMessageAttachment> CREATOR = new Parcelable.Creator<StructMessageAttachment>() {
@@ -140,27 +140,17 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
-        Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-        if (realmAttachment == null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
-                    messageAttachment.setLocalFilePath(path);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            if (realmAttachment == null) {
+                RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
+                messageAttachment.setLocalFilePath(path);
+            } else {
+                if (realmAttachment.getLocalFilePath() == null) {
+                    realmAttachment.setLocalFilePath(path);
                 }
-            });
-        } else {
-            if (realmAttachment.getLocalFilePath() == null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmAttachment.setLocalFilePath(path);
-                    }
-                });
             }
-        }
-        realm.close();
+        });
     }
 
     @Nullable
@@ -170,25 +160,15 @@ public class StructMessageAttachment implements Parcelable {
 
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
-        Realm realm = Realm.getDefaultInstance();
-        final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-        if (realmAttachment == null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
-                    messageAttachment.setLocalThumbnailPath(localPath);
-                }
-            });
-        } else {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmAttachment.setLocalThumbnailPath(localPath);
-                }
-            });
-        }
-        realm.close();
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            if (realmAttachment == null) {
+                RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
+                messageAttachment.setLocalThumbnailPath(localPath);
+            } else {
+                realmAttachment.setLocalThumbnailPath(localPath);
+            }
+        });
     }
 
     public boolean isFileExistsOnLocal() {

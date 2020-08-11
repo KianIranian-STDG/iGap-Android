@@ -10,9 +10,11 @@
 
 package net.iGap.helper;
 
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.util.Log;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
@@ -35,18 +37,27 @@ public class HelperError {
             case 2:
                 if (minorCode == 1) {
                     G.userLogin = false;
-                    error = G.fragmentActivity.getResources().getString(R.string.E_2);
+//                    error = G.fragmentActivity.getResources().getString(R.string.E_2);
                     LoginActions.login();
                 }
                 break;
             case 3: //Error 3 - NEW_CLIENT_IN_SESSION (New client connected in this session , so you will be kicked out)
-                G.allowForConnect = false;
+                break;
+            case 4:
+                if (minorCode == 14) {
+                    error = G.fragmentActivity.getResources().getString(R.string.E_4_14);
+                } else if (minorCode == 9)
+                    error = G.fragmentActivity.getResources().getString(R.string.restrictions_on_sending_messages);
                 break;
             case 5:
                 //if (minorCode == 1) error = "time out  server not response";
                 break;
-            case 7:
-                WebSocketClient.getInstance().disconnect();
+            case 7:// socket connected to not ok core
+                WebSocketClient.getInstance().disconnectSocket(true);
+                break;
+            case 8://session is terminate
+                Log.wtf(HelperError.class.getName(), "case 8:");
+                G.logoutAccount.postValue(true);
                 break;
             case 9:
                 /*if (G.currentActivity != null) {
@@ -58,14 +69,17 @@ public class HelperError {
                 break;
             case 109:
                 error = G.fragmentActivity.getResources().getString(R.string.E_109);
-                HelperLogout.logout();
+                Log.wtf(HelperError.class.getName(), "case 109:");
+                G.logoutAccount.postValue(true);
                 break;
             case 110:
-                error = G.fragmentActivity.getResources().getString(R.string.E_110);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_110);
                 break;
             case 111:
                 if (minorCode != 4) {
-                    HelperLogout.logout();
+                    Log.wtf(HelperError.class.getName(), "case 111:");
+                    G.logoutAccount.postValue(true);
                 } else {
                     error = G.fragmentActivity.getResources().getString(R.string.E_111);
                 }
@@ -74,22 +88,32 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_112);
                 break;
             case 113:
-                error = G.fragmentActivity.getResources().getString(R.string.E_113);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_113);
                 break;
             case 114:
                 error = G.fragmentActivity.getResources().getString(R.string.E_114);
                 break;
             case 115:
-                error = G.fragmentActivity.getResources().getString(R.string.E_115);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_115);
                 break;
             case 116:
                 error = G.fragmentActivity.getResources().getString(R.string.E_116);
+                break;
+            case 118:
+                if (minorCode == 5) {
+                    error = G.fragmentActivity.getResources().getString(R.string.E_118_5);
+                }
+                if (minorCode == 7)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_118);
                 break;
             case 122:
                 error = G.fragmentActivity.getResources().getString(R.string.E_122);
                 break;
             case 123:
-                error = G.fragmentActivity.getResources().getString(R.string.E_123);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_123);
                 break;
             case 124:
                 if (minorCode == 1) {
@@ -103,7 +127,8 @@ public class HelperError {
                 }
                 break;
             case 125:
-                error = G.fragmentActivity.getResources().getString(R.string.E_125);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_125);
                 break;
             case 154:
                 if (minorCode == 1) {
@@ -144,7 +169,8 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_200);
                 break;
             case 201:
-                error = G.fragmentActivity.getResources().getString(R.string.E_201);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_201);
                 break;
             case 202:
                 error = G.fragmentActivity.getResources().getString(R.string.E_202);
@@ -174,7 +200,7 @@ public class HelperError {
                 break;
 
             case 213:
-                if (minorCode == 1)
+                if (minorCode == 1 && BuildConfig.DEBUG)
                     error = G.fragmentActivity.getResources().getString(R.string.E_213);
                 break;
             case 214:
@@ -186,7 +212,8 @@ public class HelperError {
                     error = G.fragmentActivity.getResources().getString(R.string.E_218);
                 break;
             case 219:
-                error = G.fragmentActivity.getResources().getString(R.string.E_219);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_219);
                 break;
             case 220:
                 error = G.fragmentActivity.getResources().getString(R.string.E_220);
@@ -205,7 +232,8 @@ public class HelperError {
                 }
                 break;
             case 301:
-                error = G.fragmentActivity.getResources().getString(R.string.E_301);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_301);
                 break;
 
             case 302:
@@ -220,13 +248,18 @@ public class HelperError {
                 }
                 break;
             case 303:
-                error = G.fragmentActivity.getResources().getString(R.string.E_303);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_303);
                 break;
             case 304:
                 error = G.fragmentActivity.getResources().getString(R.string.E_304);
                 break;
             case 305:
                 error = G.fragmentActivity.getResources().getString(R.string.E_305);
+                break;
+            case 308:
+                if (minorCode == 18)
+                    error = G.fragmentActivity.getResources().getString(R.string.restrictions_on_sending_messages);
                 break;
 
             case 3356:
@@ -247,7 +280,8 @@ public class HelperError {
                 }
                 break;
             case 319:
-                error = G.fragmentActivity.getResources().getString(R.string.E_319);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_319);
                 break;
             case 320:
                 error = G.fragmentActivity.getResources().getString(R.string.E_320);
@@ -256,7 +290,8 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_321);
                 break;
             case 322:
-                error = G.fragmentActivity.getResources().getString(R.string.E_322);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_322);
                 break;
             case 323:
                 error = G.fragmentActivity.getResources().getString(R.string.E_323);
@@ -283,7 +318,8 @@ public class HelperError {
                 }
                 break;
             case 328:
-                error = G.fragmentActivity.getResources().getString(R.string.E_328);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_328);
                 break;
             case 329:
                 error = G.fragmentActivity.getResources().getString(R.string.E_329);
@@ -299,8 +335,9 @@ public class HelperError {
                 }
                 break;
             case 331:
-                if (minorCode == 1)
-                    error = G.fragmentActivity.getResources().getString(R.string.E_331);
+                if (BuildConfig.DEBUG)
+                    if (minorCode == 1)
+                        error = G.fragmentActivity.getResources().getString(R.string.E_331);
                 break;
             case 332:
                 if (minorCode == 1) {
@@ -311,7 +348,7 @@ public class HelperError {
                 break;
 
             case 333:
-                if (minorCode == 1)
+                if (minorCode == 1 && BuildConfig.DEBUG)
                     error = G.fragmentActivity.getResources().getString(R.string.E_333);
                 break;
             case 334:
@@ -322,7 +359,7 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_335);
                 break;
             case 336:
-                if (minorCode == 1)
+                if (minorCode == 1 && BuildConfig.DEBUG)
                     error = G.fragmentActivity.getResources().getString(R.string.E_336);
                 break;
             case 337:
@@ -415,13 +452,15 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_610);
                 break;
             case 611:
-                error = G.fragmentActivity.getResources().getString(R.string.E_611);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_611);
                 break;
             case 612:
                 error = G.fragmentActivity.getResources().getString(R.string.E_612);
                 break;
             case 613:
-                error = G.fragmentActivity.getResources().getString(R.string.E_613);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_613);
                 break;
             case 614:
                 //error = G.fragmentActivity.getResources().getString(R.string.E_614);
@@ -435,7 +474,8 @@ public class HelperError {
                 break;
 
             case 616:
-                error = G.fragmentActivity.getResources().getString(R.string.E_616);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_616);
                 break;
             case 617:
                 error = "";// G.fragmentActivity.getResources().getString(R.string.E_617);
@@ -472,17 +512,20 @@ public class HelperError {
                 if (minorCode == 1) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_1);
                 } else if (minorCode == 2) {
-                    error = G.fragmentActivity.getResources().getString(R.string.E_713_2);
+                    if (BuildConfig.DEBUG)
+                        error = G.fragmentActivity.getResources().getString(R.string.E_713_2);
                 } else if (minorCode == 3) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_3);
                 } else if (minorCode == 4) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_4);
                 } else if (minorCode == 5) {
-                    error = G.fragmentActivity.getResources().getString(R.string.E_713_5);
+                    if (BuildConfig.DEBUG)
+                        error = G.fragmentActivity.getResources().getString(R.string.E_713_5);
                 }
                 break;
             case 714:
-                error = G.fragmentActivity.getResources().getString(R.string.E_714);
+                if (BuildConfig.DEBUG)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_714);
                 break;
             case 715:
                 error = G.fragmentActivity.getResources().getString(R.string.E_715);
@@ -628,7 +671,7 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_10168);
 
                 break;
-                
+
             case 99999: // client errors
                 error = "Offset is negative";
             case -1: // client errors
@@ -654,23 +697,18 @@ public class HelperError {
 
     public static void showSnackMessage(final String message, boolean isVibrate) {
 
+        if (message == null)
+            return;
+
         if (isVibrate) {
             AppUtils.setVibrator(200);
         }
 
         if (message.length() > 0 && G.currentActivity != null) {
-            G.currentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
-                    snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
-                }
+            G.currentActivity.runOnUiThread(() -> {
+                final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
+                snack.setAction(R.string.cancel, view -> snack.dismiss());
+                snack.show();
             });
         }
     }

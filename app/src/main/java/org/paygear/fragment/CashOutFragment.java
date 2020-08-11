@@ -2,36 +2,33 @@ package org.paygear.fragment;
 
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;
 
 import ir.radsense.raadcore.OnFragmentInteraction;
-import ir.radsense.raadcore.app.RaadToolBar;
-import ir.radsense.raadcore.utils.Typefaces;
 
 
 public class CashOutFragment extends Fragment {
 
-    RaadToolBar appBar;
     ViewPager mPager;
     WalletPagerAdapter mPagerAdapter;
 
@@ -63,17 +60,29 @@ public class CashOutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_cash_out, container, false);
+        View view = inflater.inflate(R.layout.fragment_cash_out, container, false);
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setTitle(getString(isCashOut ? R.string.cashout_taxi : R.string.charge_paygear));
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
-        appBar.showBack();
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(isCashOut ? R.string.cashout_taxi : R.string.charge_paygear))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         mPager = view.findViewById(R.id.view_pager);
@@ -85,20 +94,19 @@ public class CashOutFragment extends Fragment {
             mPager.setCurrentItem(1);
         }
 
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+        /*for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             if (tab != null) {
                 TextView textView = new AppCompatTextView(getContext());
                 textView.setId(android.R.id.text1);
                 textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextColor(Color.WHITE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_MEDIUM));
 
                 tab.setCustomView(textView);
             }
-        }
+        }*/
 
         return view;
     }

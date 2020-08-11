@@ -10,16 +10,17 @@
 
 package net.iGap.request;
 
+import net.iGap.observers.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.proto.ProtoUserProfileRepresentative;
 
 public class RequestUserProfileSetRepresentative {
 
-    public void userProfileSetRepresentative(String mobileNumber) {
+    public void userProfileSetRepresentative(String mobileNumber, OnUserProfileSetRepresentative callback) {
 
         ProtoUserProfileRepresentative.UserProfileSetRepresentative.Builder builder = ProtoUserProfileRepresentative.UserProfileSetRepresentative.newBuilder();
         builder.setPhoneNumber(mobileNumber);
 
-        RequestWrapper requestWrapper = new RequestWrapper(152, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(152, builder, callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

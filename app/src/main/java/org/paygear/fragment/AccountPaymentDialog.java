@@ -7,15 +7,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +25,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
-
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -49,7 +49,6 @@ import org.paygear.model.Transport;
 import org.paygear.utils.RSAUtils;
 import org.paygear.web.Web;
 import org.paygear.widget.BankCardView;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -548,12 +547,12 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
             }
 
             if (mOrder == null) {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);
@@ -582,12 +581,12 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
 //                mCreditSwitch.setEnabled(mOrder.amount <= RaadApp.paygearCard.balance);
             }
             if (mOrder == null) {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.get()
+                Picasso.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);

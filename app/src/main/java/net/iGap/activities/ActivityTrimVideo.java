@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -18,18 +18,20 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.igap.video.trim.K4LVideoTrimmer;
+import net.igap.video.trim.interfaces.OnK4LVideoListener;
+import net.igap.video.trim.interfaces.OnTrimVideoListener;
 
 import java.io.File;
 
-import life.knowledge4.videotrimmer.K4LVideoTrimmer;
-import life.knowledge4.videotrimmer.interfaces.OnK4LVideoListener;
-import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
 
 public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoListener, OnK4LVideoListener {
 
@@ -47,9 +49,11 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_video_trime);
 
-        txtDetail = (TextView) findViewById(R.id.stfaq_txt_detail);
-        txtTime = (TextView) findViewById(R.id.stfaq_txt_time);
-        txtSize = (TextView) findViewById(R.id.stfaq_txt_size);
+        txtDetail = findViewById(R.id.stfaq_txt_detail);
+        txtTime = findViewById(R.id.stfaq_txt_time);
+        txtSize = findViewById(R.id.stfaq_txt_size);
+        View btnBack = findViewById(R.id.pu_ripple_back);
+        btnBack.setOnClickListener(v -> onBackPressed());
         final Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
@@ -63,9 +67,16 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
         setInfo(path);
 
-        K4LVideoTrimmer videoTrimmer = (K4LVideoTrimmer) findViewById(R.id.timeLine);
-        progressBar = (ProgressBar) findViewById(R.id.fvt_progress);
+        K4LVideoTrimmer videoTrimmer = findViewById(R.id.timeLine);
+        progressBar = findViewById(R.id.fvt_progress);
         if (videoTrimmer != null) {
+
+            Uri uri = Uri.parse(path);
+            if (uri == null) {
+                onBackPressed();
+                return;
+            }
+
             videoTrimmer.setVideoURI(Uri.parse(path));
             videoTrimmer.setMaxDuration(duration);
             videoTrimmer.setOnTrimVideoListener(this);
@@ -81,7 +92,7 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
             File file = new File(path);
             if (file.exists()) {
-                txtSize.setText("," + net.iGap.module.FileUtils.formatFileSize((long) file.length()));
+                txtSize.setText("," + net.iGap.module.FileUtils.formatFileSize(file.length()));
             }
 
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -124,10 +135,20 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     @Override
     public void getResult(final Uri uri) {
 
-        Intent data = new Intent();
-        data.setData(uri);
-        setResult(Activity.RESULT_OK, data);
-        finish();
+        File file = new File(uri.getPath());
+        //when file was not correct length is between digit 1082
+        if (file.length() <= 1082) {
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(this.getApplicationContext(), R.string.trim_error, Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            Intent data = new Intent();
+            data.setData(uri);
+            setResult(Activity.RESULT_OK, data);
+            finish();
+        }
+
     }
 
     @Override
@@ -142,7 +163,8 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
 
     @Override
     public void onError(String message) {
-
+        Log.e("nazariii", "onError: " + message);
+        G.handler.post(this::onBackPressed);
     }
 
     private String getRealPathFromURI(Uri contentURI) {

@@ -37,8 +37,7 @@ public class RealmRoomMessageWalletCardToCard extends RealmObject {
     private int requestTime;
 
 
-    public static RealmRoomMessageWalletCardToCard put(final ProtoGlobal.RoomMessageWallet.CardToCard input) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageWalletCardToCard put(Realm realm, final ProtoGlobal.RoomMessageWallet.CardToCard input) {
         RealmRoomMessageWalletCardToCard messageWallet = realm.createObject(RealmRoomMessageWalletCardToCard.class);
 
         messageWallet.setFromUserId(input.getFromUserId());
@@ -56,7 +55,6 @@ public class RealmRoomMessageWalletCardToCard extends RealmObject {
         messageWallet.setRrn(input.getRrn());
         messageWallet.setRequestTime(input.getRequestTime());
 
-        realm.close();
 
         return messageWallet;
     }

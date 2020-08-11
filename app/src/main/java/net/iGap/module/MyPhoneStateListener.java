@@ -1,13 +1,11 @@
 package net.iGap.module;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import net.iGap.G;
-import net.iGap.request.RequestSignalingSessionHold;
-import net.iGap.webrtc.WebRTC;
+import net.iGap.module.webrtc.WebRTC;
+import net.iGap.viewmodel.controllers.CallManager;
 
 
 public class MyPhoneStateListener extends PhoneStateListener {
@@ -15,72 +13,62 @@ public class MyPhoneStateListener extends PhoneStateListener {
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
     public static boolean isBlutoothOn = false;
 
-
+    /**
+     * in this function we observe phone's state changes. and we manage two things:
+     * 1- manage music player state when phone state changes
+     * 2- manage call state (video or voice) when phone state changes
+     *
+     * @param state
+     * @param incomingNumber
+     */
     public void onCallStateChanged(int state, String incomingNumber) {
-        if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-          /*  if (G.onRejectCallStatus != null)
-                G.onRejectCallStatus.setReject(true);*/
-    /*        try {
-                WebRTC.getInstance().leaveCall();
-            }catch (Exception e){}*/
 
-            new RequestSignalingSessionHold().signalingSessionHold(true);
-            WebRTC.getInstance().muteSound();
-            WebRTC.getInstance().pauseVideoCapture();
-
-
-            G.isCalling = true;
-        } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-
-            if (G.isVideoCallRinging) {
-                try {
-                    WebRTC.getInstance().leaveCall();
-                } catch (Exception e) {
-                }
-
-              /*  if (G.onRejectCallStatus != null)
-                    G.onRejectCallStatus.setReject(true);*/
-            }
-            G.isCalling = true;
-            G.isVideoCallRinging = false;
-        } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-            WebRTC.getInstance().unMuteSound();
-            WebRTC.getInstance().startVideoCapture();
-
-            new RequestSignalingSessionHold().signalingSessionHold(false);
-            WebRTC.getInstance().unMuteSound();
-            WebRTC.getInstance().startVideoCapture();
-
-            G.isCalling = false;
-        }
-
-
-        if (lastPhoneState == state || !MusicPlayer.isMusicPlyerEnable) {
-
-            return;
-        } else {
-
-            lastPhoneState = state;
-
+        // managing music player state
+        if (lastPhoneState != state && MusicPlayer.isMusicPlyerEnable) {
             if (state == TelephonyManager.CALL_STATE_RINGING) {
                 pauseSoundIfPlay();
-
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-
                 if (MusicPlayer.pauseSoundFromCall) {
                     MusicPlayer.pauseSoundFromCall = false;
                     MusicPlayer.playSound();
-
-                    //if (isBlutoothOn) {
-                    //    isBlutoothOn = false;
-                    //
-                    //    AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-                    //    am.setBluetoothScoOn(true);
-                    //}
                 }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 pauseSoundIfPlay();
             }
+        }
+        // if last phone state does not change so there is nothing to do: preventing from multiple calls to proto and server
+        if (lastPhoneState == state)
+            return;
+        else
+            lastPhoneState = state;
+        // if webRTC is not active thus there is nothing to do in our side.
+        if (!WebRTC.isAlive())
+            return;
+        // in this part we manage call and webRTC state when phone state changes.
+        if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+
+            CallManager.getInstance().holdCall(true);
+            WebRTC.getInstance().toggleSound(false);
+            WebRTC.getInstance().pauseVideoCapture();
+
+            G.isCalling = true;
+        } else if (state == TelephonyManager.CALL_STATE_RINGING) {
+            if (CallManager.getInstance().isRinging()) {
+                try {
+                    // TODO: 5/9/2020 do we need this anymore? 
+                    CallManager.getInstance().leaveCall();
+                } catch (Exception e) {
+                }
+
+            }
+            G.isCalling = true;
+        } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+
+            CallManager.getInstance().holdCall(false);
+            WebRTC.getInstance().toggleSound(true);
+            WebRTC.getInstance().startVideoCapture();
+
+            G.isCalling = false;
         }
     }
 
@@ -91,18 +79,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
             MusicPlayer.pauseSound();
             MusicPlayer.pauseSoundFromCall = true;
 
-            //AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-
-            //if (am.isBluetoothScoOn()) {
-            //    isBlutoothOn = true;
-            //    am.setBluetoothScoOn(false);
-            //
-            //    try {
-            //        am.stopBluetoothSco();
-            //    } catch (Exception e) {
-            //        HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
-            //    }
-            //}
         }
     }
 }

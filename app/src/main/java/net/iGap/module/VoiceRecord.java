@@ -1,18 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -25,7 +23,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnVoiceRecord;
+import net.iGap.observers.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.IOException;
@@ -64,14 +62,14 @@ public class VoiceRecord {
     private int firstY;
 
     public VoiceRecord(Context context, View layoutMic, View layoutAttach, OnVoiceRecord listener) {
-        imgPicRecord = (ImageView) layoutMic.findViewById(R.id.img_pic_record);
-        txtTimeRecord = (TextView) layoutMic.findViewById(R.id.txt_time_record);
-        txtMillisecond = (TextView) layoutMic.findViewById(R.id.txt_time_mili_secend);
-        layoutMicLock = (LinearLayout) layoutMic.findViewById(R.id.lmr_layout_mic);
-        txt_slide_to_cancel = (TextView) layoutMic.findViewById(R.id.txt_slideto_cancel);
-        btnMicLayout = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_btn_mic_layout);
-        btnLock = (MaterialDesignTextView) layoutMic.findViewById(R.id.lmr_txt_Lock);
-        AndroidUtils.setBackgroundShapeColor(btnMicLayout, Color.parseColor(G.appBarColor));
+        imgPicRecord = layoutMic.findViewById(R.id.img_pic_record);
+        txtTimeRecord = layoutMic.findViewById(R.id.txt_time_record);
+        txtMillisecond = layoutMic.findViewById(R.id.txt_time_mili_secend);
+        layoutMicLock = layoutMic.findViewById(R.id.lmr_layout_mic);
+        txt_slide_to_cancel = layoutMic.findViewById(R.id.txt_slideto_cancel);
+        btnMicLayout = layoutMic.findViewById(R.id.lmr_btn_mic_layout);
+        btnLock = layoutMic.findViewById(R.id.lmr_txt_Lock);
+        AndroidUtils.setBackgroundShapeColor(btnMicLayout, new Theme().getPrimaryColor(context));
         this.layoutAttach = layoutAttach;
         this.layoutMic = layoutMic;
         this.onVoiceRecordListener = listener;
@@ -114,6 +112,7 @@ public class VoiceRecord {
                 if (continuePlay) {
                     continuePlay = false;
                     MusicPlayer.playSound();
+                    MusicPlayer.playerStatusObservable.setValue(MusicPlayer.PLAY);
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
@@ -126,6 +125,7 @@ public class VoiceRecord {
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
                 MusicPlayer.pauseSound();
+                MusicPlayer.playerStatusObservable.setValue(MusicPlayer.PAUSE);
                 MusicPlayer.pauseSoundFromIGapCall = true;
                 continuePlay = true;
             }
@@ -322,7 +322,7 @@ public class VoiceRecord {
         txt_slide_to_cancel.setAlpha(1);
         txt_slide_to_cancel.setText(R.string.cancel);
         txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.red));
-        txt_slide_to_cancel.setTypeface(Typeface.DEFAULT_BOLD);
+        //txt_slide_to_cancel.setTypeface(Typeface.DEFAULT_BOLD);
         btnMicLayout.setText(R.string.md_send_button);
         btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.white));
         btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp16));
@@ -336,8 +336,6 @@ public class VoiceRecord {
         txt_slide_to_cancel.setPadding(0, 0, 0, 0);
         txt_slide_to_cancel.setText(R.string.slide_to_cancel_en);
         txt_slide_to_cancel.setAlpha(1);
-        txt_slide_to_cancel.setTextColor(G.context.getResources().getColor(R.color.gray));
-        txt_slide_to_cancel.setTypeface(Typeface.DEFAULT);
         btnMicLayout.setText(R.string.md_voice_message_microphone_button);
         btnMicLayout.setTextColor(G.context.getResources().getColor(R.color.black_register));
         btnMicLayout.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp26));

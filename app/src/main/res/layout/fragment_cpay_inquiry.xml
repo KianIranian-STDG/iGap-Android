@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FragmentCPayInquiryViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.cPay.FragmentCPayInquiry">
+
+        <LinearLayout
+            android:id="@+id/fci_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fci_lbl_plaque"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp32"
+            android:text="@string/car_plaque"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fci_toolbar" />
+
+        <net.iGap.libs.PlaqueView
+            android:id="@+id/fci_plaque_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fci_lbl_plaque"
+            app:pv_edit_mode="false" />
+
+        <TextView
+            android:id="@+id/fci_txt_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp32"
+            android:gravity="right"
+            android:text="@{viewModel.inquiryResultText}"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fci_plaque_view" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_car_"
+            style="@style/iGapButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp52"
+            android:minWidth="@dimen/dp200"
+            android:onClick="@{()-> viewModel.onInquiryClicked()}"
+            android:text="@string/inquiry"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fci_txt_result" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

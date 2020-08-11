@@ -1,133 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <data>
+    <data>
 
-    <import type="android.view.View" />
+        <import type="android.view.View" />
 
-    <import type="android.graphics.Color" />
+        <import type="android.graphics.Color" />
 
-    <import type="org.paygear.WalletActivity" />
+        <import type="org.paygear.WalletActivity" />
 
 
-  </data>
+    </data>
 
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@{Color.parseColor(WalletActivity.backgroundTheme),default=@color/fragment_back}"
-      android:orientation="vertical"
-      tools:context="org.paygear.fragment.CardsFragment">
-
-    <!--<android.support.v7.widget.CardView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="-8dp"-->
-    <!--app:cardCornerRadius="1dp"-->
-    <!--app:cardElevation="@dimen/app_bar_card_view_elevation"-->
-    <!--app:cardMaxElevation="0dp"-->
-    <!--app:cardPreventCornerOverlap="false">-->
-
-    <ir.radsense.raadcore.app.RaadToolBar
-      android:id="@+id/app_bar"
-      android:layout_width="match_parent"
-      android:layout_height="?actionBarSize">
-
-      <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/back_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentLeft="true"
-        android:background="#00ffffff"
-        android:padding="8dp"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/ic_action_back_white" />
-
-      <android.support.v7.widget.AppCompatImageButton
-        android:id="@+id/setting_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentRight="true"
-        android:background="#00ffffff"
-        android:padding="8dp"
-        android:tint="@android:color/white"
-        android:scaleType="centerInside"
-        android:src="@drawable/settings_wallet" />
-
-      <android.support.v7.widget.AppCompatImageButton
-          android:id="@+id/WalletMenu"
-          android:layout_width="56dp"
-          android:layout_height="56dp"
-          android:layout_toLeftOf="@+id/setting_button"
-          android:background="#00ffffff"
-          android:padding="8dp"
-          android:scaleType="centerInside"
-          app:srcCompat="@drawable/ic_store_white_24dp" />
-
-    </ir.radsense.raadcore.app.RaadToolBar>
-
-    <!--</android.support.v7.widget.CardView>-->
-
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@{Color.parseColor(WalletActivity.backgroundTheme),default=@color/fragment_back}"
+        android:orientation="vertical"
+        tools:context="org.paygear.fragment.CardsFragment">
 
-      <ir.radsense.raadcore.widget.RecyclerRefreshLayout
-          android:id="@+id/refresh_layout"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/toolbarLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height" />
 
-        <FrameLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-          <ScrollView
-              android:id="@+id/scroll_view"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+            <ir.radsense.raadcore.widget.RecyclerRefreshLayout
+                android:id="@+id/refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/cards"
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ScrollView
+                        android:id="@+id/scroll_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/cards"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+
+                    </ScrollView>
+
+                    <ir.radsense.raadcore.widget.ProgressLayout
+                        android:id="@+id/progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </FrameLayout>
+
+            </ir.radsense.raadcore.widget.RecyclerRefreshLayout>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                app:cardElevation="6dp">
 
-            </LinearLayout>
+                <net.cachapa.expandablelayout.ExpandableLayout
+                    android:id="@+id/merchants_expandable_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    app:el_duration="300"
+                    app:el_expanded="false"
+                    app:el_parallax="0.5">
 
-          </ScrollView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/merchants_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
 
-          <ir.radsense.raadcore.widget.ProgressLayout
-              android:id="@+id/progress"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" />
-
-        </FrameLayout>
-
-      </ir.radsense.raadcore.widget.RecyclerRefreshLayout>
-
-      <android.support.v7.widget.CardView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          app:cardElevation="6dp">
-
-        <net.cachapa.expandablelayout.ExpandableLayout
-            android:id="@+id/merchants_expandable_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            app:el_duration="300"
-            app:el_expanded="false"
-            app:el_parallax="0.5">
-
-          <android.support.v7.widget.RecyclerView
-              android:id="@+id/merchants_recycler"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical" />
-
-        </net.cachapa.expandablelayout.ExpandableLayout>
-      </android.support.v7.widget.CardView>
-    </RelativeLayout>
-  </LinearLayout>
+                </net.cachapa.expandablelayout.ExpandableLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </LinearLayout>
 </layout>

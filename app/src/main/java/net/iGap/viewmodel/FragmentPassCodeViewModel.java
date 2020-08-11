@@ -14,33 +14,35 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.databinding.ObservableField;
-import android.graphics.Color;
 import android.hardware.fingerprint.FingerprintManager;
-import android.opengl.Visibility;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroupOverlay;
 import android.view.WindowManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
-import com.andrognito.patternlockview.utils.ResourceUtils;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentPassCodeBinding;
+import net.iGap.fragments.FragmentPassCode;
+import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperPreferences;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
 
 import java.util.List;
@@ -49,7 +51,6 @@ import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
-import static net.iGap.G.themeColor;
 
 public class FragmentPassCodeViewModel {
 
@@ -81,16 +82,17 @@ public class FragmentPassCodeViewModel {
     public ObservableField<Integer> rootPatternPassword = new ObservableField<>(View.GONE);
     public ObservableField<Integer> titlePassCodeVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> edtSetPasswordMaxLength = new ObservableField<>(20);
-    public ObservableField<Integer> rippleOkVisibility = new ObservableField<>(View.GONE);
+    public MutableLiveData<Integer> rippleOkVisibility = new MutableLiveData<>();
     public ObservableField<Integer> layoutModePassCode = new ObservableField<>(View.GONE);
     public ObservableField<Integer> vgToggleFingerPrintVisibility = new ObservableField<>(View.GONE);
-    private Realm realm;
+    public MutableLiveData<Boolean> passCodeStateChangeListener = new MutableLiveData<>();
     private boolean isPassCode;
     public boolean isPattern;
     private boolean isChangePattern;
     private boolean isFingerPrintCode;
     private String passCode;
     private String password;
+    private FragmentPassCode fragment;
     private int page = 0;
     private net.iGap.module.NumberPicker numberPickerMinutes;
     private boolean deviceHasFingerPrint;
@@ -121,19 +123,12 @@ public class FragmentPassCodeViewModel {
             if (!isPattern || isChangePattern) {
                 if (mPattern != null) {
                     if (mPattern.equals(PatternLockUtils.patternToString(binding.patternLockView, pattern))) {
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (realmUserInfo != null) {
-                                    realmUserInfo.setPattern(true);
-                                    realmUserInfo.setPassCode(true);
-                                    realmUserInfo.setPassCode(mPattern);
-                                    mPattern = null;
-                                    isPattern = true;
-                                    goToSettingPattern();
-                                }
-                            }
-                        });
+                        PassCode.getInstance().setPattern(true);
+                        PassCode.getInstance().setPassCode(true);
+                        PassCode.getInstance().setPassCode(mPattern);
+                        mPattern = null;
+                        isPattern = true;
+                        goToSettingPattern();
                     }
                 } else {
 
@@ -160,7 +155,8 @@ public class FragmentPassCodeViewModel {
     }
 
     private void goToSettingPattern() {
-        G.isPassCode = true;
+        PassCode.getInstance().setPassCode(true);
+        passCodeStateChangeListener.postValue(PassCode.getInstance().isPassCode());
         visibilityPatternLock.set(View.VISIBLE);
         vgTogglePassCodeVisibility.set(View.VISIBLE);
         visibilityChangePass.set(View.VISIBLE);
@@ -173,8 +169,9 @@ public class FragmentPassCodeViewModel {
     }
 
 
-    public FragmentPassCodeViewModel(FragmentPassCodeBinding fragmentPassCodeBinding) {
+    public FragmentPassCodeViewModel(FragmentPassCode fragment, FragmentPassCodeBinding fragmentPassCodeBinding) {
         this.binding = fragmentPassCodeBinding;
+        this.fragment = fragment;
         getInfo();
     }
 
@@ -197,14 +194,14 @@ public class FragmentPassCodeViewModel {
     public void onClickTogglePassCode(View v) {
 
         edtSetPasswordText.set("");
-        if (realmUserInfo != null) isPassCode = realmUserInfo.isPassCode();
+        if (realmUserInfo != null) isPassCode = PassCode.getInstance().isPassCode();
 
         if (!isPassCode) {
             page = 0;
             vgTogglePassCodeVisibility.set(View.GONE);
             rootEnterPassword.set(View.VISIBLE);
             rootSettingPassword.set(View.GONE);
-            rippleOkVisibility.set(View.VISIBLE);
+            rippleOkVisibility.setValue(View.VISIBLE);
             //txtSetPassword.setText(G.fragmentActivity.getResources().getString(R.string.enter_a_password));
             //titlePassCode.set("PIN");
             txtSetPassword.set(G.fragmentActivity.getResources().getString(R.string.enter_a_password));
@@ -231,25 +228,22 @@ public class FragmentPassCodeViewModel {
         visibilityChangePass.set(View.GONE);
         rootEnterPassword.set(View.GONE);
         rootSettingPassword.set(View.GONE);
-        rippleOkVisibility.set(View.GONE);
+        rippleOkVisibility.setValue(View.GONE);
         layoutModePassCode.set(View.GONE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
         editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
         editor.apply();
 
-        G.isPassCode = false;
+        PassCode.getInstance().setPassCode(false);
+        passCodeStateChangeListener.postValue(PassCode.getInstance().isPassCode());
+        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         edtSetPasswordText.set("");
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (realmUserInfo != null) {
-                    realmUserInfo.setPassCode(false);
-                    realmUserInfo.setPattern(false);
-                    realmUserInfo.setPassCode("");
-                }
-            }
-        });
+
+        PassCode.getInstance().setPassCode(false);
+        PassCode.getInstance().setPattern(false);
+        PassCode.getInstance().setPassCode("");
+
     }
 
     public void onClickTogglePatternPassCode(View view) {
@@ -260,18 +254,10 @@ public class FragmentPassCodeViewModel {
             rootPatternPassword.set(View.VISIBLE);
             visibilityCreateNewPattern.set(View.VISIBLE);
         } else {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (realmUserInfo != null) {
-                        realmUserInfo.setPassCode(false);
-                        realmUserInfo.setPattern(false);
-                        realmUserInfo.setPassCode("");
-                        disablePattern();
-                    }
-                }
-            });
-
+            PassCode.getInstance().setPassCode(false);
+            PassCode.getInstance().setPattern(false);
+            PassCode.getInstance().setPassCode("");
+            disablePattern();
         }
     }
 
@@ -284,16 +270,18 @@ public class FragmentPassCodeViewModel {
         visibilityChangePass.set(View.GONE);
         visibilityTactileFeedback.set(View.GONE);
         isPattern = false;
+        PassCode.getInstance().setPassCode(false);
+        passCodeStateChangeListener.postValue(PassCode.getInstance().isPassCode());
+        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_PATTERN_TACTILE_DRAWN, true);
         editor.apply();
-
     }
 
     public void onClickChangePassCode(View v) {
         if (realmUserInfo != null) {
-            isPassCode = realmUserInfo.isPassCode();
-            isPattern = realmUserInfo.isPattern();
+            isPassCode = PassCode.getInstance().isPassCode();
+            isPattern = PassCode.getInstance().isPattern();
         }
         if (isPassCode) {
             if (isPattern) {
@@ -309,7 +297,7 @@ public class FragmentPassCodeViewModel {
                 vgTogglePassCodeVisibility.set(View.GONE);
                 rootEnterPassword.set(View.VISIBLE);
                 rootSettingPassword.set(View.GONE);
-                rippleOkVisibility.set(View.VISIBLE);
+                rippleOkVisibility.setValue(View.VISIBLE);
                 //titlePassCode.setText("PIN");
                 titlePassCodeVisibility.set(View.GONE);
                 layoutModePassCode.set(View.VISIBLE);
@@ -324,25 +312,25 @@ public class FragmentPassCodeViewModel {
     }
 
     public void onClickChangeVgToggleFingerPrint(View v) {
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                if (realmUserInfo != null) {
-                    if (isFingerPrintCode) {
-                        realmUserInfo.setFingerPrint(false);
-                        isFingerPrint.set(false);
-                        isFingerPrintCode = false;
-                    } else {
-                        realmUserInfo.setFingerPrint(true);
-                        isFingerPrint.set(true);
-                        isFingerPrintCode = true;
+        DbManager.getInstance().doRealmTask(realm -> {
+            AsyncTransaction.executeTransactionWithLoading(fragment.getActivity(), realm, new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        if (isFingerPrintCode) {
+                            PassCode.getInstance().setFingerPrint(false);
+                            isFingerPrint.set(false);
+                            isFingerPrintCode = false;
+                        } else {
+                            PassCode.getInstance().setFingerPrint(true);
+                            isFingerPrint.set(true);
+                            isFingerPrintCode = true;
+                        }
                     }
                 }
-            }
+            });
         });
-
     }
 
 
@@ -381,29 +369,26 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
 
-                G.isPassCode = true;
+                PassCode.getInstance().setPassCode(true);
                 ActivityMain.isLock = false;
-                AppUtils.closeKeyboard(v);
+                passCodeStateChangeListener.setValue(PassCode.getInstance().isPassCode());
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        if (realmUserInfo != null) {
-                            realmUserInfo.setPassCode(true);
-                            realmUserInfo.setPattern(false);
-                            realmUserInfo.setPassCode(edtSetPasswordText.get());
-                            realmUserInfo.setKindPassCode(kindPassword);
-                        }
-                    }
-                });
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+
+                AppUtils.closeKeyboard(v);
+                PassCode.getInstance().setPassCode(true);
+                PassCode.getInstance().setPattern(false);
+                PassCode.getInstance().setPassCode(edtSetPasswordText.get());
+                PassCode.getInstance().setKindPassCode(kindPassword);
 
                 isTogglePassCode.set(true);
                 edtSetPasswordText.set("");
+
             } else {
                 AppUtils.closeKeyboard(v);
                 AppUtils.error(G.fragmentActivity.getResources().getString(R.string.Password_dose_not_match));
@@ -422,7 +407,7 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
@@ -450,7 +435,7 @@ public class FragmentPassCodeViewModel {
         View view1 = dialog.getCustomView();
 
         assert view1 != null;
-        numberPickerMinutes = (net.iGap.module.NumberPicker) view1.findViewById(R.id.numberPicker);
+        numberPickerMinutes = view1.findViewById(R.id.numberPicker);
         numberPickerMinutes.setMinValue(0);
         numberPickerMinutes.setMaxValue(4);
         //numberPickerMinutes.setWrapSelectorWheel(true);
@@ -533,7 +518,7 @@ public class FragmentPassCodeViewModel {
                     G.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
 
 
@@ -546,7 +531,7 @@ public class FragmentPassCodeViewModel {
                     G.currentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
 
         }
@@ -592,19 +577,20 @@ public class FragmentPassCodeViewModel {
     private void getInfo() {
 
         checkFingerPrint();
-        realm = Realm.getDefaultInstance();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
 
         binding.patternLockView.addPatternLockListener(mPatternLockViewListener);
 
         if (realmUserInfo != null) {
-            isPassCode = realmUserInfo.isPassCode();
-            isPattern = realmUserInfo.isPattern();
-            isFingerPrintCode = realmUserInfo.isFingerPrint();
-            password = realmUserInfo.getPassCode();
-            kindPassword = realmUserInfo.getKindPassCode();
+            isPassCode = PassCode.getInstance().isPassCode();
+            isPattern = PassCode.getInstance().isPattern();
+            isFingerPrintCode = PassCode.getInstance().isFingerPrint();
+            password = PassCode.getInstance().getPassCode();
+            kindPassword = PassCode.getInstance().getKindPassCode();
         }
 
 
@@ -638,7 +624,7 @@ public class FragmentPassCodeViewModel {
                 visibilityDescription.set(View.GONE);
                 rootEnterPassword.set(View.VISIBLE);
                 rootSettingPassword.set(View.GONE);
-                rippleOkVisibility.set(View.VISIBLE);
+                rippleOkVisibility.setValue(View.VISIBLE);
                 txtSetPassword.set(G.fragmentActivity.getResources().getString(R.string.enter_pass_code));
                 isTogglePassCode.set(true);
             }
@@ -690,21 +676,13 @@ public class FragmentPassCodeViewModel {
             if (fingerprintManager != null) {
                 if (!fingerprintManager.isHardwareDetected()) {
                     deviceHasFingerPrint = false;
-                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                    deviceHasFingerPrint = false;
-                } else {
-                    deviceHasFingerPrint = true;
-                }
+                } else deviceHasFingerPrint = fingerprintManager.hasEnrolledFingerprints();
             }
         }
     }
 
     private void maxLengthEditText(int numberOfLength) {
         edtSetPasswordMaxLength.set(numberOfLength);
-    }
-
-    public void onDestroy() {
-        realm.close();
     }
 
     public void buttonOk() {
@@ -732,25 +710,20 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);
 
-                G.isPassCode = true;
+                PassCode.getInstance().setPassCode(true);
                 ActivityMain.isLock = false;
+                passCodeStateChangeListener.postValue(PassCode.getInstance().isPassCode());
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        if (realmUserInfo != null) {
-                            realmUserInfo.setPassCode(true);
-                            realmUserInfo.setPattern(false);
-                            realmUserInfo.setPassCode(edtSetPasswordText.get());
-                            realmUserInfo.setKindPassCode(kindPassword);
-                        }
-                    }
-                });
+                PassCode.getInstance().setPassCode(true);
+                PassCode.getInstance().setPattern(false);
+                PassCode.getInstance().setPassCode(edtSetPasswordText.get());
+                PassCode.getInstance().setKindPassCode(kindPassword);
                 edtSetPasswordText.set("");
             } else {
                 AppUtils.error(G.fragmentActivity.getResources().getString(R.string.Password_dose_not_match));
@@ -768,7 +741,7 @@ public class FragmentPassCodeViewModel {
                 } else {
                     vgToggleFingerPrintVisibility.set(View.GONE);
                 }
-                rippleOkVisibility.set(View.GONE);
+                rippleOkVisibility.setValue(View.GONE);
                 titlePassCode.set(G.fragmentActivity.getResources().getString(R.string.two_step_pass_code));
                 titlePassCodeVisibility.set(View.VISIBLE);
                 layoutModePassCode.set(View.GONE);

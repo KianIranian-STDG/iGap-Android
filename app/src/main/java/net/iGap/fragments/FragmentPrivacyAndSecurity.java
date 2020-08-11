@@ -1,30 +1,36 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import net.iGap.R;
 import net.iGap.databinding.FragmentPrivacyAndSecurityBinding;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserProfileGetSelfRemove;
 import net.iGap.viewmodel.FragmentPrivacyAndSecurityViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,15 +41,18 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
     private FragmentPrivacyAndSecurityViewModel fragmentPrivacyAndSecurityViewModel;
     private FragmentPrivacyAndSecurityBinding fragmentPrivacyAndSecurityBinding;
 
-
-    public FragmentPrivacyAndSecurity() {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentPrivacyAndSecurityViewModel = ViewModelProviders.of(this).get(FragmentPrivacyAndSecurityViewModel.class);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentPrivacyAndSecurityBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_privacy_and_security, container, false);
-        return attachToSwipeBack(fragmentPrivacyAndSecurityBinding.getRoot());
+        fragmentPrivacyAndSecurityBinding.setFragmentPrivacyAndSecurityViewModel(fragmentPrivacyAndSecurityViewModel);
+        fragmentPrivacyAndSecurityBinding.setLifecycleOwner(this);
+        return fragmentPrivacyAndSecurityBinding.getRoot();
     }
 
     @Override
@@ -54,44 +63,56 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initDataBinding();
+        fragmentPrivacyAndSecurityBinding.fpsLayoutToolbar.addView(HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setDefaultTitle(getString(R.string.st_title_Privacy_Security))
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        popBackStackFragment();
+                    }
+                }).getView());
 
         new RequestUserContactsGetBlockedList().userContactsGetBlockedList();
 
         RealmPrivacy.getUpdatePrivacyFromServer();
 
-        fragmentPrivacyAndSecurityBinding.parentPrivacySecurity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        fragmentPrivacyAndSecurityBinding.parentPrivacySecurity.setOnClickListener(view1 -> {
 
-            }
-        });
-
-        fragmentPrivacyAndSecurityBinding.stpsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
         });
 
         new RequestUserProfileGetSelfRemove().userProfileGetSelfRemove();
 
-    }
+        fragmentPrivacyAndSecurityViewModel.goToBlockedUserPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentBlockedUser()).setReplace(false).load();
+            }
+        });
 
-    private void initDataBinding() {
+        fragmentPrivacyAndSecurityViewModel.goToPassCodePage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentPassCode()).setReplace(false).load();
+            }
+        });
 
-        fragmentPrivacyAndSecurityViewModel = new FragmentPrivacyAndSecurityViewModel();
-        fragmentPrivacyAndSecurityBinding.setFragmentPrivacyAndSecurityViewModel(fragmentPrivacyAndSecurityViewModel);
+        fragmentPrivacyAndSecurityViewModel.goToSecurityPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSecurity()).setReplace(false).load();
+            }
+        });
 
-    }
+        fragmentPrivacyAndSecurityViewModel.goToActiveSessionsPage.observe(getViewLifecycleOwner(), go -> {
+            if (getActivity() != null && go != null && go) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentActiveSessions()).setReplace(false).load();
+            }
+        });
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        fragmentPrivacyAndSecurityViewModel.onDetach();
     }
 
     @Override

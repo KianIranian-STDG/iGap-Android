@@ -3,10 +3,11 @@ package net.iGap.module.SmsRetriver;
 import android.app.PendingIntent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.credentials.CredentialPickerConfig;
@@ -21,7 +22,7 @@ public class HintPhone {
 
     private void showHint(AppCompatActivity context) {
 
-        GoogleApiClient mCredentialsApiClient =new GoogleApiClient.Builder(context)
+        GoogleApiClient mCredentialsApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(@Nullable Bundle bundle) {

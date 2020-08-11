@@ -1,24 +1,24 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.observers.interfaces.OnUserSessionLogout;
 
 public class UserSessionLogoutResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserSessionLogoutResponse(int actionId, Object protoClass, String identity) {
+    public UserSessionLogoutResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -29,24 +29,30 @@ public class UserSessionLogoutResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        if (G.onUserSessionLogout != null) {
-            G.onUserSessionLogout.onUserSessionLogout();
+        if (identity instanceof OnUserSessionLogout) {
+            ((OnUserSessionLogout) identity).onUserSessionLogout();
+        } else {
+            throw new ClassCastException("callback should be: " + OnUserSessionLogout.class.getName());
         }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onUserSessionLogout != null) {
-            G.onUserSessionLogout.onTimeOut();
+        if (identity instanceof OnUserSessionLogout) {
+            ((OnUserSessionLogout) identity).onTimeOut();
+        } else {
+            throw new ClassCastException("callback should be: " + OnUserSessionLogout.class.getName());
         }
     }
 
     @Override
     public void error() {
         super.error();
-        if (G.onUserSessionLogout != null) {
-            G.onUserSessionLogout.onError();
+        if (identity instanceof OnUserSessionLogout) {
+            ((OnUserSessionLogout) identity).onError();
+        } else {
+            throw new ClassCastException("callback should be: " + OnUserSessionLogout.class.getName());
         }
     }
 }

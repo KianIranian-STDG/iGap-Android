@@ -1,19 +1,19 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items;
 
-import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -25,7 +25,6 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
@@ -34,7 +33,6 @@ import static net.iGap.fragments.SearchFragment.SearchType.contact;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     public SearchFragment.StructSearch item;
-    private Typeface typeFaceIcon;
     private AvatarHandler avatarHandler;
 
     public SearchItem(AvatarHandler avatarHandler) {
@@ -63,9 +61,9 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         setAvatar(holder);
 
         holder.name.setText(item.name);
-        if (item.comment.isEmpty()){
+        if (item.comment.isEmpty()) {
             holder.lastSeen.setText(item.userName);
-        }else {
+        } else {
             holder.lastSeen.setText(item.comment);
         }
 
@@ -84,15 +82,11 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             //holder.txtIcon.setVisibility(View.VISIBLE);
             //holder.txtIcon.setText(G.context.getString(R.string.md_user_shape));
         } else if (item.roomType == ProtoGlobal.Room.Type.GROUP) {
-            typeFaceIcon = G.typeface_Fontico;
-            holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.md_users_social_symbol));
+            holder.txtIcon.setText(G.context.getString(R.string.group_icon));
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
-            typeFaceIcon = G.typeface_Fontico;
-            holder.txtIcon.setTypeface(typeFaceIcon);
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.md_channel_icon));
+            holder.txtIcon.setText(G.context.getString(R.string.channel_main_icon));
         }
     }
 
@@ -120,17 +114,17 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         protected CircleImageView avatar;
         protected CustomTextViewMedium name;
         protected TextView txtIcon;
-        protected EmojiTextViewE lastSeen;
+        protected TextView lastSeen;
         protected TextView txtTime;
 
         public ViewHolder(View view) {
             super(view);
 
-            avatar = (CircleImageView) view.findViewById(R.id.sfsl_imv_contact_avatar);
-            name = (CustomTextViewMedium) view.findViewById(R.id.sfsl_txt_contact_name);
-            lastSeen = (EmojiTextViewE) view.findViewById(R.id.sfsl_txt_contact_lastseen);
-            txtIcon = (TextView) view.findViewById(R.id.sfsl_txt_icon);
-            txtTime = (TextView) view.findViewById(R.id.sfsl_txt_time);
+            avatar = view.findViewById(R.id.sfsl_imv_contact_avatar);
+            name = view.findViewById(R.id.sfsl_txt_contact_name);
+            lastSeen = view.findViewById(R.id.sfsl_txt_contact_lastseen);
+            txtIcon = view.findViewById(R.id.sfsl_txt_icon);
+            txtTime = view.findViewById(R.id.sfsl_txt_time);
         }
     }
 }

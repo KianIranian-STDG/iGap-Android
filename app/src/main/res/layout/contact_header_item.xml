@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <net.iGap.module.CustomTextViewMedium xmlns:android="http://schemas.android.com/apk/res/android"
-  fontPath="fonts/IRANSansMobile_Bold.ttf"
-  android:layout_width="@dimen/dp26"
-  android:layout_height="wrap_content"
-  android:layout_marginLeft="@dimen/dp8"
-  android:layout_marginStart="@dimen/dp8"
-  android:clickable="true"
-  style="?backgroundColorSettingTheme"
-  android:textColor="@color/gray_4c"
-  android:textDirection="ltr"
-  android:textSize="@dimen/dp20" />
+    style="@style/IGapRootViewStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp10"
+    android:layout_marginRight="@dimen/dp10"
+    android:clickable="true"
+    android:fontFamily="@font/main_font_bold"
+    android:gravity="left"
+    android:minWidth="@dimen/dp26"
+    android:textColor="?attr/iGapTitleTextColor"
+    android:textSize="@dimen/dp20" />

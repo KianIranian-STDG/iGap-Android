@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -15,16 +15,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -265,13 +266,13 @@ public class HelperPermission {
 
         ArrayList<String> needPermission = null;
 
-        int permissionCallPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+//        int permissionCallPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
         int permissionReadPhoneState = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
 
-        if (permissionCallPhone != PackageManager.PERMISSION_GRANTED) {
+        /*if (permissionCallPhone != PackageManager.PERMISSION_GRANTED) {
             needPermission = new ArrayList<>();
             needPermission.add(Manifest.permission.CALL_PHONE);
-        }
+        }*/
 
         if (permissionReadPhoneState != PackageManager.PERMISSION_GRANTED) {
             if (needPermission == null) {
@@ -319,10 +320,7 @@ public class HelperPermission {
 
     //************************************************************************************************************
     private static boolean checkApi() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            return false;
-        }
-        return true;
+        return Build.VERSION.SDK_INT < 23;
     }
 
     //************************************************************************************************************

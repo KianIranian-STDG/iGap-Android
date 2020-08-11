@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp70"
+    android:background="?android:selectableItemBackground"
+    android:orientation="vertical">
+
+    <net.iGap.module.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/dp60"
+        android:layout_height="@dimen/dp60"
+        android:layout_margin="@dimen/dp10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_chat_background" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp10"
+        android:singleLine="true"
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintEnd_toStartOf="@id/unreadMessageCount"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/checked"
+        style="@style/primaryIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp12"
+        android:text="@string/check_icon"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/avatar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/unreadMessageCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp12"
+        android:background="@drawable/background_badge"
+        android:gravity="center"
+        android:maxLength="3"
+        android:padding="@dimen/dp4"
+        android:textColor="@color/white"
+        android:textSize="@dimen/verySmallTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/checked"
+        app:layout_constraintEnd_toStartOf="@id/checked"
+        app:layout_constraintTop_toTopOf="@id/checked" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

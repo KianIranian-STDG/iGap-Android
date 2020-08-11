@@ -1,14 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module.structs;
+
+import androidx.annotation.Nullable;
 
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -38,5 +40,25 @@ public class StructContactInfo {
 
     public StructContactInfo() {
 
+    }
+
+    public boolean isAdmin() {
+        return role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString());
+    }
+
+    public boolean isOwner() {
+        return role.equals(ProtoGlobal.GroupRoom.Role.OWNER.toString());
+    }
+
+    public StructContactInfo(long peerId) {
+        this.peerId = peerId;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof StructContactInfo) {
+            return this.peerId == ((StructContactInfo) obj).peerId;
+        }
+        return super.equals(obj);
     }
 }

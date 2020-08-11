@@ -8,36 +8,33 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.downloader.PRDownloader;
 import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.WebSocketClient;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
-import net.iGap.helper.HelperUploadFile;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmUserInfo;
-import net.iGap.webrtc.CallObserver;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,12 +43,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
-import io.github.inflationx.calligraphy3.CalligraphyConfig;
-import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
-import io.github.inflationx.viewpump.ViewPump;
 import io.realm.CompactOnLaunchCallback;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -73,19 +66,11 @@ import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
 import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
-import static net.iGap.G.appBarColor;
-import static net.iGap.G.attachmentColor;
-import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
-import static net.iGap.G.displayName;
-import static net.iGap.G.headerTextColor;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
-import static net.iGap.G.notificationColor;
 import static net.iGap.G.selectedLanguage;
-import static net.iGap.G.toggleButtonColor;
-import static net.iGap.G.userId;
 import static net.iGap.G.userTextSize;
 
 /**
@@ -94,74 +79,63 @@ import static net.iGap.G.userTextSize;
 public final class StartupActions {
 
     public StartupActions() {
+        Log.wtf(this.getClass().getName(), "StartupActions");
 
-        detectDeviceType();
+        new Thread(this::manageSettingPreferences).start();
+        new Thread(StartupActions::makeFolder).start();
+        new Thread(this::initializeGlobalVariables).start();
+        new Thread(ConnectionManager::manageConnection).start();
+        new Thread(this::configDownloadManager).start();
+        new Thread(this::manageTime).start();
+        new Thread(StartupActions::getiGapAccountInstance).start();
 
-        //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
-        initializeGlobalVariables();
+        if (G.ISRealmOK/*realmConfiguration()*/) {
+            DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(@NotNull Realm realm) {
+                        try {
+                            long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
+                            RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                            RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
 
-        boolean ISOK = realmConfiguration();
-        if (ISOK) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    try {
-                        long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
-                        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                        RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class);
-
-                        for (RealmRoom room : realmRooms)
-                        {
-                            if (room.getLastMessage() != null) {
-                                roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                            for (RealmRoom room : realmRooms) {
+                                if (room.getLastMessage() != null) {
+                                    roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                                }
                             }
+
+                            RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                                    .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
+                                    .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                    .limit(100).findAll();
+
+                            for (RealmRoomMessage var : realmRoomMessages)
+                                var.removeFromRealm(realm);
+
+                        } catch (OutOfMemoryError error) {
+                            error.printStackTrace();
+                            HelperLog.getInstance().setErrorLog(new Exception(error.getMessage()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            HelperLog.getInstance().setErrorLog(e);
                         }
-
-                        RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
-                                .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                                .limit(100).findAll();
-
-                        for (RealmRoomMessage var : realmRoomMessages)
-                            var.removeFromRealm(realm);
-
-                    } catch (OutOfMemoryError error) {
-                        error.printStackTrace();
-                        HelperLog.setErrorLog(new Exception(error.getMessage()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        HelperLog.setErrorLog(e);
                     }
-                }
+                });
             });
-            realm.close();
-
-            mainUserInfo();
-            connectToServer();
-            manageSettingPreferences();
-            makeFolder();
-            ConnectionManager.manageConnection();
-            configDownloadManager();
-            manageTime();
-            getiGapAccountInstance();
-
-            new CallObserver();
-            /**
-             * initialize download and upload listeners
-             */
-            new HelperUploadFile();
-            checkDataUsage();
+            new Thread(() -> checkDataUsage()).start();
+            new Thread(this::connectToServer).start();
+            Log.wtf(this.getClass().getName(), "StartupActions");
         }
 
     }
 
     private void checkDataUsage() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
-        if (realmDataUsage.size() == 0)
-            HelperDataUsage.initializeRealmDataUsage();
-        realm.close();
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
+            if (realmDataUsage.size() == 0)
+                HelperDataUsage.initializeRealmDataUsage();
+        });
     }
 
     private void manageTime() {
@@ -182,8 +156,8 @@ public final class StartupActions {
     /**
      * detect and  initialize text size
      */
-    public static void textSizeDetection(SharedPreferences sharedPreferences) {
-        userTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
+    public static void textSizeDetection(int size) {
+        userTextSize = size;
 
         if (!G.context.getResources().getBoolean(R.bool.isTablet)) {
 
@@ -238,6 +212,7 @@ public final class StartupActions {
             new File(DIR_TEMP).mkdirs();
             new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
             new File(DIR_IMAGE_USER + "/" + file).createNewFile();
+            new File(DIR_STICKER + "/" + file).createNewFile();
             new File(DIR_TEMP + "/" + file).createNewFile();
 
             IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
@@ -344,7 +319,7 @@ public final class StartupActions {
             }
         }
 
-        G.iGapAccount = new Account(Config.iGapAccount, G.context.getPackageName());
+        G.iGapAccount = new Account(Config.IGAP_ACCOUNT, G.context.getPackageName());
         String password = "net.iGap";
         try {
             accountManager.addAccountExplicitly(G.iGapAccount, password, null);
@@ -384,31 +359,6 @@ public final class StartupActions {
     }
 
     /**
-     * if device is tablet twoPaneMode will be enabled
-     */
-    private void detectDeviceType() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-
-        float yInches = metrics.heightPixels / metrics.ydpi;
-        float xInches = metrics.widthPixels / metrics.xdpi;
-        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
-        if (diagonalInches >= 6.5) {
-            G.twoPaneMode = true;
-        } else {
-            G.twoPaneMode = false;
-        }
-
-        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && G.twoPaneMode) {
-            G.maxChatBox = metrics.widthPixels - (metrics.widthPixels / 3) - ViewMaker.i_Dp(R.dimen.dp80);
-        } else {
-            G.maxChatBox = metrics.widthPixels - ViewMaker.i_Dp(R.dimen.dp80);
-        }
-
-    }
-
-    /**
      * start connecting to the sever
      */
     private void connectToServer() {
@@ -430,8 +380,6 @@ public final class StartupActions {
             editor.apply();
         }
 
-//        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-
         boolean isDisableAutoDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         if (!isDisableAutoDarkTheme) {
             checkTimeForAutoTheme(preferences);
@@ -451,7 +399,7 @@ public final class StartupActions {
         int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         isSaveToGallery = checkedSaveToGallery == 1;
 
-        textSizeDetection(preferences);
+        textSizeDetection(preferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
         languageDetection(preferences);
     }
 
@@ -484,21 +432,9 @@ public final class StartupActions {
             if (currentTime.getTime() > time1.getTime() && currentTime.getTime() < time2.getTime()) {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
-                G.isDarkTheme = true;
-                appBarColor = Theme.default_dark_appBarColor;
-                notificationColor = Theme.default_dark_notificationColor;
-                toggleButtonColor = Theme.default_dark_toggleButtonColor;
-                attachmentColor = Theme.default_dark_attachmentColor;
-                headerTextColor = Theme.default_dark_headerTextColor;
-                G.progressColor = Theme.default_dark_progressColor;
+                G.themeColor = Theme.DARK;
             } else {
-                G.isDarkTheme = false;
-                appBarColor = Theme.default_appBarColor;
-                notificationColor = Theme.default_notificationColor;
-                toggleButtonColor = Theme.default_toggleButtonColor;
-                attachmentColor = Theme.default_attachmentColor;
-                headerTextColor = Theme.default_headerTextColor;
-                G.progressColor = Theme.default_progressColor;
+                G.themeColor = Theme.DARK;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -519,7 +455,7 @@ public final class StartupActions {
      */
     private void languageDetection(SharedPreferences sharedPreferences) {
 
-        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, "فارسی");
 
         switch (language) {
             case "فارسی":
@@ -536,6 +472,20 @@ public final class StartupActions {
                 Raad.language = selectedLanguage;
                 Raad.isFA = false;
                 break;
+            case "Français":
+                selectedLanguage = "fr";
+                HelperCalander.isPersianUnicode = false;
+                G.isAppRtl = false;
+                Raad.language = selectedLanguage;
+                Raad.isFA = false;
+                break;
+            case "Russian":
+                selectedLanguage = "ru";
+                HelperCalander.isPersianUnicode = false;
+                G.isAppRtl = false;
+                Raad.language = selectedLanguage;
+                Raad.isFA = false;
+                break;
             case "العربی":
                 selectedLanguage = "ar";
                 HelperCalander.isPersianUnicode = true;
@@ -543,57 +493,33 @@ public final class StartupActions {
                 Raad.language = selectedLanguage;
                 Raad.isFA = true;
                 break;
-        }
 
-        ViewPump.init(ViewPump.builder()
-                .addInterceptor(new CalligraphyInterceptor(
-                        new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/IRANSansMobile.ttf")
-                                .setFontAttrId(R.attr.fontPath)
-                                .build()))
-                .build());
+            //کوردی لوکال از چپ به راست است و برای استفاده از این گویش از زبان های راست به چپ جایگزین استفاده شده است
+            case "کوردی":
+                selectedLanguage = "ur";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
+                break;
+
+            case "آذری":
+                selectedLanguage = "iw";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+                Raad.language = selectedLanguage;
+                Raad.isFA = true;
+                break;
+        }
+        Lingver.getInstance().setLocale(context, selectedLanguage);
     }
 
     private void initializeGlobalVariables() {
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
+        ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
+        imageLoader = ImageLoader.getInstance();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
-                ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
-                imageLoader = ImageLoader.getInstance();
-
-                HelperFillLookUpClass.fillArrays();
-            }
-        }).start();
-
-    }
-
-    /**
-     * fill main user info in global variables
-     */
-    private void mainUserInfo() {
-
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-
-        if (userInfo != null && userInfo.getUserRegistrationState()) {
-
-            userId = userInfo.getUserId();
-            G.isPassCode = userInfo.isPassCode();
-
-            if (userInfo.getAuthorHash() != null) {
-                authorHash = userInfo.getAuthorHash();
-            }
-
-            if (userInfo.getUserInfo().getDisplayName() != null) {
-                displayName = userInfo.getUserInfo().getDisplayName();
-            }
-
-        }
-
-        realm.close();
+        HelperFillLookUpClass.fillArrays();
     }
 
     /**
@@ -603,40 +529,22 @@ public final class StartupActions {
         /**
          * before call RealmConfiguration client need to Realm.init(context);
          */
-
         try {
             Realm.init(context);
         } catch (Exception e) {
-            G.ISOK = false;
-            return G.ISOK;
+            G.ISRealmOK = false;
+            return false;
         } catch (Error e) {
-            G.ISOK = false;
-            return G.ISOK;
+            G.ISRealmOK = false;
+            return false;
         }
 
-        //  new SecureRandom().nextBytes(key);
-
-
-        // An encrypted Realm file can be opened in Realm Studio by using a Hex encoded version
-        // of the key. Copy the key from Logcat, then download the Realm file from the device using
-        // the method described here: https://stackoverflow.com/a/28486297/1389357
-        // The path is normally `/data/data/io.realm.examples.encryption/files/default.realm`
-
-     /*   RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
-
-        Realm configuredRealm = getInstance();
-
-        /*if (configuration!=null)
-            Realm.deleteRealm(configuration);*/
-
-        Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-        configuredRealm.close();
-        return G.ISOK;
+        /*RealmConfiguration configuredRealm = getInstance();
+        Realm.setDefaultConfiguration(configuredRealm);*/
+        return true;
     }
 
-    public Realm getPlainInstance() {
+    /*public Realm getPlainInstance() {
         RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .name(context.getResources().getString(R.string.planDB))
                 .schemaVersion(REALM_SCHEMA_VERSION)
@@ -650,9 +558,9 @@ public final class StartupActions {
                 .migration(new RealmMigration())
                 .build();
         return Realm.getInstance(configuration);
-    }
+    }*/
 
-    public Realm getInstance() {
+    public RealmConfiguration getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
         String stringArray = sharedPreferences.getString("myByteArray", null);
         if (stringArray == null) {
@@ -670,9 +578,10 @@ public final class StartupActions {
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
-
-        RealmConfiguration newConfig = new RealmConfiguration.Builder()
-                .name(context.getResources().getString(R.string.encriptedDB))
+        RealmConfiguration newConfig;
+        Log.wtf(this.getClass().getName(), "state true");
+        newConfig = new RealmConfiguration.Builder()
+                .name(net.iGap.module.accountManager.AccountManager.defaultDBName)
                 .encryptionKey(mKey)
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
@@ -680,7 +589,7 @@ public final class StartupActions {
                         final long thresholdSize = 10 * 1024 * 1024;
 
                         if (totalBytes > 500 * 1024 * 1024) {
-                            HelperLog.setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
+                            HelperLog.getInstance().setErrorLog(new Exception("DatabaseSize=" + totalBytes + " UsedSize=" + usedBytes));
                         }
 
                         return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.9);
@@ -693,7 +602,7 @@ public final class StartupActions {
         File oldRealmFile = new File(oldConfig.getPath());
         File newRealmFile = new File(newConfig.getPath());
         if (!oldRealmFile.exists()) {
-            return Realm.getInstance(newConfig);// ohhhhh
+            return newConfig;
         } else {
             Realm realm = null;
             try {
@@ -701,13 +610,16 @@ public final class StartupActions {
                 realm.writeEncryptedCopyTo(newRealmFile, mKey);
                 realm.close();
                 Realm.deleteRealm(oldConfig);
-                return Realm.getInstance(newConfig);
+                return newConfig;
             } catch (OutOfMemoryError oom) {
+                //TODO : what is that, exception in catch, realm may be null and close it
                 realm.close();
-                return getPlainInstance();
+                return null;
             } catch (Exception e) {
+                //TODO : what is that, exception in catch, realm may be null and close it
+                e.printStackTrace();
                 realm.close();
-                return getPlainInstance();
+                return null;
             }
         }
     }

@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -54,7 +55,7 @@ public class HelperString {
     private static String generate(int length) {
         char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
         StringBuilder sb = new StringBuilder();
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
 
         for (int i = 0; i < length; i++) { // random string length is 10 now
             char c = chars[random.nextInt(chars.length)];
@@ -207,6 +208,26 @@ public class HelperString {
         return true;
     }
 
+    public static boolean isInteger(String s) {
+        return isInteger(s, 10);
+    }
+
+    public static boolean isInteger(String s, int radix) {
+        if (s.isEmpty())
+            return false;
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1)
+                    return false;
+                else
+                    continue;
+            }
+            if (Character.digit(s.charAt(i), radix) < 0)
+                return false;
+        }
+        return true;
+    }
+
     /**
      * split string
      *
@@ -236,8 +257,13 @@ public class HelperString {
      */
     public static String getUtf8String(String text) {
         String result = "";
+        byte[] utf8 = new byte[0];
         try {
-            byte[] utf8 = text.getBytes("UTF-8");
+            utf8 = text.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
             result = new String(utf8, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

@@ -1,21 +1,23 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items;
 
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.CheckBox;
 
-import com.hanks.library.AnimateCheckBox;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
@@ -25,16 +27,16 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * Contact item used with FastAdapter for Navigation drawer contacts fragment.
  */
-public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
+public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> implements FastScrollerBarBaseAdapter {
     public static OnClickAdapter OnClickAdapter;
     public StructContactInfo mContact;
     private AvatarHandler avatarHandler;
@@ -62,18 +64,21 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        holder.checkBoxSelect.setChecked(true);
+        //holder.checkBoxSelect.setChecked(true);
+        holder.topLine.setVisibility(View.GONE);
 
-        if (mContact.isHeader) {
-            holder.topLine.setVisibility(View.VISIBLE);
+        if (!G.isAppRtl) {
+            holder.subtitle.setGravity(Gravity.LEFT);
+            holder.title.setGravity(Gravity.LEFT);
         } else {
-            holder.topLine.setVisibility(View.GONE);
+            holder.subtitle.setGravity(Gravity.RIGHT);
+            holder.title.setGravity(Gravity.RIGHT);
         }
 
         if (mContact.isSelected) {
-            holder.checkBoxSelect.setVisibility(View.VISIBLE);
+            holder.checkBoxSelect.setChecked(true);
         } else {
-            holder.checkBoxSelect.setVisibility(View.INVISIBLE);
+            holder.checkBoxSelect.setChecked(false);
         }
 
         holder.title.setText(mContact.displayName);
@@ -99,6 +104,15 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         return new ViewHolder(v);
     }
 
+    @Override
+    public String getBubbleText(int position) {
+        if (mContact == null)
+            return "-";
+        else {
+            return mContact.displayName.toLowerCase().substring(0, 1).toUpperCase();
+        }
+    }
+
     public interface OnClickAdapter {
         void onclick(long peerId, Uri uri, String displayName, boolean checked);
     }
@@ -109,7 +123,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         protected CustomTextViewMedium title;
         protected CustomTextViewMedium subtitle;
         protected View topLine;
-        protected AnimateCheckBox checkBoxSelect;
+        protected CheckBox checkBoxSelect;
 
         public ViewHolder(View view) {
             super(view);
@@ -117,8 +131,8 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             image = (CircleImageView) view.findViewById(R.id.imageView);
             title = (CustomTextViewMedium) view.findViewById(R.id.title);
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
-            topLine = (View) view.findViewById(R.id.topLine);
-            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);
+            topLine = view.findViewById(R.id.topLine);
+            checkBoxSelect = view.findViewById(R.id.cig_checkBox_select_user);
 
         }
 

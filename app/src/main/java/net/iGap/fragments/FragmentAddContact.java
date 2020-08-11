@@ -1,23 +1,19 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,8 +22,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -41,13 +41,18 @@ import net.iGap.R;
 import net.iGap.helper.HelperAddContact;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnCountryCallBack;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperPreferences;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.module.CountryReader;
-import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.realm.RealmUserInfo;
+import net.iGap.observers.interfaces.OnCountryCallBack;
+import net.iGap.observers.interfaces.OnUserContactEdit;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestUserContactImport;
+import net.iGap.request.RequestUserContactsEdit;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,31 +61,87 @@ import java.util.List;
 import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
-public class FragmentAddContact extends BaseFragment {
+public class FragmentAddContact extends BaseFragment implements ToolbarListener, OnUserContactEdit {
+
+    public static final String NAME = "name";
+    public static final String PHONE = "PHONE";
+    private static final String CONTACT_MODE = "MODE";
+    private static final String CONTACT_ID = "CONTACT_ID";
+    private static final String CONTACT_NAME = "NAME";
+    private static final String CONTACT_FAMILY = "FAMILY";
 
     public static OnCountryCallBack onCountryCallBack;
+    private OnContactUpdate onContactUpdate;
     private EditText edtFirstName;
     private EditText edtLastName;
     private MaskedEditText edtPhoneNumber;
     private ViewGroup parent;
-    private RippleView rippleSet;
-    private MaterialDesignTextView txtSet;
-    private TextView txtChooseCountry;
-    private TextView txtCodeCountry;
+    private EditText txtCodeCountry;
+    private HelperToolbar mHelperToolbar;
+    private long mContactId = 0;
+    private long mContactPhone = 0;
+    private String mContactName = "", mContactFamily = "";
+    private ContactMode pageMode;
+    private ProgressBar loader;
 
-    public static FragmentAddContact newInstance() {
-        return new FragmentAddContact();
+    public static FragmentAddContact newInstance(String phone, ContactMode mode) {
+        FragmentAddContact fragment = new FragmentAddContact();
+        Bundle bundle = new Bundle();
+        bundle.putString(CONTACT_MODE, mode.name());
+        bundle.putString(PHONE, phone);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static FragmentAddContact newInstance(long contactId, String phone, String name, String lastName, ContactMode mode, OnContactUpdate onContactUpdate) {
+        FragmentAddContact fragment = new FragmentAddContact();
+        fragment.onContactUpdate = onContactUpdate;
+        Bundle bundle = new Bundle();
+        bundle.putLong(CONTACT_ID, contactId);
+        bundle.putString(CONTACT_MODE, mode.name());
+        bundle.putString(CONTACT_NAME, name);
+        bundle.putString(CONTACT_FAMILY, lastName);
+        bundle.putString(PHONE, phone);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_add_contact, container, false));
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        edtFirstName = view.findViewById(R.id.ac_edt_firstName);
+        edtLastName = view.findViewById(R.id.ac_edt_lastName);
+        edtPhoneNumber = view.findViewById(R.id.ac_edt_phoneNumber);
+        txtCodeCountry = view.findViewById(R.id.ac_txt_codeCountry);
+        parent = view.findViewById(R.id.ac_layoutParent);
+        loader = view.findViewById(R.id.loader);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            pageMode = ContactMode.valueOf(bundle.getString(CONTACT_MODE, ContactMode.ADD.name()));
+
+            String contactName = bundle.getString(NAME, "");
+            edtFirstName.setText(contactName);
+
+            if (pageMode == ContactMode.EDIT) {
+                mContactId = bundle.getLong(CONTACT_ID, 0);
+                mContactName = bundle.getString(CONTACT_NAME, "");
+                mContactFamily = bundle.getString(CONTACT_FAMILY, "");
+                mContactPhone = Long.valueOf(bundle.getString(PHONE, "+0").substring(1));
+
+                edtFirstName.setText(mContactName);
+                edtLastName.setText(mContactFamily);
+                edtPhoneNumber.setEnabled(false);
+                txtCodeCountry.setEnabled(false);
+            }
+        }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -89,10 +150,12 @@ public class FragmentAddContact extends BaseFragment {
 
     private void initComponent(final View view) {
 
+        setupToolbar(view);
+
         String phoneFromUrl = "";
         String countryCode = "";
         try {
-            phoneFromUrl = getArguments().getString("PHONE");
+            phoneFromUrl = getArguments().getString(PHONE);
             if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
 
                 if (phoneFromUrl.startsWith("+")) {
@@ -103,7 +166,6 @@ public class FragmentAddContact extends BaseFragment {
                         countryCode = numberProto.getCountryCode() + "";
                     } catch (NumberParseException e) {
                         phoneFromUrl = phoneFromUrl.substring(1);
-                        ;
                     }
                 } else if (phoneFromUrl.startsWith("0")) {
                     phoneFromUrl = phoneFromUrl.substring(1);
@@ -113,80 +175,28 @@ public class FragmentAddContact extends BaseFragment {
             e.printStackTrace();
         }
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
-        final RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        parent.setOnClickListener(view1 -> {
 
-                changePage(rippleView);
-            }
         });
 
-        view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-
-        txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
-        txtSet.setTextColor(G.context.getResources().getColor(R.color.line_edit_text));
-
-        parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
-        parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        txtCodeCountry = (TextView) view.findViewById(R.id.ac_txt_codeCountry);
-        txtChooseCountry = (TextView) view.findViewById(R.id.ac_txt_chooseCountry);
-        txtChooseCountry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HelperFragment(new FragmentChooseCountry()).setReplace(false).load();
+        txtCodeCountry.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentChooseCountry()).setReplace(false).load();
                 closeKeyboard(v);
             }
         });
 
-        edtFirstName = (EditText) view.findViewById(R.id.ac_edt_firstName);
-        final View viewFirstName = view.findViewById(R.id.ac_view_firstName);
-        edtLastName = (EditText) view.findViewById(R.id.ac_edt_lastName);
-        final View viewLastName = view.findViewById(R.id.ac_view_lastName);
-        edtPhoneNumber = (MaskedEditText) view.findViewById(R.id.ac_edt_phoneNumber);
+        //when user clicked on edit text keyboard wont open with this code
+        txtCodeCountry.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                closeKeyboard(txtCodeCountry);
+
+            }
+        });
+
         if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
             edtPhoneNumber.setText(phoneFromUrl);
         }
-        final View viewPhoneNumber = view.findViewById(R.id.ac_view_phoneNumber);
-
-        edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-        edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-        edtPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewPhoneNumber.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewPhoneNumber.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
 
         edtFirstName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -239,67 +249,29 @@ public class FragmentAddContact extends BaseFragment {
         });
 
         G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
-        rippleSet.setEnabled(false);
-        rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(final RippleView rippleView) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        addContactToServer();
-                        final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
-                        if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                            try {
-                                HelperPermission.getContactPermision(G.fragmentActivity, null);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            addToContactList(rippleView);
-                        }
-                    }
-                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        addContactToServer();
-                        dialog.dismiss();
-                        G.fragmentActivity.onBackPressed();
-                    }
-                }).show();
+
+        onCountryCallBack = (nameCountry, code, mask) -> G.handler.post(() -> {
+            txtCodeCountry.setText(nameCountry);
+            txtCodeCountry.setText("+" + code);
+            if (!mask.equals(" ")) {
+                edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
+
+            } else {
+                edtPhoneNumber.setMask("##################");
             }
         });
-
-        onCountryCallBack = new OnCountryCallBack() {
-            @Override
-            public void countryName(final String nameCountry, final String code, final String mask) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtChooseCountry.setText(nameCountry);
-                        txtCodeCountry.setText("+" + code);
-                        // edtPhoneNumber.setText("");
-                        if (!mask.equals(" ")) {
-                            edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
-                        } else {
-                            edtPhoneNumber.setMask("##################");
-                        }
-                    }
-                });
-            }
-        };
 
         if (countryCode.length() > 0) {
             txtCodeCountry.setText("+" + countryCode);
             CountryReader countryReade = new CountryReader();
             StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.fragmentActivity);
-            String listArray[] = fileListBuilder.toString().split("\\r?\\n");
+            String[] listArray = fileListBuilder.toString().split("\\r?\\n");
 
             for (String aListArray : listArray) {
-                String listItem[] = aListArray.split(";");
+                String[] listItem = aListArray.split(";");
                 if (countryCode.equals(listItem[0])) {
-                    txtChooseCountry.setText(listItem[2]);
+                    txtCodeCountry.setText(listItem[2]);
                     if (listItem.length > 3) {
                         if (!listItem[3].equals(" ")) {
                             edtPhoneNumber.setMask(listItem[3].replace("X", "#").replace(" ", "-"));
@@ -311,15 +283,30 @@ public class FragmentAddContact extends BaseFragment {
         }
     }
 
+    private void setupToolbar(View view) {
+
+        String toolbarTitle = pageMode == ContactMode.ADD ? getString(R.string.menu_add_contact) : getString(R.string.edit);
+
+        ViewGroup toolbarLayout = view.findViewById(R.id.frg_add_contact_toolbar);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setDefaultTitle(toolbarTitle)
+                .setLogoShown(true)
+                .setListener(this);
+
+        toolbarLayout.addView(mHelperToolbar.getView());
+    }
+
     private void isEnableSetButton() {
 
         if ((edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) && edtPhoneNumber.getText().toString().length() > 0) {
-
-            txtSet.setTextColor(G.context.getResources().getColor(R.color.white));
-            rippleSet.setEnabled(true);
+            mHelperToolbar.getRightButton().setEnabled(true);
         } else {
-            txtSet.setTextColor(G.context.getResources().getColor(R.color.line_edit_text));
-            rippleSet.setEnabled(false);
+            mHelperToolbar.getRightButton().setEnabled(false);
         }
     }
 
@@ -334,7 +321,7 @@ public class FragmentAddContact extends BaseFragment {
      */
     private void addContactToServer() {
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG)) {
             showLimitDialog();
             return;
         }
@@ -345,7 +332,7 @@ public class FragmentAddContact extends BaseFragment {
         String saveNumber;
 
         if (edtPhoneNumber.getText().toString().startsWith("0")) {
-            saveNumber = codeCountry + _phone.substring(1, _phone.length());
+            saveNumber = codeCountry + _phone.substring(1);
         } else {
             saveNumber = codeCountry + _phone;
         }
@@ -358,7 +345,7 @@ public class FragmentAddContact extends BaseFragment {
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImport(contacts, true);
+        new RequestUserContactImport().contactImport(contacts, true, RequestUserContactImport.KEY);
     }
 
     private void addToContactList(View view) {
@@ -370,15 +357,135 @@ public class FragmentAddContact extends BaseFragment {
                 final String lastName = edtLastName.getText().toString();
                 final String codeNumber = txtCodeCountry.getText().toString();
                 String displayName = firstName + " " + lastName;
-                HelperAddContact.addContact(displayName, codeNumber, phone);
 
-                changePage(view);
+
+                if (pageMode == ContactMode.ADD) {
+                    changePage(view);
+                    HelperAddContact.addContact(displayName, codeNumber, phone);
+                } else if (pageMode == ContactMode.EDIT) {
+                    closeKeyboard(view);
+                    loader.setVisibility(View.VISIBLE);
+                    G.onUserContactEdit = this;
+                    new RequestUserContactsEdit().contactsEdit(mContactId, mContactPhone, firstName, lastName);
+                }
+
             } else {
                 Toast.makeText(G.context, R.string.please_enter_phone_number, Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(G.context, R.string.please_enter_firstname_or_lastname, Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        changePage(view);
+
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+        if (pageMode == ContactMode.ADD) {
+
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    addContactToServer();
+                    final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                    if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                        try {
+                            HelperPermission.getContactPermision(G.fragmentActivity, null);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        addToContactList(view);
+                    }
+                }
+            }).negativeText(R.string.no).onNegative((dialog, which) -> {
+                addContactToServer();
+                dialog.dismiss();
+                G.fragmentActivity.onBackPressed();
+            }).show();
+
+        } else if (pageMode == ContactMode.EDIT) {
+            new MaterialDialog.Builder(G.fragmentActivity)
+                    .title(R.string.edit_contact)
+                    .content(R.string.are_you_sure_edit_contact)
+                    .positiveText(R.string.yes)
+                    .negativeText(R.string.no)
+                    .onNegative((dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .onPositive((dialog, which) -> {
+                        final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
+                        if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
+                            try {
+                                HelperPermission.getContactPermision(G.fragmentActivity, null);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            addToContactList(view);
+                        }
+                        editContactByApi();
+                        dialog.dismiss();
+                    })
+                    .show();
+        }
+    }
+
+    private void editContactByApi() {
+    }
+
+    public EditText getEdtFirstName() {
+        return edtFirstName;
+    }
+
+    public EditText getEdtLastName() {
+        return edtLastName;
+    }
+
+    public MaskedEditText getEdtPhoneNumber() {
+        return edtPhoneNumber;
+    }
+
+    @Override
+    public void onContactEdit(String firstName, String lastName, String initials) {
+        G.handler.postDelayed(() -> {
+            loader.setVisibility(View.GONE);
+            //HelperError.showSnackMessage(getString(R.string.user_edited), false);
+            if (onContactUpdate != null)
+                onContactUpdate.updateContact(firstName, lastName);
+            popBackStackFragment();
+        }, 100);
+    }
+
+    @Override
+    public void onContactEditTimeOut() {
+        G.handler.post(() -> {
+            loader.setVisibility(View.GONE);
+            Toast.makeText(loader.getContext(), R.string.server_do_not_response, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void onContactEditError(int majorCode, int minorCode) {
+        G.handler.post(() -> {
+            loader.setVisibility(View.GONE);
+            Toast.makeText(loader.getContext(), R.string.server_error, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    public enum ContactMode {
+        ADD, EDIT
+    }
+
+
+    @FunctionalInterface
+    public interface OnContactUpdate {
+        void updateContact(String name, String family);
     }
 
 }

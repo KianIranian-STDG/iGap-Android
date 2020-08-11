@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -17,13 +17,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
@@ -33,32 +28,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.helper.HelperNotification;
-import net.iGap.interfaces.IPopUpListener;
-import net.iGap.interfaces.OnVoiceRecord;
+import net.iGap.helper.HelperRealm;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 import net.iGap.module.UploadService;
 import net.iGap.module.VoiceRecord;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.IPopUpListener;
+import net.iGap.observers.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
@@ -66,8 +61,9 @@ import net.iGap.realm.RealmRoomMessage;
 import java.io.File;
 import java.util.ArrayList;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import io.realm.Realm;
+
+import static net.iGap.G.updateResources;
 
 public class ActivityPopUpNotification extends AppCompatActivity {
 
@@ -89,7 +85,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     //////////////////////////////////////////    attach layout
     private MaterialDesignTextView btnSmileButton;
-    private EmojiEditTextE edtChat;
+    private EditText edtChat;
     private MaterialDesignTextView btnMic;
 
     //////////////////////////////////////////
@@ -101,9 +97,10 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private String initialize;
     private String color;
+    private long userId;
 
     /////////////////////////////////////////////////////////////////////////////////////////
-    private EmojiPopup emojiPopup;
+//    private EmojiPopup emojiPopup;
 
     @Override
     protected void onResume() {
@@ -119,27 +116,35 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (emojiPopup != null && emojiPopup.isShowing()) {
-            emojiPopup.dismiss();
-        } else {
-            super.onBackPressed();
-        }
+//        if (emojiPopup != null && emojiPopup.isShowing()) {
+//            emojiPopup.dismiss();
+//        } else {
+        super.onBackPressed();
+//        }
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparent)));
         super.onCreate(savedInstanceState);
+        setThemeSetting();
         setContentView(R.layout.activity_popup_notification);
 
         mList = HelperNotification.getInstance().getMessageList();
+        if (getIntent().getExtras() != null)
+            userId = getIntent().getExtras().getLong(ActivityMain.userId);
         new InitComponent();
+    }
+
+    private void setThemeSetting() {
+        this.setTheme(new Theme().getTheme(this));
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -148,91 +153,79 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         btnSmileButton.setText(drawableResourceId);
     }
 
-    private void setUpEmojiPopup() {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-
-                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
-        }
-    }
-
-    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
-        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-            @Override
-            public void onEmojiBackspaceClick(View v) {
-
-            }
-        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-            @Override
-            public void onEmojiPopupShown() {
-                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-            }
-        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-            @Override
-            public void onKeyboardOpen(final int keyBoardHeight) {
-
-            }
-        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-            @Override
-            public void onEmojiPopupDismiss() {
-                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-            }
-        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-            @Override
-            public void onKeyboardClose() {
-                emojiPopup.dismiss();
-            }
-        })
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
-                .build(edtChat);
-    }
+//    private void setUpEmojiPopup() {
+//        setEmojiColor(new Theme().getRootColor(this), new Theme().getTitleTextColor(this), new Theme().getTitleTextColor(this));
+//    }
+//
+//    private void setEmojiColor(int BackgroundColor, int iconColor, int dividerColor) {
+//        emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+//            @Override
+//            public void onEmojiBackspaceClick(View v) {
+//
+//            }
+//        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+//            @Override
+//            public void onEmojiPopupShown() {
+//                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+//            }
+//        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+//            @Override
+//            public void onKeyboardOpen(final int keyBoardHeight) {
+//
+//            }
+//        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+//            @Override
+//            public void onEmojiPopupDismiss() {
+//                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+//            }
+//        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+//            @Override
+//            public void onKeyboardClose() {
+//                emojiPopup.dismiss();
+//            }
+//        })
+//                .setBackgroundColor(BackgroundColor)
+//                .setIconColor(iconColor)
+//                .setDividerColor(dividerColor)
+//                .build(edtChat);
+//    }
 
     private void setImageAndTextAppBar(int position) {
+
+        if (mList.size() == 0)
+            return;
 
         initialize = mList.get(position).initialize;
         color = mList.get(position).color;
         txtName.setText(mList.get(position).name);
 
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
-        if (realmRegisteredInfo != null) {
-            if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, mList.get(position).senderId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                } else {
+                    txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                }
             } else {
-                txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                txtLastSeen.setText("");
             }
-        } else {
-            txtLastSeen.setText("");
-        }
 
-        setAvatar(realmRegisteredInfo);
-
-        realm.close();
-
+            setAvatar(realmRegisteredInfo, realm);
+        });
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    private void setAvatar(RealmRegisteredInfo realmRegisteredInfo) {
+    private void setAvatar(RealmRegisteredInfo realmRegisteredInfo, Realm realm) {
 
         String avatarPath = null;
-        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars() != null && realmRegisteredInfo.getLastAvatar() != null) {
-            String mainFilePath = realmRegisteredInfo.getLastAvatar().getFile().getLocalFilePath();
+        if (realmRegisteredInfo != null && realmRegisteredInfo.getAvatars(realm) != null && realmRegisteredInfo.getLastAvatar(realm) != null) {
+            String mainFilePath = realmRegisteredInfo.getLastAvatar(realm).getFile().getLocalFilePath();
             if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                 avatarPath = mainFilePath;
             } else {
-                avatarPath = realmRegisteredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
+                avatarPath = realmRegisteredInfo.getLastAvatar(realm).getFile().getLocalThumbnailPath();
             }
         }
 
@@ -267,14 +260,15 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     public static void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
-        String identity = Long.toString(System.currentTimeMillis());
-        RealmRoomMessage.makeTextMessage(mRoomId, Long.parseLong(identity), message);
-        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);
+        RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message);
+        HelperRealm.copyOrUpdateToRealm(roomMessage);
+        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(roomMessage.getMessageId() + "");
     }
 
     private void goToChatActivity() {
         Intent intent = new Intent(ActivityPopUpNotification.this, ActivityMain.class);
         intent.putExtra(ActivityMain.openChat, mList.get(viewPager.getCurrentItem()).roomId);
+        intent.putExtra(ActivityMain.userId, userId);
         startActivity(intent);
         finish();
     }
@@ -286,7 +280,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             initAppbar();
             initViewPager();
             initLayoutAttach();
-            setUpEmojiPopup();
+//            setUpEmojiPopup();
         }
 
         private void initMethod() {
@@ -311,6 +305,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewAttachFile = findViewById(R.id.apn_layout_attach_file);
 
             viewMicRecorder = findViewById(R.id.apn_layout_mic_recorde);
+            findViewById(R.id.lmr_layout_bottom).setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_root_dark), ActivityPopUpNotification.this, R.attr.rootBackgroundColor));
 
             voiceRecord = new VoiceRecord(ActivityPopUpNotification.this, viewMicRecorder, viewAttachFile, new OnVoiceRecord() {
                 @Override
@@ -348,7 +343,6 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            findViewById(R.id.apn_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
             txtName = (TextView) findViewById(R.id.apn_txt_name);
             txtName.setOnClickListener(new View.OnClickListener() {
@@ -382,7 +376,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
             /** Hint : always read count of view pager with "listSize", for avoid from view pager get count error */
             listSize = mList.size();
-            if (viewPager != null && mAdapter != null){
+            if (viewPager != null && mAdapter != null) {
                 mAdapter.notifyDataSetChanged();
             } else {
                 mAdapter = new AdapterViewPagerClass();
@@ -418,11 +412,11 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
-                    emojiPopup.toggle();
+//                    emojiPopup.toggle();
                 }
             });
 
-            edtChat = (EmojiEditTextE) findViewById(R.id.apn_edt_chat);
+            edtChat = findViewById(R.id.apn_edt_chat);
 
             edtChat.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -489,7 +483,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 public boolean onLongClick(View view) {
 
                     voiceRecord.setItemTag("ivVoice");
-                    viewAttachFile.setVisibility(View.GONE);
+                    viewAttachFile.setVisibility(View.INVISIBLE);
                     viewMicRecorder.setVisibility(View.VISIBLE);
 
 
@@ -504,8 +498,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            btnSend = (MaterialDesignTextView) findViewById(R.id.apn_btn_send);
-            btnSend.setTextColor(Color.parseColor(G.attachmentColor));
+            btnSend = findViewById(R.id.apn_btn_send);
+            //  btnSend.setTextColor(Color.parseColor(G.attachmentColor));
 
             btnSend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -541,9 +535,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, container, false);
 
-            TextView txtMessage = (TextView) layout.findViewById(R.id.slapn_txt_message);
+            TextView txtMessage = layout.findViewById(R.id.slapn_txt_message);
             txtMessage.setText(mList.get(position).message);
 
             layout.setOnClickListener(new View.OnClickListener() {
@@ -553,7 +547,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            ((ViewGroup) container).addView(layout);
+            container.addView(layout);
 
             return layout;
         }

@@ -1,22 +1,21 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
-
-import io.realm.Realm;
 
 public class ClientSearchUsernameResponse extends MessageHandler {
 
@@ -36,29 +35,19 @@ public class ClientSearchUsernameResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builder = (ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder) message;
-        Realm realm = Realm.getDefaultInstance();
-        for (final ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item : builder.getResultList()) {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (final ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item : builder.getResultList()) {
 
-            if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
+                if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
+                    RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
+                } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
+                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst() == null) {
+                        RealmRoom realmRoom = RealmRoom.putOrUpdate(item.getRoom(), realm);
+                        realmRoom.setDeleted(true);
                     }
-                });
-            } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
-                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst() == null) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRoom realmRoom = RealmRoom.putOrUpdate(item.getRoom(), realm);
-                            realmRoom.setDeleted(true);
-                        }
-                    });
                 }
             }
-        }
-        realm.close();
+        });
         if (G.onClientSearchUserName != null) {
             G.onClientSearchUserName.OnGetList(builder);
         }

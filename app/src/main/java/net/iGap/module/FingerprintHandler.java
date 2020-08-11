@@ -7,7 +7,7 @@ package net.iGap.module;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -16,21 +16,23 @@ import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
-import android.support.v4.app.ActivityCompat;
 
-import net.iGap.G;
+import androidx.core.app.ActivityCompat;
+
+import net.iGap.observers.interfaces.FingerPrint;
 
 @TargetApi(Build.VERSION_CODES.M)
 public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {
 
-
     private Context context;
+    private FingerPrint fingerPrint;
     private CancellationSignal mCancellationSignal;
     private boolean mSelfCancelled;
 
     // Constructor
-    public FingerprintHandler(Context mContext) {
+    public FingerprintHandler(Context mContext, FingerPrint fingerPrint) {
         context = mContext;
+        this.fingerPrint = fingerPrint;
     }
 
 
@@ -78,13 +80,12 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     public void update(String e, Boolean success) {
 
         if (success) {
-
-            if (G.fingerPrint != null) {
-                G.fingerPrint.success();
+            if (fingerPrint != null) {
+                fingerPrint.success();
             }
         } else {
-            if (G.fingerPrint != null && !e.contains("Fingerprint operation canceled.") && !mSelfCancelled) {
-                G.fingerPrint.error();
+            if (fingerPrint != null && !e.contains("Fingerprint operation canceled.") && !mSelfCancelled) {
+                fingerPrint.error();
             }
         }
     }

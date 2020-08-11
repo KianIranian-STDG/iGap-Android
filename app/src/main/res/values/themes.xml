@@ -1,463 +1,637 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <style name="Material_blackCustom" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="pageBackgroundTheme">@style/page_background_black</item>
-    <item name="textColorTheme">@style/text_style_black</item>
-    <item name="textColorMenuTheme">@style/text_style_menu_dark</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_dark</item>
-    <item name="backgroundColorMenuTheme">@style/background_menu_dark</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_dark</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_dark</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_dark</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_dark</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_dark</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_dark</item>
-    <item name="textBackgroundColor_2">@style/text_background_dark_2</item>
-    <item name="textBackgroundColor">@style/text_background_dark</item>
-    <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/emojiColorChat_dark</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallDark</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_dark</item>
-    <item name="fabButtoniGap">@style/FabButton_dark</item>
-    <item name="md_dark_theme">true</item>
-    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textColorBottomSheet">@style/FabButton_dark</item>
-    <!--<item name="colorAccent">@color/colorOldBlack</item>-->
-  </style>
-
-  <style name="Material_lightCustom" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="pageBackgroundTheme">@style/page_background_light</item>
-    <item name="textColorTheme">@style/text_style_light</item>
-    <item name="textColorMenuTheme">@style/text_style_menu_light</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_light</item>
-    <item name="backgroundColorMenuTheme">@style/background_menu_light</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_light</item>
-    <item name="textBackgroundColor_2">@style/text_background_light_2</item>
-    <item name="textBackgroundColor">@style/text_background_light</item>
-    <item name="textSecurityColor">@style/text_title_security_light</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallLight</item>
-    <item name="emojiChat">@style/emojiColorChat_light</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_light</item>
-    <item name="fabButtoniGap">@style/FabButton_light</item>
-    <item name="md_dark_theme">false</item>C
-    <item name="backgroundPassCode">@style/backgroundPassCodeLight</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <!--<item name="colorAccent">@color/white</item>-->
-  </style>
-
-  <style name="Material_blueGreyComplete" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#455A64</item>
-    <item name="colorPrimary">#455A64</item>
-    <item name="pageBackgroundTheme">@style/page_background_black</item>
-    <item name="textColorTheme">@style/text_style_black</item>
-
-    <item name="textColorMenuTheme">@style/text_style_menu_BlueGreyComplete</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_BlueGreyComplete</item>
-    <item name="backgroundColorMenuTheme">@style/background_settingBlueGreyComplete</item>
-
-    <item name="backgroundColorSettingTheme">@style/background_settingBlueGreyComplete</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_BlueGreyComplete</item>
-
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_BlueGreyComplete</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_BlueGreyComplete</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_BlueGreyComplete</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_BlueGreyComplete</item>
-
-    <item name="textBackgroundColor_2">@style/line_style_setting_BlueGreyComplete</item>
-    <item name="textBackgroundColor">@style/line_style_setting_BlueGreyComplete</item>
-
-    <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/emojiColorChat_BlueGreyComplete</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallBlueGreyComplete</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_BlueGreyComplete</item>
-    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
-    <item name="md_background_color">#CFD8DC</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <!--<item name="colorAccent">@color/white</item>-->
-  </style>
-
-
-  <style name="Material_indigoComplete" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#303F9F</item>
-    <item name="colorPrimary">#303F9F</item>
-    <item name="pageBackgroundTheme">@style/page_background_black</item>
-    <item name="textColorTheme">@style/text_style_black</item>
-
-    <item name="textColorMenuTheme">@style/text_style_menu_indigoComplete</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_indigoComplete</item>
-    <item name="backgroundColorMenuTheme">@style/background_settingindigoComplete</item>
-
-    <item name="backgroundColorSettingTheme">@style/background_settingindigoComplete</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_indigoComplete</item>
-
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_indigoComplete</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_indigoComplete</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_indigoComplete</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_indigoComplete</item>
-
-    <item name="textBackgroundColor_2">@style/line_style_setting_indigoComplete</item>
-    <item name="textBackgroundColor">@style/line_style_setting_indigoComplete</item>
-
-    <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/emojiColorChat_indigoComplete</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallindigoComplete</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_indigoComplete</item>
-    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
-    <item name="md_background_color">#c5cae9</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <!--<item name="colorAccent">@color/white</item>-->
-  </style>
-
-  <style name="Material_BrownComplete" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#5D4037</item>
-    <item name="colorPrimary">#5D4037</item>
-    <item name="pageBackgroundTheme">@style/page_background_black</item>
-    <item name="textColorTheme">@style/text_style_black</item>
-
-    <item name="textColorMenuTheme">@style/text_style_menu_BrownComplete</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_BrownComplete</item>
-    <item name="backgroundColorMenuTheme">@style/background_settingBrownComplete</item>
-
-    <item name="backgroundColorSettingTheme">@style/background_settingBrownComplete</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_BrownComplete</item>
-
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_BrownComplete</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_BrownComplete</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_BrownComplete</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_BrownComplete</item>
-
-    <item name="textBackgroundColor_2">@style/line_style_setting_BrownComplete</item>
-    <item name="textBackgroundColor">@style/line_style_setting_BrownComplete</item>
-
-    <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/emojiColorChat_BrownComplete</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallBrownComplete</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_BrownComplete</item>
-    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
-    <item name="md_background_color">#d7ccc8</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <!--<item name="colorAccent">@color/white</item>-->
-  </style>
-
-  <style name="Material_TealComplete" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#00796b</item>
-    <item name="colorPrimary">#00796b</item>
-    <item name="pageBackgroundTheme">@style/page_background_black</item>
-    <item name="textColorTheme">@style/text_style_black</item>
-
-    <item name="textColorMenuTheme">@style/text_style_menu_TealComplete</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_TealComplete</item>
-    <item name="backgroundColorMenuTheme">@style/background_settingTealComplete</item>
-
-    <item name="backgroundColorSettingTheme">@style/background_settingTealComplete</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_TealComplete</item>
-
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_TealComplete</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_TealComplete</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_TealComplete</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_TealComplete</item>
-
-    <item name="textBackgroundColor_2">@style/line_style_setting_TealComplete</item>
-    <item name="textBackgroundColor">@style/line_style_setting_TealComplete</item>
-
-    <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/emojiColorChat_TealComplete</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallTealComplete</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_TealComplete</item>
-    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
-    <item name="md_background_color">#b2dfdb</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <!--<item name="colorAccent">@color/white</item>-->
-  </style>
-
-  <style name="Material_GreyComplete" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#616161</item>
-    <item name="colorPrimary">#616161</item>
-    <item name="pageBackgroundTheme">@style/page_background_black</item>
-    <item name="textColorTheme">@style/text_style_black</item>
-
-    <item name="textColorMenuTheme">@style/text_style_menu_GreyComplete</item>
-    <item name="iconColorMenuTheme">@style/icon_style_menu_GreyComplete</item>
-    <item name="backgroundColorMenuTheme">@style/background_settingGreyComplete</item>
-
-    <item name="backgroundColorSettingTheme">@style/background_settingGreyComplete</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_GreyComplete</item>
-
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_GreyComplete</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_GreyComplete</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_GreyComplete</item>
-    <item name="hintColorSettingTheme">@style/hint_style_setting_GreyComplete</item>
-
-    <item name="textBackgroundColor_2">@style/line_style_setting_GreyComplete</item>
-    <item name="textBackgroundColor">@style/line_style_setting_GreyComplete</item>
-
-    <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/emojiColorChat_GreyComplete</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallGreyComplete</item>
-    <item name="backgroundSubChatTheme">@style/backgroundSubChat_GreyComplete</item>
-    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
-    <item name="md_background_color">#f5f5f5</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <!--<item name="colorAccent">@color/white</item>-->
-  </style>
-
-
-  <style name="Material_red" parent="Theme.AppCompat.Light.NoActionBar">
-
-    <item name="colorAccent">#F44336</item>
-    <item name="colorPrimary">#F44336</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_pink" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#E91E63</item>
-    <item name="colorPrimary">#E91E63</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-  </style>
-
-  <style name="Material_purple" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#9C27B0</item>
-    <item name="colorPrimary">#9C27B0</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_deepPurple" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#673AB7</item>
-    <item name="colorPrimary">#673AB7</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_indigo" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#3F51B5</item>
-    <item name="colorPrimary">#3F51B5</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_blue" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#2196F3</item>
-    <item name="colorPrimary">#2196F3</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_lightBlue" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#03A9F4</item>
-    <item name="colorPrimary">#03A9F4</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_cyan" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#00BCD4</item>
-    <item name="colorPrimary">#00BCD4</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_teal" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#009688</item>
-    <item name="colorPrimary">#009688</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_green" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#388E3C</item>
-    <item name="colorPrimary">#388E3C</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_lightGreen" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#689F38</item>
-    <item name="colorPrimary">#689F38</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_lime" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#AFB42B</item>
-    <item name="colorPrimary">#AFB42B</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_yellow" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#FBC02D</item>
-    <item name="colorPrimary">#FBC02D</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_amber" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#FFA000</item>
-    <item name="colorPrimary">#FFA000</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_orange" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#F57C00</item>
-    <item name="colorPrimary">#F57C00</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-
-  </style>
-
-  <style name="Material_deepOrange" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#E64A19</item>
-    <item name="colorPrimary">#E64A19</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-  </style>
-
-  <style name="Material_brown" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#5D4037</item>
-    <item name="colorPrimary">#5D4037</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-  </style>
-
-  <style name="Material_grey" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#616161</item>
-    <item name="colorPrimary">#616161</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-  </style>
-
-  <style name="Material_blueGrey" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">#455A64</item>
-    <item name="colorPrimary">#455A64</item>
-    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
-    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
-    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-    <item name="md_medium_font">IRANSansMobile.ttf</item>
-    <item name="md_regular_font">IRANSansMobile.ttf</item>
-    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>
-    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_light</item>
-  </style>
-
+    <style name="BaseTheme.baseDarkTheme">
+        <item name="colorAccent">@color/green</item>
+        <item name="colorAccentDark">#333635</item>
+        <item name="colorPrimary">@color/navigation_dark_mode_bg</item>
+        <item name="colorPrimaryDark">@color/background_setting_dark</item>
+        <item name="colorPrimaryLight">#565656</item>
+
+        <item name="md_dark_theme">true</item>
+
+        <item name="rootBackgroundColor">@color/background_setting_dark</item>
+        <item name="iGapTitleTextColor">@color/white</item>
+        <item name="iGapSubtitleTextColor">@color/gray_9d</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/gray_4c</item>
+        <item name="iGapHintTextColor">@color/hint_edit_text</item>
+        <item name="iGapButtonColor">@color/players_dark_background</item>
+        <item name="iGapButtonTextColor">@color/white</item>
+        <item name="iGapPrimaryIconTextColor">@color/white</item>
+        <item name="iGapLogoutButtonColor">@color/players_dark_background</item>
+        <item name="iGapCardViewColor">@color/gray_6c</item>
+        <item name="iGapEditTxtColor">@color/gray_6c</item>
+
+        <item name="iGapBottomNavigationIconStart">#FF50B452</item>
+        <item name="iGapBottomNavigationIconEnd">#FFC6DA42</item>
+
+        <item name="iGapReceivedOtherTextColor">#aaaaaa</item>
+        <item name="iGapReceivedMessageTextColor">#EEEEEE</item>
+        <item name="iGapReceivedReplayColor">#494949</item>
+
+        <item name="iGapSendMessageBubbleColor">#3d3d3d</item>
+        <item name="iGapSendMessageOtherTextColor">#cccccc</item>
+        <item name="iGapSendMessageTextColor">#AAAAAA</item>
+        <item name="iGapSendReplayColor">@color/green</item>
+
+        <item name="iGapLinkColor">#00BCD4</item>
+        <item name="iGapDefaultChatBackground">@color/background_setting_dark</item>
+    </style>
+
+    <style name="iGapDarkTheme" parent="BaseTheme.baseDarkTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_dark</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_dark</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_dark</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_dark</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_dark</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_dark
+        </item>
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_dark</item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_dark</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_dark</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark</item>
+
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_dark</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_dark_style</item>
+    </style>
+
+    <style name="BaseTheme.baseLightTheme">
+        <item name="colorAccent">@color/green</item>
+        <item name="colorAccentDark">#28820d</item>
+        <item name="colorPrimary">@color/colorToolbarBackgroundStart</item>
+        <item name="colorPrimaryDark">@color/colorToolbarBackgroundEnd</item>
+        <item name="colorPrimaryLight">#ececee</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">@color/hint_edit_text</item>
+        <item name="iGapButtonColor">@color/buttonColor</item>
+        <item name="iGapButtonTextColor">@color/buttonColor</item>
+        <item name="iGapPrimaryIconTextColor">@color/green</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapBottomNavigationIconStart">#FFC6DA42</item>
+        <item name="iGapBottomNavigationIconEnd">#FF50B452</item>
+
+        <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
+        <item name="iGapReceivedOtherTextColor">#7a7a7a</item>
+        <item name="iGapReceivedReplayColor">#e2e8de</item>
+
+        <item name="iGapSendMessageBubbleColor">#f5ffec</item>
+        <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">@color/green</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#f4f0e8</item>
+    </style>
+
+    <style name="iGapLightTheme" parent="BaseTheme.baseLightTheme">
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_default</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rec_default
+        </item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_default</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_default</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_default</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_default</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_default</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_default</item>
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_light</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_default
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_default
+        </item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_light</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_dark</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_default</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_light</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_normal_style</item>
+    </style>
+
+    <style name="BaseTheme.baseRedTheme">
+        <item name="colorAccent">#c82121</item>
+        <item name="colorAccentDark">#720505</item>
+        <item name="colorPrimary">#c82121</item>
+        <item name="colorPrimaryDark">#9e1010</item>
+        <item name="colorPrimaryLight">#f2b6b6</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#c82121</item>
+        <item name="iGapButtonTextColor">#c82121</item>
+        <item name="iGapPrimaryIconTextColor">#c82121</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+
+        <item name="iGapBottomNavigationIconStart">#dd6f6f</item>
+        <item name="iGapBottomNavigationIconEnd">#c82121</item>
+
+        <item name="iGapReceivedMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapReceivedOtherTextColor">#999999</item>
+        <item name="iGapReceivedReplayColor">#f5a2a2</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#720505</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#ffcdd2</item>
+    </style>
+
+    <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_red</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_red</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_red</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_red</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_red</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_red</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_red</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_red</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_red</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_red
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_red</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_red</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_red</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_red</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_red</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_red_style</item>
+    </style>
+
+    <style name="BaseTheme.basePinkTheme">
+        <item name="colorAccent">#ffb5b5</item>
+        <item name="colorAccentDark">#da6463</item>
+        <item name="colorPrimary">#ffb5b5</item>
+        <item name="colorPrimaryDark">#f68787</item>
+        <item name="colorPrimaryLight">#ffcbca</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#ffb5b5</item>
+        <item name="iGapButtonTextColor">#ffb5b5</item>
+        <item name="iGapPrimaryIconTextColor">#ffb5b5</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapBottomNavigationIconStart">#ffb5b5</item>
+        <item name="iGapBottomNavigationIconEnd">#f68787</item>
+
+        <item name="iGapReceivedOtherTextColor">#999999</item>
+        <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
+        <item name="iGapReceivedReplayColor">#F2BEBD</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
+        <item name="iGapSendMessageTextColor">#5F5F5F</item>
+        <item name="iGapSendReplayColor">#da6463</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#F8BBD0</item>
+    </style>
+
+    <style name="iGapPinkTheme" parent="BaseTheme.basePinkTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_pink</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_pink</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_pink</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_pink</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_pink</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_pink</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_pink</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_pink</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_pink
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_pink</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_pink</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_pink</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_pink</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_pink</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_pink</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_pink_style</item>
+    </style>
+
+    <style name="BaseTheme.basePurpleTheme">
+        <item name="colorAccent">#aa5c9f</item>
+        <item name="colorAccentDark">#68265b</item>
+        <item name="colorPrimary">#aa5c9f</item>
+        <item name="colorPrimaryDark">#854777</item>
+        <item name="colorPrimaryLight">#e8bae8</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#aa5c9f</item>
+        <item name="iGapButtonTextColor">#aa5c9f</item>
+        <item name="iGapPrimaryIconTextColor">#aa5c9f</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapBottomNavigationIconStart">#cc96ca</item>
+        <item name="iGapBottomNavigationIconEnd">#aa5c9f</item>
+
+        <item name="iGapReceivedMessageTextColor">#424242</item>
+        <item name="iGapReceivedOtherTextColor">#8A8787</item>
+        <item name="iGapReceivedReplayColor">#DBADDB</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#68265b</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#E1BEE7</item>
+    </style>
+
+    <style name="iGapPurpleTheme" parent="BaseTheme.basePurpleTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_purple</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_purple</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_purple
+        </item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_purple</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_purple</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_purple</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_purple</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_purple
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_purple
+        </item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_purple</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_purple</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_purple</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_purple</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_purple</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_purple</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_purple_style</item>
+    </style>
+
+    <style name="BaseTheme.baseBlueTheme">
+        <item name="colorAccent">#207dff</item>
+        <item name="colorAccentDark">#07439b</item>
+        <item name="colorPrimary">#207dff</item>
+        <item name="colorPrimaryDark">#064acb</item>
+        <item name="colorPrimaryLight">#9fd4ff</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#207dff</item>
+        <item name="iGapButtonTextColor">#207dff</item>
+        <item name="iGapPrimaryIconTextColor">#207dff</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapBottomNavigationIconStart">#66b3ff</item>
+        <item name="iGapBottomNavigationIconEnd">#207dff</item>
+
+        <item name="iGapReceivedMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapReceivedOtherTextColor">#999999</item>
+        <item name="iGapReceivedReplayColor">#92C7F2</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#aaaaaa</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#07439b</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#BBDEFB</item>
+    </style>
+
+    <style name="iGapBlueTheme" parent="BaseTheme.baseBlueTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_blue</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_blue</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_blue</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_blue</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_blue</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_blue</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_blue</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_blue</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_blue</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_blue
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_blue</item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_blue</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_blue</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_blue</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_blue</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_blue_style</item>
+    </style>
+
+    <style name="BaseTheme.baseGreenTheme">
+        <item name="colorAccent">#b5e663</item>
+        <item name="colorAccentDark">#8cb238</item>
+        <item name="colorPrimary">#b5e663</item>
+        <item name="colorPrimaryDark">#9dc756</item>
+        <item name="colorPrimaryLight">#dceab7</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#b5e663</item>
+        <item name="iGapButtonTextColor">#b5e663</item>
+        <item name="iGapPrimaryIconTextColor">#b5e663</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapBottomNavigationIconStart">#b5e663</item>
+        <item name="iGapBottomNavigationIconEnd">#9dc756</item>
+
+        <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
+        <item name="iGapReceivedOtherTextColor">#999999</item>
+        <item name="iGapReceivedReplayColor">#CFDDAA</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#8cb238</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#DCEDC8</item>
+    </style>
+
+    <style name="iGapGreenTheme" parent="BaseTheme.baseGreenTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_green</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_green</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_green</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_green</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_green</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_green</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_green</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_green</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_green</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_green
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_green
+        </item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_green</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_green</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_green</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_green</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_green_style</item>
+    </style>
+
+    <style name="BaseTheme.baseAmberTheme">
+        <item name="colorAccent">#f6d365</item>
+        <item name="colorAccentDark">#dd9f07</item>
+        <item name="colorPrimary">#f6d365</item>
+        <item name="colorPrimaryDark">#f7be16</item>
+        <item name="colorPrimaryLight">#ffe292</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#FFC107</item>
+        <item name="iGapButtonTextColor">#FFC107</item>
+        <item name="iGapPrimaryIconTextColor">#FFC107</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapBottomNavigationIconStart">#f6d365</item>
+        <item name="iGapBottomNavigationIconEnd">#f7be16</item>
+
+        <item name="iGapReceivedOtherTextColor">#999999</item>
+        <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
+        <item name="iGapReceivedReplayColor">#F2D585</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#dd9f07</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#FFF9C4</item>
+    </style>
+
+    <style name="iGapAmberTheme" parent="BaseTheme.baseAmberTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_amber</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_amber</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_amber</item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_amber</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_amber</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_amber</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_amber</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_amber</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_amber</item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_amber
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_amber
+        </item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_yellow</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_amber</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_amber</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_amber</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_amber_style</item>
+    </style>
+
+    <style name="BaseTheme.baseOrangeTheme">
+        <item name="colorAccent">#ff9d00</item>
+        <item name="colorAccentDark">#ff6700</item>
+        <item name="colorPrimary">#ff9d00</item>
+        <item name="colorPrimaryDark">#ff8000</item>
+        <item name="colorPrimaryLight">#ffc176</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/background_editText</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#ff9d00</item>
+        <item name="iGapButtonTextColor">#ff9d00</item>
+        <item name="iGapPrimaryIconTextColor">#ff9d00</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+
+        <item name="iGapBottomNavigationIconStart">#ff9d00</item>
+        <item name="iGapBottomNavigationIconEnd">#ff8000</item>
+
+        <item name="iGapReceivedMessageTextColor">#5F5F5F</item>
+        <item name="iGapReceivedOtherTextColor">#eeeeee</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapSendMessageOtherTextColor">#AAAAAA</item>
+        <item name="iGapSendMessageTextColor">#5f5f5f</item>
+        <item name="iGapSendReplayColor">#ff6700</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#FFE0B2</item>
+
+        <item name="iGapReceivedReplayColor">#F2B469</item>
+    </style>
+
+    <style name="iGapOrangeTheme" parent="BaseTheme.baseOrangeTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_orange</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_orange</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_orange
+        </item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_orange</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_orange</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_orange</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_orange</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_orange</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_orange</item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_orange
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_orange
+        </item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_orange</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_orange</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_orange</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_orange</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_orange_style</item>
+    </style>
+
+    <style name="BaseTheme.baseDarkGrayTheme">
+        <item name="colorAccent">#4e698a</item>
+        <item name="colorAccentDark">#182d44</item>
+        <item name="colorPrimary">#4e698a</item>
+        <item name="colorPrimaryDark">#2d4059</item>
+        <item name="colorPrimaryLight">#a6c0d1</item>
+
+        <item name="md_dark_theme">false</item>
+
+        <item name="md_background_color">@color/white</item>
+        <item name="rootBackgroundColor">@color/white</item>
+        <item name="iGapTitleTextColor">@color/blueGreyTitleTextColor</item>
+        <item name="iGapSubtitleTextColor">@color/gray_5c</item>
+        <item name="iGapPrimaryTextColor">@color/white</item>
+        <item name="iGapDividerLine">@color/grayDividerLine</item>
+        <item name="iGapHintTextColor">#757575</item>
+        <item name="iGapButtonColor">#4e698a</item>
+        <item name="iGapButtonTextColor">#4e698a</item>
+        <item name="iGapPrimaryIconTextColor">#4e698a</item>
+        <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
+        <item name="iGapCardViewColor">@color/white</item>
+        <item name="iGapEditTxtColor">#DBD9D9</item>
+
+        <item name="iGapSendMessageBubbleColor">#eae6dc</item>
+        <item name="iGapBottomNavigationIconStart">#7495b5</item>
+        <item name="iGapBottomNavigationIconEnd">#4e698a</item>
+        <item name="iGapReceivedMessageTextColor">@color/white</item>
+        <item name="iGapReceivedOtherTextColor">#eeeeee</item>
+        <item name="iGapReceivedReplayColor">#99B3C4</item>
+        <item name="iGapSendMessageOtherTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendMessageTextColor">@color/receive_message_text_light</item>
+        <item name="iGapSendReplayColor">#182d44</item>
+
+        <item name="iGapLinkColor">#303F9F</item>
+        <item name="iGapDefaultChatBackground">#CFD8DC</item>
+    </style>
+
+    <style name="iGapGrayTheme" parent="BaseTheme.baseDarkGrayTheme">
+        <item name="iGapCardToCardButton">@drawable/background_card_to_card_gray</item>
+        <item name="iGapToolbarBackground">@drawable/shape_toolbar_background_dark_gray</item>
+        <item name="iGapToolbarBackgroundSharp">@drawable/shape_toolbar_background_rect_dark_gray
+        </item>
+        <item name="iGapAvatarBackground">@drawable/shape_background_profile_sample_dark_gray</item>
+        <item name="iGapReceivedReplayBackground">@drawable/received_replay_shape_dark_gray</item>
+        <item name="iGapSendReplayBackground">@drawable/send_replay_shape_dark_gray</item>
+        <item name="iGapButtonSelector">@drawable/button_selector_dark_gray</item>
+        <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_default</item>
+        <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_dark_gray</item>
+        <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_dark_gray
+        </item>
+        <item name="iGapCardToCardButtonBackground">
+            @drawable/background_button_card_to_card_dark_gray
+        </item>
+        <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_dark_gray
+        </item>
+        <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line</item>
+        <item name="iGapScrollerHandler">@drawable/fastscroll_handle_dark_gray</item>
+        <item name="iGapChatSendMessageBackground">@drawable/backround_chatroom_root_default</item>
+        <item name="iGapProfileStroke">@drawable/profile_stroke_drawable_gray</item>
+        <item name="iGapProfileToolbar">@drawable/shape_profile_toolbar_dark_gray</item>
+        <item name="iGapTimerPinter">@drawable/timer_position_dark_gray</item>
+        <item name="iGapSpinnerShape">@drawable/kuknos_spinner_gray_style</item>
+    </style>
+
+    <style name="Theme.Design.TopSheetDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.TopSheetDialog</item>
+        <item name="bottomSheetStyle">@style/Widget.Design.TopSheet.Modal</item>
+    </style>
 
 </resources>

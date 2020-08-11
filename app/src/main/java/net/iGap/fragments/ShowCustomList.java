@@ -1,30 +1,30 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -36,39 +36,36 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
-import net.iGap.interfaces.OnSelectedList;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.module.ContactChip;
+import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.Theme;
+import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.structs.StructContactInfo;
+import net.iGap.observers.interfaces.OnSelectedList;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class ShowCustomList extends BaseFragment {
+public class ShowCustomList extends BaseFragment implements ToolbarListener {
     private static List<StructContactInfo> contacts;
     private static OnSelectedList onSelectedList;
     private FastAdapter fastAdapter;
-    private TextView txtStatus;
-    private TextView txtNumberOfMember;
-    //private EditText edtSearch;
-    private String textString = "";
-    private int sizeTextEdittext = 0;
     private boolean dialogShowing = false;
     private long lastId = 0;
     private int count = 0;
     private boolean singleSelect = false;
-    private RippleView rippleDown;
+    // private RippleView rippleDown;
     private List<ContactChip> mContactList = new ArrayList<>();
     private ChipsInput chipsInput;
     private boolean isRemove = true;
+    private HelperToolbar mHelperToolbar;
 
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
@@ -101,50 +98,47 @@ public class ShowCustomList extends BaseFragment {
             singleSelect = bundle.getBoolean("SINGLE_SELECT");
         }
 
-        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setDefaultTitle(getString(R.string.add_new_member))
+                .setListener(this)
+                .setLogoShown(true);
 
-        txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
-        txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
-        //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
-        chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
 
+        LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
+        toolbarLayout.addView(mHelperToolbar.getView());
 
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
+        /**
+         * for some problem in theme we created 2 layout and check theme then add at run time
+         * library does not support change text color or background color at run time until 1.0.8
+         */
+        ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
 
-        rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
-        rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        //todo:// use material chips
+        if (G.themeColor == Theme.DARK) {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
+        } else {
+            layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
+        }
 
-                if (dialogShowing) {
-                    showDialog();
-                } else {
-                    if (onSelectedList != null) {
-                        onSelectedList.getSelectedList(true, "", 0, getSelectedList());
-                    }
-                    popBackStackFragment();
-                }
-            }
-        });
+        chipsInput = view.findViewById(R.id.chips_input);
 
-        final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
-        final ItemAdapter headerAdapter = new ItemAdapter();
         final ItemAdapter itemAdapter = new ItemAdapter();
-        fastAdapter = FastAdapter.with(Arrays.asList(headerAdapter, itemAdapter));
+        fastAdapter = FastAdapter.with(itemAdapter);
         fastAdapter.withSelectable(true);
         fastAdapter.setHasStableIds(true);
 
         //get our recyclerView and do basic setup
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView rv = view.findViewById(R.id.fcg_recycler_view_add_item_to_group);
+        rv.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
         rv.setItemAnimator(new DefaultItemAnimator());
-        rv.setAdapter(stickyHeaderAdapter.wrap(fastAdapter));
+        rv.setAdapter(fastAdapter);
+
+        FastScroller fastScroller = view.findViewById(R.id.fast_scroller);
+        fastScroller.setRecyclerView(rv);
 
         itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
             @Override
@@ -179,10 +173,6 @@ public class ShowCustomList extends BaseFragment {
                 return false;
             }
         });
-
-        //this adds the Sticky Headers within our list
-        final StickyRecyclerHeadersDecoration decoration = new StickyRecyclerHeadersDecoration(stickyHeaderAdapter);
-        rv.addItemDecoration(decoration);
 
         List<IItem> items = new ArrayList<>();
 
@@ -230,7 +220,7 @@ public class ShowCustomList extends BaseFragment {
                         isRemove = false;
                     }
 
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -247,18 +237,9 @@ public class ShowCustomList extends BaseFragment {
             }
         });
 
-        //so the headers are aware of changes
-        stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                decoration.invalidateHeaders();
-            }
-        });
-
         //restore selections (this has to be done after the items were added
         fastAdapter.withSavedInstanceState(savedInstanceState);
 
-        refreshView();
     }
 
     private void notifyAdapter(ContactItemGroup item, int position) {
@@ -273,7 +254,6 @@ public class ShowCustomList extends BaseFragment {
 
             popBackStackFragment();
         }
-        refreshView();
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -354,25 +334,6 @@ public class ShowCustomList extends BaseFragment {
         }).show();
     }
 
-    private void refreshView() {
-
-        int selectedNumber = 0;
-        textString = "";
-
-        int size = contacts.size();
-
-        for (int i = 0; i < size; i++) {
-            if (contacts.get(i).isSelected) {
-                selectedNumber++;
-                textString += contacts.get(i).displayName + ",";
-            }
-        }
-
-        txtNumberOfMember.setText(selectedNumber + " / " + size);
-        // sizeTextEdittext = textString.length();
-        //edtSearch.setText("");
-    }
-
     private ArrayList<StructContactInfo> getSelectedList() {
 
         ArrayList<StructContactInfo> list = new ArrayList<>();
@@ -394,16 +355,43 @@ public class ShowCustomList extends BaseFragment {
     }
 
     @Override
+    public void onLeftIconClickListener(View view) {
+        popBackStackFragment();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        fixChipsLayoutShowingState();
+        if (dialogShowing) {
+            showDialog();
+        } else {
+            if (onSelectedList != null) {
+                onSelectedList.getSelectedList(true, "", 0, getSelectedList());
+            }
+            popBackStackFragment();
+        }
+    }
+
+    @Override
     public void onPause() {
 
+        fixChipsLayoutShowingState();
+        super.onPause();
+    }
+
+
+    private void fixChipsLayoutShowingState() {
+
         //this code added for close chips layout
-        if (chipsInput != null ) {
+        if (chipsInput != null) {
             try {
-                chipsInput.addChip("" , "" );
-            }catch (Exception e){
+                chipsInput.addChip("", "");
+                chipsInput.removeChipByLabel("");
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        super.onPause();
+
     }
 }

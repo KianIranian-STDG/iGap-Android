@@ -1,32 +1,30 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
-
-import android.support.annotation.NonNull;
 
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
+import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
-
-import io.realm.Realm;
-
-import static net.iGap.G.userId;
 
 public class UserInfoResponse extends MessageHandler {
 
@@ -46,16 +44,15 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
-                RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            if (identity != null && identity instanceof String) {
+                if (identity.equals(RequestUserContactImport.KEY))
+                    RealmContacts.putOrUpdate(realm, builder.getUser());
             }
-        });
 
-        realm.close();
+            RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
+            RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
+        });
 
         LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override
@@ -72,7 +69,7 @@ public class UserInfoResponse extends MessageHandler {
                 return;
             }
         }
-        if ((builder.getUser().getId() == userId)) {
+        if ((builder.getUser().getId() == AccountManager.getInstance().getCurrentUser().getId())) {
             if (G.onUserInfoMyClient != null) {
                 G.onUserInfoMyClient.onUserInfoMyClient();
             }
@@ -89,8 +86,11 @@ public class UserInfoResponse extends MessageHandler {
                     if (G.onUserInfoResponse != null) {
                         G.onUserInfoResponse.onUserInfo(builder.getUser(), (String) identity);
                     }
+                    if (identity.equals(RequestUserContactImport.KEY) && G.onContactImport != null) {
+                        G.onContactImport.onContactInfo(builder.getUser());
+                    }
 
-                } else if (identity instanceof RequestUserInfo.UserInfoBody){
+                } else if (identity instanceof RequestUserInfo.UserInfoBody) {
                     if (((RequestUserInfo.UserInfoBody) identity).onComplete != null) {
                         ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "" + builder.getUser().getId(), "OK");
                     }
@@ -131,6 +131,8 @@ public class UserInfoResponse extends MessageHandler {
     public void timeOut() {
         super.timeOut();
         G.onUserInfoResponse.onUserInfoTimeOut();
+        if (G.onContactImport != null)
+            G.onContactImport.onTimeOut();
     }
 
     @Override
@@ -155,6 +157,8 @@ public class UserInfoResponse extends MessageHandler {
             ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "ERROR");
             ((RequestUserInfo.UserInfoBody) identity).onComplete.complete(true, "", "");
         }
+        if (G.onContactImport != null)
+            G.onContactImport.onError(majorCode, minorCode);
     }
 }
 

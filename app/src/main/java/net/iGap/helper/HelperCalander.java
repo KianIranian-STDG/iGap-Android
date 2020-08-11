@@ -1,15 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 
@@ -40,6 +41,18 @@ public class HelperCalander {
         CalendarShamsi shamsi = new CalendarShamsi(c.getTime());
 
         String time = shamsi.year + "/" + shamsi.month + "/" + shamsi.date;
+
+        return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
+    }
+
+    public static String getPersianYearMonth(int year, int mounth, int day) {
+
+        Calendar c = Calendar.getInstance();
+        c.set(year, mounth, day);
+
+        CalendarShamsi shamsi = new CalendarShamsi(c.getTime());
+
+        String time = shamsi.year + "/" + shamsi.month;
 
         return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
     }
@@ -78,8 +91,8 @@ public class HelperCalander {
 
     public static int isTimeHijri() {
 
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 1);
     }
 
     public static String checkHijriAndReturnTime(long time) {
@@ -379,9 +392,9 @@ public class HelperCalander {
 
         String result;
 
-        if (G.isTimeWhole){
+        if (G.isTimeWhole) {
             result = TimeUtils.toLocal(timeinMili, "HH:mm");
-        }else if (HelperCalander.isPersianUnicode) {
+        } else if (HelperCalander.isPersianUnicode) {
             result = TimeUtils.toLocal(timeinMili, "h:mm a");
             String[] _date = result.split(" ");
             if (_date.length > 1) {

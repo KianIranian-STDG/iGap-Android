@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.inquiryBill.ShowBillInquiryViewModel" />
+    </data>
+
+    <LinearLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="vertical" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp6">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    app:layout_constraintBottom_toBottomOf="@id/payLastTermButton"
+                    app:layout_constraintEnd_toEndOf="@id/lastTermTitle"
+                    app:layout_constraintStart_toStartOf="@id/lastTermTitle"
+                    app:layout_constraintTop_toTopOf="@id/lastTermTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lastTermTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/last_term"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lastTermMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp6"
+                    android:gravity="center"
+                    android:text="@{viewModel.response.lastTerm.message}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.showLastTermMessage}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lastTermTitle" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/line"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:barrierDirection="end"
+                    app:constraint_referenced_ids="billIdTitle,lastTermPayIdTitle,lastTermAmountTitle,midTermBillIdTitle,midTermPayIdTitle,midTermAmountTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billIdTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@string/billing_id"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lastTermMessage" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@{String.valueOf(viewModel.response.lastTerm.billId)}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/billIdTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/line"
+                    app:layout_constraintTop_toTopOf="@id/billIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lastTermPayIdTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@string/payment_code"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintStart_toStartOf="@id/billIdTitle"
+                    app:layout_constraintTop_toBottomOf="@id/billIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lastTermPayId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{String.valueOf(viewModel.response.lastTerm.payId)}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/lastTermPayIdTitle"
+                    app:layout_constraintEnd_toEndOf="@id/billId"
+                    app:layout_constraintStart_toStartOf="@id/billId"
+                    app:layout_constraintTop_toTopOf="@id/lastTermPayIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lastTermAmountTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@string/amount"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintStart_toStartOf="@id/billIdTitle"
+                    app:layout_constraintTop_toBottomOf="@id/lastTermPayIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/lastTermAmount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{viewModel.getCommaSeparatedPrice(viewModel.response.lastTerm.amount)}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/lastTermAmountTitle"
+                    app:layout_constraintEnd_toEndOf="@id/billId"
+                    app:layout_constraintStart_toStartOf="@id/billId"
+                    app:layout_constraintTop_toTopOf="@id/lastTermAmountTitle" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/payLastTermButton"
+                    style="@style/iGapButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp20"
+                    android:onClick="@{()->viewModel.onLastTermPayment()}"
+                    android:text="@string/last_term_payment"
+                    android:visibility="@{viewModel.lastTermHaveAmount}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lastTermAmountTitle" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/background_cancel_money_action"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/midTermPayButton"
+                    app:layout_constraintEnd_toEndOf="@id/midTermTitle"
+                    app:layout_constraintStart_toStartOf="@id/midTermTitle"
+                    app:layout_constraintTop_toTopOf="@id/midTermTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp20"
+                    android:gravity="center"
+                    android:text="@string/mid_term"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintEnd_toEndOf="@id/lastTermTitle"
+                    app:layout_constraintStart_toStartOf="@id/lastTermTitle"
+                    app:layout_constraintTop_toBottomOf="@id/payLastTermButton" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp6"
+                    android:gravity="center"
+                    android:text="@{viewModel.response.midTerm.message}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.showMidTermMessage}"
+                    app:layout_constraintEnd_toEndOf="@id/midTermTitle"
+                    app:layout_constraintStart_toStartOf="@id/midTermTitle"
+                    app:layout_constraintTop_toBottomOf="@id/midTermTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermBillIdTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@string/billing_id"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/midTermMessage" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermBillId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp8"
+                    android:layout_marginEnd="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@{String.valueOf(viewModel.response.midTerm.billId)}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/midTermBillIdTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/line"
+                    app:layout_constraintTop_toTopOf="@id/midTermBillIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermPayIdTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:text="@string/payment_code"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintStart_toStartOf="@id/midTermBillIdTitle"
+                    app:layout_constraintTop_toBottomOf="@id/midTermBillIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermPayId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{String.valueOf(viewModel.response.midTerm.payId)}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/midTermPayIdTitle"
+                    app:layout_constraintEnd_toEndOf="@id/midTermBillId"
+                    app:layout_constraintStart_toStartOf="@id/midTermBillId"
+                    app:layout_constraintTop_toTopOf="@id/midTermPayIdTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/midTermAmountTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:gravity="start"
+                    android:text="@string/amount"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintStart_toStartOf="@id/midTermBillIdTitle"
+                    app:layout_constraintTop_toBottomOf="@id/midTermPayId" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@{viewModel.getCommaSeparatedPrice(viewModel.response.midTerm.amount)}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintBottom_toBottomOf="@id/midTermAmountTitle"
+                    app:layout_constraintEnd_toEndOf="@id/midTermBillId"
+                    app:layout_constraintStart_toStartOf="@id/midTermBillId"
+                    app:layout_constraintTop_toTopOf="@id/midTermAmountTitle" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/midTermPayButton"
+                    style="@style/iGapButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp20"
+                    android:onClick="@{()->viewModel.onMidTermPayment()}"
+                    android:text="@string/intermediate_payment"
+                    android:visibility="@{viewModel.midTermHaveAmount}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/midTermAmountTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

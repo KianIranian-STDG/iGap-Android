@@ -3,8 +3,6 @@ package org.paygear.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +10,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.MerchantsListItemBinding;
+import net.iGap.module.Theme;
 
 import org.paygear.RaadApp;
 import org.paygear.model.SearchedAccount;
@@ -79,8 +82,8 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppCompatTextView textView = new AppCompatTextView(parent.getContext());
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
-            textView.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
-            textView.setTypeface(G.typeface_IRANSansMobile);
+            textView.setBackgroundColor(new Theme().getRootColor(textView.getContext()));
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
             textView.setGravity(Gravity.START);
 
             return new ViewHolderTitle(textView);
@@ -166,14 +169,14 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
             if (data.getAccount_type() != 4) {
                 if (data.getBusiness_type()==2){
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                    Picasso.with(G.context).load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
                             .transform(new CircleImageTransform())
                             .error(R.drawable.ic_local_taxi_black_24dp)
                             .placeholder(R.drawable.ic_local_taxi_black_24dp)
                             .fit()
                             .into(mBinding.image);
                 }else {
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                    Picasso.with(G.context).load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
                             .transform(new CircleImageTransform())
                             .error(R.drawable.ic_store_black_24dp)
                             .placeholder(R.drawable.ic_store_black_24dp)
@@ -181,7 +184,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
                             .into(mBinding.image);
                 }
             } else {
-                Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                Picasso.with(G.context).load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
                         .transform(new CircleImageTransform())
                         .error(R.drawable.ic_person_outline2_white_24dp)
                         .placeholder(R.drawable.ic_person_outline2_white_24dp)

@@ -1,85 +1,113 @@
 package net.iGap.fragments;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 
-import net.iGap.G;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.databinding.DataBindingUtil;
+
 import net.iGap.R;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.databinding.FragmentFinancialServicesBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.FinancialServicesViewModel;
 
-public class FragmentFinancialServices extends BaseFragment {
+import org.jetbrains.annotations.NotNull;
 
-    public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
-    boolean openInMain = false;
+import java.util.ArrayList;
+import java.util.List;
 
-    public static FragmentFinancialServices newInstance(boolean openInFragmentMain) {
+public class FragmentFinancialServices extends FragmentToolBarBack {
+
+    private FragmentFinancialServicesBinding binding;
+    private FinancialServicesViewModel viewModel;
+
+    public static FragmentFinancialServices newInstance() {
         FragmentFinancialServices fragmentFinancialServices = new FragmentFinancialServices();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(OPEN_IN_FRAGMENT_MAIN, openInFragmentMain);
-        fragmentFinancialServices.setArguments(bundle);
         return fragmentFinancialServices;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_financial_services, container, false);
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_financial_services, root, true);
+        viewModel = new FinancialServicesViewModel();
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
+        HelperToolbar t = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.financial_services))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }
 
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        showMenu();
+                    }
+                });
 
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        binding.walletPriceView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
+            public void onGlobalLayout() {
+                // Ensure you call it only once
+                binding.walletPriceValue.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                ConstraintSet set = new ConstraintSet();
+                set.clone(binding.root);
+                set.constrainCircle(binding.walletPointer.getId(), binding.walletPriceView.getId(), binding.walletPriceView.getWidth() / 2, 0);
+                set.applyTo(binding.root);
             }
         });
 
-
-        TextView txtTop = view.findViewById(R.id.top);
-        txtTop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = "https://taps.io/get-top";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
+        viewModel.walletPointerPosition.observe(this, integer -> {
+            if (integer != null) {
+                ConstraintSet set = new ConstraintSet();
+                set.clone(binding.root);
+                set.constrainCircle(binding.walletPointer.getId(), binding.walletPriceView.getId(), binding.walletPriceView.getWidth() / 2, integer);
+                set.applyTo(binding.root);
             }
         });
 
+    }
 
-        TextView txtPagear = view.findViewById(R.id.paygear);
-        txtPagear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = "https://taps.io/get-paygear";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
-        });
+    private void showMenu() {
+        if (getContext() != null) {
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.financial_report));
+            items.add(getString(R.string.settings));
+            items.add(getString(R.string.fag));
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                switch (position) {
+                    case 0:
 
+                        break;
+                    case 1:
 
-        if (openInMain) {
-            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+                        break;
+                    case 2:
 
+                        break;
+                }
+            }).show();
         }
-
     }
 
 }

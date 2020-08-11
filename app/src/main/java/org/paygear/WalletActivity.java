@@ -6,24 +6,23 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.Theme;
 
 import org.paygear.fragment.CardsFragment;
-import org.paygear.fragment.ScannerFragment;
 import org.paygear.model.Payment;
-import org.paygear.utils.Utils;
 import org.paygear.web.Web;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.app.NavigationBarActivity;
@@ -73,7 +72,7 @@ public class WalletActivity extends NavigationBarActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override
@@ -84,6 +83,7 @@ public class WalletActivity extends NavigationBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setThemeSetting();
         super.onCreate(savedInstanceState);
 
         Raad.language = selectedLanguage;
@@ -170,5 +170,9 @@ public class WalletActivity extends NavigationBarActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+    }
+
+    private void setThemeSetting() {
+        this.setTheme(new Theme().getTheme(this));
     }
 }

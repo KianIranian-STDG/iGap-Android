@@ -1,219 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:clickable="true"
-  android:orientation="vertical">
-
-  <RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8">
+    android:clickable="true"
+    android:focusable="true"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/all"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/all"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/allFileSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <CheckBox
-      android:id="@+id/st_checkBox_photo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:minWidth="@dimen/dp100"
-      android:text="@string/array_Photo"
-      android:textColor="@color/gray_6c" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/allFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/all"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/all" />
 
-    <TextView
-      android:id="@+id/st_txt_sizeFolder_photo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:text="@string/photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
-  </RelativeLayout>
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/photo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/array_Photo"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/photoFileSize"
+        app:layout_constraintStart_toStartOf="@id/all"
+        app:layout_constraintTop_toBottomOf="@id/all" />
 
-  <!--VIDEO-->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/photoFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/photo"
+        app:layout_constraintEnd_toEndOf="@id/allFileSize"
+        app:layout_constraintTop_toTopOf="@id/photo" />
 
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8">
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/video"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/array_Video"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/videoFileSize"
+        app:layout_constraintStart_toStartOf="@id/all"
+        app:layout_constraintTop_toBottomOf="@id/photo" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/videoFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/video"
+        app:layout_constraintEnd_toEndOf="@id/allFileSize"
+        app:layout_constraintTop_toTopOf="@id/video" />
 
-    <CheckBox
-      android:id="@+id/st_checkBox_video_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:minWidth="@dimen/dp100"
-      android:text="@string/array_Video"
-      android:textColor="@color/gray_6c" />
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/document"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/Documents"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/documentFileSize"
+        app:layout_constraintStart_toStartOf="@id/all"
+        app:layout_constraintTop_toBottomOf="@id/video" />
 
-    <TextView
-      android:id="@+id/st_txt_sizeFolder_video"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:text="@string/photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
-  </RelativeLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/documentFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/document"
+        app:layout_constraintEnd_toEndOf="@id/allFileSize"
+        app:layout_constraintTop_toTopOf="@id/document" />
 
-  <!--NEXT2-->
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8">
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/audio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/audio"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/audioFileSize"
+        app:layout_constraintStart_toStartOf="@id/all"
+        app:layout_constraintTop_toBottomOf="@id/document" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/audioFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/audio"
+        app:layout_constraintEnd_toEndOf="@id/allFileSize"
+        app:layout_constraintTop_toTopOf="@id/audio" />
 
-    <CheckBox
-      android:id="@+id/st_checkBox_document_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:minWidth="@dimen/dp100"
-      android:text="@string/Documents"
-      android:textColor="@color/gray_6c" />
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/map"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/map"
+        android:textColor="?iGapTitleTextColor"
+        android:fontFamily="@font/main_font"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/mapFileSize"
+        app:layout_constraintStart_toStartOf="@id/all"
+        app:layout_constraintTop_toBottomOf="@id/audio" />
 
-    <TextView
-      android:id="@+id/st_txt_sizeFolder_document_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:text="@string/photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
-  </RelativeLayout>
-  <!--NEXT3-->
-  <!--NEXT2-->
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8"
-    android:visibility="visible">
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mapFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/map"
+        app:layout_constraintEnd_toEndOf="@id/allFileSize"
+        app:layout_constraintTop_toTopOf="@id/map" />
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/other"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:button="@drawable/check_box_background"
+        android:text="@string/other_files"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintEnd_toStartOf="@id/otherFileSize"
+        app:layout_constraintStart_toStartOf="@id/all"
+        app:layout_constraintTop_toBottomOf="@id/map" />
 
-    <CheckBox
-      android:id="@+id/st_checkBox_audio_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:minWidth="@dimen/dp100"
-      android:text="@string/audio"
-      android:textColor="@color/gray_6c" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/otherFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/other"
+        app:layout_constraintEnd_toEndOf="@id/allFileSize"
+        app:layout_constraintTop_toTopOf="@id/other" />
 
-
-    <TextView
-      android:id="@+id/st_txt_audio_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:gravity="center_vertical"
-      android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
-  </RelativeLayout>
-
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8"
-    android:visibility="visible">
-
-
-    <CheckBox
-      android:id="@+id/st_checkBox_map_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:minWidth="@dimen/dp100"
-      android:text="@string/map"
-      android:textColor="@color/gray_6c" />
-
-
-    <TextView
-      android:id="@+id/st_txt_map_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:gravity="center_vertical"
-      android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
-  </RelativeLayout>
-
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8"
-    android:visibility="visible">
-
-
-    <CheckBox
-      android:id="@+id/st_checkBox_otherFiles"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:minWidth="@dimen/dp100"
-      android:text="@string/other_files"
-      android:textColor="@color/gray_6c" />
-
-    <TextView
-      android:id="@+id/st_txt_otherFiles"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:gravity="center_vertical"
-      android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp16" />
-
-  </RelativeLayout>
-
-  <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="@dimen/dp8"
-    android:visibility="visible">
-
-    <TextView
-      android:id="@+id/st_total_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:layout_centerVertical="true"
-      android:gravity="center_vertical"
-      android:minWidth="@dimen/dp100"
-      android:padding="@dimen/dp6"
-      android:text="@string/total_size"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp18" />
-
-    <TextView
-      android:id="@+id/st_txt_totalSize_dialogClearCash"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
-      android:layout_centerVertical="true"
-      android:gravity="center_vertical"
-      android:text="photo"
-      android:textColor="@color/gray_6c"
-      android:textSize="@dimen/dp18" />
-  </RelativeLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

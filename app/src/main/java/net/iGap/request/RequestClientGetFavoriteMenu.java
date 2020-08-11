@@ -11,14 +11,14 @@
 package net.iGap.request;
 
 
-import net.iGap.interfaces.OnGetFavoriteMenu;
+import net.iGap.observers.interfaces.OnGetFavoriteMenu;
 import net.iGap.proto.ProtoClientGetFavoriteMenu;
 
 public class RequestClientGetFavoriteMenu {
 
     public void clientGetFavoriteMenu(OnGetFavoriteMenu onGetFavoriteMenu) {
         ProtoClientGetFavoriteMenu.ClientGetFavoriteMenu.Builder builder = ProtoClientGetFavoriteMenu.ClientGetFavoriteMenu.newBuilder();
-        RequestWrapper requestWrapper = new RequestWrapper(619, builder , onGetFavoriteMenu);
+        RequestWrapper requestWrapper = new RequestWrapper(619, builder, onGetFavoriteMenu);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

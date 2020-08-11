@@ -3,105 +3,75 @@ package net.iGap.viewmodel;
 import android.content.SharedPreferences;
 import android.view.View;
 
-import net.iGap.G;
-import net.iGap.R;
-import net.iGap.fragments.FragmentData;
-import net.iGap.fragments.FragmentSetting;
-import net.iGap.module.SHP_SETTING;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import static android.content.Context.MODE_PRIVATE;
+import net.iGap.G;
+import net.iGap.module.SHP_SETTING;
 
 /**
  * Created by amir on 09/12/2017.
  */
 
-public class FragmentDataViewModel {
+public class FragmentDataViewModel extends ViewModel {
 
     private final int MILADI = 0;
     private final int SHAMSI = 1;
     private final int GHAMARY = 2;
     private SharedPreferences sharedPreferences;
-    private int typeData;
 
+    private ObservableInt isMiladi = new ObservableInt(View.GONE);
+    private ObservableInt isShamsi = new ObservableInt(View.GONE);
+    private ObservableInt isGhamari = new ObservableInt(View.GONE);
+    private MutableLiveData<Boolean> dateChanged = new MutableLiveData<>();
 
-    public FragmentDataViewModel() {
-        getInfo();
+    public FragmentDataViewModel(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 1);
+
+        isMiladi.set(typeData == MILADI ? View.VISIBLE : View.GONE);
+        isShamsi.set(typeData == SHAMSI ? View.VISIBLE : View.GONE);
+        isGhamari.set(typeData == GHAMARY ? View.VISIBLE : View.GONE);
     }
 
+    public ObservableInt getIsMiladi() {
+        return isMiladi;
+    }
 
-    public void miladi(View view) {
+    public ObservableInt getIsShamsi() {
+        return isShamsi;
+    }
 
+    public ObservableInt getIsGhamari() {
+        return isGhamari;
+    }
+
+    public MutableLiveData<Boolean> getDateChanged() {
+        return dateChanged;
+    }
+
+    public void onMiladiClick() {
         if (G.onDateChanged != null) {
             G.onDateChanged.onChange();
         }
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SHP_SETTING.KEY_DATA, MILADI);
-        editor.apply();
-
-        if (FragmentData.onFragmentRemoveData != null)
-            FragmentData.onFragmentRemoveData.removeFragment();
-
-        if (FragmentSetting.dateType != null) {
-            FragmentSetting.dateType.dataName(G.fragmentActivity.getResources().getString(R.string.miladi));
-        }
-
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, MILADI).apply();
+        dateChanged.setValue(true);
     }
 
-    public void shamsi(View view) {
-
+    public void onShamsiClick() {
         if (G.onDateChanged != null) {
             G.onDateChanged.onChange();
         }
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SHP_SETTING.KEY_DATA, SHAMSI);
-        editor.apply();
-
-        if (FragmentData.onFragmentRemoveData != null)
-            FragmentData.onFragmentRemoveData.removeFragment();
-
-        if (FragmentSetting.dateType != null) {
-            FragmentSetting.dateType.dataName(G.fragmentActivity.getResources().getString(R.string.shamsi));
-        }
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, SHAMSI).apply();
+        dateChanged.setValue(true);
     }
 
-    public void ghamari(View view) {
+    public void onGhamariClick() {
         if (G.onDateChanged != null) {
             G.onDateChanged.onChange();
         }
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SHP_SETTING.KEY_DATA, GHAMARY);
-        editor.apply();
-
-        if (FragmentData.onFragmentRemoveData != null)
-            FragmentData.onFragmentRemoveData.removeFragment();
-
-        if (FragmentSetting.dateType != null) {
-            FragmentSetting.dateType.dataName(G.fragmentActivity.getResources().getString(R.string.ghamari));
-        }
+        sharedPreferences.edit().putInt(SHP_SETTING.KEY_DATA, GHAMARY).apply();
+        dateChanged.setValue(true);
     }
-
-
-    public boolean iconMiladi() {
-        return typeData == MILADI ? true : false;
-    }
-
-    public boolean iconShamsi() {
-        return typeData == SHAMSI ? true : false;
-    }
-
-    public boolean iconGhamari() {
-        return typeData == GHAMARY ? true : false;
-    }
-
-
-    private void getInfo() {
-        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
-
-    }
-
-
 }

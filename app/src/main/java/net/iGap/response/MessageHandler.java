@@ -1,24 +1,26 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import android.support.annotation.CallSuper;
 import android.util.Log;
-import android.widget.Toast;
+
+import androidx.annotation.CallSuper;
 
 import net.iGap.BuildConfig;
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.IGLog;
 import net.iGap.proto.ProtoError;
 
 import static net.iGap.G.latestResponse;
@@ -29,6 +31,8 @@ public abstract class MessageHandler {
     public Object message;
     int actionId;
     Object identity;
+    int majorCode = -1;
+    int minorCode = -1;
 
     public MessageHandler(int actionId, Object protoClass, Object identity) {
         this.actionId = actionId;
@@ -41,6 +45,10 @@ public abstract class MessageHandler {
         if (BuildConfig.DEBUG) {
             Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
         }
+
+        if (Config.FILE_LOG_ENABLE && actionId != 0) {
+            IGLog.e("RCV MSGH -> " + actionId);
+        }
         latestResponse = System.currentTimeMillis();
     }
 
@@ -51,11 +59,11 @@ public abstract class MessageHandler {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(G.context, "MessageHandler HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(G.context, "MessageHandler HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
-            WebSocketClient.reconnect(true);
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         error();
     }
@@ -64,13 +72,17 @@ public abstract class MessageHandler {
     public void error() {
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
+        majorCode = errorResponse.getMajorCode();
+        minorCode = errorResponse.getMinorCode();
+
+        if (Config.FILE_LOG_ENABLE && actionId != 0) {
+            IGLog.e("ERROR " + actionId + " MA " + majorCode + " MI " + minorCode);
+        }
 
         HelperError.showSnackMessage(HelperError.getErrorFromCode(majorCode, minorCode), false);
 
         if (!G.ignoreErrorCodes.contains(majorCode)) {
-            HelperLog.setErrorLog(new Exception("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId)));
+            HelperLog.getInstance().setErrorLog(new Exception("majorCode : " + errorResponse.getMajorCode() + " * minorCode : " + errorResponse.getMinorCode() + " * " + G.lookupMap.get(actionId)));
         }
 
 

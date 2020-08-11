@@ -7,12 +7,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +18,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;
@@ -43,7 +46,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.web.PostRequest;
@@ -54,7 +56,6 @@ import retrofit2.Response;
 
 public class CardFragment extends Fragment {
 
-    private RaadToolBar appBar;
     private BankCardView cardView;
     private SwitchCompat defaultCardSwitch;
     private TextView button;
@@ -109,17 +110,38 @@ public class CardFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.showBack();
+
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.payment))
+                .setRightIcons(R.string.scan_qr_code_icon)
+                .setLeftIcon(R.string.back_icon)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View view) {
+                        ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                new ScannerFragment(), "ScannerFragment");
+                    }
+                });
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
+        layoutToolbar.addView(toolbar.getView());
+
         if (mPayment != null) {
-            appBar.setTitle(getString(R.string.payment));
+            toolbar.setDefaultTitle(getString(R.string.payment));
         } else {
             if (mCard.bankCode != 69)
-                appBar.setTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
+                toolbar.setDefaultTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
             else
-                appBar.setTitle(mCard.cardNumber);
+                toolbar.setDefaultTitle(mCard.cardNumber);
         }
 
         cardView = view.findViewById(R.id.card_view);

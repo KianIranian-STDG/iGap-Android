@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:top="@dimen/dp4"
+        android:left="@dimen/dp4"
+        android:right="@dimen/dp4"
+        android:bottom="@dimen/dp4">
+        <shape android:shape="rectangle">
+
+            <size
+                android:width="@dimen/public_check_box_size"
+                android:height="@dimen/public_check_box_size" />
+
+            <stroke
+                android:color="@color/gray_6c"
+                android:width="@dimen/dp1" />
+
+            <corners android:radius="@dimen/dp4" />
+
+        </shape>
+    </item>
+
+    <item
+        android:top="@dimen/dp4"
+        android:left="@dimen/dp4"
+        android:right="@dimen/dp4"
+        android:bottom="@dimen/dp4">
+        <shape android:shape="rectangle">
+
+            <corners android:radius="@dimen/dp4" />
+
+        </shape>
+    </item>
+
+</layer-list>

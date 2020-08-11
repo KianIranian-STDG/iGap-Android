@@ -2,7 +2,6 @@ package net.iGap.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -10,6 +9,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -81,16 +83,16 @@ public class ActivityRatingBar extends ActivityEnhanced {
         }).build();
         View view = dialog.getView();
 
-        dialog.getTitleView().setTypeface(G.typeface_IRANSansMobile);
-        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(G.typeface_IRANSansMobile);
-        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(G.typeface_IRANSansMobile);
+        dialog.getTitleView().setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
+        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
+        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
 
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
 
-        ratingBar = (RatingBar) view.findViewById(R.id.arb_ratingBar_call);
-        edtResone = (EditText) view.findViewById(R.id.arb_edt_resone);
+        ratingBar = view.findViewById(R.id.arb_ratingBar_call);
+        edtResone = view.findViewById(R.id.arb_edt_resone);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {

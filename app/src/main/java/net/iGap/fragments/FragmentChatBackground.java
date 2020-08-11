@@ -10,450 +10,231 @@
 
 package net.iGap.fragments;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterChatBackground;
-import net.iGap.adapter.AdapterSolidChatBackground;
-import net.iGap.helper.HelperSaveFile;
+import net.iGap.databinding.ActivityChatBackgroundBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.OnGetWallpaper;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.TimeUtils;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmWallpaper;
-import net.iGap.realm.RealmWallpaperProto;
-import net.iGap.request.RequestInfoWallpaper;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.ChatBackgroundViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import io.realm.Realm;
+import static net.iGap.helper.HelperSaveFile.getPrivateDirectory;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.DIR_CHAT_BACKGROUND;
+public class FragmentChatBackground extends BaseFragment implements ToolbarListener {
 
-public class FragmentChatBackground extends BaseFragment {
+    private ActivityChatBackgroundBinding binding;
+    private ChatBackgroundViewModel viewModel;
 
-    private String savePath;
-    private RippleView rippleBack;
-    private RippleView rippleSet;
-    private RippleView rippleSetDefault;
-    private RecyclerView mRecyclerView, rcvSolidColor;
-    private ImageView imgFullImage;
-    private AdapterChatBackground adapterChatBackgroundSetting;
-    private AdapterSolidChatBackground adapterSolidChatbackground;
-    private ArrayList<StructWallpaper> wList;
-    private Realm realmChatBackground;
-    private Fragment fragment;
-    private RippleView chB_ripple_menu_button;
-    private boolean isSolidColor = false;
+    private HelperToolbar toolbar;
 
-    ArrayList<String> solidList = new ArrayList<>();
-
-
-    public static FragmentChatBackground newInstance() {
-        return new FragmentChatBackground();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new ChatBackgroundViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), getPrivateDirectory(getActivity()));
+            }
+        }).get(ChatBackgroundViewModel.class);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        realmChatBackground = Realm.getDefaultInstance();
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_chat_background, container, false));
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.activity_chat_background, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        try {
-            new File(DIR_CHAT_BACKGROUND).mkdirs();
-            new File(DIR_CHAT_BACKGROUND + "/.nomedia").createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        viewModel.init();
 
-        fragment = this;
-        view.findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.more_icon, R.string.check_icon, R.string.retry_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getString(R.string.st_title_Background))
+                .setListener(this);
 
-        rippleBack = (RippleView) view.findViewById(R.id.stcb_ripple_back);
+        binding.fcbLayoutToolbar.addView(toolbar.getView());
 
-        chB_ripple_menu_button = (RippleView) view.findViewById(R.id.chB_ripple_menu_button);
+        toolbar.getSecondRightButton().setVisibility(View.GONE);
 
-        chB_ripple_menu_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                View v = dialog.getCustomView();
+        binding.rcvContent.setAdapter(new AdapterChatBackground(viewModel.getOnImageWallpaperListClick()));
 
-                DialogAnimation.animationUp(dialog);
-                dialog.show();
+        viewModel.getLoadSelectedImage().observe(getViewLifecycleOwner(), wallpaper -> {
+            if (wallpaper != null) {
+                binding.stchfFullImage.setBackground(null);
+                binding.stchfFullImage.setImageDrawable(Drawable.createFromPath(new File(wallpaper.getImagePath()).getAbsolutePath()));
 
-                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-                ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-
-                TextView txtSolidColors = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-                TextView txtWallpaper = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-
-                TextView iconSolidColor = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                iconSolidColor.setText(G.fragmentActivity.getResources().getString(R.string.md_solid_colors));
-
-
-
-                TextView iconWallpaper = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-
-                iconWallpaper.setText(G.fragmentActivity.getResources().getString(R.string.md_wallpapers));
-
-                root1.setVisibility(View.VISIBLE);
-                root2.setVisibility(View.VISIBLE);
-
-                txtSolidColors.setText(getResources().getString(R.string.solid_colors));
-                txtWallpaper.setText(getResources().getString(R.string.wallpapers));
-
-                root1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        mRecyclerView.setVisibility(View.GONE);
-                        rcvSolidColor.setVisibility(View.VISIBLE);
-                        dialog.dismiss();
-                    }
-                });
-
-                root2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        rcvSolidColor.setVisibility(View.GONE);
-                        dialog.dismiss();
-                    }
-                });
-            }
-        });
-
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
-
-        imgFullImage = (ImageView) view.findViewById(R.id.stchf_fullImage);
-
-        SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-        if (backGroundPath.length() > 0) {
-            File f = new File(backGroundPath);
-            if (f.exists()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(backGroundPath), imgFullImage);
-            }
-        }
-
-        rippleSetDefault = (RippleView) view.findViewById(R.id.stcbf_ripple_set_default);
-
-        rippleSetDefault.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView){
-                if (getActivity() != null) {
-                    HelperSaveFile.removeFromPrivateDirectory(getActivity());
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
-                    editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
-                    editor.apply();
-                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
-                        G.onBackgroundChanged.onBackgroundChanged("");
-                    }
-                    popBackStackFragment();
+                if (wallpaper.isNew()) {
+                    toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+                    toolbar.getThirdRightButton().setVisibility(View.GONE);
+                } else {
+                    toolbar.getSecondRightButton().setVisibility(View.GONE);
+                    toolbar.getThirdRightButton().setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        rippleSet = (RippleView) view.findViewById(R.id.stcbf_ripple_set);
-        rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                if (getActivity() != null && savePath != null && savePath.length() > 0) {
-                    String finalPath = "";
-                    if (isSolidColor){
-                        finalPath = savePath;
-                        HelperSaveFile.removeFromPrivateDirectory(getActivity());
-                    } else {
-                        try {
-                            finalPath = HelperSaveFile.saveInPrivateDirectory(getActivity(), savePath);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        viewModel.getShowAddImage().observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                new MaterialDialog.Builder(getActivity()).title(R.string.choose_picture).negativeText(R.string.cancel).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        AttachFile attachFile = new AttachFile(getActivity());
+                        if (text.toString().equals(getString(R.string.from_camera))) {
+                            try {
+                                attachFile.requestTakePicture(FragmentChatBackground.this);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            try {
+                                attachFile.requestOpenGalleryForImageSingleSelect(FragmentChatBackground.this);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        dialog.dismiss();
                     }
+                }).show();
+            }
+        });
 
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
-                    editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, false);
-                    editor.apply();
-                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
-                        G.onBackgroundChanged.onBackgroundChanged(finalPath);
-                    }
-
-                    popBackStackFragment();
+        viewModel.getLoadSelectedColor().observe(getViewLifecycleOwner(), colorValue -> {
+            if (colorValue != null) {
+                binding.stchfFullImage.setImageDrawable(null);
+                binding.stchfFullImage.setBackgroundColor(colorValue.getColor());
+                if (colorValue.isNew()) {
+                    toolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+                    toolbar.getThirdRightButton().setVisibility(View.GONE);
+                } else {
+                    toolbar.getSecondRightButton().setVisibility(View.GONE);
+                    toolbar.getThirdRightButton().setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        fillList(true);
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcvContent);
-        rcvSolidColor = (RecyclerView) view.findViewById(R.id.rcvSolidColor);
-
-
-        adapterChatBackgroundSetting = new AdapterChatBackground(fragment, wList, new OnImageClick() {
-            @SuppressLint("ResourceType")
-            @Override
-            public void onClick(String imagePath) {
-
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgFullImage);
-
-
-                savePath = imagePath;
-
-                rippleSet.setVisibility(View.VISIBLE);
-                rippleSetDefault.setVisibility(View.GONE);
-                isSolidColor = false;
+        viewModel.getMenuList().observe(getViewLifecycleOwner(), menuList -> {
+            if (getContext() != null && menuList != null) {
+                new TopSheetDialog(getContext()).setListDataWithResourceId(menuList, -1, position -> viewModel.onMenuItemClicked(position)).show();
             }
         });
 
-        adapterSolidChatbackground = new AdapterSolidChatBackground(fragment, solidList, new OnImageClick() {
-            @SuppressLint("ResourceType")
-            @Override
-            public void onClick(String imagePath) {
-
-                //   G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgFullImage);
-                imgFullImage.setImageDrawable(null);
-                imgFullImage.setBackgroundColor(Color.parseColor(imagePath));
-
-                savePath = imagePath;
-
-                rippleSet.setVisibility(View.VISIBLE);
-                rippleSetDefault.setVisibility(View.GONE);
-                isSolidColor = true;
+        viewModel.getLoadChatBackgroundImage().observe(getViewLifecycleOwner(), isLoad -> {
+            if (binding.rcvContent.getAdapter() instanceof AdapterChatBackground && isLoad != null) {
+                ((AdapterChatBackground) binding.rcvContent.getAdapter()).wallpaperList(isLoad);
             }
         });
 
+        viewModel.getLoadChatBackgroundSolidColor().observe(getViewLifecycleOwner(), isLoad -> {
+            if (binding.rcvContent.getAdapter() instanceof AdapterChatBackground && isLoad != null) {
+                ((AdapterChatBackground) binding.rcvContent.getAdapter()).setSolidColor(isLoad);
+            }
+        });
 
-        mRecyclerView.setAdapter(adapterChatBackgroundSetting);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity, LinearLayoutManager.HORIZONTAL, false));
-        mRecyclerView.clearAnimation();
-
-
-        rcvSolidColor.setAdapter(adapterSolidChatbackground);
-        rcvSolidColor.setLayoutManager(new LinearLayoutManager(G.fragmentActivity, LinearLayoutManager.HORIZONTAL, false));
-        rcvSolidColor.clearAnimation();
-
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+        viewModel.getGoBack().observe(getViewLifecycleOwner(), isGoBack -> {
+            if (getActivity() instanceof ActivityMain && isGoBack != null) {
+                if (isGoBack) {
+                    ((ActivityMain) getActivity()).chatBackgroundChanged();
+                }
+                getActivity().onBackPressed();
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_CANCELED) {
-            return;
-        }
+        if (resultCode == Activity.RESULT_OK) {
+            String filePath = null;
 
-        String filePath = null;
+            switch (requestCode) {
+                case AttachFile.request_code_TAKE_PICTURE:
 
-        switch (requestCode) {
-            case AttachFile.request_code_TAKE_PICTURE:
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                    filePath = AttachFile.mCurrentPhotoPath;
-                } else {
-                    ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                    filePath = AttachFile.imagePath;
-                }
-                break;
-            case AttachFile.request_code_image_from_gallery_single_select:
-
-                if (data != null && data.getData() != null) {
-
-                    if (G.fragmentActivity != null) {
-                        AttachFile attachFile = new AttachFile(G.fragmentActivity);
-                        filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                        filePath = AttachFile.mCurrentPhotoPath;
+                    } else {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+                        filePath = AttachFile.imagePath;
                     }
-                }
+                    break;
+                case AttachFile.request_code_image_from_gallery_single_select:
 
-                break;
-        }
+                    if (data != null && data.getData() != null) {
 
-        if (filePath != null) {
+                        if (getActivity() != null) {
+                            AttachFile attachFile = new AttachFile(getActivity());
+                            filePath = attachFile.saveGalleryPicToLocal(AttachFile.getFilePathFromUri(data.getData()));
+                        }
+                    }
 
-            if (new File(filePath).exists()) {
-                RealmWallpaper.updateField(null, filePath);
-
-                fillList(false);
-
-                adapterChatBackgroundSetting.notifyItemInserted(1);
+                    break;
             }
+
+            viewModel.setUserCustomImage(filePath);
         }
     }
 
-    private Realm getRealmChatBackground() {
-        if (realmChatBackground == null || realmChatBackground.isClosed()) {
-            realmChatBackground = Realm.getDefaultInstance();
-        }
-        return realmChatBackground;
+    @Override
+    public void onLeftIconClickListener(View view) {
+        viewModel.onBackMenuItemClick();
     }
 
-    private void getImageListFromServer() {
-        G.onGetWallpaper = new OnGetWallpaper() {
-            @Override
-            public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                RealmWallpaper.updateField(list, "");
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        fillList(false);
-                        adapterChatBackgroundSetting.notifyDataSetChanged();
-                        adapterSolidChatbackground.notifyDataSetChanged();
-                    }
-                });
-            }
-        };
-
-        new RequestInfoWallpaper().infoWallpaper();
+    @Override
+    public void onRightIconClickListener(View view) {
+        viewModel.onMenuClick();
     }
 
-    private void fillList(boolean getInfoFromServer) {
+    @Override
+    public void onSecondRightIconClickListener(View view) {
+        viewModel.onAcceptMenuItemClick();
+    }
 
-        if (wList == null) wList = new ArrayList<>();
-
-        wList.clear();
-
-
-        //add item 0 add new background from local
-        StructWallpaper sw = new StructWallpaper();
-        sw.setWallpaperType(WallpaperType.addNew);
-        wList.add(sw);
-
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).findFirst();
-
-        if (realmWallpaper != null) {
-
-            if (realmWallpaper.getLocalList() != null) {
-                for (String localPath : realmWallpaper.getLocalList()) {
-                    if (new File(localPath).exists()) {
-                        StructWallpaper _swl = new StructWallpaper();
-                        _swl.setWallpaperType(WallpaperType.local);
-                        _swl.setPath(localPath);
-                        wList.add(_swl);
-
-                    }
-                }
-            }
-
-            if (realmWallpaper.getWallPaperList() != null) {
-                for (RealmWallpaperProto wallpaper : realmWallpaper.getWallPaperList()) {
-                    StructWallpaper _swp = new StructWallpaper();
-                    _swp.setWallpaperType(WallpaperType.proto);
-                    _swp.setProtoWallpaper(wallpaper);
-                    wList.add(_swp);
-                    solidList.add(_swp.getProtoWallpaper().getColor());
-                }
-            }
-
-            if (getInfoFromServer) {
-
-                long time = realmWallpaper.getLastTimeGetList();
-                if (time > 0) {
-
-                    if (time + (2 * 60 * 60 * 1000) < TimeUtils.currentLocalTime()) {
-                        getImageListFromServer();
-                    }
-                } else {
-                    getImageListFromServer();
-                }
-            }
-        } else {
-            if (getInfoFromServer) {
-                getImageListFromServer();
-            }
-        }
-
-        realm.close();
+    @Override
+    public void onThirdRightIconClickListener(View view) {
+        viewModel.onMenuResetItemClick();
     }
 
     public enum WallpaperType {
         addNew, local, proto
-    }
-
-    public interface OnImageClick {
-        void onClick(String imagePath);
-    }
-
-    public class StructWallpaper {
-
-        private WallpaperType wallpaperType;
-        private String path;
-        private RealmWallpaperProto protoWallpaper;
-
-
-        public WallpaperType getWallpaperType() {
-            return wallpaperType;
-        }
-
-        public void setWallpaperType(WallpaperType wallpaperType) {
-            this.wallpaperType = wallpaperType;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
-        public RealmWallpaperProto getProtoWallpaper() {
-            return protoWallpaper;
-        }
-
-        public void setProtoWallpaper(RealmWallpaperProto mProtoWallpaper) {
-
-            this.protoWallpaper = mProtoWallpaper;
-
-        }
     }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/row_plaque_root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp120"
+    android:padding="@dimen/dp1">
+
+    <CheckBox
+        android:id="@+id/row_plaque_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/check_box_background"
+        android:clickable="false"
+        android:layout_marginEnd="@dimen/dp6"
+        android:layout_marginRight="@dimen/dp6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/row_plaque_edit"
+        android:layout_width="@dimen/dp40"
+        android:layout_height="@dimen/dp40"
+        style="@style/myIconTextViewStyle"
+        android:text="@string/edit_icon"
+        android:layout_marginLeft="@dimen/dp6"
+        android:layout_marginStart="@dimen/dp6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <net.iGap.libs.PlaqueView
+        android:id="@+id/row_plaque_plaqueView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:pv_edit_mode="false"
+        android:layout_marginLeft="@dimen/dp6"
+        android:layout_marginRight="@dimen/dp6"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintStart_toEndOf="@id/row_plaque_check_box"
+        app:layout_constraintEnd_toStartOf="@id/row_plaque_edit"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!--just for fix root click-->
+    <View
+        android:id="@+id/row_plaque_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="@id/row_plaque_plaqueView"
+        app:layout_constraintEnd_toEndOf="@id/row_plaque_plaqueView"
+        app:layout_constraintTop_toTopOf="@id/row_plaque_plaqueView"
+        app:layout_constraintBottom_toBottomOf="@id/row_plaque_plaqueView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

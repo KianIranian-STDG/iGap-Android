@@ -4,10 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
 
 import net.iGap.libs.ripplesoundplayer.renderer.Renderer;
 import net.iGap.module.MusicPlayer;

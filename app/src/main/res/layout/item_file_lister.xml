@@ -2,30 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/FileListerItemColor">
+    android:layout_height="wrap_content">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <ImageView
+        <TextView
+            style="@style/myIconTextViewStyle"
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_folder_black_48dp" />
+            android:text="@string/folder_icon"
+            android:textSize="@dimen/dp28"
+            android:padding="@dimen/dp10"
+            android:textColor="?iGapPrimaryIconTextColor" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginStart="@dimen/dp10"
             android:layout_weight="0.9"
             android:gravity="center_vertical"
+            android:textColor="?iGapTitleTextColor"
             android:text="Folder"
+            android:singleLine="true"
             android:textSize="15sp" />
     </LinearLayout>
 </RelativeLayout>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp80"
+    android:background="@drawable/shape_round_stroke_bg">
+
+    <net.iGap.module.RadiusImageView
+        android:id="@+id/pv_iv_country"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/dp1"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_plaque_country"
+        app:riv_radius="@dimen/dp4"
+        app:riv_radius_right_side="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="10:20"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/pv_et_p1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dp6"
+        android:layout_marginLeft="@dimen/dp6"
+        android:gravity="center"
+        android:hint="55"
+        android:inputType="number"
+        android:maxLength="2"
+        android:minWidth="@dimen/dp44"
+        android:padding="@dimen/dp4"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp20"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@id/pv_iv_country"
+        app:layout_constraintRight_toLeftOf="@id/pv_layout_alphabet"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/pv_layout_alphabet"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:minWidth="@dimen/dp44"
+        android:padding="@dimen/dp4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@id/pv_et_p1"
+        app:layout_constraintRight_toLeftOf="@id/pv_et_p2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pv_et_pAlphabet"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:hint="الف"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/pv_sp_alphabet"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/pv_et_p2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:hint="135"
+        android:inputType="number"
+        android:maxLength="3"
+        android:minWidth="@dimen/dp52"
+        android:padding="@dimen/dp4"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp20"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@id/pv_layout_alphabet"
+        app:layout_constraintRight_toLeftOf="@id/pv_splitter"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/pv_splitter"
+        android:layout_width="@dimen/dp1"
+        android:layout_height="0dp"
+        android:background="@color/black"
+        android:layout_marginTop="@dimen/dp6"
+        android:layout_marginBottom="@dimen/dp6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@id/pv_et_p2"
+        app:layout_constraintRight_toLeftOf="@id/pv_ll_city"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/pv_ll_city"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/dp6"
+        android:layout_marginRight="@dimen/dp6"
+        android:gravity="center_horizontal"
+        android:minWidth="@dimen/dp44"
+        android:orientation="vertical"
+        android:padding="@dimen/dp4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@id/pv_splitter"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:gravity="center|bottom"
+            android:text="ایران"
+            android:textColor="@color/black"
+            android:textSize="@dimen/standardTextSize" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/pv_et_pCity"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:gravity="center"
+            android:hint="10"
+            android:inputType="number"
+            android:maxLength="2"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp20"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

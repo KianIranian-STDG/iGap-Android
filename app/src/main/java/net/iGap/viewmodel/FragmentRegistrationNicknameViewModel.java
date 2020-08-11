@@ -9,234 +9,239 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
+
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentRegistrationNicknameBinding;
-import net.iGap.fragments.ReagentFragment;
-import net.iGap.interfaces.OnUserInfoResponse;
-import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.adapter.BindingAdapter;
+import net.iGap.helper.HelperError;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
+import net.iGap.model.LocationModel;
+import net.iGap.model.repository.ErrorWithWaitTime;
+import net.iGap.model.repository.RegisterRepository;
+import net.iGap.module.CountryListComparator;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.structs.StructCountry;
+import net.iGap.observers.interfaces.OnUserAvatarResponse;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestUserInfo;
-import net.iGap.request.RequestUserProfileSetNickname;
+import net.iGap.request.RequestUserAvatarAdd;
 
-import io.realm.Realm;
+import org.jetbrains.annotations.NotNull;
 
-public class FragmentRegistrationNicknameViewModel {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 
-    public final static String ARG_USER_ID = "arg_user_id";
-    public long userId = 0;
-    public ObservableField<String> callBackEdtNikeName = new ObservableField<>("");
-    public ObservableField<String> edtNikeNameHint = new ObservableField<>(G.context.getResources().getString(R.string.pu_nikname_profileUser));
+
+public class FragmentRegistrationNicknameViewModel extends ViewModel implements OnUserAvatarResponse {
+
+    public long userId;
+    private boolean existAvatar = true;
+    private String pathImageUser;
+    private int idAvatar;
+
+    private AvatarHandler avatarHandler;
+    private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
+
+    private RegisterRepository repository;
+
+    public MutableLiveData<Boolean> hideKeyboard = new MutableLiveData<>();
+    public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
+    public ObservableField<BindingAdapter.AvatarImage> avatarImagePath = new ObservableField<>();
+    public MutableLiveData<Boolean> showReagentPhoneNumberError = new MutableLiveData<>();
+    public SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> showDialogSelectCountry = new SingleLiveEvent<>();
+    public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
-    public ObservableInt edtNikeNameColor = new ObservableInt(G.context.getResources().getColor(R.color.black_register));
-    public ObservableInt lineBelowEditTextColor = new ObservableInt(G.context.getResources().getColor(R.color.border_editText));
-    private FragmentRegistrationNicknameBinding fragmentRegistrationNicknameBinding;
-    private TextInputLayout txtInputNickName;
+    public ObservableInt showCameraImage = new ObservableInt(View.VISIBLE);
+    public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
+    public ObservableInt reagentPhoneNumberMaskMaxCount = new ObservableInt(11);
+    public ObservableField<String> reagentPhoneNumberMask = new ObservableField<>("###-###-####");
+    public ObservableField<String> reagentPhoneNumber = new ObservableField<>("");
+    public ObservableInt showErrorName = new ObservableInt();
+    public ObservableInt showErrorLastName = new ObservableInt();
 
+    public FragmentRegistrationNicknameViewModel(AvatarHandler avatarHandler, @NotNull StringBuilder stringBuilder) {
+        repository = RegisterRepository.getInstance();
+        this.avatarHandler = avatarHandler;
 
-    public FragmentRegistrationNicknameViewModel(Bundle arguments, FragmentRegistrationNicknameBinding fragmentRegistrationNicknameBinding) {
+        repository.removeUserAvatar();
 
-        this.fragmentRegistrationNicknameBinding = fragmentRegistrationNicknameBinding;
-        getInfo(arguments);
+        G.onUserAvatarResponse = this;
 
+        String list = stringBuilder.toString();
+        // Split line by line Into array
+        String[] listArray = list.split("\\r?\\n");
+        //Convert array
+        for (String s : listArray) {
+            StructCountry structCountry = new StructCountry();
+            String[] listItem = s.split(";");
+            structCountry.setCountryCode(listItem[0]);
+            structCountry.setAbbreviation(listItem[1]);
+            structCountry.setName(listItem[2]);
+            if (listItem.length > 3) {
+                structCountry.setPhonePattern(listItem[3]);
+            } else {
+                structCountry.setPhonePattern(" ");
+            }
+            structCountryArrayList.add(structCountry);
+        }
+
+        Collections.sort(structCountryArrayList, new CountryListComparator());
+
+        if (repository.getCallingCode() != 0)
+            reagentCountryCode.set("+" + repository.getCallingCode());
+        if (repository.getPattern() != "")
+            reagentPhoneNumberMask.set(repository.getPattern().replace("X", "#").replace(" ", "-"));
     }
 
-    public void watcher(CharSequence s) {
-
-        txtInputNickName.setErrorEnabled(true);
-        txtInputNickName.setError("");
-        txtInputNickName.setHintTextAppearance(R.style.remove_error_appearance);
-        edtNikeNameColor.set(G.context.getResources().getColor(R.color.border_editText));
-        lineBelowEditTextColor.set(G.context.getResources().getColor(android.R.color.black));
-
-
+    public ArrayList<StructCountry> getStructCountryArrayList() {
+        return structCountryArrayList;
     }
 
-    public void OnClickBtnLetsGo(View v) {
-
-        Realm realm = Realm.getDefaultInstance();
-        final String nickName = callBackEdtNikeName.get();
-        if (!nickName.equals("")) {
-//            //showProgressBar();
-            G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    setNickName();
-                }
-            });
-
-            // TODO: 4/14/19 add Representer fragment
-
-
+    public void selectAvatarOnClick() {
+        if (existAvatar) {
+            showDialog.setValue(true);
         } else {
-            G.handler.post(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void run() {
-                    txtInputNickName.setErrorEnabled(true);
-                    txtInputNickName.setError(G.fragmentActivity.getResources().getString(R.string.Toast_Write_NickName));
-                    txtInputNickName.setHintTextAppearance(R.style.error_appearance);
-                    edtNikeNameColor.set(G.context.getResources().getColor(R.color.red));
-                    lineBelowEditTextColor.set(G.context.getResources().getColor(R.color.red));
-                }
-            });
+            Log.wtf(this.getClass().getName(), "selectAvatarOnClick: else");
         }
-
-        realm.close();
-
     }
 
-
-    private void getInfo(Bundle arguments) {
-        if (arguments != null) {
-            userId = (int) arguments.getLong(ARG_USER_ID, -1);
-            delete();
-        }
-        txtInputNickName = fragmentRegistrationNicknameBinding.puTxtInputNikeName;
+    public void onCountryCodeClick() {
+        showDialogSelectCountry.setValue(true);
     }
 
-
-    private void setNickName() {
-        G.onUserProfileSetNickNameResponse = new OnUserProfileSetNickNameResponse() {
+    public void setCountry(@NotNull StructCountry country) {
+        prgVisibility.set(View.VISIBLE);
+        repository.getCountryInfo(country.getAbbreviation(), new RegisterRepository.RepositoryCallback<LocationModel>() {
             @Override
-            public void onUserProfileNickNameResponse(final String nickName, String initials) {
-                getUserInfo();
-            }
-
-            @Override
-            public void onUserProfileNickNameError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
-            }
-
-            @Override
-            public void onUserProfileNickNameTimeOut() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
-            }
-        };
-        new RequestUserProfileSetNickname().userProfileNickName(callBackEdtNikeName.get());
-    }
-
-    private void getUserInfo() {
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                G.displayName = user.getDisplayName();
-
-                                RealmUserInfo.putOrUpdate(realm, user);
-
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-//                                        G.onUserInfoResponse = null;
-                                        hideProgressBar();
-//                                        Intent intent = new Intent(context, ActivityMain.class);
-//                                        intent.putExtra(ARG_USER_ID, user.getId());
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                        G.context.startActivity(intent);
-//                                        G.fragmentActivity.finish();
-
-                                        ReagentFragment reagentFragment = ReagentFragment.newInstance(true);
-                                        FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
-                                        reagentFragment.userId = user.getId();
-                                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                        transaction.replace(R.id.ar_layout_root, reagentFragment);
-                                        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
-                                        transaction.commitAllowingStateLoss();
-                                    }
-                                });
-                            }
-                        });
-                        realm.close();
-                    }
-                });
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideProgressBar();
-                    }
-                });
-            }
-        };
-        new RequestUserInfo().userInfo(G.userId);
-    }
-
-    private void delete() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            RealmAvatar.deleteAvatarWithOwnerId(G.userId);
-        }
-        realm.close();
-    }
-
-    public void showProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                prgVisibility.set(View.VISIBLE);
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        });
-    }
-
-    public void hideProgressBar() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
+            public void onSuccess(LocationModel data) {
                 prgVisibility.set(View.GONE);
-                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                reagentCountryCode.set("+" + data.getCountryCode());
+                if (data.getPhoneMask().equals("")) {
+                    reagentPhoneNumberMask.set("##################");
+                } else {
+                    reagentPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
+                }
+            }
 
+            @Override
+            public void onError() {
+                prgVisibility.set(View.GONE);
             }
         });
+        reagentPhoneNumber.set("");
     }
 
+    public void onTextChanged(String reagentPhoneNumber) {
+        if (reagentPhoneNumber.startsWith("0")) {
+            this.reagentPhoneNumber.set("");
+            showReagentPhoneNumberStartWithZeroError.setValue(true);
+        }
+    }
+
+    public void OnClickBtnLetsGo(@NotNull String name, String lastName) {
+        if (name.length() > 0) {
+            showErrorName.set(0);
+            if (lastName.length() > 0) {
+                showErrorLastName.set(0);
+                if (reagentPhoneNumber.get().isEmpty() || reagentPhoneNumber.get().length() > 0 && repository.getRegex().equals("") || (!repository.getRegex().equals("") && reagentPhoneNumber.get().replace("-", "").matches(repository.getRegex()))) {
+                    showReagentPhoneNumberError.setValue(false);
+                    hideKeyboard.setValue(true);
+                    prgVisibility.set(View.VISIBLE);
+                    repository.setNickName(
+                            name,
+                            lastName,
+                            reagentCountryCode.get().replace("+", ""),
+                            reagentPhoneNumber.get().replace("-", ""),
+                            new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
+                                @Override
+                                public void onSuccess() {
+
+                                }
+
+                                @Override
+                                public void onError(ErrorWithWaitTime error) {// if error is not null set reagent request is have error
+                                    if (error != null) {
+                                        if (error.getMajorCode() == 10177 && error.getMinorCode() == 2) {
+                                            HelperError.showSnackMessage(G.context.getString(R.string.referral_error_yourself), false);
+                                        } else {
+                                            HelperError.showSnackMessage(G.context.getString(R.string.error), false);
+                                        }
+                                    } else {
+                                        HelperError.showSnackMessage(G.context.getString(R.string.error), false);
+                                    }
+                                    prgVisibility.set(View.GONE);
+                                }
+                            });
+                } else {
+                    showReagentPhoneNumberError.setValue(true);
+                }
+            } else {
+                showErrorLastName.set(R.string.Toast_Write_NickName);
+            }
+        } else {
+            showErrorName.set(R.string.Toast_Write_NickName);
+        }
+    }
+
+    @Override
+    public void onAvatarAdd(final ProtoGlobal.Avatar avatar) {
+        existAvatar = true;
+        avatarHandler.avatarAdd(AccountManager.getInstance().getCurrentUser().getId(), pathImageUser, avatar, avatarPath -> G.handler.post(() -> {
+            existAvatar = true;
+            prgVisibility.set(View.GONE);
+            showCameraImage.set(View.GONE);
+            avatarImagePath.set(new BindingAdapter.AvatarImage(avatarPath, false, null));
+        }));
+    }
+
+    @Override
+    public void onAvatarAddTimeOut() {
+        existAvatar = true;
+        prgVisibility.set(View.GONE);
+    }
+
+    @Override
+    public void onAvatarError() {
+        existAvatar = true;
+        prgVisibility.set(View.GONE);
+    }
+
+    public void uploadAvatar(String path) {
+        existAvatar = false;
+        pathImageUser = path;
+        int lastUploadedAvatarId = idAvatar + 1;
+        prgVisibility.set(View.VISIBLE);
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathImageUser), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+            @Override
+            public void onProgress(String id, int progress) {
+                progressValue.postValue(progress);
+            }
+
+            @Override
+            public void onFinish(String id, String token) {
+                Log.wtf(this.getClass().getName(), "onFinish: id: " + id);
+                existAvatar = true;
+                new RequestUserAvatarAdd().userAddAvatar(token);
+            }
+
+            @Override
+            public void onError(String id) {
+                Log.wtf(this.getClass().getName(), "onError: id: " + id);
+                existAvatar = true;
+                prgVisibility.set(View.GONE);
+            }
+        }));
+    }
 }

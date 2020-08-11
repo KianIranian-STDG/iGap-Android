@@ -1,22 +1,21 @@
 package net.iGap.fragments;
 
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.Theme;
 import net.iGap.proto.ProtoClientRoomReport;
 import net.iGap.proto.ProtoUserReport;
 import net.iGap.request.RequestClientRoomReport;
@@ -48,7 +47,7 @@ public class FragmentReport extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        view.findViewById(R.id.asn_toolbar).setBackgroundColor(new Theme().getAccentColor(getContext()));
 
         Bundle extras = getArguments();
         if (extras != null) {
@@ -57,8 +56,8 @@ public class FragmentReport extends BaseFragment {
             isUserReport = extras.getBoolean("USER_ID");
         }
 
-        txtBack = (RippleView) view.findViewById(R.id.stns_ripple_back);
-        rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
+        txtBack = view.findViewById(R.id.stns_ripple_back);
+        rippleOk = view.findViewById(R.id.verifyPassword_rippleOk);
 
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +83,7 @@ public class FragmentReport extends BaseFragment {
             }
         });
 
-        edtReport = (EditText) view.findViewById(R.id.edtReport);
+        edtReport = view.findViewById(R.id.edtReport);
 
     }
 

@@ -3,15 +3,14 @@ package net.iGap.helper;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.top.lib.mpl.view.PaymentInitiator;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -21,8 +20,6 @@ import net.iGap.request.RequestMplSetSalesResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import ir.pec.mpl.pecpayment.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 
@@ -36,7 +33,7 @@ public class DirectPayHelper {
         int k = 0;
         StringBuilder newPP = new StringBuilder();
         for (int i = pp.length() - 1; i > -1; i--) {
-            k ++;
+            k++;
             newPP.insert(0, pp.charAt(i));
             if (k % 3 == 0 && i != 0) {
                 newPP.insert(0, ",");
@@ -44,9 +41,9 @@ public class DirectPayHelper {
         }
 
         if (HelperCalander.isPersianUnicode) {
-            return HelperCalander.convertToUnicodeFarsiNumber(newPP.toString()) +  " " + G.currentActivity.getString(R.string.rial);
+            return HelperCalander.convertToUnicodeFarsiNumber(newPP.toString()) + " " + G.currentActivity.getString(R.string.rial);
         } else {
-            return newPP.toString() +  " " + G.currentActivity.getString(R.string.rial);
+            return newPP.toString() + " " + G.currentActivity.getString(R.string.rial);
         }
     }
 
@@ -77,19 +74,12 @@ public class DirectPayHelper {
         TextView descriptionTxt = v.findViewById(R.id.description);
         TextView priceTxt = v.findViewById(R.id.price);
         TextView priceTitle = v.findViewById(R.id.priceTitle);
-        priceTxt.setTypeface(G.typeface_IRANSansMobile_Bold);
+        priceTxt.setTypeface(ResourcesCompat.getFont(priceTxt.getContext(), R.font.main_font_bold));
         priceTitle.setText(G.currentActivity.getString(R.string.price) + ":");
         titleTxt.setText(title);
         descriptionTxt.setText(description);
         priceTxt.setText(content);
-        if (G.isDarkTheme) {
-            priceTxt.setTextColor(G.currentActivity.getResources().getColor(R.color.white));
-        } else {
-            priceTxt.setTextColor(Color.parseColor(G.appBarColor));
-        }
         Button pay = v.findViewById(R.id.pay);
-        pay.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
-
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,8 +113,8 @@ public class DirectPayHelper {
                         if (!activity.isFinishing()) {
                             dialog.dismiss();
                             Intent intent = new Intent(activity, PaymentInitiator.class);
-                            intent.putExtra("Type" , "1");
-                            intent.putExtra("Token" , token);
+                            intent.putExtra("Type", "1");
+                            intent.putExtra("Token", token);
 //                        intent.putExtra("OrderID" , int_something);
                             activity.startActivityForResult(intent, requestCodeDirectPay);
                         }

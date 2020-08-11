@@ -1,56 +1,61 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.os.Build;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.audio.AudioWave;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import io.realm.Realm;
-
-import static android.os.Build.VERSION_CODES.JELLY_BEAN;
-import static net.iGap.fragments.FragmentChat.getRealmChat;
+import static java.lang.Long.parseLong;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
+
+    private static final String PLAY = "play";
+    private static final String PAUSE = "pause";
+    private static final String UPDATE = "updateTime";
 
     public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -73,131 +78,130 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         if (!TextUtils.isEmpty(localPath) && new File(localPath).exists()) {
             holder.mFilePath = localPath;
-            holder.musicSeekbar.setEnabled(true);
-            holder.btnPlayMusic.setEnabled(true);
-
-            if (!mMessage.isSenderMe() && Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColorDarker), PorterDuff.Mode.SRC_IN);
-            }
-            holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.toolbar_background));
+            holder.waveView.setEnabled(true);
+            G.handler.postDelayed(() -> holder.btnPlayMusic.setVisibility(View.VISIBLE), 200);
         } else {
-            holder.musicSeekbar.setEnabled(false);
-            holder.btnPlayMusic.setEnabled(false);
-            holder.btnPlayMusic.setTextColor(holder.itemView.getResources().getColor(R.color.gray_6c));
+            holder.waveView.setEnabled(false);
+            holder.btnPlayMusic.setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.musicSeekbar.setTag(mMessage.messageID);
+        holder.waveView.setTag(mMessage.getMessageId());
 
-        holder.complete = new OnComplete() {
-            @Override
-            public void complete(final boolean result, String messageOne, final String MessageTow) {
+        holder.mMessageID = mMessage.getMessageId() + "";
 
-                if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
-                    if (messageOne.equals("play")) {
-                        holder.btnPlayMusic.setText(R.string.md_play_arrow);
-                    } else if (messageOne.equals("pause")) {
-                        holder.btnPlayMusic.setText(R.string.md_pause_button);
-                    } else if (messageOne.equals("updateTime")) {
+        holder.complete = (result, messageOne, MessageTow) -> {
+            if (holder.waveView.getTag().equals(mMessage.getMessageId()) && (mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
 
+                switch (messageOne) {
+                    case PLAY:
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+                        break;
+                    case PAUSE:
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
+                        break;
+                    case UPDATE:
                         if (result) {
 
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    if (mMessage.messageID.equals(MusicPlayer.messageId)) {
-                                        holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
-                                        if (HelperCalander.isPersianUnicode) {
-                                            holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
-                                        }
-                                        holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
+                            G.handler.post(() -> {
+                                holder.waveView.setProgress(MusicPlayer.musicProgress);
+                                if ((mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
+                                    holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
+                                    if (HelperCalander.isPersianUnicode) {
+                                        holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
                                     }
                                 }
                             });
                         } else {
-                            holder.btnPlayMusic.post(new Runnable() {
-                                @Override
-                                public void run() {
+                            holder.btnPlayMusic.post(() -> {
 
-                                    holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
-                                    if (HelperCalander.isPersianUnicode) {
-                                        holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
-                                    }
-                                    holder.musicSeekbar.setProgress(0);
+                                holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
+                                if (HelperCalander.isPersianUnicode) {
+                                    holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
                                 }
+                                holder.waveView.setProgress(0);
                             });
                         }
-                    }
+
                 }
             }
         };
 
         holder.btnPlayMusic.setOnLongClickListener(getLongClickPerform(holder));
 
-        holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (FragmentChat.isInSelectionMode) {
-                    holder.itemView.performLongClick();
-                    return;
-                }
+        holder.btnPlayMusic.setOnClickListener(v -> {
 
-                if (holder.mFilePath.length() < 1) return;
+            if (FragmentChat.isInSelectionMode) {
+                holder.itemView.performLongClick();
+                return;
+            }
+            if (holder.mFilePath.length() < 1)
+                return;
 
-                G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+            if (!structMessage.isSenderMe() && structMessage.realmRoomMessage.getStatus() != null &&
+                    !structMessage.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
+            ) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+                RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
+            }
 
-                RealmClientCondition.addOfflineListen(holder.mRoomId, Long.parseLong(holder.mMessageID));
+            AndroidUtils.getAudioDuration(G.context, holder.mFilePath);
+            int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.waveView.getProgress() / 100);
+            MusicPlayer.currentDuration = currentVoiceGoTO;
+            if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                MusicPlayer.onCompleteChat = holder.complete;
 
-                if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-                    MusicPlayer.onCompleteChat = holder.complete;
-
-                    if (MusicPlayer.mp != null) {
-                        MusicPlayer.playAndPause();
-                    } else {
-                        MusicPlayer.startPlayer("", holder.mFilePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, holder.mMessageID);
-                        messageClickListener.onPlayMusic(holder.mMessageID);
-                    }
+                if (MusicPlayer.mp != null) {
+                    MusicPlayer.playAndPause();
                 } else {
-
-                    MusicPlayer.stopSound();
-                    MusicPlayer.onCompleteChat = holder.complete;
                     MusicPlayer.startPlayer("", holder.mFilePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, holder.mMessageID);
                     messageClickListener.onPlayMusic(holder.mMessageID);
-
-                    holder.mTimeMusic = MusicPlayer.musicTime;
                 }
+            } else {
+                MusicPlayer.stopSound();
+                MusicPlayer.onCompleteChat = holder.complete;
+                MusicPlayer.startPlayer("", holder.mFilePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, true, holder.mMessageID);
+                messageClickListener.onPlayMusic(holder.mMessageID);
+                holder.mTimeMusic = MusicPlayer.musicTime;
             }
+            MusicPlayer.messageId = mMessage.getMessageId() + "";
         });
 
-        holder.musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
-                        return true;
-                    }
-                    if (holder.mMessageID.equals(MusicPlayer.messageId)) {
-                        MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
-                    }
+        holder.waveView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return true;
                 }
-                return false;
+                if (holder.mMessageID.equals(MusicPlayer.messageId)) {
+                    MusicPlayer.setMusicProgress((int) holder.waveView.getProgress());
+                }
             }
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.waveView.getProgress() / 100);
+                String finalElapsedTime = exractTimingInString(currentVoiceGoTO);
+                String totalSizeInString = exractTimingInString((int) AndroidUtils.getAudioDuration(G.context, holder.mFilePath));
+                holder.txt_Timer.setText(finalElapsedTime + holder.getContext().getString(R.string.forward_slash) + totalSizeInString);
+                if (HelperCalander.isPersianUnicode) {
+                    holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+                }
+            }
+            return false;
         });
 
         super.bindView(holder, payloads);
 
-        ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
+        ProtoGlobal.RoomMessageType _type = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
         holder.mType = type;
         AppUtils.rightFileThumbnailIcon(holder.thumbnail, _type, null);
 
-        holder.mRoomId = mMessage.roomId;
+        holder.mRoomId = mMessage.getRoomId();
 
-        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID));
+        RealmRegisteredInfo registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
+        });
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());
@@ -205,17 +209,16 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.author.setText("");
         }
 
-        final long _st = (int) ((mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getDuration() : mMessage.attachment.duration) * 1000);
+        final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
 
-        holder.txt_Timer.setText("00/" + MusicPlayer.milliSecondsToTimer(_st));
+        holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
-        if (holder.musicSeekbar.getTag().equals(mMessage.messageID) && mMessage.messageID.equals(MusicPlayer.messageId)) {
+        if (holder.waveView.getTag().equals(mMessage.getMessageId()) && MusicPlayer.messageId.equals(mMessage.getMessageId() + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
 
-            holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
-
+            holder.waveView.setProgress(MusicPlayer.musicProgress);
             if (MusicPlayer.musicProgress > 0) {
-                holder.txt_Timer.setText(MusicPlayer.strTimer + "/" + MusicPlayer.musicTime);
+                holder.txt_Timer.setText(MusicPlayer.strTimer + holder.getContext().getString(R.string.forward_slash) + MusicPlayer.musicTime);
             }
 
 
@@ -223,185 +226,186 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.btnPlayMusic.setText(R.string.md_pause_button);
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
                 } else {
-                    holder.btnPlayMusic.setText(R.string.md_play_arrow);
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
                 }
             }
         } else {
-            holder.musicSeekbar.setProgress(0);
-            holder.btnPlayMusic.setText(R.string.md_play_arrow);
+            holder.waveView.setProgress(0);
+            holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
         }
 
-        holder.mMessageID = mMessage.messageID;
 
         if (HelperCalander.isPersianUnicode)
             holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+
     }
 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
+        holder.txt_Timer.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
 
-        if (mMessage.isSenderMe() && ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.iGapColor), PorterDuff.Mode.SRC_IN);
+        ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
+        if (mMessage.getStatus() != null) {
+            try {
+                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus());
+            } catch (RuntimeException e) {
+                e.printStackTrace();
             }
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.iGapColor), android.graphics.PorterDuff.Mode.SRC_IN);
-        } else {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
-            }
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
         }
 
-        holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-        holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
+        if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
+            holder.listenView.setVisibility(View.GONE);
+        } else {
+            holder.listenView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
 
-        if (type == ProtoGlobal.Room.Type.CHANNEL) {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
-            }
-
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.text_line1_igap_dark), android.graphics.PorterDuff.Mode.SRC_IN);
-            holder.txt_Timer.setTextColor(Color.parseColor(G.textTitleTheme));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-            if (Build.VERSION.SDK_INT >= JELLY_BEAN) {
-                holder.musicSeekbar.getThumb().mutate().setColorFilter(G.context.getResources().getColor(R.color.gray_6c), PorterDuff.Mode.SRC_IN);
-            }
-
-            holder.musicSeekbar.getProgressDrawable().setColorFilter(holder.itemView.getResources().getColor(R.color.gray10), android.graphics.PorterDuff.Mode.SRC_IN);
-            holder.txt_Timer.setTextColor(holder.itemView.getResources().getColor(R.color.grayNewDarker));
-            holder.author.setTextColor(Color.parseColor(G.textTitleTheme));
-        }
+        holder.txt_Timer.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.author.setTextColor(theme.getReceivedMessageOtherTextColor(holder.getContext()));
+        holder.listenView.setVisibility(View.GONE);
     }
 
+    @NotNull
     @Override
     public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    public class ViewHolder extends NewChatItemHolder implements IThumbNailItem, IProgress {
 
-        protected MessageProgress progress;
-        protected AppCompatImageView thumbnail;
-        //protected ImageView tic;
-        protected AppCompatTextView btnPlayMusic;
-        protected SeekBar musicSeekbar;
-        protected OnComplete complete;
-        protected AppCompatTextView txt_Timer;
-        protected AppCompatTextView author;
-        protected String mFilePath = "";
-        protected String mMessageID = "";
-        protected String mTimeMusic = "";
-        protected long mRoomId;
-        protected ProtoGlobal.Room.Type mType;
+        private MessageProgress progress;
+        private AppCompatImageView thumbnail;
+        private FontIconTextView btnPlayMusic;
+        private OnComplete complete;
+        private AppCompatTextView txt_Timer;
+        private AppCompatTextView author;
+        private String mFilePath = "";
+        private String mMessageID = "";
+        private String mTimeMusic = "";
+        private long mRoomId;
+        private ProtoGlobal.Room.Type mType;
+        private ConstraintLayout rootView;
+        private ConstraintSet set;
+        private AudioWave waveView;
+        private View listenView;
 
         public ViewHolder(View view) {
             super(view);
-            LinearLayout linearLayout_197 = new LinearLayout(G.context);
-            linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
-            setLayoutDirection(linearLayout_197, View.LAYOUT_DIRECTION_LTR);
-            linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
-            linearLayout_197.setMinimumWidth(i_Dp(R.dimen.dp220));
-            linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            linearLayout_197.setLayoutParams(layout_80);
 
-            LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
-            audioPlayerViewContainer.setId(R.id.audioPlayerViewContainer);
-            audioPlayerViewContainer.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams layout_868 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            audioPlayerViewContainer.setLayoutParams(layout_868);
-
-            LinearLayout linearLayout_153 = new LinearLayout(G.context);
-            LinearLayout.LayoutParams layout_928 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            linearLayout_153.setLayoutParams(layout_928);
-
-            //****************************
-            FrameLayout frameLayout_161 = new FrameLayout(G.context);
-
-            int pading = i_Dp(R.dimen.dp4);
-            frameLayout_161.setPadding(pading, pading, pading, pading);
-
-            LinearLayout.LayoutParams layout_1488 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), i_Dp(R.dimen.dp40));
-            layout_1488.gravity = Gravity.CENTER;
-            frameLayout_161.setLayoutParams(layout_1488);
-
-            thumbnail = new AppCompatImageView(G.context);
+            thumbnail = new AppCompatImageView(view.getContext());
             thumbnail.setId(R.id.thumbnail);
-            FrameLayout.LayoutParams layout_152 = new FrameLayout.LayoutParams(i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
-            layout_152.gravity = Gravity.CENTER;
             AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
-            thumbnail.setLayoutParams(layout_152);
-            frameLayout_161.addView(thumbnail);
-            progress = getProgressBar(0);
-            frameLayout_161.addView(progress);
-            linearLayout_153.addView(frameLayout_161);
+            progress = getProgressBar(view.getContext(), 0);
 
-            author = new AppCompatTextView(G.context);
+            author = new AppCompatTextView(view.getContext());
             author.setId(R.id.cslv_txt_author);
-            author.setText("recorded voice");
-            author.setTextColor(Color.parseColor(G.textBubble));
             author.setSingleLine(true);
-            setTextSize(author, R.dimen.dp14);
+            setTextSize(author, R.dimen.standardTextSize);
             author.setMaxLines(2);
             setTypeFace(author);
-            // cslv_txt_author.setEllipsize(TextUtils.TruncateAt.END);
-            LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layout_799.topMargin = i_Dp(R.dimen.dp12);
-            author.setLayoutParams(layout_799);
-            linearLayout_153.addView(author);
-            audioPlayerViewContainer.addView(linearLayout_153);
 
-            LinearLayout linearLayout_503 = new LinearLayout(G.context);
-            linearLayout_503.setGravity(Gravity.LEFT | Gravity.CENTER);
-            linearLayout_503.setMinimumHeight(i_Dp(R.dimen.dp32));
-            LinearLayout.LayoutParams layout_669 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
-            linearLayout_503.setLayoutParams(layout_669);
 
-            btnPlayMusic = new AppCompatTextView(G.context);
+            btnPlayMusic = new FontIconTextView(view.getContext());
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
-            btnPlayMusic.setEnabled(false);
-            btnPlayMusic.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
-            btnPlayMusic.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-            setTextSize(btnPlayMusic, R.dimen.dp20);
-            btnPlayMusic.setTypeface(G.typeface_Fontico);
-            LinearLayout.LayoutParams layout_978 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), ViewGroup.LayoutParams.MATCH_PARENT);
-            btnPlayMusic.setLayoutParams(layout_978);
-            linearLayout_503.addView(btnPlayMusic);
+            btnPlayMusic.setText(R.string.play_icon);
+            setTextSize(btnPlayMusic, R.dimen.dp36);
 
-            musicSeekbar = new SeekBar(G.context);
-            musicSeekbar.setId(R.id.csla_seekBar1);
-            LinearLayout.LayoutParams layout_652 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-            musicSeekbar.setLayoutParams(layout_652);
-            linearLayout_503.addView(musicSeekbar);
-            audioPlayerViewContainer.addView(linearLayout_503);
-
-            txt_Timer = new AppCompatTextView(G.context);
+            txt_Timer = new AppCompatTextView(view.getContext());
             txt_Timer.setId(R.id.csla_txt_timer);
-            txt_Timer.setPadding(0, 0, i_Dp(R.dimen.dp8), 0);
-            txt_Timer.setText("00:00");
-            txt_Timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
-            setTextSize(txt_Timer, R.dimen.dp10);
+            setTextSize(txt_Timer, R.dimen.verySmallTextSize);
             setTypeFace(txt_Timer);
-            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            layout_758.gravity = Gravity.RIGHT;
-            layout_758.leftMargin = i_Dp(R.dimen.dp52);
-            txt_Timer.setLayoutParams(layout_758);
 
-            audioPlayerViewContainer.addView(txt_Timer);
-            linearLayout_197.addView(audioPlayerViewContainer);
+            listenView = new View(view.getContext());
+            listenView.setBackground(getResources().getDrawable(R.drawable.shape_voice_item_listen));
+            listenView.setId(R.id.view_listen);
 
-            m_container.addView(linearLayout_197);
+            rootView = new ConstraintLayout(getContext());
+            set = new ConstraintSet();
+
+            waveView = new AudioWave(getContext());
+            waveView.setId(R.id.wv_voiceItem_progress);
+
+
+            Date currentTime = Calendar.getInstance().getTime();
+            String value = currentTime.toString() + currentTime.toString();
+
+            byte[] soundBytes = hexStringToByteArray(value + value);
+
+            waveView.setWaveColor(getColor(R.color.voice_item_dark));
+
+            waveView.setScaledData(soundBytes);
+            waveView.setChunkHeight(dpToPx(16));
+            waveView.setMinChunkHeight(dpToPx(2));
+            waveView.setChunkRadius(dpToPx(8));
+            waveView.setExpansionAnimated(true);
+            waveView.setChunkSpacing(dpToPx(1));
+            waveView.setChunkWidth(dpToPx(3));
+
+
+            set.constrainHeight(btnPlayMusic.getId(), dpToPx(40));
+            set.constrainWidth(btnPlayMusic.getId(), dpToPx(40));
+
+            set.connect(btnPlayMusic.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, dpToPx(4));
+            set.connect(btnPlayMusic.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, dpToPx(4));
+            set.connect(btnPlayMusic.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, dpToPx(4));
+            rootView.addView(btnPlayMusic);
+
+
+            set.constrainWidth(waveView.getId(), dpToPx(190));
+            set.constrainHeight(waveView.getId(), dpToPx(30));
+
+            set.constrainWidth(listenView.getId(), LayoutCreator.dp(4));
+            set.constrainHeight(listenView.getId(), LayoutCreator.dp(4));
+
+            set.connect(waveView.getId(), ConstraintSet.LEFT, btnPlayMusic.getId(), ConstraintSet.RIGHT, dpToPx(4));
+            set.centerVertically(waveView.getId(), ConstraintSet.PARENT_ID);
+            rootView.addView(waveView);
+
+            set.constrainHeight(progress.getId(), dpToPx(40));
+            set.constrainWidth(progress.getId(), dpToPx(40));
+
+            set.connect(progress.getId(), ConstraintSet.TOP, btnPlayMusic.getId(), ConstraintSet.TOP);
+            set.connect(progress.getId(), ConstraintSet.BOTTOM, btnPlayMusic.getId(), ConstraintSet.BOTTOM);
+            set.connect(progress.getId(), ConstraintSet.RIGHT, btnPlayMusic.getId(), ConstraintSet.RIGHT);
+            set.connect(progress.getId(), ConstraintSet.LEFT, btnPlayMusic.getId(), ConstraintSet.LEFT);
+            rootView.addView(progress);
+
+            set.connect(listenView.getId(), ConstraintSet.LEFT, txt_Timer.getId(), ConstraintSet.RIGHT, LayoutCreator.dp(8));
+            set.connect(listenView.getId(), ConstraintSet.TOP, txt_Timer.getId(), ConstraintSet.TOP);
+            set.connect(listenView.getId(), ConstraintSet.BOTTOM, txt_Timer.getId(), ConstraintSet.BOTTOM);
+            rootView.addView(listenView);
+
+            set.constrainWidth(txt_Timer.getId(), ConstraintSet.WRAP_CONTENT);
+            set.constrainHeight(txt_Timer.getId(), ConstraintSet.WRAP_CONTENT);
+
+            set.connect(txt_Timer.getId(), ConstraintSet.LEFT, waveView.getId(), ConstraintSet.LEFT);
+            set.connect(txt_Timer.getId(), ConstraintSet.TOP, waveView.getId(), ConstraintSet.BOTTOM, dpToPx(2));
+            rootView.addView(txt_Timer);
+
+
+            set.applyTo(rootView);
+            rootView.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+            getContentBloke().addView(rootView, 0);
+        }
+
+        private byte[] hexStringToByteArray(String s) {
+            int len = s.length();
+            byte[] data = new byte[len / 2];
+            for (int i = 0; i < len; i += 2) {
+                data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                        + Character.digit(s.charAt(i + 1), 16));
+            }
+            return data;
         }
 
         @Override
@@ -413,5 +417,22 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         public MessageProgress getProgress() {
             return progress;
         }
+    }
+
+    private String exractTimingInString(int currentVoiceGoTO) {
+        int timeToSec = currentVoiceGoTO / 1000;
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(currentVoiceGoTO);
+        long sec = timeToSec % 60;
+
+        String minTo = minutes + "";
+        String secTo = sec + "";
+        if (sec < 10) {
+            secTo = "0" + secTo;
+        }
+        if (minutes < 10) {
+            minTo = "0" + minTo;
+        }
+        String finalElapsedTime = minTo + ":" + secTo;
+        return finalElapsedTime;
     }
 }

@@ -3,7 +3,6 @@ package org.paygear.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -11,17 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,14 +25,27 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
 import org.paygear.RefreshLayout;
@@ -62,14 +63,10 @@ import java.util.ArrayList;
 
 import ir.radsense.raadcore.OnFragmentInteraction;
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
-import ir.radsense.raadcore.model.JWT;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
-
-import ir.radsense.raadcore.widget.CircleImageTransform;
 import ir.radsense.raadcore.widget.ProgressLayout;
 import ir.radsense.raadcore.widget.RecyclerRefreshLayout;
 import retrofit2.Call;
@@ -77,11 +74,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CardsFragment extends Fragment implements OnFragmentInteraction, RefreshLayout, MerchantsListAdapter.ItemClickListener {
+public class CardsFragment extends Fragment implements ToolbarListener, OnFragmentInteraction, RefreshLayout, MerchantsListAdapter.ItemClickListener {
 
     private static final int COLLAPSE = 60;
 
-    private RaadToolBar appBar;
+    //private RaadToolBar appBar;
     private ImageView appBarImage;
     private TextView appBarTitle;
     private RecyclerRefreshLayout mRefreshLayout;
@@ -103,6 +100,10 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     Dialog otpDialog;
 
     FragmentCardsBinding mBinding;
+    private HelperToolbar mHelperToolbar;
+
+    boolean checkAfterGift = false;
+    String qrDataAccountId;
 
     public CardsFragment() {
     }
@@ -115,11 +116,23 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         return fragment;
     }
 
+    public static CardsFragment newInstance(boolean checkAfterGift, String qrDataAccountId) {
+        CardsFragment fragment = new CardsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("CheckAfterGift", checkAfterGift);
+        args.putSerializable("QrDataAccountId", qrDataAccountId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPayment = (Payment) getArguments().getSerializable("Payment");
+            checkAfterGift = getArguments().getBoolean("CheckAfterGift");
+            qrDataAccountId = getArguments().getString("QrDataAccountId");
         }
     }
 
@@ -144,19 +157,25 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_WALLET_PAGE);
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         RaadApp.selectedMerchant = null;
 
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.setting_icon, R.string.group_icon)
+                .setListener(this)
+                .setDefaultTitle(getString(R.string.wallet));
 
 
+        mBinding.toolbarLayout.addView(mHelperToolbar.getView());
 
         if (mPayment != null) {
-            appBar.showBack();
-            appBar.setTitle(getString(R.string.select_card));
+            mHelperToolbar.setDefaultTitle(getString(R.string.select_card));
         } else {
-            setAppBar();
+            mHelperToolbar.setDefaultTitle(getString(R.string.wallet));
+            // mHelperToolbar.getLeftButton().setVisibility(View.INVISIBLE);
         }
         mRefreshLayout = view.findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(new RecyclerRefreshLayout.OnRefreshListener() {
@@ -185,7 +204,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         expandableLayout = view.findViewById(R.id.merchants_expandable_layout);
         merchantsRecycler = view.findViewById(R.id.merchants_recycler);
         merchantsList = RaadApp.merchants;
-        mBinding.WalletMenu.setVisibility(View.GONE);
+        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
         if (merchantsList != null) {
             if (merchantsList.size() > 0) {
                 setMerchantsAdapter();
@@ -197,45 +216,18 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
 
         updateAppBar();
         mCards = RaadApp.cards;
+
+        if (checkAfterGift) {
+            mCards = null;
+        }
+
         if (mCards != null) {
+
             setAdapter();
         } else if (Auth.getCurrentAuth() != null) {
             load();
         }
 
-        mBinding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() != null)
-                    getActivity().onBackPressed();
-            }
-        });
-
-        mBinding.WalletMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() instanceof NavigationBarActivity) {
-                    if (expandableLayout != null) {
-                        if (expandableLayout.isExpanded())
-                            expandableLayout.collapse(true);
-                        else {
-                            expandableLayout.expand(true);
-                        }
-                    }
-                }
-            }
-        });
-
-        mBinding.settingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RaadApp.selectedMerchant = null;
-                if (getActivity() instanceof NavigationBarActivity) {
-                    ((NavigationBarActivity) getActivity()).pushFullFragment(
-                            FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
-                }
-            }
-        });
 
 
     }
@@ -255,9 +247,9 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         }
 
         if (merchantsList != null && merchantsList.size() > 0){
-            mBinding.WalletMenu.setVisibility(View.VISIBLE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
         } else {
-            mBinding.WalletMenu.setVisibility(View.GONE);
+            mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
         }
 
         merchantsListAdapter = new MerchantsListAdapter(getContext(), merchantsList, Auth.getCurrentAuth().getId());
@@ -277,81 +269,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                 fragment instanceof CashOutRequestFragment) {
             load();
         }
-    }
-
-
-    private void setAppBar() {
-        FrameLayout appBarView = appBar.getBack();
-
-        Context context = getContext();
-        int dp8 = RaadCommonUtils.getPx(8, context);
-        int dp16 = RaadCommonUtils.getPx(16, context);
-
-        LinearLayout titleLayout = new LinearLayout(context);
-        titleLayout.setOrientation(LinearLayout.HORIZONTAL);
-        FrameLayout.LayoutParams titleLayoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        titleLayoutParams.gravity = Gravity.CENTER_VERTICAL;
-        titleLayout.setLayoutParams(titleLayoutParams);
-        titleLayout.setGravity(Gravity.CENTER_VERTICAL);
-        appBarView.addView(titleLayout);
-
-        appBarImage = new AppCompatImageView(context);
-        int dp40 = RaadCommonUtils.getPx(40, context);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(dp40, dp40);
-        imageParams.rightMargin = dp16;
-        imageParams.leftMargin = dp16;
-        appBarImage.setLayoutParams(imageParams);
-        titleLayout.addView(appBarImage);
-
-        appBarTitle = new AppCompatTextView(context);
-        appBarTitle.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        //appBarTitle.setGravity(Gravity.CENTER);
-        appBarTitle.setTextColor(Color.WHITE);
-        appBarTitle.setText(getResources().getString(R.string.wallet));
-        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
-        titleLayout.addView(appBarTitle);
-
-        titleLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                ((NavigationBarActivity) getActivity()).pushFullFragment(
-//                        new EditProfileFragment(), "EditProfileFragment");
-            }
-        });
-
-//        if (merchantsList != null)
-//            if (merchantsList.size() > 0) {
-//                appBar.addRightButton(R.drawable.ic_store_white_24dp, new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (getActivity() instanceof NavigationBarActivity) {
-//                            if (expandableLayout != null) {
-//                                if (expandableLayout.isExpanded())
-//                                    expandableLayout.collapse(true);
-//                                else {
-//                                    expandableLayout.expand(true);
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//                });
-//
-//            }
-//        appBar.addRightButton(R.drawable.ic_action_settings, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (getActivity() instanceof NavigationBarActivity) {
-//                    RaadApp.selectedMerchant = null;
-//                    ((NavigationBarActivity) getActivity()).replaceFragment(
-//                            new SettingsFragment(), "SettingsFragment", true);
-//                }
-//            }
-//        });
-
     }
 
     private void load() {
@@ -385,6 +302,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                     if (auth != null) {
                         Auth.getCurrentAuth().setPublicKey(auth.publicKey);
                         loadCards();
+
                         return;
                     }
                 }
@@ -461,7 +379,21 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                     }
 
                     //collapsedItem = -1;
-                    setAdapter();
+                    if (checkAfterGift) {
+                        setAdapter();
+                        checkAfterGift = false;
+                        for (int i = 0; i < mCards.size(); i++) {
+                            if (qrDataAccountId.equals(mCards.get(i).clubId)) {
+                                if (getActivity() != null)
+                                    ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                            CardFragment.newInstance(mPayment, mCards.get(i)), "CardFragment");
+
+                            }
+                        }
+
+                    } else {
+                        setAdapter();
+                    }
                 } else {
                     if (mCards == null || mCards.size() == 0)
                         progress.setStatus(-1, getString(R.string.error));
@@ -563,12 +495,12 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         Account me = RaadApp.me;
         if (RaadApp.selectedMerchant == null) {
             if (!TextUtils.isEmpty(me.name)) {
-                appBarTitle.setText(me.name);
+                mHelperToolbar.setDefaultTitle(me.name);
             } else {
-                appBarTitle.setText(R.string.paygear_user);
+                mHelperToolbar.setDefaultTitle(getString(R.string.paygear_user));
             }
         } else {
-            appBarTitle.setText(RaadApp.selectedMerchant.getName());
+            mHelperToolbar.setDefaultTitle(RaadApp.selectedMerchant.getName());
         }
 
 //        if (merchantsList != null && merchantsList.size() > 0) {
@@ -695,11 +627,12 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         }
         TextView balanceTitle = view.findViewById(R.id.balance_title);
         ImageView history = view.findViewById(R.id.history);
+        ImageView reload = view.findViewById(R.id.reload);
 
         TextView balance = view.findViewById(R.id.balance);
         TextView unit = view.findViewById(R.id.unit);
 
-        ImageView imgQrCode = view.findViewById(R.id.imgQrCode);
+        TextView imgQrCode = view.findViewById(R.id.imgQrCode);
 
 
         TextView cashableBalance = view.findViewById(R.id.chashable_balance);
@@ -709,6 +642,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         TextView cashout = view.findViewById(R.id.cashout);
         TextView charge = view.findViewById(R.id.charge);
         TextView pin = view.findViewById(R.id.pin_title);
+        TextView plus = view.findViewById(R.id.plus);
         LinearLayout balanceLayout = view.findViewById(R.id.balance_layout);
 
         if (WalletActivity.isDarkTheme) {
@@ -723,6 +657,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
             balance.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             balanceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
             pin.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            plus.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            view.findViewById(R.id.bals_layout).setBackgroundColor(Color.parseColor("#4C5053"));
         }
 
         balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
@@ -807,8 +743,56 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
                 }
             }
 
-        }else {
+
+            balance.setText(RaadCommonUtils.formatPrice(card.balance, false));
+            cashableBalance.setText(RaadCommonUtils.formatPrice(card.cashOutBalance, false));
+            //long giftPrice = card.balance - card.cashOutBalance;
+            //giftBalance.setText(RaadCommonUtils.formatPrice(giftPrice, false));
+            view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
+
+
+        } else {
             view.findViewById(R.id.pin_layout).setVisibility(View.GONE);
+
+
+            // get total of all card club...
+            long total = 0L;
+            long balance1 = 0L;
+            long balanceTotal = 0L;
+
+
+            for (Card item : mCards) {
+
+
+                if (item.isRaadCard()) {
+
+                    balance1 = item.balance;
+
+                } else {
+
+                    if (item.type == 1 && (item.bankCode == 69 && item.clubId != null)) {
+                        total = total + item.balance;
+
+                    }
+
+
+                }
+
+
+                balanceTotal = card.balance + total;
+                balance.setText(RaadCommonUtils.formatPrice(balanceTotal, false));
+
+
+            }
+
+            cashableBalance.setText(RaadCommonUtils.formatPrice(card.balance, false));
+            giftBalance.setText(RaadCommonUtils.formatPrice(total, false));
+
+            if (total == 0) {
+                view.findViewById(R.id.bals_layout).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(new Theme().getPrimaryColor(getContext()), PorterDuff.Mode.SRC_IN));
+            }
+
         }
 
 
@@ -839,15 +823,22 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
             }
         });
 
-        balance.setText(RaadCommonUtils.formatPrice(card.balance, false));
-        cashableBalance.setText(RaadCommonUtils.formatPrice(card.cashOutBalance, false));
-        long giftPrice = card.balance - card.cashOutBalance;
-        giftBalance.setText(RaadCommonUtils.formatPrice(giftPrice, false));
 
-        if (giftPrice == 0) {
-            view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
-            view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        }
+
+
+        /*reload page*/
+        reload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (selectedMerchant == null) {
+                    loadCards();
+                } else {
+                    ShowMerchantView(selectedMerchant);
+                }
+
+            }
+        });
     }
 
     private void addMyCardsTitle() {
@@ -930,7 +921,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
             transactionLayout.setPadding(dp8, dp8, dp8, dp8);
             layout.addView(transactionLayout);
 
-            ImageView transactionHistory = new ImageView(context);
+            AppCompatImageView transactionHistory = new AppCompatImageView(context);
             transactionHistory.setLayoutParams(new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ViewCompat.setBackground(transactionHistory, RaadCommonUtils.getRectShape(context, R.color.add_card_plus_back, 12, 0));
@@ -1157,5 +1148,33 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
         } catch (Exception e) {
         }
 
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        if (getActivity() != null)
+            getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+        RaadApp.selectedMerchant = null;
+        if (getActivity() instanceof NavigationBarActivity) {
+            ((NavigationBarActivity) getActivity()).pushFullFragment(
+                    FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
+        }
+    }
+
+    @Override
+    public void onSecondRightIconClickListener(View view) {
+        if (getActivity() instanceof NavigationBarActivity) {
+            if (expandableLayout != null) {
+                if (expandableLayout.isExpanded())
+                    expandableLayout.collapse(true);
+                else {
+                    expandableLayout.expand(true);
+                }
+            }
+        }
     }
 }

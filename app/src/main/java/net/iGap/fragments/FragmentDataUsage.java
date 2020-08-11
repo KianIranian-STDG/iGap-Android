@@ -1,34 +1,27 @@
 package net.iGap.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toolbar;
 
-import net.iGap.G;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.iGap.R;
 import net.iGap.adapter.DataUsageAdapter;
 import net.iGap.helper.HelperDataUsage;
-import net.iGap.interfaces.DataUsageListener;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.DataUsageStruct;
+import net.iGap.observers.interfaces.DataUsageListener;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmDataUsage;
 
 import java.util.ArrayList;
 
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class FragmentDataUsage extends Fragment implements DataUsageListener {
@@ -38,29 +31,35 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     private long totalReceivedByte;
     private boolean type;
     private DataUsageAdapter adapter;
-    private TextView txtDataUsageHeader;
-    private RippleView rippleDataUsage;
-    private RelativeLayout rvMainDataUsage;
-
-    public static FragmentDataUsage newInstance() {
-        return new FragmentDataUsage();
-    }
+    private HelperToolbar mHelperToolbar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_data_usage, container, false);
+    }
 
-        View view = inflater.inflate(R.layout.fragment_data_usage, container, false);
-        txtDataUsageHeader = (TextView) view.findViewById(R.id.txtDataUsageHeader);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        rvMainDataUsage = (RelativeLayout) view.findViewById(R.id.rvMainDataUsage);
-        rvMainDataUsage.setBackgroundColor(G.getThemeBackgroundColor());
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
 
+                    }
+                });
 
-        AppBarLayout appBarDataUsage = (AppBarLayout) view.findViewById(R.id.appBarDataUsage);
-        appBarDataUsage.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        rippleDataUsage = (RippleView) view.findViewById(R.id.dataUsage_ripple_back);
+        ViewGroup layoutToolbar = view.findViewById(R.id.fdu_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
         type = getArguments().getBoolean("TYPE", false);
 
@@ -69,61 +68,44 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
         usageArrayList.add(new DataUsageStruct(1, 0, 0, 0, 0, "Total"));
         usageArrayList.add(new DataUsageStruct(2, 0, 0, 0, 0, "ClearData"));
 
+        RecyclerView rcDataUsage = view.findViewById(R.id.rcDataUsage);
+        adapter = new DataUsageAdapter(usageArrayList, totalReceivedByte, totalSendByte, type, this);
+        rcDataUsage.setAdapter(adapter);
 
-        return view;
     }
 
     private void initData(boolean type) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmDataUsage> wifiRealmDataUsages;
-        RealmResults<RealmDataUsage> dataRealmDataUsages;
-        if (type) {
-            txtDataUsageHeader.setText(getResources().getString(R.string.wifi_data_usage));
-            totalReceivedByte = 0;
-            totalSendByte = 0;
-            wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
-            if (wifiRealmDataUsages.size() == 0)
-                wifiRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmResults<RealmDataUsage> wifiRealmDataUsages;
+            RealmResults<RealmDataUsage> dataRealmDataUsages;
+            if (type) {
+                mHelperToolbar.setDefaultTitle(getString(R.string.wifi_data_usage));
+                totalReceivedByte = 0;
+                totalSendByte = 0;
+                wifiRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", true).findAll();
+                if (wifiRealmDataUsages.size() == 0)
+                    wifiRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
 
-            for (RealmDataUsage usage : wifiRealmDataUsages) {
-                usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
-                totalReceivedByte += usage.getDownloadSize();
-                totalSendByte += usage.getUploadSize();
-            }
+                for (RealmDataUsage usage : wifiRealmDataUsages) {
+                    usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
+                    totalReceivedByte += usage.getDownloadSize();
+                    totalSendByte += usage.getUploadSize();
+                }
 
-        } else {
-            txtDataUsageHeader.setText(getResources().getString(R.string.mobile_data_usage));
-            totalReceivedByte = 0;
-            totalSendByte = 0;
-            dataRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
-            if (dataRealmDataUsages.size() == 0)
-                dataRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
-            for (RealmDataUsage usage : dataRealmDataUsages) {
-                usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
-                totalReceivedByte += usage.getDownloadSize();
-                totalSendByte += usage.getUploadSize();
-            }
-        }
-        realm.close();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        RecyclerView rcDataUsage = view.findViewById(R.id.rcDataUsage);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
-        adapter = new DataUsageAdapter(G.currentActivity, usageArrayList, totalReceivedByte, totalSendByte, type, this);
-        rcDataUsage.setAdapter(adapter);
-        rcDataUsage.setLayoutManager(layoutManager);
-
-        rippleDataUsage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
+            } else {
+                mHelperToolbar.setDefaultTitle(getResources().getString(R.string.mobile_data_usage));
+                totalReceivedByte = 0;
+                totalSendByte = 0;
+                dataRealmDataUsages = realm.where(RealmDataUsage.class).equalTo("connectivityType", false).findAll();
+                if (dataRealmDataUsages.size() == 0)
+                    dataRealmDataUsages = realm.where(RealmDataUsage.class).findAll();
+                for (RealmDataUsage usage : dataRealmDataUsages) {
+                    usageArrayList.add(new DataUsageStruct(0, usage.getDownloadSize(), usage.getUploadSize(), usage.getNumUploadedFiles(), usage.getNumDownloadedFile(), usage.getType()));
+                    totalReceivedByte += usage.getDownloadSize();
+                    totalSendByte += usage.getUploadSize();
+                }
             }
         });
-
     }
 
     @Override

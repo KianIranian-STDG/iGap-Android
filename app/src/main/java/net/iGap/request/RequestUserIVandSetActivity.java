@@ -18,6 +18,7 @@ public class RequestUserIVandSetActivity {
 
     public interface OnSetActivities {
         void onSetActivitiesReady(String message, boolean isOk);
+
         void onError(int majorCode, int minorCode);
     }
 

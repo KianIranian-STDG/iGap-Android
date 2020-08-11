@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp52"
-    android:layout_marginRight="@dimen/dp52"
     android:layout_marginTop="@dimen/dp4"
+    android:layout_marginRight="@dimen/dp52"
     android:layout_marginBottom="@dimen/dp4"
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp4"
-    app:cardBackgroundColor="#E6E5E1DC"
     app:cardCornerRadius="12dp"
     app:cardPreventCornerOverlap="false">
 
@@ -18,6 +17,7 @@
         android:id="@+id/chatSubLayoutLogWallet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?rootBackgroundColor"
         android:orientation="vertical">
 
         <net.iGap.module.CustomTextViewMedium
@@ -25,11 +25,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#E642D4F4"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
-            android:text="انتقال وجه"
-            android:background="#E642D4F4"
             android:textColor="@color/white"
             android:textSize="@dimen/dp16" />
 
@@ -42,23 +41,22 @@
             android:orientation="vertical">
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/wallet_amount"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/amount"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="1000 Rial"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp15" />
         </LinearLayout>
 
@@ -76,27 +74,26 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/wallet_from"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/fromUserId"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="hasan"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -114,26 +111,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/wallet_to"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/toUserId"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="ali"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp15" />
         </LinearLayout>
 
@@ -151,27 +147,26 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/cardToCardTrace"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/traceNumber"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="121214212"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -188,27 +183,26 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/cardToCardInvoiceNumber"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/invoiceNumber"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="1515115151"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -225,27 +219,26 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/card_number"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/cardNumber"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="51151511515"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -262,27 +255,26 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/WalletRrnNumber"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/WalletRrnNumber"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="15511"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
         </LinearLayout>
 
         <LinearLayout
@@ -299,26 +291,25 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp32"
                 android:layout_marginRight="@dimen/dp32"
-                android:background="@color/white" />
+                android:background="?iGapDividerLine" />
 
             <net.iGap.module.CustomTextViewMedium
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/desc"
-                android:textSize="@dimen/dp15"  />
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp15" />
 
 
             <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/description"
-                style="?textSubColorSettingTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="توضیحات"
+                android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp15" />
 
         </LinearLayout>
@@ -328,14 +319,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#E642D4F4"
             android:gravity="center"
             android:paddingTop="@dimen/dp6"
             android:paddingBottom="@dimen/dp6"
-            android:background="#E642D4F4"
-            android:text="انتقال وجه"
             android:textColor="@color/white"
             android:textSize="@dimen/dp16" />
 
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

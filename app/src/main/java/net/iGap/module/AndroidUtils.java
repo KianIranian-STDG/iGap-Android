@@ -1,39 +1,45 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
+import net.iGap.libs.emojiKeyboard.emoji.DispatchQueue;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -44,10 +50,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class AndroidUtils {
     private AndroidUtils() throws InstantiationException {
@@ -170,7 +182,7 @@ public final class AndroidUtils {
 
     public static String saveBitmap(Bitmap bmp) {
         FileOutputStream out = null;
-        String outPath = G.DIR_TEMP + "/thumb_" + Long.toString(SUID.id().get()) + ".jpg";
+        String outPath = G.DIR_TEMP + "/thumb_" + SUID.id().get() + ".jpg";
         try {
             out = new FileOutputStream(outPath);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
@@ -192,16 +204,16 @@ public final class AndroidUtils {
     /**
      * get n bytes from file, starts from beginning
      *
-     * @param uploadStructure FileUploadStructure
-     * @param bytesCount      total bytes
+     * @param fileChannel fileChannel
+     * @param bytesCount  total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromStart(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
+    public static byte[] getBytesFromStart(FileChannel fileChannel, int bytesCount) throws IOException {
         // FileChannel has better performance than BufferedInputStream
-        uploadStructure.fileChannel.position(0);
+        fileChannel.position(0);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
-        uploadStructure.fileChannel.read(byteBuffer);
+        fileChannel.read(byteBuffer);
 
         byteBuffer.flip();
 
@@ -245,16 +257,16 @@ public final class AndroidUtils {
     /**
      * get n bytes from file, starts from end
      *
-     * @param uploadStructure FileUploadStructure
-     * @param bytesCount      total bytes
+     * @param fileChannel fileChannel
+     * @param bytesCount  total bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getBytesFromEnd(FileUploadStructure uploadStructure, int bytesCount) throws IOException {
+    public static byte[] getBytesFromEnd(FileChannel fileChannel, int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
-        uploadStructure.fileChannel.position(uploadStructure.fileChannel.size() - bytesCount);
+        fileChannel.position(fileChannel.size() - bytesCount);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
-        uploadStructure.fileChannel.read(byteBuffer);
+        fileChannel.read(byteBuffer);
 
         byteBuffer.flip();
 
@@ -267,17 +279,17 @@ public final class AndroidUtils {
     /**
      * get n bytes from specified offset
      *
-     * @param uploadStructure FileUploadStructure
-     * @param offset          start reading from
-     * @param bytesCount      total reading bytes
+     * @param fileChannel fileChannel
+     * @param offset      start reading from
+     * @param bytesCount  total reading bytes
      * @return bytes
      * @throws IOException
      */
-    public static byte[] getNBytesFromOffset(FileUploadStructure uploadStructure, int offset, int bytesCount) throws IOException {
+    public static byte[] getNBytesFromOffset(FileChannel fileChannel, long offset, int bytesCount) throws IOException {
         // FileChannel has better performance than RandomAccessFile
-        uploadStructure.fileChannel.position(offset);
+        fileChannel.position(offset);
         ByteBuffer byteBuffer = ByteBuffer.allocate(bytesCount);
-        uploadStructure.fileChannel.read(byteBuffer);
+        fileChannel.read(byteBuffer);
 
         byteBuffer.flip();
 
@@ -291,12 +303,13 @@ public final class AndroidUtils {
      * get SHA-256 from file
      * note: our server needs 32 bytes, so always pass true as second parameter.
      *
-     * @param uploadStructure FileUploadStructure
+     * @param fileChannel fileChannel
+     * @param fileSize    fileSize
      */
-    public static byte[] getFileHash(FileUploadStructure uploadStructure) throws NoSuchAlgorithmException, IOException {
+    public static byte[] getFileHash(FileChannel fileChannel, long fileSize) throws NoSuchAlgorithmException, IOException {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            byte[] fileBytes = fileToBytes(uploadStructure);
+            byte[] fileBytes = fileToBytes(fileChannel, fileSize);
             return sha256.digest(fileBytes);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -360,7 +373,7 @@ public final class AndroidUtils {
         out.close();
     }
 
-    private static boolean deleteFile(File src) {
+    public static boolean deleteFile(File src) {
         return src.delete();
     }
 
@@ -391,27 +404,27 @@ public final class AndroidUtils {
      * convert bytes to human readable length
      *
      * @param bytes bytes
-     * @param si    Boolean
+     * @param si    Boolean : true is in Binary Mode and false is Decimal Mode
      * @return String
      */
     public static String humanReadableByteCount(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
+        int unit = (!si ? 1000 : 1024);
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+        String pre = (!si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (!si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
     /**
      * return file to bytes
      *
-     * @param uploadStructure FileUploadStructure
+     * @param fileChannel fileChannel
      * @return bytes
      * @throws IOException
      */
-    public static byte[] fileToBytes(FileUploadStructure uploadStructure) throws IOException, OutOfMemoryError, RuntimeException {
-        ByteBuffer byteBuffer = ByteBuffer.allocate((int) uploadStructure.fileSize);
-        uploadStructure.fileChannel.read(byteBuffer);
+    public static byte[] fileToBytes(FileChannel fileChannel, long fileSize) throws IOException, OutOfMemoryError, RuntimeException {
+        ByteBuffer byteBuffer = ByteBuffer.allocate((int) fileSize);
+        fileChannel.read(byteBuffer);
 
         byteBuffer.flip();
 
@@ -491,7 +504,13 @@ public final class AndroidUtils {
     private static String makeSHA1Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA1");
         md.reset();
-        byte[] buffer = input.getBytes("UTF-8");
+
+        byte[] buffer;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            buffer = input.getBytes(StandardCharsets.UTF_8);
+        } else {
+            buffer = input.getBytes(Charset.forName("UTF-8"));
+        }
         md.update(buffer);
         byte[] digest = md.digest();
 
@@ -594,12 +613,227 @@ public final class AndroidUtils {
         } else if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
             return true;
         } else {
-            HelperLog.setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
+            HelperLog.getInstance().setErrorLog(new Exception("Please check ! isActivityRunning After Fix 1 Cu" + (G.currentActivity == null) + "fa:" + (G.fragmentActivity == null)));
             return false;
         }
     }
 
-    public static boolean canOpenDialog(){
+    public static boolean canOpenDialog() {
         return isActivityRunning();
+    }
+
+    public static boolean showKeyboard(View view) {
+        if (view == null) {
+            return false;
+        }
+        try {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (inputManager != null) {
+                return inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean isKeyboardShowed(View view) {
+        if (view == null) {
+            return false;
+        }
+        try {
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            return inputManager.isActive(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void hideKeyboard(View view) {
+        if (view == null) {
+            return;
+        }
+        try {
+            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (!imm.isActive()) {
+                return;
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int statusBarHeight = 0;
+    public static Point displaySize = new Point();
+
+    private static Field mAttachInfoField;
+    private static Field mStableInsetsField;
+
+    public static float density = 1;
+    public static DisplayMetrics displayMetrics = new DisplayMetrics();
+    public static boolean usingKeyboardInput;
+
+
+    public static int getViewInset(View view) {
+        if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
+            return 0;
+        }
+        try {
+            if (mAttachInfoField == null) {
+                mAttachInfoField = View.class.getDeclaredField("mAttachInfo");
+                mAttachInfoField.setAccessible(true);
+            }
+            Object mAttachInfo = mAttachInfoField.get(view);
+            if (mAttachInfo != null) {
+                if (mStableInsetsField == null) {
+                    mStableInsetsField = mAttachInfo.getClass().getDeclaredField("mStableInsets");
+                    mStableInsetsField.setAccessible(true);
+                }
+                Rect insets = (Rect) mStableInsetsField.get(mAttachInfo);
+                return insets.bottom;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    static {
+        checkDisplaySize(G.context, null);
+    }
+
+    public static void checkDisplaySize(Context context, Configuration newConfiguration) {
+        try {
+
+            density = context.getResources().getDisplayMetrics().density;
+
+            Configuration configuration = newConfiguration;
+            if (configuration == null) {
+                configuration = context.getResources().getConfiguration();
+            }
+
+            WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+            usingKeyboardInput = configuration.keyboard != Configuration.KEYBOARD_NOKEYS && configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;
+
+            if (manager != null) {
+                Display display = manager.getDefaultDisplay();
+                if (display != null) {
+                    display.getMetrics(displayMetrics);
+                    display.getSize(displaySize);
+                }
+            }
+            if (configuration.screenWidthDp != Configuration.SCREEN_WIDTH_DP_UNDEFINED) {
+                int newSize = (int) Math.ceil(configuration.screenWidthDp * density);
+                if (Math.abs(displaySize.x - newSize) > 3) {
+                    displaySize.x = newSize;
+                }
+            }
+            if (configuration.screenHeightDp != Configuration.SCREEN_HEIGHT_DP_UNDEFINED) {
+                int newSize = (int) Math.ceil(configuration.screenHeightDp * density);
+                if (Math.abs(displaySize.y - newSize) > 3) {
+                    displaySize.y = newSize;
+                }
+            }
+
+            Log.i("abbasiKeyboard", "display size = x -> " + displaySize.x + " y -> " + displaySize.y + " " + displayMetrics.xdpi + " " + displayMetrics.ydpi);
+
+        } catch (Exception e) {
+            Log.e("abbasiKeyboard", "checkDisplaySize: ", e);
+        }
+    }
+
+    public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
+    public static Pattern pattern = Pattern.compile("[\\-0-9]+");
+    private static String adjustOwnerClassname;
+
+    public static Integer parseInt(CharSequence value) {
+        if (value == null) {
+            return 0;
+        }
+        int val = 0;
+        try {
+            Matcher matcher = pattern.matcher(value);
+            if (matcher.find()) {
+                String num = matcher.group(0);
+                val = Integer.parseInt(num);
+            }
+        } catch (Exception ignore) {
+
+        }
+        return val;
+    }
+
+    public static Long parseLong(String value) {
+        if (value == null) {
+            return 0L;
+        }
+        long val = 0L;
+        try {
+            Matcher matcher = pattern.matcher(value);
+            if (matcher.find()) {
+                String num = matcher.group(0);
+                val = Long.parseLong(num);
+            }
+        } catch (Exception ignore) {
+
+        }
+        return val;
+    }
+
+
+    public static void requestAdjustResize(Activity activity, String className) {
+        if (activity == null || G.twoPaneMode) {
+            return;
+        }
+        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        adjustOwnerClassname = className;
+    }
+
+    public static void setAdjustResizeToNothing(Activity activity, String className) {
+        if (activity == null || G.twoPaneMode) {
+            return;
+        }
+        if (adjustOwnerClassname != null && adjustOwnerClassname.equals(className)) {
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        }
+    }
+
+    public static void removeAdjustResize(Activity activity, String className) {
+        if (activity == null || G.twoPaneMode) {
+            return;
+        }
+        if (adjustOwnerClassname != null && adjustOwnerClassname.equals(className)) {
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        }
+    }
+
+    public static String compatibleUnicode(String entry) {
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(entry)) : entry;
+    }
+
+    public static String formatShortDuration(int duration) {
+        return formatDuration(duration, false);
+    }
+
+    public static String formatLongDuration(int duration) {
+        return formatDuration(duration, true);
+    }
+
+    private static String formatDuration(int duration, boolean isLong) {
+        int h = duration / 3600;
+        int m = duration / 60 % 60;
+        int s = duration % 60;
+        if (h == 0) {
+            if (isLong) {
+                return String.format(Locale.US, "%02d:%02d", m, s);
+            } else {
+                return String.format(Locale.US, "%d:%02d", m, s);
+            }
+        } else {
+            return String.format(Locale.US, "%d:%02d:%02d", h, m, s);
+        }
     }
 }

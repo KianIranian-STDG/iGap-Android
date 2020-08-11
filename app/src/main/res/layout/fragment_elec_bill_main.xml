@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="net.iGap.viewmodel.electricity_bill.ElectricityBillMainVM" />
+
+        <variable
+            name="fragment"
+            type="net.iGap.fragments.electricity_bill.ElectricityBillMainFrag" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Container"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/dp20">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardBackgroundColor="?attr/iGapCardViewColor">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/billTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:justificationMode="inter_word"
+                            android:text="@string/elecBill_main_billTitle"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/dp18"
+                            android:gravity="center"
+                            android:ellipsize="end"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <RadioGroup
+                            android:id="@+id/mode_group"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:checkedButton="@id/mode_serviceBill"
+                            app:layout_constraintTop_toBottomOf="@+id/billTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <RadioButton
+                                android:id="@+id/mode_serviceBill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="start"
+                                android:textColor="?iGapSubtitleTextColor"
+                                android:textSize="@dimen/standardTextSize"
+                                android:text="@string/elecBill_main_serviceMode"
+                                android:button="@drawable/check_box_background" />
+
+                            <RadioButton
+                                android:id="@+id/mode_phoneBill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="start"
+                                android:textColor="?iGapSubtitleTextColor"
+                                android:textSize="@dimen/standardTextSize"
+                                android:text="@string/elecBill_main_PhoneMode"
+                                android:button="@drawable/check_box_background" />
+                        </RadioGroup>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/billTypeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:layout_marginEnd="@dimen/dp16"
+                            android:justificationMode="inter_word"
+                            android:text="@string/elecBill_main_billTypeTitle"
+                            android:textColor="?iGapTitleTextColor"
+                            android:textSize="@dimen/dp16"
+                            android:gravity="center"
+                            android:ellipsize="end"
+                            app:layout_constraintEnd_toStartOf="@+id/billSpinner"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/mode_group" />
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/billSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/dp16"
+                            android:minHeight="@dimen/dp32"
+                            style="@style/Widget.AppCompat.Spinner.Underlined"
+                            app:layout_constraintTop_toTopOf="@+id/billTypeTitle"
+                            app:layout_constraintBottom_toBottomOf="@+id/billTypeTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/billTypeTitle" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/billIdHolder"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:minHeight="48dp"
+                            android:hint="@string/elecBill_main_billIDHint"
+                            android:textColorHint="?iGapHintTextColor"
+                            app:counterMaxLength="13"
+                            app:counterEnabled="true"
+                            app:errorText="@{viewmodel.billIDError}"
+                            app:errorEnabled="@{viewmodel.billIDErrorEnable}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/billQRscan"
+                            app:layout_constraintTop_toBottomOf="@+id/billTypeTitle">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/billIdET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:digits="0123456789"
+                                android:imeOptions="actionDone"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:text="@={viewmodel.billID}"
+                                android:textColor="?iGapTitleTextColor"
+                                android:textSize="@dimen/dp18" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            style="@style/myIconTextViewStyleGray"
+                            android:id="@+id/billQRscan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginLeft="@dimen/dp8"
+                            android:gravity="center"
+                            android:text="@string/scan_qr_code_icon"
+                            android:textSize="@dimen/dp48"
+                            android:onClick="@{()->fragment.onQRScanBtnClick()}"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            app:layout_constraintEnd_toStartOf="@+id/billIdHolder"
+                            app:layout_constraintTop_toTopOf="@+id/billIdHolder"
+                            app:layout_constraintBottom_toBottomOf="@+id/billIdHolder"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/payBill"
+                            style="@style/iGapButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp16"
+                            android:layout_marginStart="@dimen/dp16"
+                            android:layout_marginEnd="@dimen/dp16"
+                            android:layout_marginBottom="@dimen/dp16"
+                            android:minHeight="58dp"
+                            android:onClick="@{()->viewmodel.inquiryBill()}"
+                            android:text="@string/elecBill_main_billPay"
+                            android:textSize="@dimen/dp16"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/billIdHolder" />
+
+                        <ProgressBar
+                            android:id="@+id/ProgressV"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:elevation="2dp"
+                            android:visibility="@{viewmodel.progressVisibility}"
+                            app:layout_constraintBottom_toBottomOf="@+id/payBill"
+                            app:layout_constraintEnd_toEndOf="@+id/payBill"
+                            app:layout_constraintStart_toStartOf="@+id/payBill"
+                            app:layout_constraintTop_toTopOf="@+id/payBill"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintWidth_percent="0.1"
+                            app:layout_constraintHorizontal_bias="0.05" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/MyElecBillList"
+                    style="@style/iGapOutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->fragment.onMyElecListBtnClick()}"
+                    android:text="@string/elecBill_main_billMyList"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="visible"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardHolder"
+                    app:layout_constraintBottom_toTopOf="@+id/searchBill"
+                    app:layout_constraintHeight_percent="0.15"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/searchBill"
+                    style="@style/iGapOutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->fragment.onSearchBillsBtnClick()}"
+                    android:text="@string/elecBill_main_billSearch"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="invisible"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/MyElecBillList"
+                    app:layout_constraintBottom_toTopOf="@+id/KontorInfo"
+                    app:layout_constraintHeight_percent="0.15" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/KontorInfo"
+                    style="@style/iGapButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:minHeight="58dp"
+                    android:onClick="@{()->fragment.onBranchInfoBtnClick()}"
+                    android:text="@string/elecBill_main_billBranchInfo"
+                    android:textSize="@dimen/dp16"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/searchBill"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHeight_percent="0.15" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

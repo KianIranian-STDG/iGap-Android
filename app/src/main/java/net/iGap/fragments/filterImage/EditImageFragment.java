@@ -14,12 +14,13 @@ package net.iGap.fragments.filterImage;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 

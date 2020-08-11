@@ -1,16 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
+
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoInfoPage;
 import net.iGap.request.RequestInfoPage;
@@ -34,20 +34,7 @@ public class InfoPageResponse extends MessageHandler {
         super.handler();
         ProtoInfoPage.InfoPageResponse.Builder infoPageResponse = (ProtoInfoPage.InfoPageResponse.Builder) message;
         String body = infoPageResponse.getBody();
-        if (identity instanceof String) {
-            switch ((String) identity) {
-                case "TOS":
-                    if (G.onReceivePageInfoTOS != null) {
-                        G.onReceivePageInfoTOS.onReceivePageInfo(body);
-                    }
-                    break;
-                case "WALLET_AGREEMENT":
-                    if (G.onReceivePageInfoWalletAgreement != null) {
-                        G.onReceivePageInfoWalletAgreement.onReceivePageInfo(body);
-                    }
-                    break;
-            }
-        } else if (identity instanceof RequestInfoPage.OnInfoPage){
+        if (identity instanceof RequestInfoPage.OnInfoPage) {
             ((RequestInfoPage.OnInfoPage) identity).onInfo(body);
         }
     }
@@ -62,9 +49,7 @@ public class InfoPageResponse extends MessageHandler {
         super.error();
         if (identity instanceof RequestInfoPage.OnInfoPage) {
             ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-            int majorCode = errorResponse.getMajorCode();
-            int minorCode = errorResponse.getMinorCode();
-            ((RequestInfoPage.OnInfoPage) identity).onError(majorCode, minorCode);
+            ((RequestInfoPage.OnInfoPage) identity).onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         }
     }
 }

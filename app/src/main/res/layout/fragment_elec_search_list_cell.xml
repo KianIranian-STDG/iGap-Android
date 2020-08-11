@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/Container"
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardHolder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="@dimen/dp16"
+            app:cardBackgroundColor="?attr/iGapCardViewColor">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billIDTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_searchCell_billID"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="start"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/billID"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billID"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:justificationMode="inter_word"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:text="123"
+                    android:singleLine="true"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/billIDTitle"
+                    app:layout_constraintTop_toTopOf="@+id/billIDTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/billIDTitle"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/billIDTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billCustomerNameTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_searchCell_CustomerName"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="start"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toBottomOf="@+id/billIDTitle"
+                    app:layout_constraintEnd_toStartOf="@+id/billCustomerName"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billCustomerName"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:justificationMode="inter_word"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="123"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/billCustomerNameTitle"
+                    app:layout_constraintTop_toTopOf="@+id/billCustomerNameTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/billCustomerNameTitle"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/billCustomerNameTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billCustomerAddressTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp8"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:justificationMode="inter_word"
+                    android:text="@string/elecBill_searchCell_CustomerAddress"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="start"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toBottomOf="@+id/billCustomerNameTitle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/billCustomerAddress" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/billCustomerAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:justificationMode="inter_word"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/dp16"
+                    android:gravity="end"
+                    android:ellipsize="end"
+                    android:text="123"
+                    android:singleLine="true"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/billCustomerAddressTitle"
+                    app:layout_constraintTop_toTopOf="@+id/billCustomerAddressTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/billCustomerAddressTitle"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/billCustomerAddressTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

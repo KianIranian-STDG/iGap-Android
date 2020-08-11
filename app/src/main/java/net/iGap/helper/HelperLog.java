@@ -1,14 +1,38 @@
 package net.iGap.helper;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import net.iGap.BuildConfig;
+import net.iGap.Config;
+import net.iGap.module.accountManager.AccountManager;
 
 public class HelperLog {
 
-    public static void setErrorLog(Exception e) {
+    private static HelperLog instance;
+    private FirebaseCrashlytics crashlytics;
 
-        Crashlytics.logException(e);
+    private HelperLog() {
+        crashlytics = FirebaseCrashlytics.getInstance();
+        crashlytics.setUserId(String.valueOf(AccountManager.getInstance().getCurrentUser().getId()));
+    }
+
+    public static HelperLog getInstance() {
+        if (instance == null) {
+            synchronized (HelperLog.class) {
+                if (instance == null) {
+                    instance = new HelperLog();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void setErrorLog(Exception e) {
+        crashlytics.recordException(e);
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e(e);
+        }
 
         if (BuildConfig.DEBUG) {
             e.printStackTrace();

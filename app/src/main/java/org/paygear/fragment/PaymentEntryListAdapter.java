@@ -1,15 +1,17 @@
 package org.paygear.fragment;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import net.iGap.R;
 
+import org.paygear.WalletActivity;
 import org.paygear.model.PaymentEntryListItem;
 
 import java.util.ArrayList;
@@ -53,9 +55,12 @@ class PaymentEntryListAdapter extends RecyclerView.Adapter<PaymentEntryListAdapt
         holder.title2.setText(item.title2);
         holder.value.setText(item.value);
 
-        holder.title2.setTextColor(ContextCompat.getColor(mContext, item.isSelectable ? R.color.primary_text : R.color.secondary_text));
+        holder.title2.setTextColor(Color.parseColor(item.isSelectable ? WalletActivity.textTitleTheme : WalletActivity.textSubTheme));
         holder.divider.setVisibility(item.isSelectable ? View.VISIBLE : View.GONE);
-        holder.view.setBackgroundResource(item.isSelectable ? R.drawable.simple_selector : 0);
+        holder.view.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        holder.divider.setBackgroundColor(Color.parseColor(WalletActivity.textSubTheme));
+        holder.title1.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+        holder.value.setTextColor(Color.parseColor(WalletActivity.textSubTheme));
     }
 
     @Override

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_downloadQuality_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="لطفا کیفیت دانلود را انتخاب کنید."
+        android:textColor="@color/black"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rg_downloadQuality"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_downloadQuality_title">
+
+        <RadioButton
+            android:id="@+id/rb_downloadQuality_128"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="کیفیت ۱۲۸"
+            android:textSize="@dimen/standardTextSize" />
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="کیفیت ۳۲۰"
+            android:textSize="@dimen/standardTextSize" />
+
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/cb_downloadQuality_rememberSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        android:text="تنظیمات را به خاطر داشته باش"
+        android:textColor="@color/gray_300"
+        android:textSize="@dimen/smallTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/gray10"
+        app:layout_constraintTop_toBottomOf="@+id/rg_downloadQuality"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/tv_downloadQuality_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:text="دانلود"
+        android:textColor="@color/gray_300"
+        android:textSize="@dimen/standardTextSize"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/cb_downloadQuality_rememberSetting"
+        app:layout_constraintTop_toBottomOf="@+id/cb_downloadQuality_rememberSetting" />
+
+    <TextView
+        android:id="@+id/tv_downloadQuality_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:padding="8dp"
+        android:text="بیخیال"
+        android:textColor="@color/gray_300"
+        android:textSize="@dimen/standardTextSize"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_downloadQuality_confirm"
+        app:layout_constraintStart_toEndOf="@+id/tv_downloadQuality_confirm"
+        app:layout_constraintTop_toTopOf="@+id/tv_downloadQuality_confirm" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,11 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.downloader.PRDownloader;
-import com.neovisionaries.ws.client.WebSocket;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
@@ -23,8 +18,6 @@ import static net.iGap.G.context;
 import static net.iGap.G.hasNetworkBefore;
 import static net.iGap.G.latestConnectivityType;
 import static net.iGap.G.latestMobileDataState;
-import static net.iGap.WebSocketClient.allowForReconnecting;
-import static net.iGap.WebSocketClient.reconnect;
 
 public class ConnectionManager {
 
@@ -80,8 +73,7 @@ public class ConnectionManager {
                          */
                         latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
                         hasNetworkBefore = true;
-                        allowForReconnecting = true;
-                        reconnect(true);
+//                        reconnect(true);
                     } else {
                         /**
                          * before has network
@@ -91,28 +83,24 @@ public class ConnectionManager {
                              * change connectivity type
                              */
                             latestConnectivityType = HelperCheckInternetConnection.currentConnectivityType;
-                            allowForReconnecting = true;
-                            WebSocket webSocket = WebSocketClient.getInstance();
-                            if (webSocket != null) {
-                                webSocket.disconnect();
-                            }
+                            WebSocketClient.getInstance().disconnectSocket(true);
                         } else {
                             /**
                              * not change connectivity type
                              * hint : if call twice or more this receiver , in second time will be called this section .
                              */
                             if (HelperTimeOut.heartBeatTimeOut()) {
-                                reconnect(true);
+                                /*reconnect(true);*/
                                 if (BuildConfig.DEBUG) {
                                     G.handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                                            // Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
                             } else {
-                                Log.i("HHH", "Connection Not Time Out HeartBeat");
+                                // Log.i("HHH", "Connection Not Time Out HeartBeat");
                             }
                         }
                     }
@@ -123,7 +111,7 @@ public class ConnectionManager {
 
                     hasNetworkBefore = false;
                     HelperConnectionState.connectionState(ConnectionState.WAITING_FOR_NETWORK);
-                    G.socketConnection = false;
+                    WebSocketClient.getInstance().disconnectSocket(true);
                 }
             }
         };

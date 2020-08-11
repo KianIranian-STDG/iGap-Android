@@ -1,56 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  style="?backgroundColorSettingTheme_2"
-  android:layout_width="wrap_content"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
-
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/rcvBottomSheetForward"
-    style="?backgroundColorSettingTheme_2"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:minHeight="@dimen/dp240"
-    android:padding="@dimen/dp10" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/gray_5c" />
+    <View
+        android:id="@+id/v"
+        android:layout_width="@dimen/dp160"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="@drawable/bottom_sheet_dialog_line" />
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp52"
-    android:layoutDirection="ltr"
-    android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8">
 
-    <net.iGap.module.MaterialDesignTextView
-      android:layout_width="@dimen/dp52"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:text="@string/md_searching_magnifying_glass"
-      android:textAppearance="@style/TextIconAppearance.all"
-      style="?textTitleColorSettingTheme" />
+        <net.iGap.module.MaterialDesignTextView
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp28"
+            android:layout_height="@dimen/dp28"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/dp8"
+            android:text="@string/search_icon" />
 
-    <net.iGap.module.MEditText
-      android:id="@+id/edtSearch"
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      android:background="@color/transparent"
-      style="?hintColorSettingTheme"
-      android:hint="@string/send_message_to" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
-    <net.iGap.module.MaterialDesignTextView
-      android:id="@+id/txtSend"
-      android:layout_width="@dimen/dp52"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:text="@string/md_send_button"
-      android:textAppearance="@style/TextIconAppearance.all"
-      style="?textColorMenuTheme" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtSearch"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp8"
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:paddingStart="@dimen/dp14"
+            android:paddingTop="6dp"
+            android:paddingEnd="@dimen/dp14"
+            android:background="@drawable/fast_sorward_light"
+            android:paddingBottom="6dp"
+            android:singleLine="true"
+            android:textSize="@dimen/largeTextSize" />
+    </LinearLayout>
 
-  </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvBottomSheetForward"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="@dimen/dp8"
+        app:layout_constraintBottom_toTopOf="@id/divider1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtSearch" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:background="?attr/selectableItemBackground"
+        android:padding="8dp"
+        android:text="@string/copy_link_title"
+        android:textColor="?iGapTitleTextColor"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/txtSend"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintWidth_percent=".9" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtSend"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:gravity="center"
+        android:text="@string/send"
+        android:textColor="@color/white"
+        android:textSize="@dimen/standardTextSize"
+        android:textStyle="bold"
+        android:background="?attr/iGapButtonColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </LinearLayout>

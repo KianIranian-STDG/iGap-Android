@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
@@ -29,16 +29,13 @@ public class RealmThumbnail extends RealmObject {
     private int height;
     private String cacheId;
 
-    public static RealmThumbnail put(long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmThumbnail put(Realm realm, long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class, id);
         realmThumbnail.setCacheId(thumbnail.getCacheId());
         realmThumbnail.setWidth(thumbnail.getWidth());
         realmThumbnail.setSize(thumbnail.getSize());
         realmThumbnail.setHeight(thumbnail.getHeight());
         realmThumbnail.setMessageId(messageId);
-
-        realm.close();
 
         return realmThumbnail;
     }

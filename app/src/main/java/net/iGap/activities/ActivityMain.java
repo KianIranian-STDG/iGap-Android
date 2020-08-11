@@ -12,6 +12,7 @@ package net.iGap.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -19,252 +20,162 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
+import com.top.lib.mpl.view.PaymentInitiator;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.dialog.SubmitScoreDialog;
-import net.iGap.eventbus.EventListener;
-import net.iGap.eventbus.EventManager;
-import net.iGap.eventbus.socketMessages;
-import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.fragments.CallSelectFragment;
+import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentChatSettings;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentLanguage;
-import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
-import net.iGap.fragments.FragmentPayment;
-import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.fragments.FragmentSetting;
-import net.iGap.fragments.FragmentToolBarBack;
-import net.iGap.fragments.FragmentWalletAgrement;
-import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.fragments.RegisteredContactsFragment;
-import net.iGap.fragments.SearchFragment;
+import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
-import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.HelperSaveFile;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.IGLog;
+import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
-import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.FinishActivity;
-import net.iGap.interfaces.ICallFinish;
-import net.iGap.interfaces.ITowPanModDesinLayout;
-import net.iGap.interfaces.OnChangeUserPhotoListener;
-import net.iGap.interfaces.OnChatClearMessageResponse;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnConnectionChangeState;
-import net.iGap.interfaces.OnGeoGetConfiguration;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnGetWallpaper;
-import net.iGap.interfaces.OnGroupAvatarResponse;
-import net.iGap.interfaces.OnMapRegisterState;
-import net.iGap.interfaces.OnMapRegisterStateMain;
-import net.iGap.interfaces.OnPayment;
-import net.iGap.interfaces.OnRefreshActivity;
-import net.iGap.interfaces.OnUnreadChange;
-import net.iGap.interfaces.OnUpdating;
-import net.iGap.interfaces.OnUserInfoMyClient;
-import net.iGap.interfaces.OnUserSessionLogout;
-import net.iGap.interfaces.OnVerifyNewDevice;
-import net.iGap.interfaces.OneFragmentIsOpen;
-import net.iGap.interfaces.OpenFragment;
-import net.iGap.interfaces.RefreshWalletBalance;
-import net.iGap.libs.floatingAddButton.ArcMenu;
-import net.iGap.libs.floatingAddButton.StateChangeListener;
-import net.iGap.libs.tabBar.NavigationTabStrip;
+import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUtils;
-import net.iGap.module.FixAppBarLayoutBehavior;
 import net.iGap.module.LoginActions;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.SubmitScoreDialog;
 import net.iGap.module.enums.ConnectionState;
-import net.iGap.proto.ProtoFileDownload;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.interfaces.DataTransformerListener;
+import net.iGap.observers.interfaces.FinishActivity;
+import net.iGap.observers.interfaces.ITowPanModDesinLayout;
+import net.iGap.observers.interfaces.OnChatClearMessageResponse;
+import net.iGap.observers.interfaces.OnChatSendMessageResponse;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnGroupAvatarResponse;
+import net.iGap.observers.interfaces.OnMapRegisterState;
+import net.iGap.observers.interfaces.OnMapRegisterStateMain;
+import net.iGap.observers.interfaces.OnPayment;
+import net.iGap.observers.interfaces.OnUpdating;
+import net.iGap.observers.interfaces.OnUserInfoMyClient;
+import net.iGap.observers.interfaces.OnVerifyNewDevice;
+import net.iGap.observers.interfaces.OneFragmentIsOpen;
+import net.iGap.observers.interfaces.OpenFragment;
+import net.iGap.observers.interfaces.RefreshWalletBalance;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmStickers;
-import net.iGap.realm.RealmUserInfo;
-import net.iGap.realm.RealmWallpaper;
-import net.iGap.request.RequestChatGetRoom;
-import net.iGap.request.RequestGeoGetConfiguration;
-import net.iGap.request.RequestInfoWallpaper;
-import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserIVandSetActivity;
-import net.iGap.request.RequestUserInfo;
-import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
-import net.iGap.viewmodel.ActivityCallViewModel;
-import net.iGap.viewmodel.FragmentIVandProfileViewModel;
-import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
-import net.iGap.viewmodel.FragmentThemColorViewModel;
+import net.iGap.viewmodel.UserScoreViewModel;
 
 import org.paygear.RaadApp;
-import org.paygear.WalletActivity;
 import org.paygear.fragment.PaymentHistoryFragment;
-import org.paygear.fragment.ScannerFragment;
-import org.paygear.model.Card;
-import org.paygear.web.Web;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import ir.pec.mpl.pecpayment.view.PaymentInitiator;
-import ir.radsense.raadcore.model.Auth;
-import ir.radsense.raadcore.web.WebBase;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
-import static net.iGap.G.userId;
-import static net.iGap.R.string.updating;
-import static net.iGap.fragments.FragmentiGapMap.mapUrls;
+import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
+import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
+    public static final String userId = "userId";
+    public static final String OPEN_DEEP_LINK = "openDeepLink";
+
+    public static final String DEEP_LINK = "deepLink";
+
     public static final String openMediaPlyer = "openMediaPlyer";
+
     public static final int requestCodePaymentCharge = 198;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
+    public static final int electricityBillRequestCodeQrCode = 203;
     public static final int WALLET_REQUEST_CODE = 1024;
+    private static final int ERROR_DIALOG_REQUEST_CODE = 1;
 
-    public static boolean isMenuButtonAddShown = false;
+    private boolean retryProviderInstall;
+
     public static boolean isOpenChatBeforeSheare = false;
-    public static boolean isLock = true;
-    public static boolean isActivityEnterPassCode = false;
+    public static boolean isLock = false;
     public static FinishActivity finishActivity;
     public static boolean disableSwipe = false;
     public static OnBackPressedListener onBackPressedListener;
     private static long oldTime;
-    private static long currentTime;
-    public TextView iconLock;
     public static boolean isUseCamera = false;
-    public ArcMenu arcMenu;
-    FragmentCall fragmentCall;
-    FloatingActionButton btnStartNewChat;
-    FloatingActionButton btnCreateNewGroup;
-    FloatingActionButton btnCreateNewChannel;
-    SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
     public static boolean waitingForConfiguration = false;
-    private LinearLayout mediaLayout;
-    private FrameLayout frameChatContainer;
-    private FrameLayout frameMainContainer;
-    private FrameLayout frameFragmentBack;
-    private FrameLayout frameFragmentContainer;
-    private NavigationTabStrip navigationTabStrip;
-    private MyAppBarLayout appBarLayout;
-    private Typeface titleTypeface;
     private SharedPreferences sharedPreferences;
-    private ImageView imgNavImage;
-    private DrawerLayout drawer;
-    private ProgressBar contentLoading;
-    private Realm mRealm;
-    private boolean isNeedToRegister = false;
-    private ViewPager mViewPager;
-    private ArrayList<Fragment> pages = new ArrayList<>();
-    private String phoneNumber;
-    private TextView itemCash;
-    private ViewGroup itemNavWallet;
-    private int currentFabIcon =0;
-    private RealmUserInfo userInfo;
-    private int lastMarginTop = 0;
-
-    public static void setWeight(View view, int value) {
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-        params.weight = value;
-        view.setLayoutParams(params);
-
-        if (value > 0) {
-            view.setVisibility(View.VISIBLE);
-        } else {
-            view.setVisibility(View.GONE);
-        }
-    }
+    private TextView iconLock;
+    private int retryConnectToWallet = 0;
+    private MyPhonStateService myPhonStateService;
+    public DataTransformerListener<Intent> dataTransformer;
+    private BroadcastReceiver audioManagerReciver;
 
     public static void setMediaLayout() {
         try {
@@ -305,55 +216,62 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
-    public static void setStripLayoutCall() {
-        if (G.isInCall) {
-            if (ActivityCall.stripLayoutChat != null) {
-                ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-
-                if (ActivityCall.stripLayoutMain != null) {
-                    ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                }
-            } else {
-                if (ActivityCall.stripLayoutMain != null) {
-                    ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-                }
-            }
-        } else {
-
-            if (ActivityCall.stripLayoutMain != null) {
-                ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+    public static void doIvandScore(String content, Activity activity) {
+        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
+            @Override
+            public void onSetActivitiesReady(String message, boolean isOk) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
+                        dialog.show();
+                    }
+                });
             }
 
-            if (ActivityCall.stripLayoutChat != null) {
-                ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = G.context.getString(R.string.error_submit_qr_code);
+                        if (majorCode == 10183 && minorCode == 2) {
+                            message = G.context.getString(R.string.E_10183);
+                        } else if (majorCode == 10184 && minorCode == 1) {
+                            message = G.context.getString(R.string.error_ivand_limit_gift);
+                        }
+
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
+                        dialog.show();
+                    }
+                });
             }
-        }
-    }
+        });
 
-    private Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
-
-    private void closeRealm() {
-        if (mRealm != null && !mRealm.isClosed()) {
-            mRealm.close();
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (G.ISOK) {
-            closeRealm();
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("Main activity on destroy");
+        }
+
+        if (G.ISRealmOK) {
+            if (myPhonStateService != null) {
+                unregisterReceiver(myPhonStateService);
+            }
+
+            if (audioManagerReciver != null) {
+                unregisterReceiver(audioManagerReciver);
+            }
             if (G.imageLoader != null) {
                 G.imageLoader.clearMemoryCache();
             }
@@ -370,6 +288,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 am.setRingerMode(G.mainRingerMode);
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -387,6 +306,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setIntent(intent);
         isOpenChatBeforeSheare = true;
         checkIntent(intent);
+
+        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+            handleDeepLink(intent);
+        }
+
+        if (G.isFirstPassCode) {
+            openActivityPassCode();
+        }
+    }
+
+    public void handleDeepLink(Intent intent) {
+        if (intent != null && intent.getExtras() != null)
+            handleDeepLink(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CHAT));
+    }
+
+    public void handleDeepLink(String uri) {
+        BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (bottomNavigationFragment != null)
+            bottomNavigationFragment.autoLinkCrawler(uri, new DiscoveryFragment.CrawlerStruct.OnDeepValidLink() {
+                @Override
+                public void linkValid(String link) {
+
+                }
+
+                @Override
+                public void linkInvalid(String link) {
+                    HelperError.showSnackMessage(link + " " + context.getResources().getString(R.string.link_not_valid), false);
+                }
+            });
     }
 
     private void checkIntent(Intent intent) {
@@ -395,23 +343,34 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        new HelperGetDataFromOtherApp(intent);
+        new HelperGetDataFromOtherApp(this, intent);
+        //check has shared data if true setup main fragment (room list) ui
+        Fragment fragmentBottomNav = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragmentBottomNav instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragmentBottomNav).checkHasSharedData(true);//set true just for checking state
+            ((BottomNavigationFragment) fragmentBottomNav).isFirstTabItem();
+        }
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
-            new HelperFragment(new FragmentSetting()).load();
+            new HelperFragment(getSupportFragmentManager(), new FragmentSetting()).load();
         }
 
         Bundle extras = intent.getExtras();
+
         if (extras != null) {
 
             long roomId = extras.getLong(ActivityMain.openChat);
             if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
-                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+//                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+                // TODO this change is duo to room null bug. if it works server must change routine.
                 long peerId = extras.getLong("PeerID");
-                if (peerId > 0) {
-                    goToChatActivity.setPeerID(peerId);
+                long userId = extras.getLong(ActivityMain.userId);
+                if (AccountManager.getInstance().getCurrentUser().getId() != userId) {
+                    new AccountHelper().changeAccount(userId);
+                    RaadApp.onCreate(this);
+                    updateUiForChangeAccount();
                 }
-                goToChatActivity.startActivity();
+                HelperUrl.goToActivityFromFCM(this, roomId, peerId);
             }
             FragmentLanguage.languageChanged = false;
 
@@ -419,7 +378,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (openMediaPlayer) {
                 if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragment = new FragmentMediaPlayer();
-                    new HelperFragment(fragment).setReplace(false).load();
+                    new HelperFragment(getSupportFragmentManager(), fragment).setReplace(false).load();
                 }
             }
         }
@@ -427,10 +386,59 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (G.ISOK) {
+        super.onCreate(savedInstanceState);
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("Main activity on create");
+        }
+
+        setContentView(R.layout.activity_main);
+
+        detectDeviceType();
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        G.logoutAccount.observe(this, isLogout -> {
+            if (isLogout != null && isLogout) {
+                boolean haveOtherAccount = new AccountHelper().logoutAccount();
+                RaadApp.onCreate(this);
+                if (haveOtherAccount) {
+                    updateUiForChangeAccount();
+                } else {
+                    try {
+                        NotificationManager nMgr = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        nMgr.cancelAll();
+                    } catch (Exception e) {
+                        e.getStackTrace();
+                    }
+                    if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+                        MusicPlayer.stopSound();
+                        MusicPlayer.closeLayoutMediaPlayer();
+                    }
+                    startActivity(new Intent(this, ActivityRegistration.class));
+                    finish();
+                }
+            }
+        });
+        if (G.ISRealmOK) {
+            finishActivity = new FinishActivity() {
+                @Override
+                public void finishActivity() {
+                    // ActivityChat.this.finish();
+                    finish();
+                }
+            };
+
+            if (G.isFirstPassCode) {
+                openActivityPassCode();
+            }
+
+            initTabStrip(getIntent());
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("android.intent.action.PHONE_STATE");
-            MyPhonStateService myPhonStateService = new MyPhonStateService();
+            myPhonStateService = new MyPhonStateService();
+
+            //add it for handle ssl handshake error
+            checkGoogleUpdate();
 
             registerReceiver(myPhonStateService, intentFilter);
             G.refreshWalletBalance = this;
@@ -445,35 +453,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     AudioManager.RINGER_MODE_CHANGED_ACTION);
 
 
-            BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
+            audioManagerReciver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     //code...
                     if (!G.appChangeRinggerMode) {
-                        AudioManager mainAudioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                        AudioManager mainAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                         G.mainRingerMode = mainAudioManager.getRingerMode();
                     }
 
                 }
             };
 
-            registerReceiver(audioManagerReciver, ringgerFilter);
+            registerReceiver(audioManagerReciver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
                     isChinesPhone();
             }
-//        setTheme(R.style.AppThemeTranslucent);
-
-            if (G.isFirstPassCode) {
-                openActivityPassCode();
-            }
-            //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //isNeedToRegister = true; // continue app even don't have storage permission
-            //isOnGetPermission = true;
-            //}
-            super.onCreate(savedInstanceState);
 
             RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
                 @Override
@@ -485,129 +483,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            finishActivity = new FinishActivity() {
-                @Override
-                public void finishActivity() {
-                    // ActivityChat.this.finish();
-                    finish();
-                }
-            };
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-            if (isNeedToRegister) {
-
-                Intent intent = new Intent(this, ActivityRegisteration.class);
-                startActivity(intent);
-
-                finish();
-                return;
+            boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
+            if (deleteFolderBackground) {
+                deleteContentFolderChatBackground();
+                sharedPreferences.edit().putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false).apply();
             }
-
-
-            G.fragmentManager = getSupportFragmentManager();
-
-            //checkAppAccount();
-
-            try {
-                HelperPermission.getPhonePermision(this, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            userInfo = getRealm().where(RealmUserInfo.class).findFirst();
-
-            if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                isNeedToRegister = true;
-                Intent intent = new Intent(this, ActivityRegisteration.class);
-                startActivity(intent);
-
-                if (mRealm != null && !mRealm.isClosed()) {
-                    mRealm.close();
-                }
-
-                finish();
-                return;
-            }
-
-
-            if (!G.userLogin) {
-                /**
-                 * set true mFirstRun for get room history after logout and login again
-                 */
-
-                //licenceChecker();
-
-                sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-                boolean deleteFolderBackground = sharedPreferences.getBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, true);
-
-                if (deleteFolderBackground) {
-                    deleteContentFolderChatBackground();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
-                    editor.apply();
-                }
-            }
-            setContentView(R.layout.activity_main);
-
-            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-            if (G.isAppRtl) {
-                ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
-            } else {
-                ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_LTR);
-            }
-
-
-            frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
-            frameMainContainer = (FrameLayout) findViewById(R.id.am_frame_main_container);
 
             if (G.twoPaneMode) {
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    G.isLandscape = true;
-                } else {
-                    G.isLandscape = false;
-                }
-
-                frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
-                frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
+                G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
                 G.oneFragmentIsOpen = new OneFragmentIsOpen() {
                     @Override
                     public void justOne() {
 
-                        if (frameFragmentContainer.getChildCount() == 0) {
-                            disableSwipe = true;
-                        } else {
-                            disableSwipe = false;
-                        }
-
-
                     }
                 };
 
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int height = displayMetrics.heightPixels;
-                int width = displayMetrics.widthPixels;
-
-                int size = Math.min(width, height) - 50;
-
-                ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
-                lp.width = size;
-                lp.height = size;
-
-
                 designLayout(chatLayoutMode.none);
-
-                frameFragmentBack.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        onBackPressed();
-                    }
-                });
+                setDialogFragmentSize();
 
                 G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
                     @Override
@@ -617,79 +512,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     @Override
                     public boolean getBackChatVisibility() {
-
-                        if (frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE) {
-                            return true;
-                        }
-
-                        return false;
+                        return G.twoPaneMode && findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE;
                     }
 
                     @Override
                     public void setBackChatVisibility(boolean visibility) {
-
-                        if (true) {
-                            if (frameFragmentBack != null) {
-                                frameFragmentBack.setVisibility(View.VISIBLE);
-                            }
+                        if (G.twoPaneMode) {
+                            findViewById(R.id.fullScreenFrame).setVisibility(View.VISIBLE);
                         }
                     }
                 };
-
-
-            } else {
-                frameChatContainer.setVisibility(View.GONE);
             }
 
             isOpenChatBeforeSheare = false;
             checkIntent(getIntent());
-
-
-            initTabStrip();
-
-            initFloatingButtonCreateNew();
-
-            arcMenu.setBackgroundTintColor();
-
-            btnStartNewChat.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-            btnCreateNewGroup.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-            btnCreateNewChannel.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
-            mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
-
-            MusicPlayer.setMusicPlayer(mediaLayout);
-            MusicPlayer.mainLayout = mediaLayout;
-
-            ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
-
-
-            appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
-            ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).setBehavior(new FixAppBarLayoutBehavior());
-
-            final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
-
-            appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
-                @Override
-                public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
-                    int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 10f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
-                    if (lastMarginTop != marginTop) {
-                        lastMarginTop = marginTop;
-                        LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
-                        param.setMargins(0, marginTop, 0, 0);
-                        navigationTabStrip.setLayoutParams(param);
-                    }
-                    toolbar.clearAnimation();
-                    if (moveUp) {
-                        if (toolbar.getAlpha() != 0F) {
-                            toolbar.animate().setDuration(150).alpha(0F).start();
-                        }
-                    } else {
-                        if (toolbar.getAlpha() != 1F) {
-                            toolbar.animate().setDuration(150).alpha(1F).start();
-                        }
-                    }
-                }
-            });
 
             initComponent();
 
@@ -700,6 +536,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             /**
              * just do this action once
              */
+            new PermissionHelper(this).grantReadPhoneStatePermission();
+
             if (!isGetContactList) {
                 try {
                     HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {
@@ -749,25 +587,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             fragmentNewGroup.setArguments(bundle);
 
                             try {
-                                new HelperFragment(fragmentNewGroup).setStateLoss(true).load();
+                                new HelperFragment(getSupportFragmentManager(), fragmentNewGroup).setStateLoss(true).load();
                             } catch (Exception e) {
                                 e.getStackTrace();
                             }
-                            lockNavigation();
                         }
                     });
                 }
             };
 
             G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-
-
             connectionState();
-
-            initDrawerMenu();
-
-            checkKeepMedia();
-
+            new Thread(this::checkKeepMedia).start();
 
             G.onVerifyNewDevice = new OnVerifyNewDevice() {
                 @Override
@@ -799,34 +630,69 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             };
 
             boolean isDefaultBg = sharedPreferences.getBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
-            if (isDefaultBg){
-                if (G.isDarkTheme){
-                    sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
-                }else{
-                    getWallpaperAsDefault();
-                }
+            if (isDefaultBg) {
+                sharedPreferences.edit().putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "").apply();
             }
 
-            ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-                @Override
-                public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
-
-                    if (response.body() != null) {
-                        if (response.body().getOk()) {
-                            RealmStickers.updateStickers(response.body().getData());
-                        }
-                    }
-                }
-                @Override
-                public void onFailure(Call<StructSticker> call, Throwable t) {
-                }
-            });
         } else {
-           super.onCreate(savedInstanceState);
-           TextView textView = new TextView(this);
-           setContentView(textView);
-           showToast(textView);
+            TextView textView = new TextView(this);
+            setContentView(textView);
+            showToast(textView);
         }
+
+
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
+        }
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.wtf(this.getClass().getName(), "------------------------------------------------");
+                for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
+                    Log.wtf(this.getClass().getName(), "fragment: " + getSupportFragmentManager().getBackStackEntryAt(i).getName());
+                }
+                Log.wtf(this.getClass().getName(), "------------------------------------------------");
+            }
+        });
+        Log.wtf(this.getClass().getName(), "onCreate");
+    }
+
+    /**
+     * if device is tablet twoPaneMode will be enabled
+     */
+    private void detectDeviceType() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+
+        G.twoPaneMode = findViewById(R.id.roomListFrame) != null;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && G.twoPaneMode) {
+            G.maxChatBox = metrics.widthPixels - (metrics.widthPixels / 3) - ViewMaker.i_Dp(R.dimen.dp80);
+        } else {
+            G.maxChatBox = metrics.widthPixels - ViewMaker.i_Dp(R.dimen.dp80);
+        }
+
+    }
+
+    private void setDialogFragmentSize() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
+        int size = Math.min(width, height) - 50;
+
+        FrameLayout frameFragmentContainer = findViewById(R.id.detailFrame);
+        ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
+        lp.width = size;
+        lp.height = size;
+
+        findViewById(R.id.fullScreenFrame).setOnClickListener(view -> onBackPressed());
     }
 
     private void showToast(View view) {
@@ -839,9 +705,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }, 2000);
     }
 
-    private void getWallpaperAsDefault() {
+    private void connectionState() {
+
+        G.onConnectionChangeState = connectionStateR -> runOnUiThread(() -> {
+            G.connectionState = connectionStateR;
+            G.connectionStateMutableLiveData.postValue(connectionStateR);
+        });
+
+        G.onUpdating = new OnUpdating() {
+            @Override
+            public void onUpdating() {
+                runOnUiThread(() -> {
+                    G.connectionState = ConnectionState.UPDATING;
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
+                });
+            }
+
+            @Override
+            public void onCancelUpdating() {
+                /**
+                 * if yet still G.connectionState is in update state
+                 * show latestState that was in previous state
+                 */
+                if (G.connectionState == ConnectionState.UPDATING) {
+                    G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
+                    G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
+                }
+            }
+        };
+    }
+
+    /*private void getWallpaperAsDefault() {
         try {
-            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
+            RealmWallpaper realmWallpaper = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            });
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
                     RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -873,35 +771,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 getImageListFromServer();
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-
+            e.printStackTrace();
         } catch (NullPointerException e2) {
-
+            e2.printStackTrace();
         } catch (Exception e3) {
-
+            e3.printStackTrace();
         }
 
-    }
+    }*/
 
-    private void setDefaultBackground(String bigImagePath) {
-        Log.wtf(this.getClass().getName(),"setDefaultBackground");
+    /*private void setDefaultBackground(String bigImagePath) {
         String finalPath = "";
         try {
             finalPath = HelperSaveFile.saveInPrivateDirectory(this, bigImagePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, finalPath);
         editor.putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true);
         editor.apply();
-    }
+    }*/
 
-    private void getImageListFromServer() {
+    /*private void getImageListFromServer() {
+        Log.e("wallpaper", "request in main ");
         G.onGetWallpaper = new OnGetWallpaper() {
             @Override
             public void onGetWallpaperList(final List<ProtoGlobal.Wallpaper> list) {
-                RealmWallpaper.updateField(list, "");
+                Log.e("wallpaper", "resp in main");
+                RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -911,9 +809,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        new RequestInfoWallpaper().infoWallpaper();
-    }
-
+        new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND);
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -986,55 +883,111 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
                 break;
             case WALLET_REQUEST_CODE:
-                try {
+                /*try {
                     getUserCredit();
                 } catch (Exception e) {
-                }
+                    e.printStackTrace();
+                }*/
 
                 break;
-            case FragmentIVandProfileViewModel.REQUEST_CODE_QR_IVAND_CODE:
+            case UserScoreViewModel.REQUEST_CODE_QR_IVAND_CODE:
                 IntentResult result2 = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (result2.getContents() != null) {
                     doIvandScore(result2.getContents(), ActivityMain.this);
                 }
                 break;
 
+            case ERROR_DIALOG_REQUEST_CODE:
+                // Adding a fragment via GoogleApiAvailability.showErrorDialogFragment
+                // before the instance state is restored throws an error. So instead,
+                // set a flag here, which will cause the fragment to delay until
+                // onPostResume.
+                retryProviderInstall = true;
+                break;
+
+            case AttachFile.request_code_trim_video:
+                if (resultCode == RESULT_OK) {
+                    Fragment fragmentGallery = getSupportFragmentManager().findFragmentById(G.twoPaneMode ? R.id.detailFrame : R.id.mainFrame);
+                    if (fragmentGallery instanceof FragmentGallery) {
+                        getSupportFragmentManager().popBackStack();
+                        getSupportFragmentManager().popBackStack();
+                        goneDetailFrameInTabletMode();
+                        Fragment fragmentChat = getSupportFragmentManager().findFragmentByTag(FragmentChat.class.getName());
+                        if (fragmentChat instanceof FragmentChat) {
+                            ((FragmentChat) fragmentChat).manageTrimVideoResult(data);
+                        } else {
+                            //todo:// fix fragment chat backstack
+                            if (dataTransformer != null) {
+                                dataTransformer.transform(AttachFile.request_code_trim_video, data);
+                            }
+                        }
+                    }
+                }
+                break;
         }
     }
 
-    public static void doIvandScore(String content, Activity activity) {
-        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
-            @Override
-            public void onSetActivitiesReady(String message, boolean isOk) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
-                        dialog.show();
-                    }
+    public void goneDetailFrameInTabletMode() {
+        if (G.twoPaneMode) findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+    }
+
+    /**
+     * This method is only called if the provider is successfully updated
+     * (or is already up-to-date).
+     */
+    @Override
+    public void onProviderInstalled() {
+        // Provider is up-to-date, app can make secure network calls.
+        Log.wtf(this.getClass().getName(), "onProviderInstalled");
+    }
+
+    /**
+     * This method is called if updating fails; the error code indicates
+     * whether the error is recoverable.
+     */
+    @Override
+    public void onProviderInstallFailed(int errorCode, Intent intent) {
+        GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
+        if (availability.isUserResolvableError(errorCode)) {
+            // Recoverable error. Show a dialog prompting the user to
+            // install/update/enable Google Play services.
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                    // The user chose not to take the recovery action
+                    onProviderInstallerNotAvailable();
                 });
             }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String message = G.context.getString(R.string.error_submit_qr_code);
-                        if (majorCode == 10183 && minorCode == 2) {
-                            message = G.context.getString(R.string.E_10183);
-                        }
-
-                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
-                        dialog.show();
-                    }
-                });
-            }
-        });
-
-        if (!isSend) {
-            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
+        } else {
+            // Google Play services is not available.
+            onProviderInstallerNotAvailable();
         }
+    }
+
+    /**
+     * On resume, check to see if we flagged that we need to reinstall the
+     * provider.
+     */
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (retryProviderInstall) {
+            // We can now safely retry installation.
+            ProviderInstaller.installIfNeededAsync(this, this);
+        }
+        retryProviderInstall = false;
+    }
+
+    private void onProviderInstallerNotAvailable() {
+        // This is reached if the provider cannot be updated for some reason.
+        // App should consider all HTTP communication to be vulnerable, and take
+        // appropriate action.
+        new MaterialDialog.Builder(this)
+                .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
+                .titleGravity(GravityEnum.CENTER)
+                .buttonsGravity(GravityEnum.CENTER)
+                .content("برای استفاده از این بخش نیاز به گوگل سرویس است.").contentGravity(GravityEnum.CENTER)
+                .positiveText(R.string.ok).onPositive((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void checkKeepMedia() {
@@ -1064,7 +1017,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }, 5000);
         }
     }
-
 
     private void getPaymentResultCode(int resultCode, Intent data) {
 
@@ -1118,6 +1070,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    public void checkGoogleUpdate() {
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+        ProviderInstaller.installIfNeededAsync(this, this);
+        Log.wtf(this.getClass().getName(), "installIfNeeded");
+    }
+
+    //*******************************************************************************************************************************************
+
     private void showErrorTypeMpl(int errorType) {
         String message = getErrorTypeMpl(errorType);
 
@@ -1152,12 +1112,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         return message;
     }
 
-
     //*******************************************************************************************************************************************
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-
+        AndroidUtils.checkDisplaySize(this, newConfig);
         if (G.twoPaneMode) {
 
             boolean beforeState = G.isLandscape;
@@ -1168,351 +1127,51 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.isLandscape = false;
             }
 
-            if (beforeState != G.isLandscape) {
-                designLayout(chatLayoutMode.none);
-            }
-
-
+            /*if (beforeState != G.isLandscape) {
+             *//*designLayout(chatLayoutMode.none);*//*
+                Log.wtf(this.getClass().getName(), "onConfigurationChanged");
+                setViewConfigurationChanged();
+            }*/
+            setDialogFragmentSize();
         }
-
         super.onConfigurationChanged(newConfig);
         G.rotationState = newConfig.orientation;
     }
 
-    //*******************************************************************************************************************************************
-
-    private void initFloatingButtonCreateNew() {
-        arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
-        arcMenu.setStateChangeListener(new StateChangeListener() {
-            @Override
-            public void onMenuOpened() {
-
-            }
-
-            @Override
-            public void onMenuClosed() {
-                isMenuButtonAddShown = false;
-            }
-        });
-
-        btnStartNewChat = (FloatingActionButton) findViewById(R.id.ac_fab_start_new_chat);
-        btnStartNewChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "New Chat");
-                fragment.setArguments(bundle);
-
-                try {
-                    //getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-                    //    R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).replace(R.id.fragmentContainer, fragment, "register_contact_fragment").commit();
-
-                    new HelperFragment(fragment).load();
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-
-                lockNavigation();
-            }
-        });
-
-        btnCreateNewGroup = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_group);
-        btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewGroup");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                lockNavigation();
-
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
-        btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewChanel");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                lockNavigation();
-                if (arcMenu.isMenuOpened()) {
-                    arcMenu.toggleMenu();
-                }
-            }
-        });
-
-        arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (mViewPager == null || mViewPager.getAdapter() == null) {
-                    return;
-                }
-
-                try {
-
-                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
-
-                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                        switch (fm.mainType) {
-
-                            case all:
-                                arcMenu.toggleMenu();
-                                break;
-                            case chat:
-                                btnStartNewChat.performClick();
-                                break;
-                            case group:
-                                btnCreateNewGroup.performClick();
-                                break;
-                            case channel:
-                                btnCreateNewChannel.performClick();
-                                break;
-                        }
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
-
-                        ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
-                    }
-                } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
-                }
-            }
-        });
-    }
-
-    private void onSelectItem(int position) {
-        FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-
-        if (adapter.getItem(position) instanceof FragmentMain) {
-
-            findViewById(R.id.amr_btn_search).setVisibility(View.VISIBLE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            setFabIcon(R.mipmap.plus);
-            arcMenu.fabMenu.hide();
-            arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof FragmentCall) {
-
-            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
-            setFabIcon(R.drawable.ic_call_black_24dp);
-            arcMenu.fabMenu.hide();
-            arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof DiscoveryFragment) {
-            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            arcMenu.setVisibility(View.GONE);
-        }
-
-        if (arcMenu.isMenuOpened()) {
-            arcMenu.toggleMenu();
-        }
-
-        arcMenu.fabMenu.show();
-    }
-
-    private void setFabIcon(int res) {
-
-        if (res == currentFabIcon) {
-            return;
-        }
-        currentFabIcon = res;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res, context.getTheme()));
-        } else {
-            arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res));
-        }
-    }
-
-    private void setViewPagerSelectedItem() {
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                if (mViewPager == null || mViewPager.getAdapter() == null || mViewPager.getAdapter().getCount() == 0) {
-                    return;
-                }
-
-                int index = 0;
-
-                if (G.selectedTabInMainActivity.length() > 0) {
-
-                    if (HelperCalander.isPersianUnicode) {
-
-                        if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 2;
-                        } else if (DiscoveryFragment.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 1;
-                        } else if (FragmentCall.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 0;
-                        }
-
-                    } else {
-
-                        if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 0;
-                        } else if (DiscoveryFragment.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 1;
-                        } else if (FragmentCall.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 2;
-                        }
-                    }
-
-                    G.selectedTabInMainActivity = "";
-
-
+    private void setViewConfigurationChanged() {
+        if (G.twoPaneMode) {
+            if (G.isLandscape) {
+                Log.wtf(this.getClass().getName(), "isLandscape");
+                findViewById(R.id.mainFrame).setVisibility(View.VISIBLE);
+                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
+            } else {
+                Log.wtf(this.getClass().getName(), "not Landscape");
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                if (fragment instanceof FragmentChat) {
+                    findViewById(R.id.roomListFrame).setVisibility(View.GONE);
                 } else {
-
-                    if (HelperCalander.isPersianUnicode) {
-                        index = 2;
-                    } else {
-                        index = 0;
-                    }
-                }
-
-                navigationTabStrip.setViewPager(mViewPager, index);
-                if (!HelperCalander.isPersianUnicode) {
-                    navigationTabStrip.updatePointIndicator();
-                }
-
-                navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
-                    @Override
-                    public void onStartTabSelected(String title, int index) {
-
-                    }
-
-                    @Override
-                    public void onEndTabSelected(String title, int index) {
-                        onSelectItem(index);
-                    }
-                });
-
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
-
-            }
-        }, 100);
-    }
-
-    private void initTabStrip() {
-
-        navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
-        navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_apps), getString(R.string.md_chat_tab));
-        } else {
-            navigationTabStrip.setTitles(getString(R.string.md_chat_tab), getString(R.string.md_apps), getString(R.string.md_phone));
-        }
-
-        navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
-        navigationTabStrip.setStripColor(Color.WHITE);
-
-        mViewPager = findViewById(R.id.viewpager);
-
-        navigationTabStrip.setVisibility(View.VISIBLE);
-        mViewPager.setOffscreenPageLimit(3);
-
-        findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
-
-        if (HelperCalander.isPersianUnicode) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(fragmentCall);
-
-                    pages.add(DiscoveryFragment.newInstance(0));
-
-                    /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
-                    /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
-                    /*      pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));*/
-
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                    mViewPager.setCurrentItem(2);
-                    setViewPagerSelectedItem();
-                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
-                }
-            }, 400);
-        } else {
-
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
-                    mViewPager.setAdapter(sampleFragmentPagerAdapter);
-
-                    findViewById(R.id.loadingContent).setVisibility(View.GONE);
-
-                }
-            }, 400);
-
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(DiscoveryFragment.newInstance(0));
-                    pages.add(fragmentCall);
-
-                    mViewPager.getAdapter().notifyDataSetChanged();
-
-                    setViewPagerSelectedItem();
-
-                }
-            }, 800);
-        }
-
-        MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
-
-        txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    fragmentCall.openDialogMenu();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    findViewById(R.id.mainFrame).setVisibility(View.GONE);
                 }
             }
-        });
-
-        if (HelperCalander.isPersianUnicode) {
-            ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
     }
 
     //******************************************************************************************************************************
+
+    private void initTabStrip(Intent intent) {
+        if (G.twoPaneMode) {
+            new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
+        }
+        Log.wtf(this.getClass().getName(), "initTabStrip");
+        BottomNavigationFragment bottomNavigationFragment = new BottomNavigationFragment();
+
+        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+            bottomNavigationFragment.setCrawlerMap(intent.getExtras().getString(DEEP_LINK, DEEP_LINK_CALL));
+        }
+
+        new HelperFragment(getSupportFragmentManager(), bottomNavigationFragment).load();
+    }
+
 
     /**
      * send client condition
@@ -1521,18 +1180,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (!G.isFirstPassCode) {
                 openActivityPassCode();
             }
             G.isFirstPassCode = false;
 
-            //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
-            //    @Override
-            //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
-            //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            //    }
-            //});
         }
     }
 
@@ -1543,12 +1196,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void openActivityPassCode() {
-        if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (PassCode.getInstance().isPassCode()) {
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
+        }
+
+        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera) {
             enterPassword();
-        } else if (!isActivityEnterPassCode && !G.isRestartActivity) {
-            currentTime = System.currentTimeMillis();
-            SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        } else if (!G.isRestartActivity) {
+            long currentTime = System.currentTimeMillis();
             long timeLock = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
+            long oldTime = sharedPreferences.getLong(SHP_SETTING.KEY_OLD_TIME, 0);
             long calculatorTimeLock = currentTime - oldTime;
 
             if (timeLock > 0 && calculatorTimeLock > (timeLock * 1000)) {
@@ -1564,710 +1221,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.isRestartActivity = false;
     }
 
-    /**
-     * init  menu drawer
-     */
-
-    private void initDrawerMenu() {
-
-        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(mainToolbar);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                // Do whatever you want here
-
-                //if (arcMenu.isMenuOpened()) {
-                //    arcMenu.toggleMenu();
-                //}
-
-            }
-        };
-
-        final ViewGroup drawerButton = (ViewGroup) findViewById(R.id.amr_ripple_menu);
-        drawerButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-
-        toggle.setDrawerIndicatorEnabled(false);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        //NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        //navigationView.setNavigationItemSelectedListener(this);
-
-        setDrawerInfo(true);
-
-        findViewById(R.id.lm_layout_header).setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
-        navBackGround.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chatGetRoom(userId);
-                closeDrawer();
-                //drawer.closeDrawer(GravityCompat.START);
-                //pageDrawer = 1;
-            }
-        });
-
-        TextView txtCloud = (TextView) findViewById(R.id.lm_txt_cloud);
-        txtCloud.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navBackGround.performClick();
-            }
-        });
-
-        ViewGroup itemNavChat = (ViewGroup) findViewById(R.id.lm_ll_new_chat);
-        itemNavChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "New Chat");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                lockNavigation();
-                closeDrawer();
-            }
-        });
-
-        ViewGroup itemNavGroup = (ViewGroup) findViewById(R.id.lm_ll_new_group);
-        itemNavGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewGroup");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(fragment).load();
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-
-                lockNavigation();
-                closeDrawer();
-            }
-        });
-
-        ViewGroup itemNavChanel = (ViewGroup) findViewById(R.id.lm_ll_new_channle);
-        itemNavChanel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE", "NewChanel");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-
-                lockNavigation();
-                closeDrawer();
-            }
-        });
-
-        ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
-        itemNavContacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = RegisteredContactsFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "Contacts");
-                fragment.setArguments(bundle);
-                try {
-                    new HelperFragment(fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-
-                lockNavigation();
-                closeDrawer();
-            }
-        });
-
-
-        itemNavWallet = (ViewGroup) findViewById(R.id.lm_ll_wallet);
-        itemNavWallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!G.isWalletRegister) {
-                    new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
-                    lockNavigation();
-                } else {
-                    Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
-                    intent.putExtra("Language", "fa");
-                    intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                    intent.putExtra("PrimaryColor", G.appBarColor);
-                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                    intent.putExtra("AccentColor", G.appBarColor);
-                    intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                    intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                    startActivityForResult(intent, WALLET_REQUEST_CODE);
-                }
-            }
-        });
-
-        itemCash = (TextView) findViewById(R.id.cash);
-        if (G.isDarkTheme) {
-            itemCash.setTextColor(Color.parseColor(G.textTitleTheme));
-        } else {
-            itemCash.setTextColor(Color.parseColor(G.appBarColor));
-        }
-
-        if (G.selectedCard != null) {
-            itemCash.setVisibility(View.VISIBLE);
-            itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.selectedCard.cashOutBalance) + " " + getResources().getString(R.string.wallet_Reial));
-        } else {
-            itemCash.setVisibility(View.GONE);
-        }
-
-        ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
-        itemNavPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HelperFragment(FragmentPayment.newInstance()).load();
-                lockNavigation();
-            }
-        });
-
-
-        ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
-
-        // gone or visible view call
-        RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
-        if (callConfig == null) {
-            new RequestSignalingGetConfiguration().signalingGetConfiguration();
-        }
-
-
-        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
-        itemNavMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMapFragment();
-            }
-        });
-
-        ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
-        itemNavSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net I'm waiting for you!");
-                sendIntent.setType("text/plain");
-                Intent openInChooser = Intent.createChooser(sendIntent, "Open in...");
-                startActivity(openInChooser);
-                closeDrawer();
-            }
-        });
-        ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
-        itemNavSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HelperFragment(new FragmentSetting()).load();
-                closeDrawer();
-                lockNavigation();
-            }
-        });
-        ViewGroup itemQrCode = (ViewGroup) findViewById(R.id.lm_ll_qrCode);
-
-        itemQrCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    HelperPermission.getCameraPermission(ActivityMain.this, new OnGetPermission() {
-                        @Override
-                        public void Allow() throws IOException, IllegalStateException {
-                            IntentIntegrator integrator = new IntentIntegrator(ActivityMain.this);
-                            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-                            integrator.setRequestCode(requestCodeQrCode);
-                            integrator.setBeepEnabled(false);
-                            integrator.setPrompt("");
-                            integrator.initiateScan();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                lockNavigation();
-                closeDrawer();
-            }
-        });
-
-        final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
-        ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
-        rootDarkTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleButton.performClick();
-            }
-        });
-        boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-
-        toggleButton.setChecked(G.isDarkTheme);
-        toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (toggleButton.isChecked()) {
-
-                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
-                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
-                    editor.putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor);
-                    editor.apply();
-                    Theme.setThemeColor();
-                    FragmentThemColorViewModel.resetApp();
-                } else {
-                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.CUSTOM);
-
-                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
-                    editor.apply();
-                    Theme.setThemeColor();
-                    FragmentThemColorViewModel.resetApp();
-
-                }
-            }
-        });
-
-        ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
-        itemNavOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                        .content(R.string.content_log_out)
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .iconRes(R.mipmap.exit_to_app_button)
-                        .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                G.onUserSessionLogout = new OnUserSessionLogout() {
-                                    @Override
-                                    public void onUserSessionLogout() {
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.selectedCard = null;
-                                                HelperLogout.logout();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onError() {
-
-                                    }
-
-                                    @Override
-                                    public void onTimeOut() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                HelperError.showSnackMessage(getResources().getString(R.string.error), false);
-
-                                            }
-                                        });
-                                    }
-                                };
-                                new RequestUserSessionLogout().userSessionLogout();
-                            }
-                        })
-                        .show();
-                closeDrawer();
-            }
-        });
-
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-                /*switch (pageDrawer) {
-                    case 1:
-                        chatGetRoom(userId);
-                        pageDrawer = 0;
-                        break;
-                    case 2: {
-                        final Fragment fragment = RegisteredContactsFragment.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TITLE", "New Chat");
-                        fragment.setArguments(bundle);
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 3: {
-                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TYPE", "NewGroup");
-                        fragment.setArguments(bundle);
-                        try {
-                              HelperFragment.loadFragment(getSupportFragmentManager(),fragment);
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 4: {
-                        FragmentNewGroup fragment = FragmentNewGroup.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TYPE", "NewChanel");
-                        fragment.setArguments(bundle);
-                        try {
-                            HelperFragment.loadFragment(getSupportFragmentManager(),fragment);
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 5: {
-                        final Fragment fragment = FragmentIgapSearch.newInstance();
-                        try {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment_igap").commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 6: {
-                        Fragment fragment = RegisteredContactsFragment.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("TITLE", "Contacts");
-                        fragment.setArguments(bundle);
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 7: {
-                        Fragment fragment = FragmentCall.newInstance(false);
-                        try {
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).addToBackStack(null).replace(R.id.fragmentContainer, fragment).commit();
-                        } catch (Exception e) {
-                            e.getStackTrace();
-                        }
-
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 8: {
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you !");
-                        sendIntent.setType("text/plain");
-                        startActivity(sendIntent);
-
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 9: {
-                        try {
-                            HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                                @Override
-                                public void Allow() {
-                                    Intent intent = new Intent(G.context, ActivitySetting.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    //ActivityMain.mLeftDrawerLayout.closeDrawer();
-                                }
-
-                                @Override
-                                public void deny() {
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        pageDrawer = 0;
-                        break;
-                    }
-                    case 10: {
-
-
-                        try {
-                            HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
-                                @Override
-                                public void Allow() throws IOException {
-                                    startActivity(new Intent(ActivityMain.this, ActivityQrCodeNewDevice.class));
-                                }
-
-                                @Override
-                                public void deny() {
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        pageDrawer = 0;
-                    }
-                    break;
-
-                    case 11: {
-                        new MaterialDialog.Builder(ActivityMain.this).title(getResources().getString(R.string.log_out))
-                                .content(R.string.content_log_out)
-                                .positiveText(getResources().getString(R.string.B_ok))
-                                .negativeText(getResources().getString(R.string.B_cancel))
-                                .iconRes(R.mipmap.exit_to_app_button)
-                                .maxIconSize((int) getResources().getDimension(R.dimen.dp24))
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        G.onUserSessionLogout = new OnUserSessionLogout() {
-                                            @Override
-                                            public void onUserSessionLogout() {
-
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        HelperLogout.logout();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onError() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onTimeOut() {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
-                                                    }
-                                                });
-                                            }
-                                        };
-                                        new RequestUserSessionLogout().userSessionLogout();
-                                    }
-                                })
-                                .show();
-                        pageDrawer = 0;
-                    }
-                    break;
-                }*/
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-    }
-
-    private void closeDrawer() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (drawer != null) drawer.closeDrawer(GravityCompat.START);
-            }
-        }, 1000);
-    }
-
-    private void openMapFragment() {
-        try {
-            HelperPermission.getLocationPermission(ActivityMain.this, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    try {
-                        if (!waitingForConfiguration) {
-                            waitingForConfiguration = true;
-                            if (mapUrls == null || mapUrls.isEmpty() || mapUrls.size() == 0) {
-                                G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
-                                    @Override
-                                    public void onGetConfiguration() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                G.handler.postDelayed(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        waitingForConfiguration = false;
-                                                    }
-                                                }, 2000);
-                                                new HelperFragment(FragmentiGapMap.getInstance()).load();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void getConfigurationTimeOut() {
-                                        G.handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                waitingForConfiguration = false;
-                                            }
-                                        }, 2000);
-                                    }
-                                };
-                                new RequestGeoGetConfiguration().getConfiguration();
-                            } else {
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        waitingForConfiguration = false;
-                                    }
-                                }, 2000);
-                                new HelperFragment(FragmentiGapMap.getInstance()).load();
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        e.getStackTrace();
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            lockNavigation();
-                        }
-                    });
-                }
-
-                @Override
-                public void deny() {
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        closeDrawer();
-    }
-
     private void initComponent() {
 
-
-        iconLock = (TextView) findViewById(R.id.am_btn_lock);
-
-        iconLock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (isLock) {
-                    iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
-                    isLock = false;
-                } else {
-                    iconLock.setText(getResources().getString(R.string.md_igap_lock));
-                    isLock = true;
-                }
-
-            }
-        });
-
-        findViewById(R.id.am_btn_scanner).setOnClickListener(v -> {
-            if (!G.isWalletRegister) {
-                new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
-                lockNavigation();
-            } else {
-                Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
-                intent.putExtra("Language", "fa");
-                intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                intent.putExtra("PrimaryColor", G.appBarColor);
-                intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                intent.putExtra("AccentColor", G.appBarColor);
-                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
-                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme);
-                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                intent.putExtra("isScan",true);
-                startActivityForResult(intent, WALLET_REQUEST_CODE);
-            }
-        });
-
-
-        contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        boolean isRegisterStatus = sharedPreferences.getBoolean(SHP_SETTING.REGISTER_STATUS, false);
-        if (isRegisterStatus) {
-            startAnimationLocation();
-        } else {
-            stopAnimationLocation();
-        }
 
         G.onMapRegisterState = new OnMapRegisterState() {
             @Override
@@ -2276,11 +1232,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     @Override
                     public void run() {
                         if (state) {
-                            startAnimationLocation();
                             editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                             editor.apply();
                         } else {
-                            stopAnimationLocation();
                             editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                             editor.apply();
                         }
@@ -2288,227 +1242,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
             }
         };
-
-        View amr_btn_search = findViewById(R.id.amr_btn_search);
-        amr_btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = SearchFragment.newInstance();
-
-                try {
-                    //  getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, fragment, "Search_fragment").commit();
-                    new HelperFragment(fragment).load();
-
-
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-                lockNavigation();
-            }
-        });
-
-        if (!HelperCalander.isPersianUnicode) {
-            titleTypeface = G.typeface_neuropolitical;
-        } else {
-            titleTypeface = G.typeface_IRANSansMobile;
-        }
-    }
-
-    public void stopAnimationLocation() {
-        //
-    }
-
-    public void startAnimationLocation() {
-        //
-    }
-
-    private void connectionState() {
-        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
-
-        Typeface typeface = G.typeface_IRANSansMobile;
-
-        if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-            txtIgap.setText(R.string.waiting_for_network);
-            txtIgap.setTypeface(typeface, Typeface.BOLD);
-        } else if (G.connectionState == ConnectionState.CONNECTING) {
-            txtIgap.setText(R.string.connecting);
-            txtIgap.setTypeface(typeface, Typeface.BOLD);
-        } else if (G.connectionState == ConnectionState.UPDATING) {
-            txtIgap.setText(updating);
-            txtIgap.setTypeface(typeface, Typeface.BOLD);
-        } else {
-            txtIgap.setText(R.string.app_name);
-            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
-        }
-
-        G.onConnectionChangeState = new OnConnectionChangeState() {
-            @Override
-            public void onChangeState(final ConnectionState connectionStateR) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Typeface typeface = null;
-                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-                            typeface = titleTypeface;
-                        }
-                        G.connectionState = connectionStateR;
-                        if (connectionStateR == ConnectionState.WAITING_FOR_NETWORK) {
-                            txtIgap.setText(R.string.waiting_for_network);
-                            txtIgap.setTypeface(typeface, Typeface.BOLD);
-                        } else if (connectionStateR == ConnectionState.CONNECTING) {
-                            txtIgap.setText(R.string.connecting);
-                            txtIgap.setTypeface(typeface, Typeface.BOLD);
-                        } else if (connectionStateR == ConnectionState.UPDATING) {
-                            txtIgap.setText(R.string.updating);
-                            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
-                        } else if (connectionStateR == ConnectionState.IGAP) {
-                            txtIgap.setText(R.string.app_name);
-                            txtIgap.setTypeface(titleTypeface, Typeface.BOLD);
-                        } else {
-                            txtIgap.setTypeface(typeface, Typeface.BOLD);
-                        }
-                    }
-                });
-            }
-        };
-
-        G.onUpdating = new OnUpdating() {
-            @Override
-            public void onUpdating() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Typeface typeface = null;
-                        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-                            typeface = titleTypeface;
-                        }
-                        G.connectionState = ConnectionState.UPDATING;
-                        txtIgap.setText(R.string.updating);
-                        txtIgap.setTypeface(typeface, Typeface.BOLD);
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelUpdating() {
-                /**
-                 * if yet still G.connectionState is in update state
-                 * show latestState that was in previous state
-                 */
-                if (G.connectionState == ConnectionState.UPDATING) {
-                    G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
-                }
-            }
-        };
-    }
-
-    @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-    }
-
-    @Override
-    public void onDrawerOpened(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerClosed(View drawerView) {
-
-    }
-
-    @Override
-    public void onDrawerStateChanged(int newState) {
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //mLeftDrawerLayout.toggle();
-        return false;
-    }
-
-    /**
-     * set drawer info
-     *
-     * @param updateFromServer if is set true send request to sever for get own info
-     */
-    private void setDrawerInfo(boolean updateFromServer) {
-        if (userInfo != null && userInfo.isValid()) {
-            String username = userInfo.getUserInfo().getDisplayName();
-            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-            imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
-            EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
-            TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
-            txtNavName.setText(username);
-            txtNavPhone.setText(phoneNumber);
-            setPhoneInquiry(phoneNumber);
-
-            if (HelperCalander.isPersianUnicode) {
-                txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
-                txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
-            }
-            if (updateFromServer) {
-                //getUserInfo(realmUserInfo);
-            }
-            setImage();
-        }
-    }
-
-    private void setPhoneInquiry(String phone) {
-
-        if (phone == null || phone.length() == 0) {
-            return;
-        }
-
-        if (phone.startsWith("+98")) {
-            phone = phone.replace("+98", "0");
-        }
-
-        if (phone.startsWith("98")) {
-            phone = phone.replace("98", "0");
-        }
-
-        if (!phone.startsWith("0")) {
-            phone = "0" + phone;
-        }
-
-        if (phone.length() < 5) {
-            return;
-        }
-
-        FragmentPaymentInquiryViewModel.OperatorType operatorType = FragmentPaymentInquiryViewModel.MCI.get(phone.substring(0, 4));
-
-        if (operatorType != null) {
-
-            TextView txtPhoneInquiry = findViewById(R.id.lm_txt_icon_phone_number_inquiry);
-            txtPhoneInquiry.setVisibility(View.VISIBLE);
-
-            final String finalPhone = phone;
-            txtPhoneInquiry.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, finalPhone)).setReplace(false).load();
-                    lockNavigation();
-                }
-            });
-        }
-    }
-
-    private void getUserInfo(final RealmUserInfo realmUserInfo) {
-        if (!realmUserInfo.isValid()) {
-            return;
-        }
-        if (G.userLogin) {
-            new RequestUserInfo().userInfo(realmUserInfo.getUserId());
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getUserInfo(realmUserInfo);
-                }
-            }, 1000);
-        }
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
@@ -2526,143 +1259,153 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.dispatchTochEventChat.getToch(ev);
         }
 
-        return super.dispatchTouchEvent(ev);
+        try {
+            return super.dispatchTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            //Fix for support lib bug, happening when onDestroy() is
+            HelperLog.getInstance().setErrorLog(e);
+            return true;
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (G.ISOK) {
+        Log.wtf(this.getClass().getName(), "onBackPressed");
+        if (G.ISRealmOK) {
             if (G.onBackPressedWebView != null) {
+                Log.wtf(this.getClass().getName(), "onBackPressedWebView");
                 if (G.onBackPressedWebView.onBack()) {
                     return;
                 }
             }
 
-            if (G.onBackPressedExplorer != null) {
-                if (G.onBackPressedExplorer.onBack()) {
-                    return;
-                }
-            } else if (G.onBackPressedChat != null) {
+            if (G.onBackPressedChat != null) {
+                Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 if (G.onBackPressedChat.onBack()) {
                     return;
                 }
             }
 
-
             if (onBackPressedListener != null) {
+                Log.wtf(this.getClass().getName(), "onBackPressedChat");
                 onBackPressedListener.doBack();
             }
-
-            if (this.drawer.isDrawerOpen(GravityCompat.START)) {
-                this.drawer.closeDrawer(GravityCompat.START);
-            } else {
-
-                openNavigation();
-
-                // this call for create group   getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-
-                super.onBackPressed();
-
-                if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() < 1) {
-                    if (!this.isFinishing()) {
-                        resume();
+            if (G.twoPaneMode) {
+                Log.wtf(this.getClass().getName(), "twoPaneMode");
+                if (findViewById(R.id.fullScreenFrame).getVisibility() == View.VISIBLE) {//handle back in fragment show like dialog
+                    Log.wtf(this.getClass().getName(), "fullScreenFrame VISIBLE");
+                    Fragment frag = getSupportFragmentManager().findFragmentById(R.id.fullScreenFrame);
+                    if (frag == null) {
+                        Log.wtf(this.getClass().getName(), "pop from: detailFrame");
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                        if (fragment != null) {
+                            getSupportFragmentManager().popBackStackImmediate();
+                        }
+                        Fragment fragmentShowed = getSupportFragmentManager().findFragmentById(R.id.detailFrame);
+                        if (fragmentShowed == null) {
+                            findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+                        }
+                    } else {
+                        Log.wtf(this.getClass().getName(), "pop from: fullScreenFrame");
+                        getSupportFragmentManager().popBackStackImmediate();
+                        findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+                    }
+                } else {
+                    Log.wtf(this.getClass().getName(), "fullScreenFrame not VISIBLE");
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 2) {
+                        Log.wtf(this.getClass().getName(), "pop from: backStack");
+                        if (getSupportFragmentManager().getBackStackEntryAt(2).getName().equals(FragmentChat.class.getName())) {
+                            if (G.isLandscape) {
+                                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
+                                if (fragment instanceof BottomNavigationFragment) {
+                                    if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                                        getSupportFragmentManager().popBackStackImmediate();
+                                    }
+                                } else {
+                                    getSupportFragmentManager().popBackStackImmediate();
+                                }
+                            } else {
+                                getSupportFragmentManager().popBackStackImmediate();
+                                findViewById(R.id.mainFrame).setVisibility(View.GONE);
+                                findViewById(R.id.roomListFrame).setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            getSupportFragmentManager().popBackStackImmediate();
+                        }
+                    } else {
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
+                        if (fragment instanceof BottomNavigationFragment) {
+                            if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                                if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                    Log.wtf(this.getClass().getName(), "pop from: finish");
+                                    finish();
+                                }
+                            }
+                        }
                     }
                 }
-
-                designLayout(chatLayoutMode.none);
+            } else {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                    getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+//                        List fragmentList = getSupportFragmentManager().getFragments();
+                    boolean handled = false;
+                    try {
+                        // because some of our fragments are NOT extended from BaseFragment
+//                            Log.wtf("amini", "onBackPressed: " + fragmentList.get(fragmentList.size() - 1).getClass().getName());
+                        Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+//                            Log.wtf("amini", "on back frag H " + frag.getClass().getName());
+                        handled = ((BaseFragment) frag).onBackPressed();
+//                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (!handled) {
+                        super.onBackPressed();
+                    }
+                } else {
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                    if (fragment instanceof BottomNavigationFragment) {
+                        if (((BottomNavigationFragment) fragment).isAllowToBackPressed()) {
+                            if (((BottomNavigationFragment) fragment).isFirstTabItem()) {
+                                finish();
+                            }
+                        }
+                    }
+                }
             }
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
     protected void onResume() {
+        Log.wtf(this.getClass().getName(), "onResume");
         super.onResume();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             resume();
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
+        Log.wtf(this.getClass().getName(), "onResume");
     }
 
     public void resume() {
         /**
          * after change language in ActivitySetting this part refresh Activity main
          */
-        G.onRefreshActivity = new OnRefreshActivity() {
-            @Override
-            public void refresh(String changeLanguag) {
-
-                G.isUpdateNotificaionColorMain = false;
-                G.isUpdateNotificaionColorChannel = false;
-                G.isUpdateNotificaionColorGroup = false;
-                G.isUpdateNotificaionColorChat = false;
-                G.isUpdateNotificaionCall = false;
-
-                new HelperFragment().removeAll(false);
-
-                ActivityMain.this.recreate();
-
-            }
-        };
-
         designLayout(chatLayoutMode.none);
-
-
-        if (contentLoading != null) {
-            AppUtils.setProgresColler(contentLoading);
-        }
-
-        if (G.isInCall) {
-            findViewById(R.id.am_ll_strip_call).setVisibility(View.VISIBLE);
-
-            ActivityCallViewModel.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
-
-            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
-            txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(ActivityMain.this, ActivityCall.class));
-                }
-            });
-
-            G.iCallFinishMain = new ICallFinish() {
-                @Override
-                public void onFinish() {
-                    try {
-
-                        findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-        } else {
-            findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
-        }
-
-        if (drawer != null) {
-            openNavigation();
-            drawer.closeDrawer(GravityCompat.START);
-        }
-
-        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
-        G.onUnreadChange = this;
         G.onPayment = this;
 
 
         try {
             startService(new Intent(this, ServiceContact.class));
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -2688,18 +1431,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-        } else {
-            HelperUrl.getLinkinfo(intent, ActivityMain.this);
+        } else if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+            Uri data = intent.getData();
+            if (data != null && data.getHost().equals("deep_link")) {
+                Intent intentTemp = new Intent();
+                intentTemp.putExtra(DEEP_LINK, data.getQuery());
+                handleDeepLink(intentTemp);
+            } else {
+                HelperUrl.getLinkInfo(intent, ActivityMain.this);
+            }
         }
+
         getIntent().setData(null);
-        setDrawerInfo(false);
-        if (drawer != null) {
-            drawer.closeDrawer(GravityCompat.START);
-        }
 
-        ActivityMain.setMediaLayout();
+        //ActivityMain.setMediaLayout();
 
-        if (G.isPassCode) {
+        /*if (G.isPassCode) {
             iconLock.setVisibility(View.VISIBLE);
 
             if (isLock) {
@@ -2709,53 +1456,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         } else {
             iconLock.setVisibility(View.GONE);
-        }
-
-        onFinance(G.isMplActive, G.isWalletActive);
+        }*/
 
     }
 
     private void enterPassword() {
-
-        closeDrawer();
         Intent intent = new Intent(ActivityMain.this, ActivityEnterPassCode.class);
         startActivity(intent);
     }
 
     @Override
     protected void onPause() {
+        Log.wtf(this.getClass().getName(), "onPause");
         super.onPause();
-        if (G.ISOK) {
-            if (isNeedToRegister) {
-                return;
-            }
-
-            AppUtils.updateBadgeOnly(getRealm(), -1);
-
-            G.onUnreadChange = null;
-
-            if (mViewPager != null && mViewPager.getAdapter() != null) {
-
-                try {
-
-                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-
-                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
-
-                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                        G.selectedTabInMainActivity = fm.mainType.toString();
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
-
-                        G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof DiscoveryFragment) {
-
-                        G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        if (G.ISRealmOK) {
+            DbManager.getInstance().doRealmTask(realm -> {
+                AppUtils.updateBadgeOnly(realm, -1);
+            });
         }
+        Log.wtf(this.getClass().getName(), "onPause");
     }
 
 
@@ -2776,11 +1495,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onStateMain(boolean state) {
-        if (state) {
-            startAnimationLocation();
-        } else {
-            stopAnimationLocation();
-        }
     }
 
     @Override
@@ -2788,31 +1502,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
+    //******* GroupAvatar and ChannelAvatar
+
     @Override
     public void onAvatarAddError() {
 
     }
-    //@Override
-    //public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
-    //    //+Realm realm = Realm.getDefaultInstance();
-    //    getRealm().executeTransactionAsync(new Realm.Transaction() {
-    //        @Override
-    //        public void execute(Realm realm) {
-    //            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-    //            if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
-    //                String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
-    //                realmRoom.setActionState(action, userId);
-    //            }
-    //        }
-    //    });
-    //    //realm.close();
-    //}
-
-    //******* GroupAvatar and ChannelAvatar
 
     private void check(final long userId) {
         if (G.userLogin) {
-            FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+            CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         } else {
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -2824,110 +1523,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
-    public void setImage() {
-        avatarHandler.getAvatar(new ParamWithAvatarType(imgNavImage, G.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
-
-        G.onChangeUserPhotoListener = new OnChangeUserPhotoListener() {
-            @Override
-            public void onChangePhoto(final String imagePath) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (imagePath == null || !new File(imagePath).exists()) {
-                            //Realm realm1 = Realm.getDefaultInstance();
-                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
-                            //realm1.close();
-                        } else {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onChangeInitials(final String initials, final String color) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
-                    }
-                });
-            }
-        };
-    }
-
     @Override
     public void onUserInfoMyClient() {
-        setImage();
+
     }
 
-    private void chatGetRoom(final long peerId) {
-        //final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
-
-        if (realmRoom != null) {
-
-            new GoToChatActivity(realmRoom.getId()).startActivity();
-
-        } else {
-
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(ProtoGlobal.Room room) {
-
-                    new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity();
-
-                    G.onChatGetRoom = null;
-                }
-
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(peerId);
-        }
-        //realm.close();
-    }
 
     @Override
     public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         //empty
     }
 
+    //*****************************************************************************************************************************
+
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                if (room != null && realmRoomMessage != null) {
-                    /**
-                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                     */
-                    if (room.getUnreadCount() <= 1) {
-                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                        room.setFirstUnreadMessage(realmRoomMessage);
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+            if (room != null && realmRoomMessage != null) {
+                /**
+                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                 */
+                if (room.getUnreadCount() <= 1) {
+                    realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
                 }
             }
         });
-        realm.close();
 
         /**
          * don't send update status for own message
          */
-        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
             // user has received the message, so I make a new delivered update status request
+            // todo:please check in group and channel that user is joined
+
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
@@ -2936,95 +1566,78 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    //*****************************************************************************************************************************
-
     @Override
     public void onMessageFailed(final long roomId, long messageId) {
         //empty
     }
 
-    public void lockNavigation() {
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    public void openNavigation() {
-        if (FragmentToolBarBack.numberOfVisible <= 1)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-
     //*************************************************************
 
     public void designLayout(final chatLayoutMode mode) {
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (G.twoPaneMode) {
-                    if (frameFragmentContainer != null) {
+        if (G.twoPaneMode) {
+            /*findViewById(R.id.mainFrame).setVisibility(G.isLandscape ? View.VISIBLE : View.GONE);*/
+            /*if (G.isLandscape) {
+                new HelperFragment(getSupportFragmentManager(), new TabletEmptyChatFragment()).load(true);
+            } else {
+                //todo: check if exist fragment remove it
+                new HelperFragment(getSupportFragmentManager(),new FragmentMain()).remove();
+            }*/
+                    /*if (frameFragmentContainer != null) {
                         if (frameFragmentContainer.getChildCount() == 0) {
-                            if (frameFragmentBack != null) {
+                            *//*if (frameFragmentBack != null) {
                                 frameFragmentBack.setVisibility(View.GONE);
-                            }
+                            }*//*
                         } else if (frameFragmentContainer.getChildCount() == 1) {
                             disableSwipe = true;
                         } else {
                             disableSwipe = false;
                         }
-                    } else {
-                        if (frameFragmentBack != null) {
+                    } else {*/
+                        /*if (frameFragmentBack != null) {
                             frameFragmentBack.setVisibility(View.GONE);
-                        }
-                    }
+                        }*/
+            /*}*/
 
-                    if (G.isLandscape) {
-                        setWeight(frameChatContainer, 2);
-                        setWeight(frameMainContainer, 1);
-                        openNavigation();
-                    } else {
+            if (G.isLandscape) {
+                /*setWeight(frameChatContainer, 2);*/
+                /*setWeight(frameFragmentContainer, 1);*/
+            } else {
 
-                        if (mode == chatLayoutMode.show) {
-                            setWeight(frameChatContainer, 1);
-                            setWeight(frameMainContainer, 0);
-                            lockNavigation();
-                        } else if (mode == chatLayoutMode.hide) {
-                            setWeight(frameChatContainer, 0);
-                            setWeight(frameMainContainer, 1);
-                            openNavigation();
-                        } else {
-                            if (frameChatContainer.getChildCount() > 0) {
+                if (mode == chatLayoutMode.show) {
+                    /*setWeight(frameChatContainer, 1);*/
+                    /*setWeight(frameFragmentContainer, 0);*/
+                } else if (mode == chatLayoutMode.hide) {
+                    /*setWeight(frameChatContainer, 0);*/
+                    /*setWeight(frameFragmentContainer, 1);*/
+                } else {
+                            /*if (frameChatContainer.getChildCount() > 0) {
                                 setWeight(frameChatContainer, 1);
-                                setWeight(frameMainContainer, 0);
-                                lockNavigation();
+                                *//*setWeight(frameFragmentContainer, 0);*//*
                             } else {
                                 setWeight(frameChatContainer, 0);
-                                setWeight(frameMainContainer, 1);
-                                openNavigation();
-                            }
-                        }
-                    }
+                                *//*setWeight(frameFragmentContainer, 1);*//*
+                            }*/
                 }
             }
-        });
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         oldTime = System.currentTimeMillis();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SHP_SETTING.KEY_OLD_TIME, oldTime);
+        editor.apply();
         G.onPayment = null;
     }
 
-    @Override
-    public void onChange() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                if (navigationTabStrip != null) {
-//                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
-//                }
-            }
-        });
-    }
+    /**
+     * bottom navigation new message badge counter
+     * unReadCount get user all unread message count
+     * change badge color if color = 0 get default badge color
+     * badge counter for other bottom navigation item should add listener to OnBottomNavigationBadge
+     */
 
     @Override
     public void onChargeToken(int status, String token, int expireTime, String message) {
@@ -3057,141 +1670,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onFinance(final boolean mplActive, final boolean walletActive) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mplActive) {
-                    findViewById(R.id.lm_ll_payment).setVisibility(View.VISIBLE);
-                } else {
-                    findViewById(R.id.lm_ll_payment).setVisibility(View.GONE);
-                }
-
-                if (walletActive) {
-                    findViewById(R.id.am_btn_scanner).setVisibility(View.VISIBLE);
-                    findViewById(R.id.lm_ll_wallet).setVisibility(View.VISIBLE);
-                } else {
-                    findViewById(R.id.lm_ll_wallet).setVisibility(View.GONE);
-                    findViewById(R.id.am_btn_scanner).setVisibility(View.GONE);
-                }
-
-                if (!G.isMplActive && !G.isWalletActive) {
-                    findViewById(R.id.lm_view_Line).setVisibility(View.GONE);
-                } else {
-                    findViewById(R.id.lm_view_Line).setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
-    }
-
-    @Override
     public void setRefreshBalance() {
-        try {
-            getUserCredit();
-        } catch (Exception e) {
-        }
-    }
 
-
-    public enum MainAction {
-        downScrool, clinetCondition
-    }
-
-    public enum chatLayoutMode {
-        none, show, hide
-    }
-
-    public interface OnBackPressedListener {
-        void doBack();
-    }
-
-    class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        SampleFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            return pages.get(i);
-        }
-
-        @Override
-        public int getCount() {
-            return pages.size();
-        }
-    }
-
-
-    private int retryConnectToWallet = 0;
-
-    public void getUserCredit() {
-
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
-        if (Auth.getCurrentAuth() != null) {
-            Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
-                @Override
-                public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
-                    if (response.body() != null) {
-                        retryConnectToWallet = 0;
-                        if (response.body().size() > 0)
-                            G.selectedCard = response.body().get(0);
-
-                        G.cardamount = G.selectedCard.cashOutBalance;
-
-                        if (G.selectedCard != null) {
-                            if (itemCash != null) {
-                                itemCash.setVisibility(View.VISIBLE);
-                                itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));
-                            }
-
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
-
-                    if (retryConnectToWallet < 3) {
-                        Crashlytics.logException(new Exception(t.getMessage()));
-                        getUserCredit();
-                        retryConnectToWallet++;
-                    }
-                }
-            });
-        }
     }
 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        switch (id) {
-            case EventManager.ON_ACCESS_TOKEN_RECIVE:
-                int response = (int) message[0];
-                switch (response) {
-                    case socketMessages.SUCCESS:
-                        new android.os.Handler(getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                getUserCredit();
-                                retryConnectToWallet = 0;
-                            }
-                        });
-
-                        break;
-
-                    case socketMessages.FAILED:
-                        if (retryConnectToWallet < 3) {
-                            new RequestWalletGetAccessToken().walletGetAccessToken();
-                            retryConnectToWallet++;
+        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
+            int response = (int) message[0];
+            switch (response) {
+                case socketMessages.SUCCESS:
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            /*getUserCredit();*/
+                            retryConnectToWallet = 0;
                         }
+                    });
 
-                        break;
-                }
-                // backthread
+                    break;
 
+                case socketMessages.FAILED:
+                    if (retryConnectToWallet < 3) {
+                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        retryConnectToWallet++;
+                    }
+
+                    break;
+            }
+            // backthread
         }
     }
 
@@ -3203,7 +1711,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             final SharedPreferences.Editor editor = settings.edit();
 
 
-            new MaterialDialog.Builder(ActivityMain.this)
+            new MaterialDialog.Builder(this)
                     .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
                     .titleGravity(GravityEnum.CENTER)
                     .buttonsGravity(GravityEnum.CENTER)
@@ -3268,13 +1776,152 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         }
                     } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
                     } catch (Exception ee) {
+                        ee.printStackTrace();
                     }
 
 
                 }
             }).show();
 
+        }
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+    }
+
+    public void onUpdateContacts() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).updateContacts();
+        }
+    }
+
+    public enum MainAction {
+        downScrool, clinetCondition
+    }
+
+    public enum chatLayoutMode {
+        none, show, hide
+    }
+
+    public interface MainInterface {
+        void onAction(MainAction action);
+    }
+
+    public interface OnBackPressedListener {
+        void doBack();
+    }
+
+    public void goToUserProfile() {
+        getSupportFragmentManager().popBackStackImmediate(BottomNavigationFragment.class.getName(), 0);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.roomListFrame);
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).goToUserProfile();
+        }
+    }
+
+    public void goToChatPage(FragmentChat fragmentChat) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof FragmentChat) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+        getSupportFragmentManager().beginTransaction().add(R.id.mainFrame, fragmentChat).commit();
+        /*new HelperFragment(getSupportFragmentManager(), fragmentChat).setReplace(false).load();*/
+    }
+
+    //removeAllFragmentLoadedLikeDialogInTabletMode
+    public void removeAllFragment() {
+        getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+    }
+
+    public void removeAllFragmentFromMain() {
+        if (G.twoPaneMode) {
+            findViewById(R.id.fullScreenFrame).setVisibility(View.GONE);
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+            if (fragment instanceof FragmentChat) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            getSupportFragmentManager().popBackStack(TabletEmptyChatFragment.class.getName(), 0);
+        } else {
+            getSupportFragmentManager().popBackStack(BottomNavigationFragment.class.getName(), 0);
+        }
+    }
+
+    /**
+     * base on main fragment structure that onResume just call one in main fragment
+     * we should get bottom nav fragment (contains all startup fragments) and after
+     * that get our fragment from bottom nav fragment and do our job
+     */
+    public void updatePassCodeState() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).checkPassCodeIconVisibility();
+        }
+    }
+
+    public void setForwardMessage(boolean enable) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).setForwardMessage(enable);
+            ((BottomNavigationFragment) fragment).isFirstTabItem();
+        }
+    }
+
+    public void checkHasSharedData(boolean enable) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
+        if (fragment instanceof BottomNavigationFragment) {
+            ((BottomNavigationFragment) fragment).checkHasSharedData(enable);
+        }
+    }
+
+    public void goToTabletEmptyPage() {
+        Log.wtf(this.getClass().getName(), "goToTabletEmptyPage");
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+        if (fragment instanceof FragmentChat) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+    }
+
+    public Fragment getFragment(String fragmentTag) {
+        return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    }
+
+    public void updateUiForChangeAccount() {
+        int t = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < t; i++) {
+            getSupportFragmentManager().popBackStackImmediate();
+        }
+        initTabStrip(getIntent());
+        // Clear all notification
+        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
+    }
+
+    public void chatBackgroundChanged() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentChatSettings.class.getName());
+        if (fragment instanceof FragmentChatSettings) {
+            ((FragmentChatSettings) fragment).chatBackgroundChange();
+        }
+        if (G.twoPaneMode) {
+            Fragment f = getSupportFragmentManager().findFragmentByTag(TabletEmptyChatFragment.class.getName());
+            if (f instanceof TabletEmptyChatFragment) {
+                ((TabletEmptyChatFragment) f).getChatBackground();
+            }
         }
     }
 }

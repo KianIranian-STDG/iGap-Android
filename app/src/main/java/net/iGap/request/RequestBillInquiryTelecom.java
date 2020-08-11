@@ -10,16 +10,18 @@
 
 package net.iGap.request;
 
+import net.iGap.fragments.inquiryBill.BillInquiryResponse;
+import net.iGap.observers.interfaces.GeneralResponseCallBack;
 import net.iGap.proto.ProtoBillInquiryTelecom;
 
 public class RequestBillInquiryTelecom {
 
-    public void billInquiryTelecom(int provinceCode, long phoneNumber) {
+    public void billInquiryTelecom(int provinceCode, long phoneNumber, GeneralResponseCallBack<BillInquiryResponse> callback) {
         ProtoBillInquiryTelecom.BillInquiryTelecom.Builder builder = ProtoBillInquiryTelecom.BillInquiryTelecom.newBuilder();
         builder.setProvinceCode(provinceCode);
         builder.setTelephoneNumber(phoneNumber);
 
-        RequestWrapper requestWrapper = new RequestWrapper(9201, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(9201, builder, callback);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:endColor="#757575" android:angle="270" />
+
+            <corners android:bottomLeftRadius="@dimen/ivand_profile_toolbar_bottom_radius" android:bottomRightRadius="@dimen/ivand_profile_toolbar_bottom_radius" />
+
+        </shape>
+    </item>
+
+</selector>

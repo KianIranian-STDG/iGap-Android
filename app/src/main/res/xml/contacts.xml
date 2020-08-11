@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2010 Sam Steele 
   
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<ContactsAccountType  xmlns:android="http://schemas.android.com/apk/res/android" >
-  <ContactsDataKind
-      android:detailColumn="data3"
-      android:icon="@mipmap/icon"
-      android:mimeType="vnd.android.cursor.item/vnd.net.iGap.call"
-      android:summaryColumn="data2" />
+<ContactsAccountType xmlns:android="http://schemas.android.com/apk/res/android">
+    <ContactsDataKind
+        android:detailColumn="data3"
+        android:icon="@mipmap/icon"
+        android:mimeType="vnd.android.cursor.item/vnd.net.iGap.call"
+        android:summaryColumn="data2" />
 
-  <ContactsDataKind
-      android:detailColumn="data3"
-      android:icon="@mipmap/icon"
-      android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile"
-      android:summaryColumn="data2" />
-</ContactsAccountType >
+    <ContactsDataKind
+        android:detailColumn="data3"
+        android:icon="@mipmap/icon"
+        android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile"
+        android:summaryColumn="data2" />
+</ContactsAccountType>
 
 

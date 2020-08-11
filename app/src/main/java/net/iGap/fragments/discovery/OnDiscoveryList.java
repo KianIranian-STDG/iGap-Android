@@ -8,5 +8,6 @@ import java.util.ArrayList;
 public interface OnDiscoveryList {
 
     void onDiscoveryListReady(ArrayList<DiscoveryItem> discoveryArrayList, String title);
+
     void onError();
 }

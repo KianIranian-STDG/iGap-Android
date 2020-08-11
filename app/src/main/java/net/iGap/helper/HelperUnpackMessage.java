@@ -10,8 +10,6 @@
 
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
@@ -20,8 +18,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -53,6 +49,10 @@ public class HelperUnpackMessage {
 
         if (!G.isSecure && !G.unSecureResponseActionId.contains(Integer.toString(actionId))) {
             return false;
+        }
+
+        if (Config.FILE_LOG_ENABLE) {
+            IGLog.e("DES -> " + actionId);
         }
 
         byte[] payload = (byte[]) objects[1];
@@ -254,19 +254,19 @@ public class HelperUnpackMessage {
             Method method3 = object3.getClass().getMethod("build");
             method3.invoke(object3);
         } catch (InstantiationException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         }
 
@@ -291,19 +291,19 @@ public class HelperUnpackMessage {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
         } catch (InstantiationException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         }
         return object;

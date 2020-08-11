@@ -1,121 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="@dimen/dp68"
-  android:clickable="true"
-  style="?backgroundColorSettingTheme"
-  android:orientation="vertical">
-
-
-  <View
-    android:id="@+id/cigp_view_topLine"
-    android:layout_width="match_parent"
-    android:layout_height="1px"
-    android:layout_marginLeft="@dimen/dp8"
-    android:layout_marginStart="@dimen/dp8"
-    style="?lineColorSettingTheme" />
-
-  <LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/dp8">
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/cigp_view_topLine"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="?attr/iGapDividerLine"
+        app:layout_constraintBottom_toTopOf="parent" />
 
     <net.iGap.module.CircleImageView
-      android:id="@+id/cigp_imv_contact_avatar"
-      android:layout_width="@dimen/dp48"
-      android:layout_height="@dimen/dp48"
-      android:layout_marginLeft="@dimen/dp4" />
-
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal">
-
-      <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp8"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-
-          <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/cigp_txt_member_role"
-              style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginRight="@dimen/dp4"
-              android:text="@string/md_rate_star"
-              android:textAppearance="@style/TextIconAppearance.all"
-              android:textSize="@dimen/dp14" />
-
-            <net.iGap.module.CustomTextViewMedium
-              android:id="@+id/cigp_txt_contact_name"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentTop="true"
-              android:gravity="start"
-              android:singleLine="true"
-              android:text="Dominika Faniz"
-              style="?textTitleColorSettingTheme"
-              android:textSize="@dimen/dp16" />
-          </LinearLayout>
-
-
-        </LinearLayout>
-
-
-        <net.iGap.module.CustomTextViewMedium
-          android:id="@+id/cigp_txt_contact_lastseen"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_alignParentBottom="true"
-          android:gravity="center_vertical|start"
-          android:singleLine="true"
-          android:tag="menu"
-          android:text="@string/last_seen_recently"
-          style="?textSubColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-      </RelativeLayout>
-
-      <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/cigp_moreButton"
+        android:id="@+id/cigp_imv_contact_avatar"
         android:layout_width="@dimen/dp48"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/md_show_more_button"
-        android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/border_editText"
-        android:textSize="@dimen/dp18" />
+        android:layout_height="@dimen/dp48"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-
-    <LinearLayout
-      android:layout_width="@dimen/dp60"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:orientation="vertical"
-      android:visibility="gone">
-
-      <TextView
-        android:id="@+id/cigp_txt_nomber_of_shared_media"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/cigp_txt_contact_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="@dimen/dp16" />
-    </LinearLayout>
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:singleLine="true"
+        android:text="Dominika Faniz"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintBottom_toTopOf="@+id/cigp_txt_contact_lastseen"
+        app:layout_constraintEnd_toStartOf="@+id/cigp_moreButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/cigp_imv_contact_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/cigp_txt_contact_lastseen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:singleLine="true"
+        android:text="@string/last_seen_recently"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/smallTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/cigp_txt_contact_name"
+        app:layout_constraintStart_toStartOf="@+id/cigp_txt_contact_name"
+        app:layout_constraintTop_toBottomOf="@+id/cigp_txt_contact_name" />
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/cigp_moreButton"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/more_icon"
+        android:textSize="@dimen/dp18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-  </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

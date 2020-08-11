@@ -6,10 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +14,14 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentDialogFactorPaymentBinding;
 
@@ -163,7 +164,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
 
         factorPaymentBinding.title.setText(R.string.pay_to);
         if (mOrder == null) {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                     .fit()
                     .into(factorPaymentBinding.image);
@@ -173,7 +174,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             factorPaymentBinding.amountToPay.setText(RaadCommonUtils.formatPrice(amountToPay, false));
 
         } else {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                     .fit()
                     .into(factorPaymentBinding.image);
@@ -294,6 +295,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
                         intent.setData(Uri.parse(newPayment.paymentAuth.IPGUrl));
                         startActivity(intent);
                     } else {
+                        getActivity().onBackPressed();
                         ((NavigationBarActivity) getActivity()).replaceFragment(
                                 CardsFragment.newInstance(newPayment), "CardsFragment", true);
                         dismiss();

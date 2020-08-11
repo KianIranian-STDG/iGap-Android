@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/liContactItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp16"
+    android:paddingEnd="@dimen/dp16"
+    android:paddingRight="@dimen/dp16"
+    android:paddingBottom="@dimen/dp8">
+
+
+    <View
+        android:id="@+id/topLine"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp20"
+        android:background="?iGapDividerLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            app:srcCompat="@drawable/add_chat_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:orientation="vertical">
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|start"
+                android:singleLine="true"
+                android:text="Dominika Faniz"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/dp16" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|start"
+                android:singleLine="true"
+                android:text="@string/last_seen_recently"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/dp14" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="?iGapDividerLine"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+

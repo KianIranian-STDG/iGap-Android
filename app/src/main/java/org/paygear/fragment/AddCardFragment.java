@@ -7,9 +7,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -19,13 +16,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import net.iGap.R;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.WalletActivity;
 import org.paygear.model.Card;
@@ -37,7 +42,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.web.PostRequest;
 import retrofit2.Call;
@@ -47,13 +51,12 @@ import retrofit2.Response;
 
 public class AddCardFragment extends Fragment {
 
-    private RaadToolBar appBar;
     private ImageView imageView;
     private EditText cardNumberText;
     private EditText monthText;
     private EditText yearText;
     private SwitchCompat defaultCardSwitch;
-    private TextView button;
+    private Button button;
     private ProgressBar progressBar;
 
     private int bankLogoRes = R.drawable.bank_logo_default;
@@ -61,6 +64,7 @@ public class AddCardFragment extends Fragment {
     private String mNumber;
     private int mMonth;
     private int mYear;
+    private HelperToolbar mHelperToolbar;
 
     public AddCardFragment() {
     }
@@ -77,13 +81,22 @@ public class AddCardFragment extends Fragment {
             rootCardView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
 
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.add_new_card))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
 
-
-        appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
-        appBar.setTitle(getString(R.string.add_new_card));
-        appBar.showBack();
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(mHelperToolbar.getView());
 
         cardNumberText = view.findViewById(R.id.card_number);
 

@@ -1,22 +1,23 @@
 package net.iGap.libs.notification;
 
 
+import android.util.Log;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import net.iGap.G;
-import net.iGap.WebSocketClient;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperNotification;
-import net.iGap.interfaces.OnClientGetRoomMessage;
+import net.iGap.model.AccountUser;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestClientGetRoomMessage;
+import net.iGap.viewmodel.controllers.CallManager;
 
-import java.util.Map;
-
-import io.realm.Realm;
+import org.json.JSONArray;
 
 
 public class NotificationService extends FirebaseMessagingService {
@@ -24,52 +25,86 @@ public class NotificationService extends FirebaseMessagingService {
     private final static String ROOM_ID = "roomId";
     private final static String MESSAGE_ID = "messageId";
     private final static String MESSAGE_TYPE = "loc_key";
-    private static boolean isFirstMessage = true;
+    private final static String USER_ID = "userId";
 
+    private static final String TYPE = "type";
+    private static final String SIGNALING_OFFER = "SIGNALING_OFFER";
 
     @Override
     public void onNewToken(String mToken) {
         super.onNewToken(mToken);
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             RealmUserInfo.setPushNotification(mToken);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onNewToken(mToken);
+                }
+            }, 1000);
         }
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        WebSocketClient.reconnect(false);
-//        if (isFirstMessage) {
-//            if (remoteMessage.getData().size() > 0) {
-//                Map<String, String> date = remoteMessage.getData();
-//                if (date.containsKey(ROOM_ID) && date.containsKey(MESSAGE_ID)) {
-//                    //   type of dataMap is     messageId roomId type loc_key loc_args
-//                    Long roomId = Long.parseLong(date.get(ROOM_ID));
-//                    Long messageId = Long.parseLong(date.get(MESSAGE_ID));
-//
-//                    G.handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, messageId, new OnClientGetRoomMessage() {
-//                                @Override
-//                                public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-//                                    if (date.containsKey(MESSAGE_TYPE)) {
-//                                        final Realm realm = Realm.getDefaultInstance();
-//                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-//                                        if (room != null) {
-//                                            HelperNotification.getInstance().addMessage(roomId, message, room.getType(), room, realm);
-//                                        }
-//                                        realm.close();
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }, 2000);
-//
-//
-//                }
-//            }
-//            isFirstMessage = false;
-//        }
+
+        if (remoteMessage.getNotification() != null && remoteMessage.getData().containsKey(ActivityMain.DEEP_LINK)) {
+            HelperNotification.sendDeepLink(remoteMessage.getData(), remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        }
+
+        if (remoteMessage.getData().containsKey(TYPE) && remoteMessage.getData().containsKey(USER_ID)) {
+            String type = remoteMessage.getData().get(TYPE);
+            Log.i("iGapCall", "on Message Received " + type);
+            if (type != null && type.equals(SIGNALING_OFFER)) {
+                Log.i("iGapCall", "on Message Received " + type + " " + remoteMessage.getData().get(USER_ID));
+                CallManager.getInstance();
+            }
+        }
+
+        if (remoteMessage.getData().containsKey(MESSAGE_ID)) {
+
+            final long messageId = Long.valueOf(remoteMessage.getData().get(MESSAGE_ID));
+            final long roomId = Long.valueOf(remoteMessage.getData().get(ROOM_ID));
+            final long userId = Long.valueOf(remoteMessage.getData().get(USER_ID));
+
+            AccountUser accountUser = AccountManager.getInstance().getUser(userId);
+            if (accountUser == null)
+                return;
+
+            new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+                realm.executeTransaction(realm1 -> {
+                    try {
+
+                        if (RealmNotificationRoomMessage.canShowNotif(realm1, messageId, roomId)) {
+
+                            String loc_key = remoteMessage.getData().get(MESSAGE_TYPE);
+                            ProtoGlobal.Room.Type roomType;
+
+                            if (loc_key.contains("CHANNEL")) {
+                                roomType = ProtoGlobal.Room.Type.CHANNEL;
+                            } else if (loc_key.contains("GROUP")) {
+                                roomType = ProtoGlobal.Room.Type.GROUP;
+                            } else {
+                                roomType = ProtoGlobal.Room.Type.CHAT;
+                            }
+
+                            JSONArray loc_args = new JSONArray(remoteMessage.getData().get("loc_args"));
+                            String text = loc_args.getString(1);
+
+                            RealmNotificationRoomMessage.putToDataBase(realm1, messageId, roomId);
+
+                            ProtoGlobal.RoomMessage roomMessage = ProtoGlobal.RoomMessage.newBuilder()
+                                    .setMessage(text)
+                                    .setUpdateTime((int) (remoteMessage.getSentTime() / 1000))
+                                    .build();
+                            HelperNotification.getInstance().addMessage(realm1, roomId, roomMessage, roomType, accountUser);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            }, userId)).start();
+        }
     }
 
 

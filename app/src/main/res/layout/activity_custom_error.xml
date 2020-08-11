@@ -1,78 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  style="?backgroundSubChatTheme"
-  android:clickable="true"
-  android:gravity="center_horizontal"
-  android:orientation="vertical">
-
-  <ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:gravity="center"
-      android:orientation="vertical">
-
-      <android.support.v7.widget.AppCompatImageView
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
-        android:contentDescription="@null"
-        android:paddingTop="@dimen/dp15"
-        app:srcCompat="@drawable/ic_crash" />
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/dp10"
-        android:text="@string/iGap_has_crashed"
-        style="?textTitleColorSettingTheme"
-        android:textAlignment="center"
-        android:textSize="@dimen/dp18"
-        android:textStyle="bold" />
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".5"
+        app:srcCompat="@drawable/ic_crash"
+        app:layout_constraintBottom_toTopOf="@id/title" />
 
-      <TextView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/title"
+        android:textColor="?iGapTitleTextColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:text="@string/iGap_has_crashed"
+        android:textAlignment="center"
+        android:textSize="@dimen/largeTextSize"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/description" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/description"
+        android:textColor="?iGapTitleTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:lineSpacingExtra="1.0mm"
+        android:lineSpacingExtra="@dimen/dp4"
         android:padding="@dimen/dp8"
         android:text="@string/iGap_has_crashed_desc"
         android:textAlignment="center"
-        android:textSize="@dimen/dp14"
-        style="?textTitleColorSettingTheme"
-        android:textStyle="bold" />
+        android:textSize="@dimen/standardTextSize"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/restart_button" />
 
-
-      <!--<TextView-->
-      <!--android:id="@+id/error_details"-->
-      <!--android:layout_width="wrap_content"-->
-      <!--android:layout_height="wrap_content"-->
-      <!--android:layout_marginTop="6dp"-->
-      <!--android:text="@string/E_2" />-->
-
-      <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/restart_button"
-        android:layout_width="wrap_content"
+        style="@style/iGapButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp10"
-        android:layout_marginTop="10dp"
-        android:background="@color/green"
-        android:paddingBottom="@dimen/dp12"
-        android:paddingLeft="@dimen/dp36"
-        android:paddingRight="@dimen/dp36"
-        android:paddingTop="@dimen/dp12"
         android:text="@string/iGap_has_crashed_reload"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dp16" />
-    </LinearLayout>
+        app:layout_constraintWidth_percent=".5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintStart_toStartOf="parent" />
 
-  </ScrollView>
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

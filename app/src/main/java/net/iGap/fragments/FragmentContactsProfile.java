@@ -14,87 +14,87 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.animation.AlphaAnimation;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnChatGetRoom;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnReport;
-import net.iGap.interfaces.OnUserContactDelete;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperPreferences;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiEditTextE;
-import net.iGap.module.MEditText;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.proto.ProtoGlobal;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoUserReport;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsBlock;
-import net.iGap.request.RequestUserContactsDelete;
-import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsUnblock;
-import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserReport;
 import net.iGap.viewmodel.FragmentContactsProfileViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
-
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
-
+//todo : fixed view mode and view and remove logic code from view
 public class FragmentContactsProfile extends BaseFragment {
 
     private static final String ROOM_ID = "RoomId";
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
-    private long userId = 0;
-    private long roomId = 0;
-    private String enterFrom;
+
+    private final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f;
+    private final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+    private final int ALPHA_ANIMATIONS_DURATION = 200;
+
+    private boolean mIsTheTitleVisible = false;
+    private boolean mIsTheTitleContainerVisible = true;
+
     private String report;
-    private FragmentContactsProfileBinding fragmentContactsProfileBinding;
-    private FragmentContactsProfileViewModel fragmentContactsProfileViewModel;
+    private FragmentContactsProfileBinding binding;
+    private FragmentContactsProfileViewModel viewModel;
+    private CircleImageView userAvatarImageView;
+    private boolean isCollapsed;
+    private long userId;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -106,50 +106,153 @@ public class FragmentContactsProfile extends BaseFragment {
         return fragment;
     }
 
-    private void initDataBinding() {
-        fragmentContactsProfileViewModel = new FragmentContactsProfileViewModel(fragmentContactsProfileBinding, roomId, userId, enterFrom, avatarHandler);
-        fragmentContactsProfileBinding.setViewModel(fragmentContactsProfileViewModel);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(FragmentContactsProfileViewModel.class);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        fragmentContactsProfileBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
-        return attachToSwipeBack(fragmentContactsProfileBinding.getRoot());
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contacts_profile, container, false);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        userId = 0;
+        long roomId = 0;
+        String enterFrom = "";
+        if (getArguments() != null) {
+            userId = getArguments().getLong(PEER_ID);
+            roomId = getArguments().getLong(ROOM_ID);
+            enterFrom = getArguments().getString(ENTER_FROM);
+        }
+        viewModel.init(roomId, userId, enterFrom, avatarHandler);
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Bundle extras = getArguments();
-        userId = extras.getLong(PEER_ID);
-        roomId = extras.getLong(ROOM_ID);
-        enterFrom = extras.getString(ENTER_FROM);
-        if (enterFrom == null) {
-            enterFrom = "";
-        }
+        initialToolbar();
 
-        initDataBinding();
+        userAvatarImageView = binding.toolbarAvatar;
+        userAvatarImageView.setOnClickListener(v -> viewModel.onImageClick());
 
-        fragmentContactsProfileBinding.chiRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        binding.toolbarBack.setOnClickListener(v -> popBackStackFragment());
+        binding.toolbarMore.setOnClickListener(v -> viewModel.onMoreButtonClick());
+        binding.toolbarCall.setOnClickListener(v -> onCallButtonClick());
+
+        viewModel.copyUserNameToClipBoard.observe(getViewLifecycleOwner(), userName -> {
+
+            if (userName == null) return;
+
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("LINK_USER", Config.IGAP_LINK_PREFIX + userName);
+            clipboard.setPrimaryClip(clip);
+
+            Toast.makeText(getActivity(), getString(R.string.username_copied), Toast.LENGTH_SHORT).show();
+
+        });
+
+        viewModel.getCloudVisibility().observe(getViewLifecycleOwner(), thisMyCloud -> {
+            if (thisMyCloud != null) {
+                if (thisMyCloud) {
+                    binding.report.setVisibility(View.GONE);
+                    binding.block.setVisibility(View.GONE);
+                    binding.enableNotificationLyt.setVisibility(View.GONE);
+                    binding.line1.setVisibility(View.GONE);
+                    binding.customNotification.setVisibility(View.GONE);
+                } else {
+                    binding.report.setVisibility(View.VISIBLE);
+                    binding.block.setVisibility(View.VISIBLE);
+                    binding.line1.setVisibility(View.VISIBLE);
+                    binding.enableNotificationLyt.setVisibility(View.VISIBLE);
+                    binding.customNotification.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        viewModel.menuVisibility.observe(getViewLifecycleOwner(), visible -> {
+            if (visible != null) binding.toolbarMore.setVisibility(visible);
+        });
+
+        viewModel.videoCallVisibility.observe(getViewLifecycleOwner(), visible -> {
+            if (visible != null) binding.toolbarCall.setVisibility(visible);
+        });
+
+        //todo: fixed it and move to viewModel
+        viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
+            binding.enableNotification.setChecked(isChecked);
+            new RequestClientMuteRoom().muteRoom(viewModel.roomId, isChecked);
+        });
+
+        viewModel.contactName.observe(getViewLifecycleOwner(), name -> {
+            if (name != null) {
+                binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
+                binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
+            }
+        });
+
+        viewModel.lastSeen.observe(getViewLifecycleOwner(), lastSeen -> {
+            if (lastSeen != null) {
+                binding.toolbarTxtStatusExpanded.setText(HelperCalander.unicodeManage(lastSeen));
+            }
+        });
+
+        viewModel.goToChatPage.observe(getViewLifecycleOwner(), userRoomId -> {
+            if (getActivity() != null && userRoomId != null) {
+                if (G.twoPaneMode) {
+                    ((ActivityMain) getActivity()).removeAllFragment();
+                } else {
+                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                }
+                new GoToChatActivity(userRoomId).startActivity(getActivity());
+            }
+        });
+
+        viewModel.goBack.observe(getViewLifecycleOwner(), isBack -> {
+            if (isBack != null && isBack) {
                 popBackStackFragment();
             }
         });
 
-        fragmentContactsProfileBinding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fragmentContactsProfileBinding.chiFabSetPic.setColorFilter(Color.WHITE);
+        viewModel.goToShearedMediaPage.observe(getViewLifecycleOwner(), data -> {
+            if (getActivity() != null && data != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentShearedMedia.newInstance(data)).setReplace(false).load();
+            }
+        });
 
-        fragmentContactsProfileBinding.chiFabSetPic.setOnClickListener(new View.OnClickListener() { //fab button
+        if (viewModel.phone != null && (!viewModel.phone.get().equals("0") || viewModel.showNumber.get())) {
+
+            if (viewModel.phone.get().equals("0")) {
+                binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
+                viewModel.menuVisibility.setValue(View.GONE);
+            } else {
+                binding.toolbarTxtTelExpanded.setText(viewModel.phone.get());
+                binding.toolbarTxtTelExpanded.setOnClickListener(v -> viewModel.onPhoneNumberClick());
+            }
+
+        } else {
+            binding.toolbarTxtTelExpanded.setVisibility(View.GONE);
+        }
+
+        /*binding.toolbarTxtUsernameExpanded.setText(viewModel.username.get());*/
+
+        binding.toolbarFabChat.setOnClickListener(v -> {
+            viewModel.onClickGoToChat();
+        });
+
+        /*binding.chiFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        binding.chiFabSetPic.setColorFilter(Color.WHITE);
+        binding.chiFabSetPic.setOnClickListener(new View.OnClickListener() { //fab button
             @Override
             public void onClick(View view) {
 
                 if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
 
-                    Realm realm = Realm.getDefaultInstance();
-                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
                         new HelperFragment().removeAll(true);
@@ -181,26 +284,27 @@ public class FragmentContactsProfile extends BaseFragment {
 
                         new RequestChatGetRoom().chatGetRoom(userId);
                     }
-                    realm.close();
+
+
                 } else {
                     popBackStackFragment();
                 }
             }
-        });
+        });*/
 
-        if (fragmentContactsProfileViewModel.showNumber.get()) {
-            fragmentContactsProfileBinding.chiLayoutNickname.setOnClickListener(new View.OnClickListener() {
+        /*if (viewModel.showNumber.get()) {
+            binding.chiLayoutNickname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    if (fragmentContactsProfileViewModel.contactName.get() == null) {
+                    if (viewModel.contactName.get() == null) {
                         return;
                     }
 
                     final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
                     layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
-                    String splitNickname[] = fragmentContactsProfileViewModel.contactName.get().split(" ");
+                    String splitNickname[] = viewModel.contactName.get().split(" ");
                     String firsName = "";
                     String lastName = "";
                     StringBuilder stringBuilder = null;
@@ -345,7 +449,7 @@ public class FragmentContactsProfile extends BaseFragment {
                     positive.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            long po = Long.parseLong(fragmentContactsProfileViewModel.phone.get());
+                            long po = Long.parseLong(viewModel.phone.get());
                             String firstName = edtFirstName.getText().toString().trim();
                             String lastName = edtLastName.getText().toString().trim();
                             new RequestUserContactsEdit().contactsEdit(userId, po, firstName, lastName);
@@ -356,116 +460,278 @@ public class FragmentContactsProfile extends BaseFragment {
                     dialog.show();
                 }
             });
-        }
+        }*/
 
-        fragmentContactsProfileBinding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        /*binding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                ViewGroup viewGroup = fragmentContactsProfileBinding.chiRootCircleImage;
+                ViewGroup viewGroup = binding.chiRootCircleImage;
                 if (verticalOffset < -5) {
                     viewGroup.animate().alpha(0).setDuration(700);
                     viewGroup.setVisibility(View.GONE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.setVisibility(View.VISIBLE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.animate().alpha(1).setDuration(300);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.setVisibility(View.VISIBLE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.animate().alpha(1).setDuration(300);
+                    binding.chiTxtTitleToolbarDisplayName.setVisibility(View.VISIBLE);
+                    binding.chiTxtTitleToolbarDisplayName.animate().alpha(1).setDuration(300);
+                    binding.chiTxtTitleToolbarLastSeen.setVisibility(View.VISIBLE);
+                    binding.chiTxtTitleToolbarLastSeen.animate().alpha(1).setDuration(300);
                 } else {
                     viewGroup.setVisibility(View.VISIBLE);
                     viewGroup.animate().alpha(1).setDuration(700);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.setVisibility(View.GONE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarDisplayName.animate().alpha(0).setDuration(500);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.setVisibility(View.GONE);
-                    fragmentContactsProfileBinding.chiTxtTitleToolbarLastSeen.animate().alpha(0).setDuration(500);
+                    binding.chiTxtTitleToolbarDisplayName.setVisibility(View.GONE);
+                    binding.chiTxtTitleToolbarDisplayName.animate().alpha(0).setDuration(500);
+                    binding.chiTxtTitleToolbarLastSeen.setVisibility(View.GONE);
+                    binding.chiTxtTitleToolbarLastSeen.animate().alpha(0).setDuration(500);
                 }
             }
-        });
+        });*/
 
-        fragmentContactsProfileBinding.chiRippleMenuPopup.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
+        viewModel.showMenu.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
                 showPopUp();
             }
         });
 
-        fragmentContactsProfileBinding.chiLayoutPhoneNumber.setOnClickListener(new View.OnClickListener() {
+        viewModel.showPhoneNumberDialog.observe(this, new Observer<Boolean>() {
             @Override
-            public void onClick(View v) {
-                try {
-                    HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
-                        @Override
-                        public void Allow() throws IOException {
-                            showPopupPhoneNumber(fragmentContactsProfileBinding.chiLayoutPhoneNumber, fragmentContactsProfileViewModel.phone.get());
-                        }
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean != null && aBoolean) {
+                    try {
+                        HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                showPopupPhoneNumber(/*t.getProfileTell()*/null, viewModel.phone.get());
+                            }
 
-                        @Override
-                        public void deny() {
+                            @Override
+                            public void deny() {
 
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
 
-        fragmentContactsProfileBinding.chiLayoutSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
+        /*binding.chiLayoutSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
-                new HelperFragment(FragmentShearedMedia.newInstance(fragmentContactsProfileViewModel.shearedId)).setReplace(false).load();
+                new HelperFragment(FragmentShearedMedia.newInstance(viewModel.shearedId)).setReplace(false).load();
+            }
+        });*/
+
+        viewModel.showClearChatDialog.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
             }
         });
 
-        fragmentContactsProfileBinding.chiTxtClearChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog(G.fragmentActivity.getResources().getString(R.string.clear_this_chat), G.fragmentActivity.getResources().getString(R.string.clear), G.fragmentActivity.getResources().getString(R.string.cancel));
-            }
-        });
-
-        fragmentContactsProfileBinding.chiTxtNotifyAndSound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        viewModel.goToCustomNotificationPage.observe(this, aBoolean -> {
+            if (getActivity() != null && aBoolean != null && aBoolean) {
                 FragmentNotification fragmentNotification = new FragmentNotification();
                 Bundle bundle = new Bundle();
                 bundle.putString("PAGE", "CONTACT");
-                bundle.putLong("ID", roomId);
+                bundle.putLong("ID", viewModel.roomId);
                 fragmentNotification.setArguments(bundle);
-                new HelperFragment(fragmentNotification).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentNotification).setReplace(false).load();
             }
         });
 
-        getUserInfo(); // client should send request for get user info because need to update user online timing
+        viewModel.setAvatar.observe(this, aBoolean -> {
+            if (aBoolean != null) {
+                if (aBoolean) {
+                    avatarHandler.getAvatar(new ParamWithAvatarType(userAvatarImageView, viewModel.userId).avatarSize(R.dimen.dp100).avatarType(AvatarHandler.AvatarType.USER).showMain());
+                } else {
+                    userAvatarImageView.setImageResource(R.drawable.ic_cloud_space_blue);
+                }
+            }
+        });
+
+        viewModel.showDeleteContactDialog.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        viewModel.deleteContact();
+                    }
+                }).negativeText(R.string.B_cancel).show();
+            }
+        });
+
+        viewModel.showDialogReportContact.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                openDialogReport();
+            }
+        });
+
+        viewModel.showDialogStartSecretChat.observe(this, aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                Toast.makeText(getContext(), "secret chat", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        viewModel.goToShowAvatarPage.observe(this, isCurrentUser -> {
+            if (getActivity() != null && isCurrentUser != null) {
+                Log.wtf(this.getClass().getName(), "goToShowAvatarPage observe");
+                FragmentShowAvatars fragment;
+                if (isCurrentUser) {
+                    fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.setting);
+                } else {
+                    fragment = FragmentShowAvatars.newInstance(viewModel.userId, FragmentShowAvatars.From.chat);
+                }
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        });
+
+        viewModel.blockDialogListener.observe(getViewLifecycleOwner(), isBlockUser -> {
+            if (isBlockUser == null) return;
+
+            if (isBlockUser) {
+                new MaterialDialog.Builder(getContext()).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new RequestUserContactsUnblock().userContactsUnblock(viewModel.userId);
+                    }
+                }).negativeText(R.string.cancel)
+                        .dismissListener(dialog -> checkViewsState())
+                        .showListener(dialog -> checkViewsState()).show();
+            } else {
+                new MaterialDialog.Builder(getContext()).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new RequestUserContactsBlock().userContactsBlock(viewModel.userId);
+                    }
+                }).negativeText(R.string.cancel)
+                        .dismissListener(dialog -> checkViewsState())
+                        .showListener(dialog -> checkViewsState()).show();
+            }
+        });
+
+        viewModel.editContactListener.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean == null) return;
+            FragmentAddContact fragment = FragmentAddContact.newInstance(
+                    viewModel.userId, viewModel.phoneNumber, viewModel.firstName, viewModel.lastName, FragmentAddContact.ContactMode.EDIT, (name, family) -> {
+                        viewModel.contactName.setValue(name + " " + family);
+                        viewModel.firstName = name;
+                        viewModel.lastName = family;
+                        if (getActivity() != null) {
+                            ((ActivityMain) getActivity()).onUpdateContacts();
+                        }
+                    }
+            );
+            if (getActivity() != null)
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+
+        });
+
+    }
+
+    private void onCallButtonClick() {
+        CallSelectFragment selectFragment = CallSelectFragment.getInstance(userId, false, null);
+        if (getFragmentManager() != null)
+            selectFragment.show(getFragmentManager(), null);
+    }
+
+    private void checkViewsState() {
+        if (isCollapsed) startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
+    }
+
+    private void initialToolbar() {
+        startAlphaAnimation(binding.toolbarTxtNameCollapsed, 0, View.INVISIBLE);
+
+        binding.toolbarAppbar.addOnOffsetChangedListener((appBarLayout, offset) -> {
+
+            isCollapsed = offset != 0;
+
+            int maxScroll = appBarLayout.getTotalScrollRange();
+            float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+            handleAlphaOnTitle(percentage);
+            handleToolbarTitleVisibility(percentage);
+
+        });
+
+    }
+
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if (!mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(binding.toolbarTxtNameCollapsed, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if (mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, 100, View.INVISIBLE);
+                startAlphaAnimation(binding.toolbarFabChat, 100, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(binding.toolbarLayoutExpTitles, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                startAlphaAnimation(binding.toolbarFabChat, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation(View v, long duration, int visibility) {
+
+        if (visibility == View.VISIBLE) v.setVisibility(visibility);
+
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
     }
 
     @Override
     public void onResume() {
+        if (binding != null && !mIsTheTitleContainerVisible) {
+            startAlphaAnimation(binding.toolbarFabChat, 0, View.INVISIBLE);
+        }
         super.onResume();
-        fragmentContactsProfileViewModel.onResume();
+        viewModel.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        fragmentContactsProfileViewModel.onPause();
+        viewModel.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        fragmentContactsProfileViewModel.onStop();
+        viewModel.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fragmentContactsProfileViewModel.onDestroy();
     }
 
     /**
      * ************************************ methods ************************************
      */
     private void showPopupPhoneNumber(View v, String number) {
-
         try {
             boolean isExist = false;
             Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
@@ -480,29 +746,26 @@ public class FragmentContactsProfile extends BaseFragment {
             }
 
             if (isExist) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case 0:
-                                String call = "+" + Long.parseLong(fragmentContactsProfileViewModel.phone.get());
-                                try {
-                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                    callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
-                                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(callIntent);
-                                } catch (Exception ex) {
-                                    ex.getStackTrace();
-                                }
-                                break;
-                            case 1:
-                                String copy;
-                                copy = fragmentContactsProfileViewModel.phone.get();
-                                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
-                                clipboard.setPrimaryClip(clip);
-                                break;
-                        }
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback((dialog, view, which, text) -> {
+                    switch (which) {
+                        case 0:
+                            String call = "+" + Long.parseLong(viewModel.phone.get());
+                            try {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
+                                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(callIntent);
+                            } catch (Exception ex) {
+                                ex.getStackTrace();
+                            }
+                            break;
+                        case 1:
+                            String copy;
+                            copy = viewModel.phone.get();
+                            ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
+                            clipboard.setPrimaryClip(clip);
+                            break;
                     }
                 }).show();
             } else {
@@ -512,8 +775,8 @@ public class FragmentContactsProfile extends BaseFragment {
                         switch (which) {
                             case 0:
 
-                                String name = fragmentContactsProfileViewModel.contactName.get();
-                                String phone = "+" + fragmentContactsProfileViewModel.phone.get();
+                                String name = viewModel.contactName.getValue();
+                                String phone = "+" + viewModel.phone.get();
 
                                 ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
 
@@ -545,7 +808,7 @@ public class FragmentContactsProfile extends BaseFragment {
                                 break;
                             case 1:
 
-                                String call = "+" + Long.parseLong(fragmentContactsProfileViewModel.phone.get());
+                                String call = "+" + Long.parseLong(viewModel.phone.get());
                                 try {
                                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                     callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
@@ -559,7 +822,7 @@ public class FragmentContactsProfile extends BaseFragment {
                             case 2:
 
                                 ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", fragmentContactsProfileViewModel.phone.get());
+                                ClipData clip = ClipData.newPlainText("PHONE_NUMBER", viewModel.phone.get());
                                 clipboard.setPrimaryClip(clip);
 
                                 break;
@@ -577,16 +840,16 @@ public class FragmentContactsProfile extends BaseFragment {
      */
     private void addContactToServer() {
 
-        if (RealmUserInfo.isLimitImportContacts()) {
+        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG)) {
             showLimitDialog();
             return;
         }
 
         List<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
-        contact.firstName = fragmentContactsProfileViewModel.firstName;
-        contact.lastName = fragmentContactsProfileViewModel.lastName;
-        contact.phone = fragmentContactsProfileViewModel.phone.get() + "";
+        contact.firstName = viewModel.firstName;
+        contact.lastName = viewModel.lastName;
+        contact.phone = viewModel.phone.get() + "";
 
         contacts.add(contact);
 
@@ -594,185 +857,24 @@ public class FragmentContactsProfile extends BaseFragment {
     }
 
     private void showPopUp() {
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-        ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-        ViewGroup root4 = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
-
-        TextView txtBlockUser = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-        TextView txtDeleteContact = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-        TextView txtReport = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
-
-        TextView iconBlockUser = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-
-        TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.md_clearHistory));
-
-        TextView iconDeleteContact = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconDeleteContact.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-
-        TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_account_alert));
-
-        root1.setVisibility(View.VISIBLE);
-        root2.setVisibility(View.VISIBLE);
-        root3.setVisibility(View.VISIBLE);
-        root4.setVisibility(View.VISIBLE);
-        if (G.userId == userId) {
-            root1.setVisibility(View.GONE);
-            root3.setVisibility(View.GONE);
-        }
-
-        if (fragmentContactsProfileViewModel.disableDeleteContact) {
-            root3.setVisibility(View.GONE);
-        }
-
-        if (fragmentContactsProfileViewModel.isBlockUser) {
-            txtBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-            iconBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.md_unblock));
-        } else {
-            txtBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.block_user));
-            iconBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.md_block));
-        }
-        txtClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.clear_history));
-        txtDeleteContact.setText(G.fragmentActivity.getResources().getString(R.string.delete_contact));
-        txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
-
-
-        if (RealmRoom.isNotificationServices(roomId)) {
-            root4.setVisibility(View.GONE);
-        }
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                blockOrUnblockUser();
-            }
-        });
-        root2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        if (FragmentChat.onComplete != null) {
-                            FragmentChat.onComplete.complete(false, roomId + "", "");
-                        }
-                    }
-                }).negativeText(R.string.B_cancel).show();
-
-            }
-        });
-        root3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        deleteContact();
-                    }
-                }).negativeText(R.string.B_cancel).show();
-
-            }
-        });
-        root4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                openDialogReport();
-            }
-
-        });
+        new TopSheetDialog(getContext()).setListData(viewModel.items, -1, position -> viewModel.onMenuItemClick(position)).show();
     }
 
     private void openDialogReport() {
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
-        if (v == null) {
-            return;
-        }
-        DialogAnimation.animationDown(dialog);
-        dialog.show();
-
-        ViewGroup rootSpam = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup rootAbuse = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-        ViewGroup rootFaceAccount = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-        ViewGroup rootOther = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
-
-        TextView txtSpam = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtAbuse = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-        TextView txtFakeAccount = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-        TextView txtOther = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
-
-        TextView iconSpam = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconSpam.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow_reply));
-        iconSpam.setVisibility(View.GONE);
-
-        TextView iconAbuse = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconAbuse.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
-        iconAbuse.setVisibility(View.GONE);
-
-        TextView iconFakeAccount = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconFakeAccount.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
-        iconFakeAccount.setVisibility(View.GONE);
-
-        TextView iconOther = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconOther.setText(G.fragmentActivity.getResources().getString(R.string.md_forward));
-        iconOther.setVisibility(View.GONE);
-
-
-        rootSpam.setVisibility(View.VISIBLE);
-        rootAbuse.setVisibility(View.VISIBLE);
-        rootFaceAccount.setVisibility(View.VISIBLE);
-        rootOther.setVisibility(View.VISIBLE);
-
-        txtSpam.setText(R.string.st_Spam);
-        txtAbuse.setText(R.string.st_Abuse);
-        txtFakeAccount.setText(R.string.st_FakeAccount);
-        txtOther.setText(R.string.st_Other);
-
-        rootSpam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.SPAM, "");
-            }
-        });
-        rootAbuse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
-            }
-        });
-        rootFaceAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
-                new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
-
-            }
-        });
-        rootOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
+        //todo: fixed on click and handle in viewModel get list menu from viewModel
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.st_Spam));
+        items.add(getString(R.string.st_Abuse));
+        items.add(getString(R.string.st_FakeAccount));
+        items.add(getString(R.string.st_Other));
+        new BottomSheetFragment().setData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.st_Spam))) {
+                new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.SPAM, "");
+            } else if (items.get(position).equals(getString(R.string.st_Abuse))) {
+                new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
+            } else if (items.get(position).equals(getString(R.string.st_FakeAccount))) {
+                new RequestUserReport().userReport(viewModel.userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
+            } else if (items.get(position).equals(getString(R.string.st_Other))) {
                 final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -786,12 +888,7 @@ public class FragmentContactsProfile extends BaseFragment {
                             positive.setEnabled(false);
                         }
                     }
-                }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new RequestUserReport().userReport(roomId, ProtoUserReport.UserReport.Reason.OTHER, report);
-                    }
-                }).negativeText(R.string.cancel).build();
+                }).positiveText(R.string.ok).onPositive((dialog, which) -> new RequestUserReport().userReport(viewModel.roomId, ProtoUserReport.UserReport.Reason.OTHER, report)).negativeText(R.string.cancel).build();
 
                 final View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -800,89 +897,39 @@ public class FragmentContactsProfile extends BaseFragment {
 
                 dialogReport.show();
 
+                dialogReport.setOnShowListener(dialog -> checkViewsState());
+                dialogReport.setOnDismissListener(dialog -> checkViewsState());
             }
-        });
+        }).show(getFragmentManager(), "bottom sheet");
 
-        G.onReport = new OnReport() {
-            @Override
-            public void success() {
-                error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
-            }
-        };
+        G.onReport = () -> error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
 
-    }
-
-    private void blockOrUnblockUser() {
-
-        if (fragmentContactsProfileViewModel.isBlockUser) {
-
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsUnblock().userContactsUnblock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-
-        } else {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    new RequestUserContactsBlock().userContactsBlock(userId);
-                }
-            }).negativeText(R.string.cancel).show();
-        }
     }
 
     private void showAlertDialog(String message, String positive, String negative) { // alert dialog for block or clear user
-
         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(message).positiveText(positive).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
                 clearHistory();
                 if (FragmentChat.onComplete != null) {
-                    FragmentChat.onComplete.complete(false, roomId + "", "");
+                    FragmentChat.onComplete.complete(false, viewModel.roomId + "", "");
                 }
             }
-        }).negativeText(negative).show();
-    }
-
-    private void deleteContact() {
-        G.onUserContactdelete = new OnUserContactDelete() {
-            @Override
-            public void onContactDelete() {
-                /**
-                 * get user info after delete it for show nickname
-                 */
-                getUserInfo();
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-        new RequestUserContactsDelete().contactsDelete(fragmentContactsProfileViewModel.phone.get());
-    }
-
-    private void getUserInfo() {
-        new RequestUserInfo().userInfo(userId);
+        }).negativeText(negative)
+                .dismissListener(dialog -> checkViewsState())
+                .showListener(dialog -> checkViewsState()).show();
     }
 
     private void clearHistory() {
-        RealmRoomMessage.clearHistoryMessage(fragmentContactsProfileViewModel.shearedId);
+        RealmRoomMessage.clearHistoryMessage(viewModel.shearedId);
     }
 
     private void error(String error) {
         if (isAdded()) {
             try {
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
+                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), view -> snack.dismiss());
                 snack.show();
             } catch (IllegalStateException e) {
                 e.getStackTrace();

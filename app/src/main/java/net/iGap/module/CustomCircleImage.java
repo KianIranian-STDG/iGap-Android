@@ -1,23 +1,21 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import net.iGap.G;
 import net.iGap.R;
 
 /**
@@ -26,8 +24,8 @@ import net.iGap.R;
 
 public class CustomCircleImage extends View {
 
-    private static final int CIRCLE_RADIUS = (int) G.context.getResources().getDimension(R.dimen.dp12);
-    private static final int CIRCLE_SPACE = (int) G.context.getResources().getDimension(R.dimen.dp16);
+    private final int CIRCLE_RADIUS = (int) getResources().getDimension(R.dimen.dp12);
+    private final int CIRCLE_SPACE = (int) getResources().getDimension(R.dimen.dp16);
     private Paint fiiPain;
     private Paint strokePain;
     private int count;
@@ -37,7 +35,7 @@ public class CustomCircleImage extends View {
     private int current;
     private int position;
     private float offsetX;
-    private float tt = G.context.getResources().getDimension(R.dimen.dp16);
+    private float tt = getResources().getDimension(R.dimen.dp16);
 
     public CustomCircleImage(Context context) {
         super(context);
@@ -58,15 +56,15 @@ public class CustomCircleImage extends View {
 
         fiiPain = new Paint();
         fiiPain.setStyle(Paint.Style.FILL);
-        fiiPain.setColor(Color.parseColor(G.appBarColor));
+        fiiPain.setColor(new Theme().getDarkAccentColor(getContext()));
         fiiPain.setAntiAlias(true);
 
         strokePain = new Paint();
-        strokePain.setStyle(Paint.Style.STROKE);
-        strokePain.setColor(Color.parseColor(("#7e7e7e")));
+        strokePain.setStyle(Paint.Style.FILL);
+        strokePain.setColor(new Theme().getAccentColor(getContext()));
         strokePain.setAntiAlias(true);
 
-        screenWidth = G.context.getResources().getDisplayMetrics().widthPixels;
+        screenWidth = getResources().getDisplayMetrics().widthPixels;
     }
 
     private void width() {

@@ -16,7 +16,7 @@ public class PollItemField implements Serializable {
 
     public PollItemField(ProtoGlobal.PollField pollField) {
         id = pollField.getId();
-        imageUrl=  pollField.getImageurl();
+        imageUrl = pollField.getImageurl();
         clickable = pollField.getClickable();
         clicked = pollField.getClicked();
         orderId = pollField.getOrderid();

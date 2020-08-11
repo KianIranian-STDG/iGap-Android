@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -21,7 +21,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,6 +38,8 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
@@ -46,9 +47,9 @@ import net.iGap.R;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.OnColorChangedListenerSelect;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ColorPiker;
+import net.iGap.observers.interfaces.OnColorChangedListenerSelect;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -121,7 +122,7 @@ public class ActivityPaint extends ActivityEnhanced {
         });
 
         TextView tvSend = (TextView) findViewById(R.id.textView_send);
-        tvSend.setTextColor(Color.parseColor(G.attachmentColor));
+        //  tvSend.setTextColor(Color.parseColor(G.attachmentColor));
         tvSend.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -138,8 +139,8 @@ public class ActivityPaint extends ActivityEnhanced {
                 setPaintClear();
             }
         });
-        Typeface typefaceEraser = G.typeface_Fontico;
-        tvEraser.setTypeface(typefaceEraser);
+
+        tvEraser.setTypeface(ResourcesCompat.getFont(tvEraser.getContext(), R.font.font_icon_old));
 
         TextView tvPaint = (TextView) findViewById(R.id.textView_paintsize);
         tvPaint.setOnClickListener(new OnClickListener() {
@@ -233,9 +234,9 @@ public class ActivityPaint extends ActivityEnhanced {
         dialogBrush.show();
         dialogBrush.getWindow().setAttributes(layoutParams);
 
-        final TextView tvBrushSize = (TextView) dialogBrush.findViewById(R.id.textView_brush_size);
+        final TextView tvBrushSize = dialogBrush.findViewById(R.id.textView_brush_size);
 
-        SeekBar skBrushSize = (SeekBar) dialogBrush.findViewById(R.id.seekBar_brush_size);
+        SeekBar skBrushSize = dialogBrush.findViewById(R.id.seekBar_brush_size);
         skBrushSize.setProgress(brushSize - minBrushSize);
         skBrushSize.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 

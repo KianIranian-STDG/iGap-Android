@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:layoutDirection="locale"
+    android:padding="@dimen/dp10">
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/main_font"
+        android:textSize="@dimen/largeTextSize"
+        android:textColor="?iGapSubtitleTextColor"
+        android:padding="@dimen/dp4"
+        android:layout_marginBottom="@dimen/dp8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/del_for"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/st_checkbox_delete"
+        app:fontFamily="@font/main_font"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintHorizontal_bias="0"
+        android:gravity="start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/del_from_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp12"
+        android:text="@string/delete_from_storage"
+        app:fontFamily="@font/main_font"
+        android:fontFamily="@font/main_font"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        android:gravity="start"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/del_for"
+        app:layout_constraintTop_toBottomOf="@id/del_for" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

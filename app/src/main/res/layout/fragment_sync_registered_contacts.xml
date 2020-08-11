@@ -1,174 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <import type="android.graphics.Color" />
-
-        <import type="net.iGap.G" />
-
-    </data>
-
-
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/menu_parent_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="?backgroundColorSettingTheme"
-    android:clickable="true"
-    tools:ignore="MissingPrefix">
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/fc_layot_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menu_parent_layout"
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/frg_contact_ll_toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layoutDirection="ltr"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/menu_txt_titleToolbar"
-                fontPath="fonts/IRANSansMobile_Bold.ttf"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/str_frag_sync_contactWelcome"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:visibility="visible" />
-
-            <net.iGap.libs.rippleeffect.RippleView
-                android:id="@+id/menu_sync"
-                rv_centered="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:rv_alpha="200"
-                app:rv_centered="true"
-                app:rv_rippleDuration="100"
-                android:visibility="gone">
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/menu_btn_sync"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="center"
-                    android:text="@string/md_igap_sync"
-                    android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/dp28"
-                    android:visibility="visible" />
-
-            </net.iGap.libs.rippleeffect.RippleView>
-
-        </LinearLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <TextView
-            android:id="@+id/frag_sync_describeAction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="@string/str_frag_sync_contactTitle"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black_register"
-            android:textSize="16sp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="@dimen/toolbar_height_root_with_search"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="visible"
-            android:paddingBottom="@dimen/dp8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/frag_sync_skipbtn"
-            app:layout_constraintTop_toBottomOf="@+id/frag_sync_describeAction"/>
-
-
-        <ProgressBar
-            android:id="@+id/prgWaiting_addContact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-
-        <!--
-                <ProgressBar
-                    android:id="@+id/prgWaitingLoadContact"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="clip_horizontal"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:indeterminate="true"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/frag_sync_skipbtn"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />-->
-
-        <Button
-            android:id="@+id/frag_sync_skipbtn"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-            android:gravity="center"
-            android:text="@string/str_frag_sync_skipBtn"
-            android:textAllCaps="false"
-            android:textColor="@color/whit_background"
-            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frg_contact_ll_toolbar_layout">
 
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/frag_sync_describeAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                android:gravity="center"
+                android:text="@string/str_frag_sync_contactTitle"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/largeTextSize"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.design.widget.CoordinatorLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingBottom="@dimen/dp8"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/frag_sync_skipbtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frag_sync_describeAction" />
+
+            <net.iGap.module.scrollbar.FastScroller
+                android:id="@+id/fast_scroller"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/recycler_view"
+                app:layout_constraintEnd_toEndOf="@id/recycler_view"
+                app:layout_constraintTop_toTopOf="@id/recycler_view" />
+
+            <ProgressBar
+                android:id="@+id/prgWaiting_addContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <!--
+                    <ProgressBar
+                        android:id="@+id/prgWaitingLoadContact"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="clip_horizontal"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:indeterminate="true"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/frag_sync_skipbtn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />-->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/frag_sync_skipbtn"
+                style="@style/iGapButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:minHeight="48dp"
+                android:text="@string/str_frag_sync_skipBtn"
+                android:textSize="@dimen/dp16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.6" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

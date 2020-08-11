@@ -1,19 +1,19 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.request;
 
-import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.neovisionaries.ws.client.WebSocket;
+import androidx.annotation.Nullable;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -21,6 +21,7 @@ import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperClassNamePreparation;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.IGLog;
 import net.iGap.module.AESCrypt;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
@@ -171,11 +172,11 @@ public class RequestQueue {
             if (G.isSecure) {
                 if (G.userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
-                    WebSocket webSocket = WebSocketClient.getInstance();
-                    if (webSocket != null) {
-                        Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
-                        webSocket.sendBinary(message, requestWrapper);
+                    Log.i("MSGR", "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
+                    if (Config.FILE_LOG_ENABLE) {
+                        IGLog.e("SND MSGR -> " + (30000 + requestWrapper.actionId));
                     }
+                    WebSocketClient.getInstance().sendBinary(message, requestWrapper);
                 } else {
                     if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                         /**
@@ -185,10 +186,7 @@ public class RequestQueue {
                     }
                 }
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
-                WebSocket webSocket = WebSocketClient.getInstance();
-                if (webSocket != null) {
-                    webSocket.sendBinary(message, requestWrapper);
-                }
+                WebSocketClient.getInstance().sendBinary(message, requestWrapper);
             } else { //if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                 timeOutImmediately(randomId, false);
                 /**
@@ -226,7 +224,12 @@ public class RequestQueue {
         for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
             String key = entry.getKey();
             RequestWrapper requestWrapper = entry.getValue();
-            boolean delete = timeDifference(requestWrapper.getTime());
+            boolean delete;
+            if (requestWrapper.actionId == 102) {
+                delete = timeDifference(requestWrapper.getTime(), (10 * DateUtils.SECOND_IN_MILLIS));
+            } else {
+                delete = timeDifference(requestWrapper.getTime(), Config.TIME_OUT_MS);
+            }
             if (delete) {
                 deleteRequest(key);
             }
@@ -338,7 +341,7 @@ public class RequestQueue {
     /**
      * if time not set yet don't set timeout
      */
-    private static boolean timeDifference(long beforeTime) {
+    private static boolean timeDifference(long beforeTime, long config) {
         if (beforeTime == 0) {
             return false;
         }
@@ -348,11 +351,7 @@ public class RequestQueue {
         long currentTime = System.currentTimeMillis();
         difference = (currentTime - beforeTime);
 
-        if (difference >= Config.TIME_OUT_MS) {
-            return true;
-        }
-
-        return false;
+        return difference >= config;
     }
 
 

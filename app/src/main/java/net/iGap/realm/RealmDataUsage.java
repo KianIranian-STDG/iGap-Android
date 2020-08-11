@@ -4,12 +4,12 @@ import io.realm.RealmObject;
 
 public class RealmDataUsage extends RealmObject {
     private String type;
-   /* private long wifiDownloadSize;
-    private long dataDownloadSize;*/
+    /* private long wifiDownloadSize;
+     private long dataDownloadSize;*/
     private long downloadSize;
 
-   /* private long wifiUploadSize;
-    private long dataUploadSize;*/
+    /* private long wifiUploadSize;
+     private long dataUploadSize;*/
     private long uploadSize;
 
     private boolean connectivityType;

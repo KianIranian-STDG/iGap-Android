@@ -5,7 +5,7 @@
     android:layout_height="50dp"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type6_card0"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
@@ -19,11 +19,8 @@
             android:id="@+id/type6_img0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
-
-            />
-    </android.support.v7.widget.CardView>
+            android:scaleType="fitXY" />
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -32,7 +29,7 @@
         android:layout_margin="@dimen/discovery_margin"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/type6_card1"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
@@ -45,12 +42,11 @@
                 android:id="@+id/type6_img1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@color/color_default_discovery_cards" />
+                android:scaleType="fitXY" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/type6_card2"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
@@ -64,10 +60,9 @@
                 android:id="@+id/type6_img2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@color/color_default_discovery_cards" />
+                android:scaleType="fitXY" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
 

@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 package net.iGap.helper;
 
 import net.iGap.G;
@@ -15,7 +15,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
 
 /**
@@ -122,5 +125,24 @@ public class HelperNumerical {
 
     public static Long getNanoTimeStamp() {
         return System.nanoTime();
+    }
+
+    public String getCommaSeparatedPrice(long price) {
+        DecimalFormat anotherDFormat = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+        anotherDFormat.setGroupingUsed(true);
+        anotherDFormat.setGroupingSize(3);
+        return anotherDFormat.format(price);
+    }
+
+    public static String getPhoneNumberStartedWithZero(String number) {
+        if (number == null) return null;
+
+        if (number.startsWith("+98")) {
+            return "0" + number.substring(3);
+        } else if (number.startsWith("98")) {
+            return "0" + number.substring(2);
+        }
+
+        return number;
     }
 }

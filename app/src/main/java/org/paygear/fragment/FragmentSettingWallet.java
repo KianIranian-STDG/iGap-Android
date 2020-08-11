@@ -1,34 +1,32 @@
 package org.paygear.fragment;
 
 import android.content.DialogInterface;
-import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentSettingWalletBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 
-import org.paygear.WalletActivity;
 import org.paygear.model.Card;
 import org.paygear.model.Payment;
 
 import ir.radsense.raadcore.app.NavigationBarActivity;
-import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.utils.Typefaces;
 
 /*
@@ -82,16 +80,23 @@ public class FragmentSettingWallet extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RaadToolBar appBar = fragmentSettingWalletBinding.appBar;
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        appBar.setTitle(getString(R.string.settings));
-        fragmentSettingWalletBinding.backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        HelperToolbar toolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLogoShown(true)
+                .setLeftIcon(R.string.back_icon)
+                .setDefaultTitle(getString(R.string.settings))
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+                        if (getActivity() != null)
+                            getActivity().onBackPressed();
+                    }
+                });
+
+        LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
+        lytToolbar.addView(toolbar.getView());
+
 
         ViewGroup btnSetPassword = fragmentSettingWalletBinding.btnSetNewPassword;
         ViewGroup btnForgotPassword = fragmentSettingWalletBinding.btnForgotPassword;
@@ -99,18 +104,18 @@ public class FragmentSettingWallet extends Fragment {
         TextView txtForgotPassword = fragmentSettingWalletBinding.txtForgotPassword;
 
 
-        Drawable mDrawableSetPassword = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
+        /*Drawable mDrawableSetPassword = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
         mDrawableSetPassword.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             btnSetPassword.setBackground(mDrawableSetPassword);
             btnForgotPassword.setBackground(mDrawableSetPassword);
-        }
+        }*/
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, txtForgotPassword, txtSetPassword);
 
-        btnSetPassword.setOnClickListener(new View.OnClickListener() {
+        txtSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -118,7 +123,7 @@ public class FragmentSettingWallet extends Fragment {
             }
         });
 
-        btnForgotPassword.setOnClickListener(new View.OnClickListener() {
+        txtForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

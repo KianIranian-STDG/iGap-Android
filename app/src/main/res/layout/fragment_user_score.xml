@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.UserScoreViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:id="@+id/rankView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp24"
+                    android:background="@drawable/rank_background"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toRightOf="@id/scoreView"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".4" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/userRank"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:gravity="center"
+                    android:text="@{viewModel.userRank}"
+                    app:layout_constraintBottom_toTopOf="@id/totalRank"
+                    app:layout_constraintLeft_toLeftOf="@id/rankView"
+                    app:layout_constraintRight_toRightOf="@id/rankView"
+                    app:layout_constraintTop_toTopOf="@id/rankView"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/totalRank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@{@string/of_from_total(viewModel.totalRank)}"
+                    app:layout_constraintBottom_toBottomOf="@id/rankView"
+                    app:layout_constraintLeft_toLeftOf="@id/userRank"
+                    app:layout_constraintRight_toRightOf="@id/userRank"
+                    app:layout_constraintTop_toBottomOf="@id/userRank" />
+
+                <View
+                    android:id="@+id/scoreView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/score_background_drawable"
+                    app:layout_constraintBottom_toBottomOf="@id/rankView"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/rankView"
+                    app:layout_constraintTop_toTopOf="@id/rankView"
+                    app:layout_constraintWidth_percent=".4" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/userScore"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:gravity="center"
+                    android:text="@{viewModel.userScore}"
+                    app:layout_constraintBottom_toBottomOf="@id/scoreView"
+                    app:layout_constraintLeft_toLeftOf="@id/scoreView"
+                    app:layout_constraintRight_toRightOf="@id/scoreView"
+                    app:layout_constraintTop_toTopOf="@id/scoreView" />
+
+                <View
+                    android:id="@+id/rankPointer"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:background="@drawable/rank_pointer"
+                    app:layout_constraintCircle="@id/rankView"
+                    app:layout_constraintCircleAngle="0"
+                    app:layout_constraintCircleRadius="83dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/rankTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/rank"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintLeft_toLeftOf="@id/rankView"
+                    app:layout_constraintRight_toRightOf="@id/rankView"
+                    app:layout_constraintTop_toBottomOf="@id/rankView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/scoreTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/score"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintLeft_toLeftOf="@id/scoreView"
+                    app:layout_constraintRight_toRightOf="@id/scoreView"
+                    app:layout_constraintTop_toBottomOf="@id/scoreView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvScoreList"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp10"
+                    app:layout_constraintBottom_toTopOf="@id/scanBarcodeButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scoreTitle" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/scanBarcodeButton"
+                    style="@style/iGapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp10"
+                    android:onClick="@{()->viewModel.onScanBarcodeButtonClick()}"
+                    android:text="@string/scan_barcode"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintWidth_percent=".7" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

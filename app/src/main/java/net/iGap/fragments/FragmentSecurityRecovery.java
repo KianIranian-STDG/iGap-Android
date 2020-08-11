@@ -1,28 +1,35 @@
 package net.iGap.fragments;
 
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
+import net.iGap.activities.ActivityRegistration;
 import net.iGap.helper.HelperError;
-import net.iGap.interfaces.OnRecoveryEmailToken;
-import net.iGap.interfaces.OnRecoverySecurityPassword;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.enums.Security;
+import net.iGap.observers.interfaces.OnRecoveryEmailToken;
+import net.iGap.observers.interfaces.OnRecoverySecurityPassword;
+import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.observers.interfaces.TwoStepVerificationRecoverPasswordByAnswersCallback;
+import net.iGap.observers.interfaces.TwoStepVerificationRecoverPasswordByToken;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByAnswers;
 import net.iGap.request.RequestUserTwoStepVerificationRecoverPasswordByToken;
 import net.iGap.request.RequestUserTwoStepVerificationRequestRecoveryToken;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +43,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
     private String txtPaternEmail = "";
     private boolean isRecoveryByEmail;
     private ViewGroup rootRecoveryEmail;
+    private ProgressBar pbLoading;
     private ViewGroup rootRecoveryQuestionPassword;
     private EditText edtSetRecoveryAnswerPassOne;
     private EditText edtSetRecoveryAnswerPassTwo;
@@ -45,6 +53,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
     private TextView txtSetRecoveryQuestionPassOne;
     private TextView txtSetRecoveryQuestionPassTwo;
     private boolean isConfirmedRecoveryEmail;
+    private HelperToolbar mHelperToolbar;
 
     public FragmentSecurityRecovery() {
         // Required empty public constructor
@@ -52,16 +61,92 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_security_recovery, container, false));
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setDefaultTitle(G.context.getResources().getString(R.string.recovery_Password))
+                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.check_icon)
+                .setLogoShown(true)
+                .setShowConnectionState(false)
+                .setListener(new ToolbarListener() {
+                    @Override
+                    public void onLeftIconClickListener(View view) {
+
+                        closeKeyboard(view);
+                        if (page == Security.SETTING) {
+                            pageSetting();
+                        } else {
+                            pageRegister();
+                        }
+
+                    }
+
+                    @Override
+                    public void onRightIconClickListener(View v) {
+                        closeKeyboard(v);
+                        if (rootRecoveryEmail.getVisibility() == View.VISIBLE) {
+                            if (edtSetRecoveryEmail.length() > 0) {
+                                setLoaderState(true);
+                                new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString(), new TwoStepVerificationRecoverPasswordByToken() {
+                                    @Override
+                                    public void recoveryByEmail(String tokenR) {
+                                        setLoaderState(false);
+                                        if (getActivity() instanceof ActivityRegistration) {
+                                            openMainActivity(tokenR);
+                                        } else if (getActivity() instanceof ActivityMain) {
+                                            backToSettings();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void errorRecoveryByEmail(int major, int minor) {
+                                        setLoaderState(false);
+                                    }
+                                });
+                            } else {
+                                error(G.fragmentActivity.getResources().getString(R.string.please_enter_code));
+                            }
+                        } else {
+                            if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
+                                setLoaderState(true);
+                                new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString(), new TwoStepVerificationRecoverPasswordByAnswersCallback() {
+                                    @Override
+                                    public void recoveryByQuestion(String tokenR) {
+                                        setLoaderState(false);
+                                        //Todo:fixed it and move to repository
+                                        if (getActivity() instanceof ActivityRegistration) {
+                                            openMainActivity(tokenR);
+                                        } else if (getActivity() instanceof ActivityMain) {
+                                            backToSettings();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void errorRecoveryByQuestion(int major, int minor) {
+                                        setLoaderState(false);
+                                    }
+                                });
+
+                            } else {
+                                error(G.fragmentActivity.getResources().getString(R.string.please_complete_all_item));
+                            }
+                        }
+                    }
+                });
+
+        ViewGroup toolbarLayout = view.findViewById(R.id.fsr_layout_toolbar);
+        toolbarLayout.addView(mHelperToolbar.getView());
 
         new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecoveryToken();
 
@@ -76,22 +161,6 @@ public class FragmentSecurityRecovery extends BaseFragment {
             isConfirmedRecoveryEmail = bundle.getBoolean("IS_CONFIRM_EMAIL");
         }
 
-        RippleView ripple_back = (RippleView) view.findViewById(R.id.ripple_back);
-
-        ripple_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                closeKeyboard(v);
-                if (page == Security.SETTING) {
-                    pageSetting();
-                } else {
-                    pageRegister();
-                }
-
-            }
-        });
-
         view.findViewById(R.id.rootRecoveryPassword).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,25 +168,24 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         });
 
-        RippleView rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);
+        pbLoading = view.findViewById(R.id.pbLoading);
+        rootRecoveryEmail = view.findViewById(R.id.rootRecoveryEmailPassword);
+        rootRecoveryQuestionPassword = view.findViewById(R.id.rootRecoveryQuestionPassword);
 
-        rootRecoveryEmail = (ViewGroup) view.findViewById(R.id.rootRecoveryEmailPassword);
-        rootRecoveryQuestionPassword = (ViewGroup) view.findViewById(R.id.rootRecoveryQuestionPassword);
-
-        txtSetRecoveryByQuestion = (TextView) view.findViewById(R.id.txtSetRecoveryByQuestion);
-        txtSetRecoveryByEmail = (TextView) view.findViewById(R.id.txtSetRecoveryByEmail);
+        txtSetRecoveryByQuestion = view.findViewById(R.id.txtSetRecoveryByQuestion);
+        txtSetRecoveryByEmail = view.findViewById(R.id.txtSetRecoveryByEmail);
 
         if (!isConfirmedRecoveryEmail) {
             txtSetRecoveryByEmail.setVisibility(View.GONE);
         }
 
-        txtSetRecoveryQuestionPassOne = (TextView) view.findViewById(R.id.txtSetRecoveryQuestionPassOne);
-        txtSetRecoveryQuestionPassTwo = (TextView) view.findViewById(R.id.txtSetRecoveryQuestionPassTwo);
+        txtSetRecoveryQuestionPassOne = view.findViewById(R.id.txtSetRecoveryQuestionPassOne);
+        txtSetRecoveryQuestionPassTwo = view.findViewById(R.id.txtSetRecoveryQuestionPassTwo);
 
         txtSetRecoveryQuestionPassOne.setText(questionOne);
         txtSetRecoveryQuestionPassTwo.setText(questionTwo);
 
-        TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
+        TextView txtResendConfirmEmail = view.findViewById(R.id.txtResendConfirmEmail);
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,9 +196,9 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         });
 
-        edtSetRecoveryAnswerPassOne = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
-        edtSetRecoveryAnswerPassTwo = (EditText) view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
-        edtSetRecoveryEmail = (EditText) view.findViewById(R.id.edtSetRecoveryEmail);
+        edtSetRecoveryAnswerPassOne = view.findViewById(R.id.edtSetRecoveryAnswerPassOne);
+        edtSetRecoveryAnswerPassTwo = view.findViewById(R.id.edtSetRecoveryAnswerPassTwo);
+        edtSetRecoveryEmail = view.findViewById(R.id.edtSetRecoveryEmail);
         edtSetRecoveryEmail.setHint("");
 
         if (page == Security.REGISTER) {
@@ -172,19 +240,9 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         });
 
+
         if (page == Security.SETTING) {
             G.onRecoverySecurityPassword = new OnRecoverySecurityPassword() {
-                @Override
-                public void recoveryByEmail(String token) {
-
-
-                    if (page == Security.SETTING) {
-                        pageSetting();
-                    } else {
-                        pageRegister();
-                    }
-
-                }
 
                 @Override
                 public void getEmailPatern(final String patern) {
@@ -195,66 +253,35 @@ public class FragmentSecurityRecovery extends BaseFragment {
                         }
                     });
                 }
-
-                @Override
-                public void errorRecoveryByEmail() {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            closeKeyboard(view);
-                        }
-                    });
-                }
-
-                @Override
-                public void recoveryByQuestion(String token) {
-                    if (page == Security.SETTING) {
-                        pageSetting();
-                    } else {
-                        pageRegister();
-                    }
-                }
-
-                @Override
-                public void errorRecoveryByQuestion() {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            closeKeyboard(view);
-
-                        }
-                    });
-                }
             };
         }
 
+    }
 
-        rippleOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (rootRecoveryEmail.getVisibility() == View.VISIBLE) {
-                    if (edtSetRecoveryEmail.length() > 0) {
-                        new RequestUserTwoStepVerificationRecoverPasswordByToken().recoveryPasswordByToken(edtSetRecoveryEmail.getText().toString());
-                        closeKeyboard(v);
-                        edtSetRecoveryEmail.setText("");
-                    } else {
-                        error(G.fragmentActivity.getResources().getString(R.string.please_enter_code));
-                    }
-                } else {
-                    if (edtSetRecoveryAnswerPassOne.length() > 0 && edtSetRecoveryAnswerPassTwo.length() > 0) {
-                        new RequestUserTwoStepVerificationRecoverPasswordByAnswers().RecoveryPasswordByAnswer(edtSetRecoveryAnswerPassOne.getText().toString(), edtSetRecoveryAnswerPassTwo.getText().toString());
-                        edtSetRecoveryAnswerPassOne.setText("");
-                        edtSetRecoveryAnswerPassTwo.setText("");
-                        closeKeyboard(v);
-
-                    } else {
-
-                        error(G.fragmentActivity.getResources().getString(R.string.please_complete_all_item));
-                    }
-                }
+    private void setLoaderState(boolean state) {
+        G.runOnUiThread(() -> {
+            if (state) {
+                pbLoading.setVisibility(View.VISIBLE);
+                mHelperToolbar.getRightButton().setEnabled(false);
+            } else {
+                pbLoading.setVisibility(View.GONE);
+                mHelperToolbar.getRightButton().setEnabled(true);
             }
         });
+    }
+
+    private void backToSettings() {
+        G.handler.post(() -> {
+            popBackStackFragment();
+            popBackStackFragment();
+        });
+    }
+
+    private void openMainActivity(String tokenR) {
+        RegisterRepository repository = RegisterRepository.getInstance();
+        repository.setForgetTwoStepVerification(true);
+        repository.setToken(tokenR);
+        repository.userLogin(tokenR);
     }
 
     private void pageRegister() {

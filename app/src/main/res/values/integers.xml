@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="ANGLE_NEARBY_ARC_MENU">70</integer>
-    <integer name="ANGLE_MAIN_ARC_MENU">90</integer>
 </resources>

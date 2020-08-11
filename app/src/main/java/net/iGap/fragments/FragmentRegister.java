@@ -1,322 +1,419 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
-import android.content.Context;
-import android.content.IntentFilter;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.databinding.DataBindingUtil;
-import android.graphics.Typeface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
+import android.os.CountDownTimer;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.auth.api.phone.SmsRetriever;
-import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.vicmikhailau.maskededittext.MaskedEditText;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityRegistration;
+import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
-import net.iGap.helper.HelperCalander;
-import net.iGap.module.AppUtils;
-import net.iGap.module.SmsRetriver.SMSReceiver;
+import net.iGap.helper.HelperError;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.CountryReader;
+import net.iGap.module.SoftKeyboard;
+import net.iGap.module.dialog.WaitingDialog;
 import net.iGap.viewmodel.FragmentRegisterViewModel;
+import net.iGap.viewmodel.WaitTimeModel;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Locale;
 
 public class FragmentRegister extends BaseFragment {
 
-    public static final String TAG = FragmentRegister.class.getSimpleName();
-    private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
-    private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
-    private static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
-    private static final String KEY_SAVE_NAMECOUNTRY = "SAVE_NAMECOUNTRY";
-    private static final String KEY_SAVE_REGEX = "KEY_SAVE_REGEX";
-    private static final String KEY_SAVE_AGREEMENT = "KEY_SAVE_REGISTER";
-    public static Button btnChoseCountry;
-    public static EditText edtCodeNumber;
-    public static MaskedEditText edtPhoneNumber;
-    public static TextView btnOk;
-    public static int positionRadioButton = -1;
-    public static OnStartAnimationRegister onStartAnimationRegister;
-    private TextView txtAgreement_register;
-    //Array List for Store List of StructCountry Object
-    private ViewGroup layout_verify;
-    private FragmentActivity mActivity;
-    private ScrollView scrollView;
-    private int headerLayoutHeight;
-    private LinearLayout headerLayout;
     private FragmentRegisterViewModel fragmentRegisterViewModel;
-    public ActivityRegisterBinding fragmentRegisterBinding;
-    private SMSReceiver smsReceiver;
+    private ActivityRegisterBinding fragmentRegisterBinding;
+    private MaterialDialog dialogQrCode;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentRegisterViewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new FragmentRegisterViewModel(new CountryReader().readFromAssetsTextFile("country.txt", getContext()));
+            }
+        }).get(FragmentRegisterViewModel.class);
+    }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentRegisterBinding = DataBindingUtil.inflate(inflater, R.layout.activity_register, container, false);
+        fragmentRegisterBinding.setFragmentRegisterViewModel(fragmentRegisterViewModel);
+        fragmentRegisterBinding.setLifecycleOwner(this);
         return fragmentRegisterBinding.getRoot();
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initBindView();
-
-        startSMSListener();
-
-        TextView txtTitleToolbar = fragmentRegisterBinding.rgTxtTitleToolbar;
-        Typeface titleTypeface;
-        if (!HelperCalander.isPersianUnicode) {
-            titleTypeface = G.typeface_neuropolitical;
-        } else {
-            titleTypeface = G.typeface_IRANSansMobile;
-        }
-
-        txtTitleToolbar.setTypeface(titleTypeface);
-
-//        if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
-//
-//            TextView rg_txt_verify_connect = fragmentRegisterBinding.rgTxtVerifyConnect;
-//            rg_txt_verify_connect.setTypeface(G.typeface_IRANSansMobile);
-//
-//            TextView rg_txt_verify_sms = fragmentRegisterBinding.rgTxtVerifySms;
-//            rg_txt_verify_sms.setTypeface(G.typeface_IRANSansMobile);
-//
-//            TextView rg_txt_verify_generate = fragmentRegisterBinding.rgTxtVerifyKey;
-//            rg_txt_verify_generate.setTypeface(G.typeface_IRANSansMobile);
-//
-//            TextView rg_txt_verify_register = fragmentRegisterBinding.rgTxtVerifyServer;
-//            rg_txt_verify_register.setTypeface(G.typeface_IRANSansMobile);
-//
-//        }
-
-
-        ProgressBar rg_prg_verify_connect = fragmentRegisterBinding.rgPrgVerifyConnect;
-        AppUtils.setProgresColler(rg_prg_verify_connect);// TODO: 12/16/2017 - 1 -
-
-        ProgressBar rg_prg_verify_sms = fragmentRegisterBinding.rgPrgVerifySms;
-        AppUtils.setProgresColler(rg_prg_verify_sms);
-
-
-        ProgressBar rg_prg_verify_generate = fragmentRegisterBinding.rgPrgVerifyKey;
-        AppUtils.setProgresColler(rg_prg_verify_generate);
-
-        ProgressBar rg_prg_verify_register = fragmentRegisterBinding.rgPrgVerifyServer;
-        AppUtils.setProgresColler(rg_prg_verify_register);
-
-        ProgressBar prgWaiting = (ProgressBar) fragmentRegisterBinding.prgWaiting;
-        AppUtils.setProgresColler(prgWaiting);
-
-
-        scrollView = fragmentRegisterBinding.scrollView;
-        headerLayout = fragmentRegisterBinding.headerLayout;
-        edtCodeNumber = fragmentRegisterBinding.rgEdtCodeNumber;
-        btnChoseCountry = fragmentRegisterBinding.rgBtnChoseCountry;
-        edtPhoneNumber = fragmentRegisterBinding.rgEdtPhoneNumber;
-        btnOk = fragmentRegisterBinding.rgEdtPhoneNumber;
-
-        txtAgreement_register = fragmentRegisterBinding.txtAgreementRegister;
-//        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-        layout_verify = fragmentRegisterBinding.rgLayoutVerifyAndAgreement;
-
-        onStartAnimationRegister = new OnStartAnimationRegister() {
+        String t = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
+        SpannableString ss = new SpannableString(t);
+        ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void start() {
-//                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-                fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.VISIBLE);
-                fragmentRegisterViewModel.txtAgreementVisibility.set(View.GONE);
-//                G.handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
-//                        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
-//
-//                        txtAgreement_register.startAnimation(trans_x_out);
-//                        G.handler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                            }
-//                        }, 500);
-//                    }
-//                });
+            public void onClick(@NotNull View textView) {
+                fragmentRegisterViewModel.onTermsAndConditionClick();
+            }
 
+            @Override
+            public void updateDrawState(@NotNull TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
             }
         };
+        ss.setSpan(clickableSpan, t.indexOf(getString(R.string.terms_and_condition_clickable)), t.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+        fragmentRegisterBinding.conditionText.setText(ss);
+        fragmentRegisterBinding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());
+        fragmentRegisterBinding.conditionText.setHighlightColor(Color.TRANSPARENT);
 
-        fragmentRegisterViewModel.saveInstance(savedInstanceState, getArguments());
-
-
-    }
-
-
-    private void startSMSListener() {
-        try {
-            smsReceiver = new SMSReceiver();
-            smsReceiver.setOTPListener(new SMSReceiver.OTPReceiveListener() {
-                @Override
-                public void onOTPReceived(String message) {
-
-                    try {
-                        if (message != null && message.length() > 0) {
-                            fragmentRegisterViewModel.receiveVerifySms(message);
-                        }
-                    } catch (Exception e1) {
-                        e1.getStackTrace();
-                    }
-
-                    unregisterReceiver();
-                }
-
-                @Override
-                public void onOTPTimeOut() {
-                    Log.e(TAG, "OTP Time out");
-                }
-
-                @Override
-                public void onOTPReceivedError(String error) {
-                    Log.e(TAG, error);
-                }
-            });
-
-            SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
-
-            Task<Void> task = client.startSmsRetriever();
-            task.addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.e(TAG, "sms API successfully started   ");
-                }
-            });
-
-            task.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "sms Fail to start API   ");
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void unregisterReceiver() {
-        try {
-            if (smsReceiver != null) {
-                G.fragmentActivity.unregisterReceiver(smsReceiver);
-                smsReceiver = null;
+        fragmentRegisterViewModel.showConditionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                showDialogConditionError();
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        });
+
+        fragmentRegisterViewModel.goNextStep.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (getActivity() instanceof ActivityRegistration && aBoolean != null && aBoolean) {
+                ((ActivityRegistration) getActivity()).loadFragment(new FragmentActivation(), true);
+            }
+        });
+
+        fragmentRegisterViewModel.closeKeyword.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                hideKeyboard();
+            }
+        });
+
+        fragmentRegisterViewModel.showEnteredPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), errorMessage -> {
+            if (errorMessage != null) {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fragmentRegisterViewModel.showChooseCountryDialog.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                showCountryDialog();
+            }
+        });
+
+        fragmentRegisterViewModel.showConfirmPhoneNumberDialog.observe(getViewLifecycleOwner(), phoneNumber -> {
+            if (getActivity() != null && phoneNumber != null) {
+                new MaterialDialog.Builder(getActivity())
+                        .content(getString(R.string.Re_dialog_verify_number_part1) + "\n" + phoneNumber + "\n" + getString(R.string.Re_dialog_verify_number_part2))
+                        .positiveText(R.string.B_ok)
+                        .negativeText(R.string.B_edit)
+                        .onPositive((dialog, which) -> fragmentRegisterViewModel.confirmPhoneNumber())
+                        .show();
+            }
+        });
+
+        fragmentRegisterViewModel.showEnteredPhoneNumberError.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (getContext() != null && aBoolean != null) {
+                if (aBoolean) {
+                    showMessageDialog(R.string.phone_number, R.string.please_enter_correct_phone_number);
+                } else {
+                    showMessageDialog(R.string.phone_number, R.string.Toast_Minimum_Characters);
+                }
+            }
+        });
+
+        fragmentRegisterViewModel.showConnectionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (getContext() != null && aBoolean != null && aBoolean) {
+                showMessageDialog(R.string.error, R.string.please_check_your_connenction);
+            }
+        });
+
+        fragmentRegisterViewModel.showDialogWaitTime.observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                dialogWaitTime(data);
+            }
+        });
+
+        fragmentRegisterViewModel.showErrorMessageEmptyErrorPhoneNumberDialog.observe(getViewLifecycleOwner(), isShow -> {
+            if (getContext() != null && isShow != null && isShow) {
+                showMessageDialog(R.string.error, R.string.phone_number_is_not_valid);
+            }
+        });
+
+        fragmentRegisterViewModel.showDialogQrCode.observe(getViewLifecycleOwner(), integer -> {
+            if (integer != null) {
+                showQrCodeDialog(integer);
+            }
+        });
+
+        fragmentRegisterViewModel.shareQrCodeIntent.observe(getViewLifecycleOwner(), uri -> {
+            if (getActivity() != null && uri != null) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                getActivity().startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+            }
+        });
+
+        fragmentRegisterViewModel.hideDialogQRCode.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null && aBoolean) {
+                if (dialogQrCode != null && dialogQrCode.isShowing())
+                    dialogQrCode.dismiss();
+            }
+        });
+
+        fragmentRegisterViewModel.goToTwoStepVerificationPage.observe(getViewLifecycleOwner(), userId -> {
+            if (getActivity() instanceof ActivityRegistration && userId != null) {
+                if (dialogQrCode != null && dialogQrCode.isShowing()) {
+                    dialogQrCode.dismiss();
+                }
+                ((ActivityRegistration) getActivity()).loadFragment(TwoStepVerificationFragment.newInstant(userId), true);
+            }
+        });
+
+        fragmentRegisterViewModel.showDialogUserBlock.observe(getViewLifecycleOwner(), isShow -> {
+            if (getActivity() != null && isShow != null && isShow) {
+                showMessageDialog(R.string.USER_VERIFY_BLOCKED_USER, R.string.Toast_Number_Block);
+            }
+        });
+
+        fragmentRegisterViewModel.showError.observe(getViewLifecycleOwner(), messageRes -> {
+            if (messageRes != null) {
+                HelperError.showSnackMessage(getString(messageRes), false);
+            }
+        });
+
+        fragmentRegisterViewModel.showTermsAndConditionDialog.observe(getViewLifecycleOwner(), termsAndConditionText -> {
+            if (termsAndConditionText != null) {
+                showDialogTermAndCondition(termsAndConditionText);
+            }
+        });
+    }
+
+    private void showMessageDialog(int title, int msg) {
+        if (getActivity() == null) return;
+        new MaterialDialog.Builder(getActivity())
+                .title(title)
+                .content(msg)
+                .positiveText(R.string.ok)
+                .show();
+    }
+
+    private void showCountryDialog() {
+        if (getActivity() != null) {
+            Dialog dialogChooseCountry = new Dialog(getActivity());
+            dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogChooseCountry.setContentView(R.layout.rg_dialog);
+            dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
+            int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
+            dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
+            //
+            final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
+            SearchView edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
+
+            txtTitle.setOnClickListener(view -> {
+                edtSearchView.setIconified(false);
+                edtSearchView.setIconifiedByDefault(true);
+                txtTitle.setVisibility(View.GONE);
+            });
+
+            // close SearchView and show title again
+            edtSearchView.setOnCloseListener(() -> {
+                txtTitle.setVisibility(View.VISIBLE);
+                return false;
+            });
+
+            final ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
+            AdapterDialog adapterDialog = new AdapterDialog(fragmentRegisterViewModel.structCountryArrayList);
+            listView.setAdapter(adapterDialog);
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                fragmentRegisterViewModel.setCountry(adapterDialog.getItem(position));
+                dialogChooseCountry.dismiss();
+            });
+
+            final ViewGroup root = dialogChooseCountry.findViewById(android.R.id.content);
+            InputMethodManager im = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
+            softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
+                @Override
+                public void onSoftKeyboardHide() {
+                    G.handler.post(() -> {
+                        if (edtSearchView.getQuery().toString().length() > 0) {
+                            edtSearchView.setIconified(false);
+                            edtSearchView.clearFocus();
+                            txtTitle.setVisibility(View.GONE);
+                        } else {
+                            edtSearchView.setIconified(true);
+                            txtTitle.setVisibility(View.VISIBLE);
+                        }
+                        adapterDialog.notifyDataSetChanged();
+                    });
+                }
+
+                @Override
+                public void onSoftKeyboardShow() {
+                    G.handler.post(() -> txtTitle.setVisibility(View.GONE));
+                }
+            });
+
+            final View border = dialogChooseCountry.findViewById(R.id.rg_borderButton);
+            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                    if (i > 0) {
+                        border.setVisibility(View.VISIBLE);
+                    } else {
+                        border.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+            AdapterDialog.mSelectedVariation = -1;
+
+            adapterDialog.notifyDataSetChanged();
+
+            edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    adapterDialog.getFilter().filter(s);
+                    return false;
+                }
+            });
+
+            dialogChooseCountry.findViewById(R.id.rg_txt_okDialog).setOnClickListener(v -> dialogChooseCountry.dismiss());
+
+            if (!(getActivity()).isFinishing()) {
+                dialogChooseCountry.show();
+            }
         }
     }
 
-    private void initBindView() {
-        fragmentRegisterViewModel = new FragmentRegisterViewModel(this, fragmentRegisterBinding.getRoot(), mActivity);
-        fragmentRegisterBinding.setFragmentRegisterViewModel(fragmentRegisterViewModel);
+    private void dialogWaitTime(WaitTimeModel data) {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            new WaitingDialog(getActivity(), data).show();
+        }
     }
 
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putString(KEY_SAVE_CODENUMBER, edtCodeNumber.getText().toString());
-        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_MASK, edtPhoneNumber.getMask());
-        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_NUMBER, edtPhoneNumber.getText().toString());
-        savedInstanceState.putString(KEY_SAVE_NAMECOUNTRY, btnChoseCountry.getText().toString());
-        savedInstanceState.putString(KEY_SAVE_REGEX, fragmentRegisterViewModel.regex);
-        savedInstanceState.putString(KEY_SAVE_AGREEMENT, txtAgreement_register.getText().toString());
+    private void showDialogTermAndCondition(String message) {
+        if (getActivity() != null) {
+            Dialog dialogTermsAndCondition = new Dialog(getActivity());
+            dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
+            AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
+            termsText.setText(message);
+            dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
+            dialogTermsAndCondition.show();
+        }
+    }
 
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
+    private void showDialogConditionError() {
+        if (getContext() != null) {
+            showMessageDialog(R.string.warning, R.string.accept_terms_and_condition_error_message);
+        }
+    }
+
+    private void showQrCodeDialog(int expireTime) {
+        if (getActivity() != null) {
+            dialogQrCode = new MaterialDialog.Builder(getActivity()).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true)
+                    .positiveText(R.string.share_item_dialog).onPositive((dialog, which) -> fragmentRegisterViewModel.shareQr())
+                    .negativeText(R.string.save).onNegative((dialog, which) -> fragmentRegisterViewModel.saveQr())
+                    .neutralText(R.string.cancel).onNeutral((dialog, which) -> dialog.dismiss()).build();
+
+            AppCompatImageView imgQrCodeNewDevice = (AppCompatImageView) dialogQrCode.findViewById(R.id.imgQrCodeNewDevice);
+            AppCompatTextView expireTimeTextView = (AppCompatTextView) dialogQrCode.findViewById(R.id.expireTime);
+
+            int time = (expireTime - 100) * 1000;
+            CountDownTimer CountDownTimerQrCode = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
+                public void onTick(long millisUntilFinished) {
+                    long seconds = millisUntilFinished / 1000 % 60;
+                    long minutes = millisUntilFinished / (60 * 1000) % 60;
+                    expireTimeTextView.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
+                }
+
+                public void onFinish() {
+                    if (getActivity() != null) dialogQrCode.dismiss();
+                    fragmentRegisterViewModel.onClickQrCode();
+                }
+            };
+
+            CountDownTimerQrCode.start();
+
+
+            if (!(getActivity()).isFinishing()) {
+                dialogQrCode.show();
+            }
+
+            dialogQrCode.setOnDismissListener(dialog -> CountDownTimerQrCode.cancel());
+
+            if (imgQrCodeNewDevice != null) {
+                G.imageLoader.clearMemoryCache();
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(fragmentRegisterViewModel._resultQrCode), imgQrCodeNewDevice);
+            }
+        }
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-
-        boolean beforeState = G.isLandscape;
-
+    public void onConfigurationChanged(@NotNull Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             G.isLandscape = true;
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
             G.isLandscape = false;
         }
-
-        if (G.isLandscape && fragmentRegisterViewModel.isVerify) {
-
-            ViewTreeObserver observer = headerLayout.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                @Override
-                public void onGlobalLayout() {
-                    headerLayoutHeight = headerLayout.getHeight();
-                    scrollView.scrollTo(0, headerLayoutHeight);
-                    headerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-            });
-        }
-
         super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) context;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        unregisterReceiver();
-        fragmentRegisterViewModel.onStop();
-        super.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
-            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public enum Reason {
-        SOCKET, TIME_OUT, INVALID_CODE
-    }
-
-    public interface OnStartAnimationRegister {
-        void start();
     }
 }

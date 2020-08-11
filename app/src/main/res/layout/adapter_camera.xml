@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/rootCamera"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:clickable="true"
-  android:orientation="vertical">
-
-  <android.support.v7.widget.CardView
+    android:id="@+id/rootCamera"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginTop="@dimen/dp6">
+    android:clickable="true"
+    android:orientation="vertical">
 
-    <RelativeLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="@dimen/dp6">
 
-      <io.fotoapparat.view.CameraView
-        android:id="@+id/cameraView"
-        android:layout_width="@dimen/dp100"
-        android:layout_height="@dimen/dp100"
-        android:background="@color/black90"
-        android:tag="cameraTest" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-      <TextView
-        android:id="@+id/txtIconCamera"
-        android:layout_width="@dimen/dp100"
-        android:layout_height="@dimen/dp100"
-        android:gravity="center"
-        android:text="@string/md_camera_alt"
-        android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dp32" />
-    </RelativeLayout>
-  </android.support.v7.widget.CardView>
+            <io.fotoapparat.view.CameraView
+                android:id="@+id/cameraView"
+                android:layout_width="@dimen/dp100"
+                android:layout_height="@dimen/dp100"
+                android:background="@color/black90"
+                android:tag="cameraTest" />
+
+            <TextView
+                android:id="@+id/txtIconCamera"
+                android:layout_width="@dimen/dp100"
+                android:layout_height="@dimen/dp100"
+                style="@style/myIconTextViewStyle"
+                android:text="@string/md_camera_alt"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp32" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

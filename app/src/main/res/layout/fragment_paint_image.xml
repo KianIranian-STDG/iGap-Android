@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.filterImage.FragmentPaintImage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:clickable="true"
+    android:background="@color/rg_text_dark_verify">
+
+    <View
+        android:id="@+id/lytToolbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/pu_txt_agreeImage"
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:text="@string/close_icon"
+        style="@style/myIconToolbarStyle"
+        android:rotation="180"
+        app:layout_constraintLeft_toLeftOf="@id/lytToolbar"
+        app:layout_constraintTop_toTopOf="@id/lytToolbar"
+        app:layout_constraintBottom_toBottomOf="@id/lytToolbar" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/dsgn_on_photo_title"
+        android:textColor="@color/whit_background"
+        android:textSize="@dimen/largeTextSize"
+        android:textStyle="bold"
+        android:visibility="visible"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        app:layout_constraintTop_toTopOf="@id/lytToolbar"
+        app:layout_constraintBottom_toBottomOf="@id/lytToolbar"
+        app:layout_constraintLeft_toRightOf="@id/pu_txt_agreeImage"
+        app:layout_constraintRight_toLeftOf="@id/pu_txt_ok" />
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/pu_txt_ok"
+        android:layout_width="@dimen/toolbar_icon_size"
+        android:layout_height="@dimen/toolbar_icon_size"
+        android:gravity="center"
+        android:text="@string/check_icon"
+        android:textAppearance="@style/TextIconAppearance_toolbar"
+        android:textColor="@color/whit_background"
+        app:layout_constraintRight_toRightOf="@id/lytToolbar"
+        app:layout_constraintTop_toTopOf="@id/lytToolbar"
+        app:layout_constraintBottom_toBottomOf="@id/lytToolbar" />
+
+    <net.iGap.libs.photoEdit.PhotoEditorView
+        android:id="@+id/paintView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/dp16"
+        android:scaleType="fitCenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lytToolbar"
+        app:layout_constraintBottom_toTopOf="@id/seekbar_brushSize" />
+
+    <TextView
+        android:id="@+id/sizeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:text="@string/lbl_magnify"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@+id/seekbar_brushSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seekbar_brushSize" />
+
+    <SeekBar
+        android:id="@+id/seekbar_brushSize"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sizeTv"
+        app:layout_constraintBottom_toTopOf="@id/color_seek_bar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:text="@string/clr_adjust"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@+id/color_seek_bar"
+        app:layout_constraintEnd_toStartOf="@+id/color_seek_bar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/color_seek_bar" />
+
+    <net.iGap.libs.ColorSeekBar
+        app:thumbBorderColor="@android:color/white"
+        android:outlineAmbientShadowColor="@color/white"
+        android:id="@+id/color_seek_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekbar_brushSize"
+        app:layout_constraintStart_toStartOf="@id/seekbar_brushSize"
+        android:layout_marginBottom="@dimen/dp16" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

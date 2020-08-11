@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/sl_itemMplTransAction"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fc_layout_filters">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_mplTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/dp100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_mplTransaction_toolBar" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_mplTransaction_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <HorizontalScrollView
+        android:id="@+id/fc_layout_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="locale"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@+id/ll_mplTransaction_toolBar">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layoutDirection="locale"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_mplTransaction_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="@drawable/button_selector"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/all"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="@dimen/smallTextSize" />
+
+            <TextView
+                android:id="@+id/tv_mplTransaction_topup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="@drawable/button_selector"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/mpl_transaction_topup"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="@dimen/smallTextSize" />
+
+
+            <TextView
+                android:id="@+id/tv_mplTransaction_cardToCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="@drawable/button_selector"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/mpl_transaction_card"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="@dimen/smallTextSize" />
+
+            <TextView
+                android:id="@+id/tv_mplTransaction_sales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="@drawable/button_selector"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/mpl_transaction_sales"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="@dimen/smallTextSize" />
+
+            <TextView
+                android:id="@+id/tv_mplTransaction_bill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="@drawable/button_selector"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/bills"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="@dimen/smallTextSize" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/tv_mplTransaction_emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/mpl_transaction_nul"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/sl_itemMplTransAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/sl_itemMplTransAction"
+        app:layout_constraintTop_toBottomOf="@+id/fc_layout_filters" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

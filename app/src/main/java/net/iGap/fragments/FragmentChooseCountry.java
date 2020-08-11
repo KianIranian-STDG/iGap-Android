@@ -1,20 +1,15 @@
 package net.iGap.fragments;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -24,11 +19,12 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,12 +35,13 @@ import static net.iGap.fragments.FragmentAddContact.onCountryCallBack;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentChooseCountry extends BaseFragment {
+public class FragmentChooseCountry extends BaseFragment implements ToolbarListener {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private ArrayList<StructCountry> items = new ArrayList<>();
     private long index = 1500;
     private RecyclerView rcvChooseCountry;
-    private EditText edtSearch;
+    private HelperToolbar mHelperToolbar;
+    private FastItemAdapter fastItemAdapter;
 
     public FragmentChooseCountry() {
         // Required empty public constructor
@@ -62,7 +59,7 @@ public class FragmentChooseCountry extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ViewGroup root = (ViewGroup) view.findViewById(R.id.rootChooseCountry);
+        ViewGroup root = view.findViewById(R.id.rootChooseCountry);
         root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,23 +67,24 @@ public class FragmentChooseCountry extends BaseFragment {
             }
         });
 
-        view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setDefaultTitle(getContext().getResources().getString(R.string.Select_Country))
+                .setSearchBoxShown(true)
+                .setListener(this);
 
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeFromBaseFragment(FragmentChooseCountry.this);
-            }
-        });
+        ViewGroup layoutToolbar = view.findViewById(R.id.fcc_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
-
-        final FastItemAdapter fastItemAdapter = new FastItemAdapter();
+        fastItemAdapter = new FastItemAdapter();
         items = getLIstCountry();
         for (int i = 0; i < items.size(); i++) {
             fastItemAdapter.add(new AdapterChooseCountry(items.get(i)).withIdentifier(index++));
         }
-        rcvChooseCountry = (RecyclerView) view.findViewById(R.id.rcvChooseCountry);
+        rcvChooseCountry = view.findViewById(R.id.rcvChooseCountry);
         rcvChooseCountry.setItemViewCacheSize(1000);
         rcvChooseCountry.setItemAnimator(null);
         rcvChooseCountry.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -107,35 +105,6 @@ public class FragmentChooseCountry extends BaseFragment {
         });
 
 
-        edtSearch = (EditText) view.findViewById(R.id.edtCountrySearch);
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                fastItemAdapter.filter(s.toString());
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-
-            }
-        });
-
-        RippleView removeSearch = (RippleView) view.findViewById(R.id.ac_ripple_set);
-        removeSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                edtSearch.setText("");
-            }
-        });
-
-
     }
 
     private ArrayList<StructCountry> getLIstCountry() {
@@ -148,13 +117,13 @@ public class FragmentChooseCountry extends BaseFragment {
 
         String list = fileListBuilder.toString();
         // Split line by line Into array
-        String listArray[] = list.split("\\r?\\n");
-        final String countryNameList[] = new String[listArray.length];
+        String[] listArray = list.split("\\r?\\n");
+        final String[] countryNameList = new String[listArray.length];
         //Convert array
         for (int i = 0; listArray.length > i; i++) {
             StructCountry structCountry = new StructCountry();
 
-            String listItem[] = listArray[i].split(";");
+            String[] listItem = listArray[i].split(";");
             structCountry.setId(i);
             structCountry.setCountryCode(listItem[0]);
             structCountry.setAbbreviation(listItem[1]);
@@ -198,6 +167,12 @@ public class FragmentChooseCountry extends BaseFragment {
 
             CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
             textView.setText(items.get(position).getName().toUpperCase().substring(0, 1));
+            textView.setPadding(getDimen(R.dimen.dp20), getDimen(R.dimen.dp20), getDimen(R.dimen.dp20), getDimen(R.dimen.dp20));
+        }
+
+        private int getDimen(int id) {
+
+            return (int) (G.context.getResources().getDimension(id) / G.context.getResources().getDisplayMetrics().density);
         }
 
         @Override
@@ -237,6 +212,7 @@ public class FragmentChooseCountry extends BaseFragment {
         public void bindView(ViewHolder holder, List payloads) {
             super.bindView(holder, payloads);
 
+
             holder.txtNameCountry.setText(item.getName());
             holder.txtCodeCountry.setText(item.getCountryCode());
 
@@ -269,11 +245,32 @@ public class FragmentChooseCountry extends BaseFragment {
             public ViewHolder(View view) {
                 super(view);
 
-                txtNameCountry = (TextView) view.findViewById(R.id.txtNameCountry);
-                txtCodeCountry = (TextView) view.findViewById(R.id.txtCodeCountry);
-                vgListCountry = (ViewGroup) view.findViewById(R.id.vgListCountry);
+                txtNameCountry = view.findViewById(R.id.txtNameCountry);
+                txtCodeCountry = view.findViewById(R.id.txtCodeCountry);
+                vgListCountry = view.findViewById(R.id.vgListCountry);
 
             }
         }
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        removeFromBaseFragment(FragmentChooseCountry.this);
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+        openKeyBoard();
+    }
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+
+    }
+
+    @Override
+    public void onSearchTextChangeListener(View view, String text) {
+        fastItemAdapter.filter(text);
+
     }
 }

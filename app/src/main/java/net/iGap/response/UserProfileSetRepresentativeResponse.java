@@ -10,21 +10,17 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
-import net.iGap.G;
+import net.iGap.observers.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileRepresentative;
-
-import static com.nostra13.universalimageloader.core.ImageLoader.TAG;
 
 public class UserProfileSetRepresentativeResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserProfileSetRepresentativeResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileSetRepresentativeResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.actionId = actionId;
@@ -34,10 +30,12 @@ public class UserProfileSetRepresentativeResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
         ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse.Builder builder = (ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse.Builder) message;
-        if (G.onUserProfileSetRepresentative != null)
-            G.onUserProfileSetRepresentative.onSetRepresentative(builder.getPhoneNumber());
+        if (identity instanceof OnUserProfileSetRepresentative) {
+            ((OnUserProfileSetRepresentative) identity).onSetRepresentative(builder.getPhoneNumber());
+        } else {
+            throw new ClassCastException("identity must be: " + OnUserProfileSetRepresentative.class.getName());
+        }
 
     }
 
@@ -52,8 +50,10 @@ public class UserProfileSetRepresentativeResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        if (G.onUserProfileSetRepresentative != null) {
-            G.onUserProfileSetRepresentative.onErrorSetRepresentative(majorCode, minorCode);
+        if (identity instanceof OnUserProfileSetRepresentative) {
+            ((OnUserProfileSetRepresentative) identity).onErrorSetRepresentative(majorCode, minorCode);
+        } else {
+            throw new ClassCastException("identity must be: " + OnUserProfileSetRepresentative.class.getName());
         }
     }
 }

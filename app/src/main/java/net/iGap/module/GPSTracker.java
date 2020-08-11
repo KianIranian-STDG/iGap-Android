@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentiGapMap;

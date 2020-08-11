@@ -17,8 +17,10 @@ import net.iGap.proto.ProtoUserProfileGetRepresentative;
 public class RequestUserProfileGetRepresentative {
 
     public static int numberOfPendingRequest = 0;
+
     public interface OnRepresentReady {
         void onRepresent(String phoneNumber);
+
         void onFailed();
     }
 
@@ -28,7 +30,7 @@ public class RequestUserProfileGetRepresentative {
 
         RequestWrapper requestWrapper = new RequestWrapper(151, builder, onRepresentReady);
         if (G.userLogin) {
-            numberOfPendingRequest ++;
+            numberOfPendingRequest++;
         }
         try {
             RequestQueue.sendRequest(requestWrapper);

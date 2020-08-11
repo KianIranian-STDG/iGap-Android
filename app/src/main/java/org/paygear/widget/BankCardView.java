@@ -3,12 +3,6 @@ package org.paygear.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -19,8 +13,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.model.Card;
@@ -99,11 +101,11 @@ public class BankCardView extends CardView {
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardNumberTitleParams.weight = 1;
         mTopCardNumberText.setLayoutParams(cardNumberTitleParams);
-        //mTopCardNumberText.setGravity(Gravity.CENTER);
+        mTopCardNumberText.setGravity(Gravity.LEFT);
         mTopCardNumberText.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
-        mTopCardNumberText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        mTopCardNumberText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         mTopCardNumberText.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
-        //mTopCardNumberText.setPadding(dp8, 0, dp8, 0);
+        mTopCardNumberText.setPadding(dp8, 0, dp8, 120);
         logoLayout.addView(mTopCardNumberText);
 
         mTitleText = new AppCompatTextView(context);
@@ -199,12 +201,12 @@ public class BankCardView extends CardView {
         BankUtils bankInfo = BankUtils.getBank(getContext(), card.bankCode);
 
         if (!TextUtils.isEmpty(mCard.backgroundImage)) {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mCard.backgroundImage))
                     .fit()
                     .into(mBackImage);
         } else {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(R.drawable.default_card_pattern)
                     .fit()
                     .into(mBackImage);
@@ -228,11 +230,16 @@ public class BankCardView extends CardView {
                 centerCardNumberLayout.setText(mCard.cardNumber);
                 mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
                 mTitleText.setVisibility(GONE);
-                mTopCardNumberText.setVisibility(GONE);
-                centerCardNumberLayout.setVisibility(GONE);
+                mTopCardNumberText.setVisibility(VISIBLE);
+                if (mCard.cardNumber.equals("پیگیر کارت")) {
+                    centerCardNumberLayout.setText("");
+                    centerCardNumberLayout.setVisibility(GONE);
+                } else {
+                    centerCardNumberLayout.setVisibility(VISIBLE);
+                }
             } else {
                 mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
-                mTopCardNumberText.setVisibility(GONE);
+                mTopCardNumberText.setVisibility(VISIBLE);
                 mTitleText.setVisibility(GONE);
             }
 

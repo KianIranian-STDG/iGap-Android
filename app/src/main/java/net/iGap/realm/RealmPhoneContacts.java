@@ -1,21 +1,22 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
 import net.iGap.G;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnQueueSendContact;
 import net.iGap.module.Contacts;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.observers.interfaces.OnQueueSendContact;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 
@@ -121,17 +122,11 @@ public class RealmPhoneContacts extends RealmObject {
     }
 
     private static void addListToDB(final List<StructListOfContact> list) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (int i = 0; i < list.size(); i++) {
-                    addContactToDB(list.get(i), realm);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (int i = 0; i < list.size(); i++) {
+                addContactToDB(list.get(i), realm);
             }
         });
-
-        realm.close();
     }
 
     private static void addContactToDB(final StructListOfContact item, Realm realm) {
@@ -154,29 +149,23 @@ public class RealmPhoneContacts extends RealmObject {
             return notImportedList;
         }
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (int i = 0; i < list.size(); i++) {
-                    StructListOfContact _item = list.get(i);
-                    if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
-                        continue;
-                    }
-
-                    try {
-                        if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
-                            notImportedList.add(_item);
-                        }
-                    } catch (IllegalArgumentException e) {
-                        HelperLog.setErrorLog(e);
-                    }
-
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            for (int i = 0; i < list.size(); i++) {
+                StructListOfContact _item = list.get(i);
+                if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
+                    continue;
                 }
+
+                try {
+                    if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
+                        notImportedList.add(_item);
+                    }
+                } catch (IllegalArgumentException e) {
+                    HelperLog.getInstance().setErrorLog(e);
+                }
+
             }
         });
-
-        realm.close();
 
         return notImportedList;
     }
@@ -187,7 +176,7 @@ public class RealmPhoneContacts extends RealmObject {
         try {
             phoneText.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
-            phoneText = item.getPhone();
+            e.printStackTrace();
         }
         return phoneText;
     }

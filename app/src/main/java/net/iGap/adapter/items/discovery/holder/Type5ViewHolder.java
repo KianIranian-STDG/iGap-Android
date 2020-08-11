@@ -1,13 +1,12 @@
 package net.iGap.adapter.items.discovery.holder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 
@@ -15,17 +14,14 @@ public class Type5ViewHolder extends BaseViewHolder {
     private ImageView img0, img1, img2;
     private CardView card0, card1, card2;
 
-    public Type5ViewHolder(@NonNull View itemView) {
-        super(itemView);
+    public Type5ViewHolder(@NonNull View itemView, FragmentActivity activity) {
+        super(itemView, activity);
         img0 = itemView.findViewById(R.id.type5_img0);
         img1 = itemView.findViewById(R.id.type5_img1);
         img2 = itemView.findViewById(R.id.type5_img2);
         card0 = itemView.findViewById(R.id.type5_card0);
         card1 = itemView.findViewById(R.id.type5_card1);
         card2 = itemView.findViewById(R.id.type5_card2);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
-        card1.setCardBackgroundColor(G.getThemeBackgroundColor());
-        card2.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override

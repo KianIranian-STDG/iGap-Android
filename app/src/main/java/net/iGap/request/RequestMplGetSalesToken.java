@@ -17,12 +17,13 @@ public class RequestMplGetSalesToken {
 
     public interface GetSalesToken {
         void onSalesToken(String token);
+
         void onError(int major, int minor);
     }
 
     public boolean mplGetSalesToken(long amount, String description,
                                     boolean inquiry, long toUserId,
-                                    long invoiceNumber ,GetSalesToken getSalesToken){
+                                    long invoiceNumber, GetSalesToken getSalesToken) {
         ProtoMplGetSalesToken.MplGetSalesToken.Builder builder = ProtoMplGetSalesToken.MplGetSalesToken.newBuilder();
         builder.setAmount(amount);
         builder.setDescription(description);

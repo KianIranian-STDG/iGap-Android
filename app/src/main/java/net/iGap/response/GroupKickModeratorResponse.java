@@ -1,19 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.helper.HelperMember;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupKickModerator;
 
 public class GroupKickModeratorResponse extends MessageHandler {
@@ -35,10 +33,6 @@ public class GroupKickModeratorResponse extends MessageHandler {
         super.handler();
         ProtoGroupKickModerator.GroupKickModeratorResponse.Builder builder = (ProtoGroupKickModerator.GroupKickModeratorResponse.Builder) message;
         HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
-
-        if (G.onGroupKickModerator != null) {
-            G.onGroupKickModerator.onGroupKickModerator(builder.getRoomId(), builder.getMemberId());
-        }
     }
 
     @Override
@@ -49,11 +43,5 @@ public class GroupKickModeratorResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-        if (G.onGroupKickModerator != null) {
-            G.onGroupKickModerator.onError(majorCode, minorCode);
-        }
     }
 }

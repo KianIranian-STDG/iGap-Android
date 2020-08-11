@@ -1,23 +1,27 @@
 package net.iGap.module;
 
 import android.graphics.Typeface;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentiGapMap;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.OnGeoGetComment;
-import net.iGap.interfaces.OnInfo;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnGeoGetComment;
+import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
@@ -25,8 +29,6 @@ import net.iGap.request.RequestGeoGetComment;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
-
-import io.realm.Realm;
 
 public class MyInfoWindow extends InfoWindow {
 
@@ -75,28 +77,32 @@ public class MyInfoWindow extends InfoWindow {
         /**
          * don't show dialog for mine user
          */
-        if (userId == G.userId) {
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
             return;
         }
 
-        Realm realm2 = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
-        if (realmRegisteredInfo == null) {
-            RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
-                @Override
-                public void onInfo(Long registeredId) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            onOpen(arg);
-                        }
-                    });
-                }
-            });
-            realm2.close();
+        String displayName = DbManager.getInstance().doRealmTask(realm2 -> {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm2, userId);
+            if (realmRegisteredInfo == null) {
+                RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
+                    @Override
+                    public void onInfo(Long registeredId) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onOpen(arg);
+                            }
+                        });
+                    }
+                });
+                return null;
+            }
+            return realmRegisteredInfo.getDisplayName();
+        });
+        if (displayName == null) {
             return;
         }
-        realm2.close();
+
 
      /*   RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
         if (callConfig != null) {
@@ -112,25 +118,27 @@ public class MyInfoWindow extends InfoWindow {
         DialogAnimation.animationDown(dialog);
         dialog.show();
 
-        final CircleImageView avatar = (CircleImageView) view.findViewById(R.id.img_info_avatar_map);
-        final TextView txtClose = (TextView) view.findViewById(R.id.txt_close_map);
-        final TextView txtBack = (TextView) view.findViewById(R.id.txt_info_back_map);
-        final TextView txtOpenComment = (TextView) view.findViewById(R.id.txt_open_comment_map);
-        final TextView txtChat = (TextView) view.findViewById(R.id.txt_chat_map);
-        final TextView txtCall = (TextView) view.findViewById(R.id.txt_call_map);
+        final CircleImageView avatar = view.findViewById(R.id.img_info_avatar_map);
+        final TextView txtClose = view.findViewById(R.id.txt_close_map);
+        final TextView txtBack = view.findViewById(R.id.txt_info_back_map);
+        final TextView txtOpenComment = view.findViewById(R.id.txt_open_comment_map);
+        final TextView txtChat = view.findViewById(R.id.txt_chat_map);
+        final TextView txtCall = view.findViewById(R.id.txt_call_map);
         txtCall.setVisibility(isCallEnable ? View.VISIBLE : View.GONE);
-        final TextView txtVideoCall = (TextView) view.findViewById(R.id.txt_video_call_map);
+        final TextView txtVideoCall = view.findViewById(R.id.txt_video_call_map);
         txtVideoCall.setVisibility(isVideoCallEnable ? View.VISIBLE : View.GONE);
-        TextView txtName = (TextView) view.findViewById(R.id.txt_name_info_map);
-        final TextView txtComment = (TextView) view.findViewById(R.id.txt_info_comment);
+        TextView txtName = view.findViewById(R.id.txt_name_info_map);
+        final TextView txtComment = view.findViewById(R.id.txt_info_comment);
 
-        txtName.setText(realmRegisteredInfo.getDisplayName());
-        txtName.setTypeface(G.typeface_IRANSansMobile_Bold, Typeface.BOLD);
+        txtName.setText(displayName);
+        txtName.setTypeface(ResourcesCompat.getFont(txtName.getContext(), R.font.main_font_bold), Typeface.BOLD);
 
-        if (G.selectedLanguage.equals("en")) {
-            txtOpenComment.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
+        if (!G.isAppRtl) {
+            txtComment.setGravity(Gravity.RIGHT);
+            txtOpenComment.setRotation(90);
         } else {
-            txtOpenComment.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
+            txtComment.setGravity(Gravity.LEFT);
+            txtOpenComment.setRotation(270);
         }
 
         txtClose.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +175,7 @@ public class MyInfoWindow extends InfoWindow {
                 HelperPublicMethod.goToChatRoom(userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
-                        new HelperFragment(fragmentiGapMap).remove();
+                        //  new HelperFragment(mActivity.getSupportFragmentManager(),fragmentiGapMap).remove();
                     }
                 }, null);
             }
@@ -176,7 +184,7 @@ public class MyInfoWindow extends InfoWindow {
         txtCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
+                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
             }
         });
 
@@ -184,7 +192,7 @@ public class MyInfoWindow extends InfoWindow {
         txtVideoCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentCall.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
             }
         });
 
@@ -250,8 +258,8 @@ public class MyInfoWindow extends InfoWindow {
     }
 
     /*public void onOpen(Object arg0) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+    DbManager.getInstance().doRealmTask(realm-> {
+     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;
         }
@@ -324,8 +332,9 @@ public class MyInfoWindow extends InfoWindow {
 
             new RequestGeoGetComment().getComment(userId);
         }
+}
 
-        realm.close();
+
     }*/
 
 }

@@ -1,16 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
 import net.iGap.helper.HelperString;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.proto.ProtoGlobal;
 
@@ -31,6 +32,8 @@ public class RealmGroupRoom extends RealmObject {
     private String invite_token;
     private boolean isPrivate;
     private String username;
+    private int startFrom;
+
 
     public static RealmGroupRoom putIncomplete(Realm realm, ProtoGlobal.GroupRoom.Role role, String description, String participantsCountLabel) {
         RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
@@ -67,73 +70,67 @@ public class RealmGroupRoom extends RealmObject {
     }
 
     public static void revokeLink(long roomId, final String inviteLink, final String inviteToken) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-            if (realmGroupRoom != null) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmGroupRoom.setInvite_link(inviteLink);
-                        realmGroupRoom.setInvite_token(inviteToken);
-                    }
-                });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                if (realmGroupRoom != null) {
+                    realmGroupRoom.setInvite_link(inviteLink);
+                    realmGroupRoom.setInvite_token(inviteToken);
+                }
             }
-        }
-        realm.close();
+        });
     }
 
     public static ProtoGlobal.GroupRoom.Role detectMineRole(long roomId) {
-        ProtoGlobal.GroupRoom.Role role = ProtoGlobal.GroupRoom.Role.UNRECOGNIZED;
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-            if (realmGroupRoom != null) {
-                role = realmGroupRoom.getMainRole();
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ProtoGlobal.GroupRoom.Role role = ProtoGlobal.GroupRoom.Role.UNRECOGNIZED;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                if (realmGroupRoom != null) {
+                    role = realmGroupRoom.getMainRole();
+                }
             }
-        }
-        realm.close();
+            return role;
+        });
 
-        return role;
     }
 
     public static GroupChatRole detectMemberRole(long roomId, long messageSenderId) {
-        GroupChatRole role = GroupChatRole.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getGroupRoom() != null) {
-                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-                for (RealmMember realmMember : realmMembers) {
-                    if (realmMember.getPeerId() == messageSenderId) {
-                        role = GroupChatRole.valueOf(realmMember.getRole());
+        return DbManager.getInstance().doRealmTask(realm -> {
+            GroupChatRole role = GroupChatRole.UNRECOGNIZED;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getGroupRoom() != null) {
+                    RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                    for (RealmMember realmMember : realmMembers) {
+                        if (realmMember.getPeerId() == messageSenderId) {
+                            role = GroupChatRole.valueOf(realmMember.getRole());
+                        }
                     }
                 }
             }
-        }
-        realm.close();
-        return role;
+            return role;
+        });
     }
 
     public static ProtoGlobal.GroupRoom.Role detectMemberRoleServerEnum(long roomId, long messageSenderId) {
-        ProtoGlobal.GroupRoom.Role role = ProtoGlobal.GroupRoom.Role.UNRECOGNIZED;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getGroupRoom() != null) {
-                RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-                for (RealmMember realmMember : realmMembers) {
-                    if (realmMember.getPeerId() == messageSenderId) {
-                        role = ProtoGlobal.GroupRoom.Role.valueOf(realmMember.getRole());
+        return DbManager.getInstance().doRealmTask(realm -> {
+            ProtoGlobal.GroupRoom.Role role = ProtoGlobal.GroupRoom.Role.UNRECOGNIZED;
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                if (realmRoom.getGroupRoom() != null) {
+                    RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
+                    for (RealmMember realmMember : realmMembers) {
+                        if (realmMember.getPeerId() == messageSenderId) {
+                            role = ProtoGlobal.GroupRoom.Role.valueOf(realmMember.getRole());
+                        }
                     }
                 }
             }
-        }
-        realm.close();
-        return role;
+            return role;
+        });
     }
 
     public GroupChatRole getRole() {
@@ -149,6 +146,9 @@ public class RealmGroupRoom extends RealmObject {
     //}
 
     public void setRole(GroupChatRole role) {
+        if (role == GroupChatRole.MODERATOR) {
+            role = GroupChatRole.ADMIN;
+        }
         this.role = role.toString();
     }
 
@@ -233,6 +233,18 @@ public class RealmGroupRoom extends RealmObject {
         } catch (Exception e) {
             this.username = HelperString.getUtf8String(username);
         }
+    }
+
+    public int getStartFrom() {
+        return startFrom;
+    }
+
+    public void setStartFrom(int startFrom) {
+        this.startFrom = startFrom;
+    }
+
+    public static void setStartFrom(long id) {
+
     }
 
     public boolean isPrivate() {

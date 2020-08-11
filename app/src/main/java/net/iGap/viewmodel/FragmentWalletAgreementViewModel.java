@@ -7,87 +7,89 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
-import android.content.Intent;
-import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
-import android.view.View;
+import android.text.Html;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.model.GoToWalletPage;
+import net.iGap.request.RequestInfoPage;
 import net.iGap.request.RequestWalletRegister;
-
-import org.paygear.WalletActivity;
 
 import ir.radsense.raadcore.model.Auth;
 
-public class FragmentWalletAgreementViewModel {
+public class FragmentWalletAgreementViewModel extends ViewModel {
 
 
-    public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.loading_wallet_agreement));
-    private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
+    private ObservableField<String> callbackTxtAgreement = new ObservableField<>("");
+    private MutableLiveData<Boolean> showDialogAcceptTerms = new MutableLiveData<>();
+    private MutableLiveData<Integer> showErrorMessage = new MutableLiveData<>();
+    private MutableLiveData<GoToWalletPage> goToWalletPage = new MutableLiveData<>();
     private String phone;
     private boolean isScan;
 
-    public FragmentWalletAgreementViewModel(FragmentWalletAgrementBinding fragmentWalletAgrementBinding, String mPhone, boolean isScan) {
-        this.fragmentWalletAgrementBinding = fragmentWalletAgrementBinding;
+    public FragmentWalletAgreementViewModel(String mPhone, boolean isScan) {
         phone = mPhone;
         this.isScan = isScan;
+        new RequestInfoPage().infoPageAgreementDiscovery("WALLET_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+            @Override
+            public void onInfo(String body) {
+                callbackTxtAgreement.set(Html.fromHtml(body).toString());
+            }
+
+            @Override
+            public void onError(int major, int minor) {
+                HelperError.showSnackMessage("خطا", false);
+            }
+        });
     }
 
-    public void checkBoxAgreement(View v, boolean checked) {
-        if (checked) {
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.accept_the_terms).
-                    content(R.string.are_you_sure)
-                    .positiveText(R.string.ok)
-                    .negativeText(R.string.cancel)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (G.userLogin) {
-                                new RequestWalletRegister().walletRegister();
-                                startWalletActivity(v);
-                            } else {
-                                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                            }
+    public ObservableField<String> getCallbackTxtAgreement() {
+        return callbackTxtAgreement;
+    }
 
-                        }
-                    }).show();
+    public MutableLiveData<Boolean> getShowDialogAcceptTerms() {
+        return showDialogAcceptTerms;
+    }
+
+    public MutableLiveData<Integer> getShowErrorMessage() {
+        return showErrorMessage;
+    }
+
+    public MutableLiveData<GoToWalletPage> getGoToWalletPage() {
+        return goToWalletPage;
+    }
+
+    public void checkBoxAgreement(boolean checked) {
+        showDialogAcceptTerms.setValue(checked);
+    }
+
+    public void acceptTerms() {
+        if (G.userLogin) {
+            new RequestWalletRegister().walletRegister();
+            goToWalletPage();
+        } else {
+            showErrorMessage.setValue(R.string.there_is_no_connection_to_server);
         }
     }
 
-    private void startWalletActivity(View v) {
-        v.postDelayed(new Runnable() {
+    private void goToWalletPage() {
+
+        //ToDo: why have delay ?!!!
+        G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (Auth.getCurrentAuth() != null) {
-                    Intent intent = new Intent(G.currentActivity, WalletActivity.class);
-                    intent.putExtra("Language", "fa");
-                    intent.putExtra("Mobile", "0" + phone);
-                    intent.putExtra("PrimaryColor", G.appBarColor);
-                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                    intent.putExtra("AccentColor", G.appBarColor);
-                    intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
-                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                    intent.putExtra("isScan", isScan);
-                    (G.currentActivity).startActivity(intent);
-
-                    G.fragmentActivity.onBackPressed();
+                    goToWalletPage.setValue(new GoToWalletPage(phone, isScan));
                 } else {
-                    startWalletActivity(v);
+                    goToWalletPage();
                 }
-
             }
         }, 100);
 

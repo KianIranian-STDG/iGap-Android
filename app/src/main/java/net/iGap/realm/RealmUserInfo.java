@@ -1,16 +1,18 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperString;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientRegisterDevice;
 
@@ -23,20 +25,32 @@ public class RealmUserInfo extends RealmObject {
     private boolean registrationStatus;
     private String email;
     private int gender;
-    private boolean isPassCode;
-    private boolean isPattern;
-    private boolean isFingerPrint;
-    private String passCode;
-    private int kindPassCode;
     private int selfRemove;
     private String token;
     private String authorHash;
-    private boolean importContactLimit;
     private String pushNotificationToken;
     private String representPhoneNumber;
+    private String accessToken;
+    private boolean isWalletRegister;
+    private boolean isWalletActive;
+    private boolean isMplActive;
+    private long walletAmount;
+    private long ivandScore;
+    private String nationalCode;
+
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
+    }
+
+    public static long queryWalletAmount() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo user = realm.where(RealmUserInfo.class).findFirst();
+            if (user != null) {
+                return user.getWalletAmount();
+            }
+            return 0L;
+        });
     }
 
     public static RealmUserInfo putOrUpdate(Realm realm, long userId, String username, String phoneNumber, String token, String authorHash) {
@@ -72,10 +86,8 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public static void setPushNotification(final String pushToken) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        new Thread(() -> {
+            DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
                     realmUserInfo.setPushNotificationToken(pushToken);
@@ -83,128 +95,76 @@ public class RealmUserInfo extends RealmObject {
                     realmUserInfo = realm.createObject(RealmUserInfo.class);
                     realmUserInfo.setPushNotificationToken(pushToken);
                 }
-            }
-        });
-        realm.close();
+            });
+        }).start();
+
     }
 
     public static void sendPushNotificationToServer() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            String token = realmUserInfo.getPushNotificationToken();
-            if (token != null && token.length() > 0) {
-                new RequestClientRegisterDevice().clientRegisterDevice(token);
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                String token = realmUserInfo.getPushNotificationToken();
+                if (token != null && token.length() > 0) {
+                    new RequestClientRegisterDevice().clientRegisterDevice(token);
+                } else {
+                    HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!" + token));
+                }
             }
-        }
-        realm.close();
+        });
     }
 
     public static void updateGender(final ProtoGlobal.Gender gender) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setGender(gender);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setGender(gender);
             }
         });
-        realm.close();
     }
 
     public static void updateSelfRemove(final int selfRemove) {
-        Realm realm1 = Realm.getDefaultInstance();
-        realm1.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setSelfRemove(selfRemove);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setSelfRemove(selfRemove);
             }
         });
-        realm1.close();
     }
 
     public static void updateEmail(final String email) {
-        Realm realm1 = Realm.getDefaultInstance();
-        realm1.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setEmail(email);
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setEmail(email);
             }
         });
-        realm1.close();
     }
 
     public static void updateNickname(final String displayName, final String initials) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
-                    if (realmRegisteredInfo != null) {
-                        realmRegisteredInfo.setDisplayName(displayName);
-                        realmRegisteredInfo.setInitials(initials);
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
+                if (realmRegisteredInfo != null) {
+                    realmRegisteredInfo.setDisplayName(displayName);
+                    realmRegisteredInfo.setInitials(initials);
                 }
             }
         });
-        realm.close();
     }
 
     public static void updateUsername(final String username) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
-                    if (realmRegisteredInfo != null) {
-                        realmRegisteredInfo.setUsername(username);
-                    }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                RealmRegisteredInfo realmRegisteredInfo = realmUserInfo.getUserInfo();
+                if (realmRegisteredInfo != null) {
+                    realmRegisteredInfo.setUsername(username);
                 }
             }
         });
-        realm.close();
     }
-
-
-    public static void updateImportContactLimit() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setImportContactLimit(true);
-                }
-            }
-        });
-        realm.close();
-    }
-
-    public static boolean isLimitImportContacts() {
-        boolean result = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-        if (userInfo != null) {
-            if (userInfo.isImportContactLimit()) {
-                result = true;
-            }
-        }
-        realm.close();
-        return result;
-    }
-
 
     public RealmRegisteredInfo getUserInfo() {
         return userInfo;
@@ -233,22 +193,7 @@ public class RealmUserInfo extends RealmObject {
         } catch (Exception e) {
             this.email = HelperString.getUtf8String(email);
         }
-    }
 
-    public boolean isFingerPrint() {
-        return isFingerPrint;
-    }
-
-    public void setFingerPrint(boolean fingerPrint) {
-        isFingerPrint = fingerPrint;
-    }
-
-    public int getKindPassCode() {
-        return kindPassCode;
-    }
-
-    public void setKindPassCode(int kindPassCode) {
-        this.kindPassCode = kindPassCode;
     }
 
     public ProtoGlobal.Gender getGender() {
@@ -257,30 +202,6 @@ public class RealmUserInfo extends RealmObject {
 
     public void setGender(ProtoGlobal.Gender value) {
         this.gender = value.getNumber();
-    }
-
-    public boolean isPassCode() {
-        return isPassCode;
-    }
-
-    public boolean isPattern() {
-        return isPattern;
-    }
-
-    public void setPattern(boolean pattern) {
-        isPattern = pattern;
-    }
-
-    public void setPassCode(boolean passCode) {
-        isPassCode = passCode;
-    }
-
-    public String getPassCode() {
-        return passCode;
-    }
-
-    public void setPassCode(String passCode) {
-        this.passCode = passCode;
     }
 
     public String getToken() {
@@ -312,18 +233,7 @@ public class RealmUserInfo extends RealmObject {
     }
 
     public boolean isAuthorMe(String author) {
-        if (author.equals(authorHash)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isImportContactLimit() {
-        return importContactLimit;
-    }
-
-    public void setImportContactLimit(boolean value) {
-        importContactLimit = value;
+        return author.equals(authorHash);
     }
 
     public String getPushNotificationToken() {
@@ -342,12 +252,20 @@ public class RealmUserInfo extends RealmObject {
         this.representPhoneNumber = representPhoneNumber;
     }
 
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
     public static void setRepresentPhoneNumber(Realm realm, String representPhoneNumber) {
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         setRepresentPhoneNumber(realm, realmUserInfo, representPhoneNumber);
     }
 
-    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo , String representPhoneNumber) {
+    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo, String representPhoneNumber) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -358,4 +276,61 @@ public class RealmUserInfo extends RealmObject {
         });
     }
 
+    public static String getCurrentUserAuthorHash() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmUserInfo realmUser = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUser != null) {
+                return realmUser.getAuthorHash();
+            }
+            return "";
+        });
+    }
+
+    public boolean isWalletRegister() {
+        return isWalletRegister;
+    }
+
+    public void setWalletRegister(boolean walletRegister) {
+        isWalletRegister = walletRegister;
+    }
+
+    public boolean isWalletActive() {
+        return isWalletActive;
+    }
+
+    public void setWalletActive(boolean walletActive) {
+        isWalletActive = walletActive;
+    }
+
+    public boolean isMplActive() {
+        return isMplActive;
+    }
+
+    public void setMplActive(boolean mplActive) {
+        isMplActive = mplActive;
+    }
+
+    public long getWalletAmount() {
+        return walletAmount;
+    }
+
+    public void setWalletAmount(long walletAmount) {
+        this.walletAmount = walletAmount;
+    }
+
+    public long getIvandScore() {
+        return ivandScore;
+    }
+
+    public void setIvandScore(long ivandScore) {
+        this.ivandScore = ivandScore;
+    }
+
+    public void setNationalCode(String nationalCode) {
+        this.nationalCode = nationalCode;
+    }
+
+    public String getNationalCode() {
+        return nationalCode;
+    }
 }

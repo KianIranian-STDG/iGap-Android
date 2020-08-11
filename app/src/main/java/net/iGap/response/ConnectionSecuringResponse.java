@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
@@ -59,7 +59,6 @@ public class ConnectionSecuringResponse extends MessageHandler {
 
         G.symmetricKey = HelperString.generateSymmetricKey(key);
 
-        byte[] encryption = null;
         try {
             RSAPublicKey rsaPublicKeyServer = (RSAPublicKey) HelperString.getPublicKeyFromPemFormat(publicKey);
             PublicKey pubKeyServer = KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(rsaPublicKeyServer.getModulus(), rsaPublicKeyServer.getPublicExponent()));
@@ -67,18 +66,18 @@ public class ConnectionSecuringResponse extends MessageHandler {
             RSAPublicKey rsaPublicKeyClient = (RSAPublicKey) HelperString.getPublicKeyFromPemFormat(Config.PUBLIC_KEY_CLIENT);
             PublicKey pubKeyClient = KeyFactory.getInstance("RSA").generatePublic(new RSAPublicKeySpec(rsaPublicKeyClient.getModulus(), rsaPublicKeyClient.getPublicExponent()));
 
-            encryption = AESCrypt.encryptSymmetricKey(pubKeyServer, pubKeyClient, G.symmetricKey.getEncoded(), builder.getSecondaryChunkSize());
-        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
+            byte[] encryption = AESCrypt.encryptSymmetricKey(pubKeyServer, pubKeyClient, G.symmetricKey.getEncoded(), builder.getSecondaryChunkSize());
 
-        ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
-        connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
-        connectionSymmetricKey.setVersion(2);
-        RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
+            if (encryption != null) {
+                ProtoConnectionSecuring.ConnectionSymmetricKey.Builder connectionSymmetricKey = ProtoConnectionSecuring.ConnectionSymmetricKey.newBuilder();
+                connectionSymmetricKey.setSymmetricKey(ByteString.copyFrom(encryption));
+                connectionSymmetricKey.setVersion(2);
+                RequestWrapper requestWrapper = new RequestWrapper(2, connectionSymmetricKey);
+
+                RequestQueue.sendRequest(requestWrapper);
+            }
+
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -90,8 +89,8 @@ public class ConnectionSecuringResponse extends MessageHandler {
          * if socket is not connect don't need to try for disconnect again because after establish
          * internet connection these steps will be done
          */
-        if (WebSocketClient.isConnect()) {
-            WebSocketClient.getInstance().disconnect();
+        if (WebSocketClient.getInstance().isConnect()) {
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         super.timeOut();
     }

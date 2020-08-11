@@ -31,11 +31,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -46,6 +41,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -64,6 +65,8 @@ import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
@@ -74,8 +77,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import io.realm.Realm;
 
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.R.id.mf_fragment_map_view;
@@ -105,16 +106,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private net.iGap.module.MaterialDesignTextView itemIcon;
     private Location location;
 
-     /*       Realm realm = Realm.getDefaultInstance();
-        ProtoGlobal.Room.Type type=  RealmRoom.detectType(mMessage.roomId);
-        if (type== ProtoGlobal.Room.Type.CHAT|| type== ProtoGlobal.Room.Type.GROUP)
-        {
-
-
-            RealmRegisteredInfo realmRegisteredInfo =  realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID,12342).findFirst();
-        }else{
-
-        }*/
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
 
@@ -209,46 +200,46 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         /* *//**//* itemIcon = (MaterialDesignTextView) view.findViewById(R.id.mf_icon);*/
 
 
-        rvIcon = (RelativeLayout) view.findViewById(R.id.rv_icon);
+        rvIcon = view.findViewById(R.id.rv_icon);
 
         Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_shape);
         if (mDrawableSkip != null) {
-            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(new Theme().getPrimaryColor(getContext()), PorterDuff.Mode.SRC_IN));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 rvIcon.setBackground(mDrawableSkip);
             }
         }
 
 
-        imgProfile = (ImageView) view.findViewById(R.id.mf_imgProfile);
+        imgProfile = view.findViewById(R.id.mf_imgProfile);
 
-        rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
-        rvSeePosition = (RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
+        rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
+        rvSeePosition = view.findViewById(R.id.mf_rv_see_position);
 
         rvSendPosition.setEnabled(false);
 
-        accuracy = (TextView) view.findViewById(R.id.mf_txt_accuracy);
+        accuracy = view.findViewById(R.id.mf_txt_accuracy);
         accuracy.setText(getResources().getString(R.string.get_location_data));
 
 
-        txtTitle = (TextView) view.findViewById(R.id.mf_txt_message);
+        txtTitle = view.findViewById(R.id.mf_txt_message);
 
-        txtUserName = (TextView) view.findViewById(R.id.mf_txt_userName);
-        txtDistance = (TextView) view.findViewById(R.id.mf_txt_distance);
+        txtUserName = view.findViewById(R.id.mf_txt_userName);
+        txtDistance = view.findViewById(R.id.mf_txt_distance);
 
         txtDistance.setText(getResources().getString(R.string.calculation));
 
-        txtUserName.setTextColor(Color.parseColor(G.appBarColor));
+        txtUserName.setTextColor(new Theme().getPrimaryColor(getContext()));
 
-        accuracy.setTextColor(Color.parseColor(G.appBarColor));
-        txtDistance.setTextColor(Color.parseColor(G.appBarColor));
+        accuracy.setTextColor(new Theme().getPrimaryColor(getContext()));
+        txtDistance.setTextColor(new Theme().getPrimaryColor(getContext()));
 
 
-        //rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
-        txtTitle.setTextColor(Color.parseColor(G.appBarColor));
+        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
+        txtTitle.setTextColor(new Theme().getPrimaryColor(getContext()));
 
-        fabOpenMap = (FloatingActionButton) view.findViewById(R.id.mf_fab_openMap);
-        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabOpenMap = view.findViewById(R.id.mf_fab_openMap);
+        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(new Theme().getButtonColor(getContext())));
         fabOpenMap.setColorFilter(Color.WHITE);
 
         bundle = getArguments();
@@ -259,8 +250,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             longitude = bundle.getDouble(FragmentMap.Longitude);
 
             mode = (Mode) bundle.getSerializable(PosoitionMode);
-            if (G.onHelperSetAction != null) {
-                G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+
+            if (mode == Mode.sendPosition) {
+                if (G.onHelperSetAction != null) {
+                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
+                }
             }
 
             initComponent(view, bundle.getInt("type", 0), bundle.getLong("roomId", 00), bundle.getString("senderId", null));
@@ -285,22 +279,17 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private void initComponent(View view, int type, long roomId, String senderId) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
-
-        //G.fragmentActivity.getSupportFragmentManager()
-        //    .beginTransaction()
-        //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-        //    .replace(mf_fragment_map_view, mapFragment, null)
-        //    .commit();
-
-        new HelperFragment(mapFragment).setReplace(false).setAddToBackStack(false).setResourceContainer(mf_fragment_map_view).load();
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), mapFragment).setReplace(false).setAddToBackStack(false).setResourceContainer(mf_fragment_map_view).load();
+        }
 
         mapFragment.getMapAsync(FragmentMap.this);
 
 
-        rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
+        rvSendPosition = view.findViewById(R.id.mf_rv_send_position);
 
 
-        //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
+        rvSendPosition.setBackgroundColor(new Theme().getPrimaryColor(getContext()));
 
         if (mode == Mode.sendPosition) {
             fabOpenMap.hide();
@@ -315,48 +304,42 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
-            Realm realm = Realm.getDefaultInstance();
+            DbManager.getInstance().doRealmTask(realm -> {
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
 
-            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
+                if (HelperCalander.isPersianUnicode) {
+                    //  params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    params.anchorGravity = Gravity.LEFT | Gravity.BOTTOM;
 
-            if (HelperCalander.isPersianUnicode) {
-                //  params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                params.anchorGravity = Gravity.LEFT | Gravity.BOTTOM;
+                    txtUserName.setGravity(Gravity.RIGHT);
+                    ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
-                txtUserName.setGravity(Gravity.RIGHT);
-                ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
-            } else {
-                //    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                params.anchorGravity = Gravity.RIGHT | Gravity.BOTTOM;
-
-
-                txtUserName.setGravity(Gravity.LEFT);
-                ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
-            }
-
-            if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
-
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
-                txtUserName.setText(realmRegisteredInfo.getDisplayName());
-
-                setAvatar(Long.parseLong(senderId));
+                } else {
+                    //    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    params.anchorGravity = Gravity.RIGHT | Gravity.BOTTOM;
 
 
-            } else {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRegisteredInfoFields.ID, roomId).findFirst();
-                txtUserName.setText(realmRoom.getTitle());
+                    txtUserName.setGravity(Gravity.LEFT);
+                    ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
-                setAvatar(roomId);
+                }
 
-            }
+                if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
+
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
+                    txtUserName.setText(realmRegisteredInfo.getDisplayName());
+
+                    setAvatar(Long.parseLong(senderId));
 
 
-            realm.close();
-            //  HelperAvatar.
+                } else {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRegisteredInfoFields.ID, roomId).findFirst();
+                    txtUserName.setText(realmRoom.getTitle());
 
+                    setAvatar(roomId);
 
+                }
+            });
         }
     }
 
@@ -683,7 +666,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     }
 
     public enum Mode {
-        sendPosition, seePosition;
+        sendPosition, seePosition
     }
 
     public interface OnGetPicture {

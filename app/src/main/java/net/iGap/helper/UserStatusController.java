@@ -1,7 +1,5 @@
 package net.iGap.helper;
 
-import android.util.Log;
-
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.request.RequestUserUpdateStatus;
 
@@ -110,7 +108,7 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
         boolean isOnlineResponse = false;
         synchronized (mutex) {
             if (isOfflineRequestPending && isOnlineRequestPending) {
-                HelperLog.setErrorLog(new Exception("Bagi Error Please Check!"));
+                HelperLog.getInstance().setErrorLog(new Exception("Bagi Error Please Check!"));
             }
 
             if (isOnlineRequestPending) {

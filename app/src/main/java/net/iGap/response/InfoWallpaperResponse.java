@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
@@ -20,9 +20,9 @@ public class InfoWallpaperResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public InfoWallpaperResponse(int actionId, Object protoClass, String identity) {
+    public InfoWallpaperResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -36,8 +36,16 @@ public class InfoWallpaperResponse extends MessageHandler {
         ProtoInfoWallpaper.InfoWallpaperResponse.Builder builder = (ProtoInfoWallpaper.InfoWallpaperResponse.Builder) message;
         List<ProtoGlobal.Wallpaper> wallpaperList = builder.getWallpaperList();
 
-        if (G.onGetWallpaper != null) {
-            G.onGetWallpaper.onGetWallpaperList(wallpaperList);
+        ProtoInfoWallpaper.InfoWallpaper.Builder builderRequest = (ProtoInfoWallpaper.InfoWallpaper.Builder) identity;
+
+        if (builderRequest.getType() == ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER) {
+            if (G.onGetProfileWallpaper != null) {
+                G.onGetProfileWallpaper.onGetWallpaperList(wallpaperList);
+            }
+        } else {
+            if (G.onGetWallpaper != null) {
+                G.onGetWallpaper.onGetWallpaperList(wallpaperList);
+            }
         }
     }
 

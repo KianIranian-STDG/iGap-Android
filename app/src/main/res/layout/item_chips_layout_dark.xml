@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.pchmn.materialchips.ChipsInput android:id="@+id/chips_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="@dimen/standardTextSize"
+    style="?rootBackgroundColor"
+    app:chip_backgroundColor="@color/white"
+    app:chip_deletable="true"
+    app:chip_deleteIconColor="@color/gray_5c"
+    app:deleteIconColor="@android:color/white"
+    app:hint="@string/search"
+    app:hintColor="#7e7e7e"
+    app:textColor="@color/white"
+    app:showChipDetailed="false"
+    app:filterable_list_backgroundColor="@color/background_setting_dark"
+    app:filterable_list_textColor="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.igasht.IGashtBuyTicketViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp4">
+
+        <View
+            android:id="@+id/view_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="@id/priceTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/priceTitle" />
+
+        <View
+            android:id="@+id/view10"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            android:background="@color/gray"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="@+id/priceTitle"
+            app:layout_constraintEnd_toStartOf="@id/priceTitle"
+            app:layout_constraintStart_toEndOf="@id/countTitle"
+            app:layout_constraintTop_toTopOf="@+id/priceTitle" />
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            android:background="@color/gray"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="@id/priceTitle"
+            app:layout_constraintEnd_toStartOf="@id/countTitle"
+            app:layout_constraintStart_toEndOf="@id/serviceTitle"
+            app:layout_constraintTop_toTopOf="@id/priceTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/priceTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/price"
+            android:textColor="?iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/countTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".3" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/countTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/igasht_count_title"
+            android:textColor="?iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="@id/priceTitle"
+            app:layout_constraintEnd_toStartOf="@id/priceTitle"
+            app:layout_constraintStart_toEndOf="@id/serviceTitle"
+            app:layout_constraintTop_toTopOf="@id/priceTitle"
+            app:layout_constraintWidth_percent=".3" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/serviceTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp8"
+            android:text="@string/igasht_service_title"
+            android:textColor="?iGapTitleTextColor"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="@id/priceTitle"
+            app:layout_constraintEnd_toStartOf="@id/countTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/priceTitle"
+            app:layout_constraintWidth_percent=".4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/totalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            android:padding="@dimen/dp4"
+            android:text="@{@string/igasht_total_ticket_price(viewModel.totalPrice)}"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            android:textStyle="bold"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addNewPlaceButton" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/addedPlaceList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp100"
+            android:visibility="@{viewModel.showMainView}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/priceTitle"
+            app:layout_constraintVertical_weight="1" />
+
+        <Button
+            android:id="@+id/addNewPlaceButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_igasht_violet"
+            android:onClick="@{()->viewModel.onAddPlaceClick()}"
+            android:text="@string/igasht_addـexternal_visits"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp16"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/totalPrice"
+            app:layout_constraintStart_toStartOf="@+id/totalPrice"
+            app:layout_constraintTop_toBottomOf="@id/addedPlaceList"
+            app:layout_constraintWidth_percent=".6" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/payButton"
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp16"
+            android:onClick="@{()->viewModel.onPayClick()}"
+            android:text="@string/igasht_buy_ticket_title"
+            android:visibility="@{viewModel.showMainView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/addNewPlaceButton"
+            app:layout_constraintStart_toStartOf="@+id/addNewPlaceButton"
+            app:layout_constraintTop_toBottomOf="@id/totalPrice"
+            app:layout_constraintWidth_percent=".6" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/refreshView"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:onClick="@{()->viewModel.onRetryClick()}"
+            android:text="@string/retry_icon"
+            android:visibility="@{viewModel.showViewRefresh}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/loadingView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

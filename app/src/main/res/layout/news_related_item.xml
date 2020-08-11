@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/container1"
+        app:layout_constraintDimensionRatio="4:5"
+        app:cardCornerRadius="6dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/kuknos_WH_itembg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp24"
+                android:text="Source"
+                android:textSize="@dimen/dp10"
+                android:gravity="center|right"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@mipmap/news_temp_icon"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginBottom="@dimen/dp8"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/source"
+                app:layout_constraintBottom_toTopOf="@+id/rootTitle" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/rootTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp24"
+                android:text="Root Title"
+                android:textSize="@dimen/dp10"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image"
+                app:layout_constraintBottom_toTopOf="@+id/title" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp24"
+                android:text="Title"
+                android:textSize="@dimen/dp12"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp8"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rootTitle"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/container1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="4:5"
+        app:cardCornerRadius="6dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/kuknos_WH_itembg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/source1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp24"
+                android:text="Source"
+                android:textSize="@dimen/dp10"
+                android:gravity="center|right"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@mipmap/news_temp_icon"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginBottom="@dimen/dp8"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/source1"
+                app:layout_constraintBottom_toTopOf="@+id/rootTitle1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/rootTitle1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp24"
+                android:text="Root Title"
+                android:textSize="@dimen/dp10"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:textColor="?attr/iGapTitleTextColor"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image1"
+                app:layout_constraintBottom_toTopOf="@+id/title1" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp24"
+                android:text="Title"
+                android:textSize="@dimen/dp12"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:layout_marginTop="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp8"
+                android:layout_marginLeft="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp8"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rootTitle1"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,8 +24,11 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnFileDownloadResponse;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.api.beepTunes.DownloadSong;
+import net.iGap.observers.interfaces.OnFileDownloadResponse;
+import net.iGap.observers.interfaces.OnSongDownload;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -40,6 +43,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class HelperDownloadFile {
 
+
+    private static final String TAG = "aabolfazl";
 
     public interface UpdateListener {
         void OnProgress(String path, int progress);
@@ -402,21 +407,9 @@ public class HelperDownloadFile {
                         item.downloadedByte = progress.currentBytes;
                         if (item.progress < 100 && !item.isPause) {
                             updateView(item);
-                            try {
-                                boolean connectivityType = true;
-                                if (HelperCheckInternetConnection.currentConnectivityType != null) {
-
-                                    if (HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI)
-                                        connectivityType = true;
-                                    else
-                                        connectivityType = false;
-                                }
-                                if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-                                    HelperDataUsage.progressDownload(connectivityType, downloadByte, item.type);
-                                }
-                            } catch (Exception e) {
+                            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                                HelperDataUsage.progressDownload(downloadByte, item.type);
                             }
-                            ;
                         }
                     }
                 })
@@ -429,13 +422,13 @@ public class HelperDownloadFile {
                                 @Override
                                 public void run() {
                                     finishDownload(item.cashId, item.offset, item.selector, item.progress);
-                                    if (item.selector.toString().toLowerCase().contains("file") && HelperCheckInternetConnection.currentConnectivityType != null) {
-                                        HelperDataUsage.insertDataUsage(HelperDataUsage.convetredDownloadType, HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI, true);
+                                    if (item.selector.toString().toLowerCase().contains("file")) {
+                                        HelperDataUsage.increaseDownloadFiles(item.type);
                                     }
                                 }
                             });
                         } catch (NullPointerException e) {
-                            HelperLog.setErrorLog(e);
+                            HelperLog.getInstance().setErrorLog(e);
                         }
                     }
 
@@ -448,6 +441,27 @@ public class HelperDownloadFile {
                             errorDownload(item.cashId, item.selector);
                     }
                 });
+    }
+
+    public static void startDownloadManager(DownloadSong song, OnSongDownload onSongDownload) {
+        song.setDownloadId(PRDownloader.download(song.getUrl(), song.getPath(), song.getSavedName())
+                .setHeader("Authorization", TokenContainer.getInstance().getToken())
+                .build()
+                .setOnStartOrResumeListener(() -> onSongDownload.startOrResume(song))
+                .setOnPauseListener(() -> onSongDownload.pauseDownload(song))
+                .setOnCancelListener(() -> onSongDownload.cancelDownload(song))
+                .setOnProgressListener(progress -> onSongDownload.progressDownload(song, progress))
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        onSongDownload.completeDownload(song);
+                    }
+
+                    @Override
+                    public void onError(Error error) {
+                        onSongDownload.downloadError(song, error);
+                    }
+                }));
     }
 
     private void requestDownloadFile(final StructDownLoad item) {
@@ -498,15 +512,18 @@ public class HelperDownloadFile {
                 } catch (IOException e) {
                 }
             }
-            switch (item.selector) {
-                case FILE:
-                    RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
-                    break;
-                case SMALL_THUMBNAIL:
-                case LARGE_THUMBNAIL:
-                    RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
-                    break;
-            }
+            new Thread(() -> {
+                switch (item.selector) {
+                    case FILE:
+                        RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
+                        break;
+                    case SMALL_THUMBNAIL:
+                    case LARGE_THUMBNAIL:
+                        RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
+                        break;
+                }
+            }).start();
+
         }
     }
 

@@ -113,7 +113,7 @@ public class MultiDexUtils {
             final List<String> externalDexClasses = getExternalDexClasses(context);
             if (externalDexClasses != null && !externalDexClasses.isEmpty()) {
                 final ArrayList<String> classList = new ArrayList<>();
-                final java.lang.reflect.Method m = ClassLoader.class.getDeclaredMethod("findLoadedClass", new Class[]{String.class});
+                final java.lang.reflect.Method m = ClassLoader.class.getDeclaredMethod("findLoadedClass", String.class);
                 m.setAccessible(true);
                 final ClassLoader cl = context.getClassLoader();
                 for (String clazz : externalDexClasses) {

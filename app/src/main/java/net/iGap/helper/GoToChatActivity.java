@@ -1,22 +1,33 @@
 package net.iGap.helper;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomAccess;
+import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomFields;
 
-import io.realm.Realm;
+import java.util.List;
 
 public class GoToChatActivity {
 
+    private final String TAG = this.getClass().getName();
     private long roomid = 0;
     private long peerID = 0;
 
@@ -56,92 +67,124 @@ public class GoToChatActivity {
         return this;
     }
 
-    public void startActivity() {
+    public void startActivity(FragmentActivity activity) {
 
         String roomName = "";
 
-        if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
-            Realm realm = Realm.getDefaultInstance();
+        if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData || FragmentChat.structIGSticker != null) {
+            roomName = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
 
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
-
-            if (realmRoom != null) {
-                roomName = realmRoom.getTitle();
-
-                if (realmRoom.getReadOnly()) {
-                    if (G.currentActivity != null && !(G.fragmentActivity).isFinishing()) {
-                        new MaterialDialog.Builder(G.currentActivity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
+                if (realmRoom != null) {
+                    if (realmRoom.getReadOnly() || hasSendMessagePermission() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null) || (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null && RealmRoom.isBot(realmRoom.getChatRoom().getPeerId()))) {
+                        if (activity != null && !(activity).isFinishing()) {
+                            new MaterialDialog.Builder(activity).title(R.string.dialog_readonly_chat).positiveText(R.string.ok).show();
+                        }
+                        return null;
                     }
-                    realm.close();
-                    return;
-                }
-            } else if (peerID > 0) {
-                RealmRegisteredInfo _RegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, peerID);
+                    return realmRoom.getTitle();
+                } else if (peerID > 0) {
+                    RealmRegisteredInfo _RegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, peerID);
 
-                if (_RegisteredInfo != null) {
-                    roomName = _RegisteredInfo.getDisplayName();
+                    if (_RegisteredInfo != null) {
+                        return _RegisteredInfo.getDisplayName();
+                    }
                 }
+
+                return "";
+            });
+
+            if (roomName == null) {
+                return;
             }
-
-            realm.close();
         }
+
+//        Log.e(TAG, "startActivity: activity ->" + activity.getClass().getName());
 
         if (HelperGetDataFromOtherApp.hasSharedData) {
 
             String message = G.context.getString(R.string.send_message_to) + " " + roomName;
 
-            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.fragmentActivity != null ? G.fragmentActivity : G.context).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
-                    new HelperFragment(fragmentChat).setReplace(false).load();
+                    fragmentChatBackStack(activity);
+                    new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
                 }
-            }).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    HelperGetDataFromOtherApp.hasSharedData = false;
+            }).onNegative((dialog, which) -> {
+                HelperGetDataFromOtherApp.hasSharedData = false;
+                //revert main rooms list from share mode
+                if (activity instanceof ActivityMain) {
+                    ((ActivityMain) activity).checkHasSharedData(false);
                 }
-            }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            });
-            if (G.fragmentActivity != null && !(G.fragmentActivity).isFinishing()) {
+            }).neutralText(R.string.another_room).onNeutral((dialog, which) -> dialog.dismiss());
+            if (!activity.isFinishing()) {
                 mDialog.show();
             }
+        } else if (FragmentChat.structIGSticker != null) {
+            String message = G.context.getString(R.string.send_message_to) + " " + roomName;
+
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive((dialog, which) -> {
+                FragmentChat fragmentChat = new FragmentChat();
+                fragmentChat.setArguments(getBundle());
+                fragmentChatBackStack(activity);
+                new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+            }).onNegative((dialog, which) -> {
+                FragmentChat.structIGSticker = null;
+
+                if (activity instanceof ActivityMain) {
+                    ((ActivityMain) activity).checkHasSharedData(false);
+                }
+
+            }).neutralText(R.string.another_room).onNeutral((dialog, which) -> dialog.dismiss());
+
+            if (!activity.isFinishing()) {
+                mDialog.show();
+            }
+
         } else if (FragmentChat.mForwardMessages != null) {
 
             String message = G.context.getString(R.string.send_forward_to) + " " + roomName + "?";
 
-            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.fragmentActivity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(activity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    FragmentChat fragmentChat = new FragmentChat();
-                    fragmentChat.setArguments(getBundle());
-                    new HelperFragment(fragmentChat).setReplace(false).load();
+                    loadChatFragment(activity);
                 }
-            }).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    FragmentChat.mForwardMessages = null;
-                }
-            }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                }
-            });
-            if (!(G.fragmentActivity).isFinishing()) {
+            }).onNegative((dialog, which) -> {
+                disableForwardMessage(activity);
+                FragmentChat.mForwardMessages = null;
+            }).neutralText(R.string.another_room).onNeutral((dialog, which) -> dialog.dismiss());
+            if (!(activity).isFinishing()) {
                 mDialog.show();
             }
         } else {
-            FragmentChat fragmentChat = new FragmentChat();
-            fragmentChat.setArguments(getBundle());
-            new HelperFragment(fragmentChat).setReplace(false).load();
+            loadChatFragment(activity);
         }
 
+    }
+
+    private void disableForwardMessage(FragmentActivity activity) {
+        if (activity instanceof ActivityMain) {
+            ((ActivityMain) activity).setForwardMessage(false);
+        }
+    }
+
+    private void loadChatFragment(FragmentActivity activity) {
+        FragmentChat fragmentChat = new FragmentChat();
+        fragmentChat.setArguments(getBundle());
+        fragmentChatBackStack(activity);
+        if (G.twoPaneMode) {
+            if (activity instanceof ActivityMain) {
+                ((ActivityMain) activity).goToChatPage(fragmentChat);
+            } else {
+                Log.wtf(this.getClass().getName(), "loadChatFragment");
+            }
+        } else {
+            new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+        }
     }
 
     public Bundle getBundle() {
@@ -175,5 +218,26 @@ public class GoToChatActivity {
         }
 
         return bundle;
+    }
+
+    private void fragmentChatBackStack(FragmentActivity activity) {
+        if (activity != null) {
+            for (int i = 0; i < activity.getSupportFragmentManager().getFragments().size(); i++) {
+                List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
+                if (fragments.get(i) instanceof FragmentChat) {
+                    FragmentChat fragmentChat = (FragmentChat) fragments.get(i);
+                    if (fragmentChat.getRoomId() == roomid) {
+                        activity.getSupportFragmentManager().beginTransaction().remove(fragmentChat).commit();
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean hasSendMessagePermission() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomid + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+            return realmRoomAccess != null && !realmRoomAccess.isCanPostMessage();
+        });
     }
 }

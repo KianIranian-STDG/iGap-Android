@@ -1,59 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type6_card0"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
-        android:layout_weight="6"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ll_item6"
+        app:layout_constraintHorizontal_weight="6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/type6_img0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
+            android:src="@color/color_default_discovery_cards" />
 
-            />
-
-
-        <net.iGap.module.MaterialDesignTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type6_tick0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/md_tick"
-            android:visibility="gone"
+            android:text="@string/check_icon"
+            style="@style/myIconToolbarStyle"
             android:textColor="@color/white"
-            android:background="@color/tick_background_color"
-            android:textAppearance="@style/TextIconAppearance_toolbar" />
-    </android.support.v7.widget.CardView>
+            android:visibility="gone" />
+    </androidx.cardview.widget.CardView>
 
     <LinearLayout
+        android:id="@+id/ll_item6"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="4"
         android:layout_margin="@dimen/discovery_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="4"
+        app:layout_constraintStart_toEndOf="@+id/type6_card0"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/type6_card1"
-            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            app:cardPreventCornerOverlap="false"
-            app:cardCornerRadius="@dimen/discovery_radius">
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/discovery_radius"
+            app:cardPreventCornerOverlap="false">
 
             <ImageView
                 android:id="@+id/type6_img1"
@@ -62,30 +68,30 @@
                 android:scaleType="fitXY"
                 android:src="@color/color_default_discovery_cards" />
 
-            <net.iGap.module.MaterialDesignTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/type6_tick1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:background="@color/tick_background_color"
                 android:gravity="center"
                 android:padding="4dp"
-                android:text="@string/md_tick"
-                android:visibility="gone"
+                android:text="@string/check_icon"
+                style="@style/myIconToolbarStyle"
                 android:textColor="@color/white"
-                android:background="@color/tick_background_color"
-                android:textAppearance="@style/TextIconAppearance_toolbar" />
+                android:visibility="gone" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/type6_card2"
-            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/discovery_margin_top_nested"
             android:layout_weight="1"
-            app:cardPreventCornerOverlap="false"
-            app:cardCornerRadius="@dimen/discovery_radius">
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="@dimen/discovery_radius"
+            app:cardPreventCornerOverlap="false">
 
             <ImageView
                 android:id="@+id/type6_img2"
@@ -94,21 +100,18 @@
                 android:scaleType="fitXY"
                 android:src="@color/color_default_discovery_cards" />
 
-            <net.iGap.module.MaterialDesignTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/type6_tick2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:background="@color/tick_background_color"
                 android:gravity="center"
                 android:padding="4dp"
-                android:text="@string/md_tick"
-                android:visibility="gone"
+                android:text="@string/check_icon"
+                style="@style/myIconToolbarStyle"
                 android:textColor="@color/white"
-                android:background="@color/tick_background_color"
-                android:textAppearance="@style/TextIconAppearance_toolbar" />
-
-        </android.support.v7.widget.CardView>
+                android:visibility="gone" />
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp4">
+
+    <net.iGap.module.CircleImageView
+        android:id="@+id/play_bg"
+        android:layout_width="@dimen/dp44"
+        android:layout_height="@dimen/dp44"
+        app:srcCompat="@drawable/ic_music_cover_blue"
+        android:scaleType="centerCrop"
+        android:layout_margin="@dimen/dp6"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        style="@style/myIconToolbarStyle"
+        android:text="@string/music_icon"
+        android:includeFontPadding="false"
+        app:layout_constraintLeft_toLeftOf="@id/play_bg"
+        app:layout_constraintRight_toRightOf="@id/play_bg"
+        app:layout_constraintTop_toTopOf="@id/play_bg"
+        app:layout_constraintBottom_toBottomOf="@id/play_bg" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        android:layout_margin="@dimen/dp6"
+        android:gravity="left"
+        app:layout_constraintLeft_toRightOf="@id/play_bg"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/play_bg" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/smallTextSize"
+        android:gravity="left"
+        app:layout_constraintRight_toRightOf="@id/title"
+        app:layout_constraintLeft_toLeftOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="@id/play_bg" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

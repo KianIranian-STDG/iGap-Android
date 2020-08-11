@@ -1,20 +1,23 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
 import net.iGap.G;
 import net.iGap.helper.HelperMessageResponse;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoChatSendMessage;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 
 import static net.iGap.realm.RealmRoomMessage.makeFailed;
 
@@ -42,15 +45,23 @@ public class ChatSendMessageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-            makeFailed(Long.parseLong(identity));
+        makeFailed(Long.parseLong(identity));
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         int waitTime = errorResponse.getWait();
+        if (majorCode == 233 && minorCode == 1) {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                if (message != null) {
+                    message.removeFromRealm(realm);
+                }
+            });
+        }
 
-        if (majorCode == 234 && G.onChatSendMessage != null) {
-            G.onChatSendMessage.Error(majorCode, minorCode, waitTime);
+        if (G.onChatSendMessage != null) {
+            G.onChatSendMessage.Error(majorCode, minorCode, waitTime, Long.parseLong(this.identity));
         }
     }
 

@@ -10,13 +10,10 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
+import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -25,26 +22,29 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.MyType;
-import net.iGap.module.ReserveSpaceRoundedImageView;
+import net.iGap.module.CircleImageView;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import io.realm.Realm;
-
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
 
-    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    private FragmentActivity activity;
+
+    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener, FragmentActivity activity) {
         super(mAdapter, true, type, messageClickListener);
+        this.activity = activity;
     }
 
     @Override
@@ -60,18 +60,17 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
-        holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
-        holder.imgMapPosition.setImageResource(R.drawable.map);
+        holder.getChatBloke().setBackgroundResource(0);
+        holder.mapPosition.setImageResource(R.drawable.map);
         RealmRoomMessageLocation item = null;
 
-        if (mMessage.forwardedFrom != null) {
-            if (mMessage.forwardedFrom.getLocation() != null) {
-                item = mMessage.forwardedFrom.getLocation();
+        if (mMessage.getForwardMessage() != null) {
+            if (mMessage.getForwardMessage().getLocation() != null) {
+                item = mMessage.getForwardMessage().getLocation();
             }
         } else {
-            if (mMessage.location != null) {
-                item = mMessage.location;
+            if (mMessage.getLocation() != null) {
+                item = mMessage.getLocation();
             }
         }
 
@@ -79,58 +78,46 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             String path = AppUtils.getLocationPath(item.getLocationLat(), item.getLocationLong());
 
             if (new File(path).exists()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgMapPosition);
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.mapPosition);
             } else {
                 RealmRoomMessageLocation finalItem1 = item;
-                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
-                    @Override
-                    public void getBitmap(Bitmap bitmap) {
-                        if (bitmap == null) {
-                            holder.imgMapPosition.setImageResource(R.drawable.map);
-                        } else {
-                            holder.imgMapPosition.setImageBitmap(bitmap);
-                            AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
-                        }
+                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), bitmap -> {
+                    if (bitmap == null) {
+                        holder.mapPosition.setImageResource(R.drawable.map);
+                    } else {
+                        holder.mapPosition.setImageBitmap(bitmap);
+                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
                     }
                 });
             }
 
             final RealmRoomMessageLocation finalItem = item;
-            holder.imgMapPosition.setOnLongClickListener(getLongClickPerform(holder));
+            holder.mapPosition.setOnLongClickListener(getLongClickPerform(holder));
 
-            holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
-                        return;
-                    }
+            holder.mapPosition.setOnClickListener(v -> {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return;
+                }
 
-                    try {
-                        HelperPermission.getLocationPermission(G.currentActivity, new OnGetPermission() {
+                try {
+                    HelperPermission.getLocationPermission(activity, new OnGetPermission() {
+                        @Override
+                        public void Allow() {
+                            G.handler.post(() -> {
+                                FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
+                                        RealmRoom.detectType(mMessage.getRoomId()).getNumber(), mMessage.getRoomId(), mMessage.getUserId() + "");
+                                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
+                            });
+                        }
 
-                            @Override
-                            public void Allow() {
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
+                        @Override
+                        public void deny() {
 
-                                        FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
-                                                RealmRoom.detectType(mMessage.roomId).getNumber(), mMessage.roomId, mMessage.senderID);
-                                        new HelperFragment(fragment).setReplace(false).load();
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void deny() {
-
-                            }
-                        });
-                    } catch (IOException | IllegalStateException e) {
-                        e.printStackTrace();
-                    }
+                        }
+                    });
+                } catch (IOException | IllegalStateException e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -146,34 +133,28 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.updateLayoutForSend(holder);
     }
 
+    @NotNull
     @Override
-    public ViewHolder getViewHolder(View v) {
+    public ViewHolder getViewHolder(@NotNull View v) {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends NewChatItemHolder implements IThumbNailItem {
 
-        ReserveSpaceRoundedImageView imgMapPosition;
+        CircleImageView mapPosition;
 
         public ViewHolder(View view) {
             super(view);
-            FrameLayout frameLayout = new FrameLayout(G.context);
-            frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            imgMapPosition = new ReserveSpaceRoundedImageView(G.context);
-            imgMapPosition.setId(R.id.thumbnail);
-            imgMapPosition.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imgMapPosition.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
-            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            imgMapPosition.setLayoutParams(layout_758);
-
-            frameLayout.addView(imgMapPosition);
-            m_container.addView(frameLayout);
+            mapPosition = new CircleImageView(getContext());
+            mapPosition.setId(R.id.thumbnail);
+            mapPosition.setBorderWidth(dpToPx(1));
+            getContentBloke().addView(mapPosition, LayoutCreator.createFrame(dpToPx(60), dpToPx(60)));
         }
 
         @Override
         public ImageView getThumbNailImageView() {
-            return imgMapPosition;
+            return mapPosition;
         }
     }
 }

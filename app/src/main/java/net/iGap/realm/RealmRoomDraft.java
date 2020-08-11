@@ -11,7 +11,6 @@
 package net.iGap.realm;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.helper.HelperString;
 
@@ -28,7 +27,7 @@ public class RealmRoomDraft extends RealmObject {
         RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
         draft.setMessage(message);
         draft.setReplyToMessageId(replyToMessageId);
-        draft.setDraftTime(draftTime  * (DateUtils.SECOND_IN_MILLIS));
+        draft.setDraftTime(draftTime * (DateUtils.SECOND_IN_MILLIS));
         return draft;
     }
 
@@ -38,7 +37,7 @@ public class RealmRoomDraft extends RealmObject {
         }
         draft.setMessage(message);
         draft.setReplyToMessageId(replyToMessageId);
-        draft.setDraftTime(draftTime  * (DateUtils.SECOND_IN_MILLIS));
+        draft.setDraftTime(draftTime * (DateUtils.SECOND_IN_MILLIS));
         return draft;
     }
 

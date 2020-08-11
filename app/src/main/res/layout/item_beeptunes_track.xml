@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <net.iGap.module.customView.SquareImageView
+            android:id="@+id/iv_trackItem"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bank_logo_tejarat" />
+
+        <TextView
+            android:id="@+id/tv_trackItem_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="@dimen/dp4"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/smallTextSize"
+            tools:text="رگ خواب" />
+
+
+        <TextView
+            android:layout_marginBottom="4dp"
+            android:id="@+id/tv_trackItem_artistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/smallTextSize"
+            tools:text="همایون شجریان" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

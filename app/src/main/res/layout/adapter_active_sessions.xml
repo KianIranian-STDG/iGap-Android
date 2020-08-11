@@ -1,171 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/adp_rootLayout"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  style="?backgroundColorSettingTheme"
-  android:clickable="true"
-  android:orientation="vertical">
-
-  <LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/adp_rootLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    style="?backgroundColorSettingTheme"
     android:padding="@dimen/dp8">
 
-
-    <LinearLayout
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      android:orientation="vertical"
-      android:padding="@dimen/dp12">
-
-
-      <net.iGap.module.HeaderTextView
-        android:id="@+id/adp_currentSession"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/currentSessionTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
         android:text="@string/current_session"
-        android:textColor="@color/toolbar_background"
-        android:textSize="@dimen/dp14" />
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/largeTextSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-      <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/deviceTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp20"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/dp8"
+        android:padding="@dimen/dp8"
+        android:text="@string/device"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/currentSessionTitle" />
 
-        <TextView
-
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/device"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-        <TextView
-          android:id="@+id/adp_device"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp4"
-          android:text="pc"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text=" , "
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-        <TextView
-          android:id="@+id/adp_platform"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="windows"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-      </LinearLayout>
-
-      <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/deviceInfo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
-        android:orientation="horizontal">
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/deviceTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/deviceTitle"
+        app:layout_constraintTop_toTopOf="@id/deviceTitle" />
 
-        <TextView
-
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/country"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-        <TextView
-          android:id="@+id/adp_country"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp4"
-          android:text="Iran"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14"
-
-          />
-
-        <TextView
-          android:id="@+id/adp_terminate"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:gravity="right|end"
-          android:text="@string/TERMINATE"
-          android:textColor="@color/red"
-          android:textSize="@dimen/dp14" />
-
-      </LinearLayout>
-
-      <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/countryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
-        android:orientation="horizontal">
+        android:padding="@dimen/dp8"
+        android:text="@string/country"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintStart_toStartOf="@id/deviceTitle"
+        app:layout_constraintTop_toBottomOf="@id/deviceTitle" />
 
-        <TextView
-
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/create_time"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-        <TextView
-          android:id="@+id/adp_create_time"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp4"
-          android:text=" 17 Nov 2016"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
-
-      </LinearLayout>
-
-      <LinearLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp4"
-        android:orientation="horizontal">
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/countryTitle"
+        app:layout_constraintEnd_toStartOf="@id/terminate"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/countryTitle"
+        app:layout_constraintTop_toTopOf="@id/countryTitle" />
 
-        <TextView
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/terminate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/dp8"
+        android:text="@string/TERMINATE"
+        android:textColor="@color/red"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/countryTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/countryTitle" />
 
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/ip"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/createTimeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="@string/create_time"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintStart_toStartOf="@id/deviceTitle"
+        app:layout_constraintTop_toBottomOf="@id/countryTitle" />
 
-        <TextView
-          android:id="@+id/adp_ip"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp4"
-          android:text=" 192.168.1.1"
-          style="?textTitleColorSettingTheme"
-          android:textSize="@dimen/dp14" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/createTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/createTimeTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/createTimeTitle"
+        app:layout_constraintTop_toTopOf="@id/createTimeTitle" />
 
-      </LinearLayout>
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ipTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="@string/ip"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintStart_toStartOf="@id/deviceTitle"
+        app:layout_constraintTop_toBottomOf="@id/createTimeTitle" />
 
-  </LinearLayout>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/ip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/ipTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ipTitle"
+        app:layout_constraintTop_toTopOf="@id/ipTitle" />
 
-  <View
-    android:id="@+id/adp_line"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    style="?textTitleColorSettingTheme" />
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

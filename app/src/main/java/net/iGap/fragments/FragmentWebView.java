@@ -1,17 +1,13 @@
 package net.iGap.fragments;
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
@@ -22,20 +18,29 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.interfaces.IOnBackPressed;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.module.WebAppInterface;
+import net.iGap.observers.interfaces.IOnBackPressed;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.io.IOException;
 
-public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
+public class FragmentWebView extends BaseFragment implements IOnBackPressed, ToolbarListener {
 
     private String url;
     private boolean forceCloseFragment;
@@ -49,6 +54,8 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     CustomWebViewClient customWebViewClient;
     private View customView;
     private WebChromeClient.CustomViewCallback callback;
+
+    private HelperToolbar mHelperToolbar;
 
     public static FragmentWebView newInstance(String url, boolean igRef, String param) {
         FragmentWebView discoveryFragment = new FragmentWebView();
@@ -64,34 +71,36 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         return newInstance(url, true, "");
     }
 
+    @Nullable
     @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_my_web_view, root, true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_my_web_view, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         forceCloseFragment = false;
+        setupToolbar(view);
         url = getArguments().getString("url");
         igRef = getArguments().getBoolean("igRef");
         String param = getArguments().getString("param");
         if (!url.startsWith("https://") && !url.startsWith("http://")) {
             url = "http://" + url;
         }
-
-        frameLayout = view.findViewById(R.id.full);
-        webView = view.findViewById(R.id.webView);
         webViewError = view.findViewById(R.id.webViewError);
-
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        frameLayout = view.findViewById(R.id.full);
+
+
+        pullToRefresh.setOnRefreshListener(() -> {
+            if (webView != null) {
                 customWebViewClient.isWebViewVisible = true;
                 webView.clearView();
                 webView.reload();
                 setWebViewVisibleWithDelay();
+            } else {
+                pullToRefresh.setRefreshing(false);
             }
         });
 
@@ -99,6 +108,18 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             pullToRefresh.setEnabled(true);
         } else {
             pullToRefresh.setEnabled(false);
+        }
+
+        if (webView == null) {
+            try {
+                webView = new WebView(getContext());
+                SwipeRefreshLayout.LayoutParams params = new SwipeRefreshLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                webView.setLayoutParams(params);
+                pullToRefresh.addView(webView, params);
+            } catch (Exception e) {
+                webViewError.setVisibility(View.VISIBLE);
+                return;
+            }
         }
 
         webViewError.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +138,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             CookieManager.getInstance().setAcceptCookie(true);
         }
 
-        titleTextView.setText(G.context.getString(R.string.igap));
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.clearCache(true);
@@ -135,6 +155,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.getSettings().setGeolocationDatabasePath(getActivity().getFilesDir().getPath());
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.addJavascriptInterface(new WebAppInterface(getActivity()), "Android");
 
         webView.setWebChromeClient(new GeoWebChromeClient());
         customWebViewClient = new CustomWebViewClient();
@@ -143,6 +164,40 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             webView.postUrl(url, param.getBytes());
         } else {
             webView.loadUrl(url);
+        }
+    }
+
+    private void setupToolbar(View view) {
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.back_icon)
+                .setLogoShown(true)
+                .setRoundBackground(false)
+                .setListener(this);
+
+        ViewGroup layoutToolbar = view.findViewById(R.id.fwv_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
+        mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
+
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        if (webView == null) {
+            popBackStackFragment();
+            return;
+        }
+
+        webView.stopLoading();
+        if (webView.canGoBack() && !forceCloseFragment) {
+            webView.clearView();
+            webView.goBack();
+            customWebViewClient.isWebViewVisible = true;
+            setWebViewVisibleWithDelay();
+        } else {
+            popBackStackFragment();
         }
     }
 
@@ -172,8 +227,9 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
     @Override
     public boolean onBack() {
+        if (webView == null) return false;
         webView.stopLoading();
-        if (webView.canGoBack()) {
+        if (webView.canGoBack() && !forceCloseFragment) {
             webView.clearView();
             webView.goBack();
             customWebViewClient.isWebViewVisible = true;
@@ -181,19 +237,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onBackButtonClicked(View view) {
-        webView.stopLoading();
-        if (webView.canGoBack() && !forceCloseFragment) {
-            webView.clearView();
-            webView.goBack();
-            customWebViewClient.isWebViewVisible = true;
-            setWebViewVisibleWithDelay();
-        } else {
-            super.onBackButtonClicked(view);
-        }
     }
 
     private class CustomWebViewClient extends WebViewClient {
@@ -209,7 +252,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 delayHandler.removeCallbacks(taskMakeVisibleWebViewWithDelay);
                 webViewError.setVisibility(View.VISIBLE);
                 webView.setVisibility(View.GONE);
-                titleTextView.setText(G.context.getString(R.string.igap));
+                mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
                 HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
             }
         }
@@ -220,7 +263,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             if (url.toLowerCase().equals("igap://close")) {
                 isWebViewVisible = false;
                 forceCloseFragment = true;
-                FragmentWebView.this.onBackButtonClicked(view);
+                onLeftIconClickListener(view);
             }
 
         }
@@ -229,27 +272,35 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
-                titleTextView.setText(view.getTitle());
+                if (view.getTitle().length() > 27) {
+                    mHelperToolbar.setDefaultTitle(view.getTitle().substring(0, 27) + "...");
+                } else {
+                    mHelperToolbar.setDefaultTitle(view.getTitle());
+                }
             }
 
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            boolean a = HelperUrl.handleAppUrl(url);
-            if (a) {
-                // onBackButtonClicked(view);
-            }
             if (url.toLowerCase().equals("igap://close")) {
                 forceCloseFragment = true;
-                onBackButtonClicked(view);
+                onLeftIconClickListener(view);
+            } else if (url.toLowerCase().contains("igap://deep_link")) {
+                if (getActivity() != null && getActivity() instanceof ActivityMain) {
+                    ActivityMain activityMain = (ActivityMain) getActivity();
+                    activityMain.handleDeepLink(url.replace("igap://deep_link?", ""));
+                    return true;
+                }
             }
-            return a;
+
+            return HelperUrl.handleAppUrl(getActivity(), url);
         }
     }
 
     public class GeoWebChromeClient extends android.webkit.WebChromeClient {
         private boolean remember;
+
         public GeoWebChromeClient() {
             remember = false;
         }
@@ -260,7 +311,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             FragmentWebView.this.callback = callback;
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             frameLayout.addView(view);
-            appBarLayout.setVisibility(View.GONE);
             pullToRefresh.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
             frameLayout.bringToFront();
@@ -278,7 +328,6 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             frameLayout.setVisibility(View.GONE);
             callback.onCustomViewHidden();
             pullToRefresh.setVisibility(View.VISIBLE);
-            appBarLayout.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -296,7 +345,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 @TargetApi(Build.VERSION_CODES.M)
                 @Override
                 public void run() {
-                    if(request.getOrigin().toString().equals("file:///")) {
+                    if (request.getOrigin().toString().equals("file:///")) {
                         request.grant(request.getResources());
                     } else {
                         request.deny();
@@ -312,28 +361,26 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             if (remember) {
                 getLocation(origin, callback);
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage(getActivity().getString(R.string.location_dialog_message))
-                        .setCancelable(true).setPositiveButton(getActivity().getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getLocation(origin, callback);
-                        remember = true;
-
-                    }
-                }).setNegativeButton(getActivity().getString(R.string.no), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        callback.invoke(origin, false, false);
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                if (getActivity() == null) return;
+                new MaterialDialog.Builder(getActivity())
+                        .content(R.string.location_dialog_message)
+                        .positiveText(R.string.yes)
+                        .negativeText(R.string.no)
+                        .onPositive((dialog, which) -> {
+                            getLocation(origin, callback);
+                            remember = true;
+                        })
+                        .onNegative((dialog, which) -> {
+                            callback.invoke(origin, false, false);
+                        })
+                        .show();
             }
         }
     }
 
     private void getLocation(String origin,
                              GeolocationPermissions.Callback callback) {
-        try{
+        try {
             HelperPermission.getLocationPermission(getActivity(), new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {

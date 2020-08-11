@@ -8,68 +8,66 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="4"
         android:layout_margin="@dimen/discovery_margin"
+        android:layout_weight="4"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/type5_card0"
-            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            app:cardPreventCornerOverlap="false"
-            app:cardCornerRadius="@dimen/discovery_radius">
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardBackgroundColor="?attr/iGapCardViewColor"
+            app:cardCornerRadius="@dimen/discovery_radius"
+            app:cardPreventCornerOverlap="false">
 
             <ImageView
                 android:id="@+id/type5_img0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@color/color_default_discovery_cards" />
+                android:scaleType="fitXY" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/type5_card1"
-            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/discovery_margin_top_nested"
-            app:cardPreventCornerOverlap="false"
-            app:cardCornerRadius="@dimen/discovery_radius">
+            android:layout_weight="1"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardBackgroundColor="?attr/iGapCardViewColor"
+            app:cardCornerRadius="@dimen/discovery_radius"
+            app:cardPreventCornerOverlap="false">
 
             <ImageView
                 android:id="@+id/type5_img1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@color/color_default_discovery_cards" />
+                android:scaleType="fitXY" />
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type5_card2"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
         android:layout_weight="6"
-        app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="?attr/iGapCardViewColor"
+        app:cardCornerRadius="@dimen/discovery_radius"
+        app:cardPreventCornerOverlap="false">
 
         <ImageView
             android:id="@+id/type5_img2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
-
-            />
-    </android.support.v7.widget.CardView>
+            android:scaleType="fitXY" />
+    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

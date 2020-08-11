@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -25,8 +25,8 @@ import com.yalantis.ucrop.util.FileUtils;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
+import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,13 +73,10 @@ public class HelperSaveFile {
 
                 switch (folderType) {
                     case download:
-
-                        if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
-                            destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
-                        } else {
-                            destinationPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Downloads/" + fileName;
+                        if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
                         }
-
+                        destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
                         break;
                     case music:
 
@@ -143,6 +140,7 @@ public class HelperSaveFile {
                     Toast.makeText(G.currentActivity, successMessage, Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 Toast.makeText(G.currentActivity, R.string.file_can_not_save_to_selected_folder, Toast.LENGTH_SHORT).show();
             }
         }
@@ -270,20 +268,18 @@ public class HelperSaveFile {
         }
     }
 
-    public static String saveInPrivateDirectory(Activity activity,String filePath) throws IOException{
-        File fileWithinMyDir = getPrivateDirectory(activity);
-        FileUtils.copyFile(filePath,fileWithinMyDir.getPath());
+    public static String saveInPrivateDirectory(File fileWithinMyDir, String filePath) throws IOException {
+        FileUtils.copyFile(filePath, fileWithinMyDir.getPath());
         return fileWithinMyDir.getPath();
     }
 
-    public static void removeFromPrivateDirectory(Activity activity){
-        File fileWithinMyDir = getPrivateDirectory(activity);
+    public static void removeFromPrivateDirectory(File fileWithinMyDir) {
         if (fileWithinMyDir.exists()) {
             fileWithinMyDir.delete();
         }
     }
 
-    private static File getPrivateDirectory(Activity activity){
+    public static File getPrivateDirectory(Activity activity) {
         return new File(new ContextWrapper(activity).getDir("ChatBackground", Context.MODE_PRIVATE), "kb24");
     }
 

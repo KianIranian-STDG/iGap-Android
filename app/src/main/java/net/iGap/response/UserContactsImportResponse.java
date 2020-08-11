@@ -1,23 +1,30 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.G;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.module.Contacts;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoError;
-import net.iGap.realm.RealmUserInfo;
+import net.iGap.proto.ProtoUserContactsImport;
+import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
+import net.iGap.request.RequestUserInfo;
 
 public class UserContactsImportResponse extends MessageHandler {
 
+    private static final String TAG = "aabolfazlContact";
     public int actionId;
     public Object message;
     public Object identity;
@@ -34,10 +41,17 @@ public class UserContactsImportResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
+        final ProtoUserContactsImport.UserContactsImportResponse.Builder builder = (ProtoUserContactsImport.UserContactsImportResponse.Builder) message;
+
         boolean getContactList = true;
-        if (identity != null) {
-            getContactList = (Boolean) identity;
-        }
+        if (identity != null)
+            if (identity instanceof Boolean) {
+                getContactList = (Boolean) identity;
+            } else if (identity instanceof String) {
+                if (identity.equals(RequestUserContactImport.KEY)) {
+                    new RequestUserInfo().contactImportWithCallBack(builder.getRegisteredContacts(0).getUserId());
+                }
+            }
 
 
         if (G.onQueueSendContact != null) {
@@ -46,6 +60,9 @@ public class UserContactsImportResponse extends MessageHandler {
 
 
         if (getContactList) {
+            Log.i("import_contact", "contact import response");
+
+            G.serverHashContact = G.localHashContact;
             new RequestUserContactsGetList().userContactGetList();
         }
     }
@@ -67,7 +84,10 @@ public class UserContactsImportResponse extends MessageHandler {
         int minorCode = errorResponse.getMinorCode();
         if (majorCode == 118) {
             if (minorCode == 5) {
-                RealmUserInfo.updateImportContactLimit();
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_CHUNK, true);
+            }
+            if (minorCode == 7) {
+                HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_NUMBER, true);
             }
         }
 

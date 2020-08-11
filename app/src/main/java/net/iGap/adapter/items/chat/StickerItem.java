@@ -1,32 +1,36 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.interfaces.IMessageItem;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.downloadFile.IGDownloadFile;
+import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.ReserveSpaceRoundedImageView;
-import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
+import java.io.File;
 import java.util.List;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
@@ -49,43 +53,51 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
+        holder.image.setTag(structMessage.getAttachment().getToken());
         super.bindView(holder, payloads);
 
-        ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(0);
+        holder.getChatBloke().setBackgroundResource(0);
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.image.setOnClickListener(v -> {
 
-                if (FragmentChat.isInSelectionMode){
-                        holder.itemView.performLongClick();
+            if (FragmentChat.isInSelectionMode) {
+                holder.itemView.performLongClick();
+            } else {
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                 } else {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
-                    }
+                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                 }
             }
         });
 
-        holder.image.setOnLongClickListener(getLongClickPerform(holder));
-        holder.progress.setVisibility(View.GONE);
-    }
+        String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        if (new File(path).exists()) {
+            G.imageLoader.displayImage(suitablePath(path), holder.image);
+        } else {
+            EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+                if (id == EventManager.STICKER_DOWNLOAD) {
 
+                    String filePath = (String) message[0];
+                    String fileToken = (String) message[1];
 
-    @Override
-    public void onLoadThumbnailFromLocal(ViewHolder holder, String tag, String localPath, LocalFileType fileType) {
-        super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
+                    if (holder.image.getTag().equals(fileToken)) {
+                        G.handler.post(() -> {
+                            G.imageLoader.displayImage(suitablePath(filePath), holder.image);
+                        });
+                    }
+                }
+            });
 
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(),
+                    structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
         }
 
+        holder.image.setOnLongClickListener(getLongClickPerform(holder));
+        holder.progress.setVisibility(View.GONE);
     }
 
     @Override
@@ -93,27 +105,22 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IProgress, IThumbNailItem{
-        protected ReserveSpaceRoundedImageView image;
+    protected static class ViewHolder extends NewChatItemHolder implements IProgress, IThumbNailItem {
+        protected AppCompatImageView image;
         protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
 
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceRoundedImageView(G.context);
+            image = new AppCompatImageView(getContext());
             image.setId(R.id.thumbnail);
-            image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
-            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            image.setLayoutParams(layout_758);
-            m_container.addView(frameLayout);
-            frameLayout.addView(image);
-            image.reserveSpace(180,180,ProtoGlobal.Room.Type.CHAT);
+            getContentBloke().addView(frameLayout);
+            frameLayout.addView(image, LayoutCreator.createFrame(200, 200, Gravity.CENTER));
 
-            progress = getProgressBar(0);
+            progress = getProgressBar(view.getContext(), 0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
         }

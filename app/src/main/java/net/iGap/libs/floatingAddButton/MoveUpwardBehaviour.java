@@ -1,9 +1,11 @@
 package net.iGap.libs.floatingAddButton;
 
 import android.os.Build;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.view.View;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by Saurabh on 15/12/15.

@@ -5,22 +5,23 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentDialogCreditPaymentBinding;
+import net.iGap.module.Theme;
 
 import org.paygear.RaadApp;
 import org.paygear.model.AvailableClubs_Result;
@@ -188,9 +189,13 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
             if (mAmount <= selectedCard.balance) {
                 creditPaymentBinding.paygearCardBalanceTitle.setVisibility(View.GONE);
                 creditPaymentBinding.paygearCardBalance.setVisibility(View.GONE);
+                creditPaymentBinding.amountToPayFactor.setVisibility(View.GONE);
+                creditPaymentBinding.amountToPayFactorTitle.setVisibility(View.GONE);
             } else {
                 creditPaymentBinding.paygearCardBalanceTitle.setVisibility(View.VISIBLE);
                 creditPaymentBinding.paygearCardBalance.setVisibility(View.VISIBLE);
+                creditPaymentBinding.amountToPayFactor.setVisibility(View.VISIBLE);
+                creditPaymentBinding.amountToPayFactorTitle.setVisibility(View.VISIBLE);
 
             }
 
@@ -205,6 +210,7 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
             }
             creditPaymentBinding.paygearCardBalance.setText(RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, false));
             creditPaymentBinding.clubCardBalance.setText(RaadCommonUtils.formatPrice(clubAvailableAmount, false));
+            creditPaymentBinding.amountToPayFactor.setText(RaadCommonUtils.formatPrice(mAmount - clubAvailableAmount, false));
             if (mAmount > selectedCard.balance + RaadApp.paygearCard.balance) {
                 creditPaymentBinding.paygearCardBalance.setTextColor(Color.RED);
                 creditPaymentBinding.paygearCardBalanceTitle.setTextColor(Color.RED);
@@ -242,14 +248,14 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
 
         creditPaymentBinding.title.setText(R.string.pay_to);
         if (mOrder == null) {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                     .fit()
                     .into(creditPaymentBinding.image);
             creditPaymentBinding.subtitle.setText(mAccount.getName());
 
         } else {
-            Picasso.get()
+            Picasso.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                     .fit()
                     .into(creditPaymentBinding.image);
@@ -465,22 +471,19 @@ public class CreditPaymentDialog extends BottomSheetDialogFragment {
                     PaymentResult paymentResult = response.body();
 
                     PaymentResultDialog dialog = PaymentResultDialog.newInstance(paymentResult);
-                    dialog.setListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            RaadApp.cards = null;
-                            if (getActivity() instanceof NavigationBarActivity) {
-                                ((NavigationBarActivity) getActivity()).broadcastMessage(
-                                        CreditPaymentDialog.this, null, CardsFragment.class);
-                                try {
-                                    ((FactorPaymentDialog) getActivity().getSupportFragmentManager().findFragmentByTag("FactorPaymentDialog")).dismiss();
-                                } catch (Exception e) {
+                    dialog.setListener(v -> {
+                        RaadApp.cards = null;
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                    CreditPaymentDialog.this, null, CardsFragment.class);
+                            try {
+                                ((FactorPaymentDialog) getActivity().getSupportFragmentManager().findFragmentByTag("FactorPaymentDialog")).dismiss();
+                            } catch (Exception e) {
 
-                                }
                             }
-                            dismiss();
                         }
-                    }, G.appBarColor);
+                        dismiss();
+                    }, String.valueOf(new Theme().getPrimaryColor(getContext())));
 
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
 

@@ -12,8 +12,11 @@ package net.iGap.viewmodel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,20 +26,20 @@ import com.larswerkman.holocolorpicker.SVBar;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.databinding.FragmentThemColorCustomBinding;
 import net.iGap.fragments.FragmentThemColorCustom;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.viewmodel.FragmentThemColorViewModel.resetApp;
 
 
-public class FragmentThemColorCustomViewModel {
+public class FragmentThemColorCustomViewModel extends ViewModel {
 
     private SharedPreferences sharedPreferences;
     private FragmentThemColorCustom fragmentThemColorCustom;
     private FragmentThemColorCustomBinding fragmentThemColorCustomBinding;
+    public MutableLiveData<Boolean> resetApp = new MutableLiveData<>();
 
 
     public FragmentThemColorCustomViewModel(FragmentThemColorCustom fragmentThemColorCustom, FragmentThemColorCustomBinding fragmentThemColorCustomBinding) {
@@ -58,13 +61,10 @@ public class FragmentThemColorCustomViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
+        /*editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);*/
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         editor.apply();
-
-        Theme.setThemeColor();
-        resetApp();
-
+        resetApp.setValue(true);
     }
 
     public void onClickTitleBarColor(View view) {
@@ -98,7 +98,7 @@ public class FragmentThemColorCustomViewModel {
 
         String titleMessage = G.fragmentActivity.getResources().getString(title);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.popup_colorpicker, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -112,9 +112,9 @@ public class FragmentThemColorCustomViewModel {
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svBar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 
@@ -141,48 +141,48 @@ public class FragmentThemColorCustomViewModel {
 
                         case R.string.app_theme:
 
-                            G.appBarColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-                            editor.apply();
-                            appBarColorClick(0);
+//                            G.appBarColor = "#" + Integer.toHexString(picker.getColor());
+//                            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+//                            editor.apply();
+//                            appBarColorClick(0);
 
 
                             break;
                         case R.string.app_notif_color:
 
-                            G.notificationColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+                            //  G.notificationColor = "#" + Integer.toHexString(picker.getColor());
+                            //   editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
                             editor.apply();
                             notificationColorClick(0, true);
 
                             break;
                         case R.string.toggle_botton_color:
 
-                            G.toggleButtonColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
+                            //   G.toggleButtonColor = "#" + Integer.toHexString(picker.getColor());
+                            //     editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
                             editor.apply();
                             toggleBottomClick(0);
 
                             break;
                         case R.string.send_and_attach_botton_color:
 
-                            G.attachmentColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
+//                            G.attachmentColor = "#" + Integer.toHexString(picker.getColor());
+//                            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
                             editor.apply();
                             sendAndAttachColorClick(0);
                             break;
                         case R.string.default_header_font_color:
 
-                            G.headerTextColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+//                            G.headerTextColor = "#" + Integer.toHexString(picker.getColor());
+//                            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
                             editor.apply();
                             headerColorClick(0, true);
 
                             break;
                         case R.string.default_progress_color:
 
-                            G.progressColor = "#" + Integer.toHexString(picker.getColor());
-                            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+//                            G.progressColor = "#" + Integer.toHexString(picker.getColor());
+//                            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
                             editor.apply();
                             progressColorClick(0, true);
                             break;
@@ -203,7 +203,7 @@ public class FragmentThemColorCustomViewModel {
     private void getInfo() {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);
+        /*String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);*/
         String notificationColor = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Theme.default_notificationColor);
         String toggleButtonColor = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Theme.default_toggleButtonColor);
         String attachmentColor = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Theme.default_attachmentColor);
@@ -212,7 +212,7 @@ public class FragmentThemColorCustomViewModel {
 
         //***********************
         GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
-        bgShape.setColor(Color.parseColor(appBarColor));
+        /*bgShape.setColor(Color.parseColor(appBarColor));*/
 
         //***********************
 
@@ -248,7 +248,7 @@ public class FragmentThemColorCustomViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.appBarColor));
+            //    bgShape.setColor(Color.parseColor(G.appBarColor));
         }
     }
 
@@ -256,7 +256,7 @@ public class FragmentThemColorCustomViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgNotificationColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.notificationColor));
+            //  bgShape.setColor(Color.parseColor(G.notificationColor));
         }
 
     }
@@ -266,7 +266,7 @@ public class FragmentThemColorCustomViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgDefaultProgressColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.progressColor));
+//            bgShape.setColor(Color.parseColor(G.progressColor));
         }
     }
 
@@ -275,7 +275,7 @@ public class FragmentThemColorCustomViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgToggleBottonColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.toggleButtonColor));
+            // bgShape.setColor(Color.parseColor(G.toggleButtonColor));
         }
     }
 
@@ -283,7 +283,7 @@ public class FragmentThemColorCustomViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgDefaultHeaderFontColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.headerTextColor));
+//            bgShape.setColor(Color.parseColor(G.headerTextColor));
         }
     }
 
@@ -291,7 +291,7 @@ public class FragmentThemColorCustomViewModel {
 
         if (fragmentThemColorCustomBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgSendAndAttachColor.getBackground();
-            bgShape.setColor(Color.parseColor(G.attachmentColor));
+//            bgShape.setColor(Color.parseColor(G.attachmentColor));
         }
 
     }

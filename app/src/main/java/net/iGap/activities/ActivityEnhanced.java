@@ -15,213 +15,140 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import net.iGap.G;
-import net.iGap.R;
-import net.iGap.Theme;
-import net.iGap.WebSocketClient;
-import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.UserStatusController;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.model.PassCode;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.module.StatusBarUtil;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 
 import java.io.File;
 import java.io.IOException;
 
-import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+import io.realm.Realm;
 
 import static net.iGap.G.updateResources;
 
 
-public class ActivityEnhanced extends AppCompatActivity {
+public abstract class ActivityEnhanced extends AppCompatActivity {
 
     public AvatarHandler avatarHandler;
     public boolean isOnGetPermission = false;
+    private static int ActivityCountInApp = 0;
     protected boolean canSetUserStatus = true;
     BroadcastReceiver myBroadcast = new BroadcastReceiver() {
         //When Event is published, onReceive method is called
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+          /*  if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (G.isPassCode) ActivityMain.isLock = true;
-            }
+            }*/
         }
     };
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(updateResources(newBase)));
+        super.attachBaseContext(updateResources(newBase));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        updateResources(getBaseContext());
         makeDirectoriesIfNotExist();
         G.currentActivity = this;
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        if (G.ISOK) {
+        ActivityCountInApp++;
+        /*Log.wtf("ActivityEnhanced","onCreate start");
+        Log.wtf("ActivityEnhanced","setThemeSetting start");*/
+        setThemeSetting();
+        /*Log.wtf("ActivityEnhanced","setThemeSetting end");
+        Log.wtf("ActivityEnhanced","super.onCreate start");*/
+        super.onCreate(savedInstanceState);
+        /*Log.wtf("ActivityEnhanced","super.onCreate end");*/
+        if (G.ISRealmOK) {
+            if (ActivityCountInApp == 1 || Realm.getLocalInstanceCount(AccountManager.getInstance().getCurrentUser().getRealmConfiguration()) == 0) {
+                DbManager.getInstance().openUiRealm();
+            }
+            /*Log.wtf("ActivityEnhanced","AvatarHandler start");*/
             avatarHandler = new AvatarHandler();
-            setThemeSetting();
+            /*Log.wtf("ActivityEnhanced","AvatarHandler end");*/
 
-            checkFont();
-
+            /*Log.wtf("ActivityEnhanced","screenStateFilter start");*/
             IntentFilter screenStateFilter = new IntentFilter();
             screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
             screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
             registerReceiver(myBroadcast, screenStateFilter);
+            /*Log.wtf("ActivityEnhanced","screenStateFilter end");*/
 
+            /*Log.wtf("ActivityEnhanced","lock start");*/
             SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
             boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
-            if (G.isPassCode && !allowScreen) {
+            if (PassCode.getInstance().isPassCode() && !allowScreen) {
                 try {
                     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             } else {
                 try {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
+            /*Log.wtf("ActivityEnhanced","lock end");*/
 
-            super.onCreate(savedInstanceState);
-
+            /*Log.wtf("ActivityEnhanced","status bar start");*/
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
+                StatusBarUtil.setColor(this, Theme.getInstance().getPrimaryDarkColor(this), 50);
             }
+            /*Log.wtf("ActivityEnhanced","status bar start");*/
 
-            makeDirectoriesIfNotExist();
+            /*makeDirectoriesIfNotExist();*/
 
-            boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+            /*boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
             if (!checkedEnableDataShams) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
             } else {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-            }
+            }*/
 
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        } else {
-            super.onCreate(savedInstanceState);
+            int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+                Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
+            }
         }
+
+        /*Log.wtf("ActivityEnhanced","onCreate end");*/
 
     }
 
     private void setThemeSetting() {
-        switch (G.themeColor) {
-            case Theme.CUSTOM:
-                this.setTheme(R.style.Material_lightCustom);
-                break;
-            case Theme.DEFAULT:
-                this.setTheme(R.style.Material_lightCustom);
-                break;
-            case Theme.DARK:
-                this.setTheme(R.style.Material_blackCustom);
-                break;
-            case Theme.RED:
-                this.setTheme(R.style.Material_red);
-                break;
-            case Theme.PINK:
-                this.setTheme(R.style.Material_pink);
-                break;
-            case Theme.PURPLE:
-                this.setTheme(R.style.Material_purple);
-                break;
-            case Theme.DEEPPURPLE:
-                this.setTheme(R.style.Material_deepPurple);
-                break;
-            case Theme.INDIGO:
-                this.setTheme(R.style.Material_indigo);
-                break;
-            case Theme.BLUE:
-                this.setTheme(R.style.Material_blue);
-                break;
-
-            case Theme.LIGHT_BLUE:
-                this.setTheme(R.style.Material_lightBlue);
-                break;
-
-            case Theme.CYAN:
-                this.setTheme(R.style.Material_cyan);
-                break;
-
-            case Theme.TEAL:
-                this.setTheme(R.style.Material_teal);
-                break;
-
-            case Theme.GREEN:
-                this.setTheme(R.style.Material_green);
-                break;
-
-            case Theme.LIGHT_GREEN:
-                this.setTheme(R.style.Material_lightGreen);
-                break;
-
-            case Theme.LIME:
-                this.setTheme(R.style.Material_lime);
-                break;
-
-            case Theme.YELLLOW:
-                this.setTheme(R.style.Material_yellow);
-                break;
-            case Theme.AMBER:
-                this.setTheme(R.style.Material_amber);
-                break;
-
-            case Theme.ORANGE:
-                this.setTheme(R.style.Material_orange);
-                break;
-
-            case Theme.DEEP_ORANGE:
-                this.setTheme(R.style.Material_deepOrange);
-                break;
-            case Theme.BROWN:
-                this.setTheme(R.style.Material_brown);
-                break;
-            case Theme.GREY:
-                this.setTheme(R.style.Material_grey);
-                break;
-            case Theme.BLUE_GREY:
-                this.setTheme(R.style.Material_blueGrey);
-                break;
-            case Theme.BLUE_GREY_COMPLETE:
-                this.setTheme(R.style.Material_blueGreyComplete);
-                break;
-            case Theme.INDIGO_COMPLETE:
-                this.setTheme(R.style.Material_indigoComplete);
-                break;
-            case Theme.BROWN_COMPLETE:
-                this.setTheme(R.style.Material_BrownComplete);
-                break;
-            case Theme.TEAL_COMPLETE:
-                this.setTheme(R.style.Material_TealComplete);
-                break;
-            case Theme.GREY_COMPLETE:
-                this.setTheme(R.style.Material_GreyComplete);
-                break;
-
-        }
-
+        this.setTheme(new Theme().getTheme(this));
     }
 
     @Override
@@ -236,7 +163,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             if (!G.isAppInFg) {
                 G.isAppInFg = true;
                 G.isChangeScrFg = false;
@@ -244,9 +171,6 @@ public class ActivityEnhanced extends AppCompatActivity {
                 /**
                  * if user isn't login and page come in foreground try for reconnect
                  */
-                if (!G.userLogin) {
-                    WebSocketClient.reconnect(true);
-                }
             } else {
                 G.isChangeScrFg = true;
             }
@@ -267,53 +191,19 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (G.ISOK) {
+        if (G.ISRealmOK) {
             avatarHandler.unregisterChangeFromOtherAvatarHandler();
 
             if (!G.isScrInFg || !G.isChangeScrFg) {
                 G.isAppInFg = false;
             }
             G.isScrInFg = false;
-            try {
-
-                HelperDataUsage.insertDataUsage(null, true, true);
-                HelperDataUsage.insertDataUsage(null, true, false);
-
-                HelperDataUsage.insertDataUsage(null, false, true);
-                HelperDataUsage.insertDataUsage(null, false, false);
-
-            } catch (Exception e) {
-            }
-            ;
 
             if (!AttachFile.isInAttach && canSetUserStatus) {
                 UserStatusController.getInstance().setOffline();
             }
         }
 
-    }
-
-    /**
-     * check the selected language user and set the language if change it
-     */
-
-    private void checkFont() {
-
-        if (G.typeface_IRANSansMobile == null) {
-            G.typeface_IRANSansMobile = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile.ttf");
-        }
-
-        if (G.typeface_IRANSansMobile_Bold == null) {
-            G.typeface_IRANSansMobile_Bold = Typeface.createFromAsset(getAssets(), "fonts/IRANSansMobile_Bold.ttf");
-        }
-
-        if (G.typeface_Fontico == null) {
-            G.typeface_Fontico = Typeface.createFromAsset(getAssets(), "fonts/iGap-Fontico.ttf");
-        }
-
-        if (G.typeface_neuropolitical == null) {
-            G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        }
     }
 
     private void makeDirectoriesIfNotExist() {
@@ -361,16 +251,36 @@ public class ActivityEnhanced extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (G.ISOK) {
+        ActivityCountInApp--;
+        if (G.ISRealmOK) {
+            if (ActivityCountInApp == 0) {
+                DbManager.getInstance().closeUiRealm();
+            }
             unregisterReceiver(myBroadcast);
         }
     }
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        AndroidUtils.checkDisplaySize(this, newConfig);
         super.onConfigurationChanged(newConfig);
-        updateResources(getBaseContext());
+        updateResources(this);
+    }
+
+    public void onRefreshActivity(boolean changeColor, String language) {
+
+        G.isUpdateNotificaionColorMain = changeColor;
+        G.isUpdateNotificaionColorChannel = changeColor;
+        G.isUpdateNotificaionColorGroup = changeColor;
+        G.isUpdateNotificaionColorChat = changeColor;
+        G.isUpdateNotificaionCall = changeColor;
+        G.isRestartActivity = true;
+
+        new HelperFragment(getSupportFragmentManager()).removeAll(false);
+
+        this.recreate();
+
     }
 
 }

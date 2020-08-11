@@ -1,14 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
+
+import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
 
@@ -42,15 +44,9 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         //builder.getSecurityIssue(); true means reject
 
         if (statusNumber == Config.REJECT) { //go to upgrade page
-
-            G.allowForConnect = false;
-            WebSocket webSocket = WebSocketClient.getInstance();
-            if (webSocket != null) {
-                webSocket.disconnect();
-            }
-
+            WebSocketClient.getInstance().disconnectSocket(true);
         } else if (statusNumber == Config.ACCEPT) {
-
+            Log.wtf(this.getClass().getName(), "statusNumber: ACCEPT");
             /**
              * when secure is false set useMask true otherwise set false
              */
@@ -61,6 +57,7 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
             String sm = builder.getSymmetricMethod();
             G.symmetricMethod = sm.split("-")[2];
             if (G.onSecuring == null) {
+                Log.wtf(this.getClass().getName(), "G.onSecuring is null");
                 new LoginActions();
             }
             G.onSecuring.onSecure();
@@ -74,8 +71,8 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
          * if socket is not connect don't need to try for disconnect again because after establish
          * internet connection these steps will be done
          */
-        if (WebSocketClient.isConnect()) {
-            WebSocketClient.getInstance().disconnect();
+        if (WebSocketClient.getInstance().isConnect()) {
+            WebSocketClient.getInstance().disconnectSocket(true);
         }
         super.timeOut();
     }

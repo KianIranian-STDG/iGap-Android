@@ -43,9 +43,23 @@ public class HelperPreferences {
         return getSharedPreferencesInstance(preferencesName).getBoolean(key, false);
     }
 
+    public boolean readBoolean(String preferencesName, String key, boolean defValue) {
+        return getSharedPreferencesInstance(preferencesName).getBoolean(key, defValue);
+    }
+
     public void putBoolean(String preferencesName, String key, boolean value) {
         SharedPreferences.Editor editor = getSharedPreferencesInstance(preferencesName).edit();
         editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    public String readString(String preferencesName, String key) {
+        return getSharedPreferencesInstance(preferencesName).getString(key, "-1");
+    }
+
+    public void putString(String preferencesName, String key, String value) {
+        SharedPreferences.Editor editor = getSharedPreferencesInstance(preferencesName).edit();
+        editor.putString(key, value);
         editor.apply();
     }
 }

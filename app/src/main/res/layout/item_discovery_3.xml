@@ -5,45 +5,44 @@
     android:layout_height="50dp"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type3_card0"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
         android:layout_weight="4"
-        app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="?attr/iGapCardViewColor"
+        app:cardCornerRadius="@dimen/discovery_radius"
+        app:cardPreventCornerOverlap="false">
 
         <ImageView
             android:id="@+id/type3_img0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
-            android:adjustViewBounds="true"/>
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/type3_card1"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
         android:layout_weight="6"
-        app:cardPreventCornerOverlap="false"
-        app:cardCornerRadius="@dimen/discovery_radius">
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="?attr/iGapCardViewColor"
+        app:cardCornerRadius="@dimen/discovery_radius"
+        app:cardPreventCornerOverlap="false">
 
         <ImageView
             android:id="@+id/type3_img1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@color/color_default_discovery_cards"
             android:adjustViewBounds="true"
-            />
-    </android.support.v7.widget.CardView>
+            android:scaleType="fitXY" />
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

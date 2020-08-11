@@ -7,23 +7,22 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import android.content.SharedPreferences;
-import android.databinding.ObservableField;
 import android.view.View;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentActiveSessions;
-import net.iGap.fragments.FragmentBlockedUser;
-import net.iGap.fragments.FragmentPassCode;
-import net.iGap.fragments.FragmentSecurity;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructSessions;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmPrivacy;
@@ -32,13 +31,12 @@ import net.iGap.request.RequestUserProfileSetSelfRemove;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentPrivacyAndSecurityViewModel {
+public class FragmentPrivacyAndSecurityViewModel extends ViewModel {
 
     private final int SEE_MY_AVATAR = 0;
     private final int INVITE_CHANNEL = 1;
@@ -53,8 +51,11 @@ public class FragmentPrivacyAndSecurityViewModel {
     public ObservableField<String> callbackVideoCall = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.everybody));
     public ObservableField<String> callbackSeeLastSeen = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.everybody));
     public ObservableField<String> callbackSelfDestruction = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.everybody));
-    int poSelfRemove;
-    private Realm realm;
+    public SingleLiveEvent<Boolean> goToBlockedUserPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToPassCodePage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToSecurityPage = new SingleLiveEvent<>();
+    public SingleLiveEvent<Boolean> goToActiveSessionsPage = new SingleLiveEvent<>();
+    private int poSelfRemove;
     private RealmUserInfo realmUserInfo;
     private RealmPrivacy realmPrivacy;
     private RealmChangeListener<RealmModel> userInfoListener;
@@ -72,14 +73,11 @@ public class FragmentPrivacyAndSecurityViewModel {
     private ArrayList<StructSessions> itemSessionsgetActivelist = new ArrayList<StructSessions>();
 
     public FragmentPrivacyAndSecurityViewModel() {
-
-        realm = Realm.getDefaultInstance();
         getInfo();
-
     }
 
     public void onClickBlocked(View view) {
-        new HelperFragment(new FragmentBlockedUser()).setReplace(false).load();
+        goToBlockedUserPage.setValue(true);
     }
 
     public void onClickSeeMyAvatar(View view) {
@@ -107,15 +105,15 @@ public class FragmentPrivacyAndSecurityViewModel {
     }
 
     public void onClickPassCode(View view) {
-        new HelperFragment(new FragmentPassCode()).setReplace(false).load();
+        goToPassCodePage.setValue(true);
     }
 
     public void onClickTwoStepVerification(View view) {
-        new HelperFragment(new FragmentSecurity()).setReplace(false).load();
+        goToSecurityPage.setValue(true);
     }
 
     public void onClickActivitySessions(View view) {
-        new HelperFragment(new FragmentActiveSessions()).setReplace(false).load();
+        goToActiveSessionsPage.setValue(true);
     }
 
     public void onClickSelfDestruction(View view) {
@@ -127,31 +125,27 @@ public class FragmentPrivacyAndSecurityViewModel {
 
 
     private void getInfo() {
-        realmPrivacy = realm.where(RealmPrivacy.class).findFirst();
-        realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        realmPrivacy = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmPrivacy.class).findFirst();
+        });
+        realmUserInfo = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class).findFirst();
+        });
+
         RealmPrivacy.getUpdatePrivacyFromServer();
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
 
         updatePrivacyUI(realmPrivacy);
 
-        userInfoListener = new RealmChangeListener<RealmModel>() {
-            @Override
-            public void onChange(RealmModel element) {
-
-                if (((RealmUserInfo) element).isValid()) {
-                    selfRemove = ((RealmUserInfo) element).getSelfRemove();
-                    setTextSelfDestructs();
-                }
+        userInfoListener = element -> {
+            if (((RealmUserInfo) element).isValid()) {
+                selfRemove = ((RealmUserInfo) element).getSelfRemove();
+                setTextSelfDestructs();
             }
         };
 
-        privacyListener = new RealmChangeListener<RealmModel>() {
-            @Override
-            public void onChange(RealmModel element) {
-                updatePrivacyUI((RealmPrivacy) element);
-            }
-        };
+        privacyListener = element -> updatePrivacyUI((RealmPrivacy) element);
     }
 
     private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, final int position, int title, final int type) {
@@ -229,8 +223,7 @@ public class FragmentPrivacyAndSecurityViewModel {
     }
 
     private void updatePrivacyUI(RealmPrivacy realmPrivacy) {
-        if (realmPrivacy.isValid()) {
-
+        if (realmPrivacy != null && realmPrivacy.isValid()) {
             callbackSeeMyAvatar.set(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar(), SEE_MY_AVATAR));
             callbackInviteChannel.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel(), INVITE_CHANNEL));
             callbackInviteGroup.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup(), INVITE_GROUP));
@@ -324,18 +317,35 @@ public class FragmentPrivacyAndSecurityViewModel {
             setTextSelfDestructs();
         }
 
-        if (realmPrivacy != null) {
-            if (privacyListener != null) {
-                realmPrivacy.addChangeListener(privacyListener);
-            }
+        if (realmPrivacy == null) {
+            fillPrivacyDatabaseWithDefaultValues();
         }
+
+        addPrivacyChangeListener();
         updatePrivacyUI(realmPrivacy);
     }
 
+    private void addPrivacyChangeListener() {
 
-    public void onDetach() {
-        realm.close();
+        if (privacyListener != null && realmPrivacy != null) {
+            realmPrivacy.addChangeListener(privacyListener);
+        }
     }
 
+    /**
+     * this method call just once , when realm was null
+     * filled db with default value and changed when server response updated
+     */
+    private void fillPrivacyDatabaseWithDefaultValues() {
 
+        RealmPrivacy.fillWithDefaultValues(() -> {
+            realmPrivacy = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmPrivacy.class).findFirst();
+            });
+            addPrivacyChangeListener();
+            updatePrivacyUI(realmPrivacy);
+        });
+
+
+    }
 }

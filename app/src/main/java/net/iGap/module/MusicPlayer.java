@@ -37,8 +37,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -46,6 +44,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -56,8 +58,10 @@ import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnAudioFocusChangeListener;
-import net.iGap.interfaces.OnComplete;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnAudioFocusChangeListener;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -72,7 +76,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -80,7 +83,14 @@ import static net.iGap.G.context;
 
 public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
+    public static final int PLAY = 0;
+    public static final int PAUSE = 1;
+    public static final int RESUME = 2;
+    public static final int STOP = 3;
+
     public static final int notificationId = 19;
+    public static final int limitMediaList = 50;
+    public static final String musicChannelId = "music_channel";
     public static boolean canDoAction = true;
     public static String repeatMode = RepeatMode.noRepeat.toString();
     public static boolean isShuffelOn = false;
@@ -99,11 +109,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static MediaPlayer mp;
     public static OnComplete onComplete = null;
     public static OnComplete onCompleteChat = null;
+    public static MutableLiveData<Boolean> playerStateChangeListener = new MutableLiveData<>();
+    public static MutableLiveData<Integer> playerStatusObservable = new MutableLiveData<>(STOP);
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
     public static boolean isPause = false;
     public static ArrayList<RealmRoomMessage> mediaList;
-    public static final int limitMediaList = 50;
     public static String strTimer = "";
     public static String messageId = "";
     public static boolean isNearDistance = false;
@@ -130,6 +141,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static TextView btnPlayMusic;
     private static TextView btnCloseMusic;
     private static TextView txt_music_name;
+    private static TextView txt_music_info;
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
@@ -143,17 +155,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static BluetoothCallbacks bluetoothCallbacks;
     private static RemoteControlClient remoteControlClient;
     private static ComponentName remoteComponentName;
-    private static Realm mRealm;
     private static boolean isRegisterSensor = false;
-    public static final String musicChannelId = "music_channel";
-
-    private static Realm getRealm() {
-        if (mRealm == null || mRealm.isClosed()) {
-            mRealm = Realm.getDefaultInstance();
-        }
-
-        return mRealm;
-    }
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
@@ -193,7 +195,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         repeatMode = str;
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("RepeatMode", str);
         editor.apply();
@@ -206,7 +208,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static void shuffleClick() {
 
         isShuffelOn = !isShuffelOn;
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("Shuffel", isShuffelOn);
         editor.apply();
@@ -232,12 +234,13 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         });
 
-        txt_music_time = (TextView) layout.findViewById(R.id.mls_txt_music_time);
+        txt_music_time = layout.findViewById(R.id.mls_txt_music_time);
 
-        txt_music_time_counter = (TextView) layout.findViewById(R.id.mls_txt_music_time_counter);
-        txt_music_name = (TextView) layout.findViewById(R.id.mls_txt_music_name);
+        txt_music_time_counter = layout.findViewById(R.id.mls_txt_music_time_counter);
+        txt_music_name = layout.findViewById(R.id.mls_txt_music_name);
+        txt_music_info = layout.findViewById(R.id.mls_txt_music_info);
 
-        btnPlayMusic = (TextView) layout.findViewById(R.id.mls_btn_play_music);
+        btnPlayMusic = layout.findViewById(R.id.mls_btn_play_music);
         btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,7 +248,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         });
 
-        btnCloseMusic = (TextView) layout.findViewById(R.id.mls_btn_close);
+        btnCloseMusic = layout.findViewById(R.id.mls_btn_close);
         btnCloseMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,15 +257,18 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         });
 
         if (MusicPlayer.mp != null) {
+
+            getMusicArtist();
+
             layout.setVisibility(View.VISIBLE);
             txt_music_name.setText(MusicPlayer.musicName);
-
+            txt_music_info.setText(MusicPlayer.musicInfoTitle);
             txt_music_time.setText(musicTime);
 
             if (MusicPlayer.mp.isPlaying()) {
-                btnPlayMusic.setText(context.getString(R.string.md_pause_button));
+                btnPlayMusic.setText(context.getString(R.string.pause_icon));
             } else {
-                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.play_icon));
             }
         }
 
@@ -313,8 +319,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp != null) {
             if (mp.isPlaying()) {
                 pauseSound();
+                MusicPlayer.playerStatusObservable.setValue(PAUSE);
             } else {
                 playSound();
+                MusicPlayer.playerStatusObservable.setValue(PLAY);
             }
         } else {
             playSound();
@@ -337,7 +345,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             stopTimer();
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.play_icon));
             }
 
             if (!isShowMediaPlayer) {
@@ -348,7 +356,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "play", "");
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
         try {
@@ -357,7 +365,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 isPause = true;
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
     }
@@ -398,7 +406,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.md_pause_button));
+                btnPlayMusic.setText(context.getString(R.string.pause_icon));
             }
 
             if (!isShowMediaPlayer) {
@@ -410,7 +418,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "pause", "");
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
 
         try {
@@ -422,9 +430,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
+
+
     }
 
     public static void stopSound() {
@@ -453,7 +463,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.play_icon));
             }
 
             musicProgress = 0;
@@ -473,6 +483,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 onComplete.complete(true, "updateTime", zeroTime);
             }
             stopTimer();
+            MusicPlayer.playerStatusObservable.setValue(STOP);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -480,7 +491,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp != null) {
             mp.stop();
             updateFastAdapter(MusicPlayer.messageId);
+
         }
+
+
     }
 
     public static void nextMusic() {
@@ -491,9 +505,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 if (isVoice) { // avoid from return to first voice
                     if (btnPlayMusic != null) {
-                        btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                        btnPlayMusic.setText(context.getString(R.string.play_icon));
                     }
                     stopSound();
+                    closeLayoutMediaPlayer();
                     return;
                 }
 
@@ -573,9 +588,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     if (selectedMedia >= mediaList.size()) {
                         if (isVoice) { // avoid from return to first voice
                             if (btnPlayMusic != null) {
-                                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                                btnPlayMusic.setText(context.getString(R.string.play_icon));
                             }
                             stopSound();
+                            closeLayoutMediaPlayer();
                             return;
                         }
                         selectedMedia = 0;
@@ -603,6 +619,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.GONE);
+                //playerStateChangeListener.setValue(false);
             }
 
             if (onComplete != null) {
@@ -641,20 +658,34 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         }
 
-        if (mRealm != null && !mRealm.isClosed()) {
-            mRealm.close();
-            mRealm = null;
+        if (MusicPlayer.chatLayout != null) {
+            MusicPlayer.chatLayout.setVisibility(View.GONE);
         }
+
+        if (MusicPlayer.mainLayout != null) {
+            MusicPlayer.mainLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.shearedMediaLayout != null) {
+            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
+        }
+
+        if (MusicPlayer.layoutTripMusic != null) {
+            MusicPlayer.layoutTripMusic.setVisibility(View.GONE);
+        }
+        MusicPlayer.playerStateChangeListener.setValue(false);
     }
 
     private static String getMusicName(long messageId, String name) {
         try {
             if (isVoice) {
                 String voiceName = "";
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());
+                RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());
+                });
                 if (realmRoomMessage != null) {
                     if (realmRoomMessage.getUserId() != 0) {
-                        if (realmRoomMessage.getUserId() == G.userId) {
+                        if (realmRoomMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
                             voiceName = G.context.getResources().getString(R.string.you);
                         } else {
                             voiceName = RealmRegisteredInfo.getNameWithId(realmRoomMessage.getUserId());
@@ -700,8 +731,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (messageID != null && messageID.length() > 0) {
 
                 try {
-                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
-
+                    RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
+                        return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
+                    });
                     if (realmRoomMessage != null) {
                         String type = realmRoomMessage.getMessageType().toString();
 
@@ -710,7 +742,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         }
                     }
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
 
@@ -740,12 +772,14 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 mp.reset();
                 mp.release();
             }
+            musicName = getMusicName(Long.parseLong(messageID), name);
+            mp = new MediaPlayer();
 
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.VISIBLE);
+                playerStateChangeListener.setValue(true);
+                MusicPlayer.playerStatusObservable.setValue(PLAY);
             }
-            musicName = getMusicName(Long.parseLong(messageID), name);
-            mp = new MediaPlayer();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -767,11 +801,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 currentDuration = 0;
             }
 
+            getMusicArtist();
+
             updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
-            btnPlayMusic.setText(context.getString(R.string.md_pause_button));
+            btnPlayMusic.setText(context.getString(R.string.pause_icon));
             txt_music_name.setText(musicName);
+
+            if (isVoice) {
+                txt_music_info.setVisibility(View.GONE);
+            } else {
+                txt_music_info.setVisibility(View.VISIBLE);
+                txt_music_info.setText(musicInfoTitle);
+            }
             updateName = new UpdateName() {
                 @Override
                 public void rename() {
@@ -823,6 +866,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
 
         inChangeStreamType = false;
+
+
+        if (MusicPlayer.chatLayout != null) {
+            MusicPlayer.chatLayout.setVisibility(View.VISIBLE);
+        }
+
+        if (MusicPlayer.mainLayout != null) {
+            MusicPlayer.mainLayout.setVisibility(View.VISIBLE);
+        }
+
+        if (MusicPlayer.shearedMediaLayout != null) {
+            MusicPlayer.shearedMediaLayout.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private static void OnCompleteMusic() {
@@ -849,6 +906,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             } else {
                 if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
                     stopSound();
+                    closeLayoutMediaPlayer();
                 } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
 
                     if (playNextMusic) {
@@ -964,7 +1022,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         boolean isOnListMusic = false;
         mediaList = new ArrayList<>();
 
-        List<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        List<RealmRoomMessage> roomMessages = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        });
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) { //TODO Saeed Mozaffari; write better code for detect voice and audio instead get all roomMessages
@@ -1002,9 +1062,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
         }
 
-        if (setSelectedItem)
-
-        {
+        if (setSelectedItem) {
             for (int i = mediaList.size() - 1; i >= 0; i--) {
                 try {
                     RealmRoomMessage _rm = RealmRoomMessage.getFinalMessage(mediaList.get(i));
@@ -1115,12 +1173,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         musicInfo = "";
         musicInfoTitle = context.getString(R.string.unknown_artist);
 
-        MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
 
         Uri uri = null;
 
         if (MusicPlayer.musicPath != null) {
-            uri = (Uri) Uri.fromFile(new File(MusicPlayer.musicPath));
+            uri = Uri.fromFile(new File(MusicPlayer.musicPath));
         }
 
         if (uri != null) {
@@ -1129,7 +1187,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 mediaMetadataRetriever.setDataSource(context, uri);
 
-                String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                String title = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 
                 if (title != null) {
                     musicInfo += title + "       ";
@@ -1173,8 +1231,53 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
+    private static void getMusicArtist() {
+
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+
+        Uri uri = null;
+
+        if (MusicPlayer.musicPath != null) {
+            uri = Uri.fromFile(new File(MusicPlayer.musicPath));
+        }
+
+        if (uri != null) {
+
+            try {
+
+                mediaMetadataRetriever.setDataSource(context, uri);
+
+                String title = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+
+                if (title != null) {
+                    musicInfo += title + "       ";
+                    musicInfoTitle = title;
+                }
+
+                String albumName = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+                if (albumName != null) {
+                    musicInfo += albumName + "       ";
+                    musicInfoTitle = albumName;
+                }
+
+                String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                if (artist != null) {
+                    musicInfo += artist + "       ";
+                    musicInfoTitle = artist;
+                }
+
+            } catch (Exception e) {
+
+                if (musicInfoTitle != null && musicInfoTitle.trim().equals("")) {
+                    txt_music_info.setVisibility(View.GONE);
+                }
+            }
+        }
+
+    }
+
     private static void getAttribute() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
     }
@@ -1182,8 +1285,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static boolean downloadNextMusic(String messageId) {
 
         boolean result = false;
+        RealmResults<RealmRoomMessage> roomMessages = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll().sort(RealmRoomMessageFields.CREATE_TIME);
 
-        RealmResults<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll().sort(RealmRoomMessageFields.CREATE_TIME);
+        });
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
@@ -1405,7 +1510,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     mSession.setPlaybackState(state);
                 } catch (Exception e) {
 
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             } else {
 
@@ -1414,7 +1519,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
                     audioManager.registerMediaButtonEventReceiver(remoteComponentName);
                 } catch (Exception e) {
-                    HelperLog.setErrorLog(e);
+                    HelperLog.getInstance().setErrorLog(e);
                 }
             }
 
@@ -1436,7 +1541,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE | RemoteControlClient.FLAG_KEY_MEDIA_STOP | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
                 }
             } catch (Exception e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }
@@ -1466,7 +1571,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 metadataEditor.apply();
             }
         } catch (Exception e) {
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
@@ -1476,6 +1581,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
     }
 
     @Override
@@ -1570,7 +1680,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
 
     public enum RepeatMode {
-        noRepeat, oneRpeat, repeatAll;
+        noRepeat, oneRpeat, repeatAll
     }
 
     public interface UpdateName {
@@ -1602,7 +1712,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             try {
 
                 if (myWallpaperManager.isSetWallpaperAllowed()) {
-                    myWallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+                    myWallpaperManager.setImageData(bitmap, null, true, WallpaperManager.FLAG_LOCK);
                 }
 
             } catch (Exception e) {
@@ -1619,7 +1729,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 if (myWallpaperManager.isSetWallpaperAllowed()) {
 
                     if (orginalWallPaper != null) {
-                        myWallpaperManager.setBitmap(orginalWallPaper, null, true, WallpaperManager.FLAG_LOCK);
+                        myWallpaperManager.setImageData(orginalWallPaper, null, true, WallpaperManager.FLAG_LOCK);
                     } else {
                         myWallpaperManager.clear(WallpaperManager.FLAG_LOCK);
                     }

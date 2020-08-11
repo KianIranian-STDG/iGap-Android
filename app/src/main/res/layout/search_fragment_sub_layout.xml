@@ -1,106 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="@dimen/dp68"
-  android:clickable="true"
-  android:orientation="horizontal"
-  style="?backgroundColorSettingTheme"
-    android:paddingTop="@dimen/dp8"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp68"
+    android:orientation="horizontal"
     android:paddingLeft="@dimen/dp8"
+    android:paddingTop="@dimen/dp8"
     android:paddingRight="@dimen/dp8">
 
 
-  <net.iGap.module.CircleImageView
-    android:id="@+id/sfsl_imv_contact_avatar"
-    android:layout_width="@dimen/dp48"
-    android:layout_height="@dimen/dp48"
-    android:layout_marginLeft="@dimen/dp8"
-    android:layout_marginRight="@dimen/dp8"
-    android:layout_marginEnd="@dimen/dp8"
-    android:layout_marginStart="@dimen/dp8" />
-
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-        android:layout_weight="1"
-      android:orientation="horizontal">
-
-      <TextView
-        android:id="@+id/sfsl_txt_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+    <net.iGap.module.CircleImageView
+        android:id="@+id/sfsl_imv_contact_avatar"
+        android:layout_width="@dimen/dp48"
+        android:layout_height="@dimen/dp48"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8"
         android:layout_marginEnd="@dimen/dp8"
-        android:layout_marginRight="@dimen/dp8"
-        android:paddingTop="@dimen/dp2"
-        style="?textSubColorSettingTheme"
-        android:text="how"
-        android:textSize="@dimen/dp18" />
-
-
-      <net.iGap.module.CustomTextViewMedium
-        android:id="@+id/sfsl_txt_contact_name"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="start|top"
-        android:singleLine="true"
-        android:text="Dominika Faniz"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-        style="?textTitleColorSettingTheme"
-        android:textSize="@dimen/dp16" />
-
-    </LinearLayout>
+        android:layout_marginRight="@dimen/dp8" />
 
     <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-        android:layout_weight="1"
-      android:gravity="center_vertical"
-      android:padding="0dp"
-      android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-      <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
-        <net.iGap.module.EmojiTextViewE
-          android:id="@+id/sfsl_txt_contact_lastseen"
-          style="?textSubColorSettingTheme"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="start"
-          android:singleLine="true"
-          android:text="@string/last_seen_recently"
-          android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-          android:textSize="@dimen/dp14" />
-
-      </LinearLayout>
+            <TextView
+                android:id="@+id/sfsl_txt_icon"
+                style="@style/myIconTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/dp8"
+                android:layout_marginRight="@dimen/dp8"
+                android:paddingTop="@dimen/dp2"
+                android:textSize="@dimen/largeTextSize" />
 
 
-      <TextView
-        android:id="@+id/sfsl_txt_time"
-        style="?textSubColorSettingTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp8"
-        android:paddingRight="@dimen/dp8"
-        android:text="10:52"
-         android:visibility="invisible"
-        android:textSize="@dimen/dp12" />
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/sfsl_txt_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="start|top"
+                android:singleLine="true"
+                android:text="Dominika Faniz"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:textColor="?iGapTitleTextColor"
+                android:textSize="@dimen/largeTextSize" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/sfsl_txt_contact_lastseen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:text="@string/last_seen_recently"
+                    android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/sfsl_txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp8"
+                android:paddingRight="@dimen/dp8"
+                android:text="10:52"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/dp12"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="?iGapDividerLine" />
 
     </LinearLayout>
-
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1px"
-      android:background="@color/gray" />
-
-  </LinearLayout>
 
 </LinearLayout>

@@ -1,64 +1,54 @@
 package net.iGap.fragments;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
-import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.interfaces.ISignalingGetCallLog;
-import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnCallLogClear;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.module.DialogAnimation;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.ISignalingGetCallLog;
+import net.iGap.observers.interfaces.OnCallLogClear;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmCallLog;
 import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
-import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
-import net.iGap.webrtc.WebRTC;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -68,336 +58,127 @@ import io.realm.Sort;
 
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-public class FragmentCall extends BaseFragment implements OnCallLogClear {
+public class FragmentCall extends BaseMainFragments implements OnCallLogClear, ToolbarListener {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
-    public FloatingActionButton fabContactList;
-    boolean openInMain = false;
-    boolean isSendRequestForLoading = false;
-    boolean isThereAnyMoreItemToLoad = true;
-    ProgressBar progressBar;
-    boolean canclick = false;
-    int move = 0;
+
+    private boolean isSendRequestForLoading = false;
+    private boolean isThereAnyMoreItemToLoad = true;
+    private ProgressBar progressBar;
+    private View emptuListView;
+    private boolean canclick = false;
+    private int move = 0;
     private int mOffset = 0;
-    private int mLimit = 50;
     private RecyclerView.OnScrollListener onScrollListener;
-    private ImageView imgCallEmpty;
-    private TextView empty_call;
     private int attampOnError = 0;
     private RecyclerView mRecyclerView;
-    //private CallAdapterA mAdapter;
+    private ProtoSignalingGetLog.SignalingGetLog.Filter mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
+
+    private TextView mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls;
+    private RealmResults<RealmCallLog> realmResults;
+    private HelperToolbar mHelperToolbar;
+    private boolean mIsMultiSelectEnable = false;
+    private List<RealmCallLog> mSelectedLogList = new ArrayList<>();
+    private ViewGroup mMultiSelectLayout, mFiltersLayout;
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
-
         FragmentCall fragmentCall = new FragmentCall();
-
         Bundle bundle = new Bundle();
         bundle.putBoolean(OPEN_IN_FRAGMENT_MAIN, openInFragmentMain);
         fragmentCall.setArguments(bundle);
-
         return fragmentCall;
-    }
-
-    public static void call(long userID, boolean isIncomingCall, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
-
-        if (G.userLogin) {
-
-            if (!G.isInCall) {
-                Realm realm = Realm.getDefaultInstance();
-                RealmCallConfig realmCallConfig = realm.where(RealmCallConfig.class).findFirst();
-
-                if (realmCallConfig == null) {
-                    new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                } else if (!G.isCalling) {
-                    if (G.currentActivity != null) {
-                        Intent intent = new Intent(G.currentActivity, ActivityCall.class);
-                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                        intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                        ActivityCall.isGoingfromApp = true;
-                        G.currentActivity.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(G.context, ActivityCall.class);
-                        intent.putExtra(ActivityCall.USER_ID_STR, userID);
-                        intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
-                        intent.putExtra(ActivityCall.CALL_TYPE, callTYpe);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        ActivityCall.isGoingfromApp = true;
-                        G.context.startActivity(intent);
-                    }
-
-
-                } else {
-                    try {
-                        WebRTC.getInstance().leaveCall();
-                    } catch (Exception e) {
-                    }
-
-                }
-
-                realm.close();
-            }
-
-
-        } else {
-
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-        }
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
-        if (openInMain) {
-            return inflater.inflate(R.layout.fragment_call, container, false);
-        }
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_call, container, false);
     }
 
-    private View view;
-
-    @SuppressLint("RestrictedApi")
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.view = view;
-        init();
 
-    }
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(getContext())
+                .setLifecycleOwner(getViewLifecycleOwner())
+                .setLeftIcon(R.string.edit_icon)
+                .setRightIcons(R.string.add_icon_without_circle_font)
+                .setFragmentActivity(getActivity())
+                .setPassCodeVisibility(true, R.string.unlock_icon)
+                .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                .setLogoShown(true)
+                .setListener(this);
 
-    public void showContactListForCall() {
-        final Fragment fragment = RegisteredContactsFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE", "call");
-        bundle.putBoolean("ACTION", true);
-        fragment.setArguments(bundle);
+        ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
+        layoutToolbar.addView(mHelperToolbar.getView());
 
-        try {
-            //G.fragmentActivity.getSupportFragmentManager()
-            //    .beginTransaction()
-            //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            //    .addToBackStack(null)
-            //    .replace(R.id.fragmentContainer, fragment)
-            //    .commit();
+        mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
+        mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
+        mBtnCanceledCalls = view.findViewById(R.id.fc_btn_canceled_calls);
+        mBtnIncomingCalls = view.findViewById(R.id.fc_btn_incoming_calls);
+        mBtnOutgoingCalls = view.findViewById(R.id.fc_btn_outgoing_calls);
+        progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
+        emptuListView = view.findViewById(R.id.empty_layout);
+        progressBar = view.findViewById(R.id.fc_progress_bar_waiting);
+        mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
+        mMultiSelectLayout = view.findViewById(R.id.fc_layout_multi_select);
+        mFiltersLayout = view.findViewById(R.id.fc_layout_filters);
+        TextView mBtnDeleteAllLogs = view.findViewById(R.id.fc_btn_remove_all);
+        TextView mBtnDeleteLog = view.findViewById(R.id.fc_btn_delete);
 
-            new HelperFragment(fragment).setReplace(false).load();
+        setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
 
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
-    private void getLogListWithOffset() {
-
-        if (G.isSecure && G.userLogin) {
-            isSendRequestForLoading = true;
-            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit);
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    getLogListWithOffset();
-                }
-            }, 1000);
-        }
-
-    }
-
-    //*************************************************************************************************************
-
-    public void openDialogMenu() {
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View view = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
-        txtClear.setText(G.fragmentActivity.getResources().getString(R.string.clean_log));
-
-        TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
-        iconClear.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-
-        ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
-        root1.setVisibility(View.VISIBLE);
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-                if (G.userLogin) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                            positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            try (Realm realm = Realm.getDefaultInstance()) {
-                                RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
-                                new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
-                                imgCallEmpty.setVisibility(View.VISIBLE);
-                                empty_call.setVisibility(View.VISIBLE);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).negativeText(R.string.B_cancel).show();
-                } else {
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onCallLogClear() {
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        if (mAdapter != null) {
-        //            mAdapter.clear();
-        //        }
-        //    }
-        //});
-    }
-
-    //*************************************************************************************************************
-    private boolean isInit = false;
-
-    private void init() {
-        if (view == null) {
-            return;
-        }
-
-        fabContactList = (FloatingActionButton) view.findViewById(R.id.fc_fab_contact_list);
-        fabContactList.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
-
-        if (!getUserVisibleHint()) {
-            if (!isInit) {
-                view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
-                view.findViewById(R.id.empty_layout).setVisibility(View.GONE);
-                view.findViewById(R.id.pb_load).setVisibility(View.VISIBLE);
-                fabContactList.hide();
-            }
-            return;
-        }
-        isInit = true;
-        view.findViewById(R.id.pb_load).setVisibility(View.GONE);
-        view.findViewById(R.id.fc_layot_title).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
-        fabContactList.show();
-
-        //G.onCallLogClear = this;
-        //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
-
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
-
-
-        imgCallEmpty = (AppCompatImageView) view.findViewById(R.id.img_icCall);
-        empty_call = (TextView) view.findViewById(R.id.textEmptyCal);
-        progressBar = (ProgressBar) view.findViewById(R.id.fc_progress_bar_waiting);
-
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_call_ripple_txtBack);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
-            }
-        });
-
-        MaterialDesignTextView txtMenu = (MaterialDesignTextView) view.findViewById(R.id.fc_btn_menu);
-
-        txtMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialogMenu();
-            }
-        });
-
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.fc_recycler_view_call);
+        mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
-        LinearLayoutManager linearVertical = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-        mRecyclerView.setLayoutManager(linearVertical);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        Realm realm = Realm.getDefaultInstance();
 
-        final RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING);
-
-        if (results.size() > 0) {
-            imgCallEmpty.setVisibility(View.GONE);
-            empty_call.setVisibility(View.GONE);
-
-        } else {
-            imgCallEmpty.setVisibility(View.VISIBLE);
-            empty_call.setVisibility(View.VISIBLE);
+        if (realmResults == null) {
+            realmResults = DbManager.getInstance().doRealmTask(realm -> {
+                return getRealmResult(mSelectedStatus, realm);
+            });
         }
 
-        CallAdapter callAdapter = new CallAdapter(results);
-        mRecyclerView.setAdapter(callAdapter);
+        realmResults.addChangeListener((realmCallLogs, changeSet) -> {
+            checkListIsEmpty();
+        });
+        checkListIsEmpty();
 
-        callAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        mRecyclerView.setAdapter(new CallAdapter(realmResults));
+
+        mOffset = 0;
+        getLogListWithOffset();
+
+        mRecyclerView.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (results.size() > 0) {
-                    imgCallEmpty.setVisibility(View.GONE);
-                    empty_call.setVisibility(View.GONE);
-
-                } else {
-                    imgCallEmpty.setVisibility(View.VISIBLE);
-                    empty_call.setVisibility(View.VISIBLE);
-                }
+                checkListIsEmpty();
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (results.size() > 0) {
-                    imgCallEmpty.setVisibility(View.GONE);
-                    empty_call.setVisibility(View.GONE);
-
-                } else {
-                    imgCallEmpty.setVisibility(View.VISIBLE);
-                    empty_call.setVisibility(View.VISIBLE);
-                }
+                checkListIsEmpty();
             }
 
         });
 
-        //fastAdapter
-        //mAdapter = new CallAdapterA();
-        //for (RealmCallLog callLog : results) {
-        //    mAdapter.add(new CallItem().setInfo(callLog).withIdentifier(callLog.getId()));
-        //}
-        //mRecyclerView.setAdapter(mAdapter);
-        //mAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
-        //    @Override
-        //    public boolean onClick(View v, IAdapter adapter, IItem item, int position) {
-        //        long userId = ((CallItem) item).callLog.getLogProto().getPeer().getId();
-        //        if (userId != 134 && G.userId != userId) {
-        //            call(userId, false);
-        //        }
-        //        return true;
-        //    }
-        //});
-
         onScrollListener = new RecyclerView.OnScrollListener() {
-
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 if (isThereAnyMoreItemToLoad) {
                     if (!isSendRequestForLoading) {
-
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-
                         if (lastVisiblePosition + 15 >= mOffset) {
                             getLogListWithOffset();
                         }
@@ -411,35 +192,11 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
         G.iSignalingGetCallLog = new ISignalingGetCallLog() {
             @Override
             public void onGetList(final int size, final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> signalingLogList) {
-
                 if (signalingLogList != null) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Realm realm = Realm.getDefaultInstance();
-                            //realm.executeTransaction(new Realm.Transaction() {
-                            //    @Override
-                            //    public void execute(Realm realm) {
-                            //        for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog : signalingLogList) {
-                            //            RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
-                            //            if (realmCallLog != null && mAdapter.getPosition(callLog.getId()) == -1) {
-                            //                if (imgCallEmpty != null && imgCallEmpty.getVisibility() == View.VISIBLE) {
-                            //                    imgCallEmpty.setVisibility(View.GONE);
-                            //                    empty_call.setVisibility(View.GONE);
-                            //                }
-                            //                mAdapter.add(0, new CallItem().setInfo(realmCallLog).withIdentifier(callLog.getId()));
-                            //            }
-                            //        }
-                            //    }
-                            //});
-                            //realm.close();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
+                    G.handler.post(() -> progressBar.setVisibility(View.GONE));
                 }
 
                 if (size == -1) {
-
                     if (attampOnError < 2) {
                         isSendRequestForLoading = false;
                         attampOnError++;
@@ -457,240 +214,243 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             }
         };
 
-        realm.close();
-
-        fabContactList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showContactListForCall();
+        mBtnAllCalls.setOnClickListener(v -> {
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.ALL) {
+                setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
             }
         });
 
-        getLogListWithOffset();
+        mBtnMissedCalls.setOnClickListener(v -> {
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED) {
+                setEnableButton(mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
+            }
+        });
 
-        if (openInMain) {
+        mBtnOutgoingCalls.setOnClickListener(v -> {
 
-            fabContactList.hide();
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING) {
+                setEnableButton(mBtnOutgoingCalls, mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
+            }
 
-            view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
+        });
 
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) throws ClassCastException {
-                    super.onScrolled(recyclerView, dx, dy);
+        mBtnIncomingCalls.setOnClickListener(v -> {
 
-                    if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING) {
+                setEnableButton(mBtnIncomingCalls, mBtnMissedCalls, mBtnAllCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
+            }
+
+        });
+
+        mBtnCanceledCalls.setOnClickListener(v -> {
+
+            if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED) {
+                setEnableButton(mBtnCanceledCalls, mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls);
+                getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
+            }
+
+        });
+
+        //clear all logs
+        mBtnDeleteAllLogs.setOnClickListener(v -> {
+            if (G.userLogin) {
+                new MaterialDialog.Builder(v.getContext()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                        positiveText(R.string.B_ok).onPositive((dialog, which) -> {
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        //ToDo: add callback to proto request
+                        setViewState(false);
+                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                        new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
+                        view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                        mSelectedLogList.clear();
+                    });
+                }).negativeText(R.string.B_cancel).show();
+            } else {
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
+            }
+
+        });
+
+        //clear selected logs
+        mBtnDeleteLog.setOnClickListener(v -> {
+
+            if (mSelectedLogList.size() == 0) {
+                Toast.makeText(_mActivity, getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (G.userLogin) {
+                new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
+
+                    try {
+                        List<Long> logIds = new ArrayList<>();
+
+                        for (int i = 0; i < mSelectedLogList.size(); i++) {
+                            logIds.add(mSelectedLogList.get(i).getLogId());
+                        }
+                        new RequestSignalingClearLog().signalingClearLog(logIds);
+
+
+                        setViewState(false);
+
+                        mSelectedLogList.clear();
+
+                        if (realmResults.size() == 0) {
+                            view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                    if (dy > 0) {
-                        // Scroll Down
-                        if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
-                        }
-                    } else if (dy < 0) {
-                        // Scroll Up
-                        if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
-                        }
-                    }
-                }
-            });
 
+                }).negativeText(R.string.B_cancel).show();
+            } else {
+                HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
+            }
+
+        });
+        //Todo: fixed it, cause load view with delay
+        setViewState(mIsMultiSelectEnable);
+    }
+
+    private void checkListIsEmpty() {
+        emptuListView.setVisibility(realmResults.size() > 0 ? View.GONE : View.VISIBLE);
+    }
+
+    private void getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter filter) {
+        if (realmResults != null) realmResults.removeAllChangeListeners();
+        mSelectedStatus = filter;
+        realmResults = DbManager.getInstance().doRealmTask(realm -> {
+            return getRealmResult(mSelectedStatus, realm);
+        });
+
+        mRecyclerView.setAdapter(new CallAdapter(realmResults));
+        checkListIsEmpty();
+    }
+
+    private void setEnableButton(TextView enable, TextView disable, TextView disable2, TextView disable3, TextView disable4) {
+        enable.setSelected(true);
+        disable.setSelected(false);
+        disable2.setSelected(false);
+        disable3.setSelected(false);
+        disable4.setSelected(false);
+    }
+
+    private RealmResults<RealmCallLog> getRealmResult(ProtoSignalingGetLog.SignalingGetLog.Filter status, Realm realm) {
+
+        switch (status) {
+            case ALL:
+                return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+
+            case MISSED:
+            case OUTGOING:
+            case CANCELED:
+            case INCOMING:
+                return realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.STATUS, status.name()).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+
+            default:
+                return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+        }
+
+    }
+
+    public void showContactListForCall() {
+        try {
+            if (getActivity() != null) {
+                Fragment fragment = RegisteredContactsFragment.newInstance(true, true, RegisteredContactsFragment.CALL);
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
+    private void getLogListWithOffset() {
+
+        if (G.isSecure && G.userLogin) {
+            isSendRequestForLoading = true;
+            int mLimit = 50;
+            new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit, mSelectedStatus);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            new Handler().postDelayed(this::getLogListWithOffset, 1000);
         }
 
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !isInit) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+    public void onLeftIconClickListener(View view) {
 
-                    init();
-                }
-            }, 800);
+        mSelectedLogList.clear();
+        if (realmResults.size() == 0) {
+            Toast.makeText(_mActivity, getString(R.string.empty_call), Toast.LENGTH_SHORT).show();
+            if (mIsMultiSelectEnable) setViewState(false);
+            return;
+        }
+        setViewState(!mIsMultiSelectEnable);
+    }
+
+    private void setViewState(boolean state) {
+
+        if (!state) {
+
+            mIsMultiSelectEnable = false;
+            mHelperToolbar.setLeftIcon(R.string.edit_icon);
+
+            mFiltersLayout.setVisibility(View.VISIBLE);
+            mMultiSelectLayout.setVisibility(View.GONE);
+
+            mHelperToolbar.getScannerButton().setVisibility(View.VISIBLE);
+            mHelperToolbar.getRightButton().setVisibility(View.VISIBLE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.VISIBLE);
+
+            refreshCallList(0, true);
+
+        } else {
+
+            mIsMultiSelectEnable = true;
+            mHelperToolbar.setLeftIcon(R.string.back_icon);
+
+            mFiltersLayout.setVisibility(View.GONE);
+            mMultiSelectLayout.setVisibility(View.VISIBLE);
+
+            mHelperToolbar.getScannerButton().setVisibility(View.GONE);
+            mHelperToolbar.getRightButton().setVisibility(View.GONE);
+            if (PassCode.getInstance().isPassCode())
+                mHelperToolbar.getPassCodeButton().setVisibility(View.GONE);
+
+            refreshCallList(0, true);
+
         }
     }
 
-    /**
-     * ***********************************************************************************
-     * *********************************** FastAdapter ***********************************
-     * ***********************************************************************************
-     */
-    //+ manually update
-    //public class CallAdapterA<Item extends CallItem> extends FastItemAdapter<Item> {
-    //
-    //    @Override
-    //    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    //        return super.onCreateViewHolder(parent, viewType);
-    //    }
-    //}
-    //
-    //public class CallItem extends AbstractItem<CallItem, CallItem.ViewHolder> {
-    //    String lastHeader = "";
-    //    RealmCallLog callLog;
-    //
-    //    public CallItem setInfo(RealmCallLog callLog) {
-    //        this.callLog = callLog;
-    //        return this;
-    //    }
-    //
-    //    @Override
-    //    public void bindView(final ViewHolder viewHolder, List payloads) throws IllegalStateException {
-    //        super.bindView(viewHolder, payloads);
-    //
-    //        if (callLog == null || !callLog.isValid()) {
-    //            return;
-    //        }
-    //
-    //        if (viewHolder.itemView.findViewById(R.id.mainContainer) == null) {
-    //            ((ViewGroup) viewHolder.itemView).addView(ViewMaker.getViewItemCall());
-    //        }
-    //
-    //        viewHolder.timeDuration = (TextView) viewHolder.itemView.findViewById(R.id.fcsl_txt_dureation_time);
-    //        viewHolder.image = (CircleImageView) viewHolder.itemView.findViewById(R.id.fcsl_imv_picture);
-    //        viewHolder.name = (EmojiTextViewE) viewHolder.itemView.findViewById(R.id.fcsl_txt_name);
-    //        viewHolder.icon = (MaterialDesignTextView) viewHolder.itemView.findViewById(R.id.fcsl_txt_icon);
-    //        viewHolder.timeAndInfo = (TextView) viewHolder.itemView.findViewById(R.id.fcsl_txt_time_info);
-    //
-    //        final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = callLog.getLogProto();
-    //
-    //        // set icon and icon color
-    //        switch (item.getStatus()) {
-    //            case OUTGOING:
-    //                viewHolder.icon.setText(R.string.md_call_made);
-    //                viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-    //                viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
-    //                break;
-    //            case MISSED:
-    //                viewHolder.icon.setText(R.string.md_call_missed);
-    //                viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
-    //                viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.red));
-    //                viewHolder.timeDuration.setText(R.string.miss);
-    //                break;
-    //            case CANCELED:
-    //
-    //                viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-    //                viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
-    //                viewHolder.timeDuration.setText(R.string.not_answer);
-    //                break;
-    //            case INCOMING:
-    //                viewHolder.icon.setText(R.string.md_call_received);
-    //                viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
-    //                viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
-    //                break;
-    //        }
-    //
-    //        if (HelperCalander.isPersianUnicode) {
-    //            viewHolder.timeAndInfo.setText(TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME + " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())));
-    //        } else {
-    //            viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
-    //        }
-    //
-    //        if (item.getDuration() > 0) {
-    //            viewHolder.timeDuration.setText(DateUtils.formatElapsedTime(item.getDuration()));
-    //        }
-    //
-    //        if (HelperCalander.isPersianUnicode) {
-    //            viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
-    //            viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
-    //        }
-    //
-    //        viewHolder.name.setText(item.getPeer().getDisplayName());
-    //
-    //        hashMapAvatar.put(item.getId(), viewHolder.image);
-    //
-    //        HelperAvatar.getAvatarCall(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
-    //            @Override
-    //            public void onAvatarGet(final String avatarPath, long ownerId) {
-    //                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(item.getId()));
-    //            }
-    //
-    //            @Override
-    //            public void onShowInitials(final String initials, final String color) {
-    //                hashMapAvatar.get(item.getId()).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-    //            }
-    //        });
-    //    }
-    //
-    //    @Override
-    //    public int getType() {
-    //        return 0;
-    //    }
-    //
-    //    @Override
-    //    public int getLayoutRes() {
-    //        return R.layout.fragment_call_sub_layout_code;
-    //    }
-    //
-    //    @Override
-    //    public ViewHolder getViewHolder(View viewGroup) {
-    //        return new ViewHolder(viewGroup);
-    //    }
-    //
-    //    public class ViewHolder extends RecyclerView.ViewHolder {
-    //
-    //        private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog;
-    //        private CircleImageView image;
-    //        private EmojiTextViewE name;
-    //        private MaterialDesignTextView icon;
-    //        private TextView timeAndInfo;
-    //        private TextView timeDuration;
-    //
-    //        public ViewHolder(View view) {
-    //            super(view);
-    //            //imgCallEmpty.setVisibility(View.GONE);
-    //            //empty_call.setVisibility(View.GONE);
-    //            //
-    //            //timeDuration = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
-    //            //image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
-    //            //name = (EmojiTextViewE) itemView.findViewById(R.id.fcsl_txt_name);
-    //            //icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
-    //            //timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
-    //            //
-    //            //itemView.setOnClickListener(new View.OnClickListener() {
-    //            //    @Override
-    //            //    public void onClick(View v) {
-    //            //
-    //            //        // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
-    //            //
-    //            //        if (canclick) {
-    //            //            long userId = callLog.getPeer().getId();
-    //            //
-    //            //            if (userId != 134 && G.userId != userId) {
-    //            //                call(userId, false);
-    //            //            }
-    //            //        }
-    //            //    }
-    //            //});
-    //            //
-    //            //itemView.setOnTouchListener(new View.OnTouchListener() {
-    //            //    @Override
-    //            //    public boolean onTouch(View v, MotionEvent event) {
-    //            //
-    //            //        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-    //            //            move = (int) event.getX();
-    //            //        } else if (event.getAction() == MotionEvent.ACTION_UP) {
-    //            //
-    //            //            int i = Math.abs((int) (move - event.getX()));
-    //            //
-    //            //            if (i < 10) {
-    //            //                canclick = true;
-    //            //            } else {
-    //            //                canclick = false;
-    //            //            }
-    //            //        }
-    //            //
-    //            //        return false;
-    //            //    }
-    //            //});
-    //        }
-    //    }
-    //}
+    @Override
+    public void onRightIconClickListener(View view) {
+        showContactListForCall();
+    }
+
+    //*************************************************************************************************************
+
+    @Override
+    public void onCallLogClear() {
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        if (mAdapter != null) {
+        //            mAdapter.clear();
+        //        }
+        //    }
+        //});
+    }
+
+    //*************************************************************************************************************
+
     @Override
     public void onResume() {
         super.onResume();
@@ -709,7 +469,33 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             }
         }
 
+        if (mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
 
+    }
+
+
+    private void refreshCallList(int pos, boolean isRefreshAll) {
+        if (mRecyclerView.getAdapter() != null) {
+            if (isRefreshAll) {
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+            } else {
+                mRecyclerView.getAdapter().notifyItemChanged(pos);
+            }
+        }
+    }
+
+    @Override
+    public boolean isAllowToBackPressed() {
+        if (mIsMultiSelectEnable) {
+            setViewState(false);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void scrollToTopOfList() {
+        if (mRecyclerView != null) mRecyclerView.smoothScrollToPosition(0);
     }
 
     /**
@@ -724,49 +510,71 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             super(realmResults, true);
         }
 
+        @NotNull
         @Override
-        public CallAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        public CallAdapter.ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int i) {
             //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
 
-            return new ViewHolder(ViewMaker.getViewItemCall());
+            return new ViewHolder(ViewMaker.getViewItemCall(parent.getContext()));
         }
 
         @Override
-        public void onBindViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(@NotNull final CallAdapter.ViewHolder viewHolder, int i) {
 
-            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = getItem(i).getLogProto();
+            final RealmCallLog item = viewHolder.callLog = getItem(i);
 
             if (item == null) {
                 return;
             }
             // set icon and icon color
-            switch (item.getStatus()) {
+
+            if (mIsMultiSelectEnable) {
+                viewHolder.checkBox.setVisibility(View.VISIBLE);
+
+                try {
+
+                    if (mSelectedLogList.contains(item)) {
+                        viewHolder.checkBox.setChecked(true);
+                    } else {
+                        viewHolder.checkBox.setChecked(false);
+                    }
+
+                } catch (Exception e) {
+
+                }
+
+            } else {
+                viewHolder.checkBox.setVisibility(View.GONE);
+                viewHolder.checkBox.setChecked(false);
+            }
+
+            switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
                 case OUTGOING:
-                    viewHolder.icon.setText(R.string.md_call_made);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.icon.setText(R.string.voice_call_made_icon);
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
                     break;
                 case MISSED:
-                    viewHolder.icon.setText(R.string.md_call_missed);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.red));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.red));
+                    viewHolder.icon.setText(R.string.voice_call_missed_icon);
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.red));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.red));
                     viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
-                    viewHolder.icon.setText(R.string.md_call_made);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.green));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.green));
+                    viewHolder.icon.setText(R.string.voice_call_made_icon);
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setText(R.string.not_answer);
                     break;
                 case INCOMING:
-                    viewHolder.icon.setText(R.string.md_call_received);
-                    viewHolder.icon.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
-                    viewHolder.timeDuration.setTextColor(G.context.getResources().getColor(R.color.colorPrimary));
+                    viewHolder.icon.setText(R.string.voice_call_received_icon);
+                    viewHolder.icon.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.colorPrimary));
                     break;
             }
 
-            if (item.getType() == VIDEO_CALLING) {
-                viewHolder.icon.setText(R.string.md_file_video);
+            if (ProtoSignalingOffer.SignalingOffer.Type.valueOf(item.getType()) == VIDEO_CALLING) {
+                viewHolder.icon.setText(R.string.video_call_icon);
             }
 
 
@@ -785,44 +593,51 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
                 viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
             }
 
-            viewHolder.name.setText(item.getPeer().getDisplayName());
-            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, item.getPeer().getId()).registeredUser(item.getPeer()).avatarType(AvatarHandler.AvatarType.USER));
+            viewHolder.name.setText(EmojiManager.getInstance().replaceEmoji(item.getUser().getDisplayName(), viewHolder.name.getPaint().getFontMetricsInt()));
+            avatarHandler.getAvatar(new ParamWithAvatarType(viewHolder.image, item.getUser().getId()).avatarType(AvatarHandler.AvatarType.USER));
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog;
+            private RealmCallLog callLog;
             private CircleImageView image;
-            private EmojiTextViewE name;
+            private TextView name;
             private MaterialDesignTextView icon;
             private TextView timeAndInfo;
             private TextView timeDuration;
+            private CheckBox checkBox;
 
             public ViewHolder(View view) {
                 super(view);
 
+                /*Log.wtf(this.getClass().getName(),"ViewHolder gone");
                 imgCallEmpty.setVisibility(View.GONE);
-                empty_call.setVisibility(View.GONE);
+                empty_call.setVisibility(View.GONE);*/
 
-                timeDuration = (TextView) itemView.findViewById(R.id.fcsl_txt_dureation_time);
-                image = (CircleImageView) itemView.findViewById(R.id.fcsl_imv_picture);
-                name = (EmojiTextViewE) itemView.findViewById(R.id.fcsl_txt_name);
-                icon = (MaterialDesignTextView) itemView.findViewById(R.id.fcsl_txt_icon);
-                timeAndInfo = (TextView) itemView.findViewById(R.id.fcsl_txt_time_info);
+                timeDuration = itemView.findViewById(R.id.fcsl_txt_dureation_time);
+                image = itemView.findViewById(R.id.fcsl_imv_picture);
+                name = itemView.findViewById(R.id.fcsl_txt_name);
+                icon = itemView.findViewById(R.id.fcsl_txt_icon);
+                timeAndInfo = itemView.findViewById(R.id.fcsl_txt_time_info);
+                checkBox = itemView.findViewById(R.id.fcsl_check_box);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                itemView.setOnClickListener(v -> {
 
-                        // HelperPublicMethod.goToChatRoom(realmResults.get(getPosition()).getLogProto().getPeer().getId(), null, null);
+                    if (mIsMultiSelectEnable) {
+
+                        multiSelectHandler(getItem(getAdapterPosition()), getAdapterPosition(), !checkBox.isChecked());
+
+                    } else {
 
                         if (canclick) {
-                            long userId = callLog.getPeer().getId();
+                            long userId = callLog.getUser().getId();
 
-                            if (userId != 134 && G.userId != userId) {
-                                call(userId, false, callLog.getType());
+                            if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
+                                CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
+                                callSelectFragment.show(getFragmentManager(), null);
                             }
                         }
+
                     }
                 });
 
@@ -836,16 +651,23 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
                             int i = Math.abs((int) (move - event.getX()));
 
-                            if (i < 10) {
-                                canclick = true;
-                            } else {
-                                canclick = false;
-                            }
+                            canclick = i < 10;
                         }
 
                         return false;
                     }
                 });
+            }
+
+            private void multiSelectHandler(RealmCallLog item, int pos, boolean checked) {
+
+                if (checked) {
+                    mSelectedLogList.add(item);
+                } else {
+                    mSelectedLogList.remove(item);
+                }
+
+                refreshCallList(pos, false);
             }
         }
     }

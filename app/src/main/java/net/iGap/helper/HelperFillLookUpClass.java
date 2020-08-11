@@ -106,6 +106,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30153, "ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse");
         lookupMap.put(30154, "ProtoUserIVandGetScore.UserIVandGetScoreResponse");
         lookupMap.put(30155, "ProtoUserIVandSetActivity.UserIVandSetActivityResponse");
+        lookupMap.put(30156, "ProtoUserRefreshToken.UserRefreshTokenResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
@@ -148,6 +149,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30324, "ProtoGroupRevokeLink.GroupRevokeLinkResponse");
         lookupMap.put(30325, "ProtoGroupEditMessage.GroupEditMessageResponse");
         lookupMap.put(30326, "ProtoGroupPinMessage.GroupPinMessageResponse");
+        lookupMap.put(30327, "ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse");
 
         // Channel 4xx , 304xx
         lookupMap.put(30400, "ProtoChannelCreate.ChannelCreateResponse");
@@ -185,6 +187,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30502, "ProtoInfoTime.InfoTimeResponse");
         lookupMap.put(30503, "ProtoInfoPage.InfoPageResponse");
         lookupMap.put(30504, "ProtoInfoWallpaper.InfoWallpaperResponse");
+        lookupMap.put(30505, "ProtoInfoUpdate.InfoUpdateResponse");
 
         // Client 6xx , 306xx
         lookupMap.put(30600, "ProtoClientCondition.ClientConditionResponse");
@@ -263,6 +266,8 @@ public class HelperFillLookUpClass {
         lookupMap.put(39103, "ProtoMplSetSalesResult.MplSetSalesResultResponse");
         lookupMap.put(39106, "ProtoMplGetCardToCardToken.MplGetCardToCardTokenResponse");
         lookupMap.put(39108, "ProtoMplSetCardToCardResult.MplSetCardToCardResultResponse");
+        lookupMap.put(39109, "ProtoMplTransactionList.MplTransactionListResponse");
+        lookupMap.put(39110, "ProtoMplTransactionInfo.MplTransactionInfoResponse");
         lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
         lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 
@@ -272,8 +277,6 @@ public class HelperFillLookUpClass {
         lookupMap.put(60002, "ProtoPushUserInfoExpired.PushUserInfoExpiredResponse");
         lookupMap.put(60003, "ProtoPushRateSignaling.PushRateSignalingResponse");
         lookupMap.put(60004, "ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse");
-
-
     }
 
     /**

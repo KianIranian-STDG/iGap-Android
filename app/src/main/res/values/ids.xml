@@ -1,91 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <item name="statusbarutil_fake_status_bar_view" type="id" />
-  <item name="audioBox" type="id" />
-  <item name="txt_play_music" type="id" />
+    <item name="statusbarutil_fake_status_bar_view" type="id" />
+    <item name="txt_play_music" type="id" />
 
-  <!-- Contact Item -->
-  <item name="name" type="id" />
-  <item name="number" type="id" />
+    <!-- Contact Item -->
+    <item name="name" type="id" />
+    <item name="number" type="id" />
 
-  <!-- Video Item -->
-  <item name="songArtist" type="id" />
-  <item name="fileSize" type="id" />
+    <!-- Video Item -->
+    <item name="songArtist" type="id" />
+    <item name="fileSize" type="id" />
 
 
-  <item name="messageSenderAvatar" type="id" />
-  <item name="messageSenderName" type="id" />
+    <item name="messageSenderAvatar" type="id" />
+    <item name="messageForwardContainer" type="id" />
+    <item name="messageSenderName" type="id" />
 
-  <item name="mainContainer" type="id" />
-  <item name="contentContainer" type="id" />
-  <item name="m_container" type="id" />
-  <item name="csliwt_layout_container_message" type="id" />
-  <item name="audioPlayerViewContainer" type="id" />
-  <item name="thumbnail" type="id" />
-  <item name="cslv_txt_author" type="id" />
-  <item name="csla_btn_play_music" type="id" />
-  <item name="csla_seekBar1" type="id" />
-  <item name="csla_txt_timer" type="id" />
-  <item name="duration" type="id" />
-  <item name="cslum_txt_unread_message" type="id" />
-  <item name="cslt_txt_time_date" type="id" />
-  <item name="cslp_progress_bar_waiting" type="id" />
-  <item name="csll_txt_log_text" type="id" />
-  <item name="csl_ll_time" type="id" />
-  <item name="txtEditedIndicator" type="id" />
-  <item name="cslr_txt_time" type="id" />
-  <item name="cslr_txt_tic" type="id" />
-  <item name="lyt_see" type="id" />
-  <item name="cslm_view_left_dis" type="id" />
-  <item name="lyt_signature" type="id" />
-  <item name="txt_signature" type="id" />
-  <item name="txt_views_label" type="id" />
-  <item name="img_eye" type="id" />
-  <item name="cslr_replay_layout" type="id" />
-  <item name="verticalLine" type="id" />
-  <item name="chslr_imv_replay_pic" type="id" />
-  <item name="chslr_txt_replay_from" type="id" />
-  <item name="chslr_txt_replay_message" type="id" />
-  <item name="cslr_ll_forward" type="id" />
-  <item name="cslr_txt_prefix_forward" type="id" />
-  <item name="cslr_txt_forward_from" type="id" />
-  <item name="lyt_vote" type="id" />
-  <item name="lyt_vote_up" type="id" />
-  <item name="txt_vote_up" type="id" />
-  <item name="img_vote_up" type="id" />
-  <item name="lyt_vote_down" type="id" />
-  <item name="img_vote_down" type="id" />
-  <item name="txt_vote_down" type="id" />
-  <item name="fileName" type="id" />
-  <item name="image" type="id" />
-  <item name="messageSenderTextMessage" type="id" />
-  <item name="root_chat_sub_layout" type="id" />
-  <item name="cs_img_contact_picture" type="id" />
-  <item name="cs_txt_chat_icon" type="id" />
-  <item name="cs_txt_contact_name" type="id" />
-  <item name="cs_img_verify_room" type="id" />
-  <item name="lyt_last_message_room" type="id" />
-  <item name="cs_txt_last_message_sender" type="id" />
-  <item name="cs_txt_last_message" type="id" />
-  <item name="cs_txt_last_message_file_text" type="id" />
-  <item name="cs_txt_mute" type="id" />
-  <item name="cs_txt_contact_time" type="id" />
-  <item name="cs_txt_unread_message" type="id" />
-  <item name="cs_txt_pinned_message" type="id" />
-  <item name="fcsl_imv_picture" type="id" />
-  <item name="fcsl_txt_name" type="id" />
-  <item name="fcsl_txt_time_info" type="id" />
-  <item name="fcsl_txt_icon" type="id" />
-  <item name="fcsl_txt_dureation_time" type="id" />
-  <item name="topLine" type="id" />
-  <item name="title" type="id" />
-  <item name="subtitle" type="id" />
-  <item name="swipeRevealLayout" type="id" />
-  <item name="swipeDelete" type="id" />
-  <item name="swipeEdit" type="id" />
-  <item name="rootRegisterContact" type="id" />
-  <item name="animateCheckBoxContact" type="id" />
-  <item name="sticker_layout" type="id" />
+    <item name="mainContainer" type="id" />
+    <item name="csliwt_layout_container_message" type="id" />
+    <item name="thumbnail" type="id" />
+    <item name="cslv_txt_author" type="id" />
+    <item name="csla_btn_play_music" type="id" />
+    <item name="csla_seekBar1" type="id" />
+    <item name="csla_txt_timer" type="id" />
+    <item name="duration" type="id" />
+    <item name="cslum_txt_unread_message" type="id" />
+    <item name="cslt_txt_time_date" type="id" />
+    <item name="cslp_progress_bar_waiting" type="id" />
+    <item name="csll_txt_log_text" type="id" />
+    <item name="cslr_replay_layout" type="id" />
+    <item name="verticalLine" type="id" />
+    <item name="chslr_imv_replay_pic" type="id" />
+    <item name="chslr_txt_replay_from" type="id" />
+    <item name="chslr_txt_replay_message" type="id" />
+    <item name="cslr_ll_forward" type="id" />
+    <item name="cslr_txt_prefix_forward" type="id" />
+    <item name="cslr_txt_forward_from" type="id" />
+    <item name="fileName" type="id" />
+    <item name="image" type="id" />
+    <item name="messageSenderTextMessage" type="id" />
+    <item name="fcsl_imv_picture" type="id" />
+    <item name="fcsl_txt_name" type="id" />
+    <item name="fcsl_txt_time_info" type="id" />
+    <item name="fcsl_txt_icon" type="id" />
+    <item name="fcsl_txt_dureation_time" type="id" />
+    <item name="topLine" type="id" />
+    <item name="title" type="id" />
+    <item name="subtitle" type="id" />
+    <item name="sticker_layout" type="id" />
+    <item name="sticker_gif_card_layout" type="id" />
+    <item name="animated_sticker_layout" type="id" />
 
+
+    <!--new chat cell-->
+    <item name="view_listen" type="id" />
+    <item name="chatSubLayoutFile" type="id" />
+    <item name="chatSubLayoutTime" type="id" />
+    <item name="chatSubLayoutLog" type="id" />
+    <item name="chatSubLayoutGifWithText" type="id" />
+    <item name="chatSubLayoutAudio" type="id" />
+    <item name="chatSubLayoutLocation" type="id" />
+    <item name="chatSubLayoutVideoWithText" type="id" />
+    <item name="chatSubLayoutImageWithText" type="id" />
+    <item name="chatSubLayoutContact" type="id" />
+    <item name="chatSubLayoutVoice" type="id" />
+
+    <!--chat item-->
+    <item name="tv_chatItem_viewLabel" type="id" />
+    <item name="ll_chatItem_viewIcon" type="id" />
+    <item name="ll_chatItem_view" type="id" />
+    <item name="ll_chatItem_vote" type="id" />
+    <item name="tv_chatItem_status" type="id" />
+    <item name="ll_chatItem_chatBloke" type="id" />
+    <item name="ll_chatItem_contentBloke" type="id" />
+    <item name="tv_chatItem_time" type="id" />
+    <item name="tv_chatItem_signature" type="id" />
+
+    <!--music item-->
+    <item name="iv_musicItem_cover" type="id" />
+
+    <!--voice item-->
+    <item name="wv_voiceItem_progress" type="id" />
+
+    <!--Contact Item-->
+    <item name="iv_contactItem_contact" type="id" />
+    <item name="tv_contactItem_contactName" type="id" />
+    <item name="tv_contactItem_contactNumber" type="id" />
+    <item name="btn_contactItem_viewContact" type="id" />
+
+    <item name="status" type="id" />
+    <item name="phoneNumber" type="id" />
+    <item name="chi_fab_setPic" type="id" />
+    <item name="view_toolbar_btn_passCode" type="id" />
+    <item name="view_toolbar_btn_scanner" type="id" />
+    <item name="fcsl_check_box" type="id" />
+
+    <item name="cardToCard" type="id" />
+    <item name="cardToCard_icon" type="id" />
+    <item name="cardToCard_button" type="id" />
+    <item name="cardToCard_innerLayout" type="id" />
+    <item name="more" type="id" />
+
+    <item name="view_toolbar_layout_player_music" type="id" />
+    <item name="view_toolbar_layout_strip_call" type="id" />
+    <item name="view_toolbar_player_layout" type="id" />
+    <item name="view_toolbar_main_constraint" type="id" />
+    <item name="view_toolbar_logo" type="id" />
+    <item name="view_toolbar_user_small_avatar" type="id" />
+    <item name="view_toolbar_btn_left" type="id" />
+    <item name="view_toolbar_btn_right_1" type="id" />
+    <item name="view_toolbar_btn_right_2" type="id" />
+    <item name="view_toolbar_btn_right_3" type="id" />
+    <item name="view_toolbar_btn_right_4" type="id" />
+    <item name="view_toolbar_search_layout" type="id" />
+    <item name="view_toolbar_search_layout_txt" type="id" />
+    <item name="view_toolbar_search_layout_edt_input" type="id" />
+    <item name="view_toolbar_user_chat_avatar_layout" type="id" />
+    <item name="view_toolbar_user_chat_avatar" type="id" />
+    <item name="view_toolbar_user_cloud_avatar" type="id" />
+    <item name="view_toolbar_chat_layout_userName" type="id" />
+    <item name="view_toolbar_chat_txt_userName" type="id" />
+    <item name="view_toolbar_chat_txt_verify" type="id" />
+    <item name="view_toolbar_chat_txt_isMute" type="id" />
+    <item name="view_toolbar_chat_txt_seen_status" type="id" />
+    <item name="groupName" type="id" />
+    <item name="groupMemberCount" type="id" />
 
 </resources>

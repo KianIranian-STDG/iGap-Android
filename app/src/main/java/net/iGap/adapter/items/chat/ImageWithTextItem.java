@@ -1,46 +1,35 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
-import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
-import java.io.InputStream;
 import java.util.List;
-
-import io.realm.Realm;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -62,8 +51,6 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(getCacheId(mMessage));
-
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.messageView);
@@ -71,16 +58,16 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (FragmentChat.isInSelectionMode){
-                        holder.itemView.performLongClick();
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, mMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
                     }
                 }
             }
@@ -92,14 +79,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
+
 //            BitmapFactory.Options options = new BitmapFactory.Options();
 //            options.inPreferredConfig = Bitmap.Config.RGB_565;
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        }
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override
@@ -108,28 +94,51 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     }
 
     protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
+        protected FontIconTextView more;
         protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
             boolean withText = true;
-            FrameLayout frameLayout = new FrameLayout(G.context);
+            FrameLayout frameLayout = new FrameLayout(view.getContext());
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            image = new ReserveSpaceRoundedImageView(G.context);
+            image = new ReserveSpaceRoundedImageView(view.getContext());
             image.setId(R.id.thumbnail);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
             LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_758);
             image.setCornerRadius(HelperRadius.computeRadius());
-            m_container.addView(frameLayout);
+            getContentBloke().addView(frameLayout);
             if (withText) {
                 setLayoutMessageContainer();
             }
             frameLayout.addView(image);
-            progress = getProgressBar(0);
+
+
+            more = new FontIconTextView(view.getContext());
+            more.setId(R.id.more);
+            //more.setBackgroundResource(R.drawable.bg_message_image_time);
+            more.setGravity(Gravity.CENTER);
+            more.setText(R.string.horizontal_more_icon);
+            setTextSize(more, R.dimen.largeTextSize);
+            more.setTextColor(G.context.getResources().getColor(R.color.white));
+            more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
+            FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_50.gravity = Gravity.RIGHT | Gravity.TOP;
+            /*layout_50.bottomMargin = -dpToPx(2);
+            layout_50.rightMargin = dpToPx(5);
+            layout_50.topMargin = dpToPx(7);*/
+            more.setLayoutParams(layout_50);
+            frameLayout.addView(more);
+
+            progress = getProgressBar(view.getContext(), 0);
             frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+        }
+
+        public FontIconTextView getMoreButton() {
+            return more;
         }
 
         @Override

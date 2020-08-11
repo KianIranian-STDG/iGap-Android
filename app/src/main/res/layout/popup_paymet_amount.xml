@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp16">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/iv_close3"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/close_icon"
+        android:textColor="?iGapSubtitleTextColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt_choose3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="@dimen/dp8"
+        android:text="@string/select_the_amount"
+        android:textColor="?iGapSubtitleTextColor"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close3"
+        app:layout_constraintStart_toEndOf="@+id/iv_close3"
+        app:layout_constraintTop_toTopOf="@+id/iv_close3" />
+
+    <View
+        android:id="@+id/close_view3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_close3"
+        app:layout_constraintEnd_toEndOf="@+id/txt_choose3"
+        app:layout_constraintStart_toStartOf="@+id/iv_close3"
+        app:layout_constraintTop_toTopOf="@+id/iv_close3" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp24"
+        android:layout_marginEnd="@dimen/dp16"
+        android:layout_marginBottom="@dimen/dp32"
+        android:scrollbars="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_dialog3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_choose3" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_dialog3"
+        style="@style/iGapButton"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/pu_Lets_Go"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dp8"
     android:layout_marginRight="@dimen/dp8"
-    card_view:cardPreventCornerOverlap="false"
     card_view:cardBackgroundColor="@android:color/transparent"
     card_view:cardCornerRadius="@dimen/dp8"
-    card_view:cardElevation="0dp">
+    card_view:cardElevation="0dp"
+    card_view:cardPreventCornerOverlap="false">
 
-    <android.support.constraint.ConstraintLayout
-        style="?backgroundColorSettingTheme"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <net.iGap.module.MaterialDesignTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/image"
+            style="@style/baseFontIcon"
             android:layout_width="@dimen/dp48"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -26,10 +27,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:gravity="center"
-            android:text="@string/md_show_more_button"
-            android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@color/border_editText"
+            android:text="@string/md_get_score_failed"
             android:textSize="@dimen/dp36"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +36,6 @@
 
         <net.iGap.module.CustomTextViewMedium
             android:id="@+id/txt_message"
-            style="?textTitleColorSettingTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -49,18 +46,18 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="TextView"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/ok"
-            android:background="@drawable/btn_rounded"
+            style="@style/iGapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
-            android:textSize="@dimen/dp12"
             android:text="@string/dialog_ok"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,12 +66,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp8"
-            app:layout_constraintTop_toBottomOf="@id/ok"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ok" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

@@ -12,42 +12,39 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperMimeType;
-import net.iGap.interfaces.IResendMessage;
 import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.CircleProgress.CircularProgressView;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmAttachment;
@@ -186,7 +183,7 @@ public final class AppUtils {
     /**
      * convert message type to appropriate text and setText if textView isn't null
      */
-    private static String returnConversionMessageType(ProtoGlobal.RoomMessageType type){
+    private static String returnConversionMessageType(ProtoGlobal.RoomMessageType type) {
         String result = "";
 
         switch (type) {
@@ -244,7 +241,7 @@ public final class AppUtils {
     public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, int colorId) {
         String result = returnConversionMessageType(type);
         if (textView != null && !result.isEmpty()) {
-            textView.setTextColor(ContextCompat.getColor(context, colorId));
+            textView.setTextColor(ContextCompat.getColor(textView.getContext(), colorId));
             textView.setText(result);
         }
         return result;
@@ -265,17 +262,11 @@ public final class AppUtils {
 
                     view.setImageBitmap(bitmap);
                     final String savedPath = AppUtils.saveMapToFile(bitmap, message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
-
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            if (message.getLocation() != null) {
-                                message.getLocation().setImagePath(savedPath);
-                            }
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        if (message.getLocation() != null) {
+                            message.getLocation().setImagePath(savedPath);
                         }
                     });
-                    realm.close();
                 }
             });
         }
@@ -314,45 +305,43 @@ public final class AppUtils {
     /**
      * update message status automatically
      *
-     * @param view TextView message status
+     * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
+    public static void rightMessageStatus(FontIconTextView iconTextView, ProtoGlobal.RoomMessageStatus status, boolean isSenderMe) {
 
-        if (view == null) {
+        if (iconTextView == null) {
             return;
         }
         if (!isSenderMe) {
-            view.setVisibility(View.GONE);
+            iconTextView.setVisibility(View.GONE);
             return;
         } else {
-            view.setVisibility(View.VISIBLE);
+            iconTextView.setVisibility(View.VISIBLE);
         }
         switch (status) {
             case DELIVERED:
-
-                setImageDrawable(view, R.drawable.ic_double_check);
-//                view.setColorFilter(Color.BLACK);
-                view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
-                setImageDrawable(view, R.drawable.ic_error_igap);
-                view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
+                iconTextView.setText(R.string.error_icon);
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case SEEN:
-                setImageDrawable(view, R.drawable.ic_double_check);
-                view.setColorFilter(Color.parseColor(G.SeenTickColor));
+            case LISTENED:
+                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setTextColor(Theme.getInstance().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
-//                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
-                view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+                iconTextView.setText(R.string.history_icon);
+                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
-                setImageDrawable(view, R.drawable.ic_check);
-//                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
-                view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+                iconTextView.setText(R.string.check_icon);
+                iconTextView.setTextColor(Theme.getInstance().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
-                view.setVisibility(View.GONE);
+                iconTextView.setVisibility(View.GONE);
                 break;
         }
     }
@@ -360,56 +349,43 @@ public final class AppUtils {
     /**
      * update message status automatically
      *
-     * @param view TextView message status
+     * @param iconTextView TextView message status
      */
-    public static void rightMessageStatus(ImageView view, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
-        if (view == null) {
+    public static void rightMessageStatus(TextView iconTextView, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessageType messageType, boolean isSenderMe) {
+        if (iconTextView == null) {
             return;
         }
         if (!isSenderMe) {
-            view.setVisibility(View.GONE);
+            iconTextView.setVisibility(View.GONE);
             return;
         } else {
-            view.setVisibility(View.VISIBLE);
+            iconTextView.setVisibility(View.VISIBLE);
         }
+
         switch (status) {
             case DELIVERED:
-                setImageDrawable(view, R.drawable.ic_double_check);
-                //DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
+                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case FAILED:
-                setImageDrawable(view, R.drawable.ic_error_igap);
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
-                } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.RED);
-                }
+                iconTextView.setText(R.string.error_icon);
+                iconTextView.setTextColor(ContextCompat.getColor(iconTextView.getContext(), R.color.red));
                 break;
             case LISTENED:
             case SEEN:
-                setImageDrawable(view, R.drawable.ic_double_check);
-                final Drawable originalDrawable = view.getDrawable();
-                final Drawable wrappedDrawable = DrawableCompat.wrap(originalDrawable);
-                DrawableCompat.setTintList(wrappedDrawable, ColorStateList.valueOf(view.getContext().getResources().getColor(R.color.iGapColor)));
+                iconTextView.setText(R.string.delivery_icon);
+                iconTextView.setTextColor(new Theme().getAccentColor(iconTextView.getContext()));
                 break;
             case SENDING:
-                setImageDrawable(view, R.drawable.ic_clock);
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
-                } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-                }
+                iconTextView.setText(R.string.history_icon);
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             case SENT:
-                setImageDrawable(view, R.drawable.ic_check);
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
-                } else {
-                    DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
-                }
+                iconTextView.setText(R.string.check_icon);
+                iconTextView.setTextColor(new Theme().getSendMessageOtherTextColor(iconTextView.getContext()));
                 break;
             default:
-                view.setVisibility(View.GONE);
+                iconTextView.setVisibility(View.GONE);
                 break;
         }
     }
@@ -476,7 +452,7 @@ public final class AppUtils {
                     messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, G.fragmentActivity.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(message.getLogs(), false).toString());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(G.fragmentActivity, message.getLogs(), false).toString());
                     break;
                 case VIDEO_TEXT:
                 case VIDEO:
@@ -537,7 +513,7 @@ public final class AppUtils {
                     if (message.getAttachment() == null) {
                         return null;
                     }
-                   messageText = resources.getString(R.string.file_message);
+                    messageText = resources.getString(R.string.file_message);
                     break;
                 case STICKER:
                     messageText = resources.getString(R.string.sticker);
@@ -584,20 +560,20 @@ public final class AppUtils {
     }
 
     public static String computeLastMessage(long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        String lastMessage = "";
-        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-        for (RealmRoomMessage realmRoomMessage : realmList) {
-            if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
-                lastMessage = AppUtils.rightLastMessage(realmRoomMessage);
-                break;
+        return DbManager.getInstance().doRealmTask(realm -> {
+            String lastMessage = "";
+            RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            for (RealmRoomMessage realmRoomMessage : realmList) {
+                if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
+                    lastMessage = AppUtils.rightLastMessage(realmRoomMessage);
+                    break;
+                }
             }
-        }
-        realm.close();
-        return lastMessage;
+            return lastMessage;
+        });
     }
 
-    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {
+    public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, boolean hasTextForCopy, final IResendMessage listener) {
         List<String> items = new ArrayList<>();
         List<Integer> itemsId = new ArrayList<>();
         items.add(context.getString(R.string.resend_chat_message));
@@ -606,15 +582,21 @@ public final class AppUtils {
             items.add(String.format(context.getString(R.string.resend_all_messages), failedMessagesCount));
             itemsId.add(1);
         }
+
         items.add(context.getString(R.string.delete_item_dialog));
         itemsId.add(2);
+
+        if (hasTextForCopy) {
+            items.add(context.getString(R.string.copy_item_dialog));
+            itemsId.add(3);
+        }
 
         int[] newIds = new int[itemsId.size()];
         for (Integer integer : itemsId) {
             newIds[itemsId.indexOf(integer)] = integer;
         }
 
-        return new MaterialDialog.Builder(context).title(R.string.resend_chat_message).negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
+        return new MaterialDialog.Builder(context).negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                 switch (itemView.getId()) {
@@ -626,6 +608,9 @@ public final class AppUtils {
                         break;
                     case 2:
                         listener.deleteMessage();
+                        break;
+                    case 3:
+                        listener.copyMessage();
                         break;
                 }
             }
@@ -649,7 +634,7 @@ public final class AppUtils {
 
         try {
 
-            progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(G.progressColor), PorterDuff.Mode.SRC_IN);
+            progressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(progressBar.getContext()), PorterDuff.Mode.SRC_IN);
 
             //  getResources().getColor(R.color.toolbar_background)
 
@@ -662,9 +647,9 @@ public final class AppUtils {
 
         try {
 
-            progressBar.setColor(Color.parseColor(G.progressColor));
+            progressBar.setColor(new Theme().getAccentColor(progressBar.getContext()));
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -684,11 +669,17 @@ public final class AppUtils {
     public static void shareItem(Intent intent, StructMessageInfo messageInfo) {
 
         try {
-            String message = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessage() : messageInfo.messageText;
+            String message = messageInfo.realmRoomMessage.getForwardMessage() != null ? messageInfo.realmRoomMessage.getForwardMessage().getMessage() : messageInfo.realmRoomMessage.getMessage();
             if (message != null) {
                 intent.putExtra(Intent.EXTRA_TEXT, message);
             }
-            String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
+            String filePath;
+            if (messageInfo.realmRoomMessage.getForwardMessage() != null) {
+                filePath = messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getName(), messageInfo.realmRoomMessage.getMessageType());
+            } else {
+                filePath = messageInfo.getAttachment().getLocalFilePath() != null ? messageInfo.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().getCacheId(), messageInfo.getAttachment().getCacheId(), messageInfo.realmRoomMessage.getMessageType());
+            }
+
             if (filePath != null) {
 
                 Uri uri;
@@ -702,7 +693,7 @@ public final class AppUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
@@ -722,7 +713,7 @@ public final class AppUtils {
 
         } catch (Exception e) {
             e.printStackTrace();
-            HelperLog.setErrorLog(e);
+            HelperLog.getInstance().setErrorLog(e);
         }
     }
 
@@ -793,5 +784,8 @@ public final class AppUtils {
         }
     }
 
+    public static String getEmojiByUnicode(int unicode) {
+        return " " + new String(Character.toChars(unicode)) + " ";
+    }
 
 }

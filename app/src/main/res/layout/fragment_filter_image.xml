@@ -1,106 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/rg_text_dark_verify"
-  android:clickable="true"
-
-  android:orientation="vertical">
-
-  <android.support.v7.widget.Toolbar
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp60"
-    android:background="@color/toolbar_transparent"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp">
+    android:layout_height="match_parent"
+    android:background="@color/rg_text_dark_verify"
+    android:clickable="true"
 
+    android:orientation="vertical">
 
-    <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <LinearLayout
-        android:id="@+id/stfaq_allLayout_toolbar"
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/pu_txt_agreeImage"
-          android:layout_width="@dimen/dp48"
-          android:layout_height="match_parent"
-          android:gravity="center"
-          android:text="@string/md_close_button"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/whit_background" />
-
-        <TextView
-          android:id="@+id/stfaq_txt_titleToolbar"
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:gravity="left|center_vertical"
-          android:text="Filter Image"
-          android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp16"
-          android:textStyle="bold"
-          android:visibility="visible" />
+        android:layout_height="@dimen/dp60"
+        android:background="@color/toolbar_transparent"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
 
 
-        <!--<net.iGap.module.MaterialDesignTextView-->
-        <!--android:id="@+id/pu_txt_clear"-->
-        <!--android:layout_width="@dimen/dp52"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center"-->
-        <!--android:text="@string/md_eraser"-->
-        <!--android:textAppearance="@style/TextIconAppearance_toolbar"-->
-        <!--android:textColor="@color/whit_background" />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/pu_txt_ok"
-          android:layout_width="@dimen/dp52"
-          android:layout_height="match_parent"
-          android:gravity="center"
-          android:text="@string/md_igap_check"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/whit_background" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-      </LinearLayout>
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/pu_txt_agreeImage"
+                    android:layout_width="@dimen/dp48"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/md_close_button"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@color/whit_background" />
 
-    </RelativeLayout>
-  </android.support.v7.widget.Toolbar>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="Filter Image"
+                    android:textColor="@color/whit_background"
+                    android:textSize="@dimen/dp16"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
-  <ImageView
-    android:id="@+id/imageFilter"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_margin="@dimen/dp6"
-    android:layout_weight="1" />
 
-  <android.support.v7.widget.CardView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/toolbar_transparent">
+                <!--<net.iGap.module.MaterialDesignTextView-->
+                <!--android:id="@+id/pu_txt_clear"-->
+                <!--android:layout_width="@dimen/dp52"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/md_eraser"-->
+                <!--android:textAppearance="@style/TextIconAppearance_toolbar"-->
+                <!--android:textColor="@color/whit_background" />-->
 
-    <LinearLayout
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/pu_txt_ok"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/check_icon"
+                    android:textAppearance="@style/TextIconAppearance_toolbar"
+                    android:textColor="@color/whit_background" />
 
-      <net.iGap.fragments.filterImage.NonSwipeableViewPager
-        android:id="@+id/viewpager"
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/imageFilter"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp140" />
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/dp6"
+        android:layout_weight="1" />
 
-      <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-    android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:tabGravity="fill"
-        app:tabTextColor="@color/green"
-        app:tabSelectedTextColor="@color/white"
-        app:tabMode="fixed" />
-    </LinearLayout>
-  </android.support.v7.widget.CardView>
+        app:cardBackgroundColor="@color/toolbar_transparent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <net.iGap.fragments.filterImage.NonSwipeableViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp140" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/rootBackgroundColor"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="?attr/colorPrimary"
+                app:tabTextColor="?attr/iGapTitleTextColor" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

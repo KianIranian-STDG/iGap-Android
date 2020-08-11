@@ -1,105 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="@dimen/dp60"
-  android:clickable="true"
-  android:orientation="vertical">
-
-
-  <FrameLayout
-    android:id="@+id/smsl_fl_contain_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:orientation="horizontal">
+    android:layout_height="@dimen/dp60"
+    android:clickable="true"
+    android:orientation="vertical">
 
 
-      <FrameLayout
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:id="@+id/smsl_fl_contain_main"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-          android:id="@+id/smslf_imv_icon_file"
-          android:layout_width="@dimen/dp48"
-          android:layout_height="@dimen/dp48"
-          android:layout_margin="@dimen/dp8"
-          android:src="@mipmap/doc_blue" />
-
-
-        <include
-          android:id="@+id/progress"
-          layout="@layout/msg_progress_item"
-          android:layout_width="56dp"
-          android:layout_height="56dp"
-          android:layout_gravity="center" />
-
-      </FrameLayout>
-
-
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-          style="?textTitleColorSettingTheme"
-          android:id="@+id/smslf_txt_file_name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/dp12"
-          android:ellipsize="middle"
-          android:singleLine="true"
-          android:text="file name"
-          android:textSize="@dimen/dp14" />
-
         <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="1"
-          android:gravity="center"
-          android:orientation="horizontal">
-
-
-          <TextView
-            style="?textSubColorSettingTheme"
-            android:id="@+id/smslf_txt_file_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxWidth="@dimen/dp300"
-            android:singleLine="true"
-            android:text="file info"
-            android:textSize="@dimen/dp14" />
-
-
-          <TextView
-            style="?textSubColorSettingTheme"
-            android:id="@+id/smslf_txt_file_size"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:singleLine="true"
-            android:text="3mb"
-            android:textSize="@dimen/dp14" />
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp4"
+                android:layout_marginRight="@dimen/dp4"
+                android:padding="@dimen/dp4">
+
+                <TextView
+                    android:id="@+id/smslf_imv_icon_file"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="@dimen/dp52"
+                    android:layout_gravity="center"
+                    android:background="@drawable/background_multi_select_light"
+                    android:gravity="center"
+                    android:text="@string/file_icon"
+                    android:textColor="@color/shared_media_music_list_icon_color" />
+
+                <net.iGap.module.RadiusImageView
+                    android:id="@+id/smslf_imv_image_file"
+                    android:layout_width="@dimen/dp52"
+                    android:layout_height="@dimen/dp52"
+                    android:layout_gravity="center"
+                    android:background="@drawable/background_multi_select_light"
+                    android:gravity="center"
+                    android:scaleType="centerCrop"
+                    android:text="@string/attach_icon"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/progress"
+                    layout="@layout/msg_progress_item"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_gravity="center" />
+
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/smslf_txt_file_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:ellipsize="middle"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:text="file name"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/smslf_txt_file_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="start"
+                        android:maxWidth="@dimen/dp300"
+                        android:singleLine="true"
+                        android:text="file info"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:textSize="@dimen/smallTextSize" />
+
+
+                    <TextView
+                        android:id="@+id/smslf_txt_file_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:singleLine="true"
+                        android:text="3mb"
+                        android:textColor="?iGapSubtitleTextColor"
+                        android:textSize="@dimen/dp14" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="@color/gray"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
 
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1px"
-          android:background="@color/gray" />
-
-      </LinearLayout>
-
-
-    </LinearLayout>
-
-  </FrameLayout>
+    </FrameLayout>
 
 </LinearLayout>

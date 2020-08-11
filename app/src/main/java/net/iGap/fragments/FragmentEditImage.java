@@ -2,86 +2,85 @@ package net.iGap.fragments;
 
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.hanks.library.AnimateCheckBox;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
-import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
-import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 import com.yalantis.ucrop.UCrop;
 
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
+import net.iGap.fragments.filterImage.FragmentPaintImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.libs.emojiKeyboard.EmojiView;
+import net.iGap.libs.emojiKeyboard.KeyboardView;
+import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.customView.EventEditText;
 import net.iGap.module.structs.StructBottomSheet;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.module.AndroidUtils.closeKeyboard;
-import static net.iGap.module.AndroidUtils.suitablePath;
+import static android.content.Context.MODE_PRIVATE;
+import static android.view.View.VISIBLE;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class FragmentEditImage extends BaseFragment {
+public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout.Listener {
 
     private final static String PATH = "PATH";
     private final static String ISCHAT = "ISCHAT";
     private final static String ISNICKNAMEPAGE = "ISNICKNAMEPAGE";
     private final static String SELECT_POSITION = "SLECT_POSITION";
-    //    private String path;
     private int selectPosition = 0;
-    //    private ImageView imgEditImage;
     private ViewPager viewPager;
     private AdapterViewPager mAdapter;
     private TextView txtEditImage;
     public static UpdateImage updateImage;
-    private EmojiEditTextE edtChat;
+    private EventEditText edtChat;
+    private TextView paintTv;
     private TextView iconOk;
     private ViewGroup layoutCaption;
-    private MaterialDesignTextView txtSet;
+    private MaterialDesignTextView channelOrGroupProfileSetTv;
     private MaterialDesignTextView imvSendButton;
     private ViewGroup rootSend;
     private MaterialDesignTextView imvSmileButton;
-    private boolean isEmojiSHow = false;
-    private EmojiPopup emojiPopup;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private boolean isChatPage = true;
     private boolean isMultiItem = true;
@@ -89,21 +88,66 @@ public class FragmentEditImage extends BaseFragment {
     public static CompleteEditImage completeEditImage;
     private int num = 0;
     private TextView txtCountImage;
-    private ArrayList<String> listPathString = new ArrayList<>();
     private AnimateCheckBox checkBox;
     public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
+    private OnImageEdited onProfileImageEdited;
+    private boolean isReOpenChatAttachment = true;
+    private GalleryListener galleryListener;
 
-    public FragmentEditImage() {
-        // Required empty public constructor
+    private NotifyFrameLayout rootView;
+    private FrameLayout keyboardContainer;
+    private EmojiView emojiView;
+
+    private int keyboardHeight;
+    private int keyboardHeightLand;
+    private boolean keyboardVisible;
+    private int emojiPadding;
+    private int lastSizeChangeValue1;
+    private boolean lastSizeChangeValue2;
+    private AttachFile attachFile = new AttachFile(G.fragmentActivity);
+
+    private SharedPreferences emojiSharedPreferences;
+
+    public void setOnProfileImageEdited(OnImageEdited onProfileImageEdited) {
+        this.onProfileImageEdited = onProfileImageEdited;
     }
 
+    private FragmentEditImage() {
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_image, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = new NotifyFrameLayout(inflater.getContext()) {
+            @Override
+            public boolean dispatchKeyEventPreIme(KeyEvent event) {
+                if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                    if (isKeyboardVisible()) {
+                        showPopup(-1);
+                        return true;
+                    }
+                    return false;
+                }
+                return super.dispatchKeyEventPreIme(event);
+            }
+        };
+
+        rootView.setListener(this);
+        View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
+        keyboardContainer = view.findViewById(R.id.fl_chat_keyboardContainer);
+        paintTv = view.findViewById(R.id.txtPaintImage);
+        rootView.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+        return rootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getActivity() != null) {
+            emojiSharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
+        }
+
     }
 
     public static FragmentEditImage newInstance(String path, boolean isChatPage, boolean isNicknamePage, int selectPosition) {
@@ -117,28 +161,27 @@ public class FragmentEditImage extends BaseFragment {
         return fragment;
     }
 
-
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initView(view);
 
         if (itemGalleryList == null || itemGalleryList.size() == 0) {
-            if (G.fragmentManager != null) {
-                G.fragmentManager.beginTransaction().remove(FragmentEditImage.this).commit();
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentEditImage.this).commit();
             }
             return;
         }
 
         if (isChatPage) {
 
-            layoutCaption.setVisibility(View.VISIBLE);
-            imvSendButton.setVisibility(View.VISIBLE);
-            txtSet.setVisibility(View.GONE);
-            checkBox.setVisibility(View.VISIBLE);
+            layoutCaption.setVisibility(VISIBLE);
+            imvSendButton.setVisibility(VISIBLE);
+            channelOrGroupProfileSetTv.setVisibility(View.GONE);
+            checkBox.setVisibility(VISIBLE);
             if (textImageList.size() > 0) {
-                txtCountImage.setVisibility(View.VISIBLE);
+                txtCountImage.setVisibility(VISIBLE);
                 txtCountImage.setText(textImageList.size() + "");
             } else {
                 txtCountImage.setVisibility(View.GONE);
@@ -150,7 +193,7 @@ public class FragmentEditImage extends BaseFragment {
 
             }
         } else {
-            txtSet.setVisibility(View.VISIBLE);
+            channelOrGroupProfileSetTv.setVisibility(VISIBLE);
             layoutCaption.setVisibility(View.GONE);
             imvSendButton.setVisibility(View.GONE);
             checkBox.setVisibility(View.GONE);
@@ -158,25 +201,15 @@ public class FragmentEditImage extends BaseFragment {
             isMultiItem = false;
         }
 
-        /**
-         *
-         * check list size for show number of select item
-         *
-         */
-
-
-        updateImage = new UpdateImage() {
-            @Override
-            public void result(String pathImageFilter) {
-
-                serCropAndFilterImage(pathImageFilter);
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
+        edtChat.setListener(event -> {
+            if (!isPopupShowing() && event.getAction() == MotionEvent.ACTION_DOWN) {
+                showPopup(KeyboardView.MODE_KEYBOARD);
             }
+        });
+
+        updateImage = pathImageFilter -> {
+            serCropAndFilterImage(pathImageFilter);
+            G.handler.post(() -> mAdapter.notifyDataSetChanged());
         };
 
         setViewPager();
@@ -184,14 +217,14 @@ public class FragmentEditImage extends BaseFragment {
         messageBox(view);
 
 
-//        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
-
         view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AndroidUtils.closeKeyboard(v);
-                new HelperFragment(FragmentEditImage.this).remove();
-                if (G.openBottomSheetItem != null && isChatPage)
+                closeKeyboard();
+                if (getActivity() != null) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+                }
+                if (G.openBottomSheetItem != null && isChatPage && isReOpenChatAttachment)
                     G.openBottomSheetItem.openBottomSheet(false);
             }
         });
@@ -206,118 +239,109 @@ public class FragmentEditImage extends BaseFragment {
         });
 
 
-        txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        channelOrGroupProfileSetTv.setOnClickListener(v -> {
 
-                if (completeEditImage != null) {
-                    completeEditImage.result(itemGalleryList.get(0).getPath(), "", null);
-                }
-
-                new HelperFragment(FragmentEditImage.this).remove();
-                AndroidUtils.closeKeyboard(v);
+            if (onProfileImageEdited != null) {
+                onProfileImageEdited.profileImageAdd(itemGalleryList.get(0).getPath());
+                return;
             }
+
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+            }
+
+            closeKeyboard();
+
         });
 
-        imvSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HelperFragment(FragmentEditImage.this).remove();
+        imvSendButton.setOnClickListener(v -> {
 
-                if (textImageList.size() == 0) {
-                    setValueCheckBox(viewPager.getCurrentItem());
-                }
-
-                completeEditImage.result("", edtChat.getText().toString(), textImageList);
-                AndroidUtils.closeKeyboard(v);
+            if (iconOk.isShown()) {
+                iconOk.performClick();
             }
-        });
 
-        isSoftKeyboardOpenOrNot(view);
-    }
-
-    private void isSoftKeyboardOpenOrNot(final View view) {
-
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int heightDiff = view.getRootView().getHeight() - view.getHeight();
-                if (heightDiff > AndroidUtils.dpToPx(G.fragmentActivity, 200)) { // if more than 200 dp, it's probably a keyboard...
-                    // ... do something here
-                    rootSend.setVisibility(View.GONE);
-                } else {
-                    rootSend.setVisibility(View.VISIBLE);
-                }
+            if (getActivity() != null) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
             }
-        });
+            if (galleryListener != null) galleryListener.onImageSent();
 
+            if (textImageList.size() == 0) {
+                setValueCheckBox(viewPager.getCurrentItem());
+            }
+
+            completeEditImage.result("", edtChat.getText().toString(), textImageList);
+            closeKeyboard();
+
+        });
     }
 
     private void messageBox(final View view) {
-        if (textImageList.containsKey(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path)) {
-            edtChat.setText(textImageList.get(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path).getText());
+        if (textImageList.containsKey(itemGalleryList.get(selectPosition).path)) {
+            edtChat.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(selectPosition).path).getText(), edtChat.getPaint().getFontMetricsInt()));
         } else {
             edtChat.setText("");
         }
 
-        txtEditImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AndroidUtils.closeKeyboard(v);
+        txtEditImage.setOnClickListener(v -> {
+            hideKeyboard();
+            if (getActivity() != null && itemGalleryList.size() > 0) {
                 if (!isNicknamePage) {
-                    new HelperFragment(FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path)).setReplace(false).load();
                 } else {
                     FragmentFilterImage fragment = FragmentFilterImage.newInstance(itemGalleryList.get(viewPager.getCurrentItem()).path);
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                 }
             }
         });
-
-
-        /**
-         *
-         * get message for each item
-         *
-         */
-
-        iconOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+        paintTv.setOnClickListener(v -> {
+            hideKeyboard();
+            if (getActivity() != null && itemGalleryList.size() > 0) {
                 String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
-                String message = edtChat.getText().toString();
-
-                itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
-                checkBox.setChecked(true);
-                checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-
-                StructBottomSheet item = new StructBottomSheet();
-                item.setPath(path);
-                item.setText(message);
-                item.setId(itemGalleryList.get(viewPager.getCurrentItem()).getId());
-
-                textImageList.put(path, item);
-//                FragmentChat.listPathString.add(itemGalleryList.get(((itemGalleryList.size() - selectPosition) - 1)).path);
-                if (textImageList.size() > 0 && isMultiItem) {
-                    txtCountImage.setVisibility(View.VISIBLE);
-                    txtCountImage.setText(textImageList.size() + "");
-                } else {
-                    txtCountImage.setVisibility(View.GONE);
+                if (path == null || path.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.error, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                closeKeyboard(v);
-                v.setVisibility(View.GONE);
+                if (!isNicknamePage) {
+                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentPaintImage.newInstance(path)).setReplace(false).load();
+                } else {
+                    FragmentPaintImage fragment = FragmentPaintImage.newInstance(path);
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.registrationFrame, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                }
             }
+        });
+        iconOk.setOnClickListener(v -> {
+
+            String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
+            String message = edtChat.getText().toString();
+
+            itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
+            checkBox.setChecked(true);
+            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(path);
+            item.setText(message);
+            item.setId(itemGalleryList.get(viewPager.getCurrentItem()).getId());
+
+            textImageList.put(path, item);
+            if (textImageList.size() > 0 && isMultiItem) {
+                txtCountImage.setVisibility(VISIBLE);
+                txtCountImage.setText(textImageList.size() + "");
+            } else {
+                txtCountImage.setVisibility(View.GONE);
+            }
+
+            v.setVisibility(View.GONE);
+
+            showPopup(-2);
+
         });
 
         edtChat.requestFocus();
 
-        edtChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isEmojiSHow) {
-
-                    imvSmileButton.performClick();
-                }
+        edtChat.setOnClickListener(v -> {
+            if (isPopupShowing()) {
+                imvSmileButton.performClick();
             }
         });
 
@@ -339,31 +363,184 @@ public class FragmentEditImage extends BaseFragment {
                     oldPath = textImageList.get(itemGalleryList.get(viewPager.getCurrentItem()).path).getText();
                 }
                 if (!oldPath.equals(s.toString())) {
-                    iconOk.setVisibility(View.VISIBLE);
+                    iconOk.setVisibility(VISIBLE);
                 } else {
                     iconOk.setVisibility(View.GONE);
                 }
             }
         });
 
+        imvSmileButton.setOnClickListener(v -> onEmojiClicked());
+    }
 
-        imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                emojiPopup.toggle();
+    private void onEmojiClicked() {
+        if (!isPopupShowing()) {
+            showPopup(KeyboardView.MODE_EMOJI);
+        } else {
+            showPopup(KeyboardView.MODE_KEYBOARD);
+        }
+    }
+
+    private void openKeyboardInternal() {
+        edtChat.requestFocus();
+        AndroidUtils.showKeyboard(edtChat);
+    }
+
+    public void closeKeyboard() {
+        edtChat.clearFocus();
+        AndroidUtils.hideKeyboard(edtChat);
+    }
+
+    private boolean isKeyboardVisible() {
+        return AndroidUtils.usingKeyboardInput || keyboardVisible;
+    }
+
+    private boolean isPopupShowing() {
+        return emojiView != null && emojiView.getVisibility() == VISIBLE;
+    }
+
+    private void onWindowSizeChanged() {
+        int size = rootView.getHeight();
+        if (!keyboardVisible) {
+            size -= emojiPadding;
+        }
+    }
+
+    private void showPopup(int show) {
+
+        if (show == KeyboardView.MODE_EMOJI) {
+            if (emojiView == null) {
+                createEmojiView();
             }
-        });
 
+            edtChat.requestFocus();
+            emojiView.setVisibility(VISIBLE);
+            keyboardContainer.setVisibility(VISIBLE);
 
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
+            }
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+            }
+
+            int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
+
+            ViewGroup.LayoutParams layoutParams = keyboardContainer.getLayoutParams();
+            layoutParams.width = AndroidUtils.displaySize.x;
+            layoutParams.height = currentHeight;
+            keyboardContainer.setLayoutParams(layoutParams);
+
+            if (keyboardVisible) {
+                closeKeyboard();
+            }
+
+            if (rootView != null) {
+                emojiPadding = currentHeight;
+                rootView.requestLayout();
+                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                rootSend.setVisibility(View.GONE);
+                onWindowSizeChanged();
+            }
+        } else if (show == KeyboardView.MODE_KEYBOARD) {
+            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+
+            keyboardContainer.setVisibility(VISIBLE);
+
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
+            }
+
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+            }
+
+            ViewGroup.LayoutParams layoutParams = keyboardContainer.getLayoutParams();
+            layoutParams.width = AndroidUtils.displaySize.x;
+            layoutParams.height = keyboardHeight;
+            keyboardContainer.setLayoutParams(layoutParams);
+
+            openKeyboardInternal();
+
+            if (emojiView != null) {
+                emojiView.setVisibility(View.GONE);
+            }
+
+            rootSend.setVisibility(View.GONE);
+
+            if (rootView != null) {
+                rootView.requestLayout();
+                onWindowSizeChanged();
+            }
+
+        } else {
+            rootSend.setVisibility(VISIBLE);
+            keyboardContainer.setVisibility(View.GONE);
+            if (emojiView != null)
+                emojiView.setVisibility(View.GONE);
+            closeKeyboard();
+        }
+
+        if (show == KeyboardView.MODE_KEYBOARD) {
+            emojiPadding = 0;
+        }
+    }
+
+    private void createEmojiView() {
+        if (emojiView == null) {
+            emojiView = new EmojiView(rootView.getContext(), false, true);
+            emojiView.setVisibility(View.GONE);
+            emojiView.setContentView(EmojiView.EMOJI);
+            emojiView.setListener(new EmojiView.Listener() {
+                @Override
+                public void onBackSpace() {
+                    if (edtChat.length() == 0) {
+                        return;
+                    }
+                    edtChat.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+                }
+
+                @Override
+                public void onStickerClick(StructIGSticker structIGSticker) {
+
+                }
+
+                @Override
+                public void onStickerSettingClick() {
+
+                }
+
+                @Override
+                public void onAddStickerClicked() {
+
+                }
+
+                @Override
+                public void onEmojiSelected(String unicode) {
+                    int i = edtChat.getSelectionEnd();
+
+                    if (i < 0) i = 0;
+
+                    try {
+                        CharSequence sequence = EmojiManager.getInstance().replaceEmoji(unicode, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false);
+                        if (edtChat.getText() != null)
+                            edtChat.setText(edtChat.getText().insert(i, sequence));
+                        int j = i + sequence.length();
+                        edtChat.setSelection(j, j);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        keyboardContainer.addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
     }
 
     private void setCheckBoxItem() {
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isMultiItem) setValueCheckBox(viewPager.getCurrentItem());
-            }
+        checkBox.setOnClickListener(v -> {
+            if (isMultiItem) setValueCheckBox(viewPager.getCurrentItem());
         });
 
         if (itemGalleryList.get(viewPager.getCurrentItem()).isSelected) {
@@ -371,7 +548,7 @@ public class FragmentEditImage extends BaseFragment {
             checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
         } else {
             checkBox.setChecked(true);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
         }
 
     }
@@ -381,7 +558,7 @@ public class FragmentEditImage extends BaseFragment {
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
 
-        viewPager.setCurrentItem((itemGalleryList.size() - selectPosition) - 1);
+        viewPager.setCurrentItem(selectPosition);
 
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -398,11 +575,11 @@ public class FragmentEditImage extends BaseFragment {
                     checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
                 } else {
                     checkBox.setChecked(true);
-                    checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+                    checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
                 }
 
                 if (textImageList.containsKey(itemGalleryList.get(position).path)) {
-                    edtChat.setText(textImageList.get(itemGalleryList.get(position).path).getText());
+                    edtChat.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(position).path).getText(), edtChat.getPaint().getFontMetricsInt()));
                 } else {
                     edtChat.setText("");
                 }
@@ -414,6 +591,14 @@ public class FragmentEditImage extends BaseFragment {
 
             }
         });
+    }
+
+    public void setIsReOpenChatAttachment(boolean enable) {
+        this.isReOpenChatAttachment = enable;
+    }
+
+    public void setGalleryListener(GalleryListener listener) {
+        this.galleryListener = listener;
     }
 
     @Override
@@ -439,70 +624,64 @@ public class FragmentEditImage extends BaseFragment {
 
     }
 
+    @Override
+    public void onSizeChanged(int keyboardSize, boolean land) {
+        if (keyboardSize > LayoutCreator.dp(50) && keyboardVisible /*&& !AndroidUtilities.isInMultiwindow && !forceFloatingEmoji*/) {
+            if (land) {
+                keyboardHeightLand = keyboardSize;
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, keyboardHeightLand).apply();
+            } else {
+                keyboardHeight = keyboardSize;
+                if (emojiSharedPreferences != null)
+                    emojiSharedPreferences.edit().putInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, keyboardHeight).apply();
+            }
+        }
+
+        if (isPopupShowing()) {
+            int newHeight;
+            if (land) {
+                newHeight = keyboardHeightLand;
+            } else {
+                newHeight = keyboardHeight;
+            }
+
+            ViewGroup.LayoutParams layoutParams = keyboardContainer.getLayoutParams();
+            if (layoutParams.width != AndroidUtils.displaySize.x || layoutParams.height != newHeight) {
+                layoutParams.width = AndroidUtils.displaySize.x;
+                layoutParams.height = newHeight;
+                keyboardContainer.setLayoutParams(layoutParams);
+
+                if (rootView != null) {
+                    emojiPadding = layoutParams.height;
+                    rootView.requestLayout();
+                    onWindowSizeChanged();
+                }
+            }
+        }
+
+        if (lastSizeChangeValue1 == keyboardSize && lastSizeChangeValue2 == land) {
+            onWindowSizeChanged();
+            return;
+        }
+        lastSizeChangeValue1 = keyboardSize;
+        lastSizeChangeValue2 = land;
+
+        boolean oldValue = keyboardVisible;
+        keyboardVisible = keyboardSize > 0;
+        if (keyboardVisible && isPopupShowing()) {
+            showPopup(-1);
+        }
+        if (emojiPadding != 0 && !keyboardVisible && keyboardVisible != oldValue && !isPopupShowing()) {
+            emojiPadding = 0;
+            rootView.requestLayout();
+        }
+        onWindowSizeChanged();
+    }
+
     public interface UpdateImage {
         void result(String path);
     }
-
-    private void setUpEmojiPopup(View view) {
-        switch (G.themeColor) {
-            case Theme.BLUE_GREY_COMPLETE:
-            case Theme.INDIGO_COMPLETE:
-            case Theme.BROWN_COMPLETE:
-            case Theme.GREY_COMPLETE:
-            case Theme.TEAL_COMPLETE:
-            case Theme.DARK:
-
-                setEmojiColor(view,G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
-                break;
-            default:
-                setEmojiColor(view,Color.parseColor("#eceff1"), "#61000000", "#61000000");
-
-
-        }
-
-    }
-
-    private void setEmojiColor(View view,int BackgroundColor, String iconColor, String dividerColor) {
-
-        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
-                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-
-                    @Override
-                    public void onEmojiBackspaceClick(View v) {
-
-                    }
-                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-                    @Override
-                    public void onEmojiPopupShown() {
-                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                        isEmojiSHow = true;
-                    }
-                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-                    @Override
-                    public void onKeyboardOpen(final int keyBoardHeight) {
-
-                    }
-                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-                    @Override
-                    public void onEmojiPopupDismiss() {
-                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-                        isEmojiSHow = false;
-                    }
-                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-                    @Override
-                    public void onKeyboardClose() {
-                        emojiPopup.dismiss();
-                    }
-                })
-                .setBackgroundColor(BackgroundColor)
-                .setIconColor(Color.parseColor(iconColor))
-                .setDividerColor(Color.parseColor(dividerColor))
-                .build(edtChat);
-
-    }
-
-
-
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
         imvSmileButton.setText(drawableResourceId);
@@ -513,27 +692,42 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     @Override
+    public boolean onBackPressed() {
+        if (isPopupShowing()) {
+            showPopup(-1);
+            return true;
+        } else
+            return super.onBackPressed();
+    }
+
+    @Override
+    public void onPause() {
+        showPopup(-1);
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-
-        if (getView() == null) {
-            return;
-        }
-        getView().setFocusableInTouchMode(true);
-        getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
-                    AndroidUtils.closeKeyboard(v);
-                    new HelperFragment(FragmentEditImage.this).remove();
-                    if (G.openBottomSheetItem != null && isChatPage)
-                        G.openBottomSheetItem.openBottomSheet(false);
-                    return true;
-                }
-                return false;
-            }
-        });
+//
+//        if (getView() == null) {
+//            return;
+//        }
+//        getView().setFocusableInTouchMode(true);
+//        getView().requestFocus();
+//        getView().setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK && getActivity() != null) {
+//                    closeKeyboard();
+//                    new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.this).remove();
+//                    if (G.openBottomSheetItem != null && isChatPage && isReOpenChatAttachment)
+//                        G.openBottomSheetItem.openBottomSheet(false);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     private class AdapterViewPager extends PagerAdapter {
@@ -563,10 +757,25 @@ public class FragmentEditImage extends BaseFragment {
         public Object instantiateItem(ViewGroup container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, (ViewGroup) container, false);
-            final ImageView imgPlay = (ImageView) layout.findViewById(R.id.img_editImage);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, container, false);
+            final ImageView imgPlay = layout.findViewById(R.id.img_editImage);
             if (itemGalleryList.get(position).path != null) {
-                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+                new Thread(() -> {
+                    String oldPath = itemGalleryList.get(position).path;
+                    String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
+                    G.runOnUiThread(() -> {
+                        //check if old path available in selected list , replace new path with that
+                        if (!oldPath.equals(finalPath)) {
+                            StructBottomSheet item = textImageList.get(oldPath);
+                            if (item != null) {
+                                textImageList.remove(oldPath);
+                                textImageList.put(finalPath, item);
+                            }
+                        }
+                        itemGalleryList.get(position).path = finalPath;
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), imgPlay);
+                    });
+                }).start();
             }
 
             imgPlay.setOnClickListener(new View.OnClickListener() {
@@ -575,7 +784,7 @@ public class FragmentEditImage extends BaseFragment {
                     if (isMultiItem) setValueCheckBox(position);
                 }
             });
-            ((ViewGroup) container).addView(layout);
+            container.addView(layout);
             return layout;
         }
 
@@ -583,7 +792,6 @@ public class FragmentEditImage extends BaseFragment {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
-
     }
 
     private void setValueCheckBox(int position) {
@@ -601,11 +809,11 @@ public class FragmentEditImage extends BaseFragment {
             item.setPath(itemGalleryList.get(position).path);
             item.setId(itemGalleryList.get(position).getId());
             textImageList.put(itemGalleryList.get(position).path, item);
-            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
+            checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
             itemGalleryList.get(position).setSelected(false);
         }
         if (textImageList.size() > 0 && isChatPage) {
-            txtCountImage.setVisibility(View.VISIBLE);
+            txtCountImage.setVisibility(VISIBLE);
             txtCountImage.setText(textImageList.size() + "");
         } else {
             txtCountImage.setVisibility(View.GONE);
@@ -615,41 +823,37 @@ public class FragmentEditImage extends BaseFragment {
 
     private void initView(View view) {
 
-        G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
-//            path = bundle.getString(PATH);
             isChatPage = bundle.getBoolean(ISCHAT);
             isNicknamePage = bundle.getBoolean(ISNICKNAMEPAGE);
             selectPosition = bundle.getInt(SELECT_POSITION);
         }
 
-
         layoutCaption = view.findViewById(R.id.layout_caption);
-        txtSet = view.findViewById(R.id.txtSet);
-        imvSendButton = (MaterialDesignTextView) view.findViewById(R.id.pu_txt_sendImage);
+        channelOrGroupProfileSetTv = view.findViewById(R.id.txtSet);
+        imvSendButton = view.findViewById(R.id.pu_txt_sendImage);
 
-        //imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
-        iconOk = (TextView) view.findViewById(R.id.chl_imv_ok_message);
-        rootSend = (ViewGroup) view.findViewById(R.id.pu_layout_cancel_crop);
-        txtEditImage = (TextView) view.findViewById(R.id.txtEditImage);
-        edtChat = (EmojiEditTextE) view.findViewById(R.id.chl_edt_chat);
+        iconOk = view.findViewById(R.id.chl_imv_ok_message);
+        rootSend = view.findViewById(R.id.pu_layout_cancel_crop);
+        txtEditImage = view.findViewById(R.id.txtEditImage);
+        edtChat = view.findViewById(R.id.chl_edt_chat);
+        edtChat.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        edtChat.setInputType(edtChat.getInputType() | EditorInfo.TYPE_TEXT_FLAG_CAP_SENTENCES);
         edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
         viewPager = view.findViewById(R.id.viewPagerEditText);
-        checkBox = (AnimateCheckBox) view.findViewById(R.id.checkBox_editImage);
-        imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
-        setUpEmojiPopup(view);
+        checkBox = view.findViewById(R.id.checkBox_editImage);
+        imvSmileButton = view.findViewById(R.id.chl_imv_smile_button);
     }
 
     private void goToCropPage(View v) {
         AndroidUtils.closeKeyboard(v);
-        if (itemGalleryList.size() == 0){
+        if (itemGalleryList.size() == 0) {
             return;
         }
         String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
-        if (newPath.lastIndexOf(".") <= 0){
+        if (newPath.lastIndexOf(".") <= 0) {
             return;
         }
 
@@ -660,8 +864,8 @@ public class FragmentEditImage extends BaseFragment {
         Uri uri = Uri.parse(newPath);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
             UCrop.Options options = new UCrop.Options();
-            options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
-            options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
+            options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.black));
+            options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.black));
             options.setCompressionQuality(80);
             options.setFreeStyleCropEnabled(true);
 
@@ -709,6 +913,48 @@ public class FragmentEditImage extends BaseFragment {
         return itemGalleryList;
     }
 
+    public static ArrayList<StructBottomSheet> insertItemList(String path, String message, boolean isSelected) {
+
+        if (itemGalleryList == null) {
+            itemGalleryList = new ArrayList<>();
+        }
+
+        if (!HelperPermission.grantedUseStorage()) {
+            return itemGalleryList;
+        }
+        StructBottomSheet item = new StructBottomSheet();
+        item.setId(itemGalleryList.size());
+        item.setPath(path);
+        item.setText(message);
+        item.isSelected = isSelected;
+        itemGalleryList.add(0, item);
+        textImageList.put(path, item);
+
+        return itemGalleryList;
+    }
+
+    public static ArrayList<StructBottomSheet> insertItemList(String path, boolean isSelected, CompleteEditImage completeEdit) {
+
+        if (itemGalleryList == null) {
+            itemGalleryList = new ArrayList<>();
+        }
+
+        if (!HelperPermission.grantedUseStorage()) {
+            return itemGalleryList;
+        }
+        StructBottomSheet item = new StructBottomSheet();
+        item.setId(itemGalleryList.size());
+        item.setPath(path);
+        item.setText("");
+        item.isSelected = isSelected;
+        itemGalleryList.add(0, item);
+        textImageList.put(path, item);
+
+        completeEditImage = completeEdit;
+
+        return itemGalleryList;
+    }
+
     private void serCropAndFilterImage(String path) {
 
         int po = (viewPager.getCurrentItem());
@@ -731,6 +977,24 @@ public class FragmentEditImage extends BaseFragment {
         mAdapter.notifyDataSetChanged();
 
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (rootView != null)
+            rootView.setListener(null);
+
+        updateImage = null;
+    }
+
+    public interface GalleryListener {
+        void onImageSent();
+    }
+
+    @FunctionalInterface
+    public interface OnImageEdited {
+        void profileImageAdd(String path);
     }
 
 }

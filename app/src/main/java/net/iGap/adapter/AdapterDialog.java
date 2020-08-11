@@ -1,27 +1,26 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.adapter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.RadioButton;
 
-import net.iGap.G;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import net.iGap.R;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.structs.StructCountry;
 
 import java.util.ArrayList;
@@ -29,62 +28,53 @@ import java.util.ArrayList;
 public class AdapterDialog extends BaseAdapter implements Filterable {
 
     public static int mSelectedVariation = -1;
-    public static boolean po = false;
-    Context context;
-    ArrayList<StructCountry> countrylist;
-    ArrayList<StructCountry> mStringFilterList;
-    ValueFilter valueFilter;
-    private RadioButton name_tv;
+    private ArrayList<StructCountry> countryList;
+    private ArrayList<StructCountry> mStringFilterList;
+    private ValueFilter valueFilter;
 
-
-    public AdapterDialog(Context context, ArrayList<StructCountry> countrylist) {
-        this.context = context;
-        this.countrylist = countrylist;
-        mStringFilterList = countrylist;
+    public AdapterDialog(ArrayList<StructCountry> countryList) {
+        this.countryList = countryList;
+        mStringFilterList = countryList;
     }
 
     @Override
     public int getCount() {
-        return countrylist.size();
+        return countryList.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return countrylist.get(position);
+    public StructCountry getItem(int position) {
+        return countryList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return countrylist.indexOf(getItem(position));
+        return countryList.indexOf(getItem(position));
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-
-        convertView = null;
+        StructCountry structCountry = countryList.get(position);
+        ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.rg_adapter_dialog, null);
-            name_tv = convertView.findViewById(R.id.rg_radioButton);
-            StructCountry structCountry = countrylist.get(position);
-            name_tv.setText(structCountry.getName());
+            // If there's no view to re-use, inflate a brand new view for row
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.rg_adapter_dialog, parent, false);
+            viewHolder.countyImage = convertView.findViewById(R.id.countyImage);
+            viewHolder.countryCode = convertView.findViewById(R.id.countryCode);
+            viewHolder.countryName = convertView.findViewById(R.id.countryName);
+            // Cache the viewHolder object inside the fresh view
+            convertView.setTag(viewHolder);
+        } else {
+            // View is being recycled, retrieve the viewHolder object from tag
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        name_tv.setChecked(countrylist.get(position).getId() == mSelectedVariation);
-        name_tv.setTag(position);
-        name_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSelectedVariation = (Integer) v.getTag();
-                mSelectedVariation = countrylist.get(position).getId();
-                notifyDataSetChanged();
-
-                G.onCountryCode.countryInfo(countrylist.get(position));
-
-            }
-        });
-
+        viewHolder.countryCode.setText(structCountry.getCountryCode());
+        viewHolder.countryName.setText(structCountry.getName());
+        viewHolder.countyImage.setImageResource(R.mipmap.icon_rounded/*structCountry.getFlag()*/);
+        viewHolder.countyImage.setVisibility(View.INVISIBLE);
         return convertView;
     }
 
@@ -101,10 +91,9 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
             if (constraint != null && constraint.length() > 0) {
-                ArrayList<StructCountry> filterList = new ArrayList<StructCountry>();
+                ArrayList<StructCountry> filterList = new ArrayList<>();
                 for (int i = 0; i < mStringFilterList.size(); i++) {
                     if ((mStringFilterList.get(i).getName().toUpperCase()).contains(constraint.toString().toUpperCase())) {
-
                         StructCountry structCountry = new StructCountry();
                         structCountry.setId(mStringFilterList.get(i).getId());
                         structCountry.setName(mStringFilterList.get(i).getName());
@@ -125,8 +114,14 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            countrylist = (ArrayList<StructCountry>) results.values;
+            countryList = (ArrayList<StructCountry>) results.values;
             notifyDataSetChanged();
         }
     }
+
+    private class ViewHolder {
+        private CircleImageView countyImage;
+        private AppCompatTextView countryName, countryCode;
+    }
+
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp4"
+    android:paddingBottom="@dimen/dp4">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/iGapButtonSelector"
+        app:layout_constraintBottom_toBottomOf="@id/price_ticket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/price_ticket" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/minusButton"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp32"
+        android:layout_height="@dimen/dp32"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:text="@string/md_delete_acc"
+        app:layout_constraintBottom_toBottomOf="@id/price_ticket"
+        app:layout_constraintEnd_toStartOf="@id/price_ticket"
+        app:layout_constraintStart_toEndOf="@id/count_ticket"
+        app:layout_constraintTop_toTopOf="@id/price_ticket" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/plusButton"
+        style="@style/myIconTextViewStyle"
+        android:layout_width="@dimen/dp32"
+        android:layout_height="@dimen/dp32"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:text="@string/add_icon_2"
+        app:layout_constraintBottom_toBottomOf="@id/price_ticket"
+        app:layout_constraintEnd_toStartOf="@id/count_ticket"
+        app:layout_constraintStart_toEndOf="@id/service_ticket"
+        app:layout_constraintTop_toTopOf="@id/price_ticket" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/price_ticket"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/minusButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent=".3" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/count_ticket"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintBottom_toBottomOf="@id/price_ticket"
+        app:layout_constraintEnd_toStartOf="@id/minusButton"
+        app:layout_constraintStart_toEndOf="@id/plusButton"
+        app:layout_constraintTop_toTopOf="@id/price_ticket" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/service_ticket"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapTitleTextColor"
+        app:layout_constraintBottom_toBottomOf="@id/price_ticket"
+        app:layout_constraintEnd_toStartOf="@id/plusButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/price_ticket"
+        app:layout_constraintWidth_percent=".4" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,21 +1,19 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
-
-import io.realm.Realm;
 
 public class ClientMuteRoomResponse extends MessageHandler {
 
@@ -35,26 +33,10 @@ public class ClientMuteRoomResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientMuteRoom.ClientMuteRoomResponse.Builder builder = (ProtoClientMuteRoom.ClientMuteRoomResponse.Builder) message;
-        try (Realm realm = Realm.getDefaultInstance()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                    if (room != null) {
-                        room.setMute(builder.getRoomMute());
-                    }
-                }
-            });
-        }
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                G.refreshRealmUi();
-                /** call this listener for update tab bars unread count */
-                if (G.onUnreadChange != null) {
-                    G.onUnreadChange.onChange();
-                }
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+            if (room != null) {
+                room.setMute(builder.getRoomMute());
             }
         });
     }

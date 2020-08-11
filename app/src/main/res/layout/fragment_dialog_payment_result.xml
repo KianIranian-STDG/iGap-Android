@@ -49,9 +49,9 @@
                 android:layout_height="100dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/shaparak_receipt_logo"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 android:gravity="center"
                 android:text="@string/save_receipt"
                 android:textColor="@color/primary_text"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/close_button"

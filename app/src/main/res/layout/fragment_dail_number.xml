@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.DailNumberViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/one"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`1`)}"
+            android:text="@string/one_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toTopOf="@id/four"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/two"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintWidth_percent=".2" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/two"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`2`)}"
+            android:text="@string/two_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/one"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toRightOf="@id/one"
+            app:layout_constraintRight_toLeftOf="@id/three"
+            app:layout_constraintTop_toTopOf="@id/one"
+            app:layout_constraintWidth_percent=".2" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/three"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`3`)}"
+            android:text="@string/three_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/one"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toRightOf="@id/two"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/one"
+            app:layout_constraintWidth_percent=".2" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/four"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`4`)}"
+            android:text="@string/four_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toTopOf="@id/seven"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/one"
+            app:layout_constraintRight_toRightOf="@id/one"
+            app:layout_constraintTop_toBottomOf="@id/one" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/five"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`5`)}"
+            android:text="@string/five_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/four"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/two"
+            app:layout_constraintRight_toRightOf="@id/two"
+            app:layout_constraintTop_toTopOf="@id/four" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/six"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`6`)}"
+            android:text="@string/six_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/four"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/three"
+            app:layout_constraintRight_toRightOf="@id/three"
+            app:layout_constraintTop_toTopOf="@id/four" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/seven"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`7`)}"
+            android:text="@string/seven_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toTopOf="@id/star"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/one"
+            app:layout_constraintRight_toRightOf="@id/one"
+            app:layout_constraintTop_toBottomOf="@id/four" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/eight"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`8`)}"
+            android:text="@string/eight_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/seven"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/two"
+            app:layout_constraintRight_toRightOf="@id/two"
+            app:layout_constraintTop_toTopOf="@id/seven" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/nine"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`9`)}"
+            android:text="@string/nine_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/seven"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/three"
+            app:layout_constraintRight_toRightOf="@id/three"
+            app:layout_constraintTop_toTopOf="@id/seven" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/star"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`*`)}"
+            android:text="@string/star_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toTopOf="@id/inputNumber"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/one"
+            app:layout_constraintRight_toRightOf="@id/one"
+            app:layout_constraintTop_toBottomOf="@id/seven" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/zero"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.addNumber(`0`)}"
+            android:text="@string/zero_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/star"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/two"
+            app:layout_constraintRight_toRightOf="@id/two"
+            app:layout_constraintTop_toTopOf="@id/star" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/eraseNumber"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/dial_number_shape"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.removeNumber()}"
+            android:text="@string/back_number"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp32"
+            app:layout_constraintBottom_toBottomOf="@id/star"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/three"
+            app:layout_constraintRight_toRightOf="@id/three"
+            app:layout_constraintTop_toTopOf="@id/star" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/inputNumber"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLength="18"
+            android:maxLines="1"
+            android:text="@{viewModel.currentDialNumber}"
+            app:layout_constraintBottom_toTopOf="@id/btnVoiceCall"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/star"
+            app:layout_constraintWidth_percent=".8" />
+
+        <!--<android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btnAddContact"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="@{()-> viewModel.addContactButtonOnClick()}"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@id/inputNumber"
+            app:layout_constraintLeft_toRightOf="@id/inputNumber"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/inputNumber"
+            app:srcCompat="@drawable/ic_add_24dp" />-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVoiceCall"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:fontFamily="@font/font_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> viewModel.voiceButtonOnClick()}"
+            android:text="@string/voice_call_icon"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp22"
+            app:backgroundTint="@color/md_green_500"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btnVideoCall"
+            app:layout_constraintTop_toBottomOf="@id/inputNumber"
+            app:layout_constraintWidth_percent=".3" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVideoCall"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:fontFamily="@font/font_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> viewModel.videoButtonOnClick()}"
+            android:text="@string/video_call_icon"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp22"
+            app:backgroundTint="@color/videoCallButton"
+            app:layout_constraintBottom_toBottomOf="@id/btnVoiceCall"
+            app:layout_constraintLeft_toRightOf="@id/btnVoiceCall"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnVoiceCall"
+            app:layout_constraintWidth_percent=".3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

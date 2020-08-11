@@ -1,23 +1,24 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.viewmodel;
 
 import android.content.Context;
-import android.databinding.ObservableField;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -29,6 +30,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmChatRoom;
@@ -51,7 +53,6 @@ public class FragmentNotificationViewModel {
     public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> vibrate = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> sound = new ObservableField<>();
-    private Realm realm;
     private RealmNotificationSetting realmNotificationSetting;
     private ProtoGlobal.Room.Type roomType;
     private FragmentNotificationBinding fragmentNotificationBinding;
@@ -66,7 +67,6 @@ public class FragmentNotificationViewModel {
         this.fragmentNotificationBinding = fragmentNotificationBinding;
         this.roomId = roomId;
 
-        realm = Realm.getDefaultInstance();
         roomType = RealmRoom.detectType(roomId);
         getInfo();
 
@@ -116,7 +116,7 @@ public class FragmentNotificationViewModel {
 
     private void startSound() {
         if (realmIdSound == 0 || realmIdSound == -1) {
-            sound.set(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+            sound.set(G.fragmentActivity.getResources().getString(R.string.Default_Notification_tone));
         } else {
             sound.set(realmSound);
         }
@@ -272,7 +272,7 @@ public class FragmentNotificationViewModel {
 
     public void onLedColorClick(View view) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.popup_colorpicker, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -286,9 +286,9 @@ public class FragmentNotificationViewModel {
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
+        final ColorPicker picker = view1.findViewById(R.id.picker);
+        SVBar svBar = view1.findViewById(R.id.svBar);
+        OpacityBar opacityBar = view1.findViewById(R.id.opacityBar);
         picker.addSVBar(svBar);
         picker.addOpacityBar(opacityBar);
 
@@ -298,7 +298,6 @@ public class FragmentNotificationViewModel {
                 dialog.dismiss();
                 GradientDrawable bgShape = (GradientDrawable) fragmentNotificationBinding.ntgImgLedColorMessage.getBackground();
                 bgShape.setColor(picker.getColor());
-
                 RealmNotificationSetting.ledColor(roomId, roomType, picker.getColor());
             }
         });
@@ -313,64 +312,58 @@ public class FragmentNotificationViewModel {
     private void getInfo() {
         switch (roomType) {
             case GROUP: {
+                DbManager.getInstance().doRealmTask(realm -> {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                Realm realm = Realm.getDefaultInstance();
-
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                    if (realmGroupRoom != null) {
-                        if (realmGroupRoom.getRealmNotificationSetting() == null) {
-                            setRealm(realm, realmGroupRoom, null, null);
-                        } else {
-                            realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                    if (realmRoom != null && realmRoom.getGroupRoom() != null) {
+                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                        if (realmGroupRoom != null) {
+                            if (realmGroupRoom.getRealmNotificationSetting() == null) {
+                                setRealm(realm, realmGroupRoom, null, null);
+                            } else {
+                                realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
+                            }
+                            getRealm();
                         }
-                        getRealm();
                     }
-                }
-
-                realm.close();
+                });
             }
 
             break;
             case CHANNEL: {
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                DbManager.getInstance().doRealmTask(realm -> {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                    if (realmChannelRoom != null) {
-                        if (realmChannelRoom.getRealmNotificationSetting() == null) {
-                            setRealm(realm, null, realmChannelRoom, null);
-                        } else {
-                            realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                    if (realmRoom != null && realmRoom.getChannelRoom() != null) {
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                        if (realmChannelRoom != null) {
+                            if (realmChannelRoom.getRealmNotificationSetting() == null) {
+                                setRealm(realm, null, realmChannelRoom, null);
+                            } else {
+                                realmNotificationSetting = realmChannelRoom.getRealmNotificationSetting();
+                            }
+                            getRealm();
                         }
-                        getRealm();
                     }
-                }
-
-                realm.close();
+                });
                 break;
             }
             case CHAT: {
+                DbManager.getInstance().doRealmTask(realm -> {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                if (realmRoom != null && realmRoom.getChatRoom() != null) {
-                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                    if (realmChatRoom != null) {
-                        if (realmChatRoom.getRealmNotificationSetting() == null) {
-                            setRealm(realm, null, null, realmChatRoom);
-                        } else {
-                            realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                    if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                        if (realmChatRoom != null) {
+                            if (realmChatRoom.getRealmNotificationSetting() == null) {
+                                setRealm(realm, null, null, realmChatRoom);
+                            } else {
+                                realmNotificationSetting = realmChatRoom.getRealmNotificationSetting();
+                            }
+                            getRealm();
                         }
-                        getRealm();
                     }
-                }
-
-                realm.close();
+                });
 
                 break;
             }
@@ -396,9 +389,5 @@ public class FragmentNotificationViewModel {
         } else {
             realmLedColor = -8257792;
         }
-    }
-
-    public void destroy() {
-        realm.close();
     }
 }

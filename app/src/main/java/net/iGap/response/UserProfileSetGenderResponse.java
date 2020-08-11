@@ -1,16 +1,16 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.observers.interfaces.OnUserProfileSetGenderResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileGender;
 import net.iGap.realm.RealmUserInfo;
@@ -19,9 +19,9 @@ public class UserProfileSetGenderResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserProfileSetGenderResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileSetGenderResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -35,8 +35,8 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         ProtoUserProfileGender.UserProfileSetGenderResponse.Builder userProfileGenderResponse = (ProtoUserProfileGender.UserProfileSetGenderResponse.Builder) message;
         RealmUserInfo.updateGender(userProfileGenderResponse.getGender());
 
-        if (G.onUserProfileSetGenderResponse != null) {
-            G.onUserProfileSetGenderResponse.onUserProfileGenderResponse(userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
+        if (identity instanceof OnUserProfileSetGenderResponse) {
+            ((OnUserProfileSetGenderResponse) identity).onUserProfileGenderResponse(userProfileGenderResponse.getGender(), userProfileGenderResponse.getResponse());
         }
     }
 
@@ -47,17 +47,16 @@ public class UserProfileSetGenderResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        if (G.onUserProfileSetGenderResponse != null) {
-            G.onUserProfileSetGenderResponse.Error(majorCode, minorCode);
+        if (identity instanceof OnUserProfileSetGenderResponse) {
+            ((OnUserProfileSetGenderResponse) identity).Error(majorCode, minorCode);
         }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-
-        if (G.onUserProfileSetGenderResponse != null) {
-            G.onUserProfileSetGenderResponse.onTimeOut();
+        if (identity instanceof OnUserProfileSetGenderResponse) {
+            ((OnUserProfileSetGenderResponse) identity).onTimeOut();
         }
     }
 }

@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.iGap"
     android:allowBackup="false"
-    android:label="@string/app_name"
-    tools:replace="allowBackup, label">
+    android:label="@string/app_name">
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -55,16 +54,15 @@
         android:largeHeap="true"
         android:launchMode="singleTask"
         android:manageSpaceActivity=".activities.ActivityManageSpace"
-        android:roundIcon="@mipmap/icon_rounded"
+        android:roundIcon="@mipmap/icon_round_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/iGapLightTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="allowBackup,supportsRtl">
-
+        tools:replace="allowBackup,supportsRtl,android:name,android:theme">
         <receiver
             android:name="ir.metrix.sdk.MetrixReferrerReceiver"
-            android:permission="android.permission.INSTALL_PACKAGES"
-            android:exported="true" >
+            android:exported="true"
+            android:permission="android.permission.INSTALL_PACKAGES">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -87,7 +85,9 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
             android:name=".activities.ActivityEnterPassCode"
-            android:configChanges="keyboard|orientation|screenSize|locale" />
+            android:configChanges="keyboard|orientation|screenSize|locale"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name=".activities.ActivityPopUpNotification"
@@ -105,30 +105,9 @@
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities.ActivityCall"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance">
-
-            <!--
-                      <intent-filter>
-                    <action android:name="android.intent.action.VIEW" />
-                    <category android:name="android.intent.category.DEFAULT" />
-                    <data android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile" />
-                  </intent-filter>
-            -->
-
-
-            <!--
-            <intent-filter>
-              <action android:name="android.intent.action.VIEW" />
-              <category android:name="android.intent.category.DEFAULT" />
-              <category android:name="android.intent.category.BROWSABLE" />
-              <data android:scheme="http" android:host="@string/host" />
-            </intent-filter>
-            -->
-
-        </activity>
-
+            android:launchMode="singleInstance"></activity>
         <activity
             android:name="org.paygear.WalletActivity"
             android:screenOrientation="portrait"
@@ -141,14 +120,7 @@
             android:name=".activities.ActivityMain"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
             android:launchMode="singleTask"
-            android:maxRecents="1"
-            android:theme="@style/AppTheme.Launcher"
-            android:windowSoftInputMode="stateUnchanged">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -166,6 +138,9 @@
                     android:scheme="igap" />
                 <data
                     android:host="join"
+                    android:scheme="igap" />
+                <data
+                    android:host="deep_link"
                     android:scheme="igap" />
             </intent-filter>
 
@@ -231,9 +206,23 @@
             <!-- this part add app logo to list of share -->
         </activity>
         <activity
-            android:name=".activities.ActivityRegisteration"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-            android:windowSoftInputMode="adjustPan" />
+            android:name=".activities.ActivityRegistration"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activities.CallActivity"
+            android:configChanges="keyboard|keyboardHidden|screenSize|locale"
+            android:excludeFromRecents="true"
+            android:screenOrientation="locked"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".activities.SplashActivity"
+            android:theme="@style/AppTheme.Launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".module.ReceiverBootPhone"
@@ -248,6 +237,9 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".module.CallActionsReceiver"
+            android:exported="false" />
 
         <service android:name=".helper.ServiceContact" />
         <service android:name=".module.UploadService" />
@@ -270,7 +262,7 @@
         </service>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -279,18 +271,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="Your_Fabric_Key"
-            tools:replace="android:value" />
-        <!--
-          The API key for Google Maps-based APIs is defined as a string resource.
-          (See the file "res/values/google_maps_api.xml").
-          Note that the API key is linked to the encryption key used to sign the APK.
-          You need a different API key for each encryption key, including the release key that is used to
-          sign the APK for publishing.
-          You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -329,6 +309,24 @@
             <meta-data
                 android:name="android.provider.CONTACTS_STRUCTURE"
                 android:resource="@xml/contacts" />
+        </service>
+        <service android:name=".module.BeepTunesPlayerService" />
+        <service android:name=".module.webrtc.CallService" />
+
+        <service
+            android:exported="false"
+            android:name=".api.webservice.JobServiceReconnect">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".viewmodel.controllers.telecom.CallConnectionService"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
         </service>
     </application>
 

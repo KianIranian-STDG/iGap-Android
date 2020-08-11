@@ -1,34 +1,27 @@
 package net.iGap.fragments;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.IVandActivityAdapter;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserIVandGetActivities;
 
 import java.util.ArrayList;
-
-import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 public class FragmentIVandActivities extends FragmentToolBarBack {
     private RecyclerView recyclerView;
@@ -38,7 +31,6 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     private IVandActivityAdapter iVandActivityAdapter;
     private boolean isLoading;
     private boolean existMoreItem;
-    private Button btnScanBarCode;
 
     public static FragmentIVandActivities newInstance() {
         FragmentIVandActivities fragmentIVandActivities = new FragmentIVandActivities();
@@ -59,11 +51,9 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btnScanBarCode).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
 
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
         titleTextView.setText(getString(R.string.ivand_activities_title));
-        btnScanBarCode =view.findViewById(R.id.btnScanBarCode);
         retry = view.findViewById(R.id.retry);
         emptyActivitiesText = view.findViewById(R.id.emptyActivitiesText);
         isLoading = false;
@@ -86,13 +76,6 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                 if (!isSend) {
                     HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
                 }
-            }
-        });
-
-        btnScanBarCode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scanBarCode(G.currentActivity);
             }
         });
 
@@ -177,7 +160,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                     tryToUpdateOrFetchRecycleViewData(count + 1);
                 }
             }, 1000);
-        } else if (!isSend){
+        } else if (!isSend) {
             turnOffRefresh(false);
         }
     }

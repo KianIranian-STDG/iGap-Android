@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/dp70"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/ivCover"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
+        android:layout_gravity="center"
+        style="@style/myIconTextViewStyle"
+        android:background="@drawable/background_multi_select_light"
+        android:gravity="center"
+        android:scaleType="centerCrop"
+        android:text="@string/attach_icon"
+        android:textColor="@color/shared_media_music_list_icon_color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="@dimen/dp10" />
+
+    <include
+        android:id="@+id/progress"
+        layout="@layout/msg_progress_item"
+        android:layout_width="@dimen/dp44"
+        android:layout_height="@dimen/dp44"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivCover"
+        app:layout_constraintBottom_toBottomOf="@id/ivCover" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/ivCover"
+        app:layout_constraintStart_toEndOf="@id/ivCover"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="@dimen/dp10"
+        android:layout_marginRight="@dimen/dp10"
+        android:textSize="@dimen/standardTextSize"
+        android:clickable="false"
+        android:focusable="false"
+        android:scrollbars="none"
+        android:linksClickable="false"
+        android:textColorLink="?iGapTitleTextColor"
+        android:textColor="?iGapTitleTextColor"
+        android:maxLines="3" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/lytLinks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/dp20"
+        android:layout_marginTop="@dimen/dp6"
+        android:layout_marginBottom="@dimen/dp6"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintBottom_toTopOf="@id/splitter"
+        app:layout_constraintTop_toBottomOf="@id/tvMessage"
+        app:layout_constraintStart_toStartOf="@id/tvMessage"
+        app:layout_constraintEnd_toEndOf="@id/tvMessage" />
+
+    <View
+        android:id="@+id/splitter"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?iGapDividerLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/ivCover"
+        app:layout_constraintEnd_toEndOf="@id/tvMessage"
+        android:layout_marginTop="@dimen/dp10" />
+
+
+    <FrameLayout
+        android:id="@+id/smsl_fl_contain_main"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/dp6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

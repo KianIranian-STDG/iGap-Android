@@ -10,14 +10,12 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomMessage;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoomMessage;
-
-import io.realm.Realm;
 
 public class ClientGetRoomMessageResponse extends MessageHandler {
 
@@ -37,20 +35,13 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder builder = (ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder) message;
-        try (Realm realm = Realm.getDefaultInstance()) {
+        DbManager.getInstance().doRealmTransaction(realm -> {
             RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra extra = (RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra) identity;
-
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage.putOrUpdate(realm, extra.getRoomId(), builder.getMessage(), new StructMessageOption().setGap());
-                }
-            });
+            RealmRoomMessage.putOrUpdate(realm, extra.getRoomId(), builder.getMessage(), new StructMessageOption().setGap());
             if (extra.getOnClientGetRoomMessage() != null) {
                 extra.getOnClientGetRoomMessage().onClientGetRoomMessageResponse(builder.getMessage());
             }
-        }
-
+        });
     }
 
     @Override

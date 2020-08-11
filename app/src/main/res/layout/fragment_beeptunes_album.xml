@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/ab_beepTunes_album"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/colorToolbarBackgroundEnd"
+            app:expandedTitleTextAppearance="@color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
+
+            <net.iGap.module.customView.SquareImageView
+                android:id="@+id/iv_albumFragment_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom"
+                android:background="@color/colorToolbarBackgroundEnd"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:layoutDirection="ltr"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_album_toolBarName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_toRightOf="@+id/tv_album_backIcon"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/largeTextSize"
+                        android:textStyle="bold"
+                        tools:text="aabolfazl" />
+
+                    <net.iGap.module.FontIconTextView
+                        android:id="@+id/tv_album_backIcon"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layoutDirection="ltr"
+                        android:text="@string/back_icon"
+                        android:textColor="@color/white"
+                        android:textSize="24dp" />
+
+                </RelativeLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/ns_album"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_album_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="338dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="رگ خواب"
+                android:textSize="@dimen/largeTextSize"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_album_albumeCost"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_album_artistName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="همایون شجریان"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintEnd_toStartOf="@+id/tv_album_albumeCost"
+                app:layout_constraintStart_toStartOf="@+id/tv_album_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_album_name" />
+
+            <TextView
+                android:id="@+id/tv_album_albumeCost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="۵۰۰۰ تومان"
+                android:textSize="@dimen/smallTextSize"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_album_artistName"
+                app:layout_constraintEnd_toEndOf="@+id/view5"
+                app:layout_constraintTop_toTopOf="@+id/tv_album_artistName" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_album_artistName" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_album_songs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray_f2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+            <ProgressBar
+                android:id="@+id/pb_album_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="@+id/rv_album_songs"
+                app:layout_constraintLeft_toLeftOf="@+id/rv_album_songs"
+                app:layout_constraintRight_toRightOf="@+id/rv_album_songs"
+                app:layout_constraintTop_toTopOf="@+id/rv_album_songs" />
+
+            <TextView
+                android:id="@+id/tv_album_artistOtherAlbum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:text="آلبوم های خواننده"
+                android:textColor="@color/black"
+                android:textSize="@dimen/standardTextSize"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/rv_album_artistAlbums"
+                app:layout_constraintTop_toBottomOf="@+id/rv_album_songs" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_album_artistAlbums"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="50dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_album_artistOtherAlbum"
+                app:layout_constraintVertical_bias="1.0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/fl_album_actionButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:background="@drawable/shape_beeptunes_album_light"
+        android:visibility="invisible"
+        app:layout_anchor="@id/ab_beepTunes_album"
+        app:layout_anchorGravity="bottom|end">
+
+        <net.iGap.module.FontIconTextView
+            android:id="@+id/tv_album_play"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/play_icon"
+            android:textColor="@color/white"
+            android:textSize="45dp"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
@@ -21,13 +21,19 @@ public class SHP_SETTING {
     public static final String KEY_REALM_DELETE_ALL = "KEY_REALM_DELETE_ALL";
 
     public static final String DELETE_FOLDER_BACKGROUND = "delete_folder_background";
+    public static final String KEY_CALL_NOTIFICATION = "calls_notification_channel";
 
+    public static String KEY_LOCK_STARTUP_STATE = "lock_startup_state";
     public static final String FILE_NAME = "setting";
     public static final String KEY_MESSAGE_TEXT_SIZE = "message_text_size";
     public static final String KEY_LANGUAGE = "language";
     public static final String KEY_DATA = "data";
     public static final String KEY_IN_APP_BROWSER = "app_browser";
     public static final String KEY_SEND_BT_ENTER = "send_by_enter";
+    public static final String EMOJI = "emoji";
+    public static final String KEY_KEYBOARD_HEIGHT = "keyboard_height";
+    public static final String KEY_KEYBOARD_HEIGHT_LAND = "keyboard_height_land";
+    public static final String KEY_PLAY_SOUND_IN_CHAT = "play_sound_in_chat";
     public static final String KEY_THEME_DARK = "KEY_THEME_DARK";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
@@ -67,6 +73,7 @@ public class SHP_SETTING {
     public static final String KEY_AD_ROAMING_FILE = "ROAMING_FILE";
     public static final String KEY_AD_ROAMING_MUSIC = "ROAMING_MUSIC";
     public static final String KEY_AD_ROAMING_GIF = "ROAMING_GIF";
+    public static final String KEY_BEEP_TUNES = "BEEP_TUNES";
 
 
     // ========================================================================================== notification and sound
@@ -161,6 +168,7 @@ public class SHP_SETTING {
     public static final String KEY_GET_CONTACT_IN_FRAGMENT = "KEY_GET_CONTACT_IN_FRAGMENT";
     public static final String KEY_KEEP_MEDIA_TIME = "KEY_KEEP_MEDIA_TIME";
     public static final String KEY_TIME_LOCK = "KEY_TIME_LOCK";
+    public static final String KEY_OLD_TIME = "KEY_OLD_TIME";
     public static final String KEY_SCREEN_SHOT_LOCK = "KEY_SCREEN_SHOT_LOCK";
     public static final String KEY_MAP_ATTENTION_DIALOG = "MAP_ATTENTION_DIALOG";
     public static final String KEY_MAP_CLEAR_CACHE_GOOGLE = "MAP_CLEAR_CACHE_GOOGLE";
@@ -184,9 +192,20 @@ public class SHP_SETTING {
     public static final String KEY_TRACKER_FILE = "KEY_TRACKER_PREFERENCES";
     public static final String KEY_TRACKER_INSTALL_USER = "KEY_INSTALL_USER";
 
+    // ========================================================================================== Popular
+
+    public static final String KEY_BBEP_TUNES_DOWNLOAD_QUALITY = "KEY_BEEP_TUNES_DOWNLOAD_QUALITY";
+    public static final String KEY_BBEP_TUNES_DOWNLOAD = "KEY_BEEP_TUNES_DOWNLOAD";
+
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }
+
+    public static final String EXCEED_CONTACTS_DIALOG = "EXCEED_CONTACTS_DIALOG";
+    public static final String EXCEED_CONTACTS_CHUNK = "EXCEED_CONTACTS_CHUNK";
+    public static final String EXCEED_CONTACTS_NUMBER = "EXCEED_CONTACTS_NUMBER";
+    public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
+    public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
 
 }
 

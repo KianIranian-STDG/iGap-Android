@@ -1,20 +1,14 @@
 package net.iGap.module.FileListerDialog;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.view.View;
 
-import net.iGap.G;
+import androidx.annotation.NonNull;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.R;
 
 import java.io.File;
-
-
-import static android.content.DialogInterface.BUTTON_NEGATIVE;
-import static android.content.DialogInterface.BUTTON_NEUTRAL;
-import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 /**
  * A File Lister Dialog
@@ -48,7 +42,7 @@ public class FileListerDialog {
         AUDIO_ONLY
     }
 
-    private AlertDialog alertDialog;
+    private MaterialDialog.Builder mDialog;
 
     private FilesListerView filesListerView;
 
@@ -56,13 +50,13 @@ public class FileListerDialog {
 
     private FileListerDialog(@NonNull Context context) {
         //super(context);
-        alertDialog = new AlertDialog.Builder(context).create();
+        mDialog = new MaterialDialog.Builder(context);
         init(context);
     }
 
     private FileListerDialog(@NonNull Context context, int themeResId) {
         //super(context, themeResId);
-        alertDialog = new AlertDialog.Builder(context, themeResId).create();
+        mDialog = new MaterialDialog.Builder(context);
         init(context);
     }
 
@@ -89,27 +83,17 @@ public class FileListerDialog {
 
     private void init(Context context) {
         filesListerView = new FilesListerView(context);
-        alertDialog.setView(filesListerView);
-        alertDialog.setButton(BUTTON_POSITIVE,  G.context.getResources().getString(R.string.Select), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                if (onFileSelectedListener != null)
-                    onFileSelectedListener.onFileSelected(filesListerView.getSelected(), filesListerView.getSelected().getAbsolutePath());
-            }
+        mDialog.customView(filesListerView, false);
+        mDialog.positiveText(R.string.Select);
+        mDialog.neutralText(R.string.Default_Dir);
+        mDialog.negativeText(R.string.cancel);
+        mDialog.onPositive((dialog, which) -> {
+            dialog.dismiss();
+            if (onFileSelectedListener != null)
+                onFileSelectedListener.onFileSelected(filesListerView.getSelected(), filesListerView.getSelected().getAbsolutePath());
         });
-        alertDialog.setButton(BUTTON_NEUTRAL,  G.context.getResources().getString(R.string.Default_Dir), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //filesListerView.goToDefaultDir();
-            }
-        });
-        alertDialog.setButton(BUTTON_NEGATIVE, G.context.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+
+        mDialog.onNeutral((dialog, which) -> filesListerView.goToDefaultDir());
     }
 
     /**
@@ -119,31 +103,25 @@ public class FileListerDialog {
         //getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         switch (filesListerView.getFileFilter()) {
             case DIRECTORY_ONLY:
-                alertDialog.setTitle(R.string.Select_directory);
+                mDialog.title(R.string.Select_directory);
                 break;
             case VIDEO_ONLY:
-                alertDialog.setTitle(R.string.Select_Video_file);
+                mDialog.title(R.string.Select_Video_file);
                 break;
             case IMAGE_ONLY:
-                alertDialog.setTitle(R.string.Select_Image_file);
+                mDialog.title(R.string.Select_Image_file);
                 break;
             case AUDIO_ONLY:
-                alertDialog.setTitle(R.string.Select_Audio_file);
+                mDialog.title(R.string.Select_Audio_file);
                 break;
             case ALL_FILES:
-                alertDialog.setTitle(R.string.Select_file);
+                mDialog.title(R.string.Select_file);
                 break;
             default:
-                alertDialog.setTitle(R.string.Select_file);
+                mDialog.title(R.string.Select_file);
         }
         filesListerView.start();
-        alertDialog.show();
-        alertDialog.getButton(BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filesListerView.goToDefaultDir();
-            }
-        });
+        mDialog.show();
     }
 
     /**

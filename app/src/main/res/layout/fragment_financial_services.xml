@@ -1,142 +1,207 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  style="?backgroundColorSettingTheme"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:clickable="true"
-  android:orientation="vertical"
-  tools:ignore="MissingPrefix">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
 
-  <android.support.design.widget.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.FinancialServicesViewModel" />
+    </data>
 
-    <LinearLayout
-      android:id="@+id/fc_layot_title"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp60"
-      android:background="@color/green"
-      android:layoutDirection="ltr"
-      android:orientation="horizontal">
-
-      <net.iGap.libs.rippleeffect.RippleView
-        android:id="@+id/fc_call_ripple_txtBack"
-        rv_centered="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        app:rv_alpha="200"
-        app:rv_centered="true"
-        app:rv_rippleDuration="0"
-        app:rv_ripplePadding="5dp">
-
-        <net.iGap.module.MaterialDesignTextView
-          android:layout_width="@dimen/dp52"
-          android:layout_height="match_parent"
-          android:gravity="center"
-          android:text="@string/md_back_arrow"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="@color/whit_background" />
-      </net.iGap.libs.rippleeffect.RippleView>
-
-      <TextView
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:gravity="center|left"
-        android:singleLine="true"
-        android:text="@string/financial_services"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/dp18"
-        android:visibility="visible" />
-
-    </LinearLayout>
-
-  </android.support.design.widget.AppBarLayout>
-
-
-  <android.support.v4.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
-
-      <ImageView
-        android:layout_width="@dimen/dp100"
-        android:layout_height="@dimen/dp100"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="@dimen/dp36"
-        android:adjustViewBounds="true"
-        android:foregroundGravity="center"
-        android:src="@mipmap/top"
-        android:visibility="visible" />
-
-      <TextView
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp36"
-        android:text="@string/text_top"
-        android:textAlignment="center" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-      <TextView
-        android:id="@+id/top"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp10"
-        android:text="@string/install_app"
-        android:textAlignment="center"
-        android:textColor="@color/verify_color" />
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-      <ImageView
-        android:layout_width="@dimen/dp100"
-        android:layout_height="@dimen/dp100"
-        android:layout_gravity="top|center"
-        android:layout_marginTop="@dimen/dp36"
-        android:adjustViewBounds="true"
-        android:foregroundGravity="center"
-        android:src="@mipmap/paygear"
-        android:visibility="visible" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/scanQRCodeButton"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="center"
+                    android:onClick="@{()->viewModel.onScanQRCodeClick()}"
+                    android:text="@string/QrCode_Scan"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textColor="@color/grayNewDarker"
+                    app:backgroundTint="@color/gray_300"
+                    app:icon="@drawable/qr_logo"
+                    app:iconGravity="textStart"
+                    app:iconSize="@dimen/dp32"
+                    app:iconTint="@color/grayNewDarker"
+                    app:layout_constraintBottom_toTopOf="@id/line1"
+                    app:layout_constraintDimensionRatio="342:81"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-      <TextView
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp36"
-        android:text="@string/text_paygear"
-        android:textAlignment="center" />
+                <View
+                    android:id="@+id/line1"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@color/gray"
+                    app:layout_constraintBottom_toTopOf="@id/walletPriceView"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/scanQRCodeButton"
+                    app:layout_constraintWidth_percent=".95" />
 
-      <TextView
-        android:id="@+id/paygear"
-        fontPath="fonts/IRANSansMobile_Bold.ttf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp32"
-        android:layout_marginRight="@dimen/dp32"
-        android:layout_marginTop="@dimen/dp10"
-        android:layout_marginBottom="@dimen/dp20"
-        android:text="@string/install_app"
-        android:textAlignment="center"
-        android:textColor="@color/verify_color" />
-    </LinearLayout>
-  </android.support.v4.widget.NestedScrollView>
+                <View
+                    android:id="@+id/walletPriceView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@drawable/wallet_background"
+                    app:layout_constraintBottom_toTopOf="@id/walletTitle"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintHorizontal_bias=".1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line1"
+                    app:layout_constraintWidth_percent=".4" />
 
-</LinearLayout>
+                <View
+                    android:id="@+id/walletPointer"
+                    android:layout_width="@dimen/dp16"
+                    android:layout_height="@dimen/dp16"
+                    android:background="@drawable/wallet_pointer"
+                    app:layout_constraintCircle="@id/walletPriceView"
+                    app:layout_constraintCircleAngle="0"
+                    app:layout_constraintCircleRadius="83dp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/walletPriceValue"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp8"
+                    android:layout_marginRight="@dimen/dp8"
+                    android:gravity="center"
+                    android:text="@{viewModel.walletValue}"
+                    app:layout_constraintBottom_toBottomOf="@id/walletPriceView"
+                    app:layout_constraintLeft_toLeftOf="@id/walletPriceView"
+                    app:layout_constraintRight_toRightOf="@id/walletPriceView"
+                    app:layout_constraintTop_toTopOf="@id/walletPriceView" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/TextAppearance.AppCompat.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/toman"
+                    app:layout_constraintLeft_toLeftOf="@id/walletPriceValue"
+                    app:layout_constraintRight_toRightOf="@id/walletPriceValue"
+                    app:layout_constraintTop_toBottomOf="@id/walletPriceValue" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/walletTitle"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="8dp"
+                    android:text="@string/wallet"
+                    app:layout_constraintBottom_toTopOf="@id/line2"
+                    app:layout_constraintLeft_toLeftOf="@id/walletPriceView"
+                    app:layout_constraintRight_toRightOf="@id/walletPriceView"
+                    app:layout_constraintTop_toBottomOf="@id/walletPriceView" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/charge"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:onClick="@{()->viewModel.onChargeButtonClick()}"
+                    android:text="@string/charge"
+                    app:layout_constraintBottom_toTopOf="@id/cashOut"
+                    app:layout_constraintLeft_toRightOf="@id/walletPriceView"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintWidth_percent=".4" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cashOut"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onCashOutClick()}"
+                    android:text="@string/cashout_request"
+                    app:layout_constraintBottom_toBottomOf="@id/walletTitle"
+                    app:layout_constraintLeft_toLeftOf="@id/charge"
+                    app:layout_constraintRight_toRightOf="@id/charge" />
+
+                <View
+                    android:id="@+id/line2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@color/gray"
+                    app:layout_constraintBottom_toTopOf="@id/addBankCard"
+                    app:layout_constraintLeft_toLeftOf="@id/line1"
+                    app:layout_constraintRight_toRightOf="@id/line1"
+                    app:layout_constraintTop_toBottomOf="@id/walletTitle" />
+
+                <View
+                    android:id="@+id/addBankCard"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="@drawable/bottom_sheet_dialog_line"
+                    android:onClick="@{()->viewModel.onAddCardButtonClick()}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="255:157"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    app:layout_constraintWidth_percent=".7" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/v"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="center"
+                    android:text="@string/md_add_plus_button"
+                    android:textAppearance="@style/TextIconAppearance.all"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    app:layout_constraintBottom_toTopOf="@id/v1"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="@id/addBankCard"
+                    app:layout_constraintRight_toRightOf="@id/addBankCard"
+                    app:layout_constraintTop_toTopOf="@id/addBankCard"
+                    app:layout_constraintWidth_percent=".16" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/v1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_bank_card"
+                    app:layout_constraintBottom_toBottomOf="@id/addBankCard"
+                    app:layout_constraintLeft_toLeftOf="@id/v"
+                    app:layout_constraintRight_toRightOf="@id/v"
+                    app:layout_constraintTop_toBottomOf="@id/v" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

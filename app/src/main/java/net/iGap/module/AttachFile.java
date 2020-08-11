@@ -15,7 +15,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -30,36 +29,37 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPaint;
-import net.iGap.fragments.FragmentExplorer;
+import net.iGap.fragments.FileManagerFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
-import net.iGap.interfaces.IPickFile;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.IPickFile;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -88,7 +88,7 @@ public class AttachFile {
     public static String videoPath = "";
     OnComplete complete;
     private PopupWindow popupWindow;
-    private Context context;
+    private FragmentActivity context;
     private LocationManager locationManager;
     private ProgressDialog pd;
     private Boolean sendPosition = false;
@@ -122,7 +122,7 @@ public class AttachFile {
                 location.getLatitude();
                 location.getLongitude();
 
-                String position = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+                String position = location.getLatitude() + "," + location.getLongitude();
 
                 if (complete != null) complete.complete(true, position, "");
             }
@@ -142,7 +142,7 @@ public class AttachFile {
 
     //=================================== Start Android 7
 
-    public AttachFile(Context context) {
+    public AttachFile(FragmentActivity context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
     }
@@ -207,53 +207,57 @@ public class AttachFile {
             return null;
         }
 
+        try {
+            String name = AttachFile.getFileName(uri.getPath());
+            if (name == null || name.length() == 0) {
+                name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            }
+
             try {
-                String name = AttachFile.getFileName(uri.getPath());
-                if (name == null || name.length() == 0) {
-                    name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String substring = name.substring(name.lastIndexOf("."));
+
+            } catch (StringIndexOutOfBoundsException e) {
+
+                if (type != null) {
+                    String ex = type.substring(type.lastIndexOf("/") + 1);
+                    name += "." + ex;
                 }
+            }
 
-                try{
-                    String substring = name.substring(name.lastIndexOf("."));
+            String destinationPath = "";
 
-                }catch (StringIndexOutOfBoundsException e){
+            switch (fileType) {
 
-                    if (type !=null){
-                        String ex =type.substring(type.lastIndexOf("/") + 1);
-                        name += "." + ex;
-                    }
-                }
+                case video:
+                    destinationPath = G.DIR_VIDEOS;
+                    break;
+                case audio:
+                    destinationPath = G.DIR_AUDIOS;
+                    break;
+                case image:
+                    destinationPath = G.DIR_IMAGES;
+                    break;
+                default:
+                    destinationPath = G.DIR_DOCUMENT;
+                    break;
+            }
 
-                String destinationPath = "";
+            destinationPath += File.separator + name;
 
-                switch (fileType) {
-
-                    case video:
-                        destinationPath = G.DIR_VIDEOS;
-                        break;
-                    case audio:
-                        destinationPath = G.DIR_AUDIOS;
-                        break;
-                    case image:
-                        destinationPath = G.DIR_IMAGES;
-                        break;
-                    default:
-                        destinationPath = G.DIR_DOCUMENT;
-                        break;
-                }
-
-                destinationPath += File.separator + name;
-
+            if (FileProvider.getUriForFile(G.context, G.context.getApplicationContext().getPackageName() + ".provider", new File(destinationPath)).equals(uri)) {
+                // shared from igap to igap
+            } else {
                 InputStream input = G.context.getContentResolver().openInputStream(uri);
 
                 AndroidUtils.copyFile(input, new File(destinationPath));
-
-                return destinationPath;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            return destinationPath;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         return null;
@@ -271,7 +275,7 @@ public class AttachFile {
 
     //*************************************************************************************************************
 
-    public void dispatchTakePictureIntent(Fragment fragment) throws IOException {
+    public void dispatchTakePictureIntent(Fragment fragment) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(G.context.getPackageManager()) != null) {
@@ -281,6 +285,7 @@ public class AttachFile {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
+                ex.printStackTrace();
                 return;
             }
             // Continue only if the File was successfully created
@@ -358,7 +363,7 @@ public class AttachFile {
 
         HelperPermission.getCameraPermission(context, new OnGetPermission() {
             @Override
-            public void Allow() throws IOException {
+            public void Allow() {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -425,9 +430,6 @@ public class AttachFile {
                     ((Activity) context).startActivityForResult(intent, requestOpenGalleryForImageMultipleSelect);
                 }
 
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_IMAGE);
-                }
                 isInAttach = true;
             }
 
@@ -467,9 +469,6 @@ public class AttachFile {
                 }
 
 
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_VIDEO);
-                }
                 isInAttach = true;
             }
 
@@ -607,9 +606,6 @@ public class AttachFile {
                 }
 
 
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_AUDIO);
-                }
                 isInAttach = true;
             }
 
@@ -634,17 +630,13 @@ public class AttachFile {
         HelperPermission.getStoragePermision(context, new OnGetPermission() {
             @Override
             public void Allow() {
-                FragmentExplorer fragment = new FragmentExplorer();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", (Serializable) listener);
-                fragment.setArguments(bundle);
-
-                new HelperFragment(fragment).setReplace(false).load();
+                new HelperFragment(context.getSupportFragmentManager(), FileManagerFragment.newInstance(listener)).setReplace(false).load();
             }
 
             @Override
             public void deny() {
-
+                if (context != null)
+                    HelperError.showSnackMessage(context.getString(R.string.you_need_to_allow) + " " + context.getString(R.string.permission_storage), false);
             }
         });
     }
@@ -661,13 +653,13 @@ public class AttachFile {
                 //    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_DOCUMENT);
                 //}
 
-                FragmentExplorer fragment = new FragmentExplorer();
+                /*FragmentExplorer fragment = new FragmentExplorer();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("Listener", (Serializable) listener);
+                bundle.putSerializable("Listener", listener);
                 bundle.putString("Mode", "documnet");
                 fragment.setArguments(bundle);
-
-                new HelperFragment(fragment).setReplace(false).load();
+*/
+                /*new HelperFragment(fragment).setReplace(false).load();*/
             }
 
             @Override
@@ -761,7 +753,7 @@ public class AttachFile {
                     location.getLatitude();
                     location.getLongitude();
 
-                    String position = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+                    String position = location.getLatitude() + "," + location.getLongitude();
 
                     if (complete != null) complete.complete(true, position, "");
                 } else {
@@ -808,7 +800,7 @@ public class AttachFile {
         String result = "";
         if (galleryPath == null) return "";
 
-        if (ImageHelper.isNeedToCompress(new File(galleryPath)) || ImageHelper.isRotateNeed(galleryPath)) {
+        if (ImageHelper.isRotateNeed(galleryPath) || ImageHelper.isNeedToCompress(new File(galleryPath))) {
 
             Bitmap bitmap = ImageHelper.decodeFile(new File(galleryPath));
             bitmap = ImageHelper.correctRotate(galleryPath, bitmap);

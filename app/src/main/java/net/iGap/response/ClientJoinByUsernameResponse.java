@@ -1,27 +1,27 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientPinRoom;
 
 public class ClientJoinByUsernameResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public ClientJoinByUsernameResponse(int actionId, Object protoClass, String identity) {
+    public ClientJoinByUsernameResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -33,14 +33,12 @@ public class ClientJoinByUsernameResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        if (identity != null) {
-            long roomId = Long.parseLong(identity);
+        if (identity instanceof RequestClientJoinByUsername.OnClientJoinByUsername) {
+            ((RequestClientJoinByUsername.OnClientJoinByUsername) identity).onClientJoinByUsernameResponse();
+        } else if (identity instanceof Long) {
+            long roomId = (long) identity;
             RealmRoom.joinRoom(roomId);
             new RequestClientPinRoom().pinRoom(roomId, true);
-        }
-
-        if (G.onClientJoinByUsername != null) {
-            G.onClientJoinByUsername.onClientJoinByUsernameResponse();
         }
     }
 
@@ -55,8 +53,9 @@ public class ClientJoinByUsernameResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        if (G.onClientJoinByUsername != null) {
-            G.onClientJoinByUsername.onError(majorCode, minorCode);
+        if (identity instanceof RequestClientJoinByUsername.OnClientJoinByUsername) {
+            ((RequestClientJoinByUsername.OnClientJoinByUsername) identity).onError(majorCode, minorCode);
+        } else if (identity instanceof Long) {
         }
     }
 }

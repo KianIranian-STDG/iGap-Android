@@ -7,7 +7,7 @@ package net.iGap.module.structs;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
 import net.iGap.proto.ProtoGlobal;
 
@@ -19,6 +19,7 @@ public class StructBottomSheetForward {
     private ProtoGlobal.Room.Type type;
     private boolean isContactList;
     private boolean isNotExistRoom;
+    private boolean isChecked;
 
     public long getId() {
         return id;
@@ -66,6 +67,14 @@ public class StructBottomSheetForward {
 
     public void setNotExistRoom(boolean notExistRoom) {
         isNotExistRoom = notExistRoom;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }
 

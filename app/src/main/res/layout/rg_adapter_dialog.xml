@@ -1,25 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:clickable="true"
-  android:divider="@null"
-  android:layoutDirection="ltr"
-  style="?backgroundColorSettingTheme_2"
-  android:orientation="vertical">
-
-  <RadioButton
-    android:id="@+id/rg_radioButton"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp52"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginLeft="@dimen/dp12"
-    android:layout_marginRight="@dimen/dp12"
-    android:checked="false"
-    android:layoutDirection="ltr"
-    android:paddingLeft="@dimen/dp20"
-    android:paddingRight="@dimen/dp20"
-    android:text="New RadioButton"
-    style="?textTitleColorSettingTheme"
-    android:textSize="@dimen/dp14" />
-</LinearLayout>
+    android:layout_height="wrap_content">
+
+    <net.iGap.module.CircleImageView
+        android:id="@+id/countyImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/dp4"
+        android:layout_marginEnd="@dimen/dp8"
+        android:layout_marginRight="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp4"
+        app:layout_constraintBottom_toBottomOf="@id/countryName"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/countryName"
+        app:layout_constraintWidth_percent=".1" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/countryName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp4"
+        android:textColor="?attr/iGapTitleTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/countryCode"
+        app:layout_constraintRight_toLeftOf="@id/countyImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/countryCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp4"
+        android:textColor="?attr/iGapTitleTextColor"
+        app:layout_constraintBottom_toBottomOf="@id/countryName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/countryName" />
+</androidx.constraintlayout.widget.ConstraintLayout>

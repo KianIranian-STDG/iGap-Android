@@ -1,11 +1,11 @@
 package net.iGap.adapter.items.poll.holder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
-import net.iGap.G;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+
 import net.iGap.R;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;
@@ -15,14 +15,12 @@ public class Type3ViewHolder extends BaseViewHolder {
     private CardView card0, card1;
     private View tick0, tick1;
 
-    public Type3ViewHolder(PollAdapter pollAdapter,  @NonNull View itemView) {
+    public Type3ViewHolder(PollAdapter pollAdapter, @NonNull View itemView) {
         super(pollAdapter, itemView);
         img0 = itemView.findViewById(R.id.type3_img0);
         img1 = itemView.findViewById(R.id.type3_img1);
         card0 = itemView.findViewById(R.id.type3_card0);
         card1 = itemView.findViewById(R.id.type3_card1);
-        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
-        card1.setCardBackgroundColor(G.getThemeBackgroundColor());
 
         tick0 = itemView.findViewById(R.id.type3_tick0);
         tick1 = itemView.findViewById(R.id.type3_tick1);

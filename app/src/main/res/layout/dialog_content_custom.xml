@@ -1,101 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="@android:color/transparent"
-  android:clickable="true"
-  android:orientation="vertical"
-  tools:ignore="MissingPrefix">
-
-  <LinearLayout
-    android:id="@+id/dialog_root_item1_notification"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <net.iGap.module.MaterialDesignTextView
-
-      android:id="@+id/iconDialogTitle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="@string/md_muted"
-      android:textAppearance="@style/TextIconAppearance.all"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp26"
-
-      />
-
-    <TextView
-      android:id="@+id/txtDialogTitle"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-
-      android:paddingLeft="@dimen/dp24"
-      android:paddingRight="@dimen/dp24"
-      android:paddingTop="@dimen/dp8"
-      android:text="@string/mute_notification"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp20" />
-  </LinearLayout>
-
-  <LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:background="@android:color/transparent"
+    android:clickable="true"
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
 
-    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-      android:id="@+id/txtDialogContent"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingBottom="@dimen/dp16"
-      android:paddingTop="@dimen/dp16"
-      android:text="@string/content_log_out"
-      style="?textSubColorSettingTheme"
-      android:textSize="@dimen/dp14"
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconDialogTitle"
+            style="@style/myIconTextViewStyle"
+            android:fontFamily="@font/font_icon_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/md_muted"
+            android:paddingTop="@dimen/dp8"
+            android:paddingRight="@dimen/dp4"
+            android:paddingLeft="@dimen/dp4"
+            android:textSize="@dimen/dp20" />
 
-      />
-  </LinearLayout>
+        <TextView
+            android:id="@+id/txtDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingTop="@dimen/dp8"
+            android:paddingRight="@dimen/dp16"
+            android:text="@string/mute_notification"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp20" />
+    </LinearLayout>
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="end|right"
-    android:orientation="horizontal"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    >
+        <TextView
+            android:id="@+id/txtDialogContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp16"
+            android:paddingBottom="@dimen/dp16"
+            android:text="@string/content_log_out"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/dp14" />
+    </LinearLayout>
 
-    <TextView
-      android:id="@+id/txtDialogCancel"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingBottom="@dimen/dp8"
-      android:paddingEnd="@dimen/dp20"
-      android:paddingLeft="@dimen/dp20"
-      android:paddingRight="@dimen/dp20"
-      android:paddingStart="@dimen/dp20"
-      android:paddingTop="@dimen/dp8"
-      android:text="@string/B_cancel"
-      android:textColor="@color/green"
-      android:textSize="@dimen/dp14" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end|right"
+        android:orientation="horizontal"
 
-    <TextView
-      android:id="@+id/txtDialogOk"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingBottom="@dimen/dp8"
-      android:paddingEnd="@dimen/dp20"
-      android:paddingLeft="@dimen/dp20"
-      android:paddingRight="@dimen/dp20"
-      android:paddingStart="@dimen/dp20"
-      android:paddingTop="@dimen/dp8"
-      android:text="@string/B_ok"
-      android:textColor="@color/green"
-      android:textSize="@dimen/dp14" />
+        >
+
+        <TextView
+            android:id="@+id/txtDialogCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp20"
+            android:paddingLeft="@dimen/dp20"
+            android:paddingTop="@dimen/dp8"
+            android:paddingEnd="@dimen/dp20"
+            android:paddingRight="@dimen/dp20"
+            android:paddingBottom="@dimen/dp8"
+            android:text="@string/B_cancel"
+            android:textColor="?attr/colorAccent"
+            android:textSize="@dimen/dp14" />
+
+        <TextView
+            android:id="@+id/txtDialogOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dp20"
+            android:paddingLeft="@dimen/dp20"
+            android:paddingTop="@dimen/dp8"
+            android:paddingEnd="@dimen/dp20"
+            android:paddingRight="@dimen/dp20"
+            android:paddingBottom="@dimen/dp8"
+            android:text="@string/B_ok"
+            android:textColor="?attr/colorAccent"
+            android:textSize="@dimen/dp14" />
 
 
-  </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

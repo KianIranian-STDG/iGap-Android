@@ -1,8 +1,8 @@
 package net.iGap.libs;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollection;
@@ -58,7 +58,7 @@ public abstract class MyRealmRecyclerViewAdapter<T extends RealmModel, S extends
     }
 
     public MyRealmRecyclerViewAdapter(@Nullable OrderedRealmCollection<T> data, boolean autoUpdate,
-                                    boolean updateOnModification) {
+                                      boolean updateOnModification) {
         if (data != null && !data.isManaged())
             throw new IllegalStateException("Only use this adapter with managed RealmCollection, " +
                     "for un-managed lists you can just use the BaseRecyclerViewAdapter");
@@ -101,7 +101,7 @@ public abstract class MyRealmRecyclerViewAdapter<T extends RealmModel, S extends
 
         // To avoid exception, return null if there are some extra positions that the
         // child adapter is adding in getItemCount (e.g: to display footer view in recycler view)
-        if(adapterData != null && index >= adapterData.size()) return null;
+        if (adapterData != null && index >= adapterData.size()) return null;
         //noinspection ConstantConditions
         return isDataValid() ? adapterData.get(index) : null;
     }

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  style="?android:attr/spinnerItemStyle"
-  fontPath="fonts/IRANSansMobile.ttf"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:ellipsize="marquee"
-  android:singleLine="true"
-  android:textAlignment="inherit"
-  android:textColor="@color/gray_4c"
-  tools:ignore="MissingPrefix" />
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?rootBackgroundColor"
+    android:ellipsize="marquee"
+    android:padding="@dimen/dp8"
+    android:singleLine="true"
+    android:gravity="center"
+    android:textAlignment="inherit"
+    android:textColor="?iGapTitleTextColor" />
 

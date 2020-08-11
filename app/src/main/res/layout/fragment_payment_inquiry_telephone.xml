@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.fragments.inquiryBill.PaymentInquiryTelephoneViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/toolbar_height"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/areaCodeIcon"
+            style="@style/primaryIconTextViewStyle"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginStart="@dimen/dp16"
+            android:layout_marginLeft="@dimen/dp16"
+            android:layout_marginTop="@dimen/dp16"
+            android:text="@string/flag_icon"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/areaCodeExample"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintVertical_bias=".3"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/areaCodeEditText"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp16"
+            android:layout_marginRight="@dimen/dp16"
+            android:background="@drawable/background_cancel_money_action"
+            android:gravity="center"
+            android:hint="@string/area_code"
+            android:inputType="number"
+            android:maxLength="4"
+            android:minHeight="@dimen/dp44"
+            android:textSize="@dimen/dp16"
+            app:layout_constraintBottom_toBottomOf="@id/areaCodeIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/areaCodeIcon"
+            app:layout_constraintTop_toTopOf="@id/areaCodeIcon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/areaCodeExample"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:text="@string/ex_area"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dp10"
+            app:layout_constraintBottom_toTopOf="@id/telephoneNumberIcon"
+            app:layout_constraintStart_toStartOf="@id/areaCodeEditText"
+            app:layout_constraintTop_toBottomOf="@id/areaCodeIcon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/telephoneNumberIcon"
+            style="@style/primaryIconTextViewStyle"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:layout_marginTop="@dimen/dp8"
+            android:text="@string/md_dialpad"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/telephoneNumberExample"
+            app:layout_constraintEnd_toEndOf="@id/areaCodeIcon"
+            app:layout_constraintStart_toStartOf="@id/areaCodeIcon"
+            app:layout_constraintTop_toBottomOf="@id/areaCodeExample" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/telephoneEditText"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp44"
+            android:background="@drawable/background_cancel_money_action"
+            android:gravity="center"
+            android:hint="@string/phone"
+            android:inputType="number"
+            android:maxLength="8"
+            android:minHeight="@dimen/dp44"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:textSize="@dimen/dp16"
+            app:layout_constraintBottom_toBottomOf="@id/telephoneNumberIcon"
+            app:layout_constraintEnd_toEndOf="@id/areaCodeEditText"
+            app:layout_constraintStart_toStartOf="@id/areaCodeEditText"
+            app:layout_constraintTop_toTopOf="@id/telephoneNumberIcon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/telephoneNumberExample"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
+            android:text="@string/ex_phone"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/dp10"
+            app:layout_constraintStart_toStartOf="@id/telephoneEditText"
+            app:layout_constraintTop_toBottomOf="@id/telephoneNumberIcon" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/inquiryButton"
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp12"
+            android:layout_marginBottom="@dimen/dp12"
+            android:enabled="@{viewModel.enableInquiryButton}"
+            android:onClick="@{()->viewModel.onInquiryClick(areaCodeEditText.getEditableText().toString(),telephoneEditText.getEditableText().toString())}"
+            android:text="@string/inquiry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".6" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{viewModel.showLoadingView}"
+            app:layout_constraintBottom_toTopOf="@id/inquiryButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/telephoneNumberExample" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

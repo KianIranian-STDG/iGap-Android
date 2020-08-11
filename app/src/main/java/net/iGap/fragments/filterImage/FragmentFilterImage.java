@@ -17,21 +17,22 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.tabs.TabLayout;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
@@ -117,9 +118,9 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
             return;
         }
 
-        imageFilter = (ImageView) view.findViewById(R.id.imageFilter);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        imageFilter = view.findViewById(R.id.imageFilter);
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
+        ViewPager viewPager = view.findViewById(R.id.viewpager);
 
         loadImage();
         setupViewPager(viewPager);
@@ -128,7 +129,9 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
             @Override
             public void onClick(View v) {
                 if (isChange) {
-                    if (!AndroidUtils.canOpenDialog()) {return;}
+                    if (!AndroidUtils.canOpenDialog()) {
+                        return;
+                    }
                     new MaterialDialog.Builder(G.fragmentActivity)
                             .title(R.string.tab_filters)
                             .content(R.string.filter_cancel_content)

@@ -11,12 +11,12 @@
 package net.iGap.fragments.filterImage;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.utils.ThumbnailItem;
@@ -75,12 +75,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
         });
 
         holder.filterName.setText(thumbnailItem.filterName);
-
-        if (selectedIndex == position) {
-            holder.filterName.setTextColor(ContextCompat.getColor(mContext, R.color.green));
-        } else {
-            holder.filterName.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-        }
+        holder.filterName.setSelected(selectedIndex == position);
     }
 
     @Override

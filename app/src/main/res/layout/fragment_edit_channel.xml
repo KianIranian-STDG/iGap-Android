@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="net.iGap.viewmodel.EditChannelViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/IGapRootViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/channelAvatar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/dp32"
+                    android:layout_marginLeft="@dimen/dp32"
+                    android:layout_marginTop="@dimen/dp32"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:onClick="@{()->viewModel.chooseImage()}"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toStartOf="@id/channelNameEditText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_percent=".2" />
+
+                <ProgressBar
+                    android:id="@+id/avatarUpload"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="@{viewModel.showUploadProgressLiveData}"
+                    app:layout_constraintBottom_toBottomOf="@+id/channelAvatar"
+                    app:layout_constraintEnd_toEndOf="@+id/channelAvatar"
+                    app:layout_constraintStart_toStartOf="@+id/channelAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/channelNameEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="bottom"
+                    android:hint="@string/channel_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:maxLines="1"
+                    android:text="@={viewModel.channelName}"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textColorHint="?iGapTitleTextColor"
+                    android:textSize="@dimen/largeTextSize"
+                    app:layout_constraintEnd_toStartOf="@+id/emojiButton"
+                    app:layout_constraintStart_toEndOf="@id/channelAvatar"
+                    app:layout_constraintTop_toTopOf="@+id/channelAvatar" />
+
+                <net.iGap.module.MaterialDesignTextView
+                    android:id="@+id/emojiButton"
+                    style="@style/myIconTextViewStyle"
+                    android:layout_width="@dimen/dp40"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()->viewModel.onEmojiClickListener()}"
+                    android:text="@string/md_emoticon_with_happy_face"
+                    android:textSize="@dimen/standardIconSize"
+                    app:layout_constraintBottom_toBottomOf="@+id/channelNameEditText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/channelNameEditText" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintEnd_toEndOf="@+id/channelNameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/groupDescriptionEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@null"
+                    android:hint="@string/channel_description"
+                    android:maxLines="8"
+                    android:text="@{viewModel.channelDescription}"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textColorHint="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintEnd_toEndOf="@+id/emojiButton"
+                    app:layout_constraintStart_toStartOf="@+id/channelNameEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/channelNameEditText" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/divider"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="groupDescriptionEditText,channelAvatar" />
+
+                <View
+                    android:id="@+id/line2"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <View
+                    android:id="@+id/line3"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rateMessageDescription"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <View
+                    android:id="@+id/line4"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:background="?iGapDividerLine"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/membersCount"
+                    app:layout_constraintWidth_percent=".95" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/channelTypeTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:padding="8dp"
+                    android:text="@string/channel_type"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/line2"
+                    app:layout_constraintWidth_percent=".9" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/channelType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onChannelTypeClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.channelType}"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
+                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/channelTypeTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/channelUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.usernameClicked()}"
+                    android:padding="@dimen/dp8"
+                    android:text="@{viewModel.channelUsername}"
+                    android:textColor="?attr/iGapTitleTextColor"
+                    android:visibility="@{viewModel.showUsername}"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/channelType" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/signedMessageTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()-> viewModel.onSignMessageClick()}"
+                    android:padding="8dp"
+                    android:text="@string/sign_message_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/standardTextSize"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/channelUsername" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/signedMessageDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/sign_channel_message_description"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintStart_toStartOf="@id/signedMessageTxt"
+                    app:layout_constraintTop_toBottomOf="@id/signedMessageTxt"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintWidth_percent=".6" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/rateMessageTxt"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{()-> viewModel.onReactionMessageClick()}"
+                    android:padding="8dp"
+                    android:text="@string/show_channel_vote"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
+                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/signedMessageDescription" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/rateMessageDescription"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/reaction_message_detail"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintStart_toStartOf="@id/rateMessageTxt"
+                    app:layout_constraintTop_toBottomOf="@id/rateMessageTxt"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintWidth_percent=".6" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/administrators"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{()->viewModel.onAdministratorClick()}"
+                    android:padding="8dp"
+                    android:text="@string/administrators_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/administratorsCount"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/line3" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/administratorsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onAdministratorClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.administratorsCount}"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/administrators"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toEndOf="@id/administrators"
+                    app:layout_constraintTop_toTopOf="@id/administrators" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/moderator"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.onModeratorClick()}"
+                    android:padding="8dp"
+                    android:text="@string/moderators_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@id/moderatorsCount"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/administrators" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/moderatorsCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onModeratorClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.moderatorsCount}"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/smallTextSize"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/moderator"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toEndOf="@id/moderator"
+                    app:layout_constraintTop_toTopOf="@id/moderator" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/members"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp8"
+                    android:onClick="@{()->viewModel.onMemberClick()}"
+                    android:padding="8dp"
+                    android:text="@string/subscribers_title"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintEnd_toStartOf="@id/membersCount"
+                    app:layout_constraintStart_toStartOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/moderator" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/membersCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onMemberClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.subscribersCount}"
+                    android:textColor="?iGapSubtitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="@id/members"
+                    app:layout_constraintEnd_toEndOf="@id/channelTypeTitle"
+                    app:layout_constraintStart_toEndOf="@id/members"
+                    app:layout_constraintTop_toTopOf="@id/members" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/deleteChannel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:onClick="@{()->viewModel.onDeleteChannelClick()}"
+                    android:padding="8dp"
+                    android:text="@{viewModel.leaveChannelText}"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@id/channelTypeTitle"
+                    app:layout_constraintRight_toRightOf="@id/channelTypeTitle"
+                    app:layout_constraintTop_toBottomOf="@id/line4"
+                    app:layout_constraintVertical_bias="0" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/signedMessage"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isSignedMessage}"
+                    android:onCheckedChanged="@{()->viewModel.onSingedMessageCheckedChange(signedMessage.isChecked())}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintBottom_toBottomOf="@id/signedMessageTxt"
+                    app:layout_constraintEnd_toEndOf="@id/signedMessageTxt"
+                    app:layout_constraintTop_toTopOf="@id/signedMessageTxt" />
+
+                <net.iGap.module.CustomToggleButton
+                    android:id="@+id/rateMessage"
+                    android:layout_width="@dimen/toggles_width"
+                    android:layout_height="@dimen/toggles_height"
+                    android:checked="@={viewModel.isReactionMessage}"
+                    android:onCheckedChanged="@{()->viewModel.onReactionMessageCheckedChange(rateMessage.isChecked())}"
+                    android:visibility="@{viewModel.showLayoutReactStatus}"
+                    app:layout_constraintBottom_toBottomOf="@id/rateMessageTxt"
+                    app:layout_constraintEnd_toEndOf="@id/rateMessageTxt"
+                    app:layout_constraintTop_toTopOf="@id/rateMessageTxt" />
+
+                <ProgressBar
+                    android:id="@+id/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:visibility="@{viewModel.isShowLoading}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

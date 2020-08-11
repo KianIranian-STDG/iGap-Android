@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -18,10 +18,10 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.widget.ImageView;
+
+import androidx.core.content.FileProvider;
 
 import net.iGap.R;
 
@@ -33,6 +33,10 @@ public class HelperMimeType {
 
     public static boolean isFileImage(String path) {
         return path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".webp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff") || path.endsWith(".tif") || path.endsWith(".ai");
+    }
+
+    public static boolean isFileJson(String path) {
+        return path.endsWith(".json");
     }
 
     public static boolean isFileVideo(String path) {
@@ -58,7 +62,7 @@ public class HelperMimeType {
 
     private static boolean isFileText(String path) {
         return path.endsWith(".txt") || path.endsWith(".csv") || path.endsWith(".xml") || path.endsWith(".html") || path.endsWith(".docx") || path.endsWith(".doc")
-      || path.endsWith(".docs");
+                || path.endsWith(".docs");
     }
 
     private static boolean isFilePakage(String path) {
@@ -84,7 +88,7 @@ public class HelperMimeType {
             try {
                 uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
             } catch (IllegalArgumentException e) {
-                HelperLog.setErrorLog(e);
+                HelperLog.getInstance().setErrorLog(e);
                 return null;
             }
 
@@ -127,40 +131,30 @@ public class HelperMimeType {
     /**
      * get a picture for this extension
      */
-    public static Integer getMimeResource(String extention) {
+    public static int getMimeResource(String extention) {
 
         Integer x = null;
 
-        if (extention == null) return null;
+        if (extention == null) return 0;
 
         extention = extention.toLowerCase();
 
         if (isFileImage(extention)) {
-            x = R.mipmap.j_pic;
-        } else if (extention.endsWith("apk")) {
-            x = R.mipmap.j_apk;
-        } else if (extention.endsWith("mp3") || extention.endsWith("ogg") || extention.endsWith("wma")) {
-            x = R.mipmap.j_mp3;
+            x = R.drawable.ic_fm_image_small;
+        } else if (extention.endsWith("ogg")) {
+            x = R.drawable.ic_fm_voice;
+        } else if (extention.endsWith("mp3") || extention.endsWith("wma")) {
+            x = R.drawable.ic_fm_music_file;
         } else if (isFileVideo(extention)) {
-            x = R.mipmap.j_video;
+            x = R.drawable.ic_fm_video_small;
         } else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith("wav")) {
-            x = R.mipmap.j_audio;
+            x = R.drawable.ic_fm_music_file;
         } else if (extention.endsWith("html") || extention.endsWith("htm")) {
-            x = R.mipmap.j_html;
+            x = R.drawable.ic_fm_html_file;
         } else if (extention.endsWith("pdf")) {
-            x = R.mipmap.j_pdf;
-        } else if (extention.endsWith("ppt")) {
-            x = R.mipmap.j_ppt;
-        } else if (extention.endsWith("snb")) {
-            x = R.mipmap.j_snb;
-        } else if (extention.endsWith("txt")) {
-            x = R.mipmap.j_txt;
-        } else if (extention.endsWith("doc")) {
-            x = R.mipmap.j_word;
-        } else if (extention.endsWith("xls")) {
-            x = R.mipmap.j_xls;
+            x = R.drawable.ic_fm_pdf_file;
         } else {
-            x = R.mipmap.j_ect;
+            x = R.drawable.ic_fm_file;
         }
 
         return x;

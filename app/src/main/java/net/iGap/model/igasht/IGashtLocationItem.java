@@ -1,0 +1,172 @@
+package net.iGap.model.igasht;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+
+import net.iGap.G;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+public class IGashtLocationItem implements Parcelable {
+
+    @SerializedName("id")
+    private int id;
+    @SerializedName("payment_id")
+    private String paymentId;
+    @SerializedName("warehoff")
+    private boolean warehoff;
+    @SerializedName("has_QR")
+    private boolean hasQR;
+    @SerializedName("print_pos")
+    private boolean printPos;
+    @SerializedName("location_name")
+    private String locationName;
+    @SerializedName("activation")
+    private boolean activation;
+    @SerializedName("location_english_name")
+    private String locationEnglishName;
+    @SerializedName("location_address")
+    private String locationAddress;
+    @SerializedName("location_english_address")
+    private String locationEnglishAddress;
+    @SerializedName("location")
+    private String location;
+    @SerializedName("text")
+    private LocationDetail detail;
+    @SerializedName("extra")
+    private ExtraDetail mExtraDetail;
+
+
+    private IGashtLocationItem(@NotNull Parcel in) {
+        id = in.readInt();
+        paymentId = in.readString();
+        warehoff = in.readByte() != 0;
+        hasQR = in.readByte() != 0;
+        printPos = in.readByte() != 0;
+        locationName = in.readString();
+        activation = in.readByte() != 0;
+        locationEnglishName = in.readString();
+        locationAddress = in.readString();
+        locationEnglishAddress = in.readString();
+        location = in.readString();
+        detail = in.readParcelable(LocationDetail.class.getClassLoader());
+    }
+
+    public static final Creator<IGashtLocationItem> CREATOR = new Creator<IGashtLocationItem>() {
+        @NotNull
+        @Contract("_ -> new")
+        @Override
+        public IGashtLocationItem createFromParcel(Parcel in) {
+            return new IGashtLocationItem(in);
+        }
+
+        @NotNull
+        @Contract(value = "_ -> new", pure = true)
+        @Override
+        public IGashtLocationItem[] newArray(int size) {
+            return new IGashtLocationItem[size];
+        }
+    };
+
+    public int getId() {
+        return id;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public boolean isWarehoff() {
+        return warehoff;
+    }
+
+    public boolean isHasQR() {
+        return hasQR;
+    }
+
+    public boolean isPrintPos() {
+        return printPos;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public boolean isActivation() {
+        return activation;
+    }
+
+    public String getLocationEnglishName() {
+        return locationEnglishName;
+    }
+
+    public String getLocationAddress() {
+        return locationAddress;
+    }
+
+    public String getLocationEnglishAddress() {
+        return locationEnglishAddress;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public LocationDetail getDetail() {
+        return detail;
+    }
+
+    public String getNameWithLanguage() {
+        switch (G.selectedLanguage) {
+            case "en":
+                return getLocationEnglishName();
+            case "fa":
+                return getLocationName();
+            default:
+                return getLocationName();
+        }
+    }
+
+    public String getAddressWithLanguage() {
+        switch (G.selectedLanguage) {
+            case "en":
+                return getLocationEnglishAddress();
+            case "fa":
+                return getLocationAddress();
+            default:
+                return getLocationAddress();
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(paymentId);
+        dest.writeByte((byte) (warehoff ? 1 : 0));
+        dest.writeByte((byte) (hasQR ? 1 : 0));
+        dest.writeByte((byte) (printPos ? 1 : 0));
+        dest.writeString(locationName);
+        dest.writeByte((byte) (activation ? 1 : 0));
+        dest.writeString(locationEnglishName);
+        dest.writeString(locationAddress);
+        dest.writeString(locationEnglishAddress);
+        dest.writeString(location);
+        dest.writeParcelable(detail, flags);
+    }
+
+    public ExtraDetail getmExtraDetail() {
+        return mExtraDetail;
+    }
+
+    public void setmExtraDetail(ExtraDetail mExtraDetail) {
+        this.mExtraDetail = mExtraDetail;
+    }
+}

@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Check connect to internet Page introduce app -->
-    <string name="text_i_introduce_page1">"گپ"</string>
-    <string name="text_line_1_introduce_page1">"آی"</string>
-    <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
-    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آیگپ بسازید."</string>
-    <string name="text_line_4_introduce_page1">"فقط چند دقیقه زمان میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
 
     <!-- Page 2 introduce app -->
     <string name="text_line_1_introduce_page2">"امنیت در آیگپ"</string>
-    <string name="text_line_2_introduce_page2">"آیگپ یک ارتباط امن و مطمئن را بین شما، دوستان و خانوادتان برقرار میکند. پیام رسانِ آیگپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
+    <string name="text_line_2_introduce_page2">"آیگپ یک ارتباط امن و مطمئن را برای شما برقرار میکند. پیام رسانِ آیگپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
 
 
     <!-- Page 3 introduce app -->
     <string name="text_line_1_introduce_page3">"گفتگو در آیگپ"</string>
     <string name="text_line_2_introduce_page3">"شما میتوانید در آیگپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها کاربر دیگر نیز به اشتراک بگذارید."</string>
 
+    <!--TODO:// complete-->
     <!-- Page 4 introduce app -->
-    <string name="text_line_1_introduce_page4">"انتقال فایل در آیگپ"</string>
-    <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید و یا در بستر ابری خود ذخیره کنید. هر آنچه دوست دارید را بدون محدودیت با هر کس که می خواهید به اشتراک بگذارید."</string>
+    <string name="text_line_1_introduce_page4">"آیلند"</string>
+    <string name="text_line_2_introduce_page4">"آیلند! سرزمین بی حد و مرز\nکه کلی اتفاق شگفت انگیز مثل گرفتن تاکسی، الوپیک، پرداخت قبض و رزرو تور و هتل توش افتاده. و تازه می تونی کلی بازی کنی، فیلم ببینی و موزیک گوش بدی."</string>
 
 
     <!-- Page 5 introduce app -->
-    <string name="text_line_1_introduce_page5">"تماس صوتی و تصویری در آیگپ"</string>
-    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آیگپ با سایر کاربرانِ آیگپ تماس صوتیِ و تصویری کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس ها در آیگپ P2P بوده و حتی سرور های آیگپ هم در جابجایی صدا و تصویر شما دخالت ندارند."</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">"همین حالا شروع کنید"</string>
-    <string name="text_line_1_introduce_page6">"همه چیز رایگان در آیگپ!"</string>
-    <string name="text_line_2_introduce_page6">"آیگپ همیشه رایگان بوده و هست. پس بیش از این منتظر نمی مانیم. همین حالا دنیای خود را در آیگپ بسازید."</string>
 
 
     <string name="text_line_1_introduce_page7">اطراف من</string>
@@ -36,59 +28,43 @@
 
 
     <!-- Fill Profile User  -->
-    <string name="pu_title_profileUser">"پروفایل خود را تکمیل کنید"</string>
-    <string name="pu_desc_profileUser">"نام خود را وارد کرده و برای خود عکس پروفایل انتخاب نمایید"</string>
-    <string name="pu_addPhoto_profileUser">"عکس پروفایل"</string>
+    <string name="pu_title_profileUser">"اطلاعات خود را تکمیل کنید"</string>
+    <string name="pu_desc_profileUser">"نام خود را وارد کنید و در صورت تمایل عکس کاربری خود را انتخاب نمایید"</string>
     <string name="pu_nikname_profileUser">"نام"</string>
     <string name="pu_Lets_Go">"ادامه"</string>
 
     <!-- Register Page -->
-    <string name="rg_title_register">"ثبت نام"</string>
-    <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید کرده سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
+    <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید و سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
     <string name="rg_Start">"بزن بریم..."</string>
     <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
-    <string name="rg_agreement_text_register">"تأیید نهایی شماره تلفن شما، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم."</string>
-    <string name="rg_verify_register1">"در حال اتصال"</string>
-    <string name="rg_verify_register2">"منتظر دریافت کد تأیید"</string>
-    <string name="rg_verify_register3">"در حال تولید کلید امنیتی"</string>
-    <string name="rg_verify_register4">"نهایی سازی ثبت نام"</string>
-    <string name="rg_verify_dialog_try_code">"دستی وارد کردم"</string>
-    <string name="rg_verify_dialog_resend_code">"ارسال مجدد کد تأیید"</string>
     <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
-    <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تأیید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
-    <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأیید را دستی وارد کنید"</string>
-    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آیگپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد، لطفاً دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
-    ‬‬‬‬‬‬
-    <string name="verify_time_out_message">"آیگپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
+    <string name="Re_dialog_verify_number_part2">"اگر شماره وارد شده صحیح است تأیید و در غیر اینصورت اصلاح نمایید"</string>
+    <string name="verify_socket_message">کد تایید ارسال شده توسط آیگپ را وارد نمایید.</string>
+    <string name="verify_sms_message">کد تایید ارسال شده توسط پیامک را وارد نمایید.</string>
+    <string name="verify_call_message">کد تایید ارسال شده توسط تماس را وارد نمایید.</string>
+    <string name="verify_sms_socket_message">کد تایید ارسال شده توسط پیامک و آیگپ را وارد نمایید.</string>
     <string name="verify_invalid_code_message">متأسفیم، کد تأیید شما نامعتبر است، لطفاً کد صحیح را مجدد وارد نمایید.</string>
-    <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
     <string name="phone_number">"شماره تلفن"</string>
-    <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
 
 
     <!--Reagent-->
-    <string name="ra_title">"معرف"</string>
-    <string name="ra_enter_reagent_code">"لطفا شماره ی معرف خود را وارد کنید"</string>
-    <string name="ra_confirm">"تایید"</string>
-    <string name="ra_skip">"فعلا بیخیال!"</string>
+    <string name="ra_enter_reagent_code">لطفا شماره ی معرف خود را وارد کنید(اختیاری)</string>
+    <string name="reagent_error_message">شماره وارد شده برای معرف اشتباه می باشد.</string>
 
 
     <!-- Toast -->
-    <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
     <string name="Toast_Location_Not_Found">"موقعیت شما یافت نشد"</string>
     <string name="Toast_First_0">"در ابتدای شماره نیاز به 0 نیست"</string>
     <string name="Toast_Minimum_Characters">تعداد کاراکترها کمتر از حد مجاز است</string>
-    <string name="Toast_Enter_Phone_Number">"لطفاً شماره تلفن خود را بدون صفر ابتدای آن وارد کنید"</string>
-    <string name="Toast_Enter_Code">"لطفاً کد تأیید را وارد نمایید"</string>
+    <string name="Toast_Enter_Code">"لطفاً کد تأیید ارسال شده را وارد نمایید"</string>
     <string name="Toast_Number_Block">"شماره وارد شده مسدود شده است"</string>
-    <string name="Toast_Invalid_nickname">"نام نامعتبر است. لطفاً نام را تغییر دهید."</string>
     <string name="Toast_Write_NickName">"لطفاً نام خود را وارد کنید"</string>
 
     <!-- Destruction -->
     <string name="sure_delete_account">آیا شما از حذف اکانت خود اطمینان دارید ؟</string>
     <string name="delete_account_text_desc">(در صورتیکه اکانت خود را حذف کنید، همه فایل هایی که به صورت پیام دریافت کرده اید نیز به طور دائم حذف خواهند شد.)</string>
     <string name="Destruction_Code">تخریب</string>
-    <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
+    <string name="destroy_description">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
     <string name="iGap_autofill_Destruction_Code">آیگپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست به صورت دستی وارد کنید.</string>
 
     <!-- Message Type and Status -->
@@ -99,11 +75,11 @@
     <string name="contact_message">پیام مخاطب</string>
     <string name="gif_message">پیام متحرک</string>
     <string name="voice_message">پیغام صوتی</string>
-    <string name="typing">درحال تایپ…</string>
+    <string name="typing">درحال نوشتن…</string>
     <string name="sending_image">درحال ارسال تصویر…</string>
     <string name="capturing_image">درحال گرفتن تصویر…</string>
     <string name="sending_video">درحال ارسال ویدئو…</string>
-    <string name="capturing_video">درحال رکورد ویدئو…</string>
+    <string name="capturing_video">درحال ضبط ویدئو…</string>
     <string name="sending_audio">درحال ارسال صوت…</string>
     <string name="recording_voice">درحال ضبط صدا…</string>
     <string name="sending_voice">درحال ارسال صدا…</string>
@@ -124,33 +100,25 @@
     <string name="Unpin_to_top">برداشتن پین</string>
     <string name="unmute_notification">"اطلاع رسانی باصدا"</string>
     <string name="clear_history">"پاک کردن تاریخچه"</string>
-    <string name="to_delete_chat">"حذف گفتگو"</string>
     <string name="left_group">ترک گروه</string>
     <string name="delete_group">حذف گروه</string>
 
     <!-- Public String -->
     <string name="app_name">"آیگپ"</string>
-    <string name="call_name">تماس صوتی آیگپ</string>
     <string name="chat">"گفتگو"</string>
     <string name="group">"گروه"</string>
     <string name="channel">"کانال"</string>
     <string name="igap">"آیگپ"</string>
-    <string name="igapChanel">"آیگپ"</string>
     <string name="search">"جستجو"</string>
-    <string name="d_of_d" formatted="false">"%d از %d"</string>
     <string name="add_to_contact">"افزودن به مخاطبین"</string>
     <string name="cancel">"انصراف"</string>
     <string name="B_cancel">"انصراف"</string>
-    <string name="B_skip">"بیخیال"</string>
-    <string name="B_finish">"پایان"</string>
     <string name="ok">"تأیید"</string>
     <string name="B_ok">"تأیید"</string>
     <string name="set">"تأیید"</string>
     <string name="am_camera">"دوربین"</string>
     <string name="am_music">"صوت"</string>
-    <string name="am_paint">"نقاشی"</string>
     <string name="am_picture">"تصویر"</string>
-    <string name="am_document">"سند"</string>
     <string name="am_location">"مکان"</string>
     <string name="am_video">"ویدئو"</string>
     <string name="am_file">"فایل"</string>
@@ -165,8 +133,8 @@
 
     <string name="just_wait_en">"لطفاً منتظر باشید."</string>
     <string name="device_dosenot_camera_en">"این دستگاه دوربین ندارد."</string>
+    <string name="device_dosenot_support">"دستگاه شما برنامه ای برای انجام این کار ندارد."</string>
     <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
-    <string name="picture_is_saved_en">"تصویر ذخیره شده است."</string>
     <string name="select_picture_en">"انتخاب تصویر"</string>
     <string name="cannot_load_data_en">"عدم توانایی در بارگیری داده‌ها"</string>
     <string name="do_you_want_exit">"آیا می‌خواهید خارج شوید؟"</string>
@@ -175,24 +143,12 @@
 
 
     <!-- setting -->
-    <string name="st_Info">"اطلاعات اکانت"</string>
-    <string name="st_Language">"زبان"</string>
-    <string name="st_titleToolbar">"تنظیمات"</string>
-    <string name="st_title_general">تنظیمات عمومی</string>
     <string name="st_username">"نام کاربری"</string>
-    <string name="st_nickname">"نام"</string>
-    <string name="st_contactName">"نام مخاطب"</string>
-    <string name="st_phoneNumber">"شماره تلفن"</string>
-    <string name="st_represent">معرف:</string>
-    <string name="st_title_info">"اطلاعات"</string>
-    <string name="st_title_notification_sounds">"اعلانات و صداها"</string>
     <string name="st_title_Clear_Cache">"پاک کردن حافظهٔ نهان"</string>
     <string name="st_title_Privacy_Security">"امنیت و حریم خصوصی"</string>
     <string name="st_title_message">"اتاق پیام"</string>
     <string name="st_title_message_textSize">"اندازهٔ پیام متنی"</string>
-    <string name="st_stickers">"برچسب‌ها و تصاویر"</string>
     <string name="st_chatBackground">"پس زمينهٔ صفحه گفتگو"</string>
-    <string name="st_Enable_Animation">"فعال کردن انیمیشن"</string>
     <string name="st_inApp_Browser">"مرورگر درون برنامه‌ای"</string>
     <string name="st_crop">"بریدن و بهبود حجم تصویر"</string>
     <string name="st_send_by_enter">"با زدن کلید اینتر ارسال کن"</string>
@@ -204,38 +160,23 @@
     <string name="st_auto_download_roaming">"بارگیری خودکار در حالت اتصال به رومینگ داده"</string>
     <string name="title_auto_download_roaming">بارگیری خودکار در حالت اتصال به رومینگ داده</string>
     <string name="st_auto_gif">"اجرای خودکار تصاویر متحرک"</string>
-    <string name="st_save_to_gallery">"ذخیره‌ کردن در گالری"</string>
-    <string name="st_title_support">"پشتیبانی برنامه"</string>
-    <string name="st_ask_question">"سؤالی بپرسید."</string>
-    <string name="st_About_iGap">"دربارهٔ آی‌گپ"</string>
-    <string name="st_privacy_policy">"سیاست های حریم خصوصی"</string>
     <string name="st_keepMedia">"نگهداری فایل‌های چند رسانه‌ای"</string>
-    <string name="st_dialog_content_keepMedia">"‫تصاویر، ویدئوها و دیگر فایل‌های ذخیره شده در فضای ابری که شما به آنها دسترسی داشته اید، به منظور ایجاد فضای خالی از دستگاه پاک می شوند. همه ی رسانه ها در بخش ذخیره سازی فضای ابری نگه داری شده که در صورت نیاز می توانید مجدداً آنها را دانلود کنید.‬‬‬‬‬‬
-"</string>
-    <string name="st_titleToolbar_page_Notification_and_sounds">"اعلانات و صداها"</string>
     <string name="st_title_messageNotification">"اعلانات پیام"</string>
     <string name="st_alert">"هشدار"</string>
     <string name="st_messagePreview">"پیش نمایش پیام"</string>
-    <string name="st_led_color">"رنگ چراغ اِل ای دی"</string>
-    <string name="st_vibrate">"ویبره"</string>
+    <string name="st_led_color">"رنگ چراغ صفحه نمایش"</string>
+    <string name="st_vibrate">"لرزش"</string>
     <string name="st_popupNotification">"پنجره اعلان پیام"</string>
     <string name="st_sound">"صدا"</string>
     <string name="st_title_groupNotification">"اعلانات گروهی"</string>
     <string name="st_title_in_app_notification">"اعلانات درون برنامه‌ای"</string>
     <string name="st_in_app_sound">"صداهای درون برنامه‌ای"</string>
-    <string name="st_in_app_vibrate">"ویبرهٔ درون برنامه‌ای"</string>
+    <string name="st_in_app_vibrate">"لرزش درون برنامه‌ای"</string>
     <string name="st_in_app_preview">"پیش نمایش درون برنامه‌ای"</string>
     <string name="st_in_chat_sound">"صداهای درون گفتگو"</string>
-    <string name="st_title_Events">"رویدادها"</string>
-    <string name="st_Contact_joined_igap">"مخاطبی اخیراً عضو آی‌‌گپ شده است."</string>
-    <string name="st_pinned_message">"پیام‌های چسبیده شده"</string>
     <string name="st_title_other">"سایر"</string>
-    <string name="st_text_keep_alive_service">"اگر اپلیکیشن توسط کاربر یا سیستم از حالت اجرا خارج شده‌ بود، باید دوباره اجرا شود. این کار اطمینان می‌دهد که شما تمام اعلانات را خواهید دید."</string>
+    <string name="st_text_keep_alive_service">"اگر نرم افزار توسط کاربر یا سیستم از حالت اجرا خارج شده‌ بود، باید دوباره اجرا شود. این کار اطمینان می‌دهد که شما تمام اعلانات را خواهید دید."</string>
     <string name="st_keep_alive_service">"سرویس همیشه در حال اجرا"</string>
-    <string name="st_background_connection">"اتصال پس زمینه"</string>
-    <string name="st_text_background_connection"></string>
-    <string name="st_badge_counter">"پیام‌های چسبیده شده"</string>
-    <string name="st_Repeat_Notifications">"پیام‌های چسبیده شده"</string>
     <string name="st_title_reset">"بازنشانی"</string>
     <string name="st_reset_all_notification">"بازنشانی همهٔ اعلانات"</string>
     <string name="st_text_reset_all_notification">"تمامی تنظیمات معمول اعلانات را برای همهٔ مخاطبین و گروه های خود خنثی کنید."</string>
@@ -243,53 +184,38 @@
     <string name="st_dialog_reset_all_notification_yes">"بلی"</string>
     <string name="st_dialog_reset_all_notification_no">"خیر"</string>
     <string name="st_title_Background">"پس زمينهٔ گفتگو"</string>
-    <string name="st_stickers_and_picture">"برچسب‌ها و تصویر"</string>
 
     <!-- privacy and security -->
     <string name="privacy">"حریم خصوصی"</string>
     <string name="Block_Users">"لیست مسدود‌ شده"</string>
-    <string name="Last_Seen">"آخرین مشاهده"</string>
+    <string name="Last_Seen">"آخرین مشاهده"</string>H
     <string name="Groups">"گروه‌ها"</string>
     <string name="Security">"امنیت"</string>
-    <string name="Passcode_Lock">"رمز عبور به هنگام قفل بودن اپلیکیشن"</string>
+    <string name="Passcode_Lock">"رمز عبور به هنگام قفل بودن نرم افزار"</string>
     <string name="Two_Step_Verification">"تأیید دو مرحله‌ای"</string>
-    <string name="Active_Sessions">"جلسات فعال"</string>
+    <string name="Active_Sessions">"نشست های فعال"</string>
     <string name="Account_Self_destruction">"خودتخریبی حساب کاربری"</string>
+    <string name="show_line_pattern">نمایش خطوط الگو</string>
 
     <!-- notification and sound group -->
     <string name="ntg_title_toolbar">"اعلانات و صداها"</string>
     <string name="ntg_notifications">"اعلانات"</string>
     <string name="ntg_Sound">"صدا"</string>
-    <string name="ntg_smart_notifications">"اعلانات هوشمند"</string>
 
     <!-- chanel_info -->
     <string name="chi_shared_Media">"رسانه‌های به اشتراک گذاشته شده"</string>
-    <string name="chi_clearChat">"پاک کردن تاریخچهٔ گفتگو"</string>
-    <string name="chi_blockContact">"مسدود کردن این مخاطب"</string>
-    <string name="chi_title_setting">"تنظیمات"</string>
     <string name="chi_popup_call">"تماس"</string>
     <string name="chi_popup_copy">"کپی"</string>
-    <string name="chi_NEXT_STEP">"گام بعدی"</string>
 
     <!-- fragment add contact -->
-    <string name="fac_Add_Contact">"افزودن مخاطب"</string>
-    <string name="fac_contact_info">"اطلاعات مخاطب"</string>
     <string name="fac_First_Name">"نام"</string>
     <string name="fac_Last_Name">"نام خانوادگی"</string>
-    <string name="fac_Phone_Number">"شماره تلفن"</string>
-    <string name="fac_Find_in_Page">"یافتن در صفحه"</string>
-    <string name="fac_Open_in_Chrome">"باز کردن در مرورگر کروم"</string>
-    <string name="fac_Powered_by_iGap">"قدرت گرفته توسط آی‌گپ"</string>
     <string name="menu_add_contact">"افزودن مخاطب"</string>
     <string name="shared_media">"رسانه‌های به اشتراک گذاشته شده"</string>
     <string name="shared_files">"فایل‌های به اشتراک گذاشته شده"</string>
-    <string name="shared_links">"پیوند به اشتراک گذاشته شده"</string>
-    <string name="shared_music">"موسیقی به اشتراک گذاشته شده"</string>
+    <string name="shared_links">"پیوند های به اشتراک گذاشته شده"</string>
     <string name="save_to_Music">"ذخیره کردن در بخش موسیقی"</string>
-    <string name="show_all_media">"نمایش همهٔ رسانه‌ها"</string>
     <string name="save_to_gallery">"ذخیره‌ کردن در گالری"</string>
-    <string name="delete_from_gallery">"حذف از گالری"</string>
-    <string name="select_room">"انتخاب گفتگو"</string>
     <string name="edited">"ویرایش‌ شده"</string>
     <string name="today">"امروز"</string>
     <string name="yesterday">"دیروز"</string>
@@ -301,10 +227,7 @@
     <string name="array_File">"فایل"</string>
     <string name="array_Music">"صوت"</string>
     <string name="array_GIF">"تصویر متحرک"</string>
-    <string name="array_Add_to_Contact">"افزودن به فهرست مخاطبین"</string>
-    <string name="array_Call">"تماس"</string>
     <string name="array_Copy">"کپی"</string>
-    <string name="array_Off">"خاموش"</string>
     <string name="array_No_popup">"بدون پنجرۀ اعلان"</string>
     <string name="array_Only_when_screen_on">"‫تنها زمانی که صفحهٔ نمایشگر روشن است"</string>‬‬‬‬‬‬
     <string name="array_Only_when_screen_off">"تنها زمانی که صفحهٔ نمایشگر خاموش است"</string>
@@ -318,13 +241,8 @@
     <string name="array_From_Gallery">"گالری"</string>
     <string name="array_From_Camera">"دوربین"</string>
     <string name="array_Delete_photo">"حذف عکس"</string>
-    <string name="array_5_minutes">"۵ دقیقه"</string>
-    <string name="array_10_minutes">"۱۰ دقیقه"</string>
-    <string name="array_30_minutes">"۳۰ دقیقه"</string>
     <string name="array_1_hour">"۱ ساعت"</string>
-    <string name="array_2_hour">"۲ ساعت"</string>
-    <string name="array_4_hour">"۴ ساعت"</string>
-    <string name="array_Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
+    <string name="Default_Notification_tone">"آهنگ پیش‌فرض اعلانات "</string>
     <string name="replay_item_dialog">"پاسخ"</string>
     <string name="copy_item_dialog">"کپی"</string>
     <string name="share_item_dialog">"اشتراک"</string>
@@ -335,25 +253,19 @@
     <string name="Search">"جستجو"</string>
     <string name="Delete_and_leave_Group">"حذف و ترک گروه"</string>
     <string name="New_Chanel">"کانال جدید"</string>
-    <string name="New_Group">"گروه جدید"</string>
 
     <!-- tarjome nashavad -->
-    <string name="test">"تست"</string>
 
     <string name="of">"از"</string>
     <string name="save_to_music_folder">"با موفقیت ذخیره کردن در پوشهٔ موسیقی"</string>
-    <string name="no_comment">"دیدگاهی وجود ندارد."</string>
-    <string name="comment">"دیدگاه"</string>
     <string name="choose_picture">"انتخاب تصویر از"</string>
     <string name="cansel">"لغو"</string>
     <string name="from_camera">"دوربین"</string>
     <string name="please_check_your_camera">"لطفاً دوربین دستگاه خود را بررسی کنید."</string>
-    <string name="delete_photo">"حذف عکس"</string>
     <string name="group_name">"نام گروه"</string>
     <string name="save">"ذخیره"</string>
     <string name="please_enter_group_name">"لطفاً نام گروه را وارد کنید."</string>
     <string name="group_description">"توضیح مختصر گروه"</string>
-    <string name="please_enter_group_description">"لطفاً توضیح مختصری برای گروه وارد کنید."</string>
     <string name="do_you_want_to_delete_this_group">"آیا از حذف این گفتگو اطمینان دارید؟"</string>
     <string name="do_you_want_to_set_admin_role_to_member">"آیا از گرفتن نقش مدیر از این عضو اطمینان دارید؟"</string>
     <string name="do_you_want_to_kick_this_member">"آیا از بیرون انداختن این عضو اطمینان دارید؟"</string>
@@ -371,8 +283,6 @@
     <string name="please_enter_firstname_or_lastname">"لطفاً نام یا نام خانوادگی را وارد کنید."</string>
     <string name="confirm_email_title">کد تأیید</string>
     <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است.</string>
-    <string name="new_chanel">"کانال جدید"</string>
-    <string name="can_not_save_picture_pleas_try_again">"عدم توانایی در ذخیرهٔ تصویر، لطفاً دوباره تلاش کنید."</string>
     <string name="chats">"گفتگو"</string>
     <string name="contacts">"مخاطبین"</string>
     <string name="messages">"پیام‌ها"</string>
@@ -382,16 +292,11 @@
     <string name="from">"از"</string>
     <string name="new_message">"پیام جدید"</string>
     <string name="new_messages">"پیام‌ جدید"</string>
-    <string name="new_message_recicve">"پیام جدید دریافت شد."</string>
-    <string name="my_Position_is">"موقعیت من:"</string>
-    <string name="latitude">"عرض جغرافیایی:"</string>
-    <string name="longitude">"طول جغرافیایی:"</string>
     <string name="unknown_artist">"هنرمند نامشخص"</string>
     <string name="add_new_member">"افزودن عضو(های) جدید"</string>
     <string name="set_admin">"تعیین مدیر"</string>
     <string name="set_modereator">"تعیین ناظر"</string>
     <string name="set_kick">"بیرون انداختن"</string>
-    <string name="member_can_add_new_member">"اعضا می‌توانند عضوهای جدید اضافه کنند."</string>
     <string name="notificaion_and_sound">"اعلانات و صدا"</string>
     <string name="your_link">"پیوند شما"</string>
     <string name="public_channel">"کانال عمومی"</string>
@@ -403,8 +308,7 @@
 
     <!-- Error -->
     <string name="USER_VERIFY_BLOCKED_USER">"کاربر مسدود شده است و امکان تأیید وجود ندارد."</string>
-    <string name="Enter_Code">"کد تخریب"</string>
-    <string name="E_2">نیاز به ورود به سیستم</string>
+    <string name="destroy_enter_code">"کد تخریب"</string>
     <string name="E_335">"خطایی از کلاینت"</string>
     <string name="E_336">"خطای درونی سرور"</string>
     <string name="E_337">"این کار مجاز نیست."</string>
@@ -461,18 +365,14 @@
     <string name="E_301">"خطای درونی سرور"</string>
     <string name="E_379">شما نمی توانید این کاربر را به گروه دعوت کنید.</string>
 
-    <string name="E_468">تغییر وضعیت امضاء کانال ممنوع است</string>
     <string name="E_478">شما نمی توانید این کاربر را به کانال دعوت کنید.</string>
 
     <string name="E_610">"خطایی از سمت کلاینت"</string>
     <string name="E_611">"خطای درونی سرور"</string>
     <string name="E_612">"خطایی از سمت کلاینت"</string>
     <string name="E_613">"خطای درونی سرور"</string>
-    <string name="E_614">"چنین گفتگویی یافت نشد."</string>
-    <string name="E_615_1">"خطایی از کلاینت: شناسهٔ روم اشتباه است."</string>
     <string name="E_615_2">"خطایی از سمت کلاینت: شناسهٔ پیام اول اشتباه است."</string>
     <string name="E_616">"خطای درونی سرور"</string>
-    <string name="E_617">"دیگر پیامی برای مشاهده وجود ندارد."</string>
     <string name="E_623">"نام کاربری پیدا نشد."</string>
     <string name="E_713_1">"خطایی از سمت کلاینت: نشانه اشتباه است."</string>
     <string name="E_713_2">"خطایی از سمت کلاینت: آفست اشتباه است."</string>
@@ -485,14 +385,6 @@
 
     <string name="E_658">گزارش تخلف قبلاً ارسال شده است.</string>
     <string name="E_659">در حال حاضر مجاز به ارسال گزارش تخلف نیستید.</string>
-
-    <string name="E_9002">دریافت شناسه امکان پذیر نیست</string>
-    <string name="E_9006">ارتباط با سرور امکان پذیر نیست</string>
-    <string name="E_9007">ارتباط با سرور امکان پذیر نیست</string>
-    <string name="E_9008">ارتباط با دریافت کننده برقرار نشد</string>
-    <string name="E_9009">ارتباط با سرور امکان پذیر نیست</string>
-    <string name="E_9010">دریافت کننده ثبت نام نکرده است</string>
-    <string name="E_9013">ثبت نام برای شما ممنوع است</string>
 
     <string name="E_10165">Bad payload: User report</string>
     <string name="E_10166">ServerError: User report internal</string>
@@ -514,12 +406,11 @@
     <string name="E_156">تخریب اکانت : کد اشتباه است</string>
     <string name="E_157">تخریب اکانت : کد اعتبار ندارد</string>
     <string name="E_158">تخریب اکانت : تلاش بیش از اندازه</string>
+    <string name="E_4_14">شما اجازه دسترسی ندارید!</string>
     <string name="time_out">عدم امکان اتصال به سرور</string>
     <string name="resend_all_messages">"‫ارسال دوبارهٔ %d پیام"</string>‬‬‬‬‬‬
     <string name="resend_chat_message">"‫ارسال دوبارهٔ پیام"</string>‬‬‬‬‬‬
     <string name="if_you_are_away_for">"پس از"</string>
-    <string name="st_Gander">"جنسیت:"</string>
-    <string name="st_email">"ایمیل:"</string>
     <string name="month_1">" ۱ماه"</string>
     <string name="month_3">"۳ ماه"</string>
     <string name="month_6">"۶ ماه"</string>
@@ -527,21 +418,18 @@
     <string name="E_114">"خطایی از سمت کلاینت: ایمیل اشتباه است."</string>
     <string name="E_115">"خطای درونی سرور"</string>
     <string name="E_116">"خطایی از سمت کلاینت: نوع جنسیت اشتباه است."</string>
-    <string name="E_117">"خطای درونی سرور"</string>
+    <string name="E_118">اخطار: تعداد مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
+    <string name="E_118_5">اخطار: تعداد پکیج انتقال مخاطبین از محدودیت تعداد سمت سرور فراتر است.</string>
     <string name="list_admin">فهرست مدیران</string>
     <string name="list_modereator">فهرست ناظران</string>
     <string name="desc">توضیحات</string>
     <string name="hello_blank_fragment">تست</string>
-    <string name="receive_code_text">آیا پیام متنی دریافت نکردید؟</string>
     <string name="please_wait">منتظر باشید.</string>
-    <string name="New_Chat">گفتگوی جدید</string>
     <string name="Invite_Friends">دعوت کردن دوستان</string>
-    <string name="iGap_FAQ">‫پرسش‌های متداول آی‌گپ</string>‬‬‬‬‬‬
+    <string name="iGap_FAQ">‫پرسش‌های متداول آیگپ</string>‬‬‬‬‬‬
     <string name="Documents">اسناد</string>
     <string name="remove_admin">حذف مدیر</string>
     <string name="remove_moderator">حذف ناظر</string>
-    <string name="Male">آقا</string>
-    <string name="Female">خانم</string>
     <string name="from_beginning">از ابتدا</string>
     <string name="from_Now">از حالا</string>
     <string name="last_50_Messages">۵۰ پیام آخر</string>
@@ -561,33 +449,24 @@
     <string name="last_month">ماه گذشته</string>
     <string name="last_week">هفتهٔ گذشته</string>
     <string name="online">آنلاین</string>
-    <string name="exactly">دقیقاْ</string>
     <string name="recently">اخیراً</string>
     <string name="support">پشتیبانی</string>
     <string name="service_notification">سرویس اعلانات برنامه</string>
     <string name="B_edit">ویرایش</string>
     <string name="left">ترک کردن</string>
-    <string name="Channel_name">کانال جدید</string>
-    <string name="arrow">پیکان</string>
     <string name="Ringtone">آهنگ زنگ</string>
     <string name="DISCARD">رد کردن</string>
     <string name="unknown">ناشناس</string>
     <string name="add_to_list_contact">افزودن به مخاطبین</string>
-    <string name="text_add_to_list_contact">آیا می‌خواهید این شماره تلفن را به مخاطبین خود بیفزایید؟</string>
+    <string name="text_add_to_list_contact">آیا می‌خواهید این شماره را به مخاطبین اضافه کنید؟</string>
 
     <string name="delete_account_text">آیا از حذف این حساب کاربری اطمینان دارید؟</string>
-    <string name="text_kick_admin">آیا از اخراج این مدیر اطمینان دارید؟؟</string>
-    <string name="text_kick_moderator">آیا از اخراج این ناظر اطمینان دارید؟</string>
     <string name="dialog_readonly_chat">متأسفانه امکان ارسال پیام در گفتگو برای شما وجود ندارد.</string>
     <string name="delete_chat">حذف گفتگو</string>
-    <string name="delete_account_text1">سایر</string>
-    <string name="delete_account_text2">سایر</string>
-    <string name="delete_account_text3">سایر</string>
-    <string name="delete_account_text4">سایر</string>
+    <string name="delete">حذف</string>
     <string name="capture_image">گرفتن تصویر</string>
     <string name="capture_video">گرفتن فیلم ویدئویی</string>
     <string name="set_gender">تنظیم و ویرایش جنسیت</string>
-    <string name="set_email">تنظیم و ویرایش ایمیل</string>
     <string name="delete_contact">حذف مخاطب</string>
     <string name="error_email">نشانی ایمیل نامعتبر</string>
     <string name="do_you_want_delete_this">آیا از حذف آیتم انتخاب شده اطمینان دارید؟</string>
@@ -600,11 +479,9 @@
     <string name="active_session_all_title">لغو و بستن جلسات</string>
     <string name="active_session_content">آیا از غیر فعال کردنِ این جلسۀ فعال اطمینان دارید؟</string>
     <string name="active_session_all_content">آیا از لغو همهٔ جلسات فعال اطمینان دارید؟</string>
-    <string name="USER_VERIFY_GIVEN_USERNAME">هیچ کاربری با نام کابری ارائه شده ثبت نام نکرده است.</string>
     <string name="USER_VERIFY_MANY_TRIES">کد تأییدیه به دلیل چندین مرتبه وارد کردن برای مدتی مسدود می‌باشد.</string>
     <string name="USER_VERIFY_MANY_TRIES_SEND">کد تأییدیه چندین مرتبه ارسال شده است.</string>
     <string name="USER_VERIFY_EXPIRED">کد تأییدیه منقضی شده است.</string>
-    <string name="USER_VERIFY_BLOCK">کاربر به دلیل درخواستش مسدود شده است.</string>
     <string name="convert_chat_to_group_content">آیا می‌خواهید این گفتگو را به گروه انتقال دهید؟</string>
     <string name="convert_chat_to_group_title">انتقال گفتگو به گروه</string>
     <string name="minute_ago">دقیقه پیش</string>
@@ -614,34 +491,23 @@
     <string name="ip">شناسه</string>
     <string name="current_session">جلسهٔ فعلی</string>
     <string name="Active_session">جلسهٔ فعال</string>
-    <string name="terminate">غیرفعال کردن</string>
     <string name="terminate_all">لغو تمامی جلسات فعال</string>
     <string name="forwarded_from">ارسال شده از</string>
-    <string name="more">بیشتر…</string>
-    <string name="do_you_want_to_delet_this_chat">آیا می‌خواهید این گفتگو را حذف کنید؟</string>
-    <string name="sound_at_most">صدای بلند</string>
-    <string name="number">تعداد</string>
     <string name="photo">عکس</string>
     <string name="music_name">عنوان موسیقی</string>
-    <string name="times">زمان‌ها</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
-    <string name="type_message">تایپ کردن پیام</string>
+    <string name="type_message">پیام...</string>
     <string name="place">مکان</string>
-    <string name="minutes">دقیقه‌ها</string>
     <string name="channel_link">پیوند کانال</string>
-    <string name="group_profile">پروفایل گروه</string>
     <string name="iran">ایران</string>
-    <string name="naturemagazine">مجلهٔ نیچر</string>
     <string name="everybody">همه</string>
     <string name="music_time">زمان موسیقی</string>
     <string name="new_group">گروه جدید</string>
-    <string name="delete_from_cache">حذف از حافظهٔ نهان</string>
     <string name="leave_channel">ترک کردن کانال</string>
     <string name="report">گزارش تخلف</string>
     <string name="replay">پاسخ دادن</string>
     <string name="members">اعضا</string>
-    <string name="skip">رد کردن</string>
     <string name="settings">تنظیمات</string>
     <string name="iGap_settings">تنظیمات حساب آیگپ</string>
     <string name="please_write_your_message">لطفاْ پیام خود را بنویسید!</string>
@@ -651,101 +517,65 @@
     <string name="share_video_file_2">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
     <string name="share_file">به اشتراک گذاشتن فایل</string>
-    <string name="text_copied">متن کپی شده</string>
+    <string name="text_copied">متن کپی شد</string>
 
     <string name="message">پیام</string>
-    <string name="future_done">این قابلیت در آینده ارائه خواهد شد.</string>
     <string name="nick_name_not_exist">این نام وجود ندارد.</string>
-    <string name="first_name">نام</string>
     <string name="last_name">نام خانوادگی</string>
-    <string name="block_this_contact">ارتباط این مخاطب مسدود شود؟</string>
     <string name="block">مسدود</string>
     <string name="clear_this_chat">آیا از حذف تاریخچۀ این گفتگو اطمینان دارید؟</string>
     <string name="clear">پاک کردن</string>
     <string name="can_not_save_image">عدم امکان ذخیرهٔ تصویر</string>
     <string name="just_owner_can_delete">فقط مالک گروه می‌تواند حذف کند.</string>
 
-    <string name="shate_audio_file">به اشتراک گذاشتن فایل صوتی</string>
     <string name="last_seen">آخرین مشاهده</string>
     <string name="remove">حذف کردن</string>
     <string name="please_check_your_connenction">لطفاْ شرایط ارتباطی خود را بررسی کنید.</string>
-    <string name="errore_verification_sms">پیام خطای تأیید</string>
     <string name="male">آقا</string>
     <string name="female">خانم</string>
-    <string name="share_via">به اشتراک گذاشتن از طریق</string>
     <string name="error">خطا</string>
     <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
-    <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
-    <string name="share_video_from_igap">به اشتراک گذاشتن ویدیو از آی‌گپ</string>
+    <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آیگپ</string>
+    <string name="share_video_from_igap">به اشتراک گذاشتن ویدیو از آیگپ</string>
     <string name="TERMINATE">لغو</string>
-    <string name="iGap_version">آیگپ اندروید نسخه</string>
-    <string name="Bazzar">کافه بازار</string>
-    <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
+    <string name="do_you_want_left_this">آیا از ترک آیتم انتخاب شده اطمینان دارید؟</string>
 
     <string name="do_you_want_to_leave_this_group">آیا از ترک این گروه اطمینان دارید؟</string>
 
     <string name="waiting_for_connection">در انتظار اتصال به سرور</string>
     <string name="picture_save_to_galary">"ذخیرهٔ تصویر در گالری"</string>
-    <string name="my_location_title">موقعیت من</string>
-    <string name="shared_image">تصویر اشتراک گذاشته شده</string>
-    <string name="shared_video">ویدیو اشتراک گذاشته شده</string>
-    <string name="shared_audio">فایل صوتی اشتراک گذاشته شده</string>
-    <string name="shared_voice">پیام صوتی اشتراک گذاشته شده</string>
-    <string name="shared_gif">تصویر متحرک اشتراک گذاشته شده</string>
-    <string name="shared_file">فایل به اشتراک گذاشته شده</string>
-    <string name="qr_payment">هزینهٔ کیو آر</string>
-    <string name="charge_balance">میزان شارژ</string>
-    <string name="total_balance">میزان کل</string>
-    <string name="rials">ریال</string>
-    <string name="unverified">تشخیص داده نشده/</string>
-    <string name="send_documents">ارسال اسناد و مدراک</string>
+    <string name="shared_image">تصاویر به اشتراک گذاشته شده</string>
+    <string name="shared_video">ویدیوهای به اشتراک گذاشته شده</string>
+    <string name="shared_audio">صوت های به اشتراک گذاشته شده</string>
+    <string name="shared_voice">پیام های صوتی به اشتراک گذاشته شده</string>
+    <string name="shared_gif">تصاویر متحرک به اشتراک گذاشته شده</string>
+    <string name="images">تصاویر</string>
+    <string name="amount_rials">%s ریال</string>
     <string name="charge">شارژ</string>
-    <string name="transaction_history">تاریخچهٔ معاملات</string>
-    <string name="transfer_mony">انتقال پول</string>
-    <string name="create_qr_code">ایجاد کد کیو آر</string>
-    <string name="pay_via_qr_code">پرداخت از طریق کد کیو آر</string>
-    <string name="charge_out">شارژ کردن</string>
-    <string name="e_commerce">تجارت الکترونیک</string>
-    <string name="agrement">توافق</string>
-    <string name="payment_charge_out_text">پیغام شارژ کردن</string>
-    <string name="description_optional">توضیح (اختیاری)</string>
-    <string name="enter_the_code_here">کد را اینجا وارد کنید.</string>
-    <string name="transfer_to">انتقال به</string>
-    <string name="transfer_to_wallet">انتقال به کیف پول</string>
+    <string name="gift_message">اعتبار هدیه به مبلغ *.مایل به دریافت آن هستید؟</string>
+    <string name="toast_success_gift">برای اعمال اعتبار هدیه چند لحظه صبر کنید.</string>
+    <string name="amount_to_pay_factor">مبلغ قابل پرداخت فاکتور (ریال) :</string>
     <string name="price">قیمت</string>
-    <string name="amunt">مقدار</string>
-    <string name="email_optional">ایمیل (اختیاری)</string>
-    <string name="create">ایجاد</string>
     <string name="gif_selected_for_send">تصویر متحرک انتخاب شده برای ارسال</string>
-    <string name="log_message">ثبت پیام</string>
-    <string name="iranian_rials">ریال ایران (IRR)</string>
-    <string name="your_login_code_is">"کد ورود شما هست: "</string>
     <string name="there_is_no_sheared_media">هیچ رسانه‌ای به اشتراک گذاشته نشده است.</string>
-    <string name="pending">معلق</string>
-    <string name="completed">کامل شده</string>
-    <string name="st_data_shams">تاریخ پارسی</string>
+    <string name="payment_userScore">امتیاز شما</string>
+    <string name="payment_spentScore">امتیاز مصرفی: </string>
+    <string name="payment_price">تخفیف: </string>
     <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>
-    <string name="one_day">یک روز قبل</string>
     <string name="two_day">دو روز قبل</string>
     <string name="three_day">سه روز قبل</string>
     <string name="four_day">چهار روز قبل</string>
     <string name="five_day">پنج روز قبل</string>
     <string name="six_day">شش روز قبل</string>
-    <string name="at">در</string>
-    <string name="group_link_copy">کپی</string>
-    <string name="group_link_revoke">ابطال لینک</string>
     <string name="group_link">لینک گروه</string>
-    <string name="normal_error">can\'t do it please try later</string>
     <string name="channel_description">توضیح کانال</string>
     <string name="channel_name">نام کانال</string>
-    <string name="delete_and_leave_channel">حذف و خارج شدن از کانال</string>
     <string name="channel_delete">حذف کانال</string>
     <string name="please_enter_channel_name">"لطفاً نام کانال وارد کنید."</string>
     <string name="new_channel">"کانال جدید"</string>
     <string name="channel_left">"ترک کانال"</string>
-    <string name="please_enter_channel_description">"لطفاً توضیح مختصری برای کانال وارد کنید."</string>
-    <string name="txt_you">"شما: "</string>
+    <string name="txt_you">"شما"</string>
     <string name="you">"شما"</string>
     <string name="farvardin">فروردین</string>
     <string name="ordibehst">اردیبهشت</string>
@@ -762,8 +592,6 @@
     <string name="join">عضویت</string>
     <string name="do_you_want_to_join_to_this">"آیا مایلید در این "</string>
     <string name="txt_draft">پیش نویس: </string>
-    <string name="st_signature">امضا</string>
-    <string name="spam">Spam</string>
 
     <string name="sunday">"یک شنبه"</string>
     <string name="monday">دوشنبه</string>
@@ -788,7 +616,6 @@
     <string name="ROOM_CONVERTED_TO_PRIVATE">"از عمومی به خصوصی تبدیل شد"</string>
     <string name="MEMBER_JOINED_BY_INVITE_LINK">"با دعوت به"</string>
     <string name="Room_Deleted_log">"حذف شد"</string>
-    <string name="revoke">ابطال</string>
     <string name="conversation">صفحه</string>
 
     <string name="MISSED_SCREEN_SHARE">"تماس از دست رفته"</string>
@@ -805,22 +632,15 @@
     <string name="permission_contact">لیست تماس ها را بدهید</string>
     <string name="permission_calender">تقویم را بدهید</string>
     <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
-    <string name="permission_record_audio">ضبط صدا را بدهید</string>
+    <string name="permission_record_audio">میکروفن را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
-    <string name="permission_sms">پیامک ها را بدهید</string>
-    <string name="st_privacy_blog">بلاگ رسمی آیگپ</string>
-    <string name="st_privacy_create_ticket">درخواست پشتیبانی</string>
-    <string name="st_privacy_iGap_home">صفحه رسمی آیگپ</string>
 
 
     <string name="channel_public_hint_revoke">لینک عمومی کانال</string>
-    <string name="channel_link_title_revoke">لینک دعوت</string>
-    <string name="channel_link_hint_revoke">لینک دعوت به کانال</string>
     <string name="self_destructs">خود تخریبی</string>
     <string name="save_ok">ذخیره شد</string>
 
     <string name="Toast_time_wait">لطفاً منتظر بمانید تا :</string>
-    <string name="array_delete_photo_group">حذف عکس</string>
     <string name="group_link_hint_revoke">لینک دعوت گروه</string>
     <string name="channel_title_convert_to_private">تبدیل به کانال خصوصی</string>
     <string name="channel_text_convert_to_private">آیا می خواهید این کانال را به کانال خصوصی تبدیل کنید؟</string>
@@ -833,7 +653,6 @@
     <string name="group_text_convert_to_public">آیا می خواهید این گروه را به گروه عمومی تبدیل کنید؟</string>
     <string name="group_title_set_username">تخصیص نام کاربری</string>
     <string name="permission_storage">محل ذخیره سازی را بدهید</string>
-    <string name="you_have_to_get_storage_permision_for_continue">برای ادامه کار نیاز به مجوز ذخیره سازی می باشد</string>
     <string name="clean_up_chat_rooms">پاک سازی کلی</string>
     <string name="clean_up">پاک سازی</string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">آیا از حذف کلیۀ اطلاعات چت ها از پایگاه دادۀ داخلی اطمینان دارید؟</string>
@@ -859,15 +678,13 @@
     <string name="toggle_botton_color">رنگ دکمه های ضامنی</string>
     <string name="send_and_attach_botton_color">رنگ آیکن ارسال و پیوست ها</string>
     <string name="default_header_font_color">رنگ تیتر نوشته ها</string>
-    <string name="default_progress_color">رنگ پروگرس بار</string>
-    <string name="who_can_see_my_avatar">چه کسی آواتارهای من را ببیند؟</string>
+    <string name="default_progress_color">رنگ نوار پردازش</string>
+    <string name="who_can_see_my_avatar">چه کسی عکس های پروفایل من را ببیند؟</string>
     <string name="who_can_invite_you_to_channel_s">چه کسی من را به کانال دعوت کند ؟</string>
     <string name="who_can_invite_you_to_group_s">چه کسی من را به گروه دعوت کند ؟</string>
     <string name="no_body">هیچکس</string>
     <string name="my_contacts">مخاطبین من</string>
-    <string name="privacy_setting">تنظیمات خصوصی </string>
-    <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
-    <string name="set_color_to_default">برگرداندن رنگ ها به پیش فرض</string>
+    ‬‬‬‬‬‬
     <string name="empty_message"> لطفاً 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
     <string name="empty_message3"> برای جستجو حداقل 5 کاراکتر وارد کنید</string>‬‬‬‬‬‬
     <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
@@ -887,7 +704,6 @@
     <string name="keep_media_forever">برای همیشه</string>
     <string name="keep_media_1month">یک هفته</string>
     <string name="file_save_to_download_folder">"فایل در پوشه دانلود ذخیره شد"</string>
-    <string name="first_download_file">ابتدا فایل را دانلود کنید</string>
     <string name="file_save_to_galary_folder">فایل در پوشه گالری ذخیره شد</string>
     <string name="file_can_not_save_to_selected_folder">فایل در پوشه انتخاب شده ذخیره نشد.</string>
     <string name="file_save_to_video_folder">فایل در پوشه ویدیو ذخیره شد.</string>
@@ -897,21 +713,18 @@
     <string name="title_limit_Create_Group">محدودیت در تعداد ساخت اتاق های گفتگو یا اطلاع رسانی</string>
     <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
     <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
-    <string name="calls">لیست تماس</string>
     <string name="voice_calls">تماس صوتی آیگپ</string>
     <string name="video_calls">تماس تصویری آیگپ</string>
     <string name="map">نقشه</string>
     <string name="igap_nearby">اطراف من</string>
-    <string name="igap_call">تماس صوتی آیگپ</string>
     <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
     <string name="clean_log">پاک کردن تاریخچه تماس صوتی</string>
     <string name="mandatory">(الزامی)</string>
-    <string name="optional">اختیاری</string>
     <string name="desc_group_chanel">توضیحات (اختیاری)</string>
 
-    <string name="set_additional_password">تعیین رمزعبور</string>
     <string name="two_step_verification_title">فعال سازی دو مرحله ای </string>
     <string name="two_step_verification_description">شما می توانید رمزعبوری برای حساب کاربری خود تعیین کنید، این رمز زمانی مورد نیاز است که بخواهید جهت ورود به حساب کاربریتان از دستگاه دیگری استفاده نمایید. بعلاوهٔ این رمز شما زمان ورود به حساب کاربری کد تأییدی نیز به صورت پیامک دریافت خواهید کرد. </string>
+    <string name="two_step_verification_disable">فعال سازی دو مرحله ای غیر فعال شد.</string>
     <string name="enter_a_password"> رمز عبور را وارد کنید</string>
     <string name="please_enter_your_password"> لطفاً رمز عبور خود را وارد نمایید</string>
     <string name="your_password">رمزعبور </string>
@@ -922,12 +735,9 @@
     <string name="password_Question_one">برای مثال: معلم مورد علاقه تان کیست؟ </string>
     <string name="password_Question_title_two"> سؤال امنیتی شماره ۲ (الزامی)</string>
     <string name="title_toolbar_password_Question">سوالات امنیتی جدید</string>
-    <string name="password_Question_explain">لطفاً سؤالات و پاسخ های جدید را جهت بازیابی رمز عبور وارد نمایید.</string>
     <string name="password_Question_two">برای مثال: بهترین دوست شما کیست؟</string>
     <string name="password_answer">جواب </string>
-    <string name="password_Question_title">پرسش رمزعبور</string>
     <string name="recovery_email">بازیابی از طریق پست الکترونیکی</string>
-    <string name="your_email">پست الکترونیکی (اختیاری) </string>
     <string name="recovery_question"> بازیابی از طریق سؤال امنیتی</string>
     <string name="two_step_verification">فعال سازی دو مرحله ای </string>
     <string name="forgot_password"> رمزعبور خود را فراموش کرده اید؟</string>
@@ -955,9 +765,7 @@
 
     <string name="recovery_Password">بازیابی رمزعبور </string>
     <string name="your_email_desc"> لطفاً پست الکترونیکی معتبری وارد کنید. این گزینه برای بازیابی رمزعبور فراموش شده است.</string>
-    <string name="call_with">انتخاب مخاطب </string>
     <string name="please_enter_code">لطفاً کد را وارد نمایید </string>
-    <string name="please_enter_all_item">لطفاً کد را وارد نمایید </string>
     <string name="Hint_cant_the_same_password">نشانهٔ در نظر گرفته شده برای رمزعبور نباید مشابه با رمزعبور باشد. </string>
     <string name="please_complete_all_item">لطفاً همهٔ موارد را کامل کنید </string>
     <string name="Password_dose_not_match">عدم مطابقت رمزعبور وارد شده </string>
@@ -977,18 +785,18 @@
     <string name="who_is_allowed_to_video_call">افراد مجاز برای تماس تصویری</string>
     <string name="miss">از دست رفته</string>
     <string name="not_answer">بدون پاسخ</string>
+    <string name="un_answered">بدون پاسخ</string>
     <string name="e_906_1">شما اجازه تماس با این مخاطب را ندارید.</string>
 
     <string name="iGap_has_crashed">آیگپ با خطای پیش بینی نشده برخورد کرده است!</string>
     <string name="iGap_has_crashed_reload">شروع مجدد</string>
-    <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
+    <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
-    <string name="nothing">چیزی نیست!</string>
-    <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس های ورودی و خروجی اطمینان دارید؟</string>
+    <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس ها اطمینان دارید؟</string>
+    <string name="are_you_sure_clear_call_log">آیا از حذف  تماس های انتخاب شده اطمینان دارید؟</string>
     <string name="please_write_your_reasons">لطفاً دلیل خود را بنویسید</string>
     <string name="error_check_password">به دلیل تلاش پیاپی، رمزعبور برای مدتی غیرفعال است.</string>
 
-    <string name="your_confirm_email">لطفاً کد تأیید پست الکترونیکی را وارد کنید</string>
     <string name="your_confirm_email_skip">بیخیال</string>
     <string name="your_resend_email_skip">ارسال مجدد کد تأیید</string>
     <string name="invalid_verify_email_code">کد تأیید نامعتبر است</string>
@@ -1005,7 +813,7 @@
     <string name="not_answered">پاسخی دریافت نشد</string>
     <string name="unavalable">در دسترس نیست</string>
     <string name="too_long">خیلی طولانی</string>
-    <string name="signaling">سیگنالینگ</string>
+    <string name="signaling">در حال برقراری تماس</string>
     <string name="incoming_call">تماس ورودی</string>
     <string name="ringing">در حال زنگ خوردن</string>
     <string name="connecting_call">در حال اتصال</string>
@@ -1021,12 +829,11 @@
     <string name="not_answerd_call">"تماس صوتی از دست رفته"</string>
     <string name="recorded_by">"ضبط شده توسط " </string>
 
-    <string name="Login_with_QrCode">ورود با کیوآر</string>
+    <string name="Login_with_QrCode">ورود با اسکن بارکد</string>
     <string name="Input_device_specification">ورود موفق دستگاه</string>
-    <string name="QrCode_Scan">بارکد اسکنر</string>
+    <string name="QrCode_Scan">ورود با اسکن بارکد</string>
     <string name="Call_Quality">کیفیت تماس</string>
     <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های تعیین شده به هیچ وجه استفاده نکنید، حساب شما پس از آن زمان به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
-    <string name="color_default">آیا مایلید رنگ بندی همه قسمت های برنامه به حالت اولیه و پیش فرض باز گردد؟</string>
 
     <string name="crop_image_menu_rotate_right">چرخاندن</string>
     <string name="crop_image_menu_crop">برش</string>
@@ -1034,7 +841,7 @@
     <string name="crop_image_menu_flip_horizontally">برگرداندن افقی تصویر</string>
     <string name="crop_image_menu_flip_vertically">برگرداندن عمودی تصویر</string>
 
-    <string name="title_who_can_see_my_avatar">دیده شدن آواتارهای من توسط</string>
+    <string name="title_who_can_see_my_avatar">دیده شدن عکسهای پروفایل من توسط</string>
     <string name="title_who_can_invite_you_to_channel_s">دریافت لینک دعوت کانال از</string>
     <string name="title_who_can_invite_you_to_group_s">دریافت لینک دعوت گروه از</string>
     <string name="title_who_is_allowed_to_call">دریافت تماس از</string>
@@ -1048,27 +855,15 @@
     <string name="c_TB">ترابایت </string>
 
     <string name="audio">فایل صوتی</string>
-    <string name="total_size">حجم کل</string>
 
-    <string name="manage_spacing">کنترل حافظهٔ برنامه</string>
-    <string name="local_database">پایگاه دادهٔ محلی</string>
     <string name="data_storage"> ذخیره سازی اطلاعات</string>
-    <string name="keep_media">نگهداری و حفظ رسانه ها</string>
-
-    <string name="invite_friend">این مخاطب هنوز به آیگپ نپیوسته. آیا مایلید ایشان را دعوت کنید؟</string>
-    <string name="clean_up_description">پاک کردن پایگاه دادهٔ برنامه منجر به حذف پیام های متنی ذخیره شده در حافظهٔ نهان و فشرده شدن پایگاه داده به منظور ذخیرهٔ فضای داخلی خواهد شد. آیگپ برای کارکردن به مقداری از اطلاعات نیاز دارد، بنابراین حجم پایگاه داده کاملاً خالی نخواهد شد و به صفر نمیرسد. تکمیل این عملیات چند دقیقه زمان می برد.</string>
-    <string name="list_contacts">لیست مخاطبین شما</string>
 
     <string name="limit_for_set_username">محدودیت زمانی برای تغییر نام کاربری</string>
 
-    <string name="clear_cache_desc">اطلاعات ذخیره شده در حافظهٔ نهان همان فایل های تصویری، ویدیویی یا اسنادی هستند که بر روی دستگاه شما دریافت و یا از سویِ آن ارسال شده اند؛ هر از گاهی عملیات پاکسازی باید بر روی این فایل ها انجام شود تا مانع از کُندی یا توقف در اجرای برنامه ها شود. هر گاه مایل باشید به این اطلاعات دست پیدا کنید می توانید دوباره فایل ها بارگیری کرده و مشاهده نمایید.</string>
     <string name="name">نام</string>
 
 
-    <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد.با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
-    <string name="turn_off_map">خاموش</string>
-    <string name="turn_on_map">روشن</string>
-    <string name="positioning">تعیین وضعیت</string>
+    <string name="turn_on_gps_explain">موقعیت مکانی و سایر ویژگی های نقشه غیر فعال می باشد. با فعال کردن دکمه زیراز قابلیت های مربوط به آن استفاده کنید.</string>
     <string name="nearby">بروزرسانی دستی</string>
     <string name="list_user_map">نمایش بصورت لیست</string>
     <string name="map_registration">غیرفعال کردن قابلیت اطراف من</string>
@@ -1088,7 +883,6 @@
 
     <string name="info_map">تنها کاربرانی برای شما قابل مشاهده اند که تا شعاع پنج کیلومتری از شما قرار دارند و وضعیت نقشه آنها روشن است.</string>
 
-    <string name="st_Auto_Rotate">چرخش خودکار صفحه</string>
     <string name="Theme_Dark">حالت شب</string>
 
     <string name="two_step_pass_code">قفل ورود به برنامه</string>
@@ -1103,8 +897,7 @@
     <string name="Fingerprint_not_recognized">اثر انگشت شما شناسایی و تأیید نشد. لطفاً مجدداً تلاش کنید</string>
     <string name="Auto_lock_description">بعد از هریک از زمان های انتخابی از میان لیست، برنامه قفل شده و برای ورود به برنامه باید رمز یا کد قفل گشا را وارد کنید.</string>
     <string name="Allow_Screen_Capture_description">در صورتیکه این گزینه فعال شود، می توانید از هر قسمت در برنامه اسکرین شات بگیرید، اما فراموش نکنید که حتی با فعال بودن قابلیت قفل برنامه، سیستم همچنان چت های شما را در قسمت برنامه های در حال اجرا در بک گراند نمایش می دهد. شاید برای فعالسازی این قابلیت مجبور شوید یک بار برنامه را بسته و مجدداً باز کنید.</string>
-    <string name="set_pass_code_description">با فعالسازی قفل ورود به برنامه، آیکن قفل در بالای صفحۀ اصلی چت ها پدیدار می شود که با استفاده از آن می توان برنامه را قفل یا قفل آن را باز کرد.
-    \nتوجه: برای تعیین رمز می توانید بدون محدودیت از اعداد یا ترکیب اعداد و حروف استفاده کنید. همچنین در صورت فراموشی آن کافی است یک بار از برنامه خارج شده و بار دیگر وارد شوید تا قفل ورود غیرفعال شود.</string>
+    <string name="set_pass_code_description">با فعالسازی قفل ورود به برنامه، آیکن قفل در بالای صفحۀ اصلی چت ها پدیدار می شود که با استفاده از آن می توان برنامه را قفل یا قفل آن را باز کرد.\nتوجه: برای تعیین رمز می توانید بدون محدودیت از اعداد یا ترکیب اعداد و حروف استفاده کنید. همچنین در صورت فراموشی آن کافی است یک بار از برنامه خارج شده و بار دیگر وارد شوید تا قفل ورود غیرفعال شود.</string>
 
 
     <string name="forgot_pin_desc">در صورتیکه رمز خود را فرامش کرده اید تنها می توانید یک بار از برنامه خارج شده و بار دیگر وارد شوید. آیا مایل به ادامه این کار هستید؟</string>
@@ -1122,26 +915,23 @@
     <string name="forgot_Unlock_with_your_passcode">رمز ورود را فراموش کرده اید؟</string>
 
     <string name="limit_passcode"> کد قفل گشا باید متشکل از حداقل ۴ حرف و یا عدد باشد</string>
-    <string name="block_the_user">مسدودی کردن مخاطب</string>
-    <string name="block_the_user_text">آیا از مسدودی کردن ارتباط این مخاطب اطمینان دارید؟</string>
+    <string name="block_the_user">مسدود کردن مخاطب</string>
+    <string name="block_the_user_text">آیا از مسدود کردن ارتباط این مخاطب اطمینان دارید؟</string>
     <string name="unblock_the_user">رفع مسدودیت مخاطب</string>
     <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
     <string name="PIN">پین</string>
     <string name="password">رمز</string>
-    <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
+    <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نقشه خود را فعال نکرده است</string>
     <string name="send_message_to">ارسال پیام به  </string>
     <string name="send_forward_to">آیا شما مطمئنید میخواهید انتقال دهید به </string>
 
     <string name="st_bio">بیو</string>
-    <string name="st_des_bio">شما می توانید توضیح مختصری دربارهٔ خود در پروفایل وارد کنید. لازم به ذکر است هر کاربر با ورود به پروفایل شما این متن را خواهد دید.</string>
-    <string name="st_Report">گزارش تخلف</string>
     <string name="st_Spam">اسپم</string>
     <string name="st_Violence">محتوای خشونت آمیز</string>
     <string name="st_Pornography">محتوای پورنوگرافی</string>
     <string name="st_Other">سایر موارد</string>
     <string name="st_Abuse">محتوای توهین آمیز و آزاردهنده</string>
     <string name="st_FakeAccount">حساب کاربری جعلی</string>
-    <string name="st_limit_bio">کاراکترهای استفاده شده بیش از حد مجاز است. تنها 70 کاراکتر در این قسمت قابل استفاده اند</string>
     <string name="st_checkbox_delete">حذف برای</string>
     <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
     <string name="st_send_report">گزارش تخلف با موفقیت ارسال شد.</string>
@@ -1165,7 +955,6 @@
     <string name="zighade">ذیقعده</string>
     <string name="zihaje">ذیحجه</string>
 
-    <string name="st_multi_tab">چند نواری</string>
     <string name="st_dark_theme">زمینه تیره</string>
     <string name="dont_ask_again">فهمیدم</string>
     <string name="attention">توجه</string>
@@ -1174,26 +963,30 @@
     <string name="open_default_player">ویدئو را با پخش کننده پیشفرض باز کن</string>
     <string name="show_channel_vote">واکنش در کانال</string>
     <string name="verify_channel">کانال تأیید شده</string>
-    <string name="verify_user">کاربر تأیید شده</string>
     <string name="save_data_in_sd_card">ذخیره اطلاعات در کارت جانبی</string>
     <string name="are_you_sure">شما مطمئن هستید ؟</string>
+    <string name="are_you_sure_request">آیا از ثبت درخواست خود اطمینان دارید؟</string>
+    <string name="are_you_sure_edit_contact">از ویرایش کاربر مطمئن هستید ؟</string>
     <string name="change_storage_place">تغییر مکان ذخیره سازی</string>
     <string name="other_files">سایر فایل ها</string>
-    <string name="title_import_contact_limit">در حال وارد کردن لیست تماس</string>
-    <string name="content_import_contact_limit">متاسفانه تعداد مخاطبین شما بیش از حد مجاز میباشد. نمیتوانیم با سرور بررسی کنیم ، لطفا مخاطبین را در حد معقول ذخیره کنید</string>
+    <string name="title_import_contact_limit">اخطار: در حال بارگزاری لیست مخاطبین</string>
+    <string name="content_import_contact_limit">متاسفانه تعداد مخاطبین شما بیش از حد مجاز میباشد. تعداد مجاز بارگزاری شد.</string>
     <string name="another_room">اتاق دیگر</string>
 
     <string name="filter_cancel_content">آیا از تغییرات انجام داده منصرف شدید ؟</string>
     <string name="lbl_brightness">روشنایی</string>
+    <string name="clr_adjust">تنظیم رنگ</string>
+    <string name="dsgn_on_photo_title">طراحی</string>
+    <string name="lbl_magnify">بزرگنمایی</string>
     <string name="lbl_contrast">کنتراست</string>
     <string name="lbl_saturation">اشباع</string>
     <string name="tab_filters">فیلتر رنگ</string>
+    <string name="filter">فیلتر</string>
     <string name="tab_edit">ویرایش</string>
     <string name="can_not_open_file">این فایل باز نمی شود</string>
     <string name="st_24_Clock">زمان ۲۴ ساعته</string>
     <string name="pin_messages_content" formatted="false">"میخواهید این پیام را %s کنید؟"</string>
     <string name="unpin">غیرسنجاق</string>
-    <string name="pin_message">سنجاق</string>
     <string name="pined_message">سنجاق</string>
     <string name="all_member">همه اعضا</string>
     <string name="this_page">همین صفحه</string>
@@ -1203,55 +996,41 @@
     <string name="to_theme">تا:</string>
     <string name="automatic">خودکار</string>
     <string name="automatic_description_theme">حالت شب از 19 تا 8 با انتخاب حالت خودکار فعال شد</string>
-    <string name="setting_dark_theme">تنظیمات پوسته تاریک</string>
     <string name="Select_Time">انتخاب زمان</string>
     <string name="financial_services">خدمات مالی</string>
-    <string name="install_app">نصب برنامه</string>
-    <string name="text_top">برای استفاده از خدمات :کارت به کارت، خرید بلیط اتوبوس ، خرید شارژ، پرداخت قبوض، خرید بسته اینترنتی و سایر خدمات پرداخت، اپلیکیشن تاپ را نصب نمایید.</string>
-    <string name="text_paygear">پیگیر ، کیف پول همراه شما برداشت و واریز آنی وجه ، پرداخت هدیه ، خرید از فروشگاه ها و پرداخت کرایه تاکسی.</string>
     <string name="customization">سفارشی سازی</string>
     <string name="Apply_colors_to_customize">اعمال رنگ ها برای سفارشی سازی</string>
     <string name="payment">پرداخت</string>
     <string name="buy_charge">خرید شارژ تلفن همراه</string>
     <string name="pay_bills">پرداخت قبوض</string>
-    <string name="pay_bills_crime">پرداخت قبوض  راهنمایی و رانندگی</string>
+    <string name="pay_bills_crime">پرداخت قبوض راهنمایی و رانندگی</string>
     <string name="barcode_reader">بار کد خوان</string>
     <string name="billing_id">شناسه قبض</string>
-    <string name="enter">وارد کنید</string>
     <string name="payment_code">شناسه پرداخت</string>
     <string name="amount">مبلغ(ریال)</string>
-    <string name="buy">خرید</string>
-    <string name="select">انتخاب کنید</string>
     <string name="hamrahe_aval">همراه اول</string>
     <string name="irancell">ایرانسل</string>
     <string name="ritel">رایتل</string>
     <string name="normal_charge">شارژ معمولی</string>
+    <string name="youth_charge">شارژ جوانان</string>
+    <string name="ladies_charge">شارژ بانوان</string>
     <string name="amazing">شگفت انگیز</string>
-    <string name="wimax_charging">شارژ وایمکس</string>
-    <string name="permanently_charge">شارژ سیم کارت دائمی</string>
+    <string name="Exciting">شور انگیز</string>
 
     <string name="get_gifts">دریافت هدیه</string>
     <string name="congratulations">تبریک</string>
     <string name="unsuccessful">موفقیت آمیز نبود</string>
-    <string name="disabled_qr_voucher">متاسفانه این Qr قابل استفاده نیست یا قبلا استفاده شده است</string>
+    <string name="disabled_qr_voucher">متاسفانه این کیوآر قابل استفاده نیست یا قبلا استفاده شده است</string>
 
-    <string name="charge_1"> 10.000 ریالی</string>
-    <string name="charge_2"> 20.000 ریالی</string>
-    <string name="charge_5"> 50.000 ریالی</string>
-    <string name="charge_10"> 100.000 ریالی</string>
-    <string name="charge_20"> 200.000 ریالی</string>
-
-    <string name="charge_1_ir">10.000 ریالی +  9%  ارزش افزوده = 10.900 ریال</string>
-    <string name="charge_2_ir">20.000 ریالی +  9%  ارزش افزوده = 21.180 ریال</string>
-    <string name="charge_5_ir">50.000 ریالی +  9%  ارزش افزوده = 54.500 ریال</string>
-    <string name="charge_10_ir">100.000 ریالی +  9%  ارزش افزوده = 109.000 ریال</string>
-    <string name="charge_20_ir">200.000 ریالی +  9%  ارزش افزوده = 218.000 ریال</string>
+    <string name="charge_5"> 50.000 ریال</string>
+    <string name="charge_10"> 100.000 ریال</string>
+    <string name="charge_20"> 200.000 ریال</string>
+    <string name="charge_50"> 500.000 ریال</string>
+    <string name="charge_100"> 1.000.000 ریال</string>
 
     <string name="biling_id_not_valid">شناسه قبض نامعتبر است</string>
     <string name="pay_id_is_not_valid">شناسه پرداخت نامعتبر است</string>
     <string name="charge_type">نوع شارژ</string>
-    <string name="operator">اپراتور</string>
-    <string name="trabord">ترابرد</string>
     <string name="time_out_error">خطای زمان پردازش</string>
     <string name="connection_error">خطای اتصال</string>
     <string name="server_error">خطای سرور</string>
@@ -1261,16 +1040,14 @@
     <string name="phone_number_is_not_valid">شماره تلفن معتبر نیست</string>
     <string name="please_select_operator">اپراتور را انتخاب کنید</string>
     <string name="wallet">کیف پول</string>
-    <string name="loading_wallet_agreement"> در حال دریافت اطلاعات …</string>
-    <string name="i_agree_with_the_terms">با شرایط موافقم</string>
+    <string name="i_agree_with_the_terms">\tبا شرایط موافقم</string>
     <string name="accept_the_terms">پذیرش شرایط</string>
     <string name="wallet_agrement">توافق کیف پول</string>
     <string name="SendMoney">ارسال پول</string>
-    <string name="transfer_amount_hint">مبلغ واریزی را وارد کنید:</string>
+    <string name="transfer_amount_hint">مبلغ واریزی را وارد کنید</string>
     <string name="amount_in_rial">مبلغ به ریال:</string>
     <string name="pay">پرداخت</string>
-    <string name="transfer_to_dialog">انتقال به:</string>
-    <string name="am_money">پول</string>
+    <string name="transfer_to_dialog">انتقال به:%s</string>
     <string name="trace_number">کد پیگیری</string>
     <string name="amount_2">مبلغ:</string>
     <string name="payment_canceled">پرداخت لغو شد</string>
@@ -1278,9 +1055,7 @@
     <string name="bills_inquiry">استعلام قبوض همراه اول و تلفن ثابت</string>
     <string name="bills_inquiry_mci">استعلام قبوض همراه اول</string>
     <string name="bills_inquiry_telecom">استعلام قبوض تلفن ثابت</string>
-    <string name="bills_inquiry_title">استعلام قبوض</string>
     <string name="bill_type">نوع قبض</string>
-    <string name="telecom">تلفن ثابت</string>
     <string name="phone">شماره تلفن</string>
     <string name="area_code">پیش شماره</string>
     <string name="inquiry">استعلام</string>
@@ -1292,18 +1067,17 @@
     <string name="responsible_for_all_financial_services">مسئولیت کلیه خدمات مالی بر عهده</string>
     <string name="parsian_e_commerce_company_top">شرکت تجارت الکترونیک پارسیان ( تاپ )</string>
     <string name="is_empty">می باشد</string>
+    <string name="empty_error_message"></string>
     <string name="customer_response_center_021_2318">مرکز پاسخگویی مشتریان  :  2318-021 </string>
     <string name="ex_mobile_phone">مثال : 09123456789</string>
     <string name="ex_area">مثال : 021</string>
     <string name="ex_phone">مثال : 44567899</string>
     <string name="sync_contact">همگام سازی مخاطبین</string>
-    <string name="satellite_view">حالت ماهواره</string>
-    <string name="default_view">حالت پیش فرض</string>
     <string name="send_location_text">ارسال موقعیت </string>
     <string name="map_distance">فاصله به متر</string>
     <string name="get_location_data">در حال دریافت اطلاعات</string>
     <string name="calculation">در حال محاسبه.. </string>
-    <string name="send">ارسال شده</string>
+    <string name="send">ارسال</string>
     <string name="not_success">ناموفق</string>
     <string name="not_success_2">"پرداخت ناموفق بود"</string>
     <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
@@ -1312,44 +1086,15 @@
     <string name="wallet_from">از</string>
     <string name="wallet_to">به</string>
     <string name="wallet_amount">مبلغ</string>
-    <string name="wallet_trace">کد پیگیری</string>
-    <string name="wallet_invoice">فاکتور</string>
-    <string name="wallet_data">تاریخ</string>
-    <string name="wallet_desc">---توضیحات پرداخت---</string>
-    <string name="wallet_toman">تومان</string>
     <string name="wallet_Your_credit">اعتبار شما: </string>
-    <string name="wallet_Reial"> ریال </string>
+    <string name="wallet_Reial">%d ریال </string>
     <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
 
-    <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
     <string name="USER_DELETE_MAX_TRY_LOCK">USER DELETE MAX TRY </string>
-    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">USER PROFILE UPDATE USERNAME UPDATE</string>
+    <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">کاربر گرامی شما به تازگی بروزرسانی کرده اید لطفا منتظر بمانید</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
-    <string name="CHANNEL_UPDATE_USERNAME_UPDATE_LOCK">CHANNEL UPDATE USERNAME UPDATE</string>
-    <string name="E_373">GROUP_REVOKE_LINK_BAD_PAYLOAD</string>
-    <string name="E_374">GROUP_REVOKE_LINK_INTERNAL_SERVER_ERROR</string>
-    <string name="E_375">GROUP_REVOKE_LINK_FORBIDDEN</string>
-    <string name="E_453">CHANNEL_CHECK_USERNAME_BAD_PAYLOAD</string>
-    <string name="E_454">CHANNEL_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
-    <string name="E_455">CHANNEL_UPDATE_USERNAME_BAD_PAYLOAD</string>
-    <string name="E_456">CHANNEL_UPDATE_USERNAME_INTERNAL_SERVER_ERROR</string>
-    <string name="E_457">CHANNEL_UPDATE_USERNAME_UPDATE_LOCK</string>
-    <string name="E_458">CHANNEL_UPDATE_USERNAME_FORBIDDEN</string>
-    <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
-    <string name="E_10109">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
-    <string name="E_10110">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
-    <string name="E_10111">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_EXPIRED_TOKEN</string>
-    <string name="E_10112">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_NO_PASSWORD</string>
-    <string name="E_10113">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INVALID_TOKEN</string>
-    <string name="E_10114">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_BAD_PAYLOAD</string>
-    <string name="E_10115">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
-    <string name="E_10116">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
-    <string name="E_10117">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_NO_PASSWORD</string>
-    <string name="E_10118"> USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INVALID_PASSWORD</string>
-    <string name="E_10119">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_CONFIRMED_BEFORE</string>
-    <string name="E_163">USER_PROFILE_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
     <string name="channel_name_notification">iGap Notification</string>
     <string name="keep_media_6month">6 Month</string>
     <string name="minutes_ago">minutes ago</string>
@@ -1373,40 +1118,33 @@
     <string name="new_pattern_passCode">ایجاد الگوی جدید</string>
     <string name="repeat_pattern_passCode">تکرار الگو</string>
     <string name="repeat_pattern_pattern">رمز عبور با الگو</string>
-    <string name="solid_colors">رنگ های پس زمین</string>
+    <string name="solid_colors">رنگ های پس زمینه</string>
     <string name="wallpapers">تصاویر پس زمینه</string>
 
-    <string name="verify_register_sms">SMS</string>
-    <string name="verify_register_call">Call</string>
-    <string name="way_receive_register_code">Way to receive code: </string>
-    <string name="reply_label">Answer</string>
+    <string name="verify_register_sms">ارسال پیامک</string>
+    <string name="verify_register_call">تماس</string>
 
     <string name="separate_notifications">اعلانات جداگانه</string>
     <string name="mark_as_unread">خوانده شده</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
-    <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
     <string name="start">شروع</string>
     <string name="bot">ربات</string>
     <string name="back_to_menu">بازگشت به منوی اصلی</string>
-    <string name="empty_text_dr_bot">به دستیار هوشمند آی‌گپ خوش آمدید!</string>
+    <string name="empty_text_dr_bot">به دستیار هوشمند آیگپ خوش آمدید!</string>
     <string name="deprecated">نسخه فعلی منقضی شده است لطفا برای استفاده به روز رسانی نمایید</string>
     <string name="new_version_avilable">نسخه جدید موجود است</string>
     <string name="new_version_alert">هشدار</string>
     <string name="ignore">نادیده گرفتن</string>
     <string name="hashtag">هشتگ</string>
     <string name="igap_update">بروزرسانی</string>
-    <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که ای گپ در پس زمینه فعال نیست ای گپ را از منو انتخاب و فعال نمایید</string>
+    <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که آیگپ در پس زمینه فعال نیست آیگپ را از منو انتخاب و فعال نمایید</string>
     <string name="dont_show_again"> مجددا نمایش نده</string>
-    <string name="invitation_message">سلام!
-از طریق لینک زیر میتونی تو آی‌گپ عضو بشی، منتظرتیم
-     https://www.igap.net
-    شناسه دعوت کننده هست :</string>
+    <string name="invitation_message">سلام!از طریق لینک زیر میتونی تو آیگپ عضو بشی، منتظرتیم  http://d.igap.net/invite \nشماره معرف :</string>
 
-    <string name="namma_per_uh">FileLister</string>
     <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>
     <string name="This_folder_already_exists">"این پوشه در حال حاضر وجود دارد لطفا نام دیگری انتخاب کنید"</string>
-    <string name="Select_directory">یک دایرکتوری را انتخاب کنید</string>
+    <string name="Select_directory">یک پوشه را انتخاب کنید</string>
     <string name="Select_Video_file">یک فایل ویدیویی را انتخاب کنید</string>
     <string name="Select_Image_file">> یک فایل تصویر را انتخاب کنید</string>
     <string name="Select_Audio_file">فایل صوتی را انتخاب کنید</string>
@@ -1414,7 +1152,6 @@
     <string name="Default_Dir">مسیر پیش فرض</string>
     <string name="Select">انتخاب</string>
     <string name="Create_new_Folder_here">در اینجا یک پوشه جدید ایجاد کنید</string>
-    <string name="Powered_by_iGap">طراحی شده توسط آیگپ</string>
     <string name="on_hold">call on hold...</string>
     <string name="switchTo">switch To :</string>
     <string name="stop">توقف</string>
@@ -1423,98 +1160,57 @@
     <string name="access_phone_number">آیا از ارسال شماره تلفن خود اطمینان دارید ؟ </string>
     <string name="access_location"> آیا از ارسال مکان خود اطمینان دارید؟ </string>
     <string name="sticker_message">پیام استیکر</string>
-    <string name="Sticker_added_successfully">استیکر با موفقیت اضافه شد</string>
-    <string name="Please_select_an_option"> لطفا یک گزینه را انتخاب کنید</string>
 
 
     <string name="sticker">استیکر</string>
     <string name="add_sticker">اضافه کردن استیکر</string>
+    <string name="add_sticker_with_size">اضافه کردن %s استیکر</string>
     <string name="remove_sticker">حذف استیکر</string>
+    <string name="remove_sticker_with_size">حذف %s استیکر</string>
     <string name="remove_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را حذف کنید؟</string>
-    <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
-    <string name="Add">اضافه</string>
+    <string name="Add">افزودن</string>
     <string name="Remove">حذف</string>
-
-    <string name="try_later">چند ثانیه بعد امتحان کنید</string>
-    <string name="representer">ثبت معرف</string>
-    <string name="representer_code">شماره تلفن همراه معرف خود را  وارد کنید
-</string>
 
     <string name="unknown_type">این نوع کارت پشتیبانی نمی شود.</string>
     <string name="order_history">مشاهده سوابق</string>
-    <string name="your_point">امتیاز شما:</string>
 
     <string name="dialog_ok">باشه</string>
     <string name="error_submit_qr_code">خطایی با درخواست شما رخ داده است!</string>
 
     <string name="not_exist_activities">لیست سوابق شما خالی است.</string>
 
-    <string name="ivand_profile_title">امتیاز من</string>
-
     <string name="ivand_activities_title">سوابق امتیاز</string>
     <string name="scan_barcode">اسکن بارکد</string>
 
-    <string name="st_ivand">باشگاه آیگپ</string>
-    <string name="st_ivand_text_setting">امتیاز شما:</string>
     <string name="E_10183">کد وارد شده نا معتبر می باشد</string>
 
 
     <string name="share_link_item_dialog">اشتراک لینک</string>
     <string name="not_found_message">این پیام وجود ندارد.</string>
     <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
+    <string name="secret_chat">گفتگوی خصوصی</string>
     <string name="new_message_notif">پیام جدید</string>
-    <string name="card_to_card">کارت به کارت</string>
-    <string name="your_device_is_root">متاسفانه دستگاه شما روت است.</string>
+    <string name="card_to_card">درخواست کارت به کارت</string>
 
 
     <string name="rial">ریال</string>
     <string name="toman">تومان</string>
 
-    <string name="verify_fragment_hint">ما از طریق پیامک برای شما یک کد فعالسازی ارسال کرده‌ایم، در صورت عدم دریافت کد بعد از ۱ دقیقه دوباره درخواست دهید.</string>
-    <string name="new_user_pass_fragment_hint">برای حساب کیف پول خود یک رمز عبور تعیین کنید، شما بعدا می‌توانید از تنظیمات رمز خود را تغییر دهید.</string>
-    <string name="code_resend_text">* ثانیه تا ارسال دوباره پیامک</string>
     <string name="resend_code">ارسال دوباره پیامک</string>
-    <string name="new_otp_requested">درخواست کد جدید ارسال شد</string>
-    <string name="request_again">درخواست مجدد</string>
-    <string name="sending_code_to_x">در حال ارسال پیامک به شماره\n*</string>
-    <string name="select_your_city">شهر خود را انتخاب کنید</string>
-    <string name="enter_username">شناسه کاربری خود را وارد کنید</string>
-    <string name="enter_code_correctly">کد ارسال شده را کامل وارد کنید</string>
-    <string name="enter_mobile_correctly">شماره موبایل خود را کامل وارد کنید</string>
-    <string name="enter_your_mobile">شماره موبایل خود را وارد کنید</string>
-    <string name="enter_your_mobile_without_zero">شماره موبایل خود را بدون صفر وارد کنید</string>
-    <string name="enter_your_activation_code">کد فعال‌سازی خود را وارد کنید</string>
     <string name="country_code_not_valid">کد کشور صحیح نیست</string>
-    <string name="four_digits_activation_code">کد فعال‌سازی ۴ رقمی</string>
-    <string name="confirm_password">تکرار رمز عبور</string>
-    <string name="enter_your_confirm_password">تکرار رمز عبور خود را وارد کنید</string>
     <string name="enter_your_password">رمز عبور خود را وارد کنید</string>
-    <string name="select_your_password">رمز عبور خود را انتخاب کنید</string>
-    <string name="enter_your_referral_code">کد معرف خود را وارد کنید</string>
-    <string name="select_your_province">استان خود را انتخاب کنید</string>
     <string name="referral_code">کد معرف</string>
-    <string name="province_name">نام استان</string>
-    <string name="account_password">رمز حساب کاربری</string>
 
-    <string name="full_name">نام و نام خانوادگی</string>
     <string name="user_name">نام کاربری</string>
-    <string name="birth_date">تاریخ تولد</string>
     <string name="email">ایمیل</string>
-    <string name="province">استان</string>
     <string name="edit_profile_hint">این اطلاعات به صورت رمزنگاری شده روی سرورهای امن کیف پول ذخیره می‌شوند و فقط در صورت نیاز با مجوز شما به سایر نرم افزارهای طرف سوم انتقال داده خواهد شد. کاربرد این اطلاعات به منظور راحتی فرآیندهای خرید می‌باشد.</string>
-    <string name="username">شناسه کاربری</string>
-    <string name="select_city">انتخاب شهر</string>
+    <string name="username_copied">شناسه کاربری کپی شد.</string>
     <string name="select_province">انتخاب استان</string>
     <string name="mobile_number">شماره موبایل</string>
     <string name="paygear_user">کاربر کیف پول</string>
-    <string name="authorization_not_valid">مجوز دسترسی معتبر نیست</string>
-    <string name="already_read">قبلا خواندم</string>
     <string name="login">ورود</string>
     <string name="next">بعدی</string>
     <string name="back">بازگشت</string>
-    <string name="code">کد</string>
-    <string name="never_mind">بی خیال</string>
-    <string name="not_now">الان نه!</string>
 
     <string name="no_item">موردی یافت نشد</string>
     <string name="retry">تلاش مجدد</string>
@@ -1527,18 +1223,13 @@
     <string name="enter_info_completely">اطلاعات را به صورت کامل وارد کنید</string>
     <string name="source_card">کارت مبدا</string>
     <string name="destination_card">کارت مقصد</string>
-    <string name="destination_card_number">شماره کارت مقصد</string>
     <string name="destination_sheba_number">شماره شبای مقصد</string>
     <string name="trace_no">کد رهگیری</string>
     <string name="reference_code">شماره مرجع</string>
-    <string name="has">دارد</string>
-    <string name="not_has">ندارد</string>
-    <string name="see_details">مشاهده جزییات</string>
     <string name="request_time">زمان درخواست</string>
     <string name="settlement_time">زمان تسویه</string>
     <string name="requested_amount">مبلغ درخواستی</string>
     <string name="requested_amount_rial">مبلغ درخواستی(ریال)</string>
-    <string name="settlement_wage">کارمزد تسویه</string>
     <string name="deposits">واریزی</string>
     <string name="wage">کارمزد</string>
     <string name="bank">بانک</string>
@@ -1549,14 +1240,11 @@
     <string name="service_price">حق سرویس</string>
     <string name="tax">مالیات</string>
     <string name="delivery_price">هزینه ارسال</string>
-    <string name="payable_price_rial">قابل پرداخت (ریال)</string>
     <string name="final_price_rial">مبلغ نهایی (ریال)</string>
     <string name="payable_price">مبلغ پرداختی</string>
-    <string name="withdraw_price">مبلغ برداشت</string>
     <string name="qr_not_detected">نماد قابل شناسایی نیست</string>
-    <string name="payment_price_rial">مبلغ پرداختی به ریال</string>
     <string name="price_rial">مبلغ (ریال)</string>
-    <string name="amount_must_be_greater_1000">مبلغ باید بیشتر از 1000 ریال باشد</string>
+    <string name="amount_must_be_greater_10000">مبلغ باید بیشتر از 10000 ریال باشد</string>
     <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
     <string name="payment_history">تاریخچه تراکنش‌ها</string>
     <string name="set_card_pin">تعریف رمز امنیتی</string>
@@ -1566,17 +1254,13 @@
     <string name="pay_to">پرداخت به</string>
     <string name="pay_with_raad_card_to">پرداخت با کیف پولکارت به</string>
     <string name="pay_charge_for_raad_card_to">پرداخت شارژ کیف پولکارت به</string>
-    <string name="charge_paygear_card">شارژ کیف پولکارت</string>
     <string name="purchase_club_plan_from">خرید طرح باشگاه از</string>
     <string name="receive_from">دریافت از</string>
     <string name="receive_sale_share_from">دریافت سهم فروش از</string>
     <string name="receive_charge_for_raad_card_from">دریافت شارژ کیف پولکارت از</string>
     <string name="settled">تسویه حساب شده</string>
     <string name="settled_pending">در انتظار تسویه حساب</string>
-    <string name="settlement">تسویه</string>
     <string name="payment_pending">در انتظار پرداخت</string>
-
-    <string name="taxi">تاکسی</string>
 
     <string name="successful_payment">پرداخت موفق</string>
     <string name="unsuccessful_payment">پرداخت ناموفق</string>
@@ -1591,7 +1275,6 @@
     <string name="how_to_get_sheba">نحوه اطلاع از شماره شبا</string>
     <string name="my_qr_hint">کد تصویری خود را به دیگران نشان دهید تا آن را اسکن کنند و به شما پول بدهند!</string>
     <string name="my_qr">کیوآر من</string>
-    <string name="credit">اعتباری</string>
 
     <string name="card_16_digits">شماره ۱۶ رقمی کارت</string>
     <string name="sheba_20_digits">شماره ۲۴ رقمی شبا</string>
@@ -1606,10 +1289,7 @@
     <string name="cash_in_paygear">شارژ حساب کیف پول</string>
     <string name="cash_out_paygear">برداشت از کیف پول</string>
     <string name="cashable">قابل برداشت</string>
-    <string name="not_cashable">غیر قابل برداشت</string>
     <string name="gift">هدیه</string>
-    <string name="withdraw">برداشت</string>
-    <string name="cards">کارت‌ها</string>
     <string name="my_cards">کارت‌های من</string>
     <string name="cashout_today_limit">سقف برداشت امروز</string>
     <string name="cash_out_request_done">درخواست تسویه انجام شد</string>
@@ -1628,11 +1308,8 @@
     <string name="edit">ویرایش</string>
     <string name="camera">دوربین</string>
     <string name="gallery">گالری</string>
-    <string name="delete_image">حذف تصویر</string>
     <string name="click_here_for_adding_card">برای افزودن کارت اینجا را لمس کنید</string>
 
-    <string name="x_people">* نفر</string>
-    <string name="enter_receiver_code">کد پذیرنده را وارد کنید</string>
     <string name="receiver_code">کد پذیرنده</string>
     <string name="pay_with_price_x">پرداخت به مبلغ\n*</string>
 
@@ -1656,7 +1333,6 @@
     <string name="enter_card_number">شماره کارت را به طور کامل وارد کنید</string>
     <string name="enter_cvv2">کد cvv2 کارت خود را وارد کنید</string>
     <string name="enter_your_second_pin">رمز دوم کارت خود را وارد نمایید</string>
-    <string name="enter_expire_date">تاریخ انقضای کارت خود را وارد کنید</string>
     <string name="enter_expire_date_year">سال انقضای کارت خود را وارد کنید</string>
     <string name="enter_expire_date_month">ماه انقضای کارت خود را وارد کنید</string>
     <string name="enter_expire_date_month_correctly">ماه انقضای کارت خود را به درستی وارد کنید</string>
@@ -1665,37 +1341,11 @@
     <string name="enter_cash_out_price">مبلغ برداشت را مشخص نمایید</string>
     <string name="enter_your_card_number">شماره کارت خود را وارد کنید</string>
     <string name="enter_your_sheba_number">شماره شبا خود را وارد کنید</string>
-    <string name="enter_your_province">استان خود را مشخص کنید</string>
 
 
     <string name="language">زبان برنامه</string>
-    <string name="privacy_policy">حریم خصوصی</string>
-    <string name="security_privacy_policy">امنیت و حریم خصوصی</string>
     <string name="app_version">نسخه برنامه</string>
-    <string name="about_app">درباره برنامه</string>
-    <string name="terms_condition">قوانین و مقررات</string>
-    <string name="terms_and_conditions">قوانین و نحوه استفاده</string>
-    <string name="contact_us">تماس با ما</string>
-    <string name="faq">سوالات متداول</string>
-    <string name="logout_from_account">خروج از حساب کاربری</string>
-    <string name="logout_prompt">آیا میخواهید از حساب خود خارج شوید؟</string>
     <string name="logout">خروج</string>
-
-    <array name="onboard_titles">
-        <item>کیف پول موبایلی</item>
-        <item>خرید با QR</item>
-    </array>
-
-    <array name="onboard_descriptions">
-        <item>کیف پول یه حساب مجازی براتون می‌سازه که به شماره موبایل وصل می‌شه و دیگه لازم نیست کیف
-            پول یا پول نقد یا کارت‌بانکی با خودتون ببرید.
-        </item>
-        <item>توی مغازه‌ها، توی تاکسی یا هر جایی که پذیرنده کیف پول هستند می‌تونید از دکمه اسکن
-            استفاده کنید و خریدتونو لذت‌بخش‌تر کنید.
-        </item>
-    </array>
-
-    <string name="top_company">شرکت تجارت الکترونیک پارسیان</string>
 
     <string name="bank_parsian">بانک پارسیان</string>
     <string name="bank_saman">بانک سامان</string>
@@ -1735,9 +1385,6 @@
     <string name="paygear_card">کیف پول</string>
     <string name="set_password">ثبت رمز عبور</string>
     <string name="change_password">تغییر رمز عبور کیف پول</string>
-    <string name="text_forgot">رمز عبور کیف پول برای شما ارسال شد.
-( رمز ارسال شده بعد از ۲ دقیقه منقضی می شود لطفاً بعد از دریافت مجدد آن را تغییر دهید )</string>
-    <string name="text_forgot_title">ارسال مجدد رمز</string>
     <string name="Forgot_Passwords">بازیابی رمز عبور کیف پول</string>
     <string name="cashier">مالی</string>
     <string name="admin">ادمین</string>
@@ -1774,8 +1421,48 @@
     <string name="purchase">خرید</string>
     <string name="remaining_balance">موجودی باقیمانده</string>
     <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
-    <string name="Recently_Sticker">به تازگی</string>
-    <string name="Favorite_Sticker">مورد علاقه</string>
+    <string name="Favorite_Sticker">استیکر های من</string>
+    <string name="item_selected"> مورد انتخاب شده</string>
+
+    <string name="terms_and_condition">%s را می پذیرم</string>
+    <string name="terms_and_condition_clickable">قوانین و مقررات</string>
+    <string name="new_channel_hint">شما می توانید توضیحات اختیاری برای کانال خود را ارائه دهید.</string>
+    <string name="new_group_hint">شما می توانید یک توضیح اختیاری برای گروه خود ارائه دهید.</string>
+    <string name="permanent_link">لینک دائمی</string>
+    <string name="change_language_title">تغییر زبان برنامه</string>
+    <string name="terms_condition_title">قوانین و مقررات</string>
+    <string name="welcome_title">به آیگپ خوش آمدید</string>
+    <string name="add_modereator">افزودن ناظر</string>
+    <string name="add_admin">افزودن مدیر</string>
+    <string name="subscribers_title">مشترک</string>
+    <string name="invite_link_title">لینک دعوت</string>
+    <string name="add_to_home_screen">افزودن به صفحه اصلی</string>
+    <string name="channel_type">نوع کانال</string>
+    <string name="sign_message_title">امضا پیام ها</string>
+    <string name="payment_continue_title">ادامه</string>
+    <string name="bills">قبض و جریمه</string>
+    <string name="charge_amount">مبلغ شارژ(ریال)</string>
+    <string name="buy_internet_package_title">خرید بسته اینترنتی</string>
+    <string name="charity_title">نیکوکاری</string>
+    <string name="disk_and_network_usage">استفاده از حافظه و شبکه</string>
+    <string name="cache">حافظه ی محلی</string>
+    <string name="auto_play_media">پخش خودکار محتوا</string>
+    <string name="auto_download_media">دانلودخودکار محتوا</string>
+    <string name="chat_setting">تنظیمات گفتگو</string>
+    <string name="warning">اخطار</string>
+    <string name="accept_terms_and_condition_error_message">فراموش كردین شرایط و ضوابط را بپذیرید</string>
+    <string name="new_channels_rules">اگر یک پیوند دائمی را تنظیم کنید، افراد دیگر قادر به یافتن و پیوستن به کانال شما خواهند بود.\nشما می توانید از a-z، 0-9 و زیرخط استفاده کنید.\nحداقل طول 5 حرف است.</string>
+
+    <string name="mark_as_several">انتخاب چندتایی</string>
+    <string name="chat_setting_title">تنظیمات صفحه گفتگو</string>
+    <string name="add_new_subscriber">افزودن دنبال کننده</string>
+    <string name="cloud">فضای ابری</string>
+    <string name="score">امتیاز</string>
+    <string name="Credit">اعتبار</string>
+    <string name="make_as_read">خوانده شده</string>
+    <string name="read_all">همه خوانده شده</string>
+    <string name="financial_report">گزارش مالی</string>
+    <string name="fag">سوالات متداول</string>
 
     <string name="wallet_message">پیام کیف پول</string>
     <string name="unknown_message">این پیام پشتیبانی نمی شود!</string>
@@ -1783,7 +1470,6 @@
     <string name="payment_message">پیام پرداخت</string>
 
     <string name="available_merchants">مشاهده فروشگاه های پذیرنده این کارت</string>
-    <string name="available_merchants_title">پذیرندگان باشگاه</string>
     <string name="balance_title">موجودی : </string>
 
     <string name="WALLET_TRANSFER_MONEY">انتقال وجه کیف پول</string>
@@ -1795,16 +1481,355 @@
     <string name="cardToCardInvoiceNumber">شماره صورتحساب</string>
     <string name="cardToCardTrace">شماره پیگیری</string>
     <string name="WalletRrnNumber">شماره مرجع</string>
-    <string name="cardToCardRequest">متن درخواست کارت به کارت خود را بنویسید.</string>
-    <string name="amCardToCardIconText">درخواست انتقال</string>
     <string name="cardToCardBtnText">کارت به کارت</string>
     <string name="crad_to_card_dest_name">نام دارنده حساب</string>
-    <string name="location_dialog_message">آیا می خواهید از موقیعت مکانی شما استفاده شود؟</string>
+    <string name="groups_in_common">گروه های مشترک</string>
+    <string name="register_with_barcode_scan">ورود با اسکن بارکد</string>
+    <string name="one_number">۱</string>
+    <string name="two_number">۲</string>
+    <string name="three_number">۳</string>
+    <string name="four_number">۴</string>
+    <string name="five_number">۵</string>
+    <string name="six_number">۶</string>
+    <string name="seven_number">۷</string>
+    <string name="eight_number">۸</string>
+    <string name="nine_number">۹</string>
+    <string name="star_number">*</string>
+    <string name="zero_number">۰</string>
+    <string name="administrators_title">مدیران</string>
+    <string name="moderators_title">ناظران</string>
+    <string name="view_contact">نمایش مخاطب</string>
+    <string name="new_group_call">تماس گروهی جدید</string>
+    <string name="dial_number">صفحه تماس</string>
+    <string name="call">تماس</string>
+    <string name="Select_Country">انتخاب کشور</string>
+    <string name="enter_wallet_password">رمز کیف پول خود را وارد کنید</string>
+    <string name="videos">فیلم ها</string>
+    <string name="audios">صوت ها</string>
+    <string name="voices">پیغام های صوتی</string>
+    <string name="gifs">گیف ها</string>
+    <string name="files">فایل ها</string>
+    <string name="links">لینک ها</string>
+    <string name="size">اندازه</string>
+    <string name="copy_link_title">کپی لینک</string>
+    <string name="location_dialog_message">آیا می خواهید از موقعیت مکانی شما استفاده شود؟</string>
+    <string name="sign_channel_message_description">اسامی مدیران را به پیامهایی که ارسال کرده اید اضافه کنید.</string>
+    <string name="reaction_message_detail">با فعال کردن این گزینه امکان نظردهی اعضا کانال برای هر پست فعال میشود.</string>
+    <string name="chat_history_for_new_member_title">تاریخچه گپ برای اعضای جدید</string>
+    <string name="permissions_title">مجوزها</string>
+    <string name="all">همه</string>
+    <string name="missed">از دست رفته</string>
+    <string name="incoming">ورودی</string>
+    <string name="outgoing">خروجی</string>
+    <string name="no_item_selected">موردی انتخاب نشده است.</string>
+    <string name="subscriber">دنبال کنندگان</string>
+    <string name="point"> امتیاز</string>
+    <string name="rank">رتبه</string>
+    <string name="tablet_empty_chat_description">شروع کار\n به آیگپ خوش آمدید.همیشه می توانید عکس نمایه خود را تنظیم کرده و یا در بخش تنظیمات نام خود را تغییر دهید.</string>
+    <string name="make_call">ایجاد تماس</string>
+    <string name="create_chat">ایجاد گفتگو</string>
+    <string name="delete_all">حذف همه</string>
     <string name="maximum_poll">شما به تعداد مجاز رای خود را ثبت کرده اید.</string>
     <string name="before_try">قبلا رای خود را ثبت کرده اید.</string>
     <string name="poll_ok">رای شما با موفقیت ثبت شد</string>
+    <string name="igasht_title">آیگشت</string>
+    <string name="igasht_choose_province_title">شهر مورد نظر خود را انتخاب کنید</string>
+    <string name="igasht_buy_ticket_title">خرید بلیط</string>
+    <string name="detail_title">جزئیات</string>
+    <string name="igasht_addـexternal_visits">اضافه کردن بازدید کننده خارجی </string>
+    <string name="igasht_total_ticket_price">مبلغ نهایی: %d ریال</string>
+    <string name="igasht_add_ticket_error">لطفا بلیت خود را اضافه کنید.</string>
 
-    <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آی گپ هستید.</string>
+    <string name="str_frag_sync_contactTitle">به دوستان خود سلام کنید و بهشون بگید که در آیگپ هستید.</string>
     <string name="str_frag_sync_contactWelcome">به آیگپ خوش آمدید</string>
-    <string name="str_frag_sync_skipBtn">شروع برنامه</string>
+    <string name="str_frag_sync_skipBtn">شروع</string>
+    <string name="str_frag_sync_error">ارتباط با سرور برقرار نشد. لطفا دوباره تلاش کنید.</string>
+    <string name="money_request">درخواست کارت به کارت به:%s</string>
+    <string name="cardtocard_descriotion_error">توضیحات نمیتواند خالی باشد.</string>
+    <string name="cardtocard_amount_empty_error">مبلغ نمیتواند خالی باشد.</string>
+    <string name="cardtocard_morethan_error">حداقل مبلغ برای کارت به کارت ۱۰ هزار ریال میباشد.</string>
+    <string name="cardtocard_cartnumber_error">شماره کارت باید ۱۶ رقم باشد.</string>
+    <string name="cardtocard_cardnumber_error">شماره کارت مقصد نمیتواند خالی باشد.</string>
+    <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید</string>
+    <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید</string>
+    <string name="buy_internet_package_volume_type_title">حجم</string>
+    <string name="buy_internet_package_daily_filter_title">%.0f روز</string>
+    <string name="buy_internet_package_weekly_filter_title">%.0f هفته</string>
+    <string name="buy_internet_package_month_filter_title">%.0f ماه</string>
+    <string name="buy_internet_package_year_filter_title">%.0f سال</string>
+    <string name="buy_internet_package_volume_filter_gb_title">%.0f گیگابایت</string>
+    <string name="buy_internet_package_volume_filter_mb_title">%.0f مگابایت</string>
+    <string name="buy_internet_package_choose_title">انتخاب کنید</string>
+    <string name="beeptunes_purchase_song">آهنگ های خریداری شده</string>
+    <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
+    <string name="beeptunesـfavorite_song">آهنگ های مورد علاقه</string>
+    <string name="play_sound_in_chat">پخش صدای ارسال پیام در گفتگو</string>
+    <string name="charge_type_error_message">لطفا نوع شارژ را انتخاب کنید.</string>
+    <string name="charge_price_error_message">لطفا مبلغ شارژ را انتخاب کنید.</string>
+    <string name="no_channels_in_category">هیچ کانالی در این دسته بندی وجود ندارد!</string>
+    <string name="message_decline_write_new">نوشتن پیام جدید…</string>
+    <string name="message_decline_call_later">با شما تماس میگیرم.</string>
+    <string name="message_decline_Please_call_later">ممکن است بعدا تماس بگیرید؟</string>
+    <string name="message_decline_please_text_me">لطفا پیام بدهید.</string>
+    <string name="mpl_transaction_rrn">شماره مرجع</string>
+    <string name="mpl_transaction_trace">شماره پیگیری</string>
+    <string name="mpl_transaction_order_id">شماره سفارش</string>
+    <string name="pay_id">شناسه پرداخت</string>
+    <string name="mpl_transaction_sales">پرداخت اینترنتی</string>
+    <string name="mpl_transaction_topup">شارژ موبایل</string>
+    <string name="mpl_transaction_empty">اطلاعات موجود نمیباشد!</string>
+    <string name="mpl_transaction_card">کارت به کارت</string>
+    <string name="mpl_terminal_no">شماره پایانه</string>
+    <string name="mpl_transaction_merchent_name">نام پذیرنده</string>
+    <string name="mpl_do_you_want_save_receipt">آیا مایل به ذخیره ی رسید هستید؟</string>
+    <string name="mpl_transaction_nul">شما هیچ تراکنشی در ۵ روز گذشته ندارید!</string>
+    <string name="scan_barcode_to_enter_visit">جهت ورود و بازدید بارکد فوق را اسکن کنید</string>
+    <string name="Your_purchase_code">کد خرید شما %s</string>
+    <string name="igasht_count_title">تعداد</string>
+    <string name="igasht_service_title">سرویس</string>
+
+    <string name="kuknos_Restore_Error_Snack">باشه</string>
+    <string name="kuknos_tradeDialogDelete_btn">بله</string>
+    <string name="kuknos_setting_copySFailTitle">خطا</string>
+    <string name="kuknos_setting_copySFailBtn">باشه</string>
+    <string name="kuknos_setting_copySFailReadM">آیگپ اجازه خواندن فایل ها را ندارد.</string>
+    <string name="kuknos_setting_copySFailWriteM">آیگپ اجازه نوشتن فایل را ندارد.</string>
+    <string name="kuknos_setting_copySFailDir">آیگپ اجازه ایجاد مسیر مناسب را ندارد.</string>
+    <string name="of_from_total">از %s</string>
+    <string name="app_version_change_log">لیست تغییرات</string>
+    <string name="updated_version_title">نسخه شما به روز شده است</string>
+    <string name="check_update_title">کنترل بروزرسانی</string>
+    <string name="view_profile">مشاهده پروفایل</string>
+    <string name="there_is_no_car_available">شما خودرویی ثبت نکرده اید.</string>
+    <string name="add_car">افزودن خودرو</string>
+    <string name="cars_plaque">شماره پلاک خودرو</string>
+    <string name="car_plaque">شماره پلاک خودرو</string>
+    <string name="c_pay_title">خدمات خودرو</string>
+    <string name="add_plaque">ثبت پلاک</string>
+    <string name="from_first">از ابتدا</string>
+    <string name="national_code">کد ملی</string>
+    <string name="plaque_is_not_valid">پلاک وارد شده صحیح نیست.</string>
+    <string name="complete_correct">اطلاعات وارد شده صحیح نیست.</string>
+    <string name="plaque_added">پلاک افزوده شد.</string>
+    <string name="at_least_cpay_amout">مبلغ (حداقل 20 هزار ریال)</string>
+    <string name="cpay_title">سی پی</string>
+    <string name="link_not_valid">لینک نامعتبر</string>
+    <string name="popular_channel">کانال های جذاب</string>
+    <string name="already_registered">شما قبلا کد معرف ثبت کرده اید</string>
+    <string name="igasht_select_location_button_title">انتخاب محل</string>
+    <string name="igasht_selected_location_title">نقاط تفریحی استان %s</string>
+    <string name="igasht_location_found_count">%d مورد یافت شد</string>
+    <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
+    <string name="noDetail_textView">فاقد توضیحات</string>
+    <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
+    <string name="Restaurant_textView">رستوران</string>
+    <string name="parking_textView">پارکینگ</string>
+    <string name="wifi_textView">وای فای</string>
+    <string name="coffeeShop_textView">کافی شاپ</string>
+    <string name="wheelchair_textView">ویلچر</string>
+    <string name="prayerRoom_textView">نمازخانه</string>
+    <string name="edit_contact">ویرایش مخاطب</string>
+    <string name="default_theme_title">پیش فرض</string>
+    <string name="dark_theme_title">تاریک</string>
+    <string name="red_theme_title">قرمز</string>
+    <string name="pink_theme_title">صورتی</string>
+    <string name="purple_theme_title">بنفش</string>
+    <string name="blue_theme_title">آبی</string>
+    <string name="green_theme_title">سبز</string>
+    <string name="amber_theme_title">زرد</string>
+    <string name="orange_theme_title">نارنجی</string>
+    <string name="gray_theme_title">طوسی تیره</string>
+
+    <string name="news_MHits">پربازدیدترین</string>
+    <string name="news_comment">نظرات</string>
+    <string name="news_emptyList">هیچ موردی برای نمایش موجود نیست.</string>
+    <string name="news_ergent">پربحث ترین</string>
+    <string name="news_groupTitle">گروه های خبری</string>
+    <string name="news_latest">آخرین خبرها</string>
+    <string name="news_mainTitle">اولین خبر</string>
+    <string name="news_related_news">اخبار مرتبط</string>
+    <string name="news_share">اشتراک گذاری خبر</string>
+    <string name="news_write_comment">نظر شما چیست؟</string>
+
+    <string name="error_ivand_limit_gift">متاسفانه هدایای تعیین شده به اتمام رسیده است.</string>
+    <string name="referral_error_yourself">امکان ثبت شماره خود به عنوان معرف مقدور نیست.</string>
+    <string name="iland">آیلند</string>
+    <string name="all_calls">تماس ها</string>
+    <string name="open_url">باز کردن لینک</string>
+    <string name="copied">کپی شد.</string>
+    <string name="message_is_long">پیام شما طولانی است.\nپیام تبدیل خواهد شد به</string>
+    <string name="add_new_account">افزودن حساب جدید</string>
+    <string name="profile">نمایه</string>
+
+    <string name="elecBill_Entry_lengthError">شناسه نباید خالی باشد.</string>
+    <string name="elecBill_EntryService_lengthError">شناسه قبض باید حداقل 12 کاراکتر باشد.</string>
+    <string name="elecBill_EntryPhone_lengthError">شماره تلفن باید ۱۱ کاراکتر باشد.</string>
+    <string name="elecBill_Entry_barcodeError">اسکن بارکد انجام نشد. لطفا دوباره تلاش کنید.</string>
+    <string name="elecBill_Entry_companyError">این قبض یافت نشد.</string>
+    <string name="elecBill_main_billTitle">استعلام و پرداخت سریع قبض</string>
+    <string name="elecBill_main_billIDHint">شناسه قبض</string>
+    <string name="elecBill_main_billIDHint2">شماره تلفن</string>
+    <string name="elecBill_main_billIDHint3">کد اشتراک</string>
+    <string name="elecBill_main_billPay">استعلام</string>
+    <string name="elecBill_main_billMyList">قبض های من</string>
+    <string name="elecBill_main_billSearch">جستجوی قبض</string>
+    <string name="elecBill_main_billBranchInfo">اطلاعات انشعاب</string>
+    <string name="elecBill_pay_billID">شناسه قبض</string>
+    <string name="elecBill_pay_billPhoneNumber">شماره تلفن</string>
+    <string name="elecBill_pay_billPayID">شناسه پرداخت قبض</string>
+    <string name="elecBill_pay_billPrice">مبلغ</string>
+    <string name="elecBill_pay_billTime">مهلت پرداخت</string>
+    <string name="elecBill_pay_billPay">پرداخت</string>
+    <string name="elecBill_pay_billBranchInfo">اطلاعات انشعاب</string>
+    <string name="elecBill_pay_billAddBillList">اضافه کردن به لیست قبض های من</string>
+    <string name="elecBill_pay_billImage">دریافت تصویر قبض</string>
+    <string name="elecBill_Entry_nameError">لطفا نام انتخابی قبض را وارد کنید. برای مثال خانه</string>
+    <string name="elecBill_Entry_billIDError">لطفا شناسه قبض را وارد نمایید.</string>
+    <string name="elecBill_add_form">اطلاعات قبض</string>
+    <string name="elecBill_add_name">نام قبض *</string>
+    <string name="elecBill_add_billID">شناسه قبض *</string>
+    <string name="elecBill_add_addBtn">اضافه کردن قبض</string>
+    <string name="elecBill_cell_showDetail">جزئیات</string>
+    <string name="elecBill_cell_addNewBill">اضافه کردن قبض جدید</string>
+    <string name="elecBill_cell_deleteAccount">حذف حساب کاربری</string>
+    <string name="elecBill_deleteBill_title">حذف قبض</string>
+    <string name="elecBill_deleteBill_desc">آیا از حذف این قبض اطمینان دارید؟</string>
+    <string name="elecBill_deleteBill_pos">حذف</string>
+    <string name="elecBill_deleteBill_neg">قبض حذف نشود.</string>
+    <string name="elecBill_deleteAccount_title">حذف حساب کاربری</string>
+    <string name="elecBill_deleteAccount_desc">آیا از حذف حساب کاربری خود اطمینان دارید؟</string>
+    <string name="elecBill_deleteAccount_pos">حذف حساب</string>
+    <string name="elecBill_deleteAccount_neg">لغو حذف حساب من</string>
+    <string name="elecBill_image_Directory">آیگپ - قبض برق</string>
+    <string name="elecBill_edit_saveBtn">ذخیره تغییرات</string>
+    <string name="elecBill_edit_Btn">ویرایش قبض</string>
+    <string name="elecBill_searchCell_billID">شناسه قبض</string>
+    <string name="elecBill_searchCell_CustomerName">نام مشتری</string>
+    <string name="elecBill_searchCell_CustomerAddress">آدرس مشتری</string>
+    <string name="elecBill_search_billSerial">شماره بدنه کنتور</string>
+    <string name="elecBill_search_billCompany">شرکت ارائه دهنده سرویس برق</string>
+    <string name="elecBill_search_billSearch">جستجو</string>
+    <string name="elecBill_search_billSpinner">انتخاب کنید</string>
+    <string name="elecBill_error_billMissing">اطلاعات لازم جهت پرداخت قبض موجود نیست.</string>
+    <string name="elecBill_error_bellowMin">امکان پرداخت قبض های زیر 10000 ریال وجود ندارد.</string>
+    <string name="elecBill_error_MPLError">سرویس پرداخت متصل نمی باشد.</string>
+    <string name="elecBill_error_title">خطا</string>
+    <string name="elecBill_error_listView">موردی برای نمایش موجود نیست. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
+    <string name="elecBill_error_company">شما باید شرکت توزیع کننده برق خود را انتخاب کنید.</string>
+    <string name="elecBill_error_billSerial">شماره کنتور نمیتواند خالی باشد.</string>
+    <string name="elecBill_error_billSerialLength">شماره کنتور باید حداقل 7 کاراکتر باشد.</string>
+    <string name="elecBill_error_openCompanySpinner">باز کردن</string>
+    <string name="elecBill_error_zeroResultSearch">نتایج: قبضی یافت نشد.</string>
+    <string name="elecBill_error_zeroResultBill">هیچ قبضی به نام شما در سیستم موجود نیست.</string>
+    <string name="elecBill_error_notPossible">این عملیات در حال حاضر امکان پذیر نیست.</string>
+    <string name="elecBill_success_title">موفقیت</string>
+    <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
+    <string name="elecBill_main_serviceMode">قبوض خدماتی</string>
+    <string name="elecBill_main_PhoneMode">قبوض موبایل و تلفن</string>
+    <string name="elecBill_main_billTypeTitle">نوع قبض: </string>
+    <string name="elecBill_main_billPhoneTitle">لطفا شماره تلفن ثابت یا موبایل مورد نظر خود را وارد کنید.\nنمونه شماره تلفن: ********۰۲۱\nنمونه شماره موبایل: *********۰۹</string>
+    <string name="elecBill_cell_billPayLastTerm">پایان دوره</string>
+    <string name="elecBill_cell_billPayMidTerm">میان دوره</string>
+    <string name="elecBill_cell_billPayPhoneLastBtn">پرداخت پایان دوره</string>
+    <string name="elecBill_cell_billPayPhoneMidBtn">پرداخت میان دوره</string>
+
+    <string name="login_exist_account_error">حساب کاربری شماره وارد شده برای این گوشی فعال است.</string>
+    <string name="delete_from_storage">حذف پیوست از حافظه</string>
+    <string name="map_registration_enable">فعال کردن قابلیت اطراف من</string>
+    <string name="need_browser">برای استفاده نیاز به مرورگر است.</string>
+    <string name="delete_recently_sticker">پاک کردن استیکر های اخیر</string>
+    <string name="sticker_setting">تنظیمات استیکر</string>
+    <string name="empty_sticker">شما تاکنون هیچ استیکری اضافه نکرده‌اید!</string>
+
+    <string name="emoji_category_activity">شکلک ها و افراد</string>
+    <string name="emoji_category_animal">حیوانات و طبیعت</string>
+    <string name="emoji_category_Flags">پرچم ها</string>
+    <string name="emoji_category_food">غذا و نوشیدنی</string>
+    <string name="emoji_category_object">اشیا</string>
+    <string name="emoji_category_smileys">شکلک ها و افراد</string>
+    <string name="emoji_category_symbols">نماد ها</string>
+    <string name="emoji_category_travel">مسافرت و اماکن</string>
+
+    <string name="install_latest_version">برای استفاده از این ویژگی آخرین نسخه را نصب کنید</string>
+
+    <string name="requester_mobile_number">شماره موبایل درخواست دهنده</string>
+    <string name="charger_mobile_number">شماره موبایل شارژ شونده</string>
+    <string name="terminal_No">شماره پایانه</string>
+    <string name="rrn">شماره مرجع</string>
+    <string name="bill_id">شناسه قبض</string>
+    <string name="topUp_title">خرید شارژ</string>
+    <string name="bill_title">پرداخت قبض</string>
+    <string name="topUp_message">پیام خرید شارژ</string>
+    <string name="bill_message">پیام پرداخت قبض</string>
+    <string name="gift_sticker_title">خرید کارت هدیه دیجیتال</string>
+    <string name="gift_sticker_visit">مشاهده</string>
+    <string name="file_manager_logs">فقط بروی نسخه های آزمایشی</string>
+    <string name="file_manager_logs_title">گزارشات فایلی</string>
+
+    <string name="poll_dialog_question">آیاازثبت نظر خود اطمینان دارید</string>
+    <string name="delete_recent_emoji">حذف اموجی های اخیر</string>
+    <string name="activated">فعال شده</string>
+    <string name="internal_desc">کاوش در حافظه داخلی دستگاه</string>
+    <string name="external_desc">کاوش در حافظه خارجی دستگاه</string>
+    <string name="file_manager_app_desc">کاوش در پوشه آیگپ</string>
+    <string name="file_manager_image_desc">ارسال فایل های تصویری</string>
+    <string name="file_manager_video_desc">ارسال فایل های ویدیویی</string>
+    <string name="file_manager_music">ارسال فایل های صوتی</string>
+    <string name="folder">پوشه</string>
+    <string name="internal_storage">حافظه داخلی</string>
+    <string name="external_storage">حافظه جانبی</string>
+    <string name="file_manager">مدیریت فایل</string>
+    <string name="trim_error">برش ویدیو بیش از حد کوتاه است . مجدد تلاش کنید.</string>
+    <string name="disconnecting">قطع تماس...</string>
+    <string name="poor_connection">اتصال ضعیف</string>
+    <string name="restrictions_on_sending_stickers">محدودیت در ارسال استیکر!</string>
+    <string name="restrictions_on_sending_multimedia_messages">محدودیت در ارسال پیام چندرسانه‌ای!</string>
+    <string name="post_message">ارسال پیام</string>
+    <string name="pin_message_1">سنجاق پیام</string>
+    <string name="edit_message">ویرایش پیام</string>
+    <string name="delete_message">حذف پیام</string>
+    <string name="modify_room">ویرایش اطلاعات</string>
+    <string name="send_text">ارسال متن</string>
+    <string name="send_media">ارسال رسانه</string>
+    <string name="send_gif">ارسال گیف</string>
+    <string name="send_sticker">ارسال استیکر</string>
+    <string name="send_link">ارسال پیوند</string>
+    <string name="remove_user">حذف کاربر</string>
+    <string name="admin_rights">دسترسی های مدیر</string>
+    <string name="edit_rights">ویرایش دسترسی</string>
+    <string name="edit_admin_rights">ویرایش دسترسی های مدیر</string>
+    <string name="edit_member_rights">دسترسی های کاربر</string>
+    <string name="edit_room_rights">دسترسی های عمومی گروه</string>
+    <string name="restrictions_on_sending_messages">محدودیت در ارسال پیام!</string>
+    <string name="change_group_rights">ویرایش دسترسی های عمومی گروه</string>
+    <string name="owner">سازنده</string>
+    <string name="choose_frome_contacts">انتخاب مخاطبین</string>
+    <string name="previousـpurchases">خرید های قبلی</string>
+    <string name="operator_selection">انتخاب اپراتور</string>
+    <string name="select_the_amount">انتخاب مبلغ</string>
+    <string name="list_empty">در لیست شما شماره ای از قبل موجود نیست</string>
+    <string name="Select_from_previous_numbers">انتخاب از خرید های قبلی</string>
+    <string name="Select_the_type_of_charge">انتخاب نوع شارژ</string>
+    <string name="order_by">مرتب سازی بر اساس</string>
+    <string name="suggested_packages">بسته های پیشنهادی</string>
+    <string name="all_packages">همه بسته ها</string>
+    <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="credit_sim">سیمکارت اعتباری</string>
+    <string name="permanent_sim">سیمکارت دائمی</string>
+    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
+    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
+    <string name="data_sim">سیمکارت دیتا</string>
+    <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
+    <string name="no_number_found">شماره ای در لیست مخاطبین موجود نیست</string>
+    <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
+    <string name="save_purchase">آیا مایل به ذخیره خرید در تاریخچه میباشید؟</string>
+    <string name="tarabord">در صورتی که ترابرد کرده اید اپراتور جدید خود را انتخاب نمایید</string>
+    <string name="mic">میکروفن</string>
+    <string name="hold">نگه‌داشتن</string>
+    <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
+    <string name="error_term_not_accepted">شرایط و مقررات تایید نشده است!</string>
+    <string-array name="billsOptions">
+        <item>برق</item>
+        <item>گاز</item>
+    </string-array>
 </resources>

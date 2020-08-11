@@ -10,10 +10,8 @@
 
 package net.iGap.response;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import net.iGap.G;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoError;
@@ -21,8 +19,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoomHistory;
-
-import io.realm.Realm;
 
 public class ClientGetRoomHistoryResponse extends MessageHandler {
 
@@ -49,21 +45,15 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
             final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction = identityParams.direction;
 
             final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
-                        if (roomMessage.getAuthor().hasUser()) {
-                            RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
-                        }
-                        RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                for (ProtoGlobal.RoomMessage roomMessage : builder.getMessageList()) {
+                    if (roomMessage.getAuthor().hasUser()) {
+                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
+                    RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
                 }
             });
-            realm.close();
-            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory,  direction);
+            G.onClientGetRoomHistoryResponse.onGetRoomHistory(roomId, builder.getMessageList().get(0).getMessageId(), builder.getMessageList().get(builder.getMessageCount() - 1).getMessageId(), reachMessageId, messageIdGetHistory, direction);
 
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;

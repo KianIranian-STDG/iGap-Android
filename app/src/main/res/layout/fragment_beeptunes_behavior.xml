@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_beepTunesPlayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?rootBackgroundColor"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="56dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_btPlayer_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:animateLayoutChanges="true"
+        android:background="?attr/iGapDividerLine"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_btPlayer_hide"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_down" />
+
+        <TextView
+            android:id="@+id/tv_btPlayer_toolBarTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/iv_btPlayer_hide"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Abolfazl Abbasi" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_btPlayer_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:animateLayoutChanges="true"
+        android:background="?attr/iGapDividerLine"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_btBehavior_image"
+            android:layout_width="54dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_btBehavior_behavior" />
+
+        <TextView
+            android:id="@+id/tv_btBehavior_artistName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="left"
+            android:text="abolfazl abbasi"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintLeft_toRightOf="@+id/iv_btBehavior_image"
+            app:layout_constraintRight_toLeftOf="@id/tv_btBehavior_playIcon"
+            app:layout_constraintTop_toBottomOf="@+id/pb_btBehavior_behavior" />
+
+        <TextView
+            android:id="@+id/tv_btBehavior_songName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:gravity="left"
+            android:text="abolfazl"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_btBehavior_artistName"
+            app:layout_constraintRight_toLeftOf="@+id/tv_btBehavior_timeDuration"
+            app:layout_constraintTop_toBottomOf="@+id/tv_btBehavior_artistName" />
+
+        <net.iGap.module.FontIconTextView
+            android:id="@+id/tv_btBehavior_playIcon"
+            android:layout_width="56dp"
+            android:layout_height="54dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="@string/play_icon"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_btBehavior_behavior"
+            app:layout_constraintVertical_bias="0.461" />
+
+        <ProgressBar
+            android:id="@+id/pb_btBehavior_behavior"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layoutDirection="ltr"
+            android:max="100"
+            android:progress="0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_btBehavior_timeDuration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="00:10 | 15:00"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_btBehavior_songName"
+            app:layout_constraintRight_toRightOf="@+id/tv_btBehavior_artistName"
+            app:layout_constraintTop_toTopOf="@+id/tv_btBehavior_songName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_btPlayer_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+</LinearLayout>

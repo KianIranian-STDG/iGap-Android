@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
@@ -29,8 +29,7 @@ public class RealmRoomMessageLocation extends RealmObject {
     private double locationLong;
     private String imagePath; // this field not important now, because we use from 'locationLat' and 'locationLat' params for detect location path
 
-    public static RealmRoomMessageLocation put(final ProtoGlobal.RoomMessageLocation input, Long id) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmRoomMessageLocation put(Realm realm, final ProtoGlobal.RoomMessageLocation input, Long id) {
         RealmRoomMessageLocation messageLocation = null;
         if (id != null) {
             messageLocation = realm.where(RealmRoomMessageLocation.class).equalTo(RealmRoomMessageLocationFields.ID, id).findFirst();
@@ -40,7 +39,6 @@ public class RealmRoomMessageLocation extends RealmObject {
         }
         messageLocation.setLocationLat(input.getLat());
         messageLocation.setLocationLong(input.getLon());
-        realm.close();
 
         return messageLocation;
     }
@@ -55,7 +53,7 @@ public class RealmRoomMessageLocation extends RealmObject {
 
     @Override
     public String toString() {
-        return Double.toString(getLocationLat()) + "," + Double.toString(getLocationLong());
+        return getLocationLat() + "," + getLocationLong();
     }
 
     public double getLocationLat() {

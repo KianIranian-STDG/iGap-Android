@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/rootAdapterChooseCountry"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  style="?backgroundColorSettingTheme"
-  android:clickable="true"
-  android:orientation="horizontal">
-
-  <LinearLayout
-    android:id="@+id/vgListCountry"
+    android:id="@+id/rootAdapterChooseCountry"
+    style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <TextView
-      android:id="@+id/txtNameCountry"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp40"
-      android:layout_marginStart="@dimen/dp40"
-      android:padding="@dimen/dp10"
-      android:text="@string/iran"
-      style="?textTitleColorSettingTheme"
-      android:textSize="@dimen/dp14" />
+    <LinearLayout
+        android:id="@+id/vgListCountry"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <View
-      android:layout_width="0dp"
-      android:layout_height="match_parent"
-      android:layout_weight="1" />
+        <TextView
+            android:id="@+id/txtNameCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp40"
+            android:layout_marginLeft="@dimen/dp40"
+            android:padding="@dimen/dp10"
+            android:text="@string/iran"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp14" />
 
-    <TextView
-      android:id="@+id/txtCodeCountry"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginEnd="@dimen/dp28"
-      android:layout_marginRight="@dimen/dp28"
-      android:padding="@dimen/dp10"
-      android:text="@string/iran"
-      android:textColor="@color/green"
-      android:textSize="@dimen/dp14" />
-  </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/txtCodeCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp28"
+            android:layout_marginRight="@dimen/dp28"
+            android:padding="@dimen/dp10"
+            android:text="@string/iran"
+            android:textColor="@color/ivand_green_text_color"
+            android:textSize="@dimen/dp14" />
+    </LinearLayout>
 </LinearLayout>

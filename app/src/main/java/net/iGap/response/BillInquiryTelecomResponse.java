@@ -10,15 +10,18 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.fragments.inquiryBill.BillInquiryResponse;
+import net.iGap.observers.interfaces.GeneralResponseCallBack;
+import net.iGap.proto.ProtoBillInquiryTelecom;
+import net.iGap.proto.ProtoError;
 
 public class BillInquiryTelecomResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public BillInquiryTelecomResponse(int actionId, Object protoClass, String identity) {
+    public BillInquiryTelecomResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -30,10 +33,12 @@ public class BillInquiryTelecomResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        if (G.onInquiry != null) {
-            G.onInquiry.OnInquiryResult(message);
-        }
+        ProtoBillInquiryTelecom.BillInquiryTelecomResponse.Builder data = (ProtoBillInquiryTelecom.BillInquiryTelecomResponse.Builder) message;
 
+        BillInquiryResponse response = new BillInquiryResponse(data.getMidTerm(), data.getLastTerm());
+        if (identity instanceof GeneralResponseCallBack) {
+            ((GeneralResponseCallBack) identity).onSuccess(response);
+        }
     }
 
     @Override
@@ -45,8 +50,9 @@ public class BillInquiryTelecomResponse extends MessageHandler {
     public void error() {
         super.error();
 
-        if (G.onInquiry != null) {
-            G.onInquiry.OnInquiryError();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        if (identity instanceof GeneralResponseCallBack) {
+            ((GeneralResponseCallBack) identity).onError(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         }
     }
 }

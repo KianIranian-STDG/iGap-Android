@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_item_pop_row"
+    android:layout_width="@dimen/dp88"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/dp2"
+    android:clickable="true"
+    app:cardBackgroundColor="?attr/iGapCardViewColor"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    app:cardCornerRadius="@dimen/dp12"
+    app:cardElevation="@dimen/dp2"
+    app:cardUseCompatPadding="false"
+    app:contentPadding="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/dp6">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circle_item_popular_rv_linear"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginTop="@dimen/dp6" />
+
+        <TextView
+            android:id="@+id/tv_item_popular_rv_linear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp4"
+            android:layout_marginBottom="@dimen/dp4"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:minLines="1"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/verySmallTextSize" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
