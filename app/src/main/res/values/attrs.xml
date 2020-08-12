@@ -135,13 +135,6 @@
 
     <!--=======================custom theme=====================-->
 
-
-    <!--bottom navigation-->
-    <declare-styleable name="BottomNavigation">
-        <attr name="background_color" format="color" />
-        <attr name="corner_radius" format="integer" />
-    </declare-styleable>
-
     <declare-styleable name="TabItem">
         <attr name="selected_icon" format="reference" />
         <attr name="unselected_icon" format="reference" />
