@@ -80,7 +80,7 @@
     <!--custom theme-->
 
     <style name="iGapEditTextStyle">
-        <item name="android:textColorHint">?attr/iGapHintTextColor</item>
+        <item name="android:textColorHint">?attr/iGapSubtitleTextColor</item>
         <item name="android:textColor">?attr/iGapTitleTextColor</item>
     </style>
 

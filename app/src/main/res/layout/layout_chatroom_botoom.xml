@@ -6,14 +6,14 @@
     android:clickable="true"
     android:gravity="bottom"
     android:layoutDirection="ltr"
-    android:minHeight="54dp"
+    android:minHeight="52dp"
     android:orientation="horizontal">
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_emoji"
         style="@style/myIconTextViewStyleGray"
-        android:layout_width="@dimen/dp48"
-        android:layout_height="@dimen/dp48"
+        android:layout_width="@dimen/dp52"
+        android:layout_height="@dimen/dp52"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
         android:text="@string/md_emoticon_with_happy_face" />
@@ -22,12 +22,11 @@
     <net.iGap.module.customView.EventEditText
         android:id="@+id/et_chatRoom_writeMessage"
         style="@style/iGapEditTextStyle"
+        android:background="@null"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/dp8"
         android:layout_weight="1"
-        android:background="@drawable/backround_chatroom_edittext"
         android:hint="@string/type_message"
         android:imeOptions="flagNoExtractUi"
         android:maxLines="4"
@@ -77,8 +76,8 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/vtn_chatRoom_attach"
             style="@style/myIconTextViewStyleGray"
-            android:layout_width="@dimen/dp44"
-            android:layout_height="@dimen/dp44"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
             android:layout_gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/md_attachment_clip" />
@@ -86,8 +85,8 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/btn_chatRoom_mic"
             style="@style/myIconTextViewStyleGray"
-            android:layout_width="@dimen/dp44"
-            android:layout_height="@dimen/dp44"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
             android:layout_gravity="center_vertical"
             android:padding="@dimen/dp8"
             android:text="@string/md_voice_message_microphone_button" />

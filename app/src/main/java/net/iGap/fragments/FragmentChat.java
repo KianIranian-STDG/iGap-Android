@@ -720,7 +720,7 @@ public class FragmentChat extends BaseFragment
         edtChat.setGravity(Gravity.CENTER_VERTICAL | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT));
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
-        edtChat.setBackground(new Theme().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapEditTxtColor));
+        edtChat.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.backround_chatroom_edittext), edtChat.getContext(), R.attr.iGapDividerLine));
 
         edtChat.setListener(this::chatMotionEvent);
 
