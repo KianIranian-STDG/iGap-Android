@@ -2,14 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item>
-
         <shape android:shape="rectangle">
-
             <solid android:color="@color/toolbar_player_background" />
-            <corners android:bottomLeftRadius="@dimen/toolbar_radius" android:bottomRightRadius="@dimen/toolbar_radius" />
-
         </shape>
-
     </item>
 
 </selector>
