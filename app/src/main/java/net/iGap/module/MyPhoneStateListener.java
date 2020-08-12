@@ -40,33 +40,24 @@ public class MyPhoneStateListener extends PhoneStateListener {
             return;
         else
             lastPhoneState = state;
-        // if webRTC is not active thus there is nothing to do in our side.
-        if (!WebRTC.isAlive())
-            return;
-        // in this part we manage call and webRTC state when phone state changes.
+
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
 
             CallManager.getInstance().holdCall(true);
             WebRTC.getInstance().toggleSound(false);
             WebRTC.getInstance().pauseVideoCapture();
-
+            G.isUserInCall=true;
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-            if (CallManager.getInstance().isRinging()) {
-                try {
-                    // TODO: 5/9/2020 do we need this anymore? 
-                    CallManager.getInstance().leaveCall();
-                } catch (Exception e) {
-                }
-
-            }
+            Log.e("checkforcallstate", "CALL_STATE_RINGING"+G.isUserInCall);
+            G.isUserInCall=false;
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
 
             CallManager.getInstance().holdCall(false);
             WebRTC.getInstance().toggleSound(true);
             WebRTC.getInstance().startVideoCapture();
-
+            G.isUserInCall=false;
             G.isCalling = false;
         }
     }

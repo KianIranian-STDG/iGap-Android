@@ -69,7 +69,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private MediaPlayer player;
     private Vibrator vibrator;
     private SharedPreferences sharedPreferences;
-
+    private RealmRegisteredInfo info;
     private CallAudioManager audioManager = null;
     private CallAudioManager.AudioManagerEvents audioManagerEvents;
 
@@ -491,6 +491,53 @@ public class CallService extends Service implements CallManager.CallStateChange 
                 onDestroy();
             }
         }
+    }
+
+    @SuppressLint("WrongConstant")
+    @TargetApi(Build.VERSION_CODES.O)
+    private PhoneAccountHandle addAccountToTelecomManager() {
+        TelecomManager tm = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+        PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, CallConnectionService.class), "1001");
+        DbManager.getInstance().doRealmTask(realm -> {
+            info = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
+        });
+        PhoneAccount account = new PhoneAccount.Builder(handle, info.getDisplayName())
+                .setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
+                .setIcon(Icon.createWithResource(this, R.drawable.logo_igap))
+                .setHighlightColor(0xff2ca5e0)
+                .addSupportedUriScheme("sip")
+                .build();
+        tm.registerPhoneAccount(account);
+        return handle;
+    }
+
+    @SuppressLint({"MissingPermission", "WrongConstant"})
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void placeOutgoingCall() {
+        TelecomManager tm = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+        PhoneAccountHandle phoneAccountHandle = addAccountToTelecomManager();
+        if (!tm.isOutgoingCallPermitted(phoneAccountHandle)) {
+            Toast.makeText(this, "R.string.outgoingCallNotPermitted", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Bundle extras = new Bundle();
+        extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle);
+        tm.placeCall(Uri.fromParts("tel", "+98" + info.getPhoneNumber(), null), extras);
+    }
+
+    @SuppressLint("WrongConstant")
+    @TargetApi(Build.VERSION_CODES.O)
+    private void placeIncomingCall() {
+        Log.e("checkfortelch", "placeIncomingCall");
+        TelecomManager tm = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+        PhoneAccountHandle phoneAccountHandle = addAccountToTelecomManager();
+        if (!tm.isIncomingCallPermitted(phoneAccountHandle)) {
+            Toast.makeText(this, "R.string.incomingCallNotPermitted", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Bundle extras = new Bundle();
+        extras.putParcelable(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS, Uri.parse(info.getPhoneNumber()));
+        tm.addNewIncomingCall(phoneAccountHandle, extras);
     }
 
     @Override

@@ -116,6 +116,14 @@ public class CallManager {
      * @param response from server
      */
     public void onOffer(ProtoSignalingOffer.SignalingOfferResponse.Builder response) {
+        isRinging = true;
+        isIncoming = true;
+        isCallActive = true;
+        if (G.isUserInCall) {
+            changeState(CallState.REJECT);
+            endCall();
+            return;
+        }
         if (invalidCallType(response.getType()))
             return;
         // set data for future use.
@@ -585,37 +593,6 @@ public class CallManager {
         tm.placeCall(Uri.fromParts("tel", "+98" + info.getPhoneNumber(), null), extras);
     }
 
-    @SuppressLint("WrongConstant")
-    @TargetApi(Build.VERSION_CODES.O)
-    private void placeIncomingCall(Context mContext) {
-        TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-        PhoneAccountHandle phoneAccountHandle = addAccountToTelecomManager(mContext);
-        if (!tm.isIncomingCallPermitted(phoneAccountHandle)) {
-            Toast.makeText(mContext, "R.string.incomingCallNotPermitted", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Bundle extras = new Bundle();
-        extras.putParcelable(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS, Uri.parse(info.getPhoneNumber()));
-        tm.addNewIncomingCall(phoneAccountHandle, extras);
-    }
-
-    @SuppressLint("WrongConstant")
-    @TargetApi(Build.VERSION_CODES.O)
-    private PhoneAccountHandle addAccountToTelecomManager(Context mContext) {
-        TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-        PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(mContext, CallConnectionService.class), "1001");
-        DbManager.getInstance().doRealmTask(realm -> {
-            info = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
-        });
-        PhoneAccount account = new PhoneAccount.Builder(handle, info.getDisplayName())
-                .setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
-                .setIcon(Icon.createWithResource(mContext, R.drawable.logo_igap))
-                .setHighlightColor(0xff2ca5e0)
-                .addSupportedUriScheme("sip")
-                .build();
-        tm.registerPhoneAccount(account);
-        return handle;
-    }
 
     private static boolean isDeviceCompatibleWithConnectionServiceAPI() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
