@@ -717,7 +717,7 @@ public class FragmentChat extends BaseFragment
          * */
 
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
-        edtChat.setGravity(Gravity.CENTER_VERTICAL | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT));
+        edtChat.setGravity(Gravity.CENTER_VERTICAL);
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
