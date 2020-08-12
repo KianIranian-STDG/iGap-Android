@@ -45,7 +45,7 @@ public class StatusBarUtil {
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             activity.getWindow().setStatusBarColor(calculateStatusColor(color, statusBarAlpha));
-            activity.getWindow().setNavigationBarColor(new Theme().getDividerColor(activity));
+            activity.getWindow().setNavigationBarColor(G.themeColor == Theme.DARK ? Theme.getInstance().getPrimaryDarkColor(activity) : Color.WHITE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 View decor = activity.getWindow().getDecorView();
                 if (G.themeColor != Theme.DARK) {
