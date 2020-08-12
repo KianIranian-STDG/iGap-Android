@@ -43,7 +43,7 @@ public class SplashActivity extends ActivityEnhanced {
             });
 
             if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
-                if (AccountManager.getInstance().haveAccount()) {//Todo: this is fucking code and must find cause of this bug
+                if (AccountManager.getInstance().haveAccount()) {//Todo: this is code and must find cause of this bug
                     Intent intent = new Intent(this, ActivityMain.class);
 
                     if (getIntent().getStringExtra(ActivityMain.DEEP_LINK) != null)

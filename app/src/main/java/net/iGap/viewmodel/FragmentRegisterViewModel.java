@@ -353,7 +353,6 @@ public class FragmentRegisterViewModel extends ViewModel {
                 });
     }
 
-    //that is fucking code i wrote because top manager in Pressure :D
     public void onTermsAndConditionClick() {
         if (agreementDescription == null || agreementDescription.isEmpty()) {
             getTermsAndConditionData();
