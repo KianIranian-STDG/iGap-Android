@@ -32,7 +32,7 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:scrimAnimationDuration="1">
 
-                <net.iGap.module.RadiusImageView
+                <ImageView
                     android:id="@+id/fup_bg_avatar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp160"
