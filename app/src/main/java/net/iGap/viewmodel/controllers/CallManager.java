@@ -579,19 +579,6 @@ public class CallManager {
             onCallStateChanged.onCallStateChanged(callState);
     }
 
-    @SuppressLint({"MissingPermission", "WrongConstant"})
-    @TargetApi(Build.VERSION_CODES.O)
-    private void placeOutgoingCall(Context mContext) {
-        TelecomManager tm = (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
-        PhoneAccountHandle phoneAccountHandle = addAccountToTelecomManager(mContext);
-        if (!tm.isOutgoingCallPermitted(phoneAccountHandle)) {
-            Toast.makeText(mContext, "R.string.outgoingCallNotPermitted", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Bundle extras = new Bundle();
-        extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle);
-        tm.placeCall(Uri.fromParts("tel", "+98" + info.getPhoneNumber(), null), extras);
-    }
 
 
     private static boolean isDeviceCompatibleWithConnectionServiceAPI() {

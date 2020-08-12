@@ -1105,7 +1105,7 @@
     <string name="USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK">کاربر گرامی شما به تازگی بروزرسانی کرده اید لطفا منتظر بمانید</string>
     <string name="GROUP_UPDATE_USERNAME_UPDATE_LOCK">GROUP UPDATE USERNAME UPDATE LOCK</string>
     <string name="channel_name_notification">iGap Notification</string>
-    <string name="keep_media_6month">6 Month</string>
+    <string name="keep_media_6month">شش ماه</string>
     <string name="minutes_ago">minutes ago</string>
 
     <string name="IP_blocked">به دلیل تلاش بیش از حد، IP شما برای مدتی مسدود شده است.</string>

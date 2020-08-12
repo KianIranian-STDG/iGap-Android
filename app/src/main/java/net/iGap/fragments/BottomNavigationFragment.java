@@ -185,7 +185,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        G.onUnreadChange = null;
+//        G.onUnreadChange = null;
     }
 
     @Override

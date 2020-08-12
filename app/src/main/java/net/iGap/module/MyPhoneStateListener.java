@@ -2,6 +2,7 @@ package net.iGap.module;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.module.webrtc.WebRTC;
@@ -49,7 +50,6 @@ public class MyPhoneStateListener extends PhoneStateListener {
             G.isUserInCall=true;
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-            Log.e("checkforcallstate", "CALL_STATE_RINGING"+G.isUserInCall);
             G.isUserInCall=false;
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
