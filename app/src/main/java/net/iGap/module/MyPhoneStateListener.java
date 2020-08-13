@@ -43,22 +43,17 @@ public class MyPhoneStateListener extends PhoneStateListener {
             lastPhoneState = state;
 
         if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-
             CallManager.getInstance().holdCall(true);
             WebRTC.getInstance().toggleSound(false);
             WebRTC.getInstance().pauseVideoCapture();
-            G.isUserInCall=true;
-            G.isCalling = true;
+            CallManager.getInstance().setUserInCall(true);
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-            G.isUserInCall=false;
-            G.isCalling = true;
+            CallManager.getInstance().setUserInCall(false);
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-
             CallManager.getInstance().holdCall(false);
             WebRTC.getInstance().toggleSound(true);
             WebRTC.getInstance().startVideoCapture();
-            G.isUserInCall=false;
-            G.isCalling = false;
+            CallManager.getInstance().setUserInCall(false);
         }
     }
 

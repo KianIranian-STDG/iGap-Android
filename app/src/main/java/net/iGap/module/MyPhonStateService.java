@@ -8,7 +8,7 @@ import android.telephony.TelephonyManager;
 
 public class MyPhonStateService extends BroadcastReceiver {
     TelephonyManager telephony;
-    MyPhoneStateListener phoneListener;
+    private MyPhoneStateListener phoneListener;
 
     /**
      * use when start or finish ringing
