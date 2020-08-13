@@ -4822,13 +4822,16 @@ public class FragmentChat extends BaseFragment
             }
         }
 
+        if(isFileExistInLocalStorage(message)) {
+            if (roomMessageType.toString().contains("IMAGE") || roomMessageType.toString().contains("VIDEO") || roomMessageType.toString().contains("GIF")) {
 
-        if (roomMessageType.toString().contains("IMAGE") || roomMessageType.toString().contains("VIDEO") || roomMessageType.toString().contains("GIF")) {
-            items.add(R.string.save_to_gallery);
-        } else if (roomMessageType.toString().contains("AUDIO") || roomMessageType.toString().contains("VOICE")) {
-            items.add(R.string.save_to_Music);
-        } else if (roomMessageType.toString().contains("FILE")) {
-            items.add(R.string.saveToDownload_item_dialog);
+                items.add(R.string.save_to_gallery);
+
+            } else if (roomMessageType.toString().contains("AUDIO") || roomMessageType.toString().contains("VOICE")) {
+                items.add(R.string.save_to_Music);
+            } else if (roomMessageType.toString().contains("FILE")) {
+                items.add(R.string.saveToDownload_item_dialog);
+            }
         }
 
         switch (roomMessageType) {
