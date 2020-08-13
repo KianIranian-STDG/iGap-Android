@@ -66,7 +66,7 @@ public class CallManager {
     private RealmRegisteredInfo info;
     private RealmCallConfig currentCallConfig;
 
-    public static boolean isUserInCall;
+    private boolean isUserInCall;
     private boolean isCallActive;
     private boolean isRinging;
     private boolean isIncoming;
@@ -613,5 +613,13 @@ public class CallManager {
 
     public boolean isRinging() {
         return isRinging;
+    }
+
+    public boolean isUserInCall() {
+        return isUserInCall;
+    }
+
+    public void setUserInCall(boolean userInCall) {
+        isUserInCall = userInCall;
     }
 }

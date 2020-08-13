@@ -41,7 +41,7 @@ public class CallSelectFragment extends BaseBottomSheet {
     }
 
     private void startCall(Activity activity, long userId, ProtoSignalingOffer.SignalingOffer.Type callType) {
-        if(CallManager.isUserInCall && activity!=null){
+        if(CallManager.getInstance().isUserInCall() && activity!=null){
             Toast.makeText(activity,"You are in Calling",Toast.LENGTH_LONG).show();
             return;
         }

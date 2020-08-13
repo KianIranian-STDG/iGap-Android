@@ -46,14 +46,14 @@ public class MyPhoneStateListener extends PhoneStateListener {
             CallManager.getInstance().holdCall(true);
             WebRTC.getInstance().toggleSound(false);
             WebRTC.getInstance().pauseVideoCapture();
-            CallManager.isUserInCall=true;
+            CallManager.getInstance().setUserInCall(true);
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-            CallManager.isUserInCall=false;
+            CallManager.getInstance().setUserInCall(false);
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
             CallManager.getInstance().holdCall(false);
             WebRTC.getInstance().toggleSound(true);
             WebRTC.getInstance().startVideoCapture();
-            CallManager.isUserInCall=false;
+            CallManager.getInstance().setUserInCall(false);
         }
     }
 
