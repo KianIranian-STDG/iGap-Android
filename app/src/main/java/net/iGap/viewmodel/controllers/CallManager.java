@@ -66,6 +66,7 @@ public class CallManager {
     private RealmRegisteredInfo info;
     private RealmCallConfig currentCallConfig;
 
+    public static boolean isUserInCall;
     private boolean isCallActive;
     private boolean isRinging;
     private boolean isIncoming;
@@ -119,7 +120,7 @@ public class CallManager {
         isRinging = true;
         isIncoming = true;
         isCallActive = true;
-        if (G.isUserInCall) {
+        if (isUserInCall) {
             changeState(CallState.REJECT);
             endCall();
             return;
@@ -136,9 +137,7 @@ public class CallManager {
 
         WebRTC.getInstance().setCallType(callType);
         // activate ringing state for caller.
-        isRinging = true;
-        isIncoming = true;
-        isCallActive = true;
+
         new RequestSignalingRinging().signalingRinging();
 
         // generate SDP

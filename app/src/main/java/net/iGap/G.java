@@ -133,7 +133,6 @@ public class G extends ApplicationContext {
     public static String symmetricMethod;
     public static Ipromote ipromote;
     public static boolean isAppInFg = false;
-    public static boolean isUserInCall = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
     public static boolean isSecure = false;
