@@ -10,8 +10,9 @@
 
 package net.iGap.response;
 
+import net.iGap.controllers.MessageDataStorage;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoChatDeleteMessage;
-import net.iGap.realm.RealmRoomMessage;
 
 public class ChatDeleteMessageResponse extends MessageHandler {
 
@@ -30,8 +31,15 @@ public class ChatDeleteMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
-        RealmRoomMessage.deleteMessageServerResponse(chatDeleteMessage.getRoomId(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getResponse());
+        ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder builder = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
+
+        long roomId = builder.getRoomId();
+        long messageId = builder.getMessageId();
+        long deleteVersion = builder.getDeleteVersion();
+        boolean update = builder.getResponse().getId().isEmpty();
+
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).processDeleteMessage(roomId, messageId, deleteVersion, update);
+
     }
 
     @Override

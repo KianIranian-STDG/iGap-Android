@@ -222,7 +222,6 @@ import net.iGap.observers.interfaces.OnChannelGetMessagesStats;
 import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.observers.interfaces.OnChatClearMessageResponse;
 import net.iGap.observers.interfaces.OnChatDelete;
-import net.iGap.observers.interfaces.OnChatDeleteMessageResponse;
 import net.iGap.observers.interfaces.OnChatEditMessageResponse;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
@@ -725,6 +724,7 @@ public class FragmentChat extends BaseFragment
 
         EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance().addEventListener(EventManager.ON_MESSAGE_DELETE, this);
         if (twoPaneMode)
             EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
@@ -1218,6 +1218,7 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.textImageList.clear();
         EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance().removeEventListener(EventManager.ON_MESSAGE_DELETE, this);
         if (twoPaneMode)
             EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -2534,37 +2535,6 @@ public class FragmentChat extends BaseFragment
                             mAdapter.updateMessageText(messageId, message);
                         }
                     });
-                }
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-
-        G.onChatDeleteMessageResponse = new OnChatDeleteMessageResponse() {
-            @Override
-            public void onChatDeleteMessage(long deleteVersion, final long messageId, long roomId, ProtoResponse.Response response) {
-                if (response.getId().isEmpty()) { // another account deleted this message
-
-                    // if deleted message is for current room clear from adapter
-                    if (roomId == mRoomId) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // remove deleted message from adapter
-                                if (mAdapter == null) {
-                                    return;
-                                }
-
-                                ArrayList list = new ArrayList();
-                                list.add(messageId);
-                                deleteSelectedMessageFromAdapter(list);
-
-                            }
-                        });
-                    }
                 }
             }
 
@@ -4822,7 +4792,7 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        if(isFileExistInLocalStorage(message)) {
+        if (isFileExistInLocalStorage(message)) {
             if (roomMessageType.toString().contains("IMAGE") || roomMessageType.toString().contains("VIDEO") || roomMessageType.toString().contains("GIF")) {
 
                 items.add(R.string.save_to_gallery);
@@ -9398,6 +9368,23 @@ public class FragmentChat extends BaseFragment
                 if (new File(path).exists())
                     ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
             });
+        } else if (id == EventManager.ON_MESSAGE_DELETE) {
+            long roomId = (long) message[0];
+            long messageId = (long) message[1];
+            boolean update = (boolean) message[2];
+
+            if (roomId == mRoomId && update) {
+                G.runOnUiThread(() -> {
+                    if (mAdapter == null) {
+                        return;
+                    }
+
+                    ArrayList<Long> messages = new ArrayList<>(1);
+                    messages.add(messageId);
+                    deleteSelectedMessageFromAdapter(messages);
+
+                });
+            }
         }
     }
 

@@ -10,28 +10,27 @@
 
 package net.iGap.response;
 
+import net.iGap.controllers.MessageDataStorage;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoGroupDeleteMessage;
-import net.iGap.realm.RealmRoomMessage;
 
 public class GroupDeleteMessageResponse extends MessageHandler {
 
-    public int actionId;
-    public Object message;
-    public String identity;
-
     public GroupDeleteMessageResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
     public void handler() {
         super.handler();
         ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder builder = (ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder) message;
-        RealmRoomMessage.deleteMessageServerResponse(builder.getRoomId(), builder.getMessageId(), builder.getDeleteVersion(), builder.getResponse());
+
+        long roomId = builder.getRoomId();
+        long messageId = builder.getMessageId();
+        long deleteVersion = builder.getDeleteVersion();
+        boolean update = builder.getResponse().getId().isEmpty();
+
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).processDeleteMessage(roomId, messageId, deleteVersion, update);
     }
 
     @Override

@@ -187,7 +187,6 @@ public class G extends ApplicationContext {
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
-    public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatDelete onChatDelete;
     public static OnChatSendMessage onChatSendMessage;
     public static OnUserProfileGetNickname onUserProfileGetNickname;

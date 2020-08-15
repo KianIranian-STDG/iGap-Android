@@ -944,77 +944,72 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getContentBloke().removeView(cslr_replay_layout);
         }
 
-        if (mMessage.getReplyTo() != null && mMessage.getReplyTo().isValid()) {
+        if (mMessage.replyTo != null && mMessage.replyTo.isValid() && !mMessage.replyTo.deleted) {
 
             final View replayView = ViewMaker.getViewReplay(((NewChatItemHolder) holder).getContext());
 
-            if (replayView != null) {
-                final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
-                final AppCompatTextView replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
-                replayView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (FragmentChat.isInSelectionMode) {
-                            holder.itemView.performLongClick();
-                            return;
-                        }
-
-                        messageClickListener.onReplyClick(mMessage.getReplyTo());
-                    }
-                });
-
-                replayView.setOnLongClickListener(getLongClickPerform(holder));
-
-                try {
-                    AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), mMessage.getReplyTo().getForwardMessage() == null ? mMessage.getReplyTo().getMessageType() : mMessage.getReplyTo().getForwardMessage().getMessageType(), mMessage.getReplyTo().getForwardMessage() == null ? mMessage.getReplyTo() : mMessage.getReplyTo().getForwardMessage());
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
+            final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
+            final AppCompatTextView replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
+            replayView.setOnClickListener(v -> {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return;
                 }
 
-                if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                    if (mAdapter.getRealmRoom() != null) {
-                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(mAdapter.getRealmRoom().getTitle(), replyFrom.getPaint().getFontMetricsInt()));
-                    }
-                } else {
-                    RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
-                        return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getReplyTo().getUserId());
-                    });
-                    if (replayToInfo != null) {
-                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
-                    }
-                }
+                messageClickListener.onReplyClick(mMessage.replyTo);
+            });
 
-                String replayText = AppUtils.replyTextMessage(mMessage.getReplyTo(), holder.itemView.getResources());
-                replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
+            replayView.setOnLongClickListener(getLongClickPerform(holder));
 
-                if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                    replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
-                } else {
-                    replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
-                }
-                replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
-                replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
-
-                replyFrom.measure(0, 0);       //must call measure!
-                replayMessage.measure(0, 0);
-
-                int maxWith, withMessage, withTitle;
-                withTitle = replyFrom.getMeasuredWidth();
-                withMessage = replayMessage.getMeasuredWidth();
-                maxWith = withTitle > withMessage ? withTitle : withMessage;
-                maxWith += i_Dp(R.dimen.dp44);
-                if (replayView.findViewById(R.id.chslr_imv_replay_pic).getVisibility() == View.VISIBLE) {
-                    maxWith += i_Dp(R.dimen.dp52);
-                }
-
-                minWith = maxWith;
-                mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
-
-                mHolder.getContentBloke().addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            try {
+                AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), mMessage.replyTo.forwardMessage == null ? mMessage.replyTo.getMessageType() : mMessage.replyTo.forwardMessage.getMessageType(), mMessage.replyTo.forwardMessage == null ? mMessage.replyTo : mMessage.replyTo.forwardMessage);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
             }
+
+            if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                if (mAdapter.getRealmRoom() != null) {
+                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(mAdapter.getRealmRoom().getTitle(), replyFrom.getPaint().getFontMetricsInt()));
+                }
+            } else {
+                RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.replyTo.userId);
+                });
+                if (replayToInfo != null) {
+                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
+                }
+            }
+
+            String replayText = AppUtils.replyTextMessage(mMessage.replyTo, holder.itemView.getResources());
+            replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
+
+            if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
+                replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
+            } else {
+                replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
+            }
+            replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
+            replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
+
+            replyFrom.measure(0, 0);       //must call measure!
+            replayMessage.measure(0, 0);
+
+            int maxWith, withMessage, withTitle;
+            withTitle = replyFrom.getMeasuredWidth();
+            withMessage = replayMessage.getMeasuredWidth();
+            maxWith = Math.max(withTitle, withMessage);
+            maxWith += i_Dp(R.dimen.dp44);
+            if (replayView.findViewById(R.id.chslr_imv_replay_pic).getVisibility() == View.VISIBLE) {
+                maxWith += i_Dp(R.dimen.dp52);
+            }
+
+            minWith = maxWith;
+            mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+
+            mHolder.getContentBloke().addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 
