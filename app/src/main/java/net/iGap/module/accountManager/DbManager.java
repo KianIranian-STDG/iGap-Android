@@ -3,8 +3,6 @@ package net.iGap.module.accountManager;
 import android.os.Looper;
 import android.util.Log;
 
-import net.iGap.BuildConfig;
-
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -88,30 +86,18 @@ public class DbManager {
     }
 
     public void doRealmTransaction(RealmTransaction realmTransaction) {
-        if (BuildConfig.DEBUG && Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException("running transaction in ui thread !!!!!!");
-        }
-
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(realmTransaction::doTransaction);
         });
     }
 
     public void doRealmTask(RealmTask realmTask, long userId) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException("You must call this function in non ui thread.");
-        }
-
         try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
             realmTask.doTask(realm);
         }
     }
 
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask, long userId) {
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException("You must call this function in non ui thread.");
-        }
-
         try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
             return realmTask.doTask(realm);
         }
@@ -129,10 +115,6 @@ public class DbManager {
     }
 
     public void doRealmTransaction(RealmTransaction realmTransaction, long userId) {
-        if (BuildConfig.DEBUG && Looper.myLooper() == Looper.getMainLooper()) {
-            throw new IllegalStateException("running transaction in ui thread !!!!!!");
-        }
-
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransaction(realmTransaction::doTransaction);
         }, userId);
