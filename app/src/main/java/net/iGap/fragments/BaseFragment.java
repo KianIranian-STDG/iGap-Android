@@ -27,13 +27,14 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
-
+import net.iGap.module.accountManager.AccountManager;
 
 
 public class BaseFragment extends SwipeBackFragment {
 
     public boolean isNeedResume = false;
     protected Fragment currentFragment;
+    public int currentAccount = AccountManager.selectedAccount;
     public AvatarHandler avatarHandler;
 
     @Override
@@ -126,7 +127,7 @@ public class BaseFragment extends SwipeBackFragment {
             public void run() {
                 try {
                     if (getActivity() != null) {
-                        Log.wtf(this.getClass().getName(),"popBackStackFragment");
+                        Log.wtf(this.getClass().getName(), "popBackStackFragment");
                         getActivity().onBackPressed();
 
                         if (G.iTowPanModDesinLayout != null) {
