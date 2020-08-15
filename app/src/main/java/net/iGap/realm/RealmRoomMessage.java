@@ -32,12 +32,9 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
-import net.iGap.module.enums.ClientConditionOffline;
-import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestGroupDeleteMessage;
@@ -63,39 +60,39 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class})
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey
-    private long messageId;
+    public long messageId;
     @Index
-    private long roomId;
-    private long messageVersion;
-    private String status;
-    private long statusVersion;
-    private String messageType;
-    private String message;
-    private boolean hasMessageLink = false;
-    private RealmAttachment attachment;
-    private long userId;
-    private RealmRoomMessageLocation location;
-    private RealmRoomMessageContact roomMessageContact;
-    private RealmRoomMessageWallet roomMessageWallet;
-    private RealmAdditional realmAdditional;
-    private boolean edited;
-    private long createTime;
-    private long updateTime;
-    private boolean deleted = false;
-    private RealmRoomMessage forwardMessage;
-    private RealmRoomMessage replyTo;
-    private boolean showMessage = true;
-    private String authorHash;
-    private boolean hasEmojiInText;
-    private boolean showTime = false;
+    public long roomId;
+    public long messageVersion;
+    public String status;
+    public long statusVersion;
+    public String messageType;
+    public String message;
+    public boolean hasMessageLink = false;
+    public RealmAttachment attachment;
+    public long userId;
+    public RealmRoomMessageLocation location;
+    public RealmRoomMessageContact roomMessageContact;
+    public RealmRoomMessageWallet roomMessageWallet;
+    public RealmAdditional realmAdditional;
+    public boolean edited;
+    public long createTime;
+    public long updateTime;
+    public boolean deleted = false;
+    public RealmRoomMessage forwardMessage;
+    public RealmRoomMessage replyTo;
+    public boolean showMessage = true;
+    public String authorHash;
+    public boolean hasEmojiInText;
+    public boolean showTime = false;
     //if it was needed in the future we can use RealmAuthor instead of author hash and also maybe authorRoomId
-    private long authorRoomId;
+    public long authorRoomId;
     // for channel message should be exist in other rooms (forwarded message)
-    private RealmChannelExtra channelExtra;
-    private long previousMessageId;
-    private long futureMessageId;
-    private String linkInfo;
-    private byte[] Logs;
+    public RealmChannelExtra channelExtra;
+    public long previousMessageId;
+    public long futureMessageId;
+    public String linkInfo;
+    public byte[] Logs;
 
     /**
      * if has forward return that otherwise return enter value
@@ -668,65 +665,6 @@ public class RealmRoomMessage extends RealmObject {
                     }
                 }
             }
-        });
-    }
-
-    public static void deleteMessageServerResponse(final long roomId, final long messageId, final long deleteVersion, final ProtoResponse.Response response) {
-        RealmClientCondition.setVersion(roomId, deleteVersion, ClientConditionVersion.DELETE);
-        RealmClientCondition.deleteOfflineAction(messageId, ClientConditionOffline.DELETE);
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            /**
-             * if another account deleted this message set deleted true
-             * otherwise before this state was set
-             */
-
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (
-                    realmRoom != null && roomMessage != null && !roomMessage.isDeleted()
-                            && !roomMessage.isSenderMe()
-                            && !roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())
-                            && realmRoom.getFirstUnreadMessage() != null
-                            && realmRoom.getFirstUnreadMessage().getMessageId() <= messageId
-                            && realmRoom.getUnreadCount() > 0
-            ) {
-                realmRoom.setUnreadCount(realmRoom.getUnreadCount() - 1);
-                if (realmRoom.getUnreadCount() == 0) {
-                    realmRoom.setFirstUnreadMessage(null);
-                }
-            }
-
-            if (response.getId().isEmpty()) {
-                if (roomMessage != null) {
-                    roomMessage.setDeleted(true);
-                }
-            }
-
-            if (G.onChatDeleteMessageResponse != null) {
-                G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);
-            }
-
-            if (realmRoom != null) {
-                if (realmRoom.getLastMessage().getMessageId() == messageId) {
-
-                    Number newLastMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                            .notEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                            .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                            .lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                            .max(RealmRoomMessageFields.MESSAGE_ID);
-
-                    if (newLastMessageId != null) {
-                        RealmRoomMessage newLastMessage = realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, newLastMessageId.longValue())
-                                .findFirst();
-
-                        realmRoom.setLastMessage(newLastMessage);
-                    } else {
-                        realmRoom.setLastMessage(null);
-                    }
-                }
-            }
-
         });
     }
 

@@ -44,35 +44,35 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class RealmRoom extends RealmObject {
     @PrimaryKey
-    private long id;
-    private String type;
-    private String title;
-    private String initials;
-    private String color;
-    private int unreadCount;
-    private boolean readOnly;
-    private RealmChatRoom chatRoom;
-    private boolean mute;
-    private RealmGroupRoom groupRoom;
-    private RealmChannelRoom channelRoom;
-    private RealmRoomMessage lastMessage;
-    private RealmRoomMessage firstUnreadMessage;
-    private RealmRoomDraft draft;
-    private RealmDraftFile draftFile;
-    private RealmAvatar avatar;
-    private long updatedTime;
-    private String sharedMediaCount = "";
+    public long id;
+    public String type;
+    public String title;
+    public String initials;
+    public String color;
+    public int unreadCount;
+    public boolean readOnly;
+    public RealmChatRoom chatRoom;
+    public boolean mute;
+    public RealmGroupRoom groupRoom;
+    public RealmChannelRoom channelRoom;
+    public RealmRoomMessage lastMessage;
+    public RealmRoomMessage firstUnreadMessage;
+    public RealmRoomDraft draft;
+    public RealmDraftFile draftFile;
+    public RealmAvatar avatar;
+    public long updatedTime;
+    public String sharedMediaCount = "";
     //if it was needed in the future we can combine this two under fields in RealmAction (actionStateUserId and actionState).
-    private long actionStateUserId;
-    private String actionState;
-    private boolean isDeleted = false;
-    private boolean isPinned;
-    private long pinId;
-    private long pinMessageId;
-    private long pinMessageIdDeleted;
-    private int priority;
-    private boolean isFromPromote;
-    private long promoteId;
+    public long actionStateUserId;
+    public String actionState;
+    public boolean isDeleted = false;
+    public boolean isPinned;
+    public long pinId;
+    public long pinMessageId;
+    public long pinMessageIdDeleted;
+    public int priority;
+    public boolean isFromPromote;
+    public long promoteId;
 
     public long getPromoteId() {
         return promoteId;

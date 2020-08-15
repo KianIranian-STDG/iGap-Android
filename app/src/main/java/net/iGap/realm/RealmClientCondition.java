@@ -30,18 +30,18 @@ import io.realm.annotations.PrimaryKey;
 // https://github.com/realm/realm-java/issues/776
 public class RealmClientCondition extends RealmObject {
     @PrimaryKey
-    private long roomId;
-    private long messageVersion;
-    private long statusVersion;
-    private long deleteVersion;
-    private RealmList<RealmOfflineDelete> offlineDeleted;
-    private RealmList<RealmOfflineEdited> offlineEdited;
-    private RealmList<RealmOfflineSeen> offlineSeen;
-    private RealmList<RealmOfflineListen> offlineListen;
-    private long clearId;
-    private long cacheStartId;
-    private long cacheEndId;
-    private String offlineMute;
+    public long roomId;
+    public long messageVersion;
+    public long statusVersion;
+    public long deleteVersion;
+    public RealmList<RealmOfflineDelete> offlineDeleted;
+    public RealmList<RealmOfflineEdited> offlineEdited;
+    public RealmList<RealmOfflineSeen> offlineSeen;
+    public RealmList<RealmOfflineListen> offlineListen;
+    public long clearId;
+    public long cacheStartId;
+    public long cacheEndId;
+    public String offlineMute;
 
     /**
      * Hint: use this method in Transaction
