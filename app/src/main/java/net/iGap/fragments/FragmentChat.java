@@ -9581,4 +9581,5 @@ public class FragmentChat extends BaseFragment
             mAdapter.toggleSelection(lastMessageId, true, recyclerView);
         }
     }
+
 }
