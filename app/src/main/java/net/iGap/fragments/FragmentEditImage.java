@@ -310,8 +310,8 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             }
         });
         iconOk.setOnClickListener(v -> {
-
-            String path = itemGalleryList.get(viewPager.getCurrentItem()).path;
+            
+            String path = itemGalleryList.get(viewPager.getCurrentItem()).getPath();
             String message = edtChat.getText().toString();
 
             itemGalleryList.get(viewPager.getCurrentItem()).setSelected(false);
