@@ -116,4 +116,20 @@ public class MessageDataStorage extends BaseController {
             }
         });
     }
+
+    private void cleanUpInternal() {
+        storageQueue.postRunnable(() -> {
+            try {
+                dataBase.close();
+                instance = null;
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    public void cleanUp() {
+        storageQueue.cleanupQueue();
+        cleanUpInternal();
+    }
 }

@@ -7,6 +7,7 @@ import android.webkit.CookieSyncManager;
 
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLogout;
@@ -15,50 +16,50 @@ import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountHelper {
 
-    public void changeAccount(){
+    public void changeAccount() {
         baseBefore();
         AccountManager.getInstance().setCurrentUser();
         baseAfter();
     }
 
-    public void changeAccount(long id){
+    public void changeAccount(long id) {
         baseBefore();
         AccountManager.getInstance().changeCurrentUserAccount(id);
         baseAfter();
     }
 
-    public void addAccount(){
+    public void addAccount() {
         baseBefore();
         AccountManager.getInstance().changeCurrentUserForAddAccount();
         baseAfter();
     }
 
-    public boolean logoutAccount(){
+    public boolean logoutAccount() {
         baseBefore();
         boolean t = new HelperLogout().logoutUser(AccountManager.getInstance().getCurrentUser());
         baseAfter();
         return t;
     }
 
-    private void baseBefore(){
+    private void baseBefore() {
         clearSharedDataAndForward();
         clearCookies(G.context);
         WebSocketClient.getInstance().disconnectSocket(false);
         G.handler.removeCallbacksAndMessages(null);
         signOutWallet();
         AccountManager.getInstance().clearSomeStaticValue();
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).cleanUp();
         //close realm ui
         DbManager.getInstance().closeUiRealm();
     }
 
-    private void baseAfter(){
+    private void baseAfter() {
         DbManager.getInstance().openUiRealm();
         WebSocketClient.getInstance().connect(true);
     }
 
     @SuppressWarnings("deprecation")
-    public void clearCookies(Context context)
-    {
+    public void clearCookies(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             CookieManager.getInstance().removeAllCookies(null);
             CookieManager.getInstance().flush();
