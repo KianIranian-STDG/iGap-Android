@@ -11,6 +11,7 @@
 package net.iGap;
 
 import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -77,6 +78,9 @@ import ir.radsense.raadcore.web.WebBase;
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
 public class G extends ApplicationContext {
+    @SuppressLint("StaticFieldLeak")
+    public static volatile Context context;
+    public static volatile Handler handler;
 
     public static final String IGAP = "/iGap";
     public static final String IMAGES = "/iGap Images";
@@ -90,8 +94,6 @@ public class G extends ApplicationContext {
     public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static boolean ISRealmOK = true;
-    public static Context context;
-    public static Handler handler;
     public static boolean isCalling = false;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
@@ -372,13 +374,22 @@ public class G extends ApplicationContext {
 
     @Override
     public void onCreate() {
+        try {
+            context = getApplicationContext();
+        } catch (Throwable ignore) {
+
+        }
+
         super.onCreate();
+
+        if (context == null) {
+            context = getApplicationContext();
+        }
 
         if (Config.FILE_LOG_ENABLE) {
             FileLog.i("Splash activity on destroy");
         }
 
-        context = getApplicationContext();
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
         CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
 
