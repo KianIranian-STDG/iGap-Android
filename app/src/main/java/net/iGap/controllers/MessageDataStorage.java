@@ -3,8 +3,11 @@ package net.iGap.controllers;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.enums.AttachmentFor;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmRoom;
@@ -110,6 +113,26 @@ public class MessageDataStorage extends BaseController {
                         }
                     }
                 }
+                dataBase.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    public void putUserAvatar(long roomId, ProtoGlobal.Avatar avatar) {
+        storageQueue.postRunnable(() -> {
+            try {
+                dataBase.beginTransaction();
+                RealmAvatar realmAvatar = dataBase.where(RealmAvatar.class).equalTo("id", avatar.getId()).findFirst();
+
+                if (realmAvatar == null) {
+                    realmAvatar = dataBase.createObject(RealmAvatar.class, avatar.getId());
+                }
+
+                realmAvatar.setOwnerId(roomId);
+                realmAvatar.setFile(RealmAttachment.build(dataBase, avatar.getFile(), AttachmentFor.AVATAR, null));
+
                 dataBase.commitTransaction();
             } catch (Exception e) {
                 FileLog.e(e);

@@ -32,14 +32,11 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.textfield.TextInputLayout;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentEditChannelBinding;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
@@ -47,16 +44,21 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnChannelCheckUsername;
-import net.iGap.observers.interfaces.OnChannelRemoveUsername;
-import net.iGap.observers.interfaces.OnChannelUpdateUsername;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MEditText;
 import net.iGap.module.SUID;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.OnChannelCheckUsername;
+import net.iGap.observers.interfaces.OnChannelRemoveUsername;
+import net.iGap.observers.interfaces.OnChannelUpdateUsername;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoChannelCheckUsername;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmRoom;
@@ -72,9 +74,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited {
+public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited, EventListener {
 
     private static final String ROOM_ID = "RoomId";
+
+    private long roomId;
+    private String uploadAvatarId;
 
     private FragmentEditChannelBinding binding;
     private EditChannelViewModel viewModel;
@@ -93,13 +98,18 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isNeedResume = true;
+        roomId = getArguments() != null ? getArguments().getLong(ROOM_ID) : -1;
+
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.Factory() {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new EditChannelViewModel(getArguments() != null ? getArguments().getLong(ROOM_ID) : -1);
+                return (T) new EditChannelViewModel(roomId);
             }
         }).get(EditChannelViewModel.class);
+
+        getEventManager().addEventListener(EventManager.AVATAR_UPDATE, this);
+        getEventManager().addEventListener(EventManager.FILE_UPLOAD_FAILED, this);
     }
 
     @Nullable
@@ -602,8 +612,6 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                         viewModel.setPrivate(true, "");
                         if (viewModel.inviteLink == null || viewModel.inviteLink.isEmpty() || viewModel.inviteLink.equals("https://")) {
                             new RequestChannelRevokeLink().channelRevokeLink(roomId);
-                        } else {
-                            /*setTextChannelLik();*/
                         }
                     });
                 });
@@ -643,92 +651,45 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                 new RequestChannelLeft().channelLeft(viewModel.roomId);
             }
             binding.loading.setVisibility(View.VISIBLE);
-            /*G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);*/
         }).negativeText(R.string.no).show();
     }
 
-    /*private void showDialog() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                switch (which) {
-                    case 0:
-                        viewModel.setChatHistoryStatus(0);
-                        break;
-                    case 1:
-                        viewModel.setChatHistoryStatus(-1);
-                        break;
-                    case 2:
-                        viewModel.setChatHistoryStatus(50);
-                        break;
-                    case 3:
-                        dialog.dismiss();
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (dialog.getInputEditText() != null && dialog.getInputEditText().getEditableText() != null) {
-                                    if (dialog.getInputEditText().getEditableText().length() < 5) {
-                                        viewModel.setChatHistoryStatus(Integer.parseInt(dialog.getInputEditText().getEditableText().toString()));
-                                    } else {
-                                        viewModel.setChatHistoryStatus(0);
-                                    }
-                                } else {
-                                    viewModel.setChatHistoryStatus(0);
-                                }
-                            }
-                        }).inputType(InputType.TYPE_CLASS_NUMBER).input(G.fragmentActivity.getResources().getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
-                            @Override
-                            public void onInput(@NotNull MaterialDialog dialog, CharSequence input) {
-
-                            }
-                        }).show();
-                        break;
-                }
-            }
-        }).show();
-    }*/
-
-
-//    private void setEmojiColor() {
-//        emojiPopup = EmojiPopup.Builder.fromRootView(binding.root)
-//                .setOnEmojiBackspaceClickListener(v -> {
-//
-//                }).setOnEmojiPopupShownListener(() -> isEmojiShow = true)
-//                .setOnSoftKeyboardOpenListener(keyBoardHeight -> {
-//                }).setOnEmojiPopupDismissListener(() -> isEmojiShow = false)
-//                .setOnSoftKeyboardCloseListener(() -> emojiPopup.dismiss())
-//                .setBackgroundColor(new Theme().getRootColor(getContext()))
-//                .setIconColor(new Theme().getTitleTextColor(getContext()))
-//                .setDividerColor(new Theme().getTitleTextColor(getContext()))
-//                .build(binding.channelNameEditText);
-//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getEventManager().removeEventListener(EventManager.AVATAR_UPDATE, this);
+        getEventManager().removeEventListener(EventManager.FILE_UPLOAD_FAILED, this);
+    }
 
     @Override
     public void profileImageAdd(String path) {
         if (getActivity() != null) {
             getActivity().getSupportFragmentManager().popBackStack(EditChannelFragment.class.getName(), 0);
         }
-        viewModel.uploadAvatar(path);
+
+        viewModel.getShowUploadProgressLiveData().postValue(View.VISIBLE);
+        uploadAvatarId = getMessageController().saveChannelAvatar(path, roomId);
     }
 
-    /*private void groupLeft() {
-        String text = "";
-        int title;
-        if (viewModel.role == GroupChatRole.OWNER) {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_delete_this_group);
-            title = R.string.delete_group;
-        } else {
-            text = G.fragmentActivity.getResources().getString(R.string.do_you_want_to_leave_this_group);
-            title = R.string.left_group;
-        }
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        if (id == EventManager.AVATAR_UPDATE) {
+            G.runOnUiThread(() -> {
+                viewModel.getShowUploadProgressLiveData().postValue(View.GONE);
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(text).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
-                viewModel.leaveGroup();
-                viewModel.showLoading.setValue(true);
-                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                long roomId = (long) message[0];
+
+                if (roomId == this.roomId) {
+                    avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+                }
+
+            }, 500);
+        } else if (id == EventManager.FILE_UPLOAD_FAILED) {
+            String fileId = (String) message[0];
+
+            if (uploadAvatarId != null && uploadAvatarId.equals(fileId)) {
+                G.runOnUiThread(() -> viewModel.getShowUploadProgressLiveData().postValue(View.GONE));
             }
-        }).show();
-    }*/
+        }
+    }
 }
