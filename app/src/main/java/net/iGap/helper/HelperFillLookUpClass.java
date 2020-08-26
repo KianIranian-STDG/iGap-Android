@@ -10,8 +10,13 @@
 
 package net.iGap.helper;
 
+import android.util.Log;
+import android.util.SparseArray;
+
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
+import net.iGap.request.AbstractObject;
+import net.iGap.request.IG_Objects;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.generalImmovableClasses;
@@ -24,6 +29,45 @@ import static net.iGap.G.unSecureResponseActionId;
 import static net.iGap.G.waitingActionIds;
 
 public class HelperFillLookUpClass {
+
+    private static HelperFillLookUpClass instance;
+    private SparseArray<Class<?>> fillLockup;
+
+    public static HelperFillLookUpClass getInstance() {
+        if (instance == null) {
+            instance = new HelperFillLookUpClass();
+        }
+        return instance;
+    }
+
+    public HelperFillLookUpClass() {
+        fillLockup = new SparseArray<>();
+        fillLockup.put(IG_Objects.ChannelAvatar.actionId, IG_Objects.AddAvatar.class);
+
+    }
+
+    public boolean validObject(int actionId) {
+        Log.i("RequestManager", "validObject: " + actionId + " " + (fillLockup.get(actionId) != null));
+        return fillLockup.get(actionId) != null;
+    }
+
+    public AbstractObject getClassInstance(int actionId) {
+        Class<?> objClass = fillLockup.get(actionId);
+        if (objClass != null) {
+            AbstractObject response;
+            try {
+                response = (AbstractObject) objClass.newInstance();
+            } catch (Throwable e) {
+                e.printStackTrace();
+                return null;
+            }
+            return response;
+        }
+
+        Log.e(getClass().getSimpleName(), "getClassInstance: " + actionId);
+
+        return null;
+    }
 
     public static void fillArrays() {
         HelperFillLookUpClass.fillLookUpClassArray();

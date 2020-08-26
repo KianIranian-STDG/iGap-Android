@@ -12,9 +12,13 @@ package net.iGap.helper;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.request.AbstractObject;
+import net.iGap.request.IG_Objects;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 
@@ -60,9 +64,9 @@ public class HelperUnpackMessage {
 
         if (responseId == null) {
             if (actionId == 0) {
-                instanceResponseClass(actionId, protoObject, null, "error");
+                instanceResponseClass(actionId, protoObject, null, null, "error", true);
             } else {
-                instanceResponseClass(actionId, protoObject, null, "handler");
+                instanceResponseClass(actionId, protoObject, null, null, "handler", true);
             }
         } else {
             if (!G.requestQueueMap.containsKey(responseId)) {
@@ -97,13 +101,13 @@ public class HelperUnpackMessage {
                                 currentProto = errorResponse;
                             }
                             G.requestQueueMap.remove(currentResponseId);
-                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, "error");
+                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, currentRequestWrapper.onResponse, "error");
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
 
-                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, "error");
+                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, requestWrapper.onResponse, "error");
                     }
                 } else {
                     if (responseId.contains(".")) {
@@ -112,7 +116,8 @@ public class HelperUnpackMessage {
                         String indexString = responseId.split("\\.")[1];
                         int index = Integer.parseInt(indexString);
 
-                        Object responseClass = instanceResponseClass(actionId, protoObject, G.requestQueueMap.get(responseId).identity, null);
+                        RequestWrapper wrapper = G.requestQueueMap.get(responseId);
+                        Object responseClass = instanceResponseClass(actionId, protoObject, wrapper.identity, wrapper.onResponse, null);
 
                         ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
                         objectValues.set(index, responseClass);
@@ -143,13 +148,13 @@ public class HelperUnpackMessage {
                                 if (fieldIdentity.get(object) != null) {
                                     currentIdentity = fieldIdentity.get(object).toString();
                                 }
-                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, "handler");
+                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, null, "handler");
                             }
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
-                        instanceResponseClass(actionId, protoObject, requestWrapper.identity, "handler");
+                        instanceResponseClass(actionId, protoObject, requestWrapper.identity, requestWrapper.onResponse, "handler");
                     }
                 }
                 RequestQueue.sendRequest();
@@ -269,22 +274,51 @@ public class HelperUnpackMessage {
         return object3;
     }
 
-    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, String optionalMethod) {
+    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, OnResponse onResponse, String optionalMethod) {
+        return instanceResponseClass(actionId, protoObject, identity, onResponse, optionalMethod, false);
+    }
+
+    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, OnResponse onResponse, String optionalMethod, boolean update) {
         Object object = null;
         try {
-            String className = getClassName(actionId);
-            String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
-            Class<?> responseClass = Class.forName(responseClassName);
-            Constructor<?> constructor;
-            try {
-                constructor = responseClass.getDeclaredConstructor(int.class, Object.class, Object.class);
-            } catch (NoSuchMethodException e) {
-                constructor = responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
-            }
-            constructor.setAccessible(true);
-            object = constructor.newInstance(actionId, protoObject, identity);
-            if (optionalMethod != null) {
-                responseClass.getMethod(optionalMethod).invoke(object);
+            if (!update && onResponse != null && optionalMethod != null) {
+                if (optionalMethod.equals("handler")) {
+                    AbstractObject abstractObject = HelperFillLookUpClass.getInstance().getClassInstance(actionId);
+
+                    if (abstractObject != null) {
+                        AbstractObject finalMessage = abstractObject.deserializeResponse(actionId, protoObject);
+                        onResponse.onReceived(finalMessage, null);
+                    }
+                } else if (optionalMethod.equals("error")) {
+                    AbstractObject error = new IG_Objects.Error();
+                    error.readParams(protoObject);
+
+                    onResponse.onReceived(null, error);
+                }
+            } else {
+                String className = getClassName(actionId);
+                String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
+                Class<?> responseClass = Class.forName(responseClassName);
+                Constructor<?> constructor;
+
+                try {
+                    constructor = responseClass.getDeclaredConstructor(int.class, Object.class, Object.class);
+                } catch (NoSuchMethodException e) {
+                    constructor = responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
+                }
+
+                constructor.setAccessible(true);
+                object = constructor.newInstance(actionId, protoObject, identity);
+
+                if (optionalMethod != null) {
+                    responseClass.getMethod(optionalMethod).invoke(object);
+                }
+
+                boolean validForUpdate = HelperFillLookUpClass.getInstance().validObject(actionId);
+
+                if (update && validForUpdate && actionId != 0) {
+                    RequestManager.getInstance(AccountManager.selectedAccount).onUpdate(actionId, protoObject);
+                }
             }
         } catch (InstantiationException e) {
             HelperLog.getInstance().setErrorLog(e);

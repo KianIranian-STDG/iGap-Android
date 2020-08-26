@@ -19,7 +19,7 @@ public class RequestWrapper {
     protected int actionId;
     private Object protoObject;
     private String randomId;
-    private OnResponse onResponse;
+    public OnResponse onResponse;
 
     public RequestWrapper(int actionId, Object protoObject, Object identity) {
         this(actionId, protoObject, identity, null);
