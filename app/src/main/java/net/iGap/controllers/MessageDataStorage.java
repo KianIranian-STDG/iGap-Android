@@ -25,7 +25,7 @@ public class MessageDataStorage extends BaseController {
 
     public MessageDataStorage(int currentAccount) {
         super(currentAccount);
-        storageQueue.postRunnable(this::openDataBase);
+        openDataBase();
     }
 
     public static MessageDataStorage getInstance(int account) {
@@ -42,8 +42,12 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void openDataBase() {
-        RealmConfiguration config = AccountManager.getInstance().getCurrentUser().getRealmConfiguration();
-        dataBase = Realm.getInstance(config);
+        storageQueue.postRunnable(() -> {
+            if (dataBase == null || dataBase.isClosed()) {
+                RealmConfiguration config = AccountManager.getInstance().getCurrentUser().getRealmConfiguration();
+                dataBase = Realm.getInstance(config);
+            }
+        });
     }
 
     public void processDeleteMessage(long roomId, long messageId, long deleteVersion, boolean update) {
@@ -141,18 +145,17 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void cleanUpInternal() {
-        storageQueue.postRunnable(() -> {
-            try {
-                dataBase.close();
-                instance = null;
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        });
+        try {
+            dataBase.close();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     public void cleanUp() {
-        storageQueue.cleanupQueue();
-        cleanUpInternal();
+        storageQueue.postRunnable(() -> {
+            cleanUpInternal();
+            openDataBase();
+        });
     }
 }
