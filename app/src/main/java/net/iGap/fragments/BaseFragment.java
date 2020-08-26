@@ -23,11 +23,16 @@ import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
+import net.iGap.controllers.MessageController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.RequestManager;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 
 
 public class BaseFragment extends SwipeBackFragment {
@@ -165,5 +170,26 @@ public class BaseFragment extends SwipeBackFragment {
 
     public boolean onBackPressed() {
         return false;
+    }
+
+
+    public EventManager getEventManager() {
+        return EventManager.getInstance();
+    }
+
+    public MessageController getMessageController() {
+        return MessageController.getInstance(currentAccount);
+    }
+
+    public MessageDataStorage getMessageDataStorage() {
+        return MessageDataStorage.getInstance(currentAccount);
+    }
+
+    public RequestManager getRequestManager() {
+        return RequestManager.getInstance(currentAccount);
+    }
+
+    public UploadManager getUploadManager() {
+        return UploadManager.getInstance();
     }
 }
