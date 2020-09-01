@@ -10,55 +10,24 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
-import net.iGap.helper.HelperTracker;
-import net.iGap.proto.ProtoError;
-import net.iGap.proto.ProtoGroupCreate;
-import net.iGap.request.RequestClientGetRoom;
-
 public class GroupCreateResponse extends MessageHandler {
-
-    public int actionId;
-    public Object message;
-    public String identity;
 
     public GroupCreateResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
-
-        this.message = protoClass;
-        this.actionId = actionId;
-        this.identity = identity;
     }
 
     @Override
     public void handler() {
         super.handler();
-        ProtoGroupCreate.GroupCreateResponse.Builder builder = (ProtoGroupCreate.GroupCreateResponse.Builder) message;
-        if (builder.getResponse().getId().isEmpty()) {
-            new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-        } else {
-            G.onGroupCreate.onGroupCreate(builder.getRoomId());
-        }
-        HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
     }
 
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
-
-        if (G.onGroupCreate != null) {
-            G.onGroupCreate.onError(majorCode, minorCode);
-        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (G.onGroupCreate != null) {
-            G.onGroupCreate.onTimeOut();
-        }
     }
 }

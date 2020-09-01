@@ -21,29 +21,27 @@ import android.widget.Toast;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.AppUtils;
 import net.iGap.observers.interfaces.OnChannelCreate;
 import net.iGap.observers.interfaces.OnChatConvertToGroup;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;
-import net.iGap.observers.interfaces.OnGroupCreate;
-import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.request.IG_Objects;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelCreate;
 import net.iGap.request.RequestChatConvertToGroup;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestGroupAvatarAdd;
-import net.iGap.request.RequestGroupCreate;
 
 import static net.iGap.module.MusicPlayer.roomId;
 
-public class FragmentNewGroupViewModel extends ViewModel {
+public class FragmentNewGroupViewModel extends BaseViewModel {
 
     public static String prefix = "NewGroup";
     public static long avatarId = 0;
@@ -94,9 +92,31 @@ public class FragmentNewGroupViewModel extends ViewModel {
                 chatToGroup();
             } else {
                 isChannel = false;
-                createGroup();
-            }
 
+                IG_Objects.Req_CreateGroup req = new IG_Objects.Req_CreateGroup();
+                req.name = edtSetNewGroup.get();
+                req.description = edtDescription.get();
+
+                getRequestManager().sendRequest(req, (response, error) -> {
+                    if (error == null) {
+                        IG_Objects.Res_CreateGroup res = (IG_Objects.Res_CreateGroup) response;
+
+                        hideProgressBar();
+
+                        roomId = res.roomId;
+                        getRoom(res.roomId, ProtoGlobal.Room.Type.GROUP, true);
+                    } else {
+                        IG_Objects.Error err = (IG_Objects.Error) error;
+
+                        G.runOnUiThread(() -> {
+                            hideProgressBar();
+                            if (err.major == 380) {
+                                ShowDialogLimitCreate();
+                            }
+                        });
+                    }
+                });
+            }
         } else {
             if (prefix.equals("NewChanel")) {
                 Toast.makeText(G.context, R.string.please_enter_channel_name, Toast.LENGTH_SHORT).show();
@@ -255,55 +275,6 @@ public class FragmentNewGroupViewModel extends ViewModel {
         new RequestChatConvertToGroup().chatConvertToGroup(groomId, edtSetNewGroup.get(), edtDescription.get());
     }
 
-    private void createGroup() {
-        G.onGroupCreate = new OnGroupCreate() {
-            @Override
-            public void onGroupCreate(final long roomIdR) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        roomId = roomIdR;
-                        hideProgressBar();
-                        getRoom(roomIdR, ProtoGlobal.Room.Type.GROUP, true);
-                    }
-                });
-
-               /* G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (avatarExist) {
-                            new RequestGroupAvatarAdd().groupAvatarAdd(roomId, fileUploadStructure.token);
-                        } else {
-                            G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                            getRoom(roomId, ProtoGlobal.Room.Type.GROUP);
-                        }
-                    }
-                });*/
-
-            }
-
-            @Override
-            public void onTimeOut() {
-                hideProgressBar();
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                hideProgressBar();
-                if (majorCode == 380) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ShowDialogLimitCreate();
-                        }
-                    });
-                }
-            }
-        };
-
-        new RequestGroupCreate().groupCreate(edtSetNewGroup.get(), edtDescription.get());
-    }
 
     private void getRoom(final long roomId, final ProtoGlobal.Room.Type typeCreate, boolean isGroup) {
 
