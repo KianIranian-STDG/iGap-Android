@@ -20,12 +20,10 @@ import net.iGap.observers.interfaces.OnUserLogin;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestGeoGetRegisterStatus;
-import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
-import net.iGap.request.RequestWrapper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -215,35 +213,6 @@ public class LoginActions {
         }
         return "";
     }
-
-
-    /**
-     * resend some of requests
-     */
-    public static void sendWaitingRequestWrappers() {
-        for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
-            RequestQueue.RUNNING_REQUEST_WRAPPERS.add(requestWrapper);
-        }
-        RequestQueue.WAITING_REQUEST_WRAPPERS.clear();
-
-        for (int i = 0; i < RequestQueue.RUNNING_REQUEST_WRAPPERS.size(); i++) {
-            final int j = i;
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        RequestQueue.sendRequest(RequestQueue.RUNNING_REQUEST_WRAPPERS.get(j));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    if (j == (RequestQueue.RUNNING_REQUEST_WRAPPERS.size() - 1)) {
-                        RequestQueue.RUNNING_REQUEST_WRAPPERS.clear();
-                    }
-                }
-            }, 1000 * j);
-        }
-    }
-
     /**
      * initialize securing interface for detecting
      * securing is done and continue login actions

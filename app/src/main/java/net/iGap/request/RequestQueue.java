@@ -35,18 +35,14 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.requestQueueMap;
 
 public class RequestQueue {
 
-    public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // if not logged-in
     private static final int QUEUE_LIMIT = 50;
     private static final int DEFAULT_PRIORITY = 100;
-    public static CopyOnWriteArrayList<RequestWrapper> RUNNING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // when logged-in and WAITING_REQUEST_WRAPPERS is full
-
 
     private static ConcurrentHashMap<Integer, ArrayList<RequestWrapper[]>> priorityRequestWrapper = new ConcurrentHashMap<>();
     private static PriorityQueue<Integer> requestPriorityQueue = new PriorityQueue<>(1000, new Comparator<Integer>() {
@@ -113,7 +109,6 @@ public class RequestQueue {
         if (requestWrapper == null)
             return false;
         requestQueueMap.remove(id);
-        WAITING_REQUEST_WRAPPERS.remove(requestWrapper);
         return true;
     }
 
@@ -178,20 +173,13 @@ public class RequestQueue {
                     WebSocketClient.getInstance().sendBinary(message, requestWrapper);
                 } else {
                     if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
-                        /**
-                         * add to waiting request wrappers while user not logged-in yet
-                         */
-                        WAITING_REQUEST_WRAPPERS.add(requestWrapper);
+
                     }
                 }
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
                 WebSocketClient.getInstance().sendBinary(message, requestWrapper);
             } else { //if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
                 timeOutImmediately(randomId, false);
-                /**
-                 * add to waiting request wrappers while user not logged-in yet
-                 */
-                WAITING_REQUEST_WRAPPERS.add(requestWrapper);
             }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
