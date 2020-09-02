@@ -216,7 +216,6 @@ public class G extends ApplicationContext {
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;
     public static OnHelperSetAction onHelperSetAction;
-    public static OnChannelDelete onChannelDelete;
     public static OnChannelLeft onChannelLeft;
     public static OnChannelAddMember onChannelAddMember;
     public static OnChannelGetMemberList onChannelGetMemberList;

@@ -45,6 +45,7 @@ public class HelperFillLookUpClass {
         fillLockup.put(IG_Objects.ChannelAvatar.actionId, IG_Objects.AddAvatar.class);
         fillLockup.put(30300, IG_Objects.CreateRoomResponse.class);
         fillLockup.put(30400, IG_Objects.CreateRoomResponse.class);
+        fillLockup.put(30404, IG_Objects.DeleteRoomResponse.class);
 
     }
 

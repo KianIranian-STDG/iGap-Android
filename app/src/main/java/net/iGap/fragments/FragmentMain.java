@@ -54,7 +54,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
@@ -70,7 +69,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.Room;
-import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestClientGetRoomList;
@@ -97,7 +95,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -552,7 +550,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
             if (item.getChannelRole() == ChannelChatRole.OWNER) {
-                new RequestChannelDelete().channelDelete(item.getId());
+                getMessageController().deleteChannel(item.getId());
             } else {
                 new RequestChannelLeft().channelLeft(item.getId());
             }
@@ -581,7 +579,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
             if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                new RequestChannelDelete().channelDelete(item.getId());
+                getMessageController().deleteChannel(item.getId());
             } else {
                 new RequestChannelLeft().channelLeft(item.getId());
             }
@@ -700,21 +698,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public void onGroupDeleteTimeOut() {
-
-    }
-
-    @Override
-    public void onChannelDelete(long roomId) {
-
-    }
-
-    @Override
-    public void onChannelDeleteError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onChannelDeleteTimeOut() {
 
     }
 

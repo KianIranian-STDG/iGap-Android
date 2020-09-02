@@ -22,6 +22,7 @@ public class MessageDataStorage extends BaseController {
     private static volatile MessageDataStorage[] instance = new MessageDataStorage[AccountManager.MAX_ACCOUNT_COUNT];
     private DispatchQueue storageQueue = new DispatchQueue("MessageStorage");
     private Realm dataBase;
+    private String TAG = getClass().getSimpleName();
 
     public MessageDataStorage(int currentAccount) {
         super(currentAccount);
@@ -156,6 +157,27 @@ public class MessageDataStorage extends BaseController {
         storageQueue.postRunnable(() -> {
             cleanUpInternal();
             openDataBase();
+        });
+    }
+
+    public void deleteRoomFromStorage(long roomId) {
+        storageQueue.postRunnable(() -> {
+            try {
+                dataBase.beginTransaction();
+
+                RealmRoom realmRoom = dataBase.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                if (realmRoom != null) {
+                    realmRoom.deleteFromRealm();
+                }
+
+                dataBase.where(RealmClientCondition.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
+                dataBase.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
+
+                dataBase.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         });
     }
 }

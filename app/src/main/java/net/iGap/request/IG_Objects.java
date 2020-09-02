@@ -2,8 +2,10 @@ package net.iGap.request;
 
 import androidx.annotation.Nullable;
 
+import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
+import net.iGap.proto.ProtoChannelDelete;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
@@ -189,4 +191,60 @@ public class IG_Objects {
             return actionId;
         }
     }
+
+    public static class Req_DeleteChannel extends AbstractObject {
+        public static int actionId = 404;
+
+        public long roomId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelDelete.ChannelDelete.Builder builder = ProtoChannelDelete.ChannelDelete.newBuilder();
+            builder.setRoomId(roomId);
+
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_DeleteChannel extends AbstractObject {
+        public static int actionId = 30404;
+
+        public long roomId;
+
+        @Override
+        public void readParams(Object message) {
+            try {
+                ProtoChannelDelete.ChannelDeleteResponse.Builder builder = (ProtoChannelDelete.ChannelDeleteResponse.Builder) message;
+                roomId = builder.getRoomId();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class DeleteRoomResponse extends AbstractObject {
+        @Nullable
+        @Override
+        public AbstractObject deserializeResponse(int constructor, Object protoObject) {
+            AbstractObject object = null;
+
+            if (constructor == 30404) {
+                object = new Res_DeleteChannel();
+                object.readParams(protoObject);
+            }
+
+            return object;
+        }
+    }
+
 }

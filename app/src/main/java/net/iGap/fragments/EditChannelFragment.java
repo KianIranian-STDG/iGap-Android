@@ -63,7 +63,6 @@ import net.iGap.proto.ProtoChannelCheckUsername;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelCheckUsername;
-import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChannelRemoveUsername;
 import net.iGap.request.RequestChannelRevokeLink;
@@ -644,14 +643,22 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             title = R.string.channel_left;
         }
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(title).content(deleteText).positiveText(R.string.yes).onPositive((dialog, which) -> {
-            if (isOwner) {
-                new RequestChannelDelete().channelDelete(viewModel.roomId);
-            } else {
-                new RequestChannelLeft().channelLeft(viewModel.roomId);
-            }
-            binding.loading.setVisibility(View.VISIBLE);
-        }).negativeText(R.string.no).show();
+        new MaterialDialog.Builder(G.fragmentActivity)
+                .title(title).content(deleteText)
+                .positiveText(R.string.yes)
+                .onPositive((dialog, which) -> {
+                    if (isOwner) {
+                        getMessageController().deleteChannel(roomId);
+
+                        if (getActivity() instanceof ActivityMain) {
+                            ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                        }
+
+                    } else {
+                        new RequestChannelLeft().channelLeft(viewModel.roomId);
+                    }
+                    binding.loading.setVisibility(View.VISIBLE);
+                }).negativeText(R.string.no).show();
     }
 
     @Override

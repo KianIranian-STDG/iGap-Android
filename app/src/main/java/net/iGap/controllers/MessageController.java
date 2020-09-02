@@ -57,6 +57,9 @@ public class MessageController extends BaseController implements EventListener {
         } else if (object instanceof IG_Objects.Res_CreateChannel) {
             IG_Objects.Res_CreateChannel res = (IG_Objects.Res_CreateChannel) object;
             new RequestClientGetRoom().clientGetRoom(res.roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
+        } else if (object instanceof IG_Objects.Res_DeleteChannel) {
+            IG_Objects.Res_DeleteChannel res = (IG_Objects.Res_DeleteChannel) object;
+            getMessageDataStorage().deleteRoomFromStorage(res.roomId);
         }
     }
 
@@ -100,5 +103,17 @@ public class MessageController extends BaseController implements EventListener {
     private void updateChannelAvatarInternal(IG_Objects.ChannelAvatar avatar) {
         getMessageDataStorage().putUserAvatar(avatar.roomId, avatar.avatar);
         G.runOnUiThread(() -> getEventManager().postEvent(EventManager.AVATAR_UPDATE, avatar.roomId));
+    }
+
+    public void deleteChannel(long roomId) {
+        IG_Objects.Req_DeleteChannel req = new IG_Objects.Req_DeleteChannel();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                IG_Objects.Res_DeleteChannel res = (IG_Objects.Res_DeleteChannel) response;
+                getMessageDataStorage().deleteRoomFromStorage(res.roomId);
+            }
+        });
     }
 }
