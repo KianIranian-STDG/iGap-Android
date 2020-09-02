@@ -27,7 +27,7 @@ public class IG_Objects {
         }
     }
 
-    public static class ChannelAddAvatar extends AbstractObject {
+    public static class Req_Channel_AddAvatar extends AbstractObject {
         public static int actionId = 412;
         public long roomId;
         public String attachment;
@@ -48,7 +48,7 @@ public class IG_Objects {
         }
     }
 
-    public static class ChannelAvatar extends AbstractObject {
+    public static class Res_Channel_Avatar extends AbstractObject {
         public static int actionId = 30412;
         public long roomId;
         public ProtoGlobal.Avatar avatar;
@@ -66,7 +66,7 @@ public class IG_Objects {
         }
     }
 
-    public static class AddAvatar extends AbstractObject {
+    public static class IG_AddAvatar extends AbstractObject {
         @Override
         public AbstractObject deserializeResponse(int constructor, Object protoObject) {
             if (protoObject == null) {
@@ -75,7 +75,7 @@ public class IG_Objects {
 
             AbstractObject object = null;
             if (constructor == 30412) {
-                object = new ChannelAvatar();
+                object = new Res_Channel_Avatar();
                 object.readParams(protoObject);
             }
 
@@ -83,7 +83,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Req_CreateGroup extends AbstractObject {
+    public static class Req_Group_Create extends AbstractObject {
         public static int actionId = 300;
         public String name;
         public String description;
@@ -104,7 +104,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Res_CreateGroup extends AbstractObject {
+    public static class Res_Group_Create extends AbstractObject {
         public static int actionId = 30300;
 
         public String inviteLink;
@@ -128,18 +128,18 @@ public class IG_Objects {
         }
     }
 
-    public static class CreateRoomResponse extends AbstractObject {
+    public static class IG_CreateRoomResponse extends AbstractObject {
         @Nullable
         @Override
         public AbstractObject deserializeResponse(int constructor, Object protoObject) {
 
             AbstractObject object = null;
 
-            if (constructor == Res_CreateGroup.actionId) {
-                object = new Res_CreateGroup();
+            if (constructor == Res_Group_Create.actionId) {
+                object = new Res_Group_Create();
                 object.readParams(protoObject);
-            } else if (constructor == Res_CreateChannel.actionId) {
-                object = new Res_CreateChannel();
+            } else if (constructor == Res_Channel_Create.actionId) {
+                object = new Res_Channel_Create();
                 object.readParams(protoObject);
             }
 
@@ -147,7 +147,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Req_CreateChannel extends AbstractObject {
+    public static class Req_Channel_Create extends AbstractObject {
         public static int actionId = 400;
         public String name;
         public String description;
@@ -168,7 +168,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Res_CreateChannel extends AbstractObject {
+    public static class Res_Channel_Create extends AbstractObject {
         public static int actionId = 30400;
 
         public String inviteLink;
@@ -192,7 +192,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Req_DeleteChannel extends AbstractObject {
+    public static class Req_Channel_Delete extends AbstractObject {
         public static int actionId = 404;
 
         public long roomId;
@@ -211,7 +211,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Res_DeleteChannel extends AbstractObject {
+    public static class Res_Channel_Delete extends AbstractObject {
         public static int actionId = 30404;
 
         public long roomId;
@@ -232,14 +232,14 @@ public class IG_Objects {
         }
     }
 
-    public static class DeleteRoomResponse extends AbstractObject {
+    public static class IG_DeleteRoomResponse extends AbstractObject {
         @Nullable
         @Override
         public AbstractObject deserializeResponse(int constructor, Object protoObject) {
             AbstractObject object = null;
 
             if (constructor == 30404) {
-                object = new Res_DeleteChannel();
+                object = new Res_Channel_Delete();
                 object.readParams(protoObject);
             }
 

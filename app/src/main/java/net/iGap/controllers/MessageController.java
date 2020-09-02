@@ -48,17 +48,17 @@ public class MessageController extends BaseController implements EventListener {
             return;
         }
 
-        if (object instanceof IG_Objects.ChannelAvatar) {
-            IG_Objects.ChannelAvatar channelAvatar = (IG_Objects.ChannelAvatar) object;
+        if (object instanceof IG_Objects.Res_Channel_Avatar) {
+            IG_Objects.Res_Channel_Avatar channelAvatar = (IG_Objects.Res_Channel_Avatar) object;
             updateChannelAvatarInternal(channelAvatar);
-        } else if (object instanceof IG_Objects.Res_CreateGroup) {
-            IG_Objects.Res_CreateGroup res = (IG_Objects.Res_CreateGroup) object;
+        } else if (object instanceof IG_Objects.Res_Group_Create) {
+            IG_Objects.Res_Group_Create res = (IG_Objects.Res_Group_Create) object;
             new RequestClientGetRoom().clientGetRoom(res.roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-        } else if (object instanceof IG_Objects.Res_CreateChannel) {
-            IG_Objects.Res_CreateChannel res = (IG_Objects.Res_CreateChannel) object;
+        } else if (object instanceof IG_Objects.Res_Channel_Create) {
+            IG_Objects.Res_Channel_Create res = (IG_Objects.Res_Channel_Create) object;
             new RequestClientGetRoom().clientGetRoom(res.roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-        } else if (object instanceof IG_Objects.Res_DeleteChannel) {
-            IG_Objects.Res_DeleteChannel res = (IG_Objects.Res_DeleteChannel) object;
+        } else if (object instanceof IG_Objects.Res_Channel_Delete) {
+            IG_Objects.Res_Channel_Delete res = (IG_Objects.Res_Channel_Delete) object;
             getMessageDataStorage().deleteRoomFromStorage(res.roomId);
         }
     }
@@ -79,13 +79,13 @@ public class MessageController extends BaseController implements EventListener {
             String fileToken = (String) message[1];
 
             if (lastUploadedAvatarId != null && lastUploadedAvatarId.equals(fileId)) {
-                IG_Objects.ChannelAddAvatar req = new IG_Objects.ChannelAddAvatar();
+                IG_Objects.Req_Channel_AddAvatar req = new IG_Objects.Req_Channel_AddAvatar();
                 req.attachment = fileToken;
                 req.roomId = lastUploadedAvatarRoomId;
 
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
-                        IG_Objects.ChannelAvatar channelAvatar = (IG_Objects.ChannelAvatar) response;
+                        IG_Objects.Res_Channel_Avatar channelAvatar = (IG_Objects.Res_Channel_Avatar) response;
                         updateChannelAvatarInternal(channelAvatar);
                     }
                 });
@@ -100,18 +100,18 @@ public class MessageController extends BaseController implements EventListener {
         }
     }
 
-    private void updateChannelAvatarInternal(IG_Objects.ChannelAvatar avatar) {
+    private void updateChannelAvatarInternal(IG_Objects.Res_Channel_Avatar avatar) {
         getMessageDataStorage().putUserAvatar(avatar.roomId, avatar.avatar);
         G.runOnUiThread(() -> getEventManager().postEvent(EventManager.AVATAR_UPDATE, avatar.roomId));
     }
 
     public void deleteChannel(long roomId) {
-        IG_Objects.Req_DeleteChannel req = new IG_Objects.Req_DeleteChannel();
+        IG_Objects.Req_Channel_Delete req = new IG_Objects.Req_Channel_Delete();
         req.roomId = roomId;
 
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
-                IG_Objects.Res_DeleteChannel res = (IG_Objects.Res_DeleteChannel) response;
+                IG_Objects.Res_Channel_Delete res = (IG_Objects.Res_Channel_Delete) response;
                 getMessageDataStorage().deleteRoomFromStorage(res.roomId);
             }
         });
