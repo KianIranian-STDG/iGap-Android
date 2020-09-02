@@ -98,7 +98,7 @@ public class MessageDataStorage extends BaseController {
 
                 getEventManager().postEvent(EventManager.ON_MESSAGE_DELETE, roomId, messageId, update);
 
-                if (realmRoom != null) {
+                if (realmRoom != null && realmRoom.lastMessage != null) {
                     if (realmRoom.lastMessage.messageId == messageId) {
 
                         Number newLastMessageId = dataBase.where(RealmRoomMessage.class)
