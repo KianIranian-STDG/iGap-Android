@@ -1,7 +1,6 @@
 package net.iGap.controllers;
 
 import net.iGap.G;
-import net.iGap.helper.HelperTracker;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.accountManager.AccountManager;
@@ -54,10 +53,10 @@ public class MessageController extends BaseController implements EventListener {
             updateChannelAvatarInternal(channelAvatar);
         } else if (object instanceof IG_Objects.Res_CreateGroup) {
             IG_Objects.Res_CreateGroup res = (IG_Objects.Res_CreateGroup) object;
-
-            HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
             new RequestClientGetRoom().clientGetRoom(res.roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-
+        } else if (object instanceof IG_Objects.Res_CreateChannel) {
+            IG_Objects.Res_CreateChannel res = (IG_Objects.Res_CreateChannel) object;
+            new RequestClientGetRoom().clientGetRoom(res.roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
         }
     }
 

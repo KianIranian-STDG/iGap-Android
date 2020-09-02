@@ -3,6 +3,7 @@ package net.iGap.request;
 import androidx.annotation.Nullable;
 
 import net.iGap.proto.ProtoChannelAvatarAdd;
+import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
@@ -135,9 +136,57 @@ public class IG_Objects {
             if (constructor == Res_CreateGroup.actionId) {
                 object = new Res_CreateGroup();
                 object.readParams(protoObject);
+            } else if (constructor == Res_CreateChannel.actionId) {
+                object = new Res_CreateChannel();
+                object.readParams(protoObject);
             }
 
             return object;
+        }
+    }
+
+    public static class Req_CreateChannel extends AbstractObject {
+        public static int actionId = 400;
+        public String name;
+        public String description;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelCreate.ChannelCreate.Builder builder = ProtoChannelCreate.ChannelCreate.newBuilder();
+
+            builder.setName(name);
+            builder.setDescription(description.trim());
+
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_CreateChannel extends AbstractObject {
+        public static int actionId = 30400;
+
+        public String inviteLink;
+        public long roomId;
+
+        @Override
+        public void readParams(Object message) {
+            try {
+                ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
+                inviteLink = builder.getInviteLink();
+                roomId = builder.getRoomId();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
         }
     }
 }

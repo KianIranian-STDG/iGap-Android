@@ -43,7 +43,8 @@ public class HelperFillLookUpClass {
     public HelperFillLookUpClass() {
         fillLockup = new SparseArray<>();
         fillLockup.put(IG_Objects.ChannelAvatar.actionId, IG_Objects.AddAvatar.class);
-        fillLockup.put(IG_Objects.Res_CreateGroup.actionId, IG_Objects.CreateRoomResponse.class);
+        fillLockup.put(30300, IG_Objects.CreateRoomResponse.class);
+        fillLockup.put(30400, IG_Objects.CreateRoomResponse.class);
 
     }
 

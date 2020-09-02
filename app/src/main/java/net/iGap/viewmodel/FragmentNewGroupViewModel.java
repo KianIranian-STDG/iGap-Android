@@ -26,15 +26,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.AppUtils;
-import net.iGap.observers.interfaces.OnChannelCreate;
 import net.iGap.observers.interfaces.OnChatConvertToGroup;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.IG_Objects;
 import net.iGap.request.RequestChannelAvatarAdd;
-import net.iGap.request.RequestChannelCreate;
 import net.iGap.request.RequestChatConvertToGroup;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestGroupAvatarAdd;
@@ -81,12 +80,30 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
             InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-            String newName = edtSetNewGroup.get().replace(" ", "_");
-            //  File file2 = new File(path, prefix + "_" + newName + Math.random() * 10000 + 1 + ".png");
             if (prefix.equals("NewChanel")) {
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 isChannel = true;
-                createChannel();
+
+                IG_Objects.Req_CreateChannel req = new IG_Objects.Req_CreateChannel();
+                req.name = edtSetNewGroup.get();
+                req.description = edtDescription.get();
+
+                getRequestManager().sendRequest(req, (response, error) -> {
+                    if (error == null) {
+                        IG_Objects.Res_CreateChannel res = (IG_Objects.Res_CreateChannel) response;
+                        getChannelRoom(res.roomId);
+
+                        HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_CHANNEL);
+                    } else {
+                        IG_Objects.Error err = (IG_Objects.Error) error;
+
+                        hideProgressBar();
+                        if (err.major == 479) {
+                            G.runOnUiThread(this::ShowDialogLimitCreate);
+                        }
+                    }
+                });
+
             } else if (prefix.equals("ConvertToGroup")) {
                 isChannel = false;
                 chatToGroup();
@@ -105,6 +122,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
 
                         roomId = res.roomId;
                         getRoom(res.roomId, ProtoGlobal.Room.Type.GROUP, true);
+                        HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
                     } else {
                         IG_Objects.Error err = (IG_Objects.Error) error;
 
@@ -179,38 +197,6 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
         edtDescriptionMaxLines.set(2);
 
 
-    }
-
-    private void createChannel() {
-
-        G.onChannelCreate = new OnChannelCreate() {
-            @Override
-            public void onChannelCreate(final long roomIdR, final String inviteLink, final String channelName) {
-                getChannelRoom(roomIdR);
-                G.onChannelCreate = null;
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.onChannelCreate = null;
-                hideProgressBar();
-                if (majorCode == 479) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ShowDialogLimitCreate();
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onTimeOut() {
-                hideProgressBar();
-            }
-        };
-
-        new RequestChannelCreate().channelCreate(edtSetNewGroup.get(), edtDescription.get());
     }
 
     private void getChannelRoom(final long roomId) {
