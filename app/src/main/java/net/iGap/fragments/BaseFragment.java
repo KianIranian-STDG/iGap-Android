@@ -13,10 +13,13 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -41,10 +44,14 @@ public class BaseFragment extends SwipeBackFragment {
     protected Fragment currentFragment;
     public int currentAccount = AccountManager.selectedAccount;
     public AvatarHandler avatarHandler;
+    private Context context;
+    protected View fragmentView;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        this.context = context;
+
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
         hideKeyboard();
@@ -82,6 +89,16 @@ public class BaseFragment extends SwipeBackFragment {
                 return false;
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return createView(context);
+    }
+
+    public View createView(Context context) {
+        return null;
     }
 
     public void closeKeyboard(View v) {

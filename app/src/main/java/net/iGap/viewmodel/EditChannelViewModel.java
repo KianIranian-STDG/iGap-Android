@@ -18,7 +18,6 @@ import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
-import net.iGap.observers.interfaces.OnChannelDelete;
 import net.iGap.observers.interfaces.OnChannelEdit;
 import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.observers.interfaces.OnChannelUpdateSignature;
@@ -34,7 +33,7 @@ import net.iGap.request.RequestChannelUpdateSignature;
 
 import java.util.ArrayList;
 
-public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
+public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, OnChannelUpdateReactionStatus {
 
     public ObservableField<String> channelName = new ObservableField<>("");
     public ObservableField<String> channelDescription = new ObservableField<>("");
@@ -87,7 +86,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         /*G.onChannelKickAdmin = this;*/
         /*G.onChannelAddModerator = this;*/
         /*G.onChannelKickModerator = this;*/
-        G.onChannelDelete = this;
         /*G.onChannelRevokeLink = this;*/
 
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
@@ -334,11 +332,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     @Override
     public void onChannelAvatarDelete(long roomId, long avatarId) {
         channelAvatarUpdatedLiveData.postValue(roomId);
-    }
-
-    @Override
-    public void onChannelDelete(long roomId) {
-        closeActivity();
     }
 
     @Override

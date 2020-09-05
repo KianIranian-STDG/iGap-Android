@@ -64,9 +64,9 @@ public class HelperUnpackMessage {
 
         if (responseId == null) {
             if (actionId == 0) {
-                instanceResponseClass(actionId, protoObject, null, null, "error", true);
+                instanceResponseClass(actionId, protoObject, null, null, null, "error", true);
             } else {
-                instanceResponseClass(actionId, protoObject, null, null, "handler", true);
+                instanceResponseClass(actionId, protoObject, null, null, null, "handler", true);
             }
         } else {
             if (!G.requestQueueMap.containsKey(responseId)) {
@@ -101,13 +101,13 @@ public class HelperUnpackMessage {
                                 currentProto = errorResponse;
                             }
                             G.requestQueueMap.remove(currentResponseId);
-                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, currentRequestWrapper.onResponse, "error");
+                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, currentRequestWrapper.onResponse, currentRequestWrapper.req, "error");
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
 
-                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, requestWrapper.onResponse, "error");
+                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, requestWrapper.onResponse, requestWrapper.req, "error");
                     }
                 } else {
                     if (responseId.contains(".")) {
@@ -117,7 +117,7 @@ public class HelperUnpackMessage {
                         int index = Integer.parseInt(indexString);
 
                         RequestWrapper wrapper = G.requestQueueMap.get(responseId);
-                        Object responseClass = instanceResponseClass(actionId, protoObject, wrapper.identity, wrapper.onResponse, null);
+                        Object responseClass = instanceResponseClass(actionId, protoObject, wrapper.identity, wrapper.onResponse, wrapper.req, null);
 
                         ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
                         objectValues.set(index, responseClass);
@@ -148,13 +148,13 @@ public class HelperUnpackMessage {
                                 if (fieldIdentity.get(object) != null) {
                                     currentIdentity = fieldIdentity.get(object).toString();
                                 }
-                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, null, "handler");
+                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, null, null, "handler");
                             }
                         }
                     } else {
                         RequestWrapper requestWrapper = G.requestQueueMap.get(responseId);
                         G.requestQueueMap.remove(responseId);
-                        instanceResponseClass(actionId, protoObject, requestWrapper.identity, requestWrapper.onResponse, "handler");
+                        instanceResponseClass(actionId, protoObject, requestWrapper.identity, requestWrapper.onResponse, requestWrapper.req, "handler");
                     }
                 }
                 RequestQueue.sendRequest();
@@ -274,21 +274,21 @@ public class HelperUnpackMessage {
         return object3;
     }
 
-    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, OnResponse onResponse, String optionalMethod) {
-        return instanceResponseClass(actionId, protoObject, identity, onResponse, optionalMethod, false);
+    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, OnResponse onResponse, AbstractObject req, String optionalMethod) {
+        return instanceResponseClass(actionId, protoObject, identity, onResponse, req, optionalMethod, false);
     }
 
-    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, OnResponse onResponse, String optionalMethod, boolean update) {
+    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, OnResponse onResponse, AbstractObject req, String optionalMethod, boolean update) {
         Object object = null;
         try {
-            if (!update && onResponse != null && optionalMethod != null) {
+            if (!update && onResponse != null && optionalMethod != null && req != null) {
                 if (optionalMethod.equals("handler")) {
-                    AbstractObject abstractObject = HelperFillLookUpClass.getInstance().getClassInstance(actionId);
+                    AbstractObject res = req.deserializeResponse(actionId, protoObject);
 
-                    if (abstractObject != null) {
-                        AbstractObject finalMessage = abstractObject.deserializeResponse(actionId, protoObject);
-                        onResponse.onReceived(finalMessage, null);
+                    if (res != null) {
+                        onResponse.onReceived(res, null);
                     }
+
                 } else if (optionalMethod.equals("error")) {
                     AbstractObject error = new IG_Objects.Error();
                     error.readParams(protoObject);
@@ -296,6 +296,12 @@ public class HelperUnpackMessage {
                     onResponse.onReceived(null, error);
                 }
             } else {
+                boolean validForUpdate = HelperFillLookUpClass.getInstance().validObject(actionId);
+
+                if (update && validForUpdate && actionId != 0) {
+                    RequestManager.getInstance(AccountManager.selectedAccount).onUpdate(actionId, protoObject);
+                }
+
                 String className = getClassName(actionId);
                 String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
                 Class<?> responseClass = Class.forName(responseClassName);
@@ -312,12 +318,6 @@ public class HelperUnpackMessage {
 
                 if (optionalMethod != null) {
                     responseClass.getMethod(optionalMethod).invoke(object);
-                }
-
-                boolean validForUpdate = HelperFillLookUpClass.getInstance().validObject(actionId);
-
-                if (update && validForUpdate && actionId != 0) {
-                    RequestManager.getInstance(AccountManager.selectedAccount).onUpdate(actionId, protoObject);
                 }
             }
         } catch (InstantiationException e) {

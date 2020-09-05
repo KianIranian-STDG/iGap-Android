@@ -22,10 +22,11 @@ public class MessageDataStorage extends BaseController {
     private static volatile MessageDataStorage[] instance = new MessageDataStorage[AccountManager.MAX_ACCOUNT_COUNT];
     private DispatchQueue storageQueue = new DispatchQueue("MessageStorage");
     private Realm dataBase;
+    private String TAG = getClass().getSimpleName();
 
     public MessageDataStorage(int currentAccount) {
         super(currentAccount);
-        storageQueue.postRunnable(this::openDataBase);
+        openDataBase();
     }
 
     public static MessageDataStorage getInstance(int account) {
@@ -42,8 +43,12 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void openDataBase() {
-        RealmConfiguration config = AccountManager.getInstance().getCurrentUser().getRealmConfiguration();
-        dataBase = Realm.getInstance(config);
+        storageQueue.postRunnable(() -> {
+            if (dataBase == null || dataBase.isClosed()) {
+                RealmConfiguration config = AccountManager.getInstance().getCurrentUser().getRealmConfiguration();
+                dataBase = Realm.getInstance(config);
+            }
+        });
     }
 
     public void processDeleteMessage(long roomId, long messageId, long deleteVersion, boolean update) {
@@ -94,7 +99,7 @@ public class MessageDataStorage extends BaseController {
 
                 getEventManager().postEvent(EventManager.ON_MESSAGE_DELETE, roomId, messageId, update);
 
-                if (realmRoom != null) {
+                if (realmRoom != null && realmRoom.lastMessage != null) {
                     if (realmRoom.lastMessage.messageId == messageId) {
 
                         Number newLastMessageId = dataBase.where(RealmRoomMessage.class)
@@ -141,18 +146,38 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void cleanUpInternal() {
+        try {
+            dataBase.close();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    public void cleanUp() {
+        storageQueue.postRunnable(() -> {
+            cleanUpInternal();
+            openDataBase();
+        });
+    }
+
+    public void deleteRoomFromStorage(long roomId) {
         storageQueue.postRunnable(() -> {
             try {
-                dataBase.close();
-                instance = null;
+                dataBase.beginTransaction();
+
+                RealmRoom realmRoom = dataBase.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                if (realmRoom != null) {
+                    realmRoom.deleteFromRealm();
+                }
+
+                dataBase.where(RealmClientCondition.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
+                dataBase.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
+
+                dataBase.commitTransaction();
             } catch (Exception e) {
                 FileLog.e(e);
             }
         });
-    }
-
-    public void cleanUp() {
-        storageQueue.cleanupQueue();
-        cleanUpInternal();
     }
 }
