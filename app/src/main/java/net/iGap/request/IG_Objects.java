@@ -1,7 +1,5 @@
 package net.iGap.request;
 
-import androidx.annotation.Nullable;
-
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
@@ -27,7 +25,7 @@ public class IG_Objects {
         }
     }
 
-    public static class Req_Channel_AddAvatar extends AbstractObject {
+    public static class Channel_AddAvatar extends AbstractObject {
         public static int actionId = 412;
         public long roomId;
         public String attachment;
@@ -35,6 +33,10 @@ public class IG_Objects {
         @Override
         public int getActionId() {
             return actionId;
+        }
+
+        public AbstractObject deserializeResponse(int constructor, Object protoObject) {
+            return Res_Channel_Avatar.deserializeObject(constructor, protoObject);
         }
 
         @Override
@@ -53,6 +55,17 @@ public class IG_Objects {
         public long roomId;
         public ProtoGlobal.Avatar avatar;
 
+        public static Res_Channel_Avatar deserializeObject(int constructor, Object protoObject) {
+            if (constructor != actionId || protoObject == null) {
+                return null;
+            }
+
+            Res_Channel_Avatar object = new Res_Channel_Avatar();
+            object.readParams(protoObject);
+
+            return object;
+        }
+
         @Override
         public void readParams(Object message) {
             try {
@@ -66,27 +79,14 @@ public class IG_Objects {
         }
     }
 
-    public static class IG_AddAvatar extends AbstractObject {
-        @Override
-        public AbstractObject deserializeResponse(int constructor, Object protoObject) {
-            if (protoObject == null) {
-                return null;
-            }
-
-            AbstractObject object = null;
-            if (constructor == 30412) {
-                object = new Res_Channel_Avatar();
-                object.readParams(protoObject);
-            }
-
-            return object;
-        }
-    }
-
-    public static class Req_Group_Create extends AbstractObject {
+    public static class Group_Create extends AbstractObject {
         public static int actionId = 300;
         public String name;
         public String description;
+
+        public Res_Group_Create deserializeResponse(int constructor, Object protoObject) {
+            return Res_Group_Create.deserializeObject(constructor, protoObject);
+        }
 
         @Override
         public Object getProtoObject() {
@@ -110,6 +110,17 @@ public class IG_Objects {
         public String inviteLink;
         public long roomId;
 
+        public static Res_Group_Create deserializeObject(int constructor, Object protoObject) {
+            if (constructor != actionId || protoObject == null) {
+                return null;
+            }
+
+            Res_Group_Create object = new Res_Group_Create();
+            object.readParams(protoObject);
+
+            return object;
+        }
+
         @Override
         public void readParams(Object message) {
             try {
@@ -128,29 +139,14 @@ public class IG_Objects {
         }
     }
 
-    public static class IG_CreateRoomResponse extends AbstractObject {
-        @Nullable
-        @Override
-        public AbstractObject deserializeResponse(int constructor, Object protoObject) {
-
-            AbstractObject object = null;
-
-            if (constructor == Res_Group_Create.actionId) {
-                object = new Res_Group_Create();
-                object.readParams(protoObject);
-            } else if (constructor == Res_Channel_Create.actionId) {
-                object = new Res_Channel_Create();
-                object.readParams(protoObject);
-            }
-
-            return object;
-        }
-    }
-
-    public static class Req_Channel_Create extends AbstractObject {
+    public static class Channel_Create extends AbstractObject {
         public static int actionId = 400;
         public String name;
         public String description;
+
+        public Res_Channel_Create deserializeResponse(int constructor, Object protoObject) {
+            return Res_Channel_Create.deserializeObject(constructor, protoObject);
+        }
 
         @Override
         public Object getProtoObject() {
@@ -174,6 +170,17 @@ public class IG_Objects {
         public String inviteLink;
         public long roomId;
 
+        public static Res_Channel_Create deserializeObject(int constructor, Object protoObject) {
+            if (constructor != actionId || protoObject == null) {
+                return null;
+            }
+
+            Res_Channel_Create object = new Res_Channel_Create();
+            object.readParams(protoObject);
+
+            return object;
+        }
+
         @Override
         public void readParams(Object message) {
             try {
@@ -192,10 +199,14 @@ public class IG_Objects {
         }
     }
 
-    public static class Req_Channel_Delete extends AbstractObject {
+    public static class Channel_Delete extends AbstractObject {
         public static int actionId = 404;
 
         public long roomId;
+
+        public Res_Channel_Delete deserializeResponse(int constructor, Object protoObject) {
+            return Res_Channel_Delete.deserializeObject(constructor, protoObject);
+        }
 
         @Override
         public Object getProtoObject() {
@@ -213,8 +224,18 @@ public class IG_Objects {
 
     public static class Res_Channel_Delete extends AbstractObject {
         public static int actionId = 30404;
-
         public long roomId;
+
+        public static Res_Channel_Delete deserializeObject(int constructor, Object protoObject) {
+            if (constructor != actionId || protoObject == null) {
+                return null;
+            }
+
+            Res_Channel_Delete object = new Res_Channel_Delete();
+            object.readParams(protoObject);
+
+            return object;
+        }
 
         @Override
         public void readParams(Object message) {
@@ -229,21 +250,6 @@ public class IG_Objects {
         @Override
         public int getActionId() {
             return actionId;
-        }
-    }
-
-    public static class IG_DeleteRoomResponse extends AbstractObject {
-        @Nullable
-        @Override
-        public AbstractObject deserializeResponse(int constructor, Object protoObject) {
-            AbstractObject object = null;
-
-            if (constructor == 30404) {
-                object = new Res_Channel_Delete();
-                object.readParams(protoObject);
-            }
-
-            return object;
         }
     }
 

@@ -84,13 +84,13 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 isChannel = true;
 
-                IG_Objects.Req_CreateChannel req = new IG_Objects.Req_CreateChannel();
+                IG_Objects.Channel_Create req = new IG_Objects.Channel_Create();
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
-                        IG_Objects.Res_CreateChannel res = (IG_Objects.Res_CreateChannel) response;
+                        IG_Objects.Res_Channel_Create res = (IG_Objects.Res_Channel_Create) response;
                         getChannelRoom(res.roomId);
 
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_CHANNEL);
@@ -110,13 +110,13 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
             } else {
                 isChannel = false;
 
-                IG_Objects.Req_CreateGroup req = new IG_Objects.Req_CreateGroup();
+                IG_Objects.Group_Create req = new IG_Objects.Group_Create();
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
-                        IG_Objects.Res_CreateGroup res = (IG_Objects.Res_CreateGroup) response;
+                        IG_Objects.Res_Group_Create res = (IG_Objects.Res_Group_Create) response;
 
                         hideProgressBar();
 

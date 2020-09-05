@@ -79,7 +79,7 @@ public class MessageController extends BaseController implements EventListener {
             String fileToken = (String) message[1];
 
             if (lastUploadedAvatarId != null && lastUploadedAvatarId.equals(fileId)) {
-                IG_Objects.Req_Channel_AddAvatar req = new IG_Objects.Req_Channel_AddAvatar();
+                IG_Objects.Channel_AddAvatar req = new IG_Objects.Channel_AddAvatar();
                 req.attachment = fileToken;
                 req.roomId = lastUploadedAvatarRoomId;
 
@@ -106,7 +106,7 @@ public class MessageController extends BaseController implements EventListener {
     }
 
     public void deleteChannel(long roomId) {
-        IG_Objects.Req_Channel_Delete req = new IG_Objects.Req_Channel_Delete();
+        IG_Objects.Channel_Delete req = new IG_Objects.Channel_Delete();
         req.roomId = roomId;
 
         getRequestManager().sendRequest(req, (response, error) -> {

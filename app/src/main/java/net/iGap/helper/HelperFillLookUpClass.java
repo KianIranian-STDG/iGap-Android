@@ -42,16 +42,36 @@ public class HelperFillLookUpClass {
 
     public HelperFillLookUpClass() {
         fillLockup = new SparseArray<>();
-        fillLockup.put(IG_Objects.ChannelAvatar.actionId, IG_Objects.AddAvatar.class);
-        fillLockup.put(30300, IG_Objects.CreateRoomResponse.class);
-        fillLockup.put(30400, IG_Objects.CreateRoomResponse.class);
-        fillLockup.put(30404, IG_Objects.DeleteRoomResponse.class);
-
+        fillLockup.put(IG_Objects.Res_Channel_Create.actionId, IG_Objects.Res_Channel_Create.class);
+        fillLockup.put(IG_Objects.Res_Channel_Delete.actionId, IG_Objects.Res_Channel_Delete.class);
+        fillLockup.put(IG_Objects.Res_Group_Create.actionId, IG_Objects.Res_Group_Create.class);
+        fillLockup.put(IG_Objects.Res_Channel_Avatar.actionId, IG_Objects.Res_Channel_Avatar.class);
     }
 
     public boolean validObject(int actionId) {
         Log.i("RequestManager", "validObject: " + actionId + " " + (fillLockup.get(actionId) != null));
         return fillLockup.get(actionId) != null;
+    }
+
+    public AbstractObject deserializeObject(int actionId, Object proto) {
+        Class<?> resClass = fillLockup.get(actionId);
+        if (resClass != null) {
+            try {
+                AbstractObject object = (AbstractObject) resClass.newInstance();
+                object.readParams(proto);
+
+                return object;
+            } catch (IllegalAccessException e) {
+                FileLog.e(e);
+                Log.e(getClass().getSimpleName(), "IllegalAccessException getClassInstance: " + actionId);
+            } catch (InstantiationException e) {
+                FileLog.e(e);
+                Log.e(getClass().getSimpleName(), "InstantiationException getClassInstance: " + actionId);
+            }
+        }
+
+        Log.e(getClass().getSimpleName(), "IllegalAccessException getClassInstance: " + actionId);
+        return null;
     }
 
     public AbstractObject getClassInstance(int actionId) {

@@ -33,7 +33,7 @@ public class RequestManager extends BaseController {
 
     public String sendRequest(AbstractObject request, OnResponse onResponse) {
         String reqId = null;
-        RequestWrapper wrapper = new RequestWrapper(request.getActionId(), request.getProtoObject(), null, onResponse);
+        RequestWrapper wrapper = new RequestWrapper(request, onResponse);
 
         try {
             reqId = RequestQueue.sendRequest(wrapper);
@@ -51,10 +51,10 @@ public class RequestManager extends BaseController {
             return;
         }
 
-        AbstractObject object = HelperFillLookUpClass.getInstance().getClassInstance(actionId);
-        if (object != null) {
-            AbstractObject finalMessage = object.deserializeResponse(actionId, protoObject);
-            getMessageController().onUpdate(finalMessage);
+        AbstractObject res = HelperFillLookUpClass.getInstance().deserializeObject(actionId, protoObject);
+
+        if (res != null) {
+            getMessageController().onUpdate(res);
         }
     }
 }

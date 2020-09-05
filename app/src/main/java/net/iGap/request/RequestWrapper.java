@@ -16,24 +16,30 @@ public class RequestWrapper {
 
     public long time = 0;
     public Object identity;
-    protected int actionId;
-    private Object protoObject;
-    private String randomId;
+    public int actionId;
+    public Object protoObject;
+    public String randomId;
     public OnResponse onResponse;
+    public AbstractObject req;
 
     public RequestWrapper(int actionId, Object protoObject, Object identity) {
-        this(actionId, protoObject, identity, null);
+        this(actionId, protoObject, identity, null, null);
     }
 
-    public RequestWrapper(int actionId, Object protoObject, Object identity, OnResponse onResponse) {
+    public RequestWrapper(int actionId, Object protoObject, Object identity, OnResponse onResponse, AbstractObject req) {
         this.actionId = actionId;
         this.protoObject = protoObject;
         this.identity = identity;
         this.onResponse = onResponse;
+        this.req = req;
     }
 
     public RequestWrapper(int actionId, Object protoObject) {
-        this(actionId, protoObject, null, null);
+        this(actionId, protoObject, null, null, null);
+    }
+
+    public RequestWrapper(AbstractObject request, OnResponse onResponse) {
+        this(request.getActionId(), request.getProtoObject(), null, onResponse, request);
     }
 
     public int getActionId() {
