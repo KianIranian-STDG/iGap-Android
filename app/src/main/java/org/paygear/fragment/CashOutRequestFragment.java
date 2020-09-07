@@ -5,20 +5,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.browser.customtabs.CustomTabsIntent;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -46,8 +38,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.textfield.TextInputLayout;
 
 import net.iGap.R;
 import net.iGap.databinding.OtpDialogBinding;
@@ -280,9 +281,9 @@ public class CashOutRequestFragment extends Fragment {
             }
 
             if (RaadApp.selectedMerchant.getAccount_type() != 4) {
-                if (RaadApp.selectedMerchant.getBusiness_type()==2){
+                if (RaadApp.selectedMerchant.getBusiness_type() == 2) {
                     first = getString(R.string.taxi_balance);
-                }else {
+                } else {
                     first = getString(R.string.shop_balance);
                 }
             } else {
@@ -838,25 +839,30 @@ public class CashOutRequestFragment extends Fragment {
         Web.getInstance().getWebService().requestCashOut(RaadApp.selectedMerchant == null ? Auth.getCurrentAuth().getId() : RaadApp.selectedMerchant.get_id(), mCard.token, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
-                if (success == null)
-                    return;
+                if (response.body() != null) {
+                    Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
+                    if (success == null)
+                        return;
 
-                if (success) {
-                    Toast.makeText(getContext(), R.string.cash_out_request_done, Toast.LENGTH_SHORT).show();
-                    if (getActivity() instanceof NavigationBarActivity) {
-                        ((NavigationBarActivity) getActivity()).broadcastMessage(
-                                CashOutRequestFragment.this, null, CardsFragment.class);
+                    if (success) {
+                        Toast.makeText(getContext(), R.string.cash_out_request_done, Toast.LENGTH_SHORT).show();
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                    CashOutRequestFragment.this, null, CardsFragment.class);
+                        }
+
+
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        if (WalletActivity.refreshLayout != null)
+                            WalletActivity.refreshLayout.setRefreshLayout(true);
+
+
+                    } else {
+                        setLoading(false);
                     }
-
-
-                    getActivity().getSupportFragmentManager().popBackStack();
-                    if (WalletActivity.refreshLayout != null)
-                        WalletActivity.refreshLayout.setRefreshLayout(true);
-
-
                 } else {
                     setLoading(false);
+                    Toast.makeText(getContext(), getResources().getString(R.string.server_do_not_response), Toast.LENGTH_SHORT).show();
                 }
             }
 
