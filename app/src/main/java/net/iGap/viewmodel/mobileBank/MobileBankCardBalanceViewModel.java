@@ -1,27 +1,24 @@
 package net.iGap.viewmodel.mobileBank;
 
+import android.util.Base64;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import net.iGap.Config;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.mobileBank.BankCardAuth;
 import net.iGap.model.mobileBank.BankCardBalance;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
-import net.iGap.module.mobileBank.RSACipher;
+import net.iGap.module.AESCrypt;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.MobileBankRepository;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
 
@@ -111,31 +108,40 @@ public class MobileBankCardBalanceViewModel extends BaseMobileBankViewModel {
     private String getAuth() {
         String tempAuth = null;
         BankCardAuth auth = new BankCardAuth(CVV.get(), date.get().replace("/", ""), password.get(), "EPAY", null);
+//        try {
+//            RSACipher cipher = new RSACipher();
+//            tempAuth = cipher.encrypt(new Gson().toJson(auth), RSACipher.stringToPublicKey(Config.PUBLIC_PARSIAN_KEY_CLIENT));
+
         try {
-            RSACipher cipher = new RSACipher();
-            tempAuth = cipher.encrypt(new Gson().toJson(auth), RSACipher.stringToPublicKey(Config.PUBLIC_PARSIAN_KEY_CLIENT));
-            return tempAuth;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            showRequestErrorMessage.setValue("Bad Encryption");
-            return null;
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-            showRequestErrorMessage.setValue("Bad Encryption");
-            return null;
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-            showRequestErrorMessage.setValue("Bad Encryption");
-            return null;
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-            showRequestErrorMessage.setValue("Bad Encryption");
-            return null;
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
+            byte[] encryptedBytes = AESCrypt.encrypt(G.symmetricKey, new Gson().toJson(auth).getBytes());
+            tempAuth = Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
+        } catch (GeneralSecurityException e) {
             showRequestErrorMessage.setValue("Bad Encryption");
             return null;
         }
+
+        return tempAuth;
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//            showRequestErrorMessage.setValue("Bad Encryption");
+//
+//        } catch (NoSuchPaddingException e) {
+//            e.printStackTrace();
+//            showRequestErrorMessage.setValue("Bad Encryption");
+//            return null;
+//        } catch (InvalidKeyException e) {
+//            e.printStackTrace();
+//            showRequestErrorMessage.setValue("Bad Encryption");
+//            return null;
+//        } catch (IllegalBlockSizeException e) {
+//            e.printStackTrace();
+//            showRequestErrorMessage.setValue("Bad Encryption");
+//            return null;
+//        } catch (BadPaddingException e) {
+//            e.printStackTrace();
+//            showRequestErrorMessage.setValue("Bad Encryption");
+//            return null;
+//        }
     }
 
     private void getBalance() {

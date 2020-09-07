@@ -34,7 +34,7 @@ public class MobileBankRepository {
     private static MobileBankRepository instance ;
     private MobileBankApi bankApi = new RetrofitFactory().getMobileBankRetrofit();
     private String accessToken;
-    private static String TOKEN_PREFIX = "Bearer  ";
+    private static String TOKEN_PREFIX = "Bearer ";
     RealmUserInfo userInfo;
 
     private MobileBankRepository() {

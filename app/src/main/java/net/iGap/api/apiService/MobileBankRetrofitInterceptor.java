@@ -15,6 +15,7 @@ public class MobileBankRetrofitInterceptor implements Interceptor {
         Request original = chain.request();
         Request request = original.newBuilder()
                 .header("Content-Type", "application/json")
+                .header("Authorization", TokenContainer.getInstance().getToken())
                 .method(original.method(), original.body())
                 .build();
 

@@ -1,5 +1,7 @@
 package net.iGap.repository;
 
+import android.util.Base64;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -19,7 +21,9 @@ import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.module.RSACipher;
+import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperNumerical;
+import net.iGap.module.AESCrypt;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.rx.IGSingleObserver;
@@ -31,15 +35,9 @@ import net.iGap.realm.RealmStickerItemFields;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -59,17 +57,16 @@ public class StickerRepository {
 
     private static StickerRepository stickerRepository;
     private StickerApi stickerApi;
-    private RSACipher rsaCipher;
     private String TAG = "abbasiStickerRepository";
+
+    private StickerRepository() {
+        stickerApi = new RetrofitFactory().getStickerRetrofit();
+    }
 
     public static StickerRepository getInstance() {
         if (stickerRepository == null)
             stickerRepository = new StickerRepository();
         return stickerRepository;
-    }
-
-    private StickerRepository() {
-        stickerApi = new RetrofitFactory().getStickerRetrofit();
     }
 
     public Single<List<StructIGStickerCategory>> getStickerCategory() {
@@ -208,25 +205,6 @@ public class StickerRepository {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("national_code", nationalCode);
         jsonObject.addProperty("tel_num", mobileNumber);
-
-        String publicKey = null;
-        try {
-            rsaCipher = RSACipher.getInstance();
-            publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
-
-        jsonObject.addProperty("key", publicKey != null ? publicKey : "");
-
         return stickerApi.activeGiftCard(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 
@@ -234,26 +212,6 @@ public class StickerRepository {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("national_code", nationalCode);
         jsonObject.addProperty("tel_num", mobileNumber);
-
-        String publicKey = null;
-
-        rsaCipher = RSACipher.getInstance();
-
-        try {
-            publicKey = rsaCipher.getPublicKey("pkcs8-pem").replace("\n", "\\n");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        }
-
-        jsonObject.addProperty("key", publicKey != null ? publicKey : "");
         return stickerApi.getCardInfo(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
     }
 
@@ -549,17 +507,16 @@ public class StickerRepository {
                 .map(rsaDataModel -> {
                     CardDetailDataModel cardDetailDataModel = null;
                     try {
-                        cardDetailDataModel = new Gson().fromJson(rsaCipher.decrypt(rsaDataModel.getData()), CardDetailDataModel.class);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchPaddingException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
-                        e.printStackTrace();
-                    } catch (IllegalBlockSizeException e) {
-                        e.printStackTrace();
-                    } catch (BadPaddingException e) {
-                        e.printStackTrace();
+                        byte[] binary = Base64.decode(rsaDataModel.getData(), Base64.DEFAULT);
+                        byte[] message = HelperNumerical.getMessage(binary);
+                        byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
+                        byte[] encryptedBytes = AESCrypt.decrypt(G.symmetricKey, iv, message);
+
+                        String str = new String(encryptedBytes);
+                        cardDetailDataModel = new Gson().fromJson(str, CardDetailDataModel.class);
+
+                    } catch (Exception e) {
+                        FileLog.e(e);
                     }
                     return cardDetailDataModel;
                 });
@@ -568,21 +525,20 @@ public class StickerRepository {
     public Single<CardDetailDataModel> getGiftCardInfo(String mobileNumber, String nationalCode, String stickerId) {
         return getCardInfoApiService(mobileNumber, nationalCode, stickerId)
                 .map(rsaDataModel -> {
-                    CardDetailDataModel cardDetailDataModel = null;
+                    CardDetailDataModel cardDetailDataMode = null;
                     try {
-                        cardDetailDataModel = new Gson().fromJson(rsaCipher.decrypt(rsaDataModel.getData()), CardDetailDataModel.class);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchPaddingException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
-                        e.printStackTrace();
-                    } catch (IllegalBlockSizeException e) {
-                        e.printStackTrace();
-                    } catch (BadPaddingException e) {
-                        e.printStackTrace();
+                        byte[] binary = Base64.decode(rsaDataModel.getData(), Base64.DEFAULT);
+                        byte[] message = HelperNumerical.getMessage(binary);
+                        byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
+                        byte[] encryptedBytes = AESCrypt.decrypt(G.symmetricKey, iv, message);
+
+                        String str = new String(encryptedBytes);
+                        cardDetailDataMode = new Gson().fromJson(str, CardDetailDataModel.class);
+                    } catch (Exception e) {
+                        FileLog.e(e);
                     }
-                    return cardDetailDataModel;
+
+                    return cardDetailDataMode;
                 });
     }
 
@@ -600,7 +556,7 @@ public class StickerRepository {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+
             }
         });
     }

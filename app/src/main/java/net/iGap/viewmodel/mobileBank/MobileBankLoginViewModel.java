@@ -1,31 +1,27 @@
 package net.iGap.viewmodel.mobileBank;
 
 
-import android.util.Log;
+import android.os.Build;
+import android.util.Base64;
 import android.view.View;
 
+import androidx.annotation.RequiresApi;
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import net.iGap.BuildConfig;
-import net.iGap.Config;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.mobileBank.BankAuth;
 import net.iGap.model.mobileBank.BaseMobileBankResponse;
 import net.iGap.model.mobileBank.LoginResponse;
+import net.iGap.module.AESCrypt;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.module.mobileBank.RSACipher;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.MobileBankRepository;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import java.security.GeneralSecurityException;
 
 public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
 
@@ -39,41 +35,26 @@ public class MobileBankLoginViewModel extends BaseMobileBankViewModel {
         repository = MobileBankRepository.getInstance();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void onLoginClicked(String userName, String password) {
         if (userName.length() > 0) {
             if (password.length() > 0) {
                 setLoaderState(true);
-                String tempAuth = null;
+                String tempAuth;
                 BankAuth auth = new BankAuth(userName, password);
                 try {
-                    RSACipher cipher = new RSACipher();
-                    tempAuth = cipher.encrypt(new Gson().toJson(auth), RSACipher.stringToPublicKey(Config.PUBLIC_PARSIAN_KEY_CLIENT));
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                    showRequestErrorMessage.setValue("Bad Encryption");
-                    return;
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                    showRequestErrorMessage.setValue("Bad Encryption");
-                    return;
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                    showRequestErrorMessage.setValue("Bad Encryption");
-                    return;
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                    showRequestErrorMessage.setValue("Bad Encryption");
-                    return;
-                } catch (BadPaddingException e) {
+                    byte[] encryptedBytes = AESCrypt.encrypt(G.symmetricKey, new Gson().toJson(auth).getBytes());
+                    tempAuth = Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
+                } catch (GeneralSecurityException e) {
                     e.printStackTrace();
                     showRequestErrorMessage.setValue("Bad Encryption");
                     return;
                 }
+
                 repository.mobileBankLogin(tempAuth, this, new ResponseCallback<BaseMobileBankResponse<LoginResponse>>() {
                     @Override
                     public void onSuccess(BaseMobileBankResponse<LoginResponse> data) {
                         setLoaderState(false);
-                        if(BuildConfig.DEBUG) Log.e("bank_token", data.getData().getAccessToken());
                         repository.setAccessToken(data.getData().getAccessToken());
                         onLoginResponse.postValue(true);
                     }
