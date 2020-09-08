@@ -19,6 +19,7 @@ import net.iGap.api.WeatherApi;
 
 import java.util.Collections;
 
+import okhttp3.CertificatePinner;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 import okhttp3.TlsVersion;
@@ -33,12 +34,20 @@ public class RetrofitFactory {
         OkHttpClient httpClient;
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
+        CertificatePinner certificatePinner = new CertificatePinner.Builder()
+                .add("api.igap.net", "sha256/HU3GGBRrx+vK8+0llzCbfwEE5GCJL4jLMoUY7atIvOc=")
+                .add("api.igap.net", "sha256/S4AbJNGvyS57nzJwv8sPMUML8VHSqH1vbiBftdPcErI=")
+                .add("api.igap.net", "sha256/qiYwp7YXsE0KKUureoyqpQFubb5gSDeoOoVxn6tmfrU=")
+                .build();
+
         if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor);
         }
+
         builder.addInterceptor(new IgapRetrofitInterceptor());
+        builder.certificatePinner(certificatePinner);
 
         if (BuildConfig.DEBUG) {
             httpClient = builder.build();

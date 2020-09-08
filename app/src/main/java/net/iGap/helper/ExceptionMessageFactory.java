@@ -7,6 +7,8 @@ import net.iGap.api.errorhandler.ErrorModel;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 
+import javax.net.ssl.SSLPeerUnverifiedException;
+
 import retrofit2.HttpException;
 
 public class ExceptionMessageFactory {
@@ -37,6 +39,8 @@ public class ExceptionMessageFactory {
             }
         } else if (throwable instanceof SocketTimeoutException) {
             errorResponse.setMessage("اتمام زمان درخواست");
+        } else if (throwable instanceof SSLPeerUnverifiedException) {
+            errorResponse.setMessage("خطای مجوز (نرم افزار را بروزرسانی کنید!)");
         } else {
             errorResponse.setMessage("خطای نامشخص");
         }
