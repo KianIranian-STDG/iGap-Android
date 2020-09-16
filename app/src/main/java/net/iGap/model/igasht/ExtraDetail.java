@@ -5,155 +5,75 @@ import com.google.gson.annotations.SerializedName;
 @SuppressWarnings("unused")
 public class ExtraDetail {
 
-    @SerializedName("attentions")
-    private String mAttentions;
-    @SerializedName("closing_times")
-    private String mClosingTimes;
-    @SerializedName("coffee_shop")
-    private Boolean mCoffeeShop;
-    @SerializedName("content")
-    private String mContent;
-    @SerializedName("lat")
-    private String mLat;
-    @SerializedName("location_name")
-    private String mLocationName;
-    @SerializedName("long")
-    private String mLong;
-    @SerializedName("main_picture")
-    private String mMainPicture;
-    @SerializedName("parking")
-    private Boolean mParking;
-    @SerializedName("prayer_room")
-    private Boolean mPrayerRoom;
-    @SerializedName("resturant")
-    private Boolean mResturant;
-    @SerializedName("wc")
-    private Boolean mWc;
-    @SerializedName("weelchair_ramp")
-    private Boolean mWeelchairRamp;
-    @SerializedName("wifi")
-    private Boolean mWifi;
-    @SerializedName("working_time")
-    private String mWorkingTime;
+    @SerializedName("CoverImage")
+    private String mCoverImage;
+    @SerializedName("FullDescription")
+    private String mFullDescription;
+    @SerializedName("ShortDescription")
+    private String mShortDescription;
+    @SerializedName("Gallery_1")
+    private String mGallery1;
+    @SerializedName("Gallery_2")
+    private String mGallery2;
+    @SerializedName("Gallery_3")
+    private String mGallery3;
+    @SerializedName("Gallery_4")
+    private String mGallery4;
 
-    public String getAttentions() {
-        return mAttentions;
+
+    public String getmCoverImage() {
+        return mCoverImage;
     }
 
-    public void setAttentions(String attentions) {
-        mAttentions = attentions;
+    public void setmCoverImage(String mCoverImage) {
+        this.mCoverImage = mCoverImage;
     }
 
-    public String getClosingTimes() {
-        return mClosingTimes;
+    public String getmFullDescription() {
+        return mFullDescription;
     }
 
-    public void setClosingTimes(String closingTimes) {
-        mClosingTimes = closingTimes;
+    public void setmFullDescription(String mFullDescription) {
+        this.mFullDescription = mFullDescription;
     }
 
-    public Boolean getCoffeeShop() {
-        return mCoffeeShop;
+    public String getmGallery1() {
+        return mGallery1;
     }
 
-    public void setCoffeeShop(Boolean coffeeShop) {
-        mCoffeeShop = coffeeShop;
+    public void setmGallery1(String mGallery1) {
+        this.mGallery1 = mGallery1;
     }
 
-    public String getContent() {
-        return mContent;
+    public String getmGallery2() {
+        return mGallery2;
     }
 
-    public void setContent(String content) {
-        mContent = content;
+    public void setmGallery2(String mGallery2) {
+        this.mGallery2 = mGallery2;
     }
 
-    public String getLat() {
-        return mLat;
+    public String getmGallery3() {
+        return mGallery3;
     }
 
-    public void setLat(String lat) {
-        mLat = lat;
+    public void setmGallery3(String mGallery3) {
+        this.mGallery3 = mGallery3;
     }
 
-    public String getLocationName() {
-        return mLocationName;
+    public String getmGallery4() {
+        return mGallery4;
     }
 
-    public void setLocationName(String locationName) {
-        mLocationName = locationName;
+    public void setmGallery4(String mGallery4) {
+        this.mGallery4 = mGallery4;
     }
 
-    public void setmLong(String mLong) {
-        this.mLong = mLong;
+    public String getmShortDescription() {
+        return mShortDescription;
     }
 
-    public String getmLong() {
-        return mLong;
+    public void setmShortDescription(String mShortDescription) {
+        this.mShortDescription = mShortDescription;
     }
-
-    public String getMainPicture() {
-        return mMainPicture;
-    }
-
-    public void setMainPicture(String mainPicture) {
-        mMainPicture = mainPicture;
-    }
-
-    public Boolean getParking() {
-        return mParking;
-    }
-
-    public void setParking(Boolean parking) {
-        mParking = parking;
-    }
-
-    public Boolean getPrayerRoom() {
-        return mPrayerRoom;
-    }
-
-    public void setPrayerRoom(Boolean prayerRoom) {
-        mPrayerRoom = prayerRoom;
-    }
-
-    public Boolean getResturant() {
-        return mResturant;
-    }
-
-    public void setResturant(Boolean resturant) {
-        mResturant = resturant;
-    }
-
-    public Boolean getWc() {
-        return mWc;
-    }
-
-    public void setWc(Boolean wc) {
-        mWc = wc;
-    }
-
-    public Boolean getWeelchairRamp() {
-        return mWeelchairRamp;
-    }
-
-    public void setWeelchairRamp(Boolean weelchairRamp) {
-        mWeelchairRamp = weelchairRamp;
-    }
-
-    public Boolean getmWifi() {
-        return mWifi;
-    }
-
-    public void setWifi(Boolean wifi) {
-        mWifi = wifi;
-    }
-
-    public String getWorkingTime() {
-        return mWorkingTime;
-    }
-
-    public void setWorkingTime(String workingTime) {
-        mWorkingTime = workingTime;
-    }
-
 }
