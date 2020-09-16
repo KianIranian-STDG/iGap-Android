@@ -38,6 +38,20 @@ public class IGashtLocationItem implements Parcelable {
     private LocationDetail detail;
     @SerializedName("extra")
     private ExtraDetail mExtraDetail;
+    @SerializedName("bulky_sale")
+    private Boolean mBulkySale;
+    @SerializedName("description")
+    private String mDescription;
+    @SerializedName("introduction")
+    private String mIntroduction;
+    @SerializedName("latitude")
+    private Long mLatitude;
+    @SerializedName("longitude")
+    private Long mLongitude;
+    @SerializedName("mandatory_entrance")
+    private Boolean mMandatoryEntrance;
+    @SerializedName("presell_activation")
+    private Boolean mPresellActivation;
 
 
     private IGashtLocationItem(@NotNull Parcel in) {
@@ -55,6 +69,22 @@ public class IGashtLocationItem implements Parcelable {
         detail = in.readParcelable(LocationDetail.class.getClassLoader());
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(paymentId);
+        dest.writeByte((byte) (warehoff ? 1 : 0));
+        dest.writeByte((byte) (hasQR ? 1 : 0));
+        dest.writeByte((byte) (printPos ? 1 : 0));
+        dest.writeString(locationName);
+        dest.writeByte((byte) (activation ? 1 : 0));
+        dest.writeString(locationEnglishName);
+        dest.writeString(locationAddress);
+        dest.writeString(locationEnglishAddress);
+        dest.writeString(location);
+        dest.writeParcelable(detail, flags);
+    }
+
     public static final Creator<IGashtLocationItem> CREATOR = new Creator<IGashtLocationItem>() {
         @NotNull
         @Contract("_ -> new")
@@ -70,6 +100,29 @@ public class IGashtLocationItem implements Parcelable {
             return new IGashtLocationItem[size];
         }
     };
+
+    public String getNameWithLanguage() {
+        switch (G.selectedLanguage) {
+            case "en":
+                return getLocationEnglishName();
+            case "fa":
+                return getLocationName();
+            default:
+                return getLocationName();
+        }
+    }
+
+    public String getAddressWithLanguage() {
+        switch (G.selectedLanguage) {
+            case "en":
+                return getLocationEnglishAddress();
+            case "fa":
+                return getLocationAddress();
+            default:
+                return getLocationAddress();
+        }
+    }
+
 
     public int getId() {
         return id;
@@ -119,47 +172,10 @@ public class IGashtLocationItem implements Parcelable {
         return detail;
     }
 
-    public String getNameWithLanguage() {
-        switch (G.selectedLanguage) {
-            case "en":
-                return getLocationEnglishName();
-            case "fa":
-                return getLocationName();
-            default:
-                return getLocationName();
-        }
-    }
-
-    public String getAddressWithLanguage() {
-        switch (G.selectedLanguage) {
-            case "en":
-                return getLocationEnglishAddress();
-            case "fa":
-                return getLocationAddress();
-            default:
-                return getLocationAddress();
-        }
-    }
 
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(paymentId);
-        dest.writeByte((byte) (warehoff ? 1 : 0));
-        dest.writeByte((byte) (hasQR ? 1 : 0));
-        dest.writeByte((byte) (printPos ? 1 : 0));
-        dest.writeString(locationName);
-        dest.writeByte((byte) (activation ? 1 : 0));
-        dest.writeString(locationEnglishName);
-        dest.writeString(locationAddress);
-        dest.writeString(locationEnglishAddress);
-        dest.writeString(location);
-        dest.writeParcelable(detail, flags);
     }
 
     public ExtraDetail getmExtraDetail() {
@@ -168,5 +184,61 @@ public class IGashtLocationItem implements Parcelable {
 
     public void setmExtraDetail(ExtraDetail mExtraDetail) {
         this.mExtraDetail = mExtraDetail;
+    }
+
+    public Boolean getmBulkySale() {
+        return mBulkySale;
+    }
+
+    public void setmBulkySale(Boolean mBulkySale) {
+        this.mBulkySale = mBulkySale;
+    }
+
+    public String getmDescription() {
+        return mDescription;
+    }
+
+    public void setmDescription(String mDescription) {
+        this.mDescription = mDescription;
+    }
+
+    public String getmIntroduction() {
+        return mIntroduction;
+    }
+
+    public void setmIntroduction(String mIntroduction) {
+        this.mIntroduction = mIntroduction;
+    }
+
+    public Long getmLatitude() {
+        return mLatitude;
+    }
+
+    public void setmLatitude(Long mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    public Long getmLongitude() {
+        return mLongitude;
+    }
+
+    public void setmLongitude(Long mLongitude) {
+        this.mLongitude = mLongitude;
+    }
+
+    public Boolean getmMandatoryEntrance() {
+        return mMandatoryEntrance;
+    }
+
+    public void setmMandatoryEntrance(Boolean mMandatoryEntrance) {
+        this.mMandatoryEntrance = mMandatoryEntrance;
+    }
+
+    public Boolean getmPresellActivation() {
+        return mPresellActivation;
+    }
+
+    public void setmPresellActivation(Boolean mPresellActivation) {
+        this.mPresellActivation = mPresellActivation;
     }
 }
