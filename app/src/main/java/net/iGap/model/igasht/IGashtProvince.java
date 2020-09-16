@@ -11,7 +11,7 @@ public class IGashtProvince implements Parcelable {
     private int id;
     @SerializedName("project_id")
     private int projectId;
-    @SerializedName("project_name")
+    @SerializedName("province_name")
     private String provinceName;
     @SerializedName("english_name")
     private String englishName;
