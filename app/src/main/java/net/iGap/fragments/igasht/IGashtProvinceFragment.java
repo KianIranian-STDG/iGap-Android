@@ -14,12 +14,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.adapter.igahst.ProvinceSuggestionListAdapter;
 import net.iGap.databinding.FragmentIgashtProvinceBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.viewmodel.igasht.IGashtProvinceViewModel;
-import net.iGap.adapter.igahst.ProvinceSuggestionListAdapter;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.viewmodel.igasht.IGashtProvinceViewModel;
 
 public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewModel> {
 
@@ -49,7 +49,7 @@ public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewMod
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(/*R.string.score_star_icon,*/R.string.history_icon)
+                .setRightIcons(R.string.history_icon)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -65,20 +65,14 @@ public class IGashtProvinceFragment extends IGashtBaseView<IGashtProvinceViewMod
                         }
                     }
 
-                  /*  @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
-                        }
-                    }*/
                 }).getView());
 
         binding.provinceSearchText.setOnItemClickListener((parent, view1, position, id) -> viewModel.setSelectedLocation(position));
 
         viewModel.getGoToShowLocationListPage().observe(getViewLifecycleOwner(), isGo -> {
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
             if (getActivity() != null && isGo != null) {
                 if (isGo) {
-                    ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
                     new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtLocationListFragment()).setReplace(false).load(true);
                 } else {
                     Toast.makeText(getContext(), R.string.select_province, Toast.LENGTH_SHORT).show();
