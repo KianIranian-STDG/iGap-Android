@@ -196,6 +196,7 @@ import net.iGap.module.customView.EventEditText;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadStruct;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.Status;
 import net.iGap.module.enums.Additional;
@@ -5031,7 +5032,7 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                Downloader.getInstance().download(message.realmRoomMessage, arg -> {
+                Downloader.getInstance().download(new DownloadStruct(message.realmRoomMessage, selector), arg -> {
                     if (arg.data != null && arg.data.getProgress() == 100) {
                         if (canUpdateAfterDownload) {
                             G.handler.post(() -> HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder));
@@ -5075,7 +5076,7 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                Downloader.getInstance().download(message.realmRoomMessage, selector, arg -> {
+                Downloader.getInstance().download(new DownloadStruct(message.realmRoomMessage), selector, arg -> {
                     if (canUpdateAfterDownload) {
                         G.handler.post(() -> {
                             if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
@@ -5128,7 +5129,7 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                Downloader.getInstance().download(message.realmRoomMessage, selector, arg -> {
+                Downloader.getInstance().download(new DownloadStruct(message.realmRoomMessage), selector, arg -> {
                     if (canUpdateAfterDownload) {
                         G.handler.post(() -> {
                             switch (arg.status) {

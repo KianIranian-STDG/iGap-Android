@@ -4,22 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.proto.ProtoFileDownload;
-import net.iGap.realm.RealmRoomMessage;
 
 public interface IDownloader {
-    void download(@NonNull RealmRoomMessage message,
+    void download(@NonNull DownloadStruct message,
                   @NonNull ProtoFileDownload.FileDownload.Selector selector,
                   int priority,
                   @Nullable Observer<Resource<Request.Progress>> observer);
 
-    void download(@NonNull RealmRoomMessage message,
+    void download(@NonNull DownloadStruct message,
                   @NonNull ProtoFileDownload.FileDownload.Selector selector,
                   @Nullable Observer<Resource<Request.Progress>> observer);
 
-    void download(@NonNull RealmRoomMessage message,
+    void download(@NonNull DownloadStruct message,
                   @Nullable Observer<Resource<Request.Progress>> observer);
 
-    void download(@NonNull RealmRoomMessage message,
+    void download(@NonNull DownloadStruct message,
                   int priority,
                   @Nullable Observer<Resource<Request.Progress>> observer);
 

@@ -35,7 +35,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     public static final String BASE_URL = ApiStatic.UPLOAD_URL + "download/";
 
     private String requestId;
-    private Downloader.MessageStruct message;
+    private DownloadStruct message;
     private Selector selector;
     private volatile boolean isDownloading;
     private volatile boolean isDownloaded;
@@ -50,12 +50,12 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     private Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> downloadStatusObserver;
     private Call call;
 
-    protected Request(Downloader.MessageStruct message, Selector selector, int priority) {
+    protected Request(DownloadStruct message, Selector selector, int priority) {
         this(message, selector);
         this.priority = priority;
     }
 
-    private Request(Downloader.MessageStruct msg, Selector selector) {
+    private Request(DownloadStruct msg, Selector selector) {
         this.selector = selector;
         message = msg;
         requestId = generateRequestId();
@@ -124,7 +124,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     @WorkerThread
-    private void download(String jwtToken, Downloader.MessageStruct message) {
+    private void download(String jwtToken, DownloadStruct message) {
         isDownloading = true;
         notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
         OkHttpClient client = OkHttpClientInstance.getInstance();
@@ -244,7 +244,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         return priority - o.priority;
     }
 
-    public static String generateRequestId(Downloader.MessageStruct message, Selector selector) {
+    public static String generateRequestId(DownloadStruct message, Selector selector) {
         return message.getCacheId() + selector.toString();
     }
 

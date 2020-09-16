@@ -75,6 +75,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadStruct;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
@@ -1324,7 +1325,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 }
             });
 
-            Downloader.getInstance().download(mList.get(position).item, ProtoFileDownload.FileDownload.Selector.FILE, arg -> {
+            Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.FILE, arg -> {
                 if (canUpdateAfterDownload) {
                     G.handler.post(() -> {
                         switch (arg.status) {
@@ -1566,7 +1567,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                     if (at != null && at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
-                            Downloader.getInstance().download(mList.get(position).item, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                            Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
                                 if (canUpdateAfterDownload) {
                                     G.handler.post(() -> {
                                         switch (arg.status) {
@@ -1693,7 +1694,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            Downloader.getInstance().download(mList.get(position).item, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                            Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
                                 if (canUpdateAfterDownload) {
                                     switch (arg.status) {
                                         case SUCCESS:
@@ -2121,7 +2122,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         if (at.getSmallThumbnail() != null) {
                             if (at.getSmallThumbnail().getSize() > 0) {
 
-                                Downloader.getInstance().download(mList.get(position).item, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                                Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
                                     if (canUpdateAfterDownload) {
                                         switch (arg.status) {
                                             case LOADING:

@@ -82,6 +82,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
+import net.iGap.module.downloader.DownloadStruct;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
@@ -1580,7 +1581,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (token != null && token.length() > 0 && size > 0) {
-            Downloader.getInstance().download(mMessage, selector, null);
+            Downloader.getInstance().download(new DownloadStruct(mMessage), selector, null);
         }
     }
 
@@ -1611,7 +1612,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-            Downloader.getInstance().download(mMessage, selector, priority, arg -> {
+            Downloader.getInstance().download(new DownloadStruct(mMessage), selector, priority, arg -> {
                 if (FragmentChat.canUpdateAfterDownload) {
                     G.handler.post(() -> {
                         switch (arg.status) {

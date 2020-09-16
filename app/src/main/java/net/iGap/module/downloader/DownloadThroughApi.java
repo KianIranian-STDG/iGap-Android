@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.proto.ProtoFileDownload;
-import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,26 +38,17 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
         inProgressRequests = new ArrayList<>();
     }
 
-    public void download(@NonNull RealmRoomMessage message,
+    public void download(@NonNull DownloadStruct message,
                          @NonNull ProtoFileDownload.FileDownload.Selector selector,
                          int priority,
                          @Nullable Observer<Resource<Request.Progress>> observer) {
 
-        Downloader.MessageStruct messageStruct;
-        if (validateMessage(RealmRoomMessage.getFinalMessage(message))) {
-            message = RealmRoomMessage.getFinalMessage(message);
-            messageStruct = new Downloader.MessageStruct(message);
-        } else {
-            Log.i(TAG, "download: invalid message to download");
-            return;
-        }
-
         if (requestsQueue == null)
             requestsQueue = new PriorityBlockingQueue<>();
 
-        Request existedRequest = findExistedRequest(Request.generateRequestId(messageStruct, selector));
+        Request existedRequest = findExistedRequest(Request.generateRequestId(message, selector));
         if (existedRequest == null) {
-            existedRequest = new Request(messageStruct, selector, priority);
+            existedRequest = new Request(message, selector, priority);
             existedRequest.setDownloadStatusListener(this);
             requestsQueue.add(existedRequest);
             scheduleNewDownload();
@@ -69,27 +59,23 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message,
+    public void download(@NonNull DownloadStruct message,
                          @NonNull ProtoFileDownload.FileDownload.Selector selector,
                          @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message,
+    public void download(@NonNull DownloadStruct message,
                          @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull RealmRoomMessage message,
+    public void download(@NonNull DownloadStruct message,
                          int priority,
                          @Nullable Observer<Resource<Request.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
-    }
-
-    private boolean validateMessage(RealmRoomMessage message) {
-        return message.getAttachment() != null;
     }
 
     private Request findExistedRequest(String requestId) {
