@@ -23,30 +23,49 @@
         android:clipToPadding="false"
         android:paddingBottom="@dimen/dp16">
 
-        <net.iGap.module.RadiusImageView
-            android:id="@+id/itemImage"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/slider_igasht"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp4"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:imageUrl="@{viewModel.locationDetail.getMainPicture()}"
+            android:layout_height="@dimen/dp200"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp4"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintBottom_toTopOf="@+id/subTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:riv_corner_radius="@dimen/dp8" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <net.iGap.libs.bannerslider.BannerSlider
+                android:id="@+id/banner_slider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:slider_animateIndicators="true"
+                app:slider_indicatorSize="4dp"
+                app:slider_loopSlides="true"
+                app:slider_selectedSlideIndicator="@drawable/indicator_circle_selected"
+                app:slider_unselectedSlideIndicator="@drawable/indicator_circle_unselected" />
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/subTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp8"
-            android:text="@{viewModel.locationDetail.locationName}"
+            android:text="@{viewModel.locationDetail.getmShortDescription}"
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemImage" />
+            app:layout_constraintTop_toBottomOf="@id/slider_igasht" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/null_txt"
@@ -81,335 +100,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp8"
             android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp4"
             android:layout_marginEnd="@dimen/dp8"
             android:layout_marginRight="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp4"
-            android:text="@{viewModel.locationDetail.workingTime}"
+            android:text="@{viewModel.locationDetail.getmFullDescription}"
             android:textColor="?iGapTitleTextColor"
             app:layout_constraintEnd_toEndOf="@+id/view4"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/view4"
             app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/subTitle2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp4"
-            android:text="@{viewModel.locationDetail.closingTimes}"
-            android:textColor="?iGapTitleTextColor"
-            app:layout_constraintEnd_toEndOf="@+id/subDetail"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/subDetail"
-            app:layout_constraintTop_toBottomOf="@+id/subDetail" />
-
-        <View
-            android:id="@+id/view1"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp8"
-            android:background="@color/gray_300"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintEnd_toEndOf="@+id/subTitle2"
-            app:layout_constraintStart_toStartOf="@+id/subTitle2"
-            app:layout_constraintTop_toBottomOf="@+id/subTitle2" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/subDetail2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp4"
-            android:text="@{viewModel.locationDetail.attentions}"
-            android:textColor="?iGapTitleTextColor"
-            app:layout_constraintEnd_toEndOf="@id/view1"
-            app:layout_constraintStart_toStartOf="@id/view1"
-            app:layout_constraintTop_toBottomOf="@+id/view1" />
-
-        <View
-            android:id="@+id/view2"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp8"
-            android:background="@color/gray_300"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintEnd_toEndOf="@+id/subDetail2"
-            app:layout_constraintStart_toStartOf="@+id/subDetail2"
-            app:layout_constraintTop_toBottomOf="@+id/subDetail2" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/subTitle3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp8"
-            android:layout_marginLeft="@dimen/dp8"
-            android:layout_marginTop="@dimen/dp4"
-            android:layout_marginEnd="@dimen/dp8"
-            android:layout_marginRight="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp4"
-            android:text="@{viewModel.locationDetail.content}"
-            android:textColor="?iGapTitleTextColor"
-            app:layout_constraintEnd_toEndOf="@+id/view2"
-            app:layout_constraintStart_toStartOf="@+id/view2"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp8"
-            android:background="@drawable/shape_igasht_strokegray"
-            android:padding="@dimen/dp4"
-            android:visibility="@{viewModel.showMainView}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subTitle3">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center_vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_parking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/parking_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/check_parking"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.haveParking}"
-                    android:textColor="@{viewModel.haveParking==R.string.check_icon ? @color/green : @color/red}" />
-
-                <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="@dimen/dp32"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dp4"
-                    android:background="@color/gray_300" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_wifi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/wifi_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/check_wifi"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.haveWiFi}"
-                    android:textColor="@{viewModel.haveWiFi==R.string.check_icon ? @color/green : @color/red}" />
-            </TableRow>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/dp4"
-                android:background="@color/gray_300" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center_vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_resturant"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/Restaurant_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/cheked_resturant"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.haveRestaurant}"
-                    android:textColor="@{viewModel.haveRestaurant==R.string.check_icon ? @color/green : @color/red}" />
-
-                <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="@dimen/dp32"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dp4"
-                    android:background="@color/gray_300" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_coffeeShop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/coffeeShop_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/cheked_coffeeShop"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.haveCoffeeShop}"
-                    android:textColor="@{viewModel.haveCoffeeShop==R.string.check_icon ? @color/green : @color/red}" />
-            </TableRow>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/dp4"
-                android:background="@color/gray_300" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center_vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_wheelchair"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/wheelchair_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/check_wheelchair"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.haveWheelchairRamp}"
-                    android:textColor="@{viewModel.haveWheelchairRamp==R.string.check_icon ? @color/green : @color/red}" />
-
-                <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="@dimen/dp32"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dp4"
-                    android:background="@color/gray_300" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_PrayerRoom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/prayerRoom_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/check_PrayerRoom"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.havePrayerRoom}"
-                    android:textColor="@{viewModel.havePrayerRoom==R.string.check_icon ? @color/green : @color/red}" />
-            </TableRow>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/dp4"
-                android:background="@color/gray_300" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp8"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginEnd="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:gravity="center_vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/text_wc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:text="@string/parking_textView"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/check_wc"
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1"
-                    android:text="@{viewModel.haveWc}"
-                    android:textColor="@{viewModel.haveWc==R.string.check_icon ? @color/green : @color/red}" />
-
-                <View
-                    android:layout_width="0.5dp"
-                    android:layout_height="@dimen/dp32"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dp4"
-                    android:background="@color/gray_300" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="2"
-                    android:textColor="?iGapTitleTextColor" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/baseFontIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp4"
-                    android:layout_weight="1" />
-            </TableRow>
-
-        </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
