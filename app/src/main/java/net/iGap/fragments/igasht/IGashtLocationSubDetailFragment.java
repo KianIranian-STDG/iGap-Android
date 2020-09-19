@@ -2,6 +2,8 @@ package net.iGap.fragments.igasht;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +44,19 @@ public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocat
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Spanned titleText = Html.fromHtml(viewModel.getLocationDetail().getmShortDescription());
+        binding.subTitle.setText(titleText);
+
+        Spanned detailText = Html.fromHtml(viewModel.getLocationDetail().getmFullDescription());
+        binding.subDetail.setText(detailText);
+
         binding.bannerSlider.postDelayed(() -> {
             adapter = new IGashtDetailSliderAdapter(viewModel.getLocationDetail().getmGallery());
             binding.bannerSlider.setAdapter(adapter);
             binding.bannerSlider.setSelectedSlide(0);
             binding.bannerSlider.setInterval(2000);
         }, 100);
+
     }
 }
