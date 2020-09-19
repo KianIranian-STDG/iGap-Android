@@ -10,10 +10,16 @@ import net.iGap.repository.IGashtRepository;
 public class IGashtLocationSubDetailViewModel extends BaseIGashtViewModel {
     private IGashtRepository repository;
     private ObservableInt noDetail = new ObservableInt(View.GONE);
+    private ObservableInt galleryShow = new ObservableInt(View.GONE);
 
     public IGashtLocationSubDetailViewModel() {
         repository = IGashtRepository.getInstance();
         if (getLocationDetail() != null) {
+            if (getLocationDetail().getmGallery() != null) {
+                galleryShow.set(View.VISIBLE);
+            } else {
+                galleryShow.set(View.GONE);
+            }
             showMainView.set(View.VISIBLE);
             noDetail.set(View.GONE);
         } else {
@@ -33,5 +39,9 @@ public class IGashtLocationSubDetailViewModel extends BaseIGashtViewModel {
     @Override
     public void onSuccess(Object data) {
 
+    }
+
+    public ObservableInt getGalleryShow() {
+        return galleryShow;
     }
 }
