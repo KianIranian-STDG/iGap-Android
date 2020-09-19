@@ -171,7 +171,7 @@
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/dp4"
                             android:padding="@dimen/dp4"
-                            app:imageUrl="@{viewModel.locationItem.getmExtraDetail().getMainPicture()}"
+                            app:imageUrl="@{viewModel.locationItem.getmExtraDetail().getmCoverImage()}"
                             app:layout_constraintDimensionRatio="116:83"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
