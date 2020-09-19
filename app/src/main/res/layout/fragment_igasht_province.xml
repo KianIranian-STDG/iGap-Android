@@ -97,6 +97,7 @@
 
                         <androidx.appcompat.widget.AppCompatTextView
                             style="@style/baseFontIcon"
+                            android:id="@+id/search_icon"
                             android:layout_width="@dimen/dp40"
                             android:layout_height="@dimen/dp40"
                             android:layout_gravity="center"
