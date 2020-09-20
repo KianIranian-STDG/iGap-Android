@@ -8,15 +8,14 @@
  * All rights reserved.
  */
 
-package net.iGap.helper;
+package net.iGap.network;
 
 import android.util.Log;
 import android.util.SparseArray;
 
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
-import net.iGap.request.AbstractObject;
-import net.iGap.request.IG_Objects;
+import net.iGap.helper.FileLog;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.generalImmovableClasses;
@@ -28,45 +27,44 @@ import static net.iGap.G.unSecure;
 import static net.iGap.G.unSecureResponseActionId;
 import static net.iGap.G.waitingActionIds;
 
-public class HelperFillLookUpClass {
+public class LookUpClass {
 
-    private static HelperFillLookUpClass instance;
-    private SparseArray<Class<?>> fillLockup;
+    private static LookUpClass instance;
+    private SparseArray<Class<?>> classes;
 
-    public static HelperFillLookUpClass getInstance() {
+    public static LookUpClass getInstance() {
         if (instance == null) {
-            instance = new HelperFillLookUpClass();
+            instance = new LookUpClass();
         }
         return instance;
     }
 
-    public HelperFillLookUpClass() {
-        fillLockup = new SparseArray<>();
-        fillLockup.put(IG_Objects.Res_Channel_Create.actionId, IG_Objects.Res_Channel_Create.class);
-        fillLockup.put(IG_Objects.Res_Channel_Delete.actionId, IG_Objects.Res_Channel_Delete.class);
-        fillLockup.put(IG_Objects.Res_Group_Create.actionId, IG_Objects.Res_Group_Create.class);
-        fillLockup.put(IG_Objects.Res_Channel_Avatar.actionId, IG_Objects.Res_Channel_Avatar.class);
+    public LookUpClass() {
+        classes = new SparseArray<>();
+        classes.put(IG_RPC.Res_Channel_Create.actionId, IG_RPC.Res_Channel_Create.class);
+        classes.put(IG_RPC.Res_Channel_Delete.actionId, IG_RPC.Res_Channel_Delete.class);
+        classes.put(IG_RPC.Res_Group_Create.actionId, IG_RPC.Res_Group_Create.class);
+        classes.put(IG_RPC.Res_Channel_Avatar.actionId, IG_RPC.Res_Channel_Avatar.class);
     }
 
     public boolean validObject(int actionId) {
-        Log.i("RequestManager", "validObject: " + actionId + " " + (fillLockup.get(actionId) != null));
-        return fillLockup.get(actionId) != null;
+        return classes.get(actionId) != null;
     }
 
-    public AbstractObject deserializeObject(int actionId, Object proto) {
-        Class<?> resClass = fillLockup.get(actionId);
+    public AbstractObject deserializeObject(int actionId, byte[] message) {
+        Class<?> resClass = classes.get(actionId);
         if (resClass != null) {
             try {
                 AbstractObject object = (AbstractObject) resClass.newInstance();
-                object.readParams(proto);
+                object.readParams(message);
 
                 return object;
             } catch (IllegalAccessException e) {
                 FileLog.e(e);
-                Log.e(getClass().getSimpleName(), "IllegalAccessException getClassInstance: " + actionId);
             } catch (InstantiationException e) {
                 FileLog.e(e);
-                Log.e(getClass().getSimpleName(), "InstantiationException getClassInstance: " + actionId);
+            } catch (Exception e) {
+                FileLog.e(e);
             }
         }
 
@@ -75,7 +73,7 @@ public class HelperFillLookUpClass {
     }
 
     public AbstractObject getClassInstance(int actionId) {
-        Class<?> objClass = fillLockup.get(actionId);
+        Class<?> objClass = classes.get(actionId);
         if (objClass != null) {
             AbstractObject response;
             try {
@@ -93,15 +91,15 @@ public class HelperFillLookUpClass {
     }
 
     public static void fillArrays() {
-        HelperFillLookUpClass.fillLookUpClassArray();
-        HelperFillLookUpClass.fillUnSecureList();
-        HelperFillLookUpClass.fillUnSecureServerActionId();
-        HelperFillLookUpClass.fillUnLoginList();
-        HelperFillLookUpClass.fillImmovableClasses();
-        HelperFillLookUpClass.fillWaitingRequestActionIdAllowed();
-        HelperFillLookUpClass.fillPriorityActionId();
-        HelperFillLookUpClass.fillForcePriorityActionId();
-        HelperFillLookUpClass.fillIgnoreErrorCodes();
+        LookUpClass.fillLookUpClassArray();
+        LookUpClass.fillUnSecureList();
+        LookUpClass.fillUnSecureServerActionId();
+        LookUpClass.fillUnLoginList();
+        LookUpClass.fillImmovableClasses();
+        LookUpClass.fillWaitingRequestActionIdAllowed();
+        LookUpClass.fillPriorityActionId();
+        LookUpClass.fillForcePriorityActionId();
+        LookUpClass.fillIgnoreErrorCodes();
     }
 
     /**
@@ -189,7 +187,6 @@ public class HelperFillLookUpClass {
         lookupMap.put(30210, "ProtoChatSetAction.ChatSetActionResponse");
 
         // Group 3xx , 303xx
-        lookupMap.put(30300, "ProtoGroupCreate.GroupCreateResponse");
         lookupMap.put(30301, "ProtoGroupAddMember.GroupAddMemberResponse");
         lookupMap.put(30302, "ProtoGroupAddAdmin.GroupAddAdminResponse");
         lookupMap.put(30303, "ProtoGroupAddModerator.GroupAddModeratorResponse");
@@ -219,11 +216,9 @@ public class HelperFillLookUpClass {
         lookupMap.put(30327, "ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse");
 
         // Channel 4xx , 304xx
-        lookupMap.put(30400, "ProtoChannelCreate.ChannelCreateResponse");
         lookupMap.put(30401, "ProtoChannelAddMember.ChannelAddMemberResponse");
         lookupMap.put(30402, "ProtoChannelAddAdmin.ChannelAddAdminResponse");
         lookupMap.put(30403, "ProtoChannelAddModerator.ChannelAddModeratorResponse");
-        lookupMap.put(30404, "ProtoChannelDelete.ChannelDeleteResponse");
         lookupMap.put(30405, "ProtoChannelEdit.ChannelEditResponse");
         lookupMap.put(30406, "ProtoChannelKickAdmin.ChannelKickAdminResponse");
         lookupMap.put(30407, "ProtoChannelKickMember.ChannelKickMemberResponse");
@@ -231,7 +226,6 @@ public class HelperFillLookUpClass {
         lookupMap.put(30409, "ProtoChannelLeft.ChannelLeftResponse");
         lookupMap.put(30410, "ProtoChannelSendMessage.ChannelSendMessageResponse");
         lookupMap.put(30411, "ProtoChannelDeleteMessage.ChannelDeleteMessageResponse");
-        lookupMap.put(30412, "ProtoChannelAvatarAdd.ChannelAvatarAddResponse");
         lookupMap.put(30413, "ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse");
         lookupMap.put(30414, "ProtoChannelAvatarGetList.ChannelAvatarGetListResponse");
         lookupMap.put(30415, "ProtoChannelUpdateDraft.ChannelUpdateDraftResponse");

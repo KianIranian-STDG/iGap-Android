@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.text.DecimalFormat;

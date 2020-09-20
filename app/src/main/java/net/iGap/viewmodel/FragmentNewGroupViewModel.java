@@ -28,11 +28,11 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.AppUtils;
+import net.iGap.network.IG_RPC;
 import net.iGap.observers.interfaces.OnChatConvertToGroup;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.request.IG_Objects;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChatConvertToGroup;
 import net.iGap.request.RequestClientGetRoom;
@@ -84,18 +84,18 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 isChannel = true;
 
-                IG_Objects.Channel_Create req = new IG_Objects.Channel_Create();
+                IG_RPC.Channel_Create req = new IG_RPC.Channel_Create();
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
-                        IG_Objects.Res_Channel_Create res = (IG_Objects.Res_Channel_Create) response;
+                        IG_RPC.Res_Channel_Create res = (IG_RPC.Res_Channel_Create) response;
                         getChannelRoom(res.roomId);
 
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_CHANNEL);
                     } else {
-                        IG_Objects.Error err = (IG_Objects.Error) error;
+                        IG_RPC.Error err = (IG_RPC.Error) error;
 
                         hideProgressBar();
                         if (err.major == 479) {
@@ -110,13 +110,13 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
             } else {
                 isChannel = false;
 
-                IG_Objects.Group_Create req = new IG_Objects.Group_Create();
+                IG_RPC.Group_Create req = new IG_RPC.Group_Create();
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
-                        IG_Objects.Res_Group_Create res = (IG_Objects.Res_Group_Create) response;
+                        IG_RPC.Res_Group_Create res = (IG_RPC.Res_Group_Create) response;
 
                         hideProgressBar();
 
@@ -124,7 +124,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                         getRoom(res.roomId, ProtoGlobal.Room.Type.GROUP, true);
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
                     } else {
-                        IG_Objects.Error err = (IG_Objects.Error) error;
+                        IG_RPC.Error err = (IG_RPC.Error) error;
 
                         G.runOnUiThread(() -> {
                             hideProgressBar();

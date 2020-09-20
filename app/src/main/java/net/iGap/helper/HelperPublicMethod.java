@@ -19,6 +19,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoGlobal;

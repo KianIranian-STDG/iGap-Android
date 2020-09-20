@@ -1,7 +1,7 @@
 package net.iGap.controllers;
 
-import net.iGap.helper.RequestManager;
 import net.iGap.helper.upload.UploadManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 
 public class BaseController {

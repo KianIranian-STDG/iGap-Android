@@ -17,9 +17,9 @@ import com.neovisionaries.ws.client.WebSocket;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.LoginActions;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoConnectionSecuring;
 
 public class ConnectionSymmetricKeyResponse extends MessageHandler {

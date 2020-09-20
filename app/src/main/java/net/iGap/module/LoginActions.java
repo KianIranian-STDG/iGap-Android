@@ -11,11 +11,11 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.RequestManager;
 import net.iGap.helper.UserStatusController;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnContactFetchForServer;
 import net.iGap.observers.interfaces.OnSecuring;
 import net.iGap.observers.interfaces.OnUserLogin;

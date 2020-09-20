@@ -21,7 +21,7 @@
 -keep class net.iGap.model.popularChannel.**
 -keep class net.iGap.payment.**
 -keep class net.iGap.proto.** , com.neovisionaries.ws.client.** { *; }
--keep class net.iGap.helper.HelperFillLookUpClass { *; }
+-keep class net.iGap.network.LookUpClass { *; }
 -keep public class * extends net.iGap.response.MessageHandler
 -keepclasseswithmembers class * {
    public <init>(int, java.lang.Object, java.lang.String);

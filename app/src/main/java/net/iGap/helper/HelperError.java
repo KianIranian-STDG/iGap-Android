@@ -21,6 +21,7 @@ import net.iGap.WebSocketClient;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 
 public class HelperError {
 

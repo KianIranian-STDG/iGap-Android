@@ -23,6 +23,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnUserSessionLogout;
 import net.iGap.request.RequestUserSessionLogout;
 

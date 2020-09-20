@@ -13,10 +13,10 @@ package net.iGap.module;
 import com.google.gson.Gson;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;

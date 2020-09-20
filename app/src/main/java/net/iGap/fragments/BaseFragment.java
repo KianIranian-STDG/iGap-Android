@@ -29,12 +29,12 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.controllers.MessageController;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.RequestManager;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 
 

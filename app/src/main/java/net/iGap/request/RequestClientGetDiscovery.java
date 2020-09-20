@@ -11,8 +11,8 @@
 package net.iGap.request;
 
 import net.iGap.fragments.discovery.OnDiscoveryList;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoClientGetDiscovery;
 
 public class RequestClientGetDiscovery {

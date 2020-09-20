@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import net.iGap.network.AbstractObject;
 import net.iGap.observers.interfaces.OnResponse;
 
 public class RequestWrapper {

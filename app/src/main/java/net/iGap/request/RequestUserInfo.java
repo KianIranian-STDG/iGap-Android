@@ -12,8 +12,8 @@ package net.iGap.request;
 
 import android.text.format.DateUtils;
 
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;

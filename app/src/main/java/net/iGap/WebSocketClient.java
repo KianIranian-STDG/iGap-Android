@@ -23,9 +23,9 @@ import com.neovisionaries.ws.client.WebSocketState;
 
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperConnectionState;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientGetRoomList;

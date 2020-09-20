@@ -11,8 +11,8 @@
 package net.iGap.request;
 
 import net.iGap.fragments.poll.OnPollList;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoClientGetPoll;
 
 public class RequestClientGetPoll {

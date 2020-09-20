@@ -24,10 +24,10 @@ import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
-import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.LookUpClass;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
@@ -519,7 +519,7 @@ public final class StartupActions {
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
         imageLoader = ImageLoader.getInstance();
 
-        HelperFillLookUpClass.fillArrays();
+        LookUpClass.fillArrays();
     }
 
     /**

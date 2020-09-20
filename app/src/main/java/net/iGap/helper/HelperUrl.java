@@ -57,6 +57,7 @@ import net.iGap.module.dialog.BottomSheetItemClickCallback;
 import net.iGap.module.dialog.JoinDialogFragment;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.observers.interfaces.OnClientCheckInviteLink;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;

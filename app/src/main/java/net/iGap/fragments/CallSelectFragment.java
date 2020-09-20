@@ -15,10 +15,10 @@ import androidx.annotation.Nullable;
 import net.iGap.R;
 import net.iGap.activities.CallActivity;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.module.webrtc.CallService;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
 

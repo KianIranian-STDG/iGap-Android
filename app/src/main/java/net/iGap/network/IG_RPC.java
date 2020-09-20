@@ -1,4 +1,4 @@
-package net.iGap.request;
+package net.iGap.network;
 
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAvatarAdd;
@@ -8,7 +8,7 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
 
-public class IG_Objects {
+public class IG_RPC {
 
     public static class Error extends AbstractObject {
         public static int actionId = 0;
@@ -16,12 +16,11 @@ public class IG_Objects {
         public int major;
 
         @Override
-        public void readParams(Object message) {
-            ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-
-            minor = errorResponse.getMinorCode();
-            major = errorResponse.getMajorCode();
-
+        public void readParams(byte[] message) throws Exception {
+            ProtoError.ErrorResponse response = ProtoError.ErrorResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            minor = response.getMinorCode();
+            major = response.getMajorCode();
         }
     }
 
@@ -35,8 +34,9 @@ public class IG_Objects {
             return actionId;
         }
 
-        public AbstractObject deserializeResponse(int constructor, Object protoObject) {
-            return Res_Channel_Avatar.deserializeObject(constructor, protoObject);
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Channel_Avatar.deserializeObject(constructor, message);
         }
 
         @Override
@@ -55,27 +55,29 @@ public class IG_Objects {
         public long roomId;
         public ProtoGlobal.Avatar avatar;
 
-        public static Res_Channel_Avatar deserializeObject(int constructor, Object protoObject) {
-            if (constructor != actionId || protoObject == null) {
+
+        public static Res_Channel_Avatar deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
                 return null;
             }
 
-            Res_Channel_Avatar object = new Res_Channel_Avatar();
-            object.readParams(protoObject);
+            Res_Channel_Avatar object = null;
+            try {
+                object = new Res_Channel_Avatar();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return object;
         }
 
         @Override
-        public void readParams(Object message) {
-            try {
-                ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder builder = (ProtoChannelAvatarAdd.ChannelAvatarAddResponse.Builder) message;
-
-                roomId = builder.getRoomId();
-                avatar = builder.getAvatar();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelAvatarAdd.ChannelAvatarAddResponse response = ProtoChannelAvatarAdd.ChannelAvatarAddResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            avatar = response.getAvatar();
         }
     }
 
@@ -84,8 +86,9 @@ public class IG_Objects {
         public String name;
         public String description;
 
-        public Res_Group_Create deserializeResponse(int constructor, Object protoObject) {
-            return Res_Group_Create.deserializeObject(constructor, protoObject);
+        @Override
+        public Res_Group_Create deserializeResponse(int constructor, byte[] message) {
+            return Res_Group_Create.deserializeObject(constructor, message);
         }
 
         @Override
@@ -110,27 +113,27 @@ public class IG_Objects {
         public String inviteLink;
         public long roomId;
 
-        public static Res_Group_Create deserializeObject(int constructor, Object protoObject) {
-            if (constructor != actionId || protoObject == null) {
+        public static Res_Group_Create deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
                 return null;
             }
-
-            Res_Group_Create object = new Res_Group_Create();
-            object.readParams(protoObject);
+            Res_Group_Create object = null;
+            try {
+                object = new Res_Group_Create();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return object;
         }
 
         @Override
-        public void readParams(Object message) {
-            try {
-                ProtoGroupCreate.GroupCreateResponse.Builder builder = (ProtoGroupCreate.GroupCreateResponse.Builder) message;
-                inviteLink = builder.getInviteLink();
-                roomId = builder.getRoomId();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupCreate.GroupCreateResponse response = ProtoGroupCreate.GroupCreateResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            inviteLink = response.getInviteLink();
+            roomId = response.getRoomId();
         }
 
         @Override
@@ -144,8 +147,9 @@ public class IG_Objects {
         public String name;
         public String description;
 
-        public Res_Channel_Create deserializeResponse(int constructor, Object protoObject) {
-            return Res_Channel_Create.deserializeObject(constructor, protoObject);
+        @Override
+        public Res_Channel_Create deserializeResponse(int constructor, byte[] message) {
+            return Res_Channel_Create.deserializeObject(constructor, message);
         }
 
         @Override
@@ -170,27 +174,28 @@ public class IG_Objects {
         public String inviteLink;
         public long roomId;
 
-        public static Res_Channel_Create deserializeObject(int constructor, Object protoObject) {
-            if (constructor != actionId || protoObject == null) {
+        public static Res_Channel_Create deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
                 return null;
             }
 
-            Res_Channel_Create object = new Res_Channel_Create();
-            object.readParams(protoObject);
+            Res_Channel_Create object = null;
+            try {
+                object = new Res_Channel_Create();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return object;
         }
 
         @Override
-        public void readParams(Object message) {
-            try {
-                ProtoChannelCreate.ChannelCreateResponse.Builder builder = (ProtoChannelCreate.ChannelCreateResponse.Builder) message;
-                inviteLink = builder.getInviteLink();
-                roomId = builder.getRoomId();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelCreate.ChannelCreateResponse response = ProtoChannelCreate.ChannelCreateResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            inviteLink = response.getInviteLink();
+            roomId = response.getRoomId();
         }
 
         @Override
@@ -204,8 +209,9 @@ public class IG_Objects {
 
         public long roomId;
 
-        public Res_Channel_Delete deserializeResponse(int constructor, Object protoObject) {
-            return Res_Channel_Delete.deserializeObject(constructor, protoObject);
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Channel_Delete.deserializeObject(constructor, message);
         }
 
         @Override
@@ -226,31 +232,34 @@ public class IG_Objects {
         public static int actionId = 30404;
         public long roomId;
 
-        public static Res_Channel_Delete deserializeObject(int constructor, Object protoObject) {
-            if (constructor != actionId || protoObject == null) {
+        public static AbstractObject deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
                 return null;
             }
 
-            Res_Channel_Delete object = new Res_Channel_Delete();
-            object.readParams(protoObject);
+            Res_Channel_Delete object = null;
+            try {
+                object = new Res_Channel_Delete();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
 
             return object;
         }
 
         @Override
-        public void readParams(Object message) {
-            try {
-                ProtoChannelDelete.ChannelDeleteResponse.Builder builder = (ProtoChannelDelete.ChannelDeleteResponse.Builder) message;
-                roomId = builder.getRoomId();
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelDelete.ChannelDeleteResponse response = ProtoChannelDelete.ChannelDeleteResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
         }
 
         @Override
         public int getActionId() {
             return actionId;
         }
+
     }
 
 }

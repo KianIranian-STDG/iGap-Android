@@ -18,8 +18,8 @@ import android.telephony.TelephonyManager;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 

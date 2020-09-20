@@ -2,9 +2,9 @@ package net.iGap.helper.upload;
 
 import net.iGap.G;
 import net.iGap.helper.HelperDataUsage;
-import net.iGap.helper.RequestManager;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileUploadStatus;
 import net.iGap.proto.ProtoGlobal;

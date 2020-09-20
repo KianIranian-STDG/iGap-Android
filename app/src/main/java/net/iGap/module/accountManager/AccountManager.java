@@ -11,8 +11,8 @@ import com.google.gson.reflect.TypeToken;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
-import net.iGap.helper.RequestManager;
 import net.iGap.model.AccountUser;
+import net.iGap.network.RequestManager;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
