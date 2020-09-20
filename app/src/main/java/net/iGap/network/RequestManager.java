@@ -25,11 +25,9 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestWrapper;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -138,17 +136,11 @@ public class RequestManager extends BaseController {
                 }
             } else if (G.unSecure.contains(requestWrapper.actionId + "")) {
                 WebSocketClient.getInstance().sendBinary(message, requestWrapper);
-            } else { //if (G.waitingActionIds.contains(requestWrapper.actionId + "")) {
+            } else {
                 timeOutImmediately(randomId, false);
             }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | GeneralSecurityException e) {
+            FileLog.e(e);
         }
     }
 
@@ -163,7 +155,7 @@ public class RequestManager extends BaseController {
                 delete = timeDifference(requestWrapper.getTime(), Config.TIME_OUT_MS);
             }
             if (delete) {
-                deleteRequest(key);
+                requestQueueMapRemover(key);
             }
         }
 
@@ -173,27 +165,6 @@ public class RequestManager extends BaseController {
             pullRequestQueueRunned.getAndSet(false);
         }
 
-    }
-
-    private void deleteRequest(String key) {
-        if (key.contains(".")) {
-            /**
-             * never be called until now
-             */
-            String randomId = key.split("\\.")[0];
-
-            if (!G.requestQueueRelationMap.containsKey(randomId)) return;
-
-            ArrayList<Object> array = G.requestQueueRelationMap.get(randomId);
-
-            G.requestQueueRelationMap.remove(randomId);
-
-            for (int i = 0; i < array.size(); i++) {
-                requestQueueMapRemover(randomId + "." + i);
-            }
-        } else {
-            requestQueueMapRemover(key);
-        }
     }
 
     private void requestQueueMapRemover(String key) {
@@ -220,7 +191,7 @@ public class RequestManager extends BaseController {
                 try {
                     object = c.getConstructor(int.class, Object.class, Object.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
                 } catch (NoSuchMethodException e) {
-                    object = c.getConstructor(int.class, Object.class, String.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
+                    object = c.getConstructor(int.class, Object.class, Object.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
                 }
                 Method setTimeoutMethod = object.getClass().getMethod("timeOut");
                 setTimeoutMethod.invoke(object);
@@ -234,7 +205,7 @@ public class RequestManager extends BaseController {
         for (Map.Entry<String, RequestWrapper> entry : requestQueueMap.entrySet()) {
             String key = entry.getKey();
             if (allRequest || key.equals(keyRandomId)) {
-                deleteRequest(key);
+                requestQueueMapRemover(key);
             }
         }
     }
@@ -253,20 +224,19 @@ public class RequestManager extends BaseController {
     }
 
     public void unpack(byte[] message) {
+        int actionId = getId(message);
+        byte[] payload = getProtoInfo(message);
+        String className = getClassName(actionId);
 
-        Object[] objects = fetchMessage(message);
-        if (objects == null) {
+
+        if (className == null) {
             return;
         }
-
-        int actionId = (int) objects[0];
 
         if (!isSecure && !G.unSecureResponseActionId.contains(Integer.toString(actionId))) {
             return;
         }
 
-        byte[] payload = (byte[]) objects[1];
-        String className = (String) objects[2];
 
         String protoClassName = HelperClassNamePreparation.preparationProtoClassName(className);
         Object protoObject = fillProtoClassData(protoClassName, payload);
@@ -284,86 +254,14 @@ public class RequestManager extends BaseController {
             }
 
             try {
+                RequestWrapper requestWrapper = requestQueueMap.remove(responseId);
                 if (actionId == 0) { // error
-                    if (responseId.contains(".")) {
-                        String randomId = responseId.split("\\.")[0];
-                        String indexString = responseId.split("\\.")[1];
-                        int index = Integer.parseInt(indexString);
-                        ArrayList<Object> values = G.requestQueueRelationMap.get(randomId);
-                        G.requestQueueRelationMap.remove(randomId);
-                        for (int i = 0; i < values.size(); i++) {
-                            Object currentProto;
-                            String currentResponseId = randomId + "." + i;
-                            RequestWrapper currentRequestWrapper = requestQueueMap.get(currentResponseId);
-                            if (i == index) {
-                                currentProto = protoObject;
-                            } else {
-                                ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();
-                                responseBuilder.setId(getRequestId(currentRequestWrapper));
-                                responseBuilder.build();
-
-                                ProtoError.ErrorResponse.Builder errorResponse = ProtoError.ErrorResponse.newBuilder();
-                                errorResponse.setMinorCode(6);
-                                errorResponse.setMinorCode(1);
-                                errorResponse.setResponse(responseBuilder);
-                                errorResponse.build();
-
-                                currentProto = errorResponse;
-                            }
-                            requestQueueMap.remove(currentResponseId);
-                            instanceResponseClass(currentRequestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, currentProto, currentRequestWrapper.identity, "error");
-                        }
-                    } else {
-                        RequestWrapper requestWrapper = requestQueueMap.get(responseId);
-                        requestQueueMap.remove(responseId);
-
-                        instanceResponseClass(requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET, protoObject, requestWrapper.identity, "error");
+                    if (requestWrapper != null) {
+                        int finalAct = requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET;
+                        instanceResponseClass(finalAct, protoObject, requestWrapper.identity, "error");
                     }
                 } else {
-                    if (responseId.contains(".")) {
-
-                        String randomId = responseId.split("\\.")[0];
-                        String indexString = responseId.split("\\.")[1];
-                        int index = Integer.parseInt(indexString);
-
-                        RequestWrapper wrapper = requestQueueMap.get(responseId);
-                        Object responseClass = instanceResponseClass(actionId, protoObject, wrapper.identity, null);
-
-                        ArrayList<Object> objectValues = G.requestQueueRelationMap.get(randomId);
-                        objectValues.set(index, responseClass);
-
-                        boolean runLoop = true;
-
-                        for (int i = 0; i < objectValues.size(); i++) {
-                            if (objectValues.get(i) == null) {
-                                runLoop = false;
-                                break;
-                            }
-                        }
-
-                        if (runLoop) {
-                            G.requestQueueRelationMap.remove(randomId);
-
-                            for (int j = 0; j < objectValues.size(); j++) {
-                                requestQueueMap.remove(randomId + "." + j);
-
-                                Object object = objectValues.get(j);
-
-                                Field fieldActionId = object.getClass().getDeclaredField("actionId");
-                                Field fieldMessage = object.getClass().getDeclaredField("message");
-                                Field fieldIdentity = object.getClass().getDeclaredField("identity");
-                                int currentActionId = fieldActionId.getInt(object);
-                                Object currentMessage = fieldMessage.get(object);
-                                String currentIdentity = null;
-                                if (fieldIdentity.get(object) != null) {
-                                    currentIdentity = fieldIdentity.get(object).toString();
-                                }
-                                instanceResponseClass(currentActionId, currentMessage, currentIdentity, "handler");
-                            }
-                        }
-                    } else {
-                        RequestWrapper requestWrapper = requestQueueMap.get(responseId);
-                        requestQueueMap.remove(responseId);
+                    if (requestWrapper != null) {
                         instanceResponseClass(actionId, protoObject, requestWrapper.identity, "handler");
                     }
                 }
@@ -371,7 +269,6 @@ public class RequestManager extends BaseController {
                 e.printStackTrace();
             }
         }
-
     }
 
     private String getResponseId(Object protoObject) {
@@ -389,36 +286,6 @@ public class RequestManager extends BaseController {
         return responseId;
     }
 
-    private String getRequestId(RequestWrapper requestWrapper) {
-
-        String requestId = null;
-        try {
-            Object protoObject = requestWrapper.getProtoObject();
-            Method method = protoObject.getClass().getMethod("getRequest");
-            ProtoRequest.Request request = (ProtoRequest.Request) method.invoke(protoObject);
-            requestId = request.getId();
-        } catch (SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return requestId;
-    }
-
-    private Object[] fetchMessage(byte[] message) {
-
-        int actionId = getId(message);
-
-        byte[] payload = getProtoInfo(message);
-
-        String className = getClassName(actionId);
-
-        if (className == null) {
-            return null;
-        }
-
-        return new Object[]{actionId, payload, className};
-    }
-
     public int getId(byte[] byteArray) {
 
         byteArray = Arrays.copyOfRange(byteArray, 0, 2);
@@ -432,8 +299,8 @@ public class RequestManager extends BaseController {
     }
 
     private String getClassName(int value) {
-
-        if (!G.lookupMap.containsKey(value)) return null;
+        if (!G.lookupMap.containsKey(value))
+            return null;
 
         return G.lookupMap.get(value);
     }
@@ -446,7 +313,6 @@ public class RequestManager extends BaseController {
     private Object fillProtoClassData(String protoClassName, byte[] protoMessage) {
         Object object3 = null;
         try {
-
             Class<?> c = Class.forName(protoClassName);
             Constructor<?> constructor = c.getDeclaredConstructor();
             constructor.setAccessible(true);
@@ -477,10 +343,14 @@ public class RequestManager extends BaseController {
         return object3;
     }
 
-    private Object instanceResponseClass(int actionId, Object protoObject, Object identity, String optionalMethod) {
-        Object object = null;
+    private void instanceResponseClass(int actionId, Object protoObject, Object identity, String optionalMethod) {
         try {
             String className = getClassName(actionId);
+
+            if (className == null) {
+                return;
+            }
+
             String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
             Class<?> responseClass = Class.forName(responseClassName);
             Constructor<?> constructor;
@@ -492,7 +362,7 @@ public class RequestManager extends BaseController {
             }
 
             constructor.setAccessible(true);
-            object = constructor.newInstance(actionId, protoObject, identity);
+            Object object = constructor.newInstance(actionId, protoObject, identity);
 
             if (optionalMethod != null) {
                 responseClass.getMethod(optionalMethod).invoke(object);
@@ -510,10 +380,8 @@ public class RequestManager extends BaseController {
             HelperLog.getInstance().setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            HelperLog.getInstance().setErrorLog(e);
-            e.printStackTrace();
+            FileLog.e(e);
         }
-        return object;
     }
 
     public void onBinaryReceived(byte[] binary) {

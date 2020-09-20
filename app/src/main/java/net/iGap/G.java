@@ -106,7 +106,6 @@ public class G extends ApplicationContext {
     public static ArrayList<Integer> forcePriorityActionId = new ArrayList<>();
     public static ArrayList<Integer> ignoreErrorCodes = new ArrayList<>();
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
-    public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
     public static HashMap<Integer, Integer> priorityActionId = new HashMap<>();
     public static ActivityEnhanced currentActivity;
     public static FragmentActivity fragmentActivity;
