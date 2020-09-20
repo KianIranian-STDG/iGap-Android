@@ -29,7 +29,7 @@ public interface IgashtApi {
     Call<BaseIGashtResponse<IGashtLocationService>> requestGetServiceList(@Path("locationId") int locationId);
 
     @POST("entertainment/purchase")
-    Call<RegisterTicketResponse> registerOrder(@Body IGashtOrder order);
+    Call<RegisterTicketResponse> requestRegisterOrder(@Body IGashtOrder order);
 
     @GET("entertainment/ticket/list")
     Call<TicketHistoryListResponse<IGashtTicketDetail>> requestGetTicketList(@Query("offet") int offset,
