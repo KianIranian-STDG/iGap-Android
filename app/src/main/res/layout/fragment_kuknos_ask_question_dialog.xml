@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?rootBackgroundColor"
+    android:orientation="vertical"
+    android:padding="@dimen/dp16"
+    tools:context=".fragments.kuknos.KuknosAskQuestionDialogFragment">
+
+    <TextView
+        android:id="@+id/kuknos_dialog_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginBottom="@dimen/dp16"
+        android:textAlignment="center"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        tools:text="What is yout Name?" />
+
+    <Button
+        android:id="@+id/kuknos_dialog_first_answer"
+        style="@style/iGapButton"
+        android:layout_width="400dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:text="@string/hello_blank_fragment" />
+
+    <Button
+        android:id="@+id/kuknos_dialog_second_answer"
+        style="@style/iGapButton"
+        android:layout_width="400dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:text="@string/hello_blank_fragment" />
+
+    <Button
+        android:id="@+id/kuknos_dialog_third_answer"
+        style="@style/iGapButton"
+        android:layout_width="400dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:text="@string/hello_blank_fragment" />
+
+    <Button
+        android:id="@+id/kuknos_dialog_fourth_answer"
+        style="@style/iGapButton"
+        android:layout_width="400dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:text="@string/hello_blank_fragment" />
+
+</LinearLayout>

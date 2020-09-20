@@ -20,7 +20,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
     private MutableLiveData<KuknosError> error;
     private SingleLiveEvent<Boolean> nextPage;
     private MutableLiveData<Boolean> progressState;
-    private ObservableField<String> mnemonic = new ObservableField<>();
+    private MutableLiveData<String> mnemonic;
     private String selectedLanguage = "EN";
     private String selectedLength = "12";
 
@@ -31,6 +31,8 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
         progressState.setValue(false);
+        mnemonic = new MutableLiveData<>();
+        mnemonic.setValue(null);
     }
 
     public void initMnemonic() {
@@ -55,7 +57,7 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
             error.setValue(new KuknosError(true, "generate fatal error", "1", R.string.kuknos_RecoverySK_ErrorGenerateMn));
             return;
         }
-        mnemonic.set(mnemonicTemp);
+        mnemonic.setValue(mnemonicTemp);
     }
 
     public void onNext() {
@@ -77,6 +79,14 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
 
     //Setter and Getter
 
+    public String getSelectedLanguage() {
+        return selectedLanguage;
+    }
+
+    public String getSelectedLength() {
+        return selectedLength;
+    }
+
     public MutableLiveData<KuknosError> getError() {
         return error;
     }
@@ -97,11 +107,11 @@ public class KuknosShowRecoveryKeyVM extends ViewModel {
         this.progressState = progressState;
     }
 
-    public ObservableField<String> getMnemonic() {
+    public MutableLiveData<String> getMnemonic() {
         return mnemonic;
     }
 
-    public void setMnemonic(ObservableField<String> mnemonic) {
+    public void setMnemonic(MutableLiveData<String> mnemonic) {
         this.mnemonic = mnemonic;
     }
 }

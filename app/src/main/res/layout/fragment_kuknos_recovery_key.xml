@@ -43,9 +43,9 @@
                     android:text="@string/kuknos_RecoverySK_languageTitle"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_language"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_language"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_language" />
+                    app:layout_constraintTop_toTopOf="@+id/spinner_language" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner_language"
@@ -77,16 +77,16 @@
                     android:text="@string/kuknos_RecoverySK_lengthTitle"
                     android:textColor="?iGapTitleTextColor"
                     android:textSize="@dimen/dp16"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_length"
                     app:layout_constraintStart_toStartOf="@+id/fragKuknosRKSDescription"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_length"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_length" />
+                    app:layout_constraintTop_toTopOf="@+id/spinner_length" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner_length"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/dp36"
                     android:layout_marginTop="@dimen/dp4"
+                    android:minHeight="@dimen/dp36"
                     android:onItemSelected="@{(parent,view,position,id)->viewmodel.onItemSelectSpinnerLength(position)}"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosRKSDescription"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_language"
@@ -130,31 +130,25 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosRKSkeysET"
                     app:layout_constraintWidth_percent="0.7" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fragKuknosRKSkeysET"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/background_cancel_money_action"
-                    android:ems="10"
                     android:enabled="false"
                     android:gravity="top"
-                    android:hint="@string/kuknos_RecoverySK_Hint"
-                    android:inputType="textMultiLine"
                     android:maxHeight="200dp"
                     android:minHeight="200dp"
-                    android:minLines="3"
+                    android:layoutDirection="ltr"
                     android:padding="8dp"
+                    android:orientation="vertical"
                     android:scrollbars="vertical"
                     android:scrollHorizontally="false"
-                    android:text="@{viewmodel.mnemonic}"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textColorHint="?iGapSubtitleTextColor"
-                    android:textSize="18dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spinner_length"
                     app:layout_constraintWidth_percent="0.8" />
+
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/fragKuknosRKSMessage"
