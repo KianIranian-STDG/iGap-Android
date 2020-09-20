@@ -856,7 +856,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                     new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (G.userLogin) {
+                            if (getRequestManager().isUserLogin()) {
                                 new RequestGeoRegister().register(true);
                             } else {
                                 toggleGps.setChecked(false);
@@ -1641,7 +1641,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                             new MaterialDialog.Builder(getContext()).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    if (G.userLogin) {
+                                    if (getRequestManager().isUserLogin()) {
                                         new RequestGeoRegister().register(true);
                                     } else {
                                         toggleGps.setChecked(false);

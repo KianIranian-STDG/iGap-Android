@@ -2,7 +2,9 @@ package net.iGap.helper.upload;
 
 import net.iGap.G;
 import net.iGap.helper.HelperDataUsage;
+import net.iGap.helper.RequestManager;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileUploadStatus;
 import net.iGap.proto.ProtoGlobal;
@@ -255,7 +257,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
 
     public void cancel() {
         if (lastRequestId != null) {
-            G.requestQueueMap.remove(lastRequestId);
+            RequestManager.getInstance(AccountManager.selectedAccount).cancelRequest(lastRequestId);
         }
 
         synchronized (this) {

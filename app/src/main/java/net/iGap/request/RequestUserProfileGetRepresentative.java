@@ -10,7 +10,8 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
+import net.iGap.helper.RequestManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoUserProfileGetRepresentative;
 
 
@@ -29,7 +30,7 @@ public class RequestUserProfileGetRepresentative {
         ProtoUserProfileGetRepresentative.UserProfileGetRepresentative.Builder builder = ProtoUserProfileGetRepresentative.UserProfileGetRepresentative.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(151, builder, onRepresentReady);
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             numberOfPendingRequest++;
         }
         try {

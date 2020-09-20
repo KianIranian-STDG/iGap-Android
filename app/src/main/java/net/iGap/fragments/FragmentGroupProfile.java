@@ -611,7 +611,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
 
                 if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
-                    if (G.userLogin) {
+                    if (getRequestManager().isUserLogin()) {
                         String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                         new RequestGroupCheckUsername().GroupCheckUsername(viewModel.roomId, userName, new OnGroupCheckUsername() {
                             @Override
@@ -672,7 +672,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             public void onClick(View view) {
                 hideKeyboard();
                 String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
-                if (G.userLogin) {
+                if (getRequestManager().isUserLogin()) {
                     progressBar.setVisibility(View.VISIBLE);
                     positive.setEnabled(false);
                     new RequestGroupUpdateUsername().groupUpdateUsername(viewModel.roomId, userName, new OnGroupUpdateUsername() {

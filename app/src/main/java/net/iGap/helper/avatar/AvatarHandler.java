@@ -16,16 +16,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.helper.RequestManager;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnAvatarAdd;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnDownload;
 import net.iGap.observers.interfaces.OnFileDownloaded;
-import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -369,7 +371,7 @@ public class AvatarHandler {
     private void getAvatarImage(BaseParam baseParam, Realm _realm, boolean requestUserInfo) {
         RealmAvatar realmAvatar = getLastAvatar(baseParam.avatarOwnerId, _realm);
 
-        if (realmAvatar == null && requestUserInfo && G.userLogin) {
+        if (realmAvatar == null && requestUserInfo && RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
 
             new RequestUserInfo().userInfoWithCallBack(new OnComplete() {
                 @Override

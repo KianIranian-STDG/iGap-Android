@@ -3,6 +3,8 @@ package net.iGap.api.apiService;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.helper.RequestManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 
 // base view model implements callback for repository and handle on fail and base onError.
@@ -20,4 +22,7 @@ public abstract class BaseAPIViewModel extends ViewModel implements HandShakeCal
         updateGooglePlay.setValue(true);
     }
 
+    public RequestManager getRequestManager() {
+        return RequestManager.getInstance(AccountManager.selectedAccount);
+    }
 }

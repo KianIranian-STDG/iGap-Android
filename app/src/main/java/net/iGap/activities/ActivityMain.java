@@ -85,6 +85,7 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.helper.RequestManager;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
 import net.iGap.model.payment.Payment;
@@ -1530,7 +1531,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void check(final long userId) {
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         } else {
             G.handler.postDelayed(new Runnable() {

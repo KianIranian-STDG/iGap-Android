@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.helper.RequestManager;
 import net.iGap.model.AccountUser;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
@@ -21,7 +22,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.paygear.utils.Utils.signOutWallet;
 
@@ -227,7 +227,7 @@ public class AccountManager {
         G.serverHashContact = null;
         G.selectedCard = null;
         G.nationalCode = null;
-        G.pullRequestQueueRunned = new AtomicBoolean(false);
+        RequestManager.getInstance(AccountManager.selectedAccount).setPullRequestQueueRunned(false);
     }
 
     public boolean haveAccount() {

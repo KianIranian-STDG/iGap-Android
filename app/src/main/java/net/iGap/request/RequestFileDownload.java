@@ -18,6 +18,8 @@ import android.telephony.TelephonyManager;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.RequestManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 
@@ -51,7 +53,7 @@ public class RequestFileDownload {
         }
 
         try {
-            if (checkDuplicate && G.userLogin) {
+            if (checkDuplicate && RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
                 RequestQueue.sendRequest(requestWrapper);
                 downloadPending.add(token + "" + offset);

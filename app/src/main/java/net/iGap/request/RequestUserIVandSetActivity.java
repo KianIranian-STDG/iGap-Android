@@ -10,7 +10,8 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
+import net.iGap.helper.RequestManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoUserIVandSetActivity;
 
 
@@ -29,7 +30,7 @@ public class RequestUserIVandSetActivity {
 
         RequestWrapper requestWrapper = new RequestWrapper(155, builder, onSetActivities);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {

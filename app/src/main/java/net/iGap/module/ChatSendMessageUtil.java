@@ -12,8 +12,8 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
-import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.helper.RequestManager;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
@@ -247,7 +247,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChannelSendMessage.sendMessage(fakeMessageIdAsIdentity);
         }
 
-        if (!G.userLogin) {
+        if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             makeFailed(Long.parseLong(fakeMessageIdAsIdentity));
         }
     }

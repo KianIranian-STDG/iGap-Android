@@ -13,12 +13,14 @@ package net.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.helper.RequestManager;
 import net.iGap.helper.upload.UploadManager;
-import net.iGap.observers.interfaces.IResendMessage;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -40,16 +42,16 @@ public class ResendMessage implements IResendMessage {
         this.mSelectedMessageID = selectedMessageID;
         boolean hasTextForCopy = checkHasMessageForCopy(messages);
         if (!((Activity) context).isFinishing()) {
-            AppUtils.buildResendDialog(context, messages.size() , hasTextForCopy, this).show();
+            AppUtils.buildResendDialog(context, messages.size(), hasTextForCopy, this).show();
         }
 
     }
 
     private boolean checkHasMessageForCopy(List<StructMessageInfo> messages) {
-        for (StructMessageInfo message : messages){
+        for (StructMessageInfo message : messages) {
             if (message.realmRoomMessage == null) continue;
             String msgText = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessage() : message.realmRoomMessage.getMessage();
-            if (msgText != null && !msgText.isEmpty()){
+            if (msgText != null && !msgText.isEmpty()) {
                 return true;
             }
         }
@@ -78,7 +80,7 @@ public class ResendMessage implements IResendMessage {
 
     private void resend(final boolean all) {
 
-        if (!G.userLogin) {
+        if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             return;
         }
         DbManager.getInstance().doRealmTask(realm -> {
@@ -124,7 +126,7 @@ public class ResendMessage implements IResendMessage {
                                                         new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                                     } else {
                                                         UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
-                                                   }
+                                                    }
                                                 }
                                             }
                                         }

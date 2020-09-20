@@ -59,6 +59,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.RequestManager;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.UploadManager;
@@ -1507,7 +1508,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
             if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
 
                 } else {

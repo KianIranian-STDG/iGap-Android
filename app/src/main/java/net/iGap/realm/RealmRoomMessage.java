@@ -25,6 +25,7 @@ import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.RequestManager;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
@@ -540,10 +541,7 @@ public class RealmRoomMessage extends RealmObject {
             RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
                     .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
                     .findFirst();
-            if (realmRoomMessage != null) {
-                return true;
-            }
-            return false;
+            return realmRoomMessage != null;
         });
     }
 
@@ -670,7 +668,7 @@ public class RealmRoomMessage extends RealmObject {
 
     public static boolean isBothDelete(long messageTime) {
         long currentTime;
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             currentTime = G.currentServerTime * DateUtils.SECOND_IN_MILLIS;
         } else {
             currentTime = System.currentTimeMillis();

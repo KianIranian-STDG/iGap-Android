@@ -6,8 +6,9 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.RequestManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.text.DecimalFormat;
@@ -79,7 +80,7 @@ public class ShowBillInquiryViewModel extends ViewModel {
     }
 
     public void onLastTermPayment() {
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             new RequestMplGetBillToken().mplGetBillToken(response.getLastTerm().getBillId(), response.getLastTerm().getPayId());
             goBack.setValue(true);
         } else {
@@ -88,7 +89,7 @@ public class ShowBillInquiryViewModel extends ViewModel {
     }
 
     public void onMidTermPayment() {
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             new RequestMplGetBillToken().mplGetBillToken(response.getMidTerm().getBillId(), response.getMidTerm().getPayId());
             goBack.setValue(true);
         } else {

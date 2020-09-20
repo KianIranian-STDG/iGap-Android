@@ -5,14 +5,13 @@ import android.view.View;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.observers.interfaces.GeneralResponseCallBack;
 import net.iGap.request.RequestBillInquiryTelecom;
+import net.iGap.viewmodel.BaseViewModel;
 
-public class PaymentInquiryTelephoneViewModel extends ViewModel {
+public class PaymentInquiryTelephoneViewModel extends BaseViewModel {
 
     private ObservableBoolean enableInquiryButton = new ObservableBoolean(true);
     private ObservableInt showLoadingView = new ObservableInt(View.GONE);
@@ -43,7 +42,7 @@ public class PaymentInquiryTelephoneViewModel extends ViewModel {
     public void onInquiryClick(String areaCode, String telephoneNumber) {
         hideKeyword.setValue(true);
         enableInquiryButton.set(false);
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             if (telephoneNumber.length() < 8 || areaCode.length() < 3) {
                 enableInquiryButton.set(true);
                 showErrorMessage.setValue(R.string.phone_number_is_not_valid);

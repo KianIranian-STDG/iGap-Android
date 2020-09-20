@@ -55,7 +55,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.observers.interfaces.*;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestWrapper;
 
 import org.paygear.RaadApp;
 import org.paygear.model.Card;
@@ -65,8 +64,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -96,9 +93,7 @@ public class G extends ApplicationContext {
     public static boolean ISRealmOK = true;
     public static boolean isCalling = false;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
-    public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
-    public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
     public static SecretKeySpec symmetricKey;
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
@@ -137,8 +132,6 @@ public class G extends ApplicationContext {
     public static boolean isAppInFg = false;
     public static boolean isScrInFg = false;
     public static boolean isChangeScrFg = false;
-    public static boolean isSecure = false;
-    public static boolean userLogin = false;
     public static boolean canRunReceiver = false;
     public static boolean firstEnter = true;
     public static boolean isSaveToGallery = false;

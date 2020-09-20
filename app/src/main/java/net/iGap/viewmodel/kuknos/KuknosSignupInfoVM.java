@@ -4,7 +4,6 @@ import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.model.kuknos.KuknosError;
@@ -190,7 +189,7 @@ public class KuknosSignupInfoVM extends BaseAPIViewModel {
             TandCAgree.postValue(TandCAgree.getValue());
             return;
         }
-        if (!G.isSecure) {
+        if (getRequestManager().isSecure()) {
             TandCAgree.postValue("error");
             return;
         }

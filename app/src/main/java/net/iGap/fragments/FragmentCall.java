@@ -257,7 +257,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         //clear all logs
         mBtnDeleteAllLogs.setOnClickListener(v -> {
-            if (G.userLogin) {
+            if (getRequestManager().isUserLogin()) {
                 new MaterialDialog.Builder(v.getContext()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
                     DbManager.getInstance().doRealmTask(realm -> {
@@ -283,7 +283,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                 return;
             }
 
-            if (G.userLogin) {
+            if (getRequestManager().isUserLogin()) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
 
                     try {
@@ -372,7 +372,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
     private void getLogListWithOffset() {
 
-        if (G.isSecure && G.userLogin) {
+        if (getRequestManager().isSecure() && getRequestManager().isUserLogin()) {
             isSendRequestForLoading = true;
             int mLimit = 50;
             new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit, mSelectedStatus);

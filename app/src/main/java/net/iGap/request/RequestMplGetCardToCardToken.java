@@ -10,7 +10,8 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
+import net.iGap.helper.RequestManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoMplGetCardToCardToken;
 
 public class RequestMplGetCardToCardToken {
@@ -27,7 +28,7 @@ public class RequestMplGetCardToCardToken {
         builder.setToUserId(userId);
         RequestWrapper requestWrapper = new RequestWrapper(9106, builder, onMplCardToCardToken);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {

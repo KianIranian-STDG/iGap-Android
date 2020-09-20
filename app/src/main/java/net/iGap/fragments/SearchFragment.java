@@ -32,7 +32,6 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
@@ -41,6 +40,7 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IClientSearchUserName;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientSearchUsername;
@@ -65,7 +65,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Case;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 import static net.iGap.fragments.FragmentChat.messageId;
@@ -195,7 +194,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
 
         if (strSize >= 5) {
-            if (G.userLogin) {
+            if (getRequestManager().isUserLogin()) {
                 if ((!text.equals(preventRepeatSearch))) {
                     itemAdapter.clear();
                     if (text.startsWith("@")) {

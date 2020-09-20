@@ -8551,7 +8551,7 @@ public class FragmentChat extends BaseFragment
              */
             progressItem(SHOW, direction);
 
-            if (!G.userLogin) {
+            if (!getRequestManager().isUserLogin()) {
                 getOnlineMessageAfterTimeOut(oldMessageId, direction);
                 return;
             }
@@ -8707,7 +8707,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void getOnlineMessageAfterTimeOut(final long messageIdGetHistory, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             getOnlineMessage(messageIdGetHistory, direction);
         } else {
             G.handler.postDelayed(new Runnable() {

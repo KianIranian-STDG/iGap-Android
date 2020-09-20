@@ -18,7 +18,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
@@ -43,7 +42,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FragmentRegisterViewModel extends ViewModel {
+public class FragmentRegisterViewModel extends BaseViewModel {
 
     //view callback
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
@@ -182,7 +181,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     private void getTermsAndConditionData() {
         isShowLoading.set(View.VISIBLE);
         showRetryView.set(View.GONE);
-        if (G.isSecure) {
+        if (getRequestManager().isSecure()) {
             isShowLoading.set(View.VISIBLE);
             showRetryView.set(View.GONE);
             repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
@@ -290,7 +289,7 @@ public class FragmentRegisterViewModel extends ViewModel {
                     showDialogWaitTime.postValue(new WaitTimeModel(R.string.USER_VERIFY_MANY_TRIES_SEND, error.getWaitTime(), error.getMajorCode()));
                 } else if (error.getMajorCode() == 5 && error.getMinorCode() == 1) { // timeout
                     showError.postValue(R.string.connection_error);
-                }else if (error.getMajorCode() == 1038 && error.getMinorCode() == 1){
+                } else if (error.getMajorCode() == 1038 && error.getMinorCode() == 1) {
                     showError.postValue(R.string.error);
                 }
             }

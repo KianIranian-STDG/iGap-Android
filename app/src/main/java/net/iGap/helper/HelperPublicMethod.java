@@ -13,14 +13,14 @@ package net.iGap.helper;
 import android.content.Context;
 import android.content.Intent;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
-import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
@@ -79,7 +79,7 @@ public class HelperPublicMethod {
                     }
                 };
 
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     new RequestChatGetRoom().chatGetRoom(peerId);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -139,7 +139,7 @@ public class HelperPublicMethod {
                     }
                 };
 
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     new RequestChatGetRoom().chatGetRoom(peerId);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -190,7 +190,7 @@ public class HelperPublicMethod {
                     }
                 };
 
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     new RequestChatGetRoom().chatGetRoom(peerId);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);

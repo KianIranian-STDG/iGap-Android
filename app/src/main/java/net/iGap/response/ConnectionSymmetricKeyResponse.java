@@ -17,7 +17,9 @@ import com.neovisionaries.ws.client.WebSocket;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.RequestManager;
 import net.iGap.module.LoginActions;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoConnectionSecuring;
 
 public class ConnectionSymmetricKeyResponse extends MessageHandler {
@@ -46,18 +48,18 @@ public class ConnectionSymmetricKeyResponse extends MessageHandler {
         if (statusNumber == Config.REJECT) { //go to upgrade page
             WebSocketClient.getInstance().disconnectSocket(true);
         } else if (statusNumber == Config.ACCEPT) {
-            Log.wtf(this.getClass().getName(),"statusNumber: ACCEPT");
+            Log.wtf(this.getClass().getName(), "statusNumber: ACCEPT");
             /**
              * when secure is false set useMask true otherwise set false
              */
-            G.isSecure = true;
+            RequestManager.getInstance(AccountManager.selectedAccount).setSecure(true);
             WebSocket.useMask = false;
 
             G.ivSize = builder.getSymmetricIvSize();
             String sm = builder.getSymmetricMethod();
             G.symmetricMethod = sm.split("-")[2];
             if (G.onSecuring == null) {
-                Log.wtf(this.getClass().getName(),"G.onSecuring is null");
+                Log.wtf(this.getClass().getName(), "G.onSecuring is null");
                 new LoginActions();
             }
             G.onSecuring.onSecure();

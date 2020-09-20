@@ -221,7 +221,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
 
             if (isNeedGetMemberList) {
-                if (G.userLogin) {
+                if (getRequestManager().isUserLogin()) {
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {

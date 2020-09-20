@@ -51,6 +51,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.libs.Tuple;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
 import net.iGap.module.dialog.JoinDialogFragment;
@@ -831,7 +832,7 @@ public class HelperUrl {
 
     public static void checkAndJoinToRoom(FragmentActivity activity, final String token) {
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             showIndeterminateProgressDialog(activity);
 
             G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
@@ -895,7 +896,7 @@ public class HelperUrl {
     }
 
     private static void joinToRoom(FragmentActivity activity, String token, final ProtoGlobal.Room room) {
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             showIndeterminateProgressDialog(activity);
 
             G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
@@ -955,9 +956,7 @@ public class HelperUrl {
                     int index = currentChatInviteLink.lastIndexOf("/");
                     if (index != -1) {
                         String st = currentChatInviteLink.toLowerCase().substring(index + 1);
-                        if (st.equals(userName.toLowerCase())) {
-                            return true;
-                        }
+                        return st.equals(userName.toLowerCase());
                     }
                 }
 
@@ -981,7 +980,7 @@ public class HelperUrl {
     public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity, final String username, final ChatEntry chatEntry, final long messageId) {
         if (username == null || username.length() < 1) return;
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
 
             // this methode check user name and if it is ok go to room
             G.onClientResolveUsername = new OnClientResolveUsername() {
@@ -1262,7 +1261,7 @@ public class HelperUrl {
                 goToActivity(activity, realmRoom.getId(), id, user.getBot() ? ChatEntry.chat : chatEntery, messageId);
 
             } else {
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     addChatToDatabaseAndGoToChat(activity, user, -1, user.getBot() ? ChatEntry.chat : chatEntery);
                 } else {
                     closeDialogWaiting();
@@ -1402,7 +1401,7 @@ public class HelperUrl {
     private static void checkConnection(FragmentActivity activity, final Uri path, int countTime) {
         countTime++;
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             Matcher matcher = patternMessageLink.matcher(path.toString());
             Matcher matcher2 = patternMessageLink2.matcher(path.toString());
             if (matcher.find()) {

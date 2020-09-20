@@ -38,13 +38,13 @@ import com.mikepenz.fastadapter.listeners.OnClickListener;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.adapter.items.SearchItamIGap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;
-import net.iGap.observers.interfaces.IClientSearchUserName;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.IClientSearchUserName;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientSearchUsername;
@@ -153,7 +153,7 @@ public class FragmentIgapSearch extends BaseFragment {
                 }
 
                 if (strSize > 5) {
-                    if (G.userLogin) {
+                    if (getRequestManager().isUserLogin()) {
                         if ((!edtSearch.getText().toString().equals(preventRepeatSearch))) {
                             itemAdapter.clear();
                             new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));

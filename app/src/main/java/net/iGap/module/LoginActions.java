@@ -11,7 +11,9 @@ import com.google.gson.Gson;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.RequestManager;
 import net.iGap.helper.UserStatusController;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.observers.interfaces.OnContactFetchForServer;
@@ -92,11 +94,11 @@ public class LoginActions {
 
             }
         };
-        if (G.isSecure) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                 Log.wtf(LoginActions.class.getName(), "bagi: ");
-                if (!G.userLogin) {
+                if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     if (userInfo != null) {
                         if (userInfo.getUserRegistrationState()) {
                             Log.wtf(LoginActions.class.getName(), "LoginActions.login: RequestUserLogin().userLogin");
@@ -127,7 +129,7 @@ public class LoginActions {
                 return realmUserInfo.getUserId();
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.wtf(LoginActions.class.getName(),"catch");
+                Log.wtf(LoginActions.class.getName(), "catch");
                 G.logoutAccount.postValue(true);
                 return null;
             }
@@ -162,7 +164,7 @@ public class LoginActions {
             }
         };
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             /**
              * this can be go in the activity for check permission in api 6+
              */
@@ -213,6 +215,7 @@ public class LoginActions {
         }
         return "";
     }
+
     /**
      * initialize securing interface for detecting
      * securing is done and continue login actions

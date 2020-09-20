@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -224,7 +223,7 @@ public class KuknosBuyPeymanVM extends BaseAPIViewModel {
             TandCAgree.postValue(TandCAgree.getValue());
             return;
         }
-        if (!G.isSecure) {
+        if (getRequestManager().isSecure()) {
             TandCAgree.postValue("error");
             return;
         }

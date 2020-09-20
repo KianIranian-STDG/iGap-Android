@@ -14,21 +14,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import net.iGap.module.accountManager.AccountHelper;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
-import net.iGap.module.Theme;
-import net.iGap.observers.interfaces.OnUserSessionLogout;
 import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.OnUserSessionLogout;
 import net.iGap.request.RequestUserSessionLogout;
-
-import org.jetbrains.annotations.NotNull;
-
-import io.realm.Realm;
 
 
 /**
@@ -112,7 +108,7 @@ public final class HelperLogout {
 
 
     private void resetStaticField() {
-        G.userLogin = false;
+        RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(false);
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
         G.isSaveToGallery = false;

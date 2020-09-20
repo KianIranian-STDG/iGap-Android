@@ -7,7 +7,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -43,7 +42,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 
-public class FragmentGroupProfileViewModel extends ViewModel {
+public class FragmentGroupProfileViewModel extends BaseViewModel {
 
     public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
     public ObservableBoolean isUnMuteNotification = new ObservableBoolean(true);
@@ -291,7 +290,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void sendRequestRemoveGroupUsername() {
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             showProgressBar();
             new RequestGroupRemoveUsername().groupRemoveUsername(roomId, new OnGroupRemoveUsername() {
                 @Override
