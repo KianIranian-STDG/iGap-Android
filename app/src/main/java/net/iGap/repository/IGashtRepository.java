@@ -1,21 +1,21 @@
 package net.iGap.repository;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiInitializer;
-import net.iGap.model.igasht.BaseIGashtResponse;
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.model.igasht.TicketQRCodeResponse;
-import net.iGap.model.igasht.IGashtTicketDetail;
-import net.iGap.model.igasht.TicketHistoryListResponse;
-import net.iGap.model.igasht.RegisterTicketResponse;
+import net.iGap.model.igasht.BaseIGashtResponse;
+import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.IGashtLocationService;
 import net.iGap.model.igasht.IGashtOrder;
-import net.iGap.model.igasht.IGashtVouchers;
-import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.IGashtProvince;
+import net.iGap.model.igasht.IGashtTicketDetail;
+import net.iGap.model.igasht.IGashtVouchers;
+import net.iGap.model.igasht.RegisterTicketResponse;
+import net.iGap.model.igasht.TicketHistoryListResponse;
+import net.iGap.model.igasht.TicketQRCodeResponse;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmUserInfo;
 
 import org.jetbrains.annotations.NotNull;
@@ -92,7 +92,7 @@ public class IGashtRepository {
 
     public void registeredOrder(HandShakeCallback handShakeCallback, ResponseCallback<RegisterTicketResponse> callback) {
         DbManager.getInstance().doRealmTask(realm -> {
-            new ApiInitializer<RegisterTicketResponse>().initAPI(igashtApi.registerOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
+            new ApiInitializer<RegisterTicketResponse>().initAPI(igashtApi.requestRegisterOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
                     1,
                     selectedProvince.getId(),
                     selectedLocation.getId(),
