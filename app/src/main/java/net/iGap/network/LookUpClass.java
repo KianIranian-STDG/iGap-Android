@@ -41,6 +41,7 @@ public class LookUpClass {
 
     public LookUpClass() {
         classes = new SparseArray<>();
+        classes.put(IG_RPC.Error.actionId, IG_RPC.Error.class);
         classes.put(IG_RPC.Res_Channel_Create.actionId, IG_RPC.Res_Channel_Create.class);
         classes.put(IG_RPC.Res_Channel_Delete.actionId, IG_RPC.Res_Channel_Delete.class);
         classes.put(IG_RPC.Res_Group_Create.actionId, IG_RPC.Res_Group_Create.class);

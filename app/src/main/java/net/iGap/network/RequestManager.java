@@ -223,20 +223,46 @@ public class RequestManager extends BaseController {
         return difference >= config;
     }
 
+
     public void unpack(byte[] message) {
         int actionId = getId(message);
         byte[] payload = getProtoInfo(message);
         String className = getClassName(actionId);
 
 
-        if (className == null) {
-            return;
-        }
-
         if (!isSecure && !G.unSecureResponseActionId.contains(Integer.toString(actionId))) {
             return;
         }
 
+        final LookUpClass lookUp = LookUpClass.getInstance();
+        boolean isRpc = lookUp.validObject(actionId);
+
+        if (isRpc) {
+            AbstractObject object = lookUp.deserializeObject(actionId, payload);
+            if (object != null) {
+                String resId = object.getResId();
+                if (resId != null) {
+                    RequestWrapper requestWrapper = requestQueueMap.get(resId);
+                    if (requestWrapper != null && requestWrapper.onResponse != null) {
+                        if (actionId == 0) {
+                            requestWrapper.onResponse.onReceived(null, object);
+                        } else {
+                            requestWrapper.onResponse.onReceived(object, null);
+                        }
+                        requestQueueMap.remove(resId);
+                        return;
+                    }
+                } else {
+                    if (actionId != 0) {
+                        getMessageController().onUpdate(object);
+                    }
+                }
+            }
+        }
+
+        if (className == null) {
+            return;
+        }
 
         String protoClassName = HelperClassNamePreparation.preparationProtoClassName(className);
         Object protoObject = fillProtoClassData(protoClassName, payload);
@@ -386,34 +412,11 @@ public class RequestManager extends BaseController {
 
     public void onBinaryReceived(byte[] binary) {
         if (isSecure) {
-            byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
-            byte[] binaryDecode = HelperNumerical.getMessage(binary);
             try {
+                byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
+                byte[] binaryDecode = HelperNumerical.getMessage(binary);
                 binaryDecode = AESCrypt.decrypt(G.symmetricKey, iv, binaryDecode);
-
-                int act = getId(binaryDecode);
-                final LookUpClass lookUp = LookUpClass.getInstance();
-                boolean isRpc = lookUp.validObject(act);
-
-                if (isRpc) {
-                    byte[] message = Arrays.copyOfRange(binaryDecode, 2, binaryDecode.length);
-                    AbstractObject object = lookUp.deserializeObject(act, message);
-                    if (object != null) {
-                        String resId = object.getResId();
-                        if (resId != null) {
-                            RequestWrapper requestWrapper = requestQueueMap.remove(resId);
-                            if (requestWrapper != null) {
-                                requestWrapper.onResponse.onReceived(object, null);
-                            }
-                        } else {
-                            if (act != 0) {
-                                getMessageController().onUpdate(object);
-                            }
-                        }
-                    }
-                } else {
-                    unpack(binaryDecode);
-                }
+                unpack(binaryDecode);
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             }
