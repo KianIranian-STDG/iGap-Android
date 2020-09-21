@@ -1,9 +1,10 @@
 package net.iGap.api;
 
+import com.google.gson.JsonObject;
+
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.IGashtLocationService;
-import net.iGap.model.igasht.IGashtOrder;
 import net.iGap.model.igasht.IGashtProvince;
 import net.iGap.model.igasht.IGashtTicketDetail;
 import net.iGap.model.igasht.RegisterTicketResponse;
@@ -29,7 +30,7 @@ public interface IgashtApi {
     Call<BaseIGashtResponse<IGashtLocationService>> requestGetServiceList(@Path("locationId") int locationId);
 
     @POST("entertainment/purchase")
-    Call<RegisterTicketResponse> requestRegisterOrder(@Body IGashtOrder order);
+    Call<RegisterTicketResponse> requestRegisterOrder(@Body JsonObject jsonObject);
 
     @GET("entertainment/ticket/list")
     Call<TicketHistoryListResponse<IGashtTicketDetail>> requestGetTicketList(@Query("offet") int offset,
