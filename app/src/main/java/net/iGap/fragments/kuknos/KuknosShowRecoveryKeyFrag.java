@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -97,20 +96,24 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         onNextObserver();
         progressState();
     }
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+
     private void onGetMnemonicLists() {
         kuknosShowRecoveryKeyVM.getMnemonic().observe(getViewLifecycleOwner(), mnemonic -> {
             if (mnemonic != null) {
                 mnemonicWords = mnemonic;
-                if(kuknosShowRecoveryKeyVM.getSelectedLanguage().equals("EN")){
-                    binding.fragKuknosRKSkeysET.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                }else {
-                    binding.fragKuknosRKSkeysET.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    if (kuknosShowRecoveryKeyVM.getSelectedLanguage().equals("EN")) {
+                        binding.fragKuknosRKSkeysET.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    } else {
+                        binding.fragKuknosRKSkeysET.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                    }
                 }
+
                 wordsAdapter = new WordsAdapter(prepareQuestionsForDialogFragment());
-                if(getResources().getBoolean(R.bool.isTablet)){
+                if (getResources().getBoolean(R.bool.isTablet)) {
                     binding.fragKuknosRKSkeysET.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-                }else {
+                } else {
                     binding.fragKuknosRKSkeysET.setLayoutManager(new GridLayoutManager(getActivity(), 3));
                 }
 
@@ -219,9 +222,9 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
             textView = itemView.findViewById(R.id.word_items);
         }
 
-        public void bind(String word,int position) {
+        public void bind(String word, int position) {
             this.word = word;
-            textView.setText(position+1+"  "+word);
+            textView.setText(position + 1 + "  " + word);
         }
     }
 
@@ -243,7 +246,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull WordHolder holder, int position) {
-            holder.bind(words.get(position),position);
+            holder.bind(words.get(position), position);
         }
 
         @Override
