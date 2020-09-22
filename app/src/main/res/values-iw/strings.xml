@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="kuknos_toast">Cevap yanlış! Lütfen dikkatlice cevaplayın</string>
     <string name="Account_Self_destruction">استفاده چی حسابینین اؤزونو تخریب ائتمه سی</string>
     <string name="Active_Sessions">فعال نشست لر</string>
     <string name="Active_session">فعال جلسه </string>

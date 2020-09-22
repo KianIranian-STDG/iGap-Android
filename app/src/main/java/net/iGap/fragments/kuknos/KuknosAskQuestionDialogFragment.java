@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +29,8 @@ import java.util.Random;
 
 
 public class KuknosAskQuestionDialogFragment extends DialogFragment {
-    public static final String QUESTIONS = "net.iGap.fragments.kuknos.questions";
-    private static final String CHECK_FOR_OPEN_NEXT_FRAGMENT="net.iGap.fragments.kuknos.checkFroOpenNextFragment";
+    public static final String QUESTIONS = "questions";
+    private static final String CHECK_FOR_OPEN_NEXT_FRAGMENT = "checkFroOpenNextFragment";
     private Button firstButton;
     private Button secondButton;
     private Button thirdButton;
@@ -56,12 +55,14 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public static KuknosAskQuestionDialogFragment newInstance() {
         KuknosAskQuestionDialogFragment fragment = new KuknosAskQuestionDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,11 +93,7 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                     }
                 } else {
 
-                    if(G.selectedLanguage.equals("fa")) {
-                        Toast.makeText(getActivity(), "جواب اشتباه است! لطفا با دقت پاسخ دهید", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getActivity(), "The Answer Was Wrong! Please answer carefully ", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getActivity(), getResources().getString(R.string.kuknos_toast), Toast.LENGTH_LONG).show();
                     dismiss();
                 }
             }
@@ -114,11 +111,7 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                         changeTheTextOfTextViewAndButtons();
                     }
                 } else {
-                    if(G.selectedLanguage.equals("fa")) {
-                        Toast.makeText(getActivity(), "جواب اشتباه است! لطفا با دقت پاسخ دهید", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getActivity(), "The Answer Was Wrong! Please answer carefully ", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getActivity(), getResources().getString(R.string.kuknos_toast), Toast.LENGTH_LONG).show();
                     dismiss();
                 }
             }
@@ -136,11 +129,7 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                         changeTheTextOfTextViewAndButtons();
                     }
                 } else {
-                    if(G.selectedLanguage.equals("fa")) {
-                        Toast.makeText(getActivity(), "جواب اشتباه است! لطفا با دقت پاسخ دهید", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getActivity(), "The Answer Was Wrong! Please answer carefully ", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getActivity(), getResources().getString(R.string.kuknos_toast), Toast.LENGTH_LONG).show();
                     dismiss();
                 }
             }
@@ -158,11 +147,7 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                         changeTheTextOfTextViewAndButtons();
                     }
                 } else {
-                    if(G.selectedLanguage.equals("fa")) {
-                        Toast.makeText(getActivity(), "جواب اشتباه است! لطفا با دقت پاسخ دهید", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getActivity(), "The Answer Was Wrong! Please answer carefully ", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getActivity(), getResources().getString(R.string.kuknos_toast), Toast.LENGTH_LONG).show();
                     dismiss();
                 }
             }
@@ -198,41 +183,41 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
     private void changeTheTextOfTextViewAndButtons() {
         int randomNumberForTrueAnswer = random.nextInt(4);
         randomNumber = random.nextInt(questions.size());
-        while (randomNumber == randomNumberForTrueAnswer || randomNumber==0) {
+        while (randomNumber == randomNumberForTrueAnswer || randomNumber == 0) {
             randomNumberForTrueAnswer = random.nextInt(4);
             randomNumber = random.nextInt(questions.size());
         }
-        if(G.selectedLanguage.equals("fa")) {
+        if (G.selectedLanguage.equals("fa")) {
             questionTextView.setText("کلمه" + " " + randomNumber + " " + "ام" + " " + "از کلمات بازیابی را انتخاب کنید:");
-        }else {
-            questionTextView.setText("Enter the "+randomNumber+" "+"Number From Recovery Keys:");
+        } else {
+            questionTextView.setText("Enter the " + randomNumber + " " + "Number From Recovery Keys:");
         }
         Collections.shuffle(questions);
 
 
         switch (randomNumberForTrueAnswer) {
             case 0:
-                firstButton.setText(answersWithKey.get(randomNumber-1));
+                firstButton.setText(answersWithKey.get(randomNumber - 1));
                 break;
             case 1:
-                secondButton.setText(answersWithKey.get(randomNumber-1));
+                secondButton.setText(answersWithKey.get(randomNumber - 1));
                 break;
             case 2:
-                thirdButton.setText(answersWithKey.get(randomNumber-1));
+                thirdButton.setText(answersWithKey.get(randomNumber - 1));
                 break;
             case 3:
-                fourthButton.setText(answersWithKey.get(randomNumber-1));
+                fourthButton.setText(answersWithKey.get(randomNumber - 1));
                 break;
         }
-        trueAnswer = answersWithKey.get(randomNumber-1);
+        trueAnswer = answersWithKey.get(randomNumber - 1);
         questions.remove(trueAnswer);
-        Log.e("hwdjfhwufh", "true:" + answersWithKey.get(randomNumber) + " /" + randomNumberForTrueAnswer + "/" + randomNumber + "/" + questions.size());
+
         if (randomNumberForTrueAnswer == 0) {
             do {
                 secondButton.setText(questions.get(random.nextInt(questions.size())));
                 thirdButton.setText(questions.get(random.nextInt(questions.size())));
                 fourthButton.setText(questions.get(random.nextInt(questions.size())));
-            }while (secondButton.getText().toString().equals(thirdButton.getText().toString()) ||
+            } while (secondButton.getText().toString().equals(thirdButton.getText().toString()) ||
                     thirdButton.getText().toString().equals(fourthButton.getText().toString()) ||
                     secondButton.getText().toString().equals(fourthButton.getText().toString()));
 
@@ -244,10 +229,9 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                 thirdButton.setText(questions.get(random.nextInt(questions.size())));
 
                 fourthButton.setText(questions.get(random.nextInt(questions.size())));
-            }while (firstButton.getText().toString().equals(thirdButton.getText().toString()) ||
+            } while (firstButton.getText().toString().equals(thirdButton.getText().toString()) ||
                     thirdButton.getText().toString().equals(fourthButton.getText().toString()) ||
                     firstButton.getText().toString().equals(fourthButton.getText().toString()));
-
 
 
         } else if (randomNumberForTrueAnswer == 2) {
@@ -257,11 +241,9 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                 secondButton.setText(questions.get(random.nextInt(questions.size())));
 
                 fourthButton.setText(questions.get(random.nextInt(questions.size())));
-            }while (firstButton.getText().toString().equals(secondButton.getText().toString()) ||
+            } while (firstButton.getText().toString().equals(secondButton.getText().toString()) ||
                     secondButton.getText().toString().equals(fourthButton.getText().toString()) ||
                     firstButton.getText().toString().equals(fourthButton.getText().toString()));
-
-
 
 
         } else {
@@ -271,7 +253,7 @@ public class KuknosAskQuestionDialogFragment extends DialogFragment {
                 secondButton.setText(questions.get(random.nextInt(questions.size())));
 
                 thirdButton.setText(questions.get(random.nextInt(questions.size())));
-            }while (firstButton.getText().toString().equals(secondButton.getText().toString()) ||
+            } while (firstButton.getText().toString().equals(secondButton.getText().toString()) ||
                     secondButton.getText().toString().equals(thirdButton.getText().toString()) ||
                     firstButton.getText().toString().equals(thirdButton.getText().toString()));
 
