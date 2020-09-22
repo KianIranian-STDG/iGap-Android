@@ -7,9 +7,9 @@ import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.IGashtLocationService;
 import net.iGap.model.igasht.IGashtProvince;
 import net.iGap.model.igasht.IGashtTicketDetail;
-import net.iGap.model.igasht.RegisterTicketResponse;
 import net.iGap.model.igasht.TicketHistoryListResponse;
 import net.iGap.model.igasht.TicketQRCodeResponse;
+import net.iGap.model.igasht.purchaseResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -30,7 +30,7 @@ public interface IgashtApi {
     Call<BaseIGashtResponse<IGashtLocationService>> requestGetServiceList(@Path("locationId") int locationId);
 
     @POST("entertainment/purchase")
-    Call<RegisterTicketResponse> requestRegisterOrder(@Body JsonObject jsonObject);
+    Call<purchaseResponse> requestRegisterOrder(@Body JsonObject jsonObject);
 
     @GET("entertainment/ticket/list")
     Call<TicketHistoryListResponse<IGashtTicketDetail>> requestGetTicketList(@Query("offet") int offset,
