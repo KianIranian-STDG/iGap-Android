@@ -128,6 +128,8 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
         if (request == null)
             return;
 
+        Log.i(TAG, "removeDownloadingRequestIfExist: ");
+
         for (int i = 0; i < inProgressRequests.size(); i++) {
             if (request.getRequestId().equals(inProgressRequests.get(i).getRequestId())) {
                 Log.i(TAG, "removeDownloadingRequestIfExist: " + inProgressRequests.get(i).getRequestId());
@@ -141,6 +143,8 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     private void scheduleNewDownload() {
         if (inProgressCount.get() >= MAX_DOWNLOAD)
             return;
+
+        Log.i(TAG, "scheduleNewDownload: ");
 
         Request request = requestsQueue.poll();
         if (request == null)
@@ -157,6 +161,8 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     public void onUpdate(Pair<Request, DownloadStatus> arg) {
         if (arg == null)
             return;
+
+        Log.i(TAG, "onUpdate: ");
 
         switch (arg.second) {
             case DOWNLOADED:

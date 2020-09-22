@@ -15,6 +15,7 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -25,6 +26,10 @@ import java.util.HashSet;
 
 public class RequestFileDownload {
 
+    public RequestFileDownload() {
+
+    }
+
     public static int maxLimitDownload = 0;
     private final int KB_10 = 10 * 1024;
     private final int KB_30 = 30 * 1024;
@@ -34,6 +39,7 @@ public class RequestFileDownload {
     public static HashSet<String> downloadPending = new HashSet<>();
 
     public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity, Boolean checkDuplicate) {
+        Log.i("AbbasiDownload", token + " avatar " + checkDuplicate);
         ProtoFileDownload.FileDownload.Builder builder = ProtoFileDownload.FileDownload.newBuilder();
 
         if (token == null) {

@@ -49,6 +49,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     private AppExecutors appExecutors;
     private Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> downloadStatusObserver;
     private Call call;
+    private String TAG = "DownloadManager";
 
     protected Request(DownloadStruct message, Selector selector, int priority) {
         this(message, selector);
@@ -199,6 +200,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void onDownloadCompleted() {
+        Log.i(TAG, "onDownloadCompleted: ");
         try {
             moveTempToDownloadedDir();
             this.progress = 100;
@@ -211,7 +213,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void onProgress(int progress) {
-        Log.i("amiiiiir", "onProgress: " + getRequestId() + " " + progress);
+        Log.i(TAG, "onProgress: " + progress);
         if (selector == Selector.FILE)
             notifyObservers(Resource.loading(new Progress(progress, downloadedFile.getAbsolutePath())));
         else
@@ -219,6 +221,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void onError(@NotNull Throwable throwable) {
+        Log.e(TAG, "onError: ", throwable);
         throwable.printStackTrace();
         safelyCancelDownload();
         notifyObservers(Resource.error(throwable.getMessage(), null));
@@ -226,7 +229,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
 
     @WorkerThread
     private void moveTempToDownloadedDir() throws IOException {
-        Log.i("amiiiiir", "moveTempToDownloadedDir: " + downloadedFile.length() + " " + getRequestId());
+        Log.i(TAG, "moveTempToDownloadedDir: " + downloadedFile.length() + " " + getRequestId());
         switch (selector) {
             case FILE:
                 AndroidUtils.cutFromTemp(tempFile.getAbsolutePath(), downloadedFile.getAbsolutePath());
@@ -273,6 +276,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void notifyDownloadStatus(DownloadThroughApi.DownloadStatus downloadStatus) {
+        Log.i(TAG, "notifyDownloadStatus: " + downloadStatus.toString());
         if (downloadStatusObserver != null) {
             downloadStatusObserver.onUpdate(new Pair<>(this, downloadStatus));
         }

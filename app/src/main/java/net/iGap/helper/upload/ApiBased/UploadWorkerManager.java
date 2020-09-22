@@ -40,7 +40,7 @@ public class UploadWorkerManager implements IUpload {
     private Context context;
     Constraints constraints;
 
-    private static final String TAG = "UploadApiManager http";
+    private static final String TAG = "UploadApiManager";
 
     public static void initial(Context context) {
         UploadWorkerManager localInstance = instance;
@@ -164,7 +164,7 @@ public class UploadWorkerManager implements IUpload {
 
     @Override
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
-        Log.d("bagi", "uploadMessageAndSend" + message.getMessageId());
+        Log.d(TAG, "uploadMessageAndSend " + message.getMessageId());
         Log.d(TAG, "UploadWorkerManager: " + pendingCompressTasks.size() + " " + pendingUploadTasks.size());
         if (message.isManaged()) {
             uploadMessageAndSend(
@@ -186,7 +186,7 @@ public class UploadWorkerManager implements IUpload {
             return;
         }
 
-        Log.d(TAG, "uploadMessageAndSend222");
+        Log.d(TAG, "uploadMessageAndSend ");
         String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + message.getMessageId() + ".mp4";
         File compressFile = new File(savePathVideoCompress);
         File CompletedCompressFile = new File(savePathVideoCompress.replace(".mp4", "_finish.mp4"));
@@ -197,7 +197,7 @@ public class UploadWorkerManager implements IUpload {
             if (pendingCompressTasks.containsKey(message.getMessageId() + ""))
                 return;
 
-            Log.d(TAG, "uploadMessageAndSend33");
+            Log.d(TAG, "uploadMessageAndSend ");
             if (compressFile.exists()) {
                 compressFile.delete();
             }
@@ -225,7 +225,7 @@ public class UploadWorkerManager implements IUpload {
                 if (workInfo != null) {
                     switch (workInfo.getState()) {
                         case RUNNING:
-                            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, String.valueOf(message.getMessageId()), workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+                            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, String.valueOf(message.getMessageId()), workInfo.getProgress().getInt(UploadWorker.PROGRESS, 0));
                             break;
                         case SUCCEEDED:
                             Log.d("bagi", "onCompressFinish" + message.getMessageId());
@@ -250,7 +250,7 @@ public class UploadWorkerManager implements IUpload {
                             uploadMessageAndSend(roomType, message, true);
                             break;
                     }
-                    Log.d(TAG, "onChanged compress: " + workInfo.getState().name() + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+                    Log.d(TAG, "onChanged compress: " + workInfo.getState().name() + workInfo.getProgress().getInt(UploadWorker.PROGRESS, 0));
                 }
             });
             return;
@@ -297,8 +297,8 @@ public class UploadWorkerManager implements IUpload {
             if (workInfo != null) {
                 switch (workInfo.getState()) {
                     case RUNNING:
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(message.getMessageId()), workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
-                        Log.i(TAG, "progress: " + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(message.getMessageId()), workInfo.getProgress().getInt(UploadWorker.PROGRESS, 0));
+                        Log.i(TAG, "progress: " + workInfo.getProgress().getInt(UploadWorker.PROGRESS, 0));
                         break;
                     case SUCCEEDED:
                         Log.d("bagi", "uploadMessageAndSendonFinish");
@@ -347,7 +347,7 @@ public class UploadWorkerManager implements IUpload {
                         makeFailed(id);
                         break;
                 }
-                Log.d(TAG, "onChanged upload: " + workInfo.getState().name() + " " + workInfo.getProgress().getInt(UploadWorker.PROGRESS, -1));
+                Log.d(TAG, "onChanged upload: " + workInfo.getState().name() + " " + workInfo.getProgress().getInt(UploadWorker.PROGRESS, 0));
             }
         });
     }
