@@ -1,6 +1,6 @@
 package net.iGap.api.apiService;
 
-class ApiStatic {
+public class ApiStatic {
     static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
     static final String MOBILE_BANK = "http://192.168.8.109:3000/v1.0/";
