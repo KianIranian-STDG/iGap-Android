@@ -2,7 +2,7 @@ package net.iGap.model.igasht;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterTicketResponse {
+public class purchaseResponse {
 
     @SerializedName("details")
     private Details mDetails;
@@ -10,6 +10,8 @@ public class RegisterTicketResponse {
     private String mMessage;
     @SerializedName("name")
     private String mName;
+    @SerializedName("token")
+    private String mToken;
 
     public Details getDetails() {
         return mDetails;
@@ -33,5 +35,13 @@ public class RegisterTicketResponse {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public String getmToken() {
+        return mToken;
+    }
+
+    public void setmToken(String mToken) {
+        this.mToken = mToken;
     }
 }
