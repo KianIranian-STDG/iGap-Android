@@ -23,7 +23,6 @@ public class ApiStatic {
     static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
     static final String WEATHER_URL = "http://192.168.8.66:7000/v1.0/";
-    public static final String UPLOAD_URL = "https://api.igap.net/file-test/v1.0/";
-//    public static final String UPLOAD_URL = "http://192.168.10.31:3007/v1.0/";
+    public static final String UPLOAD_URL = "https://gate.igap.net/files/v1.0/";
 }
 
