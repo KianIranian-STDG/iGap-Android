@@ -97,21 +97,20 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         onNextObserver();
         progressState();
     }
-
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void onGetMnemonicLists() {
         kuknosShowRecoveryKeyVM.getMnemonic().observe(getViewLifecycleOwner(), mnemonic -> {
             if (mnemonic != null) {
                 mnemonicWords = mnemonic;
-                if (kuknosShowRecoveryKeyVM.getSelectedLanguage().equals("EN")) {
+                if(kuknosShowRecoveryKeyVM.getSelectedLanguage().equals("EN")){
                     binding.fragKuknosRKSkeysET.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                } else {
+                }else {
                     binding.fragKuknosRKSkeysET.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
                 }
                 wordsAdapter = new WordsAdapter(prepareQuestionsForDialogFragment());
-                if (getResources().getBoolean(R.bool.isTablet)) {
+                if(getResources().getBoolean(R.bool.isTablet)){
                     binding.fragKuknosRKSkeysET.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-                } else {
+                }else {
                     binding.fragKuknosRKSkeysET.setLayoutManager(new GridLayoutManager(getActivity(), 3));
                 }
 
@@ -164,6 +163,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         for (int i = 0; i < questions.length; i++) {
 
 
+            Log.e("mcvcmvnmc", "prepareQuestionsForDialogFragment: " + counter);
             if (counter < questions.length) {
                 finalQuetions[innerCounter] = "";
                 while (!questions[counter].equals(" ")) {
@@ -221,7 +221,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
 
         public void bind(String word, int position) {
             this.word = word;
-            textView.setText(position + 1 + "  " + word);
+            textView.setText(position+1+"  "+word);
         }
     }
 
@@ -259,7 +259,7 @@ public class KuknosShowRecoveryKeyFrag extends BaseFragment {
         boolean check = false;
         if (requestCode == REQUEST_CODE_FOR_DIALOGFRAGMENT) {
             check = data.getBooleanExtra(KuknosAskQuestionDialogFragment.newInstance().getCheckForOpenNextFragment(), false);
-
+            Log.e("cmvnbjbvj", "onActivityResult: " + check);
             if (check) {
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
