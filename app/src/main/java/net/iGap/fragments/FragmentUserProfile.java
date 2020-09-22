@@ -53,6 +53,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
+    private static final String TAG = "FragmentUserProfile1";
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
@@ -190,8 +191,8 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner() , state->{
-            if(state == null) return;
+        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner(), state -> {
+            if (state == null) return;
             closeKeyboard(binding.getRoot());
         });
     }

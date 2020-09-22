@@ -32,8 +32,6 @@ import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
@@ -43,6 +41,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.eventbus.socketMessages;
@@ -1116,7 +1115,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         pathSaveImage = path;
         long lastUploadedAvatarId = idAvatar + 1L;
         showLoading.set(View.VISIBLE);
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+        Uploader.getInstance().upload(lastUploadedAvatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
             }
@@ -1130,7 +1129,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onError(String id) {
                 G.handler.post(() -> showLoading.set(View.GONE));
             }
-        }));
+        });
     }
 
     public void onCountryCodeClick() {

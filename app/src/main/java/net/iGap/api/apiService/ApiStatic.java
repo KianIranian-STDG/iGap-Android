@@ -23,5 +23,6 @@ class ApiStatic {
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
     private static final String NEWS_BASE_URL = "https://api.cafetitle.com/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
+    public static final String UPLOAD_URL = "https://gate.igap.net/files/v1.0/";
 }
 

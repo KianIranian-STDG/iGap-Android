@@ -50,23 +50,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
-import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
-import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.bottomNavigation.Util.Utils;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
@@ -78,9 +71,17 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.RadiusImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientCountRoomHistory;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
@@ -1199,7 +1200,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     holder1.messageProgress.setTag(mList.get(position).messageId);
                     holder1.messageProgress.withDrawable(R.drawable.ic_download, true);
 
-                    if (HelperDownloadFile.getInstance().isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
+                    if (Downloader.getInstance().isDownloading(mList.get(position).item.getAttachment().getCacheId())) {
                         startDownload(position, holder1.messageProgress);
                     }
                 }
@@ -1308,8 +1309,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             final RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
             ProtoGlobal.RoomMessageType messageType = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
 
-            String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
-
             messageProgress.withOnProgress(new OnProgress() {
                 @Override
                 public void onProgressFinished() {
@@ -1326,36 +1325,22 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 }
             });
 
-            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(String path, final int progress) {
-
-                    if (canUpdateAfterDownload) {
-                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
-                            G.currentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    messageProgress.withProgress(progress);
-                                }
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                public void OnError(String token) {
-                    if (canUpdateAfterDownload) {
-
-                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
-                            G.currentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+            Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.FILE, arg -> {
+                if (canUpdateAfterDownload) {
+                    G.handler.post(() -> {
+                        switch (arg.status) {
+                            case LOADING:
+                            case SUCCESS:
+                                if (arg.data != null)
+                                    messageProgress.withProgress(arg.data.getProgress());
+                                break;
+                            case ERROR:
+                                if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
                                     messageProgress.withProgress(0);
                                     messageProgress.withDrawable(R.drawable.ic_download, true);
                                 }
-                            });
                         }
-                    }
+                    });
                 }
             });
         }
@@ -1391,12 +1376,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         private void stopDownload(int position) {
 
-            HelperDownloadFile.getInstance().stopDownLoad(mList.get(position).item.getAttachment().getCacheId());
+            Downloader.getInstance().cancelDownload(mList.get(position).item.getAttachment().getCacheId());
         }
 
         private void downloadFile(int position, MessageProgress messageProgress) {
 
-            if (HelperDownloadFile.getInstance().isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
+            if (Downloader.getInstance().isDownloading(mList.get(position).item.getAttachment().getCacheId())) {
                 stopDownload(position);
             } else {
                 startDownload(position, messageProgress);
@@ -1582,30 +1567,21 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                     if (at != null && at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
-                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
-
-                                    if (progress == 100) {
-
-                                        if (canUpdateAfterDownload) {
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-
+                            Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                                if (canUpdateAfterDownload) {
+                                    G.handler.post(() -> {
+                                        switch (arg.status) {
+                                            case LOADING:
+                                            case SUCCESS:
+                                                if (arg.data == null)
+                                                    return;
+                                                if (arg.data.getProgress() == 100) {
                                                     if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), vh.imvPicFile);
+                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), vh.imvPicFile);
                                                     }
                                                 }
-                                            });
                                         }
-                                    }
-
-                                }
-
-                                @Override
-                                public void OnError(String token) {
-
+                                    });
                                 }
                             });
                         }
@@ -1718,28 +1694,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
-
-                                    if (progress == 100) {
-                                        if (canUpdateAfterDownload) {
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.imvPicFile);
-                                                    }
+                            Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                                if (canUpdateAfterDownload) {
+                                    switch (arg.status) {
+                                        case SUCCESS:
+                                        case LOADING:
+                                            if (arg.data == null)
+                                                return;
+                                            if (arg.data.getProgress() == 100) {
+                                                if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), holder1.imvPicFile);
                                                 }
-                                            });
-                                        }
+                                            }
                                     }
-                                }
-
-                                @Override
-                                public void OnError(String token) {
-
                                 }
                             });
                         }
@@ -2155,28 +2122,20 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         if (at.getSmallThumbnail() != null) {
                             if (at.getSmallThumbnail().getSize() > 0) {
 
-                                HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                    @Override
-                                    public void OnProgress(final String path, int progress) {
+                                Downloader.getInstance().download(new DownloadStruct(mList.get(position).item), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                                    if (canUpdateAfterDownload) {
+                                        switch (arg.status) {
+                                            case LOADING:
+                                            case SUCCESS:
+                                                if (arg.data == null)
+                                                    return;
 
-                                        if (progress == 100) {
-                                            if (canUpdateAfterDownload) {
-                                                G.currentActivity.runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-
-                                                        if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
-                                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.gifView);
-                                                        }
+                                                if (arg.data.getProgress() == 100) {
+                                                    if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
+                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), holder1.gifView);
                                                     }
-                                                });
-                                            }
+                                                }
                                         }
-                                    }
-
-                                    @Override
-                                    public void OnError(String token) {
-
                                     }
                                 });
                             }

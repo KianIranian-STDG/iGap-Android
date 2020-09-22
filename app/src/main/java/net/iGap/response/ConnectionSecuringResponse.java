@@ -58,6 +58,7 @@ public class ConnectionSecuringResponse extends MessageHandler {
         }
 
         G.symmetricKey = HelperString.generateSymmetricKey(key);
+        G.symmetricKeyString = key;
 
         try {
             RSAPublicKey rsaPublicKeyServer = (RSAPublicKey) HelperString.getPublicKeyFromPemFormat(publicKey);

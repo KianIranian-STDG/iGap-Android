@@ -62,7 +62,6 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         return progress;
     }
 
-
     @Override
     public void run() {
         super.run();

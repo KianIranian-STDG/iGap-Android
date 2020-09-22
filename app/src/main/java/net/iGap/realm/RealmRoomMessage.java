@@ -20,7 +20,6 @@ import com.google.gson.JsonObject;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
@@ -31,6 +30,7 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
@@ -639,7 +639,7 @@ public class RealmRoomMessage extends RealmObject {
 
                         // stop download
                         if (roomMessage.getAttachment() != null) {
-                            HelperDownloadFile.getInstance().stopDownLoad(roomMessage.getAttachment().getCacheId());
+                            Downloader.getInstance().cancelDownload(roomMessage.getAttachment().getCacheId());
                         }
                     }
 

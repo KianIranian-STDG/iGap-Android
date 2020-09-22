@@ -2205,6 +2205,7 @@ Want to get it?</string>
     <string name="hold">Hold</string>
     <string name="Increase_score">Increase your score\n right now!</string>
     <string name="error_term_not_accepted">\"Terms and conditions should be accepted!\"</string>
+    <string name="error_resume_file_expired">Resuming file is expired! please try again.</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>

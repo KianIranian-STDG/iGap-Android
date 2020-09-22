@@ -61,7 +61,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
@@ -83,9 +82,12 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
+import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.network.RequestManager;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IChatItemAttachment;
@@ -386,11 +388,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
 
-            if (!UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
-                UploadManager.getInstance().uploadMessageAndSend(type, mMessage);
+            if (!Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+                Uploader.getInstance().uploadMessageAndSend(type, mMessage);
             } else {
                 MessageProgress _Progress = ((IProgress) holder).getProgress();
-                _Progress.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                _Progress.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             }
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -1407,12 +1409,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         final MessageProgress _Progress = ((IProgress) holder).getProgress();
 
-
         if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.getMessageId())) {
             return;
         }
 
-        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId())) {
             return;
         }
 
@@ -1506,7 +1507,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         View thumbnail = ((IThumbNailItem) holder).getThumbNailImageView();
 
 
-        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
             if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
                 if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
@@ -1517,8 +1518,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition());
             }
-        } else if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
-            HelperDownloadFile.getInstance().stopDownLoad(structMessage.getAttachment().getCacheId());
+        } else if (Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId())) {
+            Downloader.getInstance().cancelDownload(structMessage.getAttachment().getCacheId());
         } else {
             thumbnail.setVisibility(View.VISIBLE);
 
@@ -1576,35 +1577,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (token != null && token.length() > 0 && size > 0) {
-
-            HelperDownloadFile.getInstance().startDownload(mMessage.getMessageType(), mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, int progress) {
-
-                    if (FragmentChat.canUpdateAfterDownload) {
-                        if (progress == 100) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String type;
-                                    if (mMessage.getForwardMessage() != null) {
-                                        type = mMessage.getForwardMessage().getMessageType().toString().toLowerCase();
-                                    } else {
-                                        type = mMessage.getMessageType().toString().toLowerCase();
-                                    }
-//                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-//                                        onLoadThumbnailFromLocal(holder, structMessage.getAttachment().getCacheId(), path, LocalFileType.THUMBNAIL);
-//                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                public void OnError(String token) {
-                }
-            });
+            Downloader.getInstance().download(new DownloadStruct(mMessage), selector, null);
         }
     }
 
@@ -1614,7 +1587,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId());
+        boolean _isDownloading = Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId());
 
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
@@ -1635,57 +1608,42 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-
-            HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, final int progress) {
-
-                    if (FragmentChat.canUpdateAfterDownload) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+            Downloader.getInstance().download(new DownloadStruct(mMessage), selector, priority, arg -> {
+                if (FragmentChat.canUpdateAfterDownload) {
+                    G.handler.post(() -> {
+                        switch (arg.status) {
+                            case SUCCESS:
+                            case LOADING:
+                                if (arg.data == null) {
+                                    return;
+                                }
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
                                     if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
-                                        if (progress != 100) {
-                                            progressBar.withProgress(progress);
+                                        if (arg.data.getProgress() != 100) {
+                                            progressBar.withProgress(arg.data.getProgress());
                                         } else {
                                             progressBar.withProgress(99);
                                         }
                                     }
 
-                                    if (progress == 100) {
-
+                                    if (arg.data.getProgress() == 100) {
+                                        int position = mAdapter.getPosition(this);
+                                        mAdapter.notifyItemChanged(position);
                                         if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
                                             if (mMessage.getRoomId() == MusicPlayer.roomId) {
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
-//                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
                                     }
                                 }
-                            }
-                        });
-                    }
-
-                }
-
-                @Override
-                public void OnError(String token) {
-
-                    if (FragmentChat.canUpdateAfterDownload) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                                break;
+                            case ERROR:
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
                                     progressBar.withProgress(1);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
-
                                 }
-                            }
-                        });
-                    }
-
-
+                        }
+                    });
                 }
             });
 
@@ -1717,12 +1675,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
              */
-            if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
+            if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
                 //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
                 hideThumbnailIf(holder);
 
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                progressBar.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                progressBar.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             } else {
                 checkForDownloading(holder);
             }
@@ -1757,7 +1715,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progress = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progress.progressBar);
 
-        if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+        if (Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, 0);

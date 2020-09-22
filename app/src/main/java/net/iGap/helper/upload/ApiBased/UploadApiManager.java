@@ -1,4 +1,4 @@
-package net.iGap.helper.upload;
+package net.iGap.helper.upload.ApiBased;
 
 import android.os.Looper;
 import android.util.Log;
@@ -7,6 +7,8 @@ import androidx.collection.ArrayMap;
 
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
+import net.iGap.helper.upload.CompressTask;
+import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.DbManager;
@@ -15,6 +17,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.viewmodel.controllers.CallManager;
 import net.igap.video.compress.OnCompress;
 
 import java.io.File;
@@ -24,21 +27,31 @@ import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class UploadManager {
+public class UploadApiManager {
 
-    //Todo: add clear instance for open memory(ehsan to bagvand)
-    private static final UploadManager ourInstance = new UploadManager();
-
-    public static UploadManager getInstance() {
-        return ourInstance;
-    }
+    private static volatile UploadApiManager instance = null;
 
     private ThreadPoolExecutor mThreadPoolExecutor;
 
-    private ArrayMap<String, UploadTask> pendingUploadTasks;
+    private ArrayMap<String, UploadApiTask> pendingUploadTasks;
     private ArrayMap<String, CompressTask> pendingCompressTasks;
 
-    private UploadManager() {
+    private static final String TAG = "UploadApiManager http";
+
+    public static UploadApiManager getInstance() {
+        UploadApiManager localInstance = instance;
+        if (localInstance == null) {
+            synchronized (CallManager.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new UploadApiManager();
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    public UploadApiManager() {
         int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
 
         mThreadPoolExecutor = new ThreadPoolExecutor(
@@ -52,7 +65,7 @@ public class UploadManager {
         pendingCompressTasks = new ArrayMap<>();
     }
 
-    public void upload(UploadTask uploadTask) {
+    public void upload(UploadApiTask uploadTask) {
         if (uploadTask == null)
             return;
         pendingUploadTasks.put(uploadTask.identity, uploadTask);
@@ -63,7 +76,7 @@ public class UploadManager {
         uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) != 1);
     }
 
-    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
+    private void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
         Log.d("bagi", "uploadMessageAndSend" + message.getMessageId());
         if (message.isManaged()) {
             uploadMessageAndSend(
@@ -184,14 +197,13 @@ public class UploadManager {
                 pendingUploadTasks.remove(id);
                 HelperSetAction.sendCancel(Long.parseLong(id));
                 makeFailed(id);
-
             }
         };
-        UploadTask uploadTask;
+        UploadApiTask uploadTask;
         if (CompletedCompressFile.exists()) {
-            uploadTask = new UploadTask(message, CompletedCompressFile.getAbsolutePath(), onUploadListener);
+            uploadTask = new UploadApiTask(message, CompletedCompressFile.getAbsolutePath(), onUploadListener);
         } else {
-            uploadTask = new UploadTask(message, onUploadListener);
+            uploadTask = new UploadApiTask(message, onUploadListener);
         }
 
         if (!pendingUploadTasks.containsKey(uploadTask.identity)) {
@@ -228,8 +240,9 @@ public class UploadManager {
         });
     }
 
+
     public boolean isUploading(String identity) {
-        UploadTask uploadTask = pendingUploadTasks.get(identity);
+        UploadApiTask uploadTask = pendingUploadTasks.get(identity);
         return uploadTask != null;
     }
 
@@ -243,13 +256,13 @@ public class UploadManager {
     }
 
     public boolean cancelUploading(String identity) {
-        UploadTask uploadTask = pendingUploadTasks.remove(identity);
+        UploadApiTask uploadTask = pendingUploadTasks.remove(identity);
 
         if (uploadTask == null) {
             return false;
         } else {
             mThreadPoolExecutor.remove(uploadTask);
-            uploadTask.cancel();
+            uploadTask.cancelUpload();
             return true;
         }
     }
@@ -266,9 +279,9 @@ public class UploadManager {
     }
 
     public int getUploadProgress(String identity) {
-        UploadTask uploadTask = pendingUploadTasks.get(identity);
+        UploadApiTask uploadTask = pendingUploadTasks.get(identity);
         if (uploadTask != null) {
-            return uploadTask.getUploadProgress();
+            return uploadTask.getProgressValue();
         }
         return 1;
     }
@@ -280,4 +293,5 @@ public class UploadManager {
         }
         return 1;
     }
+
 }

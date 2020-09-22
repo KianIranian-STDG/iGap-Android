@@ -42,6 +42,7 @@ import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
+import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatSendMessageUtil;
@@ -95,6 +96,7 @@ public class G extends ApplicationContext {
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static List<Long> smsNumbers = new ArrayList<>();
     public static SecretKeySpec symmetricKey;
+    public static String symmetricKeyString;
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
     public static ImageLoader imageLoader;
@@ -296,6 +298,7 @@ public class G extends ApplicationContext {
     public static boolean isLocationFromBot = false;
     public static boolean isNeedToCheckProfileWallpaper = false;
     public static String nationalCode;
+    public static int uploadDownloadConfig = 1;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
     public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();
@@ -448,6 +451,7 @@ public class G extends ApplicationContext {
             FileLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
             FileLog.i("---------------------------------------------------");
         }
+        UploadWorkerManager.initial(getApplicationContext());
     }
 
     @Override

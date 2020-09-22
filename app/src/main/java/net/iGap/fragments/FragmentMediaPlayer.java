@@ -13,8 +13,6 @@ package net.iGap.fragments;
 import android.content.res.Configuration;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,20 +34,22 @@ import com.mikepenz.fastadapter_extensions.items.ProgressItem;
 import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
 import net.iGap.databinding.ActivityMediaPlayerLandBinding;
-import net.iGap.helper.HelperDownloadFile;
-import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
-import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Request;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -64,7 +64,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -339,7 +338,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                     holder.messageProgress.withDrawable(R.drawable.ic_download, true);
                     holder.iconPlay.setVisibility(View.GONE);
 
-                    if (HelperDownloadFile.getInstance().isDownLoading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
+                    if (Downloader.getInstance().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
                         startDownload(holder.getAdapterPosition(), holder.messageProgress);
                     }
                 }
@@ -482,7 +481,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void downloadFile(int position, MessageProgress messageProgress) {
 
-        if (HelperDownloadFile.getInstance().isDownLoading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
+        if (Downloader.getInstance().isDownloading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
             stopDownload(position, messageProgress);
         } else {
             startDownload(position, messageProgress);
@@ -491,7 +490,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void stopDownload(int position, final MessageProgress messageProgress) {
 
-        HelperDownloadFile.getInstance().stopDownLoad(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
+        Downloader.getInstance().cancelDownload(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
     }
 
     private void startDownload(final int position, final MessageProgress messageProgress) {
@@ -523,45 +522,26 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
+        Downloader.getInstance().download(new DownloadStruct(MusicPlayer.mediaList.get(position)), ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_HIGH, arg -> {
+            if (canUpdateAfterDownload) {
+                G.handler.post(() -> {
+                    switch (arg.status) {
+                        case SUCCESS:
+                        case LOADING:
+                            if (arg.data == null)
+                                return;
 
-        HelperDownloadFile.getInstance().startDownload(messageType, MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
-            @Override
-            public void OnProgress(String path, final int progress) {
-
-                if (canUpdateAfterDownload) {
-
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
                             if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
-
-                                G.currentActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        messageProgress.withProgress(progress);
-                                    }
-                                });
+                                messageProgress.withProgress(arg.data.getProgress());
                             }
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void OnError(String token) {
-                if (canUpdateAfterDownload) {
-
-                    if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            break;
+                        case ERROR:
+                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
                                 messageProgress.withProgress(0);
                                 messageProgress.withDrawable(R.drawable.ic_download, true);
                             }
-                        });
                     }
-                }
+                });
             }
         });
     }

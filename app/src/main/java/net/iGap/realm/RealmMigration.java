@@ -15,6 +15,8 @@ import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 import net.iGap.module.accountManager.AccountManager;
 
+import javax.activation.MimetypesFileTypeMap;
+
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
@@ -871,6 +873,26 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField(RealmRoomAccessFields.CAN_MODIFY_ROOM, boolean.class)
                     .addField(RealmRoomAccessFields.CAN_PIN_MESSAGE, boolean.class)
                     .addRealmObjectField(RealmRoomAccessFields.REALM_POST_MESSAGE_RIGHTS.$, realmPostMessageRights);
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 48) {
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+            if (realmAttachment != null) {
+                realmAttachment.addField("mimeType", String.class);
+
+                RealmResults<DynamicRealmObject> realmAttachments = realm.where(RealmAttachment.class.getSimpleName()).findAll();
+                for (DynamicRealmObject attachment : realmAttachments) {
+                    if (attachment != null) {
+                        String fileName = attachment.getString("name");
+                        if (fileName != null) {
+                            String mimeType = new MimetypesFileTypeMap().getContentType(fileName);
+                            attachment.setString("mimeType", mimeType);
+                        }
+                    }
+                }
+            }
 
             oldVersion++;
         }
