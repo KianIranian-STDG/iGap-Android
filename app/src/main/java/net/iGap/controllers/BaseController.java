@@ -1,6 +1,10 @@
 package net.iGap.controllers;
 
 import net.iGap.helper.upload.UploadManager;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.IDownloader;
+import net.iGap.module.upload.IUpload;
+import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 
@@ -29,5 +33,13 @@ public class BaseController {
 
     public UploadManager getUploadManager() {
         return UploadManager.getInstance();
+    }
+
+    public IDownloader getDownloader() {
+        return Downloader.getInstance();
+    }
+
+    public IUpload getIUploader() {
+        return Uploader.getInstance();
     }
 }
