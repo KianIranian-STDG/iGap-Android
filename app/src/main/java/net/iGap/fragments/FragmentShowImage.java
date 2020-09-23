@@ -52,6 +52,8 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
@@ -743,19 +745,11 @@ public class FragmentShowImage extends BaseFragment {
             }
         }
 
-        /**
-         * start download
-         */
         private void startDownload(final int position, final MessageProgress progress, final PhotoView ZoomableImageView, final ImageView imgPlay, final TextureView mTextureView) {
-
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
-
-            String dirPath = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getMessageType());
-
             if (downloadedList.indexOf(rm.getAttachment().getToken()) == -1) {
                 downloadedList.add(rm.getAttachment().getCacheId());
             }
-
 
             progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
                 progress.withProgress(0);
@@ -766,30 +760,27 @@ public class FragmentShowImage extends BaseFragment {
                 }
             }));
 
+            DownloadStruct struct = DownloadStruct.getForRoom(rm);
+            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-            HelperDownloadFile.getInstance().startDownload(rm.getMessageType(), System.currentTimeMillis() + "", rm.getAttachment().getToken(), rm.getAttachment().getUrl(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, final int progres) {
-                    G.currentActivity.runOnUiThread(() -> {
-                        progress.withProgress(progres);
-                        if (progres == 100) {
-//                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), ZoomableImageView);
-                            ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, path);
-                            ZoomableImageView.setZoomable(true);
-                        }
-                    });
-
+            getDownloader().download(struct, selector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> G.runOnUiThread(() -> {
+                if (arg.data == null) {
+                    return;
                 }
-
-                @Override
-                public void OnError(String token) {
-                    G.currentActivity.runOnUiThread(() -> {
+                switch (arg.status) {
+                    case SUCCESS:
+                        ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, arg.data.getFilePath());
+                        ZoomableImageView.setZoomable(true);
+                        break;
+                    case LOADING:
+                        progress.withProgress(arg.data.getProgress());
+                        break;
+                    case ERROR:
                         progress.withProgress(0);
                         progress.withDrawable(R.drawable.ic_download, true);
-                    });
-
+                        break;
                 }
-            });
+            }));
         }
 
         @Override

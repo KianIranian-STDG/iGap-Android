@@ -51,6 +51,10 @@ public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
         smallThumbnail = message.getAttachment().getSmallThumbnail();
     }
 
+    public static DownloadStruct getForRoom(RealmRoomMessage roomMessage) {
+        return new DownloadStruct(roomMessage);
+    }
+
     public DownloadStruct(@NonNull RealmRoomMessage message, ProtoFileDownload.FileDownload.Selector selector) {
         this(message);
         this.selector = selector;
