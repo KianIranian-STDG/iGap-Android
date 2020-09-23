@@ -57,7 +57,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     private AppExecutors appExecutors;
     private Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> downloadStatusObserver;
     private Call call;
-    private String TAG = "DownloadManager";
 
     protected HttpRequest(DownloadStruct message, Selector selector, int priority) {
         this(message, selector);
@@ -100,11 +99,11 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         String name = message.getCacheId();
         String mime = message.getMime();
         String path = suitableAppFilePath(message.getMessageType());
-        return new File(path + "/" + name + mime);
+        return new File(path + "/" + name + "_" + mime);
     }
 
     private File generateTempFileForRequest() {
-        String fileName = message.getCacheId() + selector.toString();
+        String fileName = message.getCacheId() + "_" + selector;
         return new File(G.DIR_TEMP + fileName);
     }
 
@@ -165,7 +164,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             builder.addHeader("Range", "bytes=" + offset + "-" + size);
         }
 
-        FileLog.i(TAG, "download Start with " + url + " range " + "bytes=" + offset + "-" + size);
+        FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + offset + "-" + size);
 
         Request request = builder.build();
         Response response = null;
@@ -240,7 +239,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     public void onError(@NotNull Throwable throwable) {
         safelyCancelDownload();
         notifyObservers(Resource.error(throwable.getMessage(), null));
-        FileLog.e(TAG, throwable);
+        FileLog.e("HttpRequest", throwable);
     }
 
     @WorkerThread
@@ -263,7 +262,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     }
 
     public static String generateRequestId(DownloadStruct message, Selector selector) {
-        return message.getCacheId() + selector.toString();
+        return message.getToken() + "_" + selector.toString();
     }
 
     public File getDownloadedFile() {

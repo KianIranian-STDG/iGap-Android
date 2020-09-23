@@ -18,7 +18,7 @@ class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDown
     private Queue<HttpRequest> requestsQueue;
     private List<HttpRequest> inProgressRequests;
     private AtomicInteger inProgressCount = new AtomicInteger(0);
-    private static final int MAX_DOWNLOAD = 2;
+    private static final int MAX_DOWNLOAD = 3;
 
     public static HttpDownloader getInstance() {
         HttpDownloader localInstance = instance;
