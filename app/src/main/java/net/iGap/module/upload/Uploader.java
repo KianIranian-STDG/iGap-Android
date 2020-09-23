@@ -1,9 +1,9 @@
 package net.iGap.module.upload;
 
-import net.iGap.G;
 import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -100,9 +100,9 @@ public class Uploader implements IUpload {
     // 0 => through proto
     // 1 => through api
     private IUpload getCurrentUploader() {
-        if (G.uploadDownloadConfig == 0) {
+        if (AppConfig.fileGateway == 0) {
             return uploadThroughProto;
-        } else if (G.uploadDownloadConfig == 1) {
+        } else if (AppConfig.fileGateway == 1) {
             return uploadThroughApi;
         }
 

@@ -66,6 +66,7 @@ public class EventManager {
     public static final int FILE_UPLOAD_PROGRESS = eventId++;
     public static final int FILE_UPLOAD_FAILED = eventId++;
     public static final int FILE_UPLOAD_SUCCESS = eventId++;
+    public static final int APP_CONFIG_CHANGED = eventId++;
 
     private static EventManager eventListenerInstance;
 

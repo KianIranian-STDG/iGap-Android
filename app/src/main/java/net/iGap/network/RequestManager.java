@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import net.iGap.Config;
@@ -16,8 +17,11 @@ import net.iGap.helper.HelperClassNamePreparation;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.OkHttpClientInstance;
+import net.iGap.model.ConfigRes;
 import net.iGap.module.AESCrypt;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
@@ -32,6 +36,10 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class RequestManager extends BaseController {
     private static volatile RequestManager[] instance = new RequestManager[AccountManager.MAX_ACCOUNT_COUNT];
@@ -60,6 +68,42 @@ public class RequestManager extends BaseController {
 
     public RequestManager(int currentAccount) {
         super(currentAccount);
+//        getConfig();
+    }
+
+    private void getConfig() {
+        new Thread(() -> {
+            OkHttpClient okHttpClient = OkHttpClientInstance.getInstance();
+
+            Request req = new Request.Builder()
+                    .url("https://api.igap.net/config")
+                    .build();
+            try {
+                Response response = okHttpClient.newCall(req).execute();
+                if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
+                    String res = response.body().string();
+                    ConfigRes config = new Gson().fromJson(res, ConfigRes.class);
+
+                    if (Config.FILE_LOG_ENABLE) {
+                        FileLog.i(TAG, res);
+                    }
+
+                    try {
+                        AppConfig.webSocketUrl = config.webSocket;
+                        AppConfig.fileGateway = config.microServices.file.toLowerCase().equals("socket") ? 0 : 1;
+                        AppConfig.defaultTimeout = config.defaultTimeout;
+                        AppConfig.maxFileSize = config.maxFileSize;
+                        AppConfig.messageLengthMax = config.messageLengthMax;
+                        AppConfig.optimizeMode = config.optimizeMode;
+                        AppConfig.saveConfig();
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }).start();
     }
 
     public String sendRequest(AbstractObject request, OnResponse onResponse) {
@@ -99,7 +143,7 @@ public class RequestManager extends BaseController {
                 public void run() {
                     requestQueuePullFunction();
                 }
-            }, Config.TIME_OUT_DELAY_MS);
+            }, net.iGap.Config.TIME_OUT_DELAY_MS);
         }
 
         requestWrapper.setRandomId(randomId);
@@ -129,7 +173,7 @@ public class RequestManager extends BaseController {
             if (isSecure) {
                 if (userLogin || G.unLogin.contains(requestWrapper.actionId + "")) {
                     message = AESCrypt.encrypt(G.symmetricKey, message);
-                    if (Config.FILE_LOG_ENABLE) {
+                    if (net.iGap.Config.FILE_LOG_ENABLE) {
                         FileLog.i("MSGR " + "prepareRequest: " + G.lookupMap.get(30000 + requestWrapper.actionId));
                     }
                     WebSocketClient.getInstance().sendBinary(message, requestWrapper);
@@ -152,7 +196,7 @@ public class RequestManager extends BaseController {
             if (requestWrapper.actionId == 102) {
                 delete = timeDifference(requestWrapper.getTime(), (10 * DateUtils.SECOND_IN_MILLIS));
             } else {
-                delete = timeDifference(requestWrapper.getTime(), Config.TIME_OUT_MS);
+                delete = timeDifference(requestWrapper.getTime(), net.iGap.Config.TIME_OUT_MS);
             }
             if (delete) {
                 requestQueueMapRemover(key);
@@ -160,7 +204,7 @@ public class RequestManager extends BaseController {
         }
 
         if (requestQueueMap.size() > 0) {
-            G.runOnUiThread(this::requestQueuePullFunction, Config.TIME_OUT_DELAY_MS);
+            G.runOnUiThread(this::requestQueuePullFunction, net.iGap.Config.TIME_OUT_DELAY_MS);
         } else {
             pullRequestQueueRunned.getAndSet(false);
         }
@@ -172,7 +216,7 @@ public class RequestManager extends BaseController {
             RequestWrapper requestWrapper = requestQueueMap.remove(key);
             if (requestWrapper != null) {
                 int actionId = requestWrapper.getActionId();
-                String className = G.lookupMap.get(actionId + Config.LOOKUP_MAP_RESPONSE_OFFSET);
+                String className = G.lookupMap.get(actionId + net.iGap.Config.LOOKUP_MAP_RESPONSE_OFFSET);
                 String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
 
                 ProtoResponse.Response.Builder responseBuilder = ProtoResponse.Response.newBuilder();
@@ -283,7 +327,7 @@ public class RequestManager extends BaseController {
                 RequestWrapper requestWrapper = requestQueueMap.remove(responseId);
                 if (actionId == 0) { // error
                     if (requestWrapper != null) {
-                        int finalAct = requestWrapper.getActionId() + Config.LOOKUP_MAP_RESPONSE_OFFSET;
+                        int finalAct = requestWrapper.getActionId() + net.iGap.Config.LOOKUP_MAP_RESPONSE_OFFSET;
                         instanceResponseClass(finalAct, protoObject, requestWrapper.identity, "error");
                     }
                 } else {

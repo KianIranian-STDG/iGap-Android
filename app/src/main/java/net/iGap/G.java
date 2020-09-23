@@ -51,6 +51,7 @@ import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.observers.interfaces.*;
@@ -298,7 +299,6 @@ public class G extends ApplicationContext {
     public static boolean isLocationFromBot = false;
     public static boolean isNeedToCheckProfileWallpaper = false;
     public static String nationalCode;
-    public static int uploadDownloadConfig = 1;
 
     public static MutableLiveData<ConnectionState> connectionStateMutableLiveData = new MutableLiveData<>();
     public static SingleLiveEvent<Boolean> logoutAccount = new SingleLiveEvent<>();
@@ -390,6 +390,7 @@ public class G extends ApplicationContext {
         PassCode.initPassCode(getApplicationContext());
 
         AndroidUtils.density = getApplicationContext().getResources().getDisplayMetrics().density;
+        AppConfig.loadConfig();
 
         //init account manager for handle multi account
 
