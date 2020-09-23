@@ -8154,7 +8154,7 @@ public class FragmentChat extends BaseFragment
                             } else {
                                 mAdapter.add(index, new GiftStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        } else if (messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
+                        } else if (messageInfo.getAttachment() != null && messageInfo.getAttachment().getName() != null && messageInfo.getAttachment().isAnimatedSticker()) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
