@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <resources>
+    <string name="kuknos_toast">جواب غلط ہے! برائے مہربانی جواب دیں</string>
     <string name="text_line_1_introduce_page2">پارێزراوێتی لە ئای­گەپدا</string>
     <string name="text_line_2_introduce_page2">ئای­گەپ پێوەندییەکی پارێزراو بۆ تۆ پێک دەهێنێت. پەیام­نێری ئای­گەپ بە کەڵک­وەرگرتن لە ئەلگووریتمی رەمزیی تایبەت، لە جێگوڕکێی هەموو دەیتاکانتدا سەرترین ئاستی پارێزراوی بۆ پاراستنی هەرێمی تایبەتی تۆ دابین کردووە.</string>
     <string name="text_line_1_introduce_page3">وتووێژ لە ئای­گەپدا</string>

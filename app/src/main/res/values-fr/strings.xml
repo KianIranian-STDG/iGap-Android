@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="kuknos_toast">La réponse est fausse! Veuillez répondre attentivement</string>
     <string name="text_line_1_introduce_page2">Sécurité sur iGap</string>
     <string name="text_line_2_introduce_page2">iGap construit une connexion privée et en bonne sécurité. La messagerie d’I Gap utilise les algorithmes de cryptage individuels et uniques qui favorisent le transfert de toutes vos données et vos informations tout en respectant votre confidentialité </string>
     <string name="text_line_1_introduce_page3">Discussion sur iGap</string>
