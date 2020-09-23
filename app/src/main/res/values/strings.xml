@@ -1995,7 +1995,8 @@ Want to get it?</string>
     <string name="news_add_comment_errorComment" tools:ignore="ExtraTranslation">لطفا نظر خود را وارد کنید.</string>
     <string name="delete_from_storage">Delete Attachment from Storage</string>
 
-
+    //kuknos
+    <string name="kuknos_toast">The Answer Is Wrong! Please answer carefully</string>
     <string name="login_exist_account_error">This account is login on this device</string>
     <string name="need_browser">Requires browser to use.</string>
     <string name="install_latest_version">Install the latest version to use this feature</string>

@@ -16,7 +16,7 @@
     <string name="text_line_1_introduce_page4">"آیلند"</string>
     <string name="text_line_2_introduce_page4">"آیلند! سرزمین بی حد و مرز\nکه کلی اتفاق شگفت انگیز مثل گرفتن تاکسی، الوپیک، پرداخت قبض و رزرو تور و هتل توش افتاده. و تازه می تونی کلی بازی کنی، فیلم ببینی و موزیک گوش بدی."</string>
 
-
+    <string name="kuknos_toast">جواب اشتباه است! لطفا با دقت پاسخ دهید</string>
     <!-- Page 5 introduce app -->
 
     <!-- Page 6 introduce app -->

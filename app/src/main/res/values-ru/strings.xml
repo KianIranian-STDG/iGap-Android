@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <resources>
+    <string name="kuknos_toast">Ответ неверный! Пожалуйста ответьте внимательно</string>
     <string name="text_line_1_introduce_page2">Безопасность в  iGap</string>
     <string name="text_line_2_introduce_page2">iGap обеспечивает безопасное и надежное соединение для вас. Мессенджер iGap использует уникальные алгоритмы шифрования для перемещения всех ваших данных, чтобы обеспечить максимальную безопасность вашей конфиденциальности.</string>
     <string name="text_line_1_introduce_page3">Чат в iGap</string>
