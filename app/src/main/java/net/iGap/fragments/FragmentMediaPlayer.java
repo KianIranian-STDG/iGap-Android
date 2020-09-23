@@ -46,7 +46,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.downloader.DownloadStruct;
 import net.iGap.module.downloader.Downloader;
-import net.iGap.module.downloader.Request;
+import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
 import net.iGap.observers.interfaces.OnComplete;
@@ -522,7 +522,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
-        Downloader.getInstance().download(new DownloadStruct(MusicPlayer.mediaList.get(position)), ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_HIGH, arg -> {
+        Downloader.getInstance().download(new DownloadStruct(MusicPlayer.mediaList.get(position)), ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
             if (canUpdateAfterDownload) {
                 G.handler.post(() -> {
                     switch (arg.status) {

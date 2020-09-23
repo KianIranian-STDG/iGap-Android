@@ -16,28 +16,28 @@ import net.iGap.realm.RealmAttachment;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class DownloadThroughCdn implements IDownloader {
-    private static IDownloader instance;
-
+public class CdnDownloader implements IDownloader {
+    private static CdnDownloader instance;
     private HashMap<String, DownloadStruct> requestedDownload = new HashMap<>();
 
-    private DownloadThroughCdn() {
+    private CdnDownloader() {
     }
 
-    public static IDownloader getInstance() {
-        if (instance == null) {
-            synchronized (DownloadThroughCdn.class) {
-                if (instance == null) {
-                    instance = new DownloadThroughCdn();
+    public static CdnDownloader getInstance() {
+        CdnDownloader localInstance = instance;
+        if (localInstance == null) {
+            synchronized (CdnDownloader.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new CdnDownloader();
                 }
             }
         }
-        return instance;
+        return localInstance;
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, int priority,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         if (!isPublic(message)) {
             return;
         }
@@ -98,7 +98,7 @@ public class DownloadThroughCdn implements IDownloader {
     private void handleProgress(DownloadStruct message, Progress progress) {
         int percent = (int) ((progress.currentBytes * 100) / progress.totalBytes);
         if (percent > message.getProgress()) {
-            message.notifyObservers(Resource.loading(new Request.Progress(percent, message.getDestinationFile().getAbsolutePath())));
+            message.notifyObservers(Resource.loading(new HttpRequest.Progress(percent, message.getDestinationFile().getAbsolutePath())));
         }
     }
 
@@ -118,7 +118,7 @@ public class DownloadThroughCdn implements IDownloader {
                     RealmAttachment.setThumbnailPathDataBaseAttachment(message.getCacheId(), message.getTempFile().getAbsolutePath());
                     break;
             }
-            message.notifyObservers(Resource.success(new Request.Progress(100, message.getSelector() == Selector.FILE ? message.getDestinationFile().getAbsolutePath() : message.getTempFile().getAbsolutePath())));
+            message.notifyObservers(Resource.success(new HttpRequest.Progress(100, message.getSelector() == Selector.FILE ? message.getDestinationFile().getAbsolutePath() : message.getTempFile().getAbsolutePath())));
         } catch (IOException e) {
             handleError(message, e.getMessage());
             e.printStackTrace();
@@ -126,18 +126,17 @@ public class DownloadThroughCdn implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, Selector.FILE, priority, observer);
     }
 

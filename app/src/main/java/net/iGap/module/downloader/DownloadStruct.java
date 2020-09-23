@@ -12,7 +12,7 @@ import java.io.File;
 
 import static net.iGap.module.AndroidUtils.suitableAppFilePath;
 
-public class DownloadStruct extends Observable<Resource<Request.Progress>> {
+public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
     private String token;
     private long messageId;
     private long fileSize;

@@ -4,14 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.G;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.HashSet;
 
 public class Downloader implements IDownloader {
-    private static Downloader instance;
+    private static volatile Downloader instance;
 
     private IDownloader downloadThroughProto;
     private IDownloader downloadThroughApi;
@@ -19,24 +18,26 @@ public class Downloader implements IDownloader {
     private HashSet<String> publicCacheId = new HashSet<>();
 
     private Downloader() {
-        downloadThroughApi = DownloadThroughApi.getInstance();
-        downloadThroughProto = new DownloaderAdapter(HelperDownloadFile.getInstance());
-        downloadThroughCdn = DownloadThroughCdn.getInstance();
+        downloadThroughApi = HttpDownloader.getInstance();
+        downloadThroughProto = SocketDownloader.getInstance();
+        downloadThroughCdn = CdnDownloader.getInstance();
     }
 
     public static Downloader getInstance() {
-        if (instance == null) {
+        Downloader localInstance = instance;
+        if (localInstance == null) {
             synchronized (Downloader.class) {
-                if (instance == null) {
-                    instance = new Downloader();
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new Downloader();
                 }
             }
         }
-        return instance;
+        return localInstance;
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         if (isPublic(message)) {
             publicCacheId.add(message.getCacheId());
         }
@@ -54,17 +55,17 @@ public class Downloader implements IDownloader {
 
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, Selector.FILE, priority, observer);
     }
 

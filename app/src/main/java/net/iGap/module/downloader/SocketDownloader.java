@@ -10,17 +10,29 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
 
-public class DownloaderAdapter implements IDownloader {
+class SocketDownloader implements IDownloader {
+    private static SocketDownloader instance;
     private HelperDownloadFile oldDownloader;
 
-    public DownloaderAdapter(HelperDownloadFile helperDownloadFile) {
-        oldDownloader = helperDownloadFile;
+    public static SocketDownloader getInstance() {
+        SocketDownloader localInstance = instance;
+        if (localInstance == null) {
+            synchronized (SocketDownloader.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new SocketDownloader();
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    private SocketDownloader() {
+        oldDownloader = HelperDownloadFile.getInstance();
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message,
-                         @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                         int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         long size;
         String filePath = "";
         switch (selector) {
@@ -47,9 +59,9 @@ public class DownloaderAdapter implements IDownloader {
                             return;
 
                         if (progress < 100 && progress >= 0) {
-                            observer.onUpdate(Resource.loading(new Request.Progress(progress, path)));
+                            observer.onUpdate(Resource.loading(new HttpRequest.Progress(progress, path)));
                         } else if (progress == 100) {
-                            observer.onUpdate(Resource.success(new Request.Progress(progress, path)));
+                            observer.onUpdate(Resource.success(new HttpRequest.Progress(progress, path)));
                         }
                     }
 
@@ -63,17 +75,17 @@ public class DownloaderAdapter implements IDownloader {
 
     @Override
     public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+                         @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 

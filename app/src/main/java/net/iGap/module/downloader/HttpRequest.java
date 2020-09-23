@@ -1,6 +1,5 @@
 package net.iGap.module.downloader;
 
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -9,6 +8,7 @@ import androidx.annotation.WorkerThread;
 import net.iGap.G;
 import net.iGap.api.apiService.ApiStatic;
 import net.iGap.api.apiService.TokenContainer;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
@@ -21,17 +21,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 
 import static net.iGap.module.AndroidUtils.suitableAppFilePath;
 
-public class Request extends Observable<Resource<Request.Progress>> implements Comparable<Request> {
+public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> implements Comparable<HttpRequest> {
     public static final String BASE_URL = ApiStatic.UPLOAD_URL + "download/";
 
     private String requestId;
@@ -47,16 +55,16 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     private int priority = PRIORITY.PRIORITY_DEFAULT;
     private AtomicBoolean cancelDownload = new AtomicBoolean(false);
     private AppExecutors appExecutors;
-    private Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> downloadStatusObserver;
+    private Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> downloadStatusObserver;
     private Call call;
     private String TAG = "DownloadManager";
 
-    protected Request(DownloadStruct message, Selector selector, int priority) {
+    protected HttpRequest(DownloadStruct message, Selector selector, int priority) {
         this(message, selector);
         this.priority = priority;
     }
 
-    private Request(DownloadStruct msg, Selector selector) {
+    private HttpRequest(DownloadStruct msg, Selector selector) {
         this.selector = selector;
         message = msg;
         requestId = generateRequestId();
@@ -110,7 +118,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
 
     public void download() {
         if (isDownloaded) {
-            notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADED);
+            notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
             return;
         }
         appExecutors.networkIO().execute(() -> download(TokenContainer.getInstance().getToken(), message));
@@ -127,15 +135,15 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     @WorkerThread
     private void download(String jwtToken, DownloadStruct message) {
         isDownloading = true;
-        notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADING);
+        notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADING);
         OkHttpClient client = OkHttpClientInstance.getInstance();
         String fileToken = message.getToken();
         int selector;
         switch (this.selector) {
-            case LARGE_THUMBNAIL:
+            case SMALL_THUMBNAIL:
                 selector = 1;
                 break;
-            case SMALL_THUMBNAIL:
+            case LARGE_THUMBNAIL:
                 selector = 2;
                 break;
             case WAVEFORM_THUMBNAIL:
@@ -144,11 +152,22 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
             default:
                 selector = 0;
         }
+
         String qParam = "?selector=" + selector;
 
         String url = BASE_URL + fileToken + qParam;
-        okhttp3.Request request = new okhttp3.Request.Builder().url(url).addHeader("Authorization", jwtToken)
-                .addHeader("Range", String.format("bytes=" + offset + "-" + size)).build();
+
+        Request.Builder builder = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", jwtToken);
+
+        if (offset > 0) {
+            builder.addHeader("Range", "bytes=" + offset + "-" + size);
+        }
+
+        FileLog.i(TAG, "download Start with " + url + " range " + "bytes=" + offset + "-" + size);
+
+        Request request = builder.build();
         Response response = null;
 
         try (OutputStream os = new FileOutputStream(tempFile, true)) {
@@ -159,8 +178,8 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
             }
             InputStream inputStream = response.body().byteStream();
             byte[] iv = new byte[16];
-            int readCount = inputStream.read(iv, 0, 16);
-            InputStream cipherInputStream = new CipherInputStream(inputStream, AesCipherDownloadOptimized.getCipher(iv, G.symmetricKey));
+            int i = inputStream.read(iv, 0, 16);
+            InputStream cipherInputStream = new CipherInputStream(inputStream, getCipher(iv, G.symmetricKey));
             byte[] data = new byte[4096];
             int count;
             long downloaded = offset;
@@ -192,7 +211,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         if (downloadedFile.exists())
             downloadedFile.delete();
         isDownloading = false;
-        notifyDownloadStatus(DownloadThroughApi.DownloadStatus.NOT_DOWNLOADED);
+        notifyDownloadStatus(HttpDownloader.DownloadStatus.NOT_DOWNLOADED);
     }
 
     public String getRequestId() {
@@ -200,20 +219,18 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void onDownloadCompleted() {
-        Log.i(TAG, "onDownloadCompleted: ");
         try {
             moveTempToDownloadedDir();
             this.progress = 100;
             notifyObservers(Resource.success(new Progress(this.progress, selector == Selector.FILE ? downloadedFile.getAbsolutePath() : tempFile.getAbsolutePath())));
 
-            notifyDownloadStatus(DownloadThroughApi.DownloadStatus.DOWNLOADED);
+            notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
         } catch (Exception e) {
             onError(e);
         }
     }
 
     public void onProgress(int progress) {
-        Log.i(TAG, "onProgress: " + progress);
         if (selector == Selector.FILE)
             notifyObservers(Resource.loading(new Progress(progress, downloadedFile.getAbsolutePath())));
         else
@@ -221,15 +238,13 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     public void onError(@NotNull Throwable throwable) {
-        Log.e(TAG, "onError: ", throwable);
-        throwable.printStackTrace();
         safelyCancelDownload();
         notifyObservers(Resource.error(throwable.getMessage(), null));
+        FileLog.e(TAG, throwable);
     }
 
     @WorkerThread
     private void moveTempToDownloadedDir() throws IOException {
-        Log.i(TAG, "moveTempToDownloadedDir: " + downloadedFile.length() + " " + getRequestId());
         switch (selector) {
             case FILE:
                 AndroidUtils.cutFromTemp(tempFile.getAbsolutePath(), downloadedFile.getAbsolutePath());
@@ -243,7 +258,7 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
     }
 
     @Override
-    public int compareTo(Request o) {
+    public int compareTo(HttpRequest o) {
         return priority - o.priority;
     }
 
@@ -271,12 +286,11 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         return offset;
     }
 
-    public void setDownloadStatusListener(Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> observer) {
+    public void setDownloadStatusListener(Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> observer) {
         this.downloadStatusObserver = observer;
     }
 
-    public void notifyDownloadStatus(DownloadThroughApi.DownloadStatus downloadStatus) {
-        Log.i(TAG, "notifyDownloadStatus: " + downloadStatus.toString());
+    public void notifyDownloadStatus(HttpDownloader.DownloadStatus downloadStatus) {
         if (downloadStatusObserver != null) {
             downloadStatusObserver.onUpdate(new Pair<>(this, downloadStatus));
         }
@@ -305,5 +319,12 @@ public class Request extends Observable<Resource<Request.Progress>> implements C
         public String getFilePath() {
             return filePath;
         }
+    }
+
+    public Cipher getCipher(byte[] iv, final SecretKeySpec key) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+        cipher.init(Cipher.DECRYPT_MODE, key, ivSpec);
+        return cipher;
     }
 }

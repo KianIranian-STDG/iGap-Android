@@ -1,6 +1,5 @@
 package net.iGap.module.downloader;
 
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -14,41 +13,38 @@ import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, DownloadThroughApi.DownloadStatus>> {
-    private static final String TAG = "DownloadThroughApi";
-    private static DownloadThroughApi instance;
-    private Queue<Request> requestsQueue;
-    private List<Request> inProgressRequests;
+class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> {
+    private static HttpDownloader instance;
+    private Queue<HttpRequest> requestsQueue;
+    private List<HttpRequest> inProgressRequests;
     private AtomicInteger inProgressCount = new AtomicInteger(0);
     private static final int MAX_DOWNLOAD = 2;
 
-    public static DownloadThroughApi getInstance() {
-        if (instance == null) {
-            synchronized (DownloadThroughApi.class) {
-                if (instance == null) {
-                    instance = new DownloadThroughApi();
+    public static HttpDownloader getInstance() {
+        HttpDownloader localInstance = instance;
+        if (localInstance == null) {
+            synchronized (HttpDownloader.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new HttpDownloader();
                 }
             }
         }
-        return instance;
+        return localInstance;
     }
 
-    private DownloadThroughApi() {
+    private HttpDownloader() {
         requestsQueue = new PriorityBlockingQueue<>();
         inProgressRequests = new ArrayList<>();
     }
 
-    public void download(@NonNull DownloadStruct message,
-                         @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                         int priority,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
-
+    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         if (requestsQueue == null)
             requestsQueue = new PriorityBlockingQueue<>();
 
-        Request existedRequest = findExistedRequest(Request.generateRequestId(message, selector));
+        HttpRequest existedRequest = findExistedRequest(HttpRequest.generateRequestId(message, selector));
         if (existedRequest == null) {
-            existedRequest = new Request(message, selector, priority);
+            existedRequest = new HttpRequest(message, selector, priority);
             existedRequest.setDownloadStatusListener(this);
             requestsQueue.add(existedRequest);
             scheduleNewDownload();
@@ -59,31 +55,26 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message,
-                         @NonNull ProtoFileDownload.FileDownload.Selector selector,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, selector, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
-        download(message, ProtoFileDownload.FileDownload.Selector.FILE, Request.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(message, ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message,
-                         int priority,
-                         @Nullable Observer<Resource<Request.Progress>> observer) {
+    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 
-    private Request findExistedRequest(String requestId) {
-        for (Request request : requestsQueue) {
+    private HttpRequest findExistedRequest(String requestId) {
+        for (HttpRequest request : requestsQueue) {
             if (request.getRequestId().equals(requestId))
                 return request;
         }
-        for (Request request : inProgressRequests) {
+        for (HttpRequest request : inProgressRequests) {
             if (request.getRequestId().equals(requestId))
                 return request;
         }
@@ -93,13 +84,12 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
     public void cancelDownload(@NonNull String cacheId) {
         for (int i = 0; i < inProgressRequests.size(); i++) {
             if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
-                Log.i(TAG, "cancelDownload: " + inProgressRequests.get(i).getRequestId());
                 inProgressRequests.get(i).cancelDownload();
                 break;
             }
         }
 
-        for (Request request : requestsQueue) {
+        for (HttpRequest request : requestsQueue) {
             if (cacheId.contains(request.getRequestId())) {
                 requestsQueue.remove(request);
                 break;
@@ -124,15 +114,12 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
         return false;
     }
 
-    private void removeDownloadingRequestIfExist(Request request) {
+    private void removeDownloadingRequestIfExist(HttpRequest request) {
         if (request == null)
             return;
 
-        Log.i(TAG, "removeDownloadingRequestIfExist: ");
-
         for (int i = 0; i < inProgressRequests.size(); i++) {
             if (request.getRequestId().equals(inProgressRequests.get(i).getRequestId())) {
-                Log.i(TAG, "removeDownloadingRequestIfExist: " + inProgressRequests.get(i).getRequestId());
                 inProgressRequests.remove(i);
                 inProgressCount.decrementAndGet();
                 break;
@@ -144,25 +131,20 @@ public class DownloadThroughApi implements IDownloader, Observer<Pair<Request, D
         if (inProgressCount.get() >= MAX_DOWNLOAD)
             return;
 
-        Log.i(TAG, "scheduleNewDownload: ");
-
-        Request request = requestsQueue.poll();
+        HttpRequest request = requestsQueue.poll();
         if (request == null)
             return;
 
         inProgressRequests.add(request);
-        Log.i(TAG, "scheduleNewDownload: " + request.getRequestId());
         inProgressCount.incrementAndGet();
 
         request.download();
     }
 
     @Override
-    public void onUpdate(Pair<Request, DownloadStatus> arg) {
+    public void onUpdate(Pair<HttpRequest, DownloadStatus> arg) {
         if (arg == null)
             return;
-
-        Log.i(TAG, "onUpdate: ");
 
         switch (arg.second) {
             case DOWNLOADED:
