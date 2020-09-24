@@ -1,20 +1,10 @@
 package net.iGap.viewmodel.controllers;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.SystemClock;
-import android.telecom.PhoneAccount;
-import android.telecom.PhoneAccountHandle;
-import android.telecom.TelecomManager;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -34,8 +24,6 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.proto.ProtoSignalingSessionHold;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingAccept;
 import net.iGap.request.RequestSignalingCandidate;
 import net.iGap.request.RequestSignalingGetConfiguration;
@@ -43,7 +31,6 @@ import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestSignalingOffer;
 import net.iGap.request.RequestSignalingRinging;
 import net.iGap.request.RequestSignalingSessionHold;
-import net.iGap.viewmodel.controllers.telecom.CallConnectionService;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
@@ -183,7 +170,7 @@ public class CallManager {
     private void setupCallerInfo(long callPeerId) {
         currentCallerInfo = new CallerInfo();
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, callPeerId).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", callPeerId).findFirst();
             if (realmRegisteredInfo != null) {
                 currentCallerInfo.name = realmRegisteredInfo.getDisplayName();
                 currentCallerInfo.color = realmRegisteredInfo.getColor();
@@ -577,7 +564,6 @@ public class CallManager {
         if (onCallStateChanged != null)
             onCallStateChanged.onCallStateChanged(callState);
     }
-
 
 
     private static boolean isDeviceCompatibleWithConnectionServiceAPI() {

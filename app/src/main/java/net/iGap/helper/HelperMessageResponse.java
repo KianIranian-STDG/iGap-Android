@@ -19,7 +19,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmNotificationRoomMessage;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoom;
@@ -37,7 +36,7 @@ public class HelperMessageResponse {
              * put message to realm
              */
             RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
-            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             /**
              * because user may have more than one device, his another device should not
              * be recipient but sender. so I check current userId with room message user id,

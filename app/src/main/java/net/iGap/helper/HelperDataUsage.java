@@ -3,7 +3,6 @@ package net.iGap.helper;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmDataUsage;
-import net.iGap.realm.RealmDataUsageFields;
 
 import io.realm.RealmResults;
 
@@ -13,8 +12,8 @@ public class HelperDataUsage {
         ProtoGlobal.RoomMessageType finalType = getDataUsageType(type);
         DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
             RealmDataUsage realmDataUsage = realm.where(RealmDataUsage.class)
-                    .equalTo(RealmDataUsageFields.CONNECTIVITY_TYPE, HelperCheckInternetConnection.isConnectivityWifi())
-                    .equalTo(RealmDataUsageFields.TYPE, finalType.toString())
+                    .equalTo("connectivityType", HelperCheckInternetConnection.isConnectivityWifi())
+                    .equalTo("type", finalType.toString())
                     .findFirst();
             if (realmDataUsage != null) {
                 realmDataUsage.setNumDownloadedFile(realmDataUsage.getNumDownloadedFile() + 1);
@@ -26,8 +25,8 @@ public class HelperDataUsage {
         ProtoGlobal.RoomMessageType finalType = getDataUsageType(type);
         DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
             RealmDataUsage realmDataUsage = realm.where(RealmDataUsage.class)
-                    .equalTo(RealmDataUsageFields.CONNECTIVITY_TYPE, HelperCheckInternetConnection.isConnectivityWifi())
-                    .equalTo(RealmDataUsageFields.TYPE, finalType.toString())
+                    .equalTo("connectivityType", HelperCheckInternetConnection.isConnectivityWifi())
+                    .equalTo("type", finalType.toString())
                     .findFirst();
             if (realmDataUsage != null) {
                 realmDataUsage.setNumUploadedFiles(realmDataUsage.getNumUploadedFiles() + 1);
@@ -39,8 +38,8 @@ public class HelperDataUsage {
         ProtoGlobal.RoomMessageType finalType = getDataUsageType(type);
         DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
             RealmDataUsage realmDataUsage = realm.where(RealmDataUsage.class)
-                    .equalTo(RealmDataUsageFields.CONNECTIVITY_TYPE, HelperCheckInternetConnection.isConnectivityWifi())
-                    .equalTo(RealmDataUsageFields.TYPE, finalType.toString())
+                    .equalTo("connectivityType", HelperCheckInternetConnection.isConnectivityWifi())
+                    .equalTo("type", finalType.toString())
                     .findFirst();
             if (realmDataUsage != null) {
                 realmDataUsage.setDownloadSize(realmDataUsage.getDownloadSize() + downloadByte);
@@ -53,8 +52,8 @@ public class HelperDataUsage {
         ProtoGlobal.RoomMessageType finalType = getDataUsageType(type);
         DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
             RealmDataUsage realmDataUsage = realm.where(RealmDataUsage.class)
-                    .equalTo(RealmDataUsageFields.CONNECTIVITY_TYPE, HelperCheckInternetConnection.isConnectivityWifi())
-                    .equalTo(RealmDataUsageFields.TYPE, finalType.toString())
+                    .equalTo("connectivityType", HelperCheckInternetConnection.isConnectivityWifi())
+                    .equalTo("type", finalType.toString())
                     .findFirst();
             if (realmDataUsage != null) {
                 realmDataUsage.setUploadSize(realmDataUsage.getUploadSize() + uploadByte);
@@ -87,7 +86,7 @@ public class HelperDataUsage {
 
     public static void clearUsageRealm(boolean connectivityType) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmResults<RealmDataUsage> wifiRealmList = realm.where(RealmDataUsage.class).equalTo(RealmDataUsageFields.CONNECTIVITY_TYPE, connectivityType).findAll();
+            RealmResults<RealmDataUsage> wifiRealmList = realm.where(RealmDataUsage.class).equalTo("connectivityType", connectivityType).findAll();
             for (RealmDataUsage usage : wifiRealmList) {
                 usage.setDownloadSize(0);
                 usage.setUploadSize(0);

@@ -32,7 +32,7 @@ public class RealmMobileBankAccounts extends RealmObject {
 
                     if (item.getAccountNumber() == null) continue;
 
-                    RealmMobileBankAccounts object = asyncRealm.where(RealmMobileBankAccounts.class).equalTo(RealmMobileBankAccountsFields.ACCOUNT_NUMBER, item.getAccountNumber()).findFirst();
+                    RealmMobileBankAccounts object = asyncRealm.where(RealmMobileBankAccounts.class).equalTo("accountNumber", item.getAccountNumber()).findFirst();
                     if (object == null)
                         object = asyncRealm.createObject(RealmMobileBankAccounts.class, item.getAccountNumber());
 
@@ -47,7 +47,7 @@ public class RealmMobileBankAccounts extends RealmObject {
 
     public static void delete(String accountNumber) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmMobileBankAccounts object = realm.where(RealmMobileBankAccounts.class).equalTo(RealmMobileBankAccountsFields.ACCOUNT_NUMBER, accountNumber).findFirst();
+            RealmMobileBankAccounts object = realm.where(RealmMobileBankAccounts.class).equalTo("accountNumber", accountNumber).findFirst();
             if (object != null) object.deleteFromRealm();
         });
     }

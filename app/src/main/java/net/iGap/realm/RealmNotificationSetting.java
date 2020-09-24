@@ -10,9 +10,9 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 
 import io.realm.Realm;
@@ -52,7 +52,7 @@ public class RealmNotificationSetting extends RealmObject {
 
     public static void sound(final long roomId, final String sound, final int which, final ProtoGlobal.Room.Type roomType) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 switch (roomType) {
                     case CHAT:
@@ -83,7 +83,7 @@ public class RealmNotificationSetting extends RealmObject {
 
     public static void popupNotification(final long roomId, final ProtoGlobal.Room.Type roomType, final int notification) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 switch (roomType) {
                     case CHAT: {
@@ -114,7 +114,7 @@ public class RealmNotificationSetting extends RealmObject {
 
     public static void vibrate(final long roomId, final ProtoGlobal.Room.Type roomType, final int vibrateLevel) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 switch (roomType) {
                     case CHAT: {
@@ -146,7 +146,7 @@ public class RealmNotificationSetting extends RealmObject {
 
     public static void ledColor(final long roomId, final ProtoGlobal.Room.Type roomType, final int ledColor) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 switch (roomType) {
                     case CHAT: {

@@ -42,7 +42,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
-import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetLog;
 
@@ -263,7 +262,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                     DbManager.getInstance().doRealmTask(realm -> {
                         //ToDo: add callback to proto request
                         setViewState(false);
-                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort("offerTime", Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
                         mSelectedLogList.clear();
@@ -345,16 +344,16 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         switch (status) {
             case ALL:
-                return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+                return realm.where(RealmCallLog.class).findAll().sort("offerTime", Sort.DESCENDING);
 
             case MISSED:
             case OUTGOING:
             case CANCELED:
             case INCOMING:
-                return realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.STATUS, status.name()).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+                return realm.where(RealmCallLog.class).equalTo("status", status.name()).findAll().sort("offerTime", Sort.DESCENDING);
 
             default:
-                return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+                return realm.where(RealmCallLog.class).findAll().sort("offerTime", Sort.DESCENDING);
         }
 
     }

@@ -32,7 +32,6 @@ import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -101,13 +100,13 @@ public final class StartupActions {
 
                             for (RealmRoom room : realmRooms) {
                                 if (room.getLastMessage() != null) {
-                                    roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                                    roomMessages = roomMessages.notEqualTo("messageId", room.getLastMessage().getMessageId());
                                 }
                             }
 
                             RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                                    .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
-                                    .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                    .greaterThan("messageId", 0)
+                                    .lessThan("createTime", time)
                                     .limit(100).findAll();
 
                             for (RealmRoomMessage var : realmRoomMessages)

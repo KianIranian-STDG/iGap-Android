@@ -12,12 +12,12 @@ package net.iGap.realm;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperString;
+import net.iGap.module.AppUtils;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.observers.interfaces.OnRegistrationInfo;
-import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserInfo;
 
@@ -139,13 +139,13 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public static RealmRegisteredInfo getRegistrationInfo(Realm realm, long userId) {
-        return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        return realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
     }
 
     public static String getNameWithId(long userId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             String displayName = "";
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
             if (realmRegisteredInfo != null) {
                 displayName = realmRegisteredInfo.getDisplayName();
             }
@@ -193,7 +193,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public static void updateMutual(final String phone, final boolean mutual) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone + "").findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("phoneNumber", phone + "").findFirst();
             if (realmRegisteredInfo != null) {
                 realmRegisteredInfo.setMutual(mutual);
             }
@@ -220,8 +220,8 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     public static long getUserInfo(Realm realm, String phoneNumber) {
-        if (realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phoneNumber).findFirst() != null) {
-            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phoneNumber).findFirst().getId();
+        if (realm.where(RealmRegisteredInfo.class).equalTo("phoneNumber", phoneNumber).findFirst() != null) {
+            return realm.where(RealmRegisteredInfo.class).equalTo("phoneNumber", phoneNumber).findFirst().getId();
         } else {
             return 0;
         }
@@ -400,7 +400,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public RealmList<RealmAvatar> getAvatars(Realm realm) {
         RealmList<RealmAvatar> avatars = new RealmList<>();
-        avatars.addAll(realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, id).findAll().sort(RealmAvatarFields.ID, Sort.ASCENDING));
+        avatars.addAll(realm.where(RealmAvatar.class).equalTo("ownerId", id).findAll().sort("id", Sort.ASCENDING));
         return avatars;
     }
 

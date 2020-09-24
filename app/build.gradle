@@ -183,7 +183,6 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.18@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-    implementation 'dk.ilios:realmfieldnameshelper:1.1.1'
     implementation 'com.hanks.animatecheckbox:library:0.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'com.google.zxing:core:3.3.2'

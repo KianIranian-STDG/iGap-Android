@@ -68,7 +68,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -682,7 +681,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (isVoice) {
                 String voiceName = "";
                 RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());
+                    return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst());
                 });
                 if (realmRoomMessage != null) {
                     if (realmRoomMessage.getUserId() != 0) {
@@ -733,7 +732,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 try {
                     RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
-                        return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
+                        return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(messageID)).findFirst());
                     });
                     if (realmRoomMessage != null) {
                         String type = realmRoomMessage.getMessageType().toString();
@@ -1024,7 +1023,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         mediaList = new ArrayList<>();
 
         List<RealmRoomMessage> roomMessages = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            return realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).findAll().sort("messageId", Sort.DESCENDING);
         });
 
         if (!roomMessages.isEmpty()) {
@@ -1287,7 +1286,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         boolean result = false;
         RealmResults<RealmRoomMessage> roomMessages = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAll().sort(RealmRoomMessageFields.CREATE_TIME);
+            return realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).equalTo("deleted", false).greaterThan("messageId", Long.parseLong(messageId)).findAll().sort("createTime");
 
         });
 

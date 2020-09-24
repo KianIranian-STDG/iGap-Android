@@ -86,8 +86,8 @@ import net.iGap.module.downloader.DownloadStruct;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.network.RequestManager;
 import net.iGap.module.upload.Uploader;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IChatItemAttachment;
@@ -98,7 +98,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
@@ -199,7 +198,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     messageId = messageId * (-1);
                 }
 
-                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
                 if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
                     AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
             } else {
@@ -848,7 +847,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 forwardMessageId = forwardMessageId * (-1);
             }
             RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+                return realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
             });
             if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                 new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId(), reaction, forwardMessageId);
@@ -1082,7 +1081,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
                 RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getRoomId()).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getRoomId()).findFirst();
                 });
                 if (realmRoom != null) {
                     txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
@@ -1829,7 +1828,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mMessage.getRoomId()).findFirst();
                     long peerId;
                     if (room != null && room.getChatRoom() != null) {
                         peerId = room.getChatRoom().getPeerId();

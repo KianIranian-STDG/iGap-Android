@@ -22,7 +22,6 @@ import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
@@ -281,7 +280,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
 
             String userId = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null && realmRoom.getChatRoom() != null) {
                     return String.valueOf(realmRoom.getChatRoom().getPeerId());
                 }
@@ -296,7 +295,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
 
             boolean roomIsMyCloud = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null && realmRoom.getChatRoom() != null)
                     return realmRoom.getChatRoom().getPeerId() > 0 && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
                 else
@@ -304,7 +303,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             });
 
             String userId = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null && realmRoom.getChatRoom() != null) {
                     return String.valueOf(realmRoom.getChatRoom().getPeerId());
                 }

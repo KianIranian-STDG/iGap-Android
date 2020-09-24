@@ -38,13 +38,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.AppUtils;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -52,11 +47,8 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnContactImport;
-import net.iGap.observers.interfaces.OnContactsGetList;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.OnUserContactDelete;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
@@ -64,12 +56,19 @@ import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
+import net.iGap.observers.interfaces.OnContactImport;
+import net.iGap.observers.interfaces.OnContactsGetList;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.OnUserContactDelete;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
@@ -293,8 +292,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                          * if contacts size is zero send request for get contacts list
                          * for insuring that contacts not exist really or not
                          */
-                            LoginActions.importContact();
-                            prgMainLoader.setVisibility(View.GONE);
+                        LoginActions.importContact();
+                        prgMainLoader.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -672,7 +671,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     public void loadContacts() {
         results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort("display_name").findAll());
         });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
@@ -680,7 +679,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     private void loadContact(String key) {
         results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.copyFromRealm(realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+            return realm.copyFromRealm(realm.where(RealmContacts.class).contains("display_name", key, Case.INSENSITIVE).findAll().sort("display_name"));
         });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
@@ -776,7 +775,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 viewHolder.subtitle.setText(
                         setUserStatus(
                                 viewHolder.subtitle.getContext(),
-                                contact.getStatus() == null ? null : AppUtils.getStatsForUser(contact.getStatus()) ,
+                                contact.getStatus() == null ? null : AppUtils.getStatsForUser(contact.getStatus()),
                                 contact.getId(),
                                 contact.getLast_seen())
                 );
@@ -847,7 +846,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             }
         }
 
-        private String setUserStatus(Context context , String userStatus, long userId , long time ) {
+        private String setUserStatus(Context context, String userStatus, long userId, long time) {
 
             if (userStatus != null) {
                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -855,7 +854,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 } else {
                     return userStatus;
                 }
-            }else {
+            } else {
                 return LastSeenTimeUtil.computeTime(context, userId, time, false);
             }
         }

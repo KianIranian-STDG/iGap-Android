@@ -35,10 +35,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupAddAdmin;
 import net.iGap.proto.ProtoGroupChangeMemberRights;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestGroupAddAdmin;
@@ -107,11 +105,11 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
         this.currentUserAccess = currentUserAccess;
 
         RealmRoomAccess roomAccess = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
+            return realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId).findFirst();
         });
 
         realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+            return realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
         });
 
         if (currentMode == 0) {

@@ -66,7 +66,6 @@ import net.iGap.observers.interfaces.OnVersionCallBack;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.Room;
 import net.iGap.request.RequestChannelLeft;
@@ -199,7 +198,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (mSelectedRoomList.size() > 0)
                     item = DbManager.getInstance().doRealmTask(realm -> {
                         return realm.where(RealmRoom.class)
-                                .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
+                                .equalTo("id", mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
                     });
             }
 
@@ -323,7 +322,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void confirmActionForReadAllRoom() {
         List<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll());
+            return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan("unreadCount", 0).equalTo("isDeleted", false).findAll());
         });
 
         if (unreadList.size() == 0) {
@@ -408,7 +407,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         if (results == null) {
             results = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
+                return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).sort(new String[]{"isPinned", "pinId", "updatedTime"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
         } else {
@@ -925,7 +924,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     boolean isCloud = peerId > 0 && peerId == AccountManager.getInstance().getCurrentUser().getId();
 
                     int pinCount = DbManager.getInstance().doRealmTask(realm -> {
-                        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll().size();
+                        return realm.where(RealmRoom.class).equalTo("isPinned", true).findAll().size();
                     });
 
 

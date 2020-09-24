@@ -23,19 +23,18 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
         setTextIfNeeded(holder.messageView);
         RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
-            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
+            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", mMessage.getMessageId()).findFirst());
         });
 
         if (roomMessage != null) {
@@ -184,7 +183,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             cslf_txt_file_name.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp180));
             cslf_txt_file_name.setText("file_name.ext");
             setTextSize(cslf_txt_file_name, R.dimen.standardTextSize);
-            cslf_txt_file_name.setTypeface(ResourcesCompat.getFont(cslf_txt_file_name.getContext() , R.font.main_font_bold), BOLD);
+            cslf_txt_file_name.setTypeface(ResourcesCompat.getFont(cslf_txt_file_name.getContext(), R.font.main_font_bold), BOLD);
             LinearLayout.LayoutParams layout_1000 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             cslf_txt_file_name.setLayoutParams(layout_1000);
             linearLayout_780.addView(cslf_txt_file_name);

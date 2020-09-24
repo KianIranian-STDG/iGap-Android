@@ -34,7 +34,6 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestUserInfo;
 
@@ -511,7 +510,7 @@ public class AvatarHandler {
                     initials = realmRegisteredInfo.getInitials();
                     color = realmRegisteredInfo.getColor();
                 } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, ownerId).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", ownerId).findFirst();
                     if (realmRoom != null) {
                         initials = realmRoom.getInitials();
                         color = realmRoom.getColor();
@@ -519,7 +518,7 @@ public class AvatarHandler {
                 }
             } else if (avatarType == AvatarType.ROOM) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ownerId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", ownerId).findFirst();
                 if (realmRoom != null) {
                     initials = realmRoom.getInitials();
                     color = realmRoom.getColor();

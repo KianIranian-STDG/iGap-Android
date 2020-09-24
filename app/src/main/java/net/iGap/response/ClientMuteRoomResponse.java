@@ -13,9 +13,6 @@ package net.iGap.response;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
-
-import io.realm.Realm;
 
 public class ClientMuteRoomResponse extends MessageHandler {
 
@@ -36,7 +33,7 @@ public class ClientMuteRoomResponse extends MessageHandler {
         super.handler();
         ProtoClientMuteRoom.ClientMuteRoomResponse.Builder builder = (ProtoClientMuteRoom.ClientMuteRoomResponse.Builder) message;
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
             if (room != null) {
                 room.setMute(builder.getRoomMute());
             }

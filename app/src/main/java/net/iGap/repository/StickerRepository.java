@@ -28,9 +28,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.realm.RealmStickerGroup;
-import net.iGap.realm.RealmStickerGroupFields;
 import net.iGap.realm.RealmStickerItem;
-import net.iGap.realm.RealmStickerItemFields;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -253,7 +251,7 @@ public class StickerRepository {
     public Single<StructIGStickerGroup> getStickerGroup(String groupId) {
 
         RealmStickerGroup realmStickers = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmStickerGroup.class).equalTo(RealmStickerGroupFields.ID, groupId).findFirst();
+            return realm.where(RealmStickerGroup.class).equalTo("id", groupId).findFirst();
         });
 
         if (realmStickers != null && realmStickers.isValid()) {
@@ -280,8 +278,8 @@ public class StickerRepository {
                         stickerGroup.setName(G.context.getResources().getString(R.string.recently));
                         RealmResults<RealmStickerItem> realmStickersDetails = realm.where(RealmStickerItem.class)
                                 .limit(RECENT_STICKER_LIMIT)
-                                .notEqualTo(RealmStickerItemFields.RECENT_TIME, 0)
-                                .sort(RealmStickerItemFields.RECENT_TIME, Sort.DESCENDING)
+                                .notEqualTo("recentTime", 0)
+                                .sort("recentTime", Sort.DESCENDING)
                                 .findAll();
                         List<StructIGSticker> stickers = new ArrayList<>();
                         for (int i = 0; i < realmStickersDetails.size(); i++) {
@@ -300,8 +298,8 @@ public class StickerRepository {
                         favoriteStickerGroup.setName(G.context.getResources().getString(R.string.beeptunesـfavorite_song));
                         RealmResults<RealmStickerItem> stickerItems = realm.where(RealmStickerItem.class)
                                 .limit(FAVORITE_STICKER_LIMIT)
-                                .equalTo(RealmStickerItemFields.IS_FAVORITE, true)
-                                .sort(RealmStickerItemFields.RECENT_TIME, Sort.DESCENDING)
+                                .equalTo("isFavorite", true)
+                                .sort("recentTime", Sort.DESCENDING)
                                 .findAll();
 
                         if (stickerItems != null) {
@@ -330,8 +328,8 @@ public class StickerRepository {
     public Flowable<List<StructIGSticker>> getStickerByEmoji(String unicode) {
         return DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmStickerItem.class)
-                    .equalTo(RealmStickerItemFields.NAME, unicode)
-                    .sort(RealmStickerItemFields.RECENT_TIME, Sort.DESCENDING)
+                    .equalTo("name", unicode)
+                    .sort("recentTime", Sort.DESCENDING)
                     .findAll()
                     .asFlowable()
                     .filter(RealmResults::isLoaded)
@@ -368,10 +366,10 @@ public class StickerRepository {
         DbManager.getInstance().doRealmTask(realm -> {
             realm.executeTransactionAsync(realm1 -> {
                 RealmResults<RealmStickerItem> realmStickersDetails = realm1.where(RealmStickerItem.class)
-                        .notEqualTo(RealmStickerItemFields.RECENT_TIME, 0)
+                        .notEqualTo("recentTime", 0)
                         .findAll();
 
-                realmStickersDetails.setLong(RealmStickerItemFields.RECENT_TIME, 0);
+                realmStickersDetails.setLong("recentTime", 0);
 
             }, () -> callback.onSuccess(true), error -> callback.onError(error.getMessage()));
         });
@@ -410,8 +408,8 @@ public class StickerRepository {
         return addStickerToFavoriteApiService(stickerId)
                 .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
                     RealmStickerItem stickerItem = realm.where(RealmStickerItem.class)
-                            .equalTo(RealmStickerItemFields.ID, stickerId)
-                            .equalTo(RealmStickerItemFields.IS_FAVORITE, false)
+                            .equalTo("id", stickerId)
+                            .equalTo("isFavorite", false)
                             .findFirst();
 
                     if (stickerItem != null)
@@ -425,7 +423,7 @@ public class StickerRepository {
                 .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
                     RealmStickerGroup realmStickerGroup = realm
                             .where(RealmStickerGroup.class)
-                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .equalTo("id", stickerGroup.getGroupId())
                             .findFirst();
 
                     if (realmStickerGroup == null) {
@@ -441,7 +439,7 @@ public class StickerRepository {
                 .doOnComplete(() -> DbManager.getInstance().doRealmTask(realm -> {
                     RealmStickerGroup realmStickerGroup = realm
                             .where(RealmStickerGroup.class)
-                            .equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId())
+                            .equalTo("id", stickerGroup.getGroupId())
                             .findFirst();
 
                     if (realmStickerGroup != null) {

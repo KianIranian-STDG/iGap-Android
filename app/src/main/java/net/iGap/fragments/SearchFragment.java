@@ -47,13 +47,9 @@ import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientSearchUsername;
 
@@ -305,7 +301,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             if (!text.startsWith("#")) {
                 text = "#" + text;
             }
-            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.EDITED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
+            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo("hasMessageLink", true).contains("message", text, Case.INSENSITIVE).equalTo("edited", false).isNotEmpty("message").findAll();
 
             if (results != null && results.size() > 0) {
 
@@ -321,7 +317,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     item.type = SearchType.message;
                     item.messageId = roomMessage.getMessageId();
 
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
 
                     if (realmRoom != null) { // room exist
                         item.name = realmRoom.getTitle();
@@ -372,10 +368,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             final RealmResults<RealmRoom> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
-                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "GROUP", Case.INSENSITIVE).findAll();
+                results = realm.where(RealmRoom.class).beginGroup().contains("channelRoom.username", text, Case.INSENSITIVE).or().contains("groupRoom.username", text, Case.INSENSITIVE).endGroup().equalTo("type", "GROUP", Case.INSENSITIVE).findAll();
 
             } else {
-                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).or().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "GROUP", Case.INSENSITIVE).findAll();
+                results = realm.where(RealmRoom.class).beginGroup().contains("title", text, Case.INSENSITIVE).or().contains("channelRoom.username", text, Case.INSENSITIVE).or().contains("groupRoom.username", text, Case.INSENSITIVE).endGroup().equalTo("type", "GROUP", Case.INSENSITIVE).findAll();
             }
 
             if (results != null) {
@@ -422,10 +418,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             final RealmResults<RealmRoom> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
-                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "CHANNEL", Case.INSENSITIVE).findAll();
+                results = realm.where(RealmRoom.class).beginGroup().contains("channelRoom.username", text, Case.INSENSITIVE).or().contains("groupRoom.username", text, Case.INSENSITIVE).endGroup().equalTo("type", "CHANNEL", Case.INSENSITIVE).findAll();
 
             } else {
-                results = realm.where(RealmRoom.class).beginGroup().contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).or().contains(RealmRoomFields.CHANNEL_ROOM.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRoomFields.GROUP_ROOM.USERNAME, text, Case.INSENSITIVE).endGroup().equalTo(RealmRoomFields.TYPE, "CHANNEL", Case.INSENSITIVE).findAll();
+                results = realm.where(RealmRoom.class).beginGroup().contains("title", text, Case.INSENSITIVE).or().contains("channelRoom.username", text, Case.INSENSITIVE).or().contains("groupRoom.username", text, Case.INSENSITIVE).endGroup().equalTo("type", "CHANNEL", Case.INSENSITIVE).findAll();
             }
 
             if (results != null && results.size() > 0) {
@@ -470,10 +466,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             final RealmResults<RealmRegisteredInfo> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
-                results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, true).findAll();
+                results = realm.where(RealmRegisteredInfo.class).contains("username", text, Case.INSENSITIVE).equalTo("isBot", true).findAll();
 
             } else {
-                results = realm.where(RealmRegisteredInfo.class).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text).endGroup().equalTo(RealmRegisteredInfoFields.IS_BOT, true).findAll();
+                results = realm.where(RealmRegisteredInfo.class).beginGroup().contains("username", text, Case.INSENSITIVE).or().contains("displayName", text).endGroup().equalTo("isBot", true).findAll();
             }
 
             if (results != null && results.size() > 0) {
@@ -506,10 +502,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             final RealmResults<RealmRegisteredInfo> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
-                results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, false).findAll();
+                results = realm.where(RealmRegisteredInfo.class).contains("username", text, Case.INSENSITIVE).equalTo("isBot", false).findAll();
 
             } else {
-                results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text, Case.INSENSITIVE).endGroup().findAll();
+                results = realm.where(RealmRegisteredInfo.class).equalTo("isBot", false).beginGroup().contains("username", text, Case.INSENSITIVE).or().contains("displayName", text, Case.INSENSITIVE).endGroup().findAll();
             }
 
             if (results != null && results.size() > 0) {
@@ -542,10 +538,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             final RealmResults<RealmContacts> results;
 
             if (edtSearch.getText().toString().startsWith("@")) {
-                results = realm.where(RealmContacts.class).contains(RealmContactsFields.USERNAME, text, Case.INSENSITIVE).findAll();
+                results = realm.where(RealmContacts.class).contains("username", text, Case.INSENSITIVE).findAll();
 
             } else {
-                results = realm.where(RealmContacts.class).beginGroup().contains(RealmContactsFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmContactsFields.DISPLAY_NAME, text).endGroup().findAll();
+                results = realm.where(RealmContacts.class).beginGroup().contains("username", text, Case.INSENSITIVE).or().contains("display_name", text).endGroup().findAll();
             }
 
             if (results != null) {
@@ -584,7 +580,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     private void fillMessages(String text) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains(RealmRoomMessageFields.MESSAGE, text, Case.INSENSITIVE).equalTo(RealmRoomMessageFields.DELETED, false).isNotEmpty(RealmRoomMessageFields.MESSAGE).findAll();
+            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).contains("message", text, Case.INSENSITIVE).equalTo("deleted", false).isNotEmpty("message").findAll();
             if (results != null && results.size() > 0) {
                 addHeader(G.fragmentActivity.getResources().getString(R.string.messages));
                 for (RealmRoomMessage roomMessage : results) {
@@ -597,7 +593,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     item.type = SearchType.message;
                     item.messageId = roomMessage.getMessageId();
 
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
 
                     if (realmRoom != null) { // room exist
                         item.name = realmRoom.getTitle();
@@ -631,10 +627,10 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             RealmRoom realmRoom = null;
 
             if (type == SearchType.message) {
-                realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
                 goToRoomWithRealm(realmRoom, type, id);
             } else if (type == SearchType.contact) {
-                realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+                realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).findFirst();
                 goToRoomWithRealm(realmRoom, type, id);
             } else if (type == SearchType.room) {
                 if (userName != null && userName.length() > 1) {
@@ -642,7 +638,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     /*Log.wtf(this.getClass().getName(),"goTo chat");
                     popBackStackFragment();*/
                 } else {
-                    realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                    realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
                     goToRoomWithRealm(realmRoom, type, id);
                 }
             }

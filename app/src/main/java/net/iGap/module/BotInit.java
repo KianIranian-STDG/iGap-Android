@@ -40,7 +40,6 @@ import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
@@ -116,7 +115,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
+                            RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo("isFromPromote", true).findAll();
                             for (RealmRoom room : roomList) {
                                 if (!promoteIds.contains(room.getPromoteId())) {
                                     room.setFromPromote(false);
@@ -132,9 +131,9 @@ public class BotInit implements MakeButtons.OnClickListener {
                         RealmRoom realmRoom;
 
                         if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
+                            realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", builder.getPromoteList().get(i).getId()).equalTo("isFromPromote", true).findFirst();
                         } else {
-                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
+                            realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getPromoteList().get(i).getId()).equalTo("isFromPromote", true).findFirst();
                         }
 
                         if (realmRoom == null) {

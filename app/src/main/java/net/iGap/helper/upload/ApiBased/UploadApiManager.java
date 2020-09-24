@@ -16,7 +16,6 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.viewmodel.controllers.CallManager;
 import net.igap.video.compress.OnCompress;
 
@@ -225,7 +224,7 @@ public class UploadApiManager {
         }
 
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
             if (message != null) {
                 message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                 long finalRoomId = message.getRoomId();

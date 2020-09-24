@@ -23,7 +23,6 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -363,7 +362,7 @@ public class UploadWorkerManager implements IUpload {
         }
 
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
             if (message != null) {
                 message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                 long finalRoomId = message.getRoomId();

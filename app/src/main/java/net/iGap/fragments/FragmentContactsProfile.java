@@ -253,7 +253,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
                 if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
 
-final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userId).findFirst();
 
                     if (realmRoom != null) {
                         new HelperFragment().removeAll(true);

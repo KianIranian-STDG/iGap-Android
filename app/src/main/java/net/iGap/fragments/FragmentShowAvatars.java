@@ -28,34 +28,32 @@ import androidx.viewpager.widget.ViewPager;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.chrisbanes.photoview.PhotoView;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.avatar.AvatarHandler;
-import net.iGap.module.downloader.Downloader;
-import net.iGap.observers.interfaces.OnChannelAvatarDelete;
-import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.OnGroupAvatarDelete;
-import net.iGap.observers.interfaces.OnUserAvatarDelete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.observers.interfaces.OnChannelAvatarDelete;
+import net.iGap.observers.interfaces.OnComplete;
+import net.iGap.observers.interfaces.OnGroupAvatarDelete;
+import net.iGap.observers.interfaces.OnUserAvatarDelete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAvatarDelete;
 import net.iGap.request.RequestChannelAvatarGetList;
 import net.iGap.request.RequestGroupAvatarDelete;
@@ -258,7 +256,7 @@ public class FragmentShowAvatars extends BaseFragment {
                 break;
             case group:
                 RealmRoom roomGroup = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mPeerId).findFirst();
                 });
                 if (roomGroup != null) {
                     new RequestGroupAvatarGetList().groupAvatarGetList(mPeerId);
@@ -268,7 +266,7 @@ public class FragmentShowAvatars extends BaseFragment {
                 break;
             case channel:
                 RealmRoom roomChannel = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mPeerId).findFirst();
                 });
                 if (roomChannel != null) {
                     new RequestChannelAvatarGetList().channelAvatarGetList(mPeerId);
@@ -281,7 +279,7 @@ public class FragmentShowAvatars extends BaseFragment {
         if (isRoomExist) {
 
             avatarList = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
+                return realm.where(RealmAvatar.class).equalTo("ownerId", mPeerId).findAll().sort("id", Sort.DESCENDING);
             });
             avatarListSize = avatarList.size();
         }

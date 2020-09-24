@@ -38,10 +38,8 @@ import net.iGap.observers.interfaces.OnMenuClick;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddModerator;
 import net.iGap.request.RequestChannelLeft;
@@ -142,7 +140,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
         };
 
         mRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
 
         if (mRoom == null || mRoom.getChannelRoom() == null) {
@@ -220,7 +218,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
     public void onClickCircleImage() {
         if (DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+            return realm.where(RealmAvatar.class).equalTo("ownerId", roomId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(roomId);
         }
@@ -260,7 +258,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
     public void onResume() {
         mRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
         if (mRoom != null) {
             if (changeListener == null) {

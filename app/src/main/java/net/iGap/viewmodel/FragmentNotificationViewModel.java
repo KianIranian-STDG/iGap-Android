@@ -27,17 +27,16 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmChatRoom;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 
 import io.realm.Realm;
 
@@ -313,7 +312,7 @@ public class FragmentNotificationViewModel {
         switch (roomType) {
             case GROUP: {
                 DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
                     if (realmRoom != null && realmRoom.getGroupRoom() != null) {
                         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -332,7 +331,7 @@ public class FragmentNotificationViewModel {
             break;
             case CHANNEL: {
                 DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
                     if (realmRoom != null && realmRoom.getChannelRoom() != null) {
                         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -350,7 +349,7 @@ public class FragmentNotificationViewModel {
             }
             case CHAT: {
                 DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
                     if (realmRoom != null && realmRoom.getChatRoom() != null) {
                         RealmChatRoom realmChatRoom = realmRoom.getChatRoom();

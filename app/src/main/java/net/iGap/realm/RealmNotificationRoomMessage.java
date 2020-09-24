@@ -32,8 +32,8 @@ public class RealmNotificationRoomMessage extends RealmObject {
 
     public static boolean canShowNotif(Realm realm, long messageId, long roomId) {
         RealmNotificationRoomMessage message = realm.where(RealmNotificationRoomMessage.class)
-                .equalTo(RealmNotificationRoomMessageFields.MESSAGE_ID, messageId)
-                .equalTo(RealmNotificationRoomMessageFields.ROOM_ID, roomId)
+                .equalTo("messageId", messageId)
+                .equalTo("roomId", roomId)
                 .findFirst();
         return message == null;
     }

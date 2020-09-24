@@ -10,8 +10,8 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 
@@ -52,9 +52,9 @@ public class RealmAvatar extends RealmObject {
         /**
          * bigger than input.getId() exist avatar means that user deleted an avatar which has more priority.
          */
-        realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).greaterThan(RealmAvatarFields.ID, input.getId()).findAll().deleteAllFromRealm();
+        realm.where(RealmAvatar.class).equalTo("ownerId", ownerId).greaterThan("id", input.getId()).findAll().deleteAllFromRealm();
 
-        RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, input.getId()).findFirst();
+        RealmAvatar avatar = realm.where(RealmAvatar.class).equalTo("id", input.getId()).findFirst();
         if (avatar == null) {
             avatar = realm.createObject(RealmAvatar.class, input.getId());
             avatar.setOwnerId(ownerId);
@@ -64,7 +64,7 @@ public class RealmAvatar extends RealmObject {
     }
 
     public static RealmAvatar putOrUpdate(Realm realm, final long ownerId, final ProtoGlobal.Avatar input) {
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, input.getId()).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", input.getId()).findFirst();
         if (realmAvatar == null) {
             realmAvatar = realm.createObject(RealmAvatar.class, input.getId());
         }
@@ -82,7 +82,7 @@ public class RealmAvatar extends RealmObject {
      */
     public static void deleteAllAvatars(final long ownerId, Realm realm) {
         AvatarHandler.clearCacheForOwnerId(ownerId);
-        RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll();
+        RealmResults<RealmAvatar> ownerAvatars = realm.where(RealmAvatar.class).equalTo("ownerId", ownerId).findAll();
         if (ownerAvatars.size() > 0) {
             ownerAvatars.deleteAllFromRealm();
         }
@@ -90,7 +90,7 @@ public class RealmAvatar extends RealmObject {
 
     public static void deleteAvatar(Realm realm, final long avatarId) {
         AvatarHandler.clearCacheForOwnerId(avatarId);
-        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.ID, avatarId).findFirst();
+        RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("id", avatarId).findFirst();
         if (realmAvatar != null) {
             realmAvatar.deleteFromRealm();
         }
@@ -99,7 +99,7 @@ public class RealmAvatar extends RealmObject {
     public static void deleteAvatarWithOwnerId(final long ownerId) {
         AvatarHandler.clearCacheForOwnerId(ownerId);
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findFirst();
+            RealmAvatar realmAvatar = realm.where(RealmAvatar.class).equalTo("ownerId", ownerId).findFirst();
             if (realmAvatar != null) {
                 realmAvatar.deleteFromRealm();
             }
@@ -114,7 +114,7 @@ public class RealmAvatar extends RealmObject {
      * @return return latest RealmAvatar for this ownerId
      */
     public static RealmAvatar getLastAvatar(long ownerId, Realm realm) {
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, ownerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo("ownerId", ownerId).findAll().sort("id", Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 return avatar;
             }

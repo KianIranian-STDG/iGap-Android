@@ -70,8 +70,6 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestChannelGetMemberList;
@@ -209,7 +207,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
             }
 
             realmRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, mRoomID + "_" + userID).findFirst();
+                return realm.where(RealmRoomAccess.class).equalTo("id", mRoomID + "_" + userID).findFirst();
             });
 
             isShowAddButton = getArguments().getBoolean(ISSHOWADDMEMBER, true);
@@ -252,7 +250,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                                     @Override
                                     public void execute(Realm realm) {
                                         final RealmList<RealmMember> newMemberList = new RealmList<>();
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomID).findFirst();
                                         if (realmRoom != null) {
                                             if (realmRoom.getType() == GROUP) {
                                                 for (ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member : listMembers) {
@@ -443,7 +441,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         mBtnAdd = view.findViewById(R.id.fcm_lbl_add);
 
         realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomID).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", mRoomID).findFirst();
         });
 
         if (selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {

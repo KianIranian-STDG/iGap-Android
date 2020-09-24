@@ -28,7 +28,7 @@ public class RealmRoomAccess extends RealmObject {
 
     public static void putOrUpdate(ProtoGlobal.RoomAccess roomAccess, long userId, long roomId, Realm realm) {
 
-        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -65,7 +65,7 @@ public class RealmRoomAccess extends RealmObject {
 
     public static void channelAdminPutOrUpdate(ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
 
-        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -97,7 +97,7 @@ public class RealmRoomAccess extends RealmObject {
 
     public static void groupAdminPutOrUpdate(ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, long userId, long roomId, Realm realm) {
 
-        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -127,7 +127,7 @@ public class RealmRoomAccess extends RealmObject {
     }
 
     public static void groupMemberPutOrUpdate(ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, long userId, long roomId, Realm realm) {
-        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
+        RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId).findFirst();
 
         if (realmRoomAccess == null) {
             realmRoomAccess = realm.createObject(RealmRoomAccess.class, roomId + "_" + userId);
@@ -159,7 +159,7 @@ public class RealmRoomAccess extends RealmObject {
 
     public static void getAccess(long userId, long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId).findFirst();
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId).findFirst();
 
             if (realmRoomAccess != null) {
                 if (realmRoomAccess.getRealmPostMessageRights() != null) {
@@ -179,7 +179,7 @@ public class RealmRoomAccess extends RealmObject {
 
     private static void delete(long userId, long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + userId)
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + userId)
                     .findFirst();
 
             if (realmRoomAccess != null) {

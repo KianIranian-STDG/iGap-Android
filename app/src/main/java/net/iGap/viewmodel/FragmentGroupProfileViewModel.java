@@ -25,12 +25,10 @@ import net.iGap.observers.interfaces.OnGroupRemoveUsername;
 import net.iGap.observers.interfaces.OnGroupRevokeLink;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
@@ -115,7 +113,7 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
 
         //group info
         realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
@@ -265,7 +263,7 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
 
     public void onClickRippleGroupAvatar() {
         if (DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+            return realm.where(RealmAvatar.class).equalTo("ownerId", roomId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(roomId);
         }

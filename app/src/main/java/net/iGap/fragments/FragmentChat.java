@@ -260,27 +260,20 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomDraft;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
 import net.iGap.realm.RealmStickerItem;
-import net.iGap.realm.RealmStickerItemFields;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
@@ -699,7 +692,7 @@ public class FragmentChat extends BaseFragment
 
             if (mustCheckPermission())
                 currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, mRoomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+                    return realm.where(RealmRoomAccess.class).equalTo("id", mRoomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
                 });
         }
 
@@ -1012,7 +1005,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 DbManager.getInstance().doRealmTask(realm -> {
-                    final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
                     if (room != null) {
                         if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                             setConnectionText(G.connectionState);
@@ -1561,7 +1554,7 @@ public class FragmentChat extends BaseFragment
     private RealmRoom getRoom() {
         if (managedRoom == null) {
             return managedRoom = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                return realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
             });
         } else
             return managedRoom;
@@ -1802,7 +1795,7 @@ public class FragmentChat extends BaseFragment
 
     private long getMessagesCount() {
         return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<Integer>) realm -> {
-            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size();
+            return realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).findAll().size();
         });
     }
 
@@ -2053,7 +2046,7 @@ public class FragmentChat extends BaseFragment
         RealmRoomMessage rm = null;
         RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoomMessage.class).
-                    equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
+                    equalTo("roomId", mRoomId).findAll();
         });
         if (result.size() > 0) {
             rm = result.last();
@@ -2078,7 +2071,7 @@ public class FragmentChat extends BaseFragment
                         savedScrollMessageId = 0;
                     } else {
                         RealmRoomMessage rm = DbManager.getInstance().doRealmTask(realm -> {
-                            return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                            return realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
                         });
                         rm = RealmRoomMessage.getFinalMessage(rm);
                         if (rm != null) {
@@ -2174,7 +2167,7 @@ public class FragmentChat extends BaseFragment
         pinedMessageLayout = rootView.findViewById(R.id.ac_ll_strip_Pin);
         if (pinMessageId > 0) {
             RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+                return realm.where(RealmRoomMessage.class).equalTo("messageId", pinMessageId).findFirst();
             });
 
             if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
@@ -2207,7 +2200,7 @@ public class FragmentChat extends BaseFragment
                     public void onClick(View v) {
                         if (!goToPositionWithAnimation(pinMessageId, 1000)) {
                             RealmRoomMessage rm = DbManager.getInstance().doRealmTask(realm -> {
-                                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+                                return realm.where(RealmRoomMessage.class).equalTo("messageId", pinMessageId).findFirst();
                             });
                             rm = RealmRoomMessage.getFinalMessage(rm);
                             if (rm != null) {
@@ -2737,7 +2730,7 @@ public class FragmentChat extends BaseFragment
             boolean backToMenu = true;
 
             RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, RealmUserInfo.getCurrentUserAuthorHash()).findAll();
+                return realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).notEqualTo("authorHash", RealmUserInfo.getCurrentUserAuthorHash()).findAll();
             });
 
             if (result.size() > 0) {
@@ -4341,7 +4334,7 @@ public class FragmentChat extends BaseFragment
                     boolean backToMenu = true;
                     RealmResults<RealmRoomMessage> result = DbManager.getInstance().doRealmTask(realm -> {
                         return realm.where(RealmRoomMessage.class).
-                                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, RealmUserInfo.getCurrentUserAuthorHash()).findAll();
+                                equalTo("roomId", mRoomId).notEqualTo("authorHash", RealmUserInfo.getCurrentUserAuthorHash()).findAll();
                     });
                     if (result.size() > 0) {
                         rm = result.last();
@@ -4371,7 +4364,7 @@ public class FragmentChat extends BaseFragment
         }
 
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
 
             if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
                 if (roomMessage.getAuthor().getUser() != null) {
@@ -4460,7 +4453,7 @@ public class FragmentChat extends BaseFragment
 
         if (isReply()) {
             RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo("messageId", getReplyMessageId()).findFirst();
                 if (copyReplyMessage1 != null) {
                     return realm.copyFromRealm(copyReplyMessage1);
                 }
@@ -4566,7 +4559,7 @@ public class FragmentChat extends BaseFragment
         String _filePath = null;
         String _token = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getToken() : message.getAttachment().getToken();
         RealmAttachment _Attachment = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
+            return realm.where(RealmAttachment.class).equalTo("token", _token).findFirst();
         });
 
         if (_Attachment != null) {
@@ -4758,7 +4751,7 @@ public class FragmentChat extends BaseFragment
 
 
         RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", message.realmRoomMessage.getRoomId()).findFirst();
         });
         if (room != null && room.getChannelRoom() != null && !room.getChannelRoom().isPrivate()) {
             shareLinkIsOn = true;
@@ -4836,7 +4829,7 @@ public class FragmentChat extends BaseFragment
         }
 
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.realmRoomMessage.getRoomId()).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", message.realmRoomMessage.getRoomId()).findFirst();
         });
 
         if (realmRoom != null) {
@@ -5194,7 +5187,7 @@ public class FragmentChat extends BaseFragment
 
                         deleteFileFromStorageIfExist(message);
                         RealmAttachment attachment = realm1.where(RealmAttachment.class)
-                                .equalTo(RealmAttachmentFields.TOKEN, message.getAttachment().getToken())
+                                .equalTo("token", message.getAttachment().getToken())
                                 .findFirst();
 
                         if (attachment != null) {
@@ -6205,7 +6198,7 @@ public class FragmentChat extends BaseFragment
 
         if (isReply()) {
             RealmRoomMessage copyReplyMessage = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, getReplyMessageId()).findFirst();
+                RealmRoomMessage copyReplyMessage1 = realm.where(RealmRoomMessage.class).equalTo("messageId", getReplyMessageId()).findFirst();
                 if (copyReplyMessage1 != null) {
                     return realm.copyFromRealm(copyReplyMessage1);
                 }
@@ -6219,7 +6212,7 @@ public class FragmentChat extends BaseFragment
 
         new Thread(() -> DbManager.getInstance().doRealmTransaction(realm -> {
             realm.copyToRealmOrUpdate(roomMessage);
-            RealmStickerItem stickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
+            RealmStickerItem stickerItem = realm.where(RealmStickerItem.class).equalTo("id", structIGSticker.getId()).findFirst();
             if (stickerItem != null && stickerItem.isValid()) {
                 stickerItem.setRecent();
             }
@@ -6656,7 +6649,7 @@ public class FragmentChat extends BaseFragment
 
         if (messageInfo == null) return;
         RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, messageInfo.realmRoomMessage.getRoomId()).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", messageInfo.realmRoomMessage.getRoomId()).findFirst();
         });
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -6812,7 +6805,7 @@ public class FragmentChat extends BaseFragment
             return RealmRegisteredInfo.getRegistrationInfo(realm, chatPeerId);
         });
         RealmContacts realmContacts = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
+            return realm.where(RealmContacts.class).equalTo("id", chatPeerId).findFirst();
         });
         if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != AccountManager.getInstance().getCurrentUser().getId()) {
             if (phoneNumber == null) {
@@ -6873,7 +6866,7 @@ public class FragmentChat extends BaseFragment
                 long registeredInfoID = registeredInfo.getId();
                 new Thread(() -> {
                     DbManager.getInstance().doRealmTransaction(realm1 -> {
-                        RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfoID).findFirst();
+                        RealmRegisteredInfo registeredInfo2 = realm1.where(RealmRegisteredInfo.class).equalTo("id", registeredInfoID).findFirst();
                         if (registeredInfo2 != null) {
                             registeredInfo2.setDoNotshowSpamBar(true);
                         }
@@ -7107,7 +7100,7 @@ public class FragmentChat extends BaseFragment
                 }
             } else {
                 RealmRoomMessage message = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatItem.realmRoomMessage.getMessageId()).findFirst();
+                    return realm.where(RealmRoomMessage.class).equalTo("messageId", chatItem.realmRoomMessage.getMessageId()).findFirst();
                 });
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.realmRoomMessage.getMessageType(), message);
                 String _text = AppUtils.conversionMessageType(chatItem.realmRoomMessage.getMessageType());
@@ -7121,7 +7114,7 @@ public class FragmentChat extends BaseFragment
             if (!isEdit) {
                 if (chatType == CHANNEL) {
                     RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatItem.realmRoomMessage.getRoomId()).findFirst();
+                        return realm.where(RealmRoom.class).equalTo("id", chatItem.realmRoomMessage.getRoomId()).findFirst();
                     });
                     if (realmRoom != null) {
                         replayFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), replayFrom.getPaint().getFontMetricsInt()));
@@ -7444,15 +7437,15 @@ public class FragmentChat extends BaseFragment
 
     private void itemAdapterBottomSheetForward() {
 
-        String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
+        String[] fieldNames = {"isPinned", "pinId", "updatedTime"};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
         results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).
-                    equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
+            return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).
+                    equalTo("readOnly", false).notEqualTo("id", mRoomId).findAll().sort(fieldNames, sort);
         });
 
         resultsContact = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            return realm.where(RealmContacts.class).findAll().sort("display_name");
         });
 
         List<Long> te = new ArrayList<>();
@@ -7756,7 +7749,7 @@ public class FragmentChat extends BaseFragment
 
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm1 -> {
-                RealmRoom room = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                RealmRoom room = realm1.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
                 if (room != null) {
                     room.setDeleted(false);
                 }
@@ -7835,7 +7828,7 @@ public class FragmentChat extends BaseFragment
 
         if (replyMessageId() > 0) {
             RealmRoomMessage realmRoomMessageCopy = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId()).findFirst();
+                RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", replyMessageId()).findFirst();
                 if (realmRoomMessage != null) {
                     return realm.copyFromRealm(realmRoomMessage);
                 } else {
@@ -7953,7 +7946,7 @@ public class FragmentChat extends BaseFragment
 
                 final long messageId = AppUtils.makeRandomId();
                 RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
                 });
 
                 if (realmRoom == null || realmRoom.getReadOnly()) {
@@ -7972,14 +7965,14 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void onSuccess() {
                             DbManager.getInstance().doRealmTask(realm1 -> {
-                                RealmRoomMessage forwardedMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                                RealmRoomMessage forwardedMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
 
                                 if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
                                     if (isSingleForward) {
                                         switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedMessage))), false);
                                         scrollToEnd();
                                     }
-                                    RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageInfo.realmRoomMessage.getMessageId()).findFirst();
+                                    RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", messageInfo.realmRoomMessage.getMessageId()).findFirst();
                                     if (roomMessage != null) {
                                         chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                                     }
@@ -8263,7 +8256,7 @@ public class FragmentChat extends BaseFragment
                 startFutureMessageIdUp = fetchMessageId;
 
                 // we have firstUnreadMessage but for gapDetection method we need RealmResult so get this message with query; if we change gap detection method will be can use from firstUnreadMessage
-                resultsDown = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findAll();
+                resultsDown = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).equalTo("messageId", fetchMessageId).findAll();
 
                 addToView = false;
                 direction = DOWN;
@@ -8276,23 +8269,23 @@ public class FragmentChat extends BaseFragment
              * Hint: don't use "findFirst()" for find biggest message, because "findFirst()" just will be
              * returned latest message that inserted to "RealmRoomMessage" and it is not biggest always
              **/
-            Number latestMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).max(RealmRoomMessageFields.MESSAGE_ID);
+            Number latestMessageId = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).max("messageId");
             if (latestMessageId != null) {
-                resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, latestMessageId.longValue()).findAll();
+                resultsUp = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).equalTo("messageId", latestMessageId.longValue()).findAll();
             } else {
                 /** use fake query for make empty RealmResult */
-                resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, -100).findAll();
+                resultsUp = realm.where(RealmRoomMessage.class).equalTo("roomId", -100).findAll();
             }
 
             long gapMessageId;
             if (direction == DOWN) {
-                RealmQuery realmQuery = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true);
+                RealmQuery realmQuery = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).lessThanOrEqualTo("messageId", fetchMessageId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true);
                 /**
                  * if for UP changeState client have message detect gap otherwise try for get online message
                  * because maybe client have message but not exist in Realm yet
                  */
                 if (realmQuery.count() > 1) {
-                    resultsUp = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll();
+                    resultsUp = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).equalTo("messageId", fetchMessageId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).findAll();
                     gapDetection(resultsUp, UP);
                 } else {
                     getOnlineMessage(fetchMessageId, UP);
@@ -8366,7 +8359,7 @@ public class FragmentChat extends BaseFragment
                  */
                 long oldMessageId = 0;
                 if (direction == DOWN) {
-                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).findFirst();
+                    RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).notEqualTo("createTime", 0).equalTo("showMessage", true).equalTo("messageId", fetchMessageId).findFirst();
                     if (realmRoomMessage != null) {
                         oldMessageId = realmRoomMessage.getMessageId();
                     }
@@ -8765,7 +8758,7 @@ public class FragmentChat extends BaseFragment
      * (reason : use from this method for avoid from closed realm error)
      */
     private RealmRoomMessage getFirstUnreadMessage(Realm realm) {
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
         if (realmRoom != null) {
             return realmRoom.getFirstUnreadMessage();
         }

@@ -38,7 +38,7 @@ public class RealmMobileBankCards extends RealmObject {
 
                     if (card.getPan() == null) continue;
 
-                    RealmMobileBankCards object = asyncRealm.where(RealmMobileBankCards.class).equalTo(RealmMobileBankCardsFields.CARD_NUMBER, card.getPan()).findFirst();
+                    RealmMobileBankCards object = asyncRealm.where(RealmMobileBankCards.class).equalTo("cardNumber", card.getPan()).findFirst();
                     if (object == null)
                         object = asyncRealm.createObject(RealmMobileBankCards.class, card.getPan());
 
@@ -56,7 +56,7 @@ public class RealmMobileBankCards extends RealmObject {
     public static void putOrUpdate(String cardNumber, String cardName, String bankName, String expireDate, String status, boolean isOrigin) {
         DbManager.getInstance().doRealmTask(realm1 -> {
 
-            RealmMobileBankCards object = realm1.where(RealmMobileBankCards.class).equalTo(RealmMobileBankCardsFields.CARD_NUMBER, cardNumber).findFirst();
+            RealmMobileBankCards object = realm1.where(RealmMobileBankCards.class).equalTo("cardNumber", cardNumber).findFirst();
             if (object == null) object = realm1.createObject(RealmMobileBankCards.class);
 
             object.setCardName(cardName);
@@ -71,7 +71,7 @@ public class RealmMobileBankCards extends RealmObject {
 
     public static void delete(String cardNumber) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmMobileBankCards object = realm.where(RealmMobileBankCards.class).equalTo(RealmMobileBankCardsFields.CARD_NUMBER, cardNumber).findFirst();
+            RealmMobileBankCards object = realm.where(RealmMobileBankCards.class).equalTo("cardNumber", cardNumber).findFirst();
             if (object != null) object.deleteFromRealm();
         });
     }

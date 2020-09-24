@@ -51,7 +51,6 @@ import net.iGap.observers.interfaces.OnPhoneContact;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.request.RequestUserContactsGetList;
 
 import org.jetbrains.annotations.NotNull;
@@ -139,7 +138,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         // get all the contacts from realm
         results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            return realm.where(RealmContacts.class).findAll().sort("display_name");
         });
 
         results.addChangeListener(new RealmChangeListener<RealmResults<RealmContacts>>() {
@@ -301,7 +300,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
 
         if (results == null || results.size() == 0) {
             results = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                return realm.where(RealmContacts.class).limit(ContactManager.CONTACT_LIMIT).findAll().sort("display_name");
             });
             contactListAdapter2 = new ContactListAdapter2(results);
             realmRecyclerView.setAdapter(contactListAdapter2);
@@ -356,7 +355,7 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
                 contacts.get(i).setPhone(s);
             }
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort("display_name");
 
 
                 ArrayList<StructListOfContact> slc = new ArrayList();
@@ -403,11 +402,11 @@ public class FragmentSyncRegisteredContacts extends BaseFragment implements OnPh
     public void onSearchTextChangeListener(View view, String text) {
         if (text.length() > 0) {
             results = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, text, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                return realm.where(RealmContacts.class).contains("display_name", text, Case.INSENSITIVE).findAll().sort("display_name");
             });
         } else {
             results = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                return realm.where(RealmContacts.class).findAll().sort("display_name");
             });
         }
 //        contactListAdapter.usersList = results;

@@ -18,12 +18,9 @@ import androidx.annotation.Nullable;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmAvatar;
 
 import java.io.File;
-
-import io.realm.Realm;
 
 public class StructMessageAttachment implements Parcelable {
     public static final Parcelable.Creator<StructMessageAttachment> CREATOR = new Parcelable.Creator<StructMessageAttachment>() {
@@ -143,7 +140,7 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalFilePath(final long messageId, @Nullable final String path) {
         this.localFilePath = path;
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
             if (realmAttachment == null) {
                 RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
                 messageAttachment.setLocalFilePath(path);
@@ -163,7 +160,7 @@ public class StructMessageAttachment implements Parcelable {
     public void setLocalThumbnailPath(final long messageId, @Nullable final String localPath) {
         this.localThumbnailPath = localPath;
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            final RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
             if (realmAttachment == null) {
                 RealmAttachment messageAttachment = realm.createObject(RealmAttachment.class, messageId);
                 messageAttachment.setLocalThumbnailPath(localPath);

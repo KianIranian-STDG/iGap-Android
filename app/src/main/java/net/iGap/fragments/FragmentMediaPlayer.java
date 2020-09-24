@@ -55,7 +55,6 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientSearchRoomHistory;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
 
@@ -595,11 +594,11 @@ public class FragmentMediaPlayer extends BaseFragment {
         try {
             realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
-                        .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                        .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
-                        .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
-                        .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        .equalTo("roomId", MusicPlayer.roomId)
+                        .notEqualTo("deleted", true)
+                        .contains("messageType", ProtoGlobal.RoomMessageType.AUDIO.toString())
+                        .lessThan("messageId", MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                        .findAll().sort("messageId", Sort.DESCENDING);
             });
         } catch (IllegalStateException e) {
         }

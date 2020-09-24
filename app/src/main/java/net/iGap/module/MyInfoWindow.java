@@ -11,8 +11,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.CallSelectFragment;
@@ -20,6 +18,8 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGeoGetComment;
 import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -131,7 +131,7 @@ public class MyInfoWindow extends InfoWindow {
         final TextView txtComment = view.findViewById(R.id.txt_info_comment);
 
         txtName.setText(displayName);
-        txtName.setTypeface(ResourcesCompat.getFont(txtName.getContext() , R.font.main_font_bold), Typeface.BOLD);
+        txtName.setTypeface(ResourcesCompat.getFont(txtName.getContext(), R.font.main_font_bold), Typeface.BOLD);
 
         if (!G.isAppRtl) {
             txtComment.setGravity(Gravity.RIGHT);
@@ -242,7 +242,7 @@ public class MyInfoWindow extends InfoWindow {
 
         //for show old comment
         //
-        //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
+        //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo("userId", userId).findFirst();
         //if (realmGeoNearbyDistance != null && hasComment) {
         //    if (realmGeoNearbyDistance.getComment() != null && !realmGeoNearbyDistance.getComment().isEmpty()) {
         //        txtComment.setText(realmGeoNearbyDistance.getComment());
@@ -259,7 +259,7 @@ public class MyInfoWindow extends InfoWindow {
 
     /*public void onOpen(Object arg0) {
     DbManager.getInstance().doRealmTask(realm-> {
-     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;
         }

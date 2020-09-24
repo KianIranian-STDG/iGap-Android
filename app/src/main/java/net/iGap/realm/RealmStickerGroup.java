@@ -23,7 +23,7 @@ public class RealmStickerGroup extends RealmObject {
     private RealmList<RealmStickerItem> stickerItems;
 
     public static RealmStickerGroup put(Realm realm, StructIGStickerGroup stickerGroup) {
-        RealmStickerGroup realmStickerGroup = realm.where(RealmStickerGroup.class).equalTo(RealmStickerGroupFields.ID, stickerGroup.getGroupId()).findFirst();
+        RealmStickerGroup realmStickerGroup = realm.where(RealmStickerGroup.class).equalTo("id", stickerGroup.getGroupId()).findFirst();
 
         if (realmStickerGroup == null) {
             realmStickerGroup = realm.createObject(RealmStickerGroup.class);

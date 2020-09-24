@@ -12,7 +12,6 @@ package net.iGap.realm;
 
 import net.iGap.module.accountManager.DbManager;
 
-import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -26,7 +25,7 @@ public class RealmGeoNearbyDistance extends RealmObject {
 
     public static void updateComment(final long roomId, final String comment) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, roomId).findFirst();
+            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo("userId", roomId).findFirst();
             if (realmGeoNearbyDistance != null) {
                 realmGeoNearbyDistance.setComment(comment);
             }

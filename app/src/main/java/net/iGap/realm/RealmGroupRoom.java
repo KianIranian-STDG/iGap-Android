@@ -71,7 +71,7 @@ public class RealmGroupRoom extends RealmObject {
 
     public static void revokeLink(long roomId, final String inviteLink, final String inviteToken) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                 if (realmGroupRoom != null) {
@@ -85,7 +85,7 @@ public class RealmGroupRoom extends RealmObject {
     public static ProtoGlobal.GroupRoom.Role detectMineRole(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             ProtoGlobal.GroupRoom.Role role = ProtoGlobal.GroupRoom.Role.UNRECOGNIZED;
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
                 if (realmGroupRoom != null) {
@@ -100,7 +100,7 @@ public class RealmGroupRoom extends RealmObject {
     public static GroupChatRole detectMemberRole(long roomId, long messageSenderId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             GroupChatRole role = GroupChatRole.UNRECOGNIZED;
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getGroupRoom() != null) {
                     RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
@@ -118,7 +118,7 @@ public class RealmGroupRoom extends RealmObject {
     public static ProtoGlobal.GroupRoom.Role detectMemberRoleServerEnum(long roomId, long messageSenderId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             ProtoGlobal.GroupRoom.Role role = ProtoGlobal.GroupRoom.Role.UNRECOGNIZED;
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getGroupRoom() != null) {
                     RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();

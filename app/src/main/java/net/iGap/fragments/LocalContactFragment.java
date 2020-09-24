@@ -19,20 +19,19 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterListContact;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.OnPhoneContact;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.Contacts;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.observers.interfaces.OnPhoneContact;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -308,7 +307,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 }
             }
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort("display_name");
 
                 ArrayList<StructListOfContact> slc = new ArrayList();
 

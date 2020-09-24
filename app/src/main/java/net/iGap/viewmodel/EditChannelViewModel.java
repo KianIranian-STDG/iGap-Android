@@ -26,7 +26,6 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
@@ -111,7 +110,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         };
 
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
 
         //todo:fixed it

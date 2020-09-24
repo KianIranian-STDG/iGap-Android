@@ -63,7 +63,6 @@ import net.iGap.observers.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupCheckUsername;
@@ -138,7 +137,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
         currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+            return realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
         });
 
         return attachToSwipeBack(binding.getRoot());

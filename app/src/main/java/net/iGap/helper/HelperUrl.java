@@ -68,9 +68,7 @@ import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
 import net.iGap.request.RequestClientGetRoom;
@@ -861,7 +859,7 @@ public class HelperUrl {
             return;
         }
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).equalTo("isDeleted", false).findFirst();
             if (realmRoom != null) {
                 if (room.getId() != FragmentChat.lastChatRoomId) {
                     new GoToChatActivity(room.getId()).startActivity(activity);
@@ -931,7 +929,7 @@ public class HelperUrl {
     private static boolean isInCurrentChat(String userName) {
         if (FragmentChat.lastChatRoomId > 0) {
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, FragmentChat.lastChatRoomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", FragmentChat.lastChatRoomId).findFirst();
                 String currentChatUserName = "";
                 String currentChatInviteLink = "";
                 if (realmRoom != null) {
@@ -1016,7 +1014,7 @@ public class HelperUrl {
         DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
             @Override
             public void doTask(Realm realm) {
-                RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo("roomId", room.getId()).equalTo("messageId", messageId).findFirst();
                 if (rm != null) {
                     openChat(activity, username, type, user, room, chatEntry, messageId);
                 } else {
@@ -1109,7 +1107,7 @@ public class HelperUrl {
                     DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
                         @Override
                         public void doTask(Realm realm) {
-                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
                             if (realmRoom != null) {
                                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
@@ -1118,7 +1116,7 @@ public class HelperUrl {
                                     @Override
                                     public void onChatGetRoom(final ProtoGlobal.Room room) {
                                         DbManager.getInstance().doRealmTransaction(realm2 -> {
-                                            if (realm2.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                            if (realm2.where(RealmRoom.class).equalTo("id", room.getId()).findFirst() == null) {
                                                 RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm2);
                                                 realmRoom1.setDeleted(true);
                                             } else {
@@ -1173,13 +1171,13 @@ public class HelperUrl {
 
         if (roomId != FragmentChat.lastChatRoomId) {
             DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
                 if (realmRoom != null) {
                     // room with given roomID exists.
                     new GoToChatActivity(realmRoom.getId()).startActivity(activity);
                 } else if (peerId > 0) {
-                    realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                    realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
                     if (realmRoom != null) {
                         new GoToChatActivity(realmRoom.getId()).startActivity(activity);
                     } else {
@@ -1192,7 +1190,7 @@ public class HelperUrl {
                                         realm1.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                if (realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst() == null) {
                                                     RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
                                                     realmRoom1.setDeleted(true);
                                                 } else {
@@ -1255,7 +1253,7 @@ public class HelperUrl {
     private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).equalTo("isDeleted", false).findFirst();
 
             if (realmRoom != null) {
                 closeDialogWaiting();
@@ -1320,7 +1318,7 @@ public class HelperUrl {
 
     private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
 
             if (realmRoom != null) {
 

@@ -10,10 +10,10 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.module.SerializationUtils;
 import net.iGap.module.TimeUtils;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
 
@@ -33,7 +33,7 @@ public class RealmWallpaper extends RealmObject {
 
     public static void updateField(final List<ProtoGlobal.Wallpaper> protoList, final String localPath, int type_) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, type_).findFirst();
+            final RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", type_).findFirst();
 
             RealmWallpaper item;
 
@@ -74,7 +74,7 @@ public class RealmWallpaper extends RealmObject {
 
     public static void updateWallpaper(List<ProtoGlobal.Wallpaper> wallpaperList) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
             if (realmWallpaper != null) {
                 realmWallpaper.setWallPaperList(realm, wallpaperList);
             }

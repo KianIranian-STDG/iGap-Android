@@ -25,7 +25,6 @@ import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestUserInfo;
@@ -37,7 +36,7 @@ public class HelperPublicMethod {
 
     public static void goToChatRoom(final long peerId, final OnComplete onComplete, final OnError onError) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
             if (realmRoom != null) {
 
@@ -95,7 +94,7 @@ public class HelperPublicMethod {
 
     public static void goToChatRoomWithMessage(final Context context, final long peerId, String message, final OnComplete onComplete, final OnError onError) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
             if (realmRoom != null) {
 
@@ -154,7 +153,7 @@ public class HelperPublicMethod {
 
     public static void goToChatRoomFromFirstContact(final long peerId, final OnComplete onComplete, final OnError onError) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
             if (realmRoom != null) {
 

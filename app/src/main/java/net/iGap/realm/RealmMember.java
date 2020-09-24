@@ -68,12 +68,12 @@ public class RealmMember extends RealmObject {
     }
 
     public static void deleteAllMembers(Realm realm, long roomId, String selectedRole) {
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             if (realmRoom.getType() == GROUP) {
                 if (realmRoom.getGroupRoom().getMembers() != null) {
                     if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-                        realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
+                        realmRoom.getGroupRoom().getMembers().where().equalTo("role", selectedRole).findAll().deleteAllFromRealm();
                     } else {
                         realmRoom.getGroupRoom().getMembers().where().findAll().deleteAllFromRealm();
                     }
@@ -81,7 +81,7 @@ public class RealmMember extends RealmObject {
             } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                 if (realmRoom.getChannelRoom().getMembers() != null) {
                     if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-                        realmRoom.getChannelRoom().getMembers().where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll().deleteAllFromRealm();
+                        realmRoom.getChannelRoom().getMembers().where().equalTo("role", selectedRole).findAll().deleteAllFromRealm();
                     } else {
                         realmRoom.getChannelRoom().getMembers().where().findAll().deleteAllFromRealm();
                     }
@@ -92,7 +92,7 @@ public class RealmMember extends RealmObject {
 
     public static void addMember(final long roomId, final long userId, final String role) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
             if (realmRoom != null) {
                 RealmList<RealmMember> members = new RealmList<>();
@@ -115,7 +115,7 @@ public class RealmMember extends RealmObject {
     public static void updateMemberRole(final long roomId, final long memberId, final String role) {
         //TODO [Saeed Mozaffari] [2017-10-24 6:05 PM] - Can Write Better Code?
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 RealmList<RealmMember> realmMemberRealmList = null;
                 if (realmRoom.getType() == GROUP) {
@@ -150,8 +150,8 @@ public class RealmMember extends RealmObject {
 
     public static boolean kickMember(Realm realm, final long roomId, final long userId) {
 
-        //test this <code>realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.PEER_ID, builder.getMemberId()).findFirst();</code> for kick member
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        //test this <code>realmRoom.getGroupRoom().getMembers().where().equalTo("peerId", builder.getMemberId()).findFirst();</code> for kick member
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             RealmList<RealmMember> realmMembers = new RealmList<>();
             if (realmRoom.getType() == GROUP) {
@@ -174,7 +174,7 @@ public class RealmMember extends RealmObject {
     }
 
     public static RealmList<RealmMember> getMembers(Realm realm, long roomId) {
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         RealmList<RealmMember> memberList = new RealmList<>();
         if (realmRoom != null) {
             if (realmRoom.getType() == GROUP) {
@@ -202,7 +202,7 @@ public class RealmMember extends RealmObject {
                         @Override
                         public void execute(Realm realm) {
 
-                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
+                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", Long.parseLong(identity)).findFirst();
                             if (realmRoom != null) {
 
                                 members.clear();
@@ -250,7 +250,7 @@ public class RealmMember extends RealmObject {
                         @Override
                         public void execute(Realm realm) {
 
-                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, Long.parseLong(identity)).findFirst();
+                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", Long.parseLong(identity)).findFirst();
                             if (realmRoom != null) {
 
                                 members.clear();
@@ -289,7 +289,7 @@ public class RealmMember extends RealmObject {
 
     public static RealmResults<RealmMember> filterMember(Realm realm, long roomId, @Nullable String filter, ArrayList<String> unSelectedRule, String selectedRole) {
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom == null) {
             return emptyResult(realm);
         }
@@ -304,17 +304,17 @@ public class RealmMember extends RealmObject {
             }
 
             if (!selectedRole.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
-                query = query.equalTo(RealmMemberFields.ROLE, selectedRole);
+                query = query.equalTo("role", selectedRole);
             }
 
             for (String role : unSelectedRule) {
-                query = query.notEqualTo(RealmMemberFields.ROLE, role);
+                query = query.notEqualTo("role", role);
             }
 
             if (filter == null || filter.length() == 0) {
                 searchMember = query.findAll();
             } else {
-                RealmResults<RealmRegisteredInfo> findMember = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, filter, Case.INSENSITIVE).findAll();
+                RealmResults<RealmRegisteredInfo> findMember = realm.where(RealmRegisteredInfo.class).contains("displayName", filter, Case.INSENSITIVE).findAll();
                 for (int i = 0; i < findMember.size(); i++) {
                     if (i != 0 && i != (findMember.size() - 1)) {
                         query = query.or();
@@ -324,7 +324,7 @@ public class RealmMember extends RealmObject {
                         query = query.beginGroup();
                     }
 
-                    query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+                    query = query.equalTo("peerId", findMember.get(i).getId());
 
                     if (i == (findMember.size() - 1)) {
                         query = query.endGroup();
@@ -346,7 +346,7 @@ public class RealmMember extends RealmObject {
         RealmResults<RealmMember> searchMember = emptyResult(realm);
 
         try {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 RealmQuery<RealmMember> query;
                 if (realmRoom.getType() == GROUP) {
@@ -355,7 +355,7 @@ public class RealmMember extends RealmObject {
                     query = realmRoom.getChannelRoom().getMembers().where();
                 }
 
-                query = query.equalTo(RealmMemberFields.PEER_ID, userId);
+                query = query.equalTo("peerId", userId);
                 searchMember = query.findAll();
             }
         } catch (Exception e) {
@@ -370,7 +370,7 @@ public class RealmMember extends RealmObject {
      * make empty result for avoid from null state
      */
     public static RealmResults<RealmMember> emptyResult(Realm realm) {
-        return realm.where(RealmMember.class).equalTo(RealmMemberFields.ID, -1).findAll();
+        return realm.where(RealmMember.class).equalTo("id", -1).findAll();
     }
 
     public long getId() {

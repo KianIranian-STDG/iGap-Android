@@ -56,10 +56,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -67,9 +65,10 @@ import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.module.Theme;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 
 import java.io.File;
@@ -326,14 +325,14 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
                 if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
 
-                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", Long.parseLong(senderId)).findFirst();
                     txtUserName.setText(realmRegisteredInfo.getDisplayName());
 
                     setAvatar(Long.parseLong(senderId));
 
 
                 } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRegisteredInfoFields.ID, roomId).findFirst();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                     txtUserName.setText(realmRoom.getTitle());
 
                     setAvatar(roomId);

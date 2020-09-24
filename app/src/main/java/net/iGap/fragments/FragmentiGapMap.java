@@ -86,7 +86,6 @@ import net.iGap.observers.interfaces.OnMapUsersGet;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
@@ -207,7 +206,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
         Bitmap bitmap = DbManager.getInstance().doRealmTask(realm -> {
             String pathName = "";
             Bitmap bitmap1 = null;
-            for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING)) {
+            for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo("ownerId", userId).findAll().sort("id", Sort.DESCENDING)) {
                 if (avatar.getFile() != null) {
                     pathName = avatar.getFile().getLocalFilePath();
                     if (pathName == null) {
@@ -1300,7 +1299,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
     }
 
     private void downloadMarkerAvatar(Realm realm, long userId) {
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo("ownerId", userId).findAll().sort("id", Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 String pathName = avatar.getFile().getLocalFilePath();
                 if (pathName == null) {

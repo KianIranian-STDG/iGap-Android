@@ -26,7 +26,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import java.util.ArrayList;
@@ -60,9 +59,9 @@ public class Contacts {
             ArrayList<StructContactInfo> items = new ArrayList<>();
             RealmResults<RealmContacts> contacts;
             if (filter == null) {
-                contacts = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                contacts = realm.where(RealmContacts.class).findAll().sort("display_name");
             } else {
-                contacts = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, filter).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                contacts = realm.where(RealmContacts.class).contains("display_name", filter).findAll().sort("display_name");
             }
 
             String lastHeader = "";

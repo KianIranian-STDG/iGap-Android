@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -23,11 +22,12 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
@@ -35,7 +35,6 @@ import net.iGap.request.RequestGeoGetNearbyDistance;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
@@ -206,7 +205,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     //        if (item == null) {
     //            return;
     //        }
-    //        RealmRegisteredInfo registeredInfo = getRealmMapUsers().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, item.getUserId()).findFirst();
+    //        RealmRegisteredInfo registeredInfo = getRealmMapUsers().where(RealmRegisteredInfo.class).equalTo("id", item.getUserId()).findFirst();
     //        if (registeredInfo == null) {
     //            return;
     //        }

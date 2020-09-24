@@ -15,20 +15,15 @@ import android.content.Context;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.upload.UploadManager;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.network.RequestManager;
-import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.module.upload.Uploader;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.util.List;
 
@@ -117,9 +112,9 @@ public class ResendMessage implements IResendMessage {
                                 @Override
                                 public void run() {
                                     DbManager.getInstance().doRealmTask(realm1 -> {
-                                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
+                                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                                         if (roomMessage != null) {
-                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
                                             if (realmRoom != null) {
                                                 if (roomMessage.getAttachment() == null) {
                                                     ProtoGlobal.Room.Type roomType = realmRoom.getType();
@@ -140,9 +135,9 @@ public class ResendMessage implements IResendMessage {
                     } else {
                         if (mMessages.get(j).realmRoomMessage.getMessageId() == mSelectedMessageID) {
                             if (FragmentChat.allowResendMessage(mSelectedMessageID)) {
-                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
+                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                                 if (roomMessage != null) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
                                     if (realmRoom != null) {
                                         ProtoGlobal.Room.Type roomType = realmRoom.getType();
                                         if (roomMessage.getAttachment() == null) {

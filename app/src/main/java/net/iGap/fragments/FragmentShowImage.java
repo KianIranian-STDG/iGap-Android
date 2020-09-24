@@ -61,7 +61,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
@@ -179,7 +178,7 @@ public class FragmentShowImage extends BaseFragment {
             }
 
             RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
-                return RealmRoomMessage.findSorted(realm, mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
+                return RealmRoomMessage.findSorted(realm, mRoomId, "updateTime", Sort.ASCENDING);
             });
             if (mRealmList.size() < 1) {
                 popBackStackFragment();

@@ -43,7 +43,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
@@ -629,7 +628,7 @@ public class HelperNotification {
     }
 
     public void addMessage(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, AccountUser accountUser) {
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (room != null) {
             addMessage(roomId, roomMessage, roomType, room, realm, accountUser);
         }

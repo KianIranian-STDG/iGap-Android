@@ -28,7 +28,6 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestGroupAvatarAdd;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
@@ -81,7 +80,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
 
         this.roomId = roomId;
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
 
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
@@ -303,7 +302,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         //ToDo: move this code to repository
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm1 -> {
-                realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().getGroupRoom().setStartFrom(status);
+                realm1.where(RealmRoom.class).equalTo("id", roomId).findFirst().getGroupRoom().setStartFrom(status);
             });
         }).start();
 
