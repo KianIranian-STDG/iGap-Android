@@ -38,13 +38,11 @@ public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
         fileSize = message.getAttachment().getSize();
         cacheId = message.getAttachment().getCacheId();
         messageType = message.getMessageType();
-        mime = extractMime(message);
+        name = message.getAttachment().getName();
+        mime = extractMime();
         token = message.getAttachment().getToken();
         url = message.getAttachment().getUrl();
         selector = ProtoFileDownload.FileDownload.Selector.FILE;
-
-        name = message.getAttachment().getName();
-        mime = extractExtension(message);
         destinationFile = generateDestinationPath();
         tempFile = generateTempPath(selector);
         largeThumbnail = message.getAttachment().getLargeThumbnail();
@@ -61,13 +59,12 @@ public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
         tempFile = generateTempPath(selector);
     }
 
-    private String extractMime(@NonNull RealmRoomMessage message) {
-        if (message.getAttachment().getMimeType() == null)
-            return ".data";
-        String[] contentType = message.getAttachment().getMimeType().replace("/", "!!!").split("!!!");
-        if (contentType.length == 2)
-            return "." + contentType[1];
-        return ".data";
+    private String extractMime() {
+        int index = name.lastIndexOf(".");
+        if (index >= 0) {
+            mime = name.substring(index);
+        }
+        return mime;
     }
 
     public long getMessageId() {
@@ -96,15 +93,6 @@ public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
 
     public String getUrl() {
         return url;
-    }
-
-    private String extractExtension(RealmRoomMessage message) {
-        if (message.getAttachment().getMimeType() == null)
-            return ".data";
-        String[] contentType = message.getAttachment().getMimeType().replace("/", "!!!").split("!!!");
-        if (contentType.length == 2)
-            return "." + contentType[1];
-        return ".data";
     }
 
     public void setProgress(int progress) {
