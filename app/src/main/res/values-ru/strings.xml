@@ -1610,4 +1610,5 @@
     <string name="no_number_found">Там нет предварительного номера</string>
     <string name="payment_userScore">Твой счет</string>
     <string name="Increase_score">Увеличьте свой счет \n прямо сейчас!</string>
+    <string name="location_list_tile">Поиск развлекательных центров</string>
 </resources>
