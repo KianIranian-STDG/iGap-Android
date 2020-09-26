@@ -3,6 +3,7 @@ package net.iGap.module.downloader;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -78,14 +79,12 @@ public class Downloader implements IDownloader {
         return getCurrentDownloader(cacheId).isDownloading(cacheId);
     }
 
-    // 0 => through proto
-    // 1 => through api
     private IDownloader getCurrentDownloader(String cacheId) {
         if (publicCacheId.contains(cacheId))
             return downloadThroughCdn;
-        else if (/*AppConfig.fileGateway == 0*/false) {
+        else if (AppConfig.fileGateway == 0) {
             return downloadThroughProto;
-        } else if (/*AppConfig.fileGateway == 1*/ true) {
+        } else if (AppConfig.fileGateway == 1) {
             return downloadThroughApi;
         }
         return downloadThroughProto;

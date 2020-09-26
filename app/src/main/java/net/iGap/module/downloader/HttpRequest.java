@@ -262,7 +262,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     }
 
     public static String generateRequestId(DownloadStruct message, Selector selector) {
-        return message.getToken() + "_" + selector.toString();
+        return message.getCacheId() + "_" + selector.toString();
     }
 
     public File getDownloadedFile() {

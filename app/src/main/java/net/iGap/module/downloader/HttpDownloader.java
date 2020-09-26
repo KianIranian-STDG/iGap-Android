@@ -99,9 +99,10 @@ class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDown
 
     @Override
     public boolean isDownloading(@NonNull String cacheId) {
+        String key = cacheId + "_" + ProtoFileDownload.FileDownload.Selector.FILE;
         try {
             for (int i = 0; i < inProgressRequests.size(); i++) {
-                if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
+                if (inProgressRequests.get(i).getRequestId().equals(key)) {
                     return inProgressRequests.get(i).isDownloading();
                 }
             }
