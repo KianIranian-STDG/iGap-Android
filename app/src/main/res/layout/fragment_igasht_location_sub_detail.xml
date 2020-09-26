@@ -16,6 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?rootBackgroundColor"
         android:layout_marginStart="@dimen/dp6"
         android:layout_marginTop="@dimen/dp2"
         android:layout_marginEnd="@dimen/dp6"
@@ -42,6 +43,7 @@
             <net.iGap.libs.bannerslider.BannerSlider
                 android:id="@+id/banner_slider"
                 android:layout_width="match_parent"
+                android:background="?rootBackgroundColor"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -89,8 +91,7 @@
             android:id="@+id/view4"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/dp8"
-            android:layout_marginBottom="@dimen/dp8"
+            android:layout_marginTop="16dp"
             android:background="@color/gray_300"
             android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="@+id/subTitle"
