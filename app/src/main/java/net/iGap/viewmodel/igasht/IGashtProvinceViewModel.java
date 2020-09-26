@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.model.igasht.BaseIGashtResponse;
-import net.iGap.repository.IGashtRepository;
 import net.iGap.model.igasht.IGashtProvince;
+import net.iGap.repository.IGashtRepository;
 
 import java.util.List;
 
@@ -64,7 +64,6 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     public void setSelectedLocation(int position) {
         if (provinceList.getValue() != null) {
             repository.setSelectedProvince(provinceList.getValue().get(position));
-            onSearchPlaceButtonClick();
         }
     }
 
