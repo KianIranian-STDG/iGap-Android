@@ -68,7 +68,7 @@ public class RequestManager extends BaseController {
 
     public RequestManager(int currentAccount) {
         super(currentAccount);
-//        getConfig();
+        getConfig();
     }
 
     private void getConfig() {

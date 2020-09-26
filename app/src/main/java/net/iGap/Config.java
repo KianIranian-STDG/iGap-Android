@@ -13,10 +13,15 @@ package net.iGap;
 import android.text.format.DateUtils;
 
 public class Config {
+    public static boolean FILE_LOG_ENABLE;
 
-    public static final boolean ALPHA_VERSION = false;
-    public static final boolean BETA_VERSION = false;
-    public static final boolean FILE_LOG_ENABLE = ALPHA_VERSION || BuildConfig.DEBUG;
+    static {
+        try {
+            FILE_LOG_ENABLE = BuildConfig.VERSION_NAME.contains("alpha") || BuildConfig.DEBUG;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static final int ACCEPT = 1;
     public static final int REJECT = 0;
