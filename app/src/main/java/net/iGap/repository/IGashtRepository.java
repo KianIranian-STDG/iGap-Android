@@ -1,18 +1,20 @@
 package net.iGap.repository;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.IGashtLocationService;
-import net.iGap.model.igasht.IGashtOrder;
 import net.iGap.model.igasht.IGashtProvince;
 import net.iGap.model.igasht.IGashtTicketDetail;
 import net.iGap.model.igasht.IGashtVouchers;
-import net.iGap.model.igasht.RegisterTicketResponse;
 import net.iGap.model.igasht.TicketHistoryListResponse;
 import net.iGap.model.igasht.TicketQRCodeResponse;
+import net.iGap.model.igasht.purchaseResponse;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -33,6 +35,10 @@ public class IGashtRepository {
     private IGashtLocationItem selectedLocation;
     private List<IGashtVouchers> selectedServiceList;
     private List<IGashtProvince> provinceList;
+    private List<IGashtLocationService> locationServices;
+    private int count;
+    private int voucherId;
+    private Object serviceTime;
 
     public static IGashtRepository getInstance() {
         if (instance == null) {
@@ -52,6 +58,14 @@ public class IGashtRepository {
 
     public void setSelectedProvince(IGashtProvince selectedProvince) {
         this.selectedProvince = selectedProvince;
+    }
+
+    public void setLocationServices(List<IGashtLocationService> locationServices) {
+        this.locationServices = locationServices;
+    }
+
+    public List<IGashtLocationService> getLocationServices() {
+        return locationServices;
     }
 
     public IGashtProvince getSelectedProvince() {
@@ -90,16 +104,6 @@ public class IGashtRepository {
         new ApiInitializer<TicketHistoryListResponse<IGashtTicketDetail>>().initAPI(igashtApi.requestGetTicketList(offset, limit), handShakeCallback, callback);
     }
 
-    public void registeredOrder(HandShakeCallback handShakeCallback, ResponseCallback<RegisterTicketResponse> callback) {
-        DbManager.getInstance().doRealmTask(realm -> {
-            new ApiInitializer<RegisterTicketResponse>().initAPI(igashtApi.requestRegisterOrder(new IGashtOrder(realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber(),
-                    1,
-                    selectedProvince.getId(),
-                    selectedLocation.getId(),
-                    selectedServiceList)), handShakeCallback, callback);
-        });
-    }
-
     public void getTicketQRCode(String voucherNumber, HandShakeCallback handShakeCallback, ResponseCallback<TicketQRCodeResponse> callback) {
         new ApiInitializer<TicketQRCodeResponse>().initAPI(igashtApi.requestGetTicketQRCode(voucherNumber), handShakeCallback, callback);
     }
@@ -108,8 +112,29 @@ public class IGashtRepository {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getCount() > 0) {
                 selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getVoucherinfoId(), data.get(i).getCount()));
+                count = getLocationServices().get(i).getCount();
+                voucherId = getLocationServices().get(i).getAmounts().get(i).getVoucherinfoId();
+                //       serviceTime = getLocationServices().get(i).getAmounts().get(i).getmServiceTimes().get(i);
             }
         }
+    }
+
+    public void getRegisteredOrder(HandShakeCallback handShakeCallback, ResponseCallback<purchaseResponse> callback) {
+        DbManager.getInstance().doRealmTask(realm -> {
+            JsonObject jsonObject1 = new JsonObject();
+            jsonObject1.addProperty("voucher_id", voucherId);
+            jsonObject1.addProperty("count", count);
+            //   jsonObject1.addProperty("service_time_id", serviceTime.toString());
+            JsonArray vouchers = new JsonArray();
+            vouchers.add(jsonObject1);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("phone_number", realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber().replaceAll("^98", "0"));
+            jsonObject.addProperty("province_id", selectedProvince.getId());
+            jsonObject.add("vouchers", vouchers);
+
+            new ApiInitializer<purchaseResponse>().initAPI(igashtApi.requestRegisterOrder(jsonObject), handShakeCallback, callback);
+
+        });
     }
 
     public void clearSelectedServiceList() {
