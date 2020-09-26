@@ -41,6 +41,8 @@ public class CdnDownloader implements IDownloader {
         if (!isPublic(message)) {
             return;
         }
+        message.setSelector(selector);
+
         DownloadStruct publicMessage = requestedDownload.get(DownloadStruct.generateRequestId(message.getCacheId(), selector));
         if (publicMessage != null) {
             Status status = PRDownloader.getStatus(publicMessage.getDownloadId());

@@ -11,6 +11,8 @@ import net.iGap.realm.RealmThumbnail;
 import java.io.File;
 
 import static net.iGap.module.AndroidUtils.suitableAppFilePath;
+import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
 public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
     private String token;
@@ -92,7 +94,22 @@ public class DownloadStruct extends Observable<Resource<HttpRequest.Progress>> {
     }
 
     public String getUrl() {
+        if (url == null) {
+            return null;
+        }
+
+        if (selector == SMALL_THUMBNAIL) {
+            url = url + "?selector=" + 1;
+
+        } else if (selector == LARGE_THUMBNAIL) {
+            url = url + "?selector=" + 2;
+        }
+
         return url;
+    }
+
+    public void setSelector(ProtoFileDownload.FileDownload.Selector selector) {
+        this.selector = selector;
     }
 
     public void setProgress(int progress) {
