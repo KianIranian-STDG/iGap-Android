@@ -96,25 +96,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/search_icon"
-                            style="@style/baseFontIcon"
-                            android:layout_width="@dimen/dp40"
-                            android:layout_height="@dimen/dp40"
-                            android:layout_gravity="center"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
-                            android:text="@string/search_icon" />
-
-                        <View
-                            android:layout_width="@dimen/dp1"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/dp8"
-                            android:layout_marginTop="@dimen/dp4"
-                            android:layout_marginRight="@dimen/dp8"
-                            android:layout_marginBottom="@dimen/dp4"
-                            android:background="@color/gray" />
-
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/provinceSearchText"
                             android:layout_width="0dp"
@@ -151,7 +132,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="?toolbarBackgroundColor"
-                android:clickable="false"
+                android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
                 android:visibility="@{viewModel.showMainView}"
                 app:cardCornerRadius="@dimen/dp12"
                 app:cardUseCompatPadding="true"
