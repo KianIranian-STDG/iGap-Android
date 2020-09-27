@@ -9,7 +9,7 @@ import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 
 public class BaseController {
-    private int currentAccount;
+    public int currentAccount;
 
     public BaseController(int currentAccount) {
         this.currentAccount = currentAccount;
@@ -36,7 +36,7 @@ public class BaseController {
     }
 
     public IDownloader getDownloader() {
-        return Downloader.getInstance();
+        return Downloader.getInstance(currentAccount);
     }
 
     public IUpload getIUploader() {

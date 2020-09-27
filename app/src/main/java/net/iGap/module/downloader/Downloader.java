@@ -3,33 +3,35 @@ package net.iGap.module.downloader;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.controllers.BaseController;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.AppConfig;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
-import net.iGap.realm.RealmRoomMessage;
 
 import java.util.HashSet;
 
-public class Downloader implements IDownloader {
-    private static volatile Downloader instance;
+public class Downloader extends BaseController implements IDownloader {
+    private static volatile Downloader[] instance = new Downloader[AccountManager.MAX_ACCOUNT_COUNT];
 
     private IDownloader downloadThroughProto;
     private IDownloader downloadThroughApi;
     private IDownloader downloadThroughCdn;
     private HashSet<String> publicCacheId = new HashSet<>();
 
-    private Downloader() {
-        downloadThroughApi = HttpDownloader.getInstance();
+    private Downloader(int account) {
+        super(account);
+        downloadThroughApi = HttpDownloader.getInstance(account);
         downloadThroughProto = SocketDownloader.getInstance();
-        downloadThroughCdn = CdnDownloader.getInstance();
+        downloadThroughCdn = CdnDownloader.getInstance(account);
     }
 
-    public static Downloader getInstance() {
-        Downloader localInstance = instance;
+    public static Downloader getInstance(int account) {
+        Downloader localInstance = instance[account];
         if (localInstance == null) {
             synchronized (Downloader.class) {
-                localInstance = instance;
+                localInstance = instance[account];
                 if (localInstance == null) {
-                    instance = localInstance = new Downloader();
+                    instance[account] = localInstance = new Downloader(account);
                 }
             }
         }
@@ -37,36 +39,27 @@ public class Downloader implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        if (isPublic(message)) {
-            publicCacheId.add(message.getCacheId());
+    public void download(@NonNull DownloadObject file, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        if (file.isPublic()) {
+            publicCacheId.add(file.mainCacheId);
         }
-        getCurrentDownloader(message.getCacheId()).download(message, selector, priority, observer);
-    }
-
-    private boolean isPublic(DownloadStruct message) {
-        return message.getUrl() != null && !message.getUrl().isEmpty();
-    }
-
-    private boolean validateMessage(RealmRoomMessage message) {
-        message = RealmRoomMessage.getFinalMessage(message);
-        return message != null && message.getAttachment() != null;
+        getCurrentDownloader(file.mainCacheId).download(file, selector, priority, observer);
     }
 
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadObject file, @NonNull Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(file, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        download(message, Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadObject file, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(file, Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        download(message, Selector.FILE, priority, observer);
+    public void download(@NonNull DownloadObject file, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(file, Selector.FILE, priority, observer);
     }
 
     @Override

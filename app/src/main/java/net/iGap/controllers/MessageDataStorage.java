@@ -180,4 +180,26 @@ public class MessageDataStorage extends BaseController {
             }
         });
     }
+
+    public void setAttachmentFilePath(String cacheId, String absolutePath, boolean isThumb) {
+        FileLog.e("setAttachmentFilePath " + cacheId + " " + absolutePath + " " + isThumb);
+        storageQueue.postRunnable(() -> {
+            try {
+                dataBase.beginTransaction();
+                RealmResults<RealmAttachment> attachments = dataBase.where(RealmAttachment.class).equalTo("cacheId", cacheId).findAll();
+
+                for (RealmAttachment attachment : attachments) {
+                    if (isThumb) {
+                        attachment.setLocalThumbnailPath(absolutePath);
+                    } else {
+                        attachment.setLocalFilePath(absolutePath);
+                    }
+                }
+
+                dataBase.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
 }

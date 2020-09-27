@@ -44,8 +44,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.downloader.DownloadStruct;
-import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
@@ -337,7 +336,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                     holder.messageProgress.withDrawable(R.drawable.ic_download, true);
                     holder.iconPlay.setVisibility(View.GONE);
 
-                    if (Downloader.getInstance().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
+                    if (getDownloader().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
                         startDownload(holder.getAdapterPosition(), holder.messageProgress);
                     }
                 }
@@ -480,7 +479,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void downloadFile(int position, MessageProgress messageProgress) {
 
-        if (Downloader.getInstance().isDownloading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
+        if (getDownloader().isDownloading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
             stopDownload(position, messageProgress);
         } else {
             startDownload(position, messageProgress);
@@ -489,7 +488,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void stopDownload(int position, final MessageProgress messageProgress) {
 
-        Downloader.getInstance().cancelDownload(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
+        getDownloader().cancelDownload(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
     }
 
     private void startDownload(final int position, final MessageProgress messageProgress) {
@@ -521,7 +520,13 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
-        Downloader.getInstance().download(new DownloadStruct(MusicPlayer.mediaList.get(position)), ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
+        DownloadObject fileObject = DownloadObject.createForRoomMessage(MusicPlayer.mediaList.get(position));
+
+        if (fileObject == null) {
+            return;
+        }
+
+        getDownloader().download(fileObject, ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
             if (canUpdateAfterDownload) {
                 G.handler.post(() -> {
                     switch (arg.status) {

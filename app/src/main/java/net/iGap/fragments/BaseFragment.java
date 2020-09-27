@@ -210,7 +210,7 @@ public class BaseFragment extends SwipeBackFragment {
     }
 
     public IDownloader getDownloader() {
-        return Downloader.getInstance();
+        return Downloader.getInstance(currentAccount);
     }
 
     public IUpload getIUploader() {

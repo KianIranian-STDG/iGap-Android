@@ -9,27 +9,34 @@ import com.downloader.PRDownloader;
 import com.downloader.Progress;
 import com.downloader.Status;
 
+import net.iGap.controllers.BaseController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
-import net.iGap.realm.RealmAttachment;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-public class CdnDownloader implements IDownloader {
-    private static CdnDownloader instance;
-    private HashMap<String, DownloadStruct> requestedDownload = new HashMap<>();
+import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.FILE_VALUE;
+import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL_VALUE;
+import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL_VALUE;
 
-    private CdnDownloader() {
+public class CdnDownloader extends BaseController implements IDownloader {
+    private static CdnDownloader[] instance = new CdnDownloader[AccountManager.MAX_ACCOUNT_COUNT];
+    private HashMap<String, DownloadObject> requestedDownload = new HashMap<>();
+
+    private CdnDownloader(int account) {
+        super(account);
     }
 
-    public static CdnDownloader getInstance() {
-        CdnDownloader localInstance = instance;
+    public static CdnDownloader getInstance(int account) {
+        CdnDownloader localInstance = instance[account];
         if (localInstance == null) {
             synchronized (CdnDownloader.class) {
-                localInstance = instance;
+                localInstance = instance[account];
                 if (localInstance == null) {
-                    instance = localInstance = new CdnDownloader();
+                    instance[account] = localInstance = new CdnDownloader(account);
                 }
             }
         }
@@ -37,44 +44,41 @@ public class CdnDownloader implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        if (!isPublic(message)) {
+    public void download(@NonNull DownloadObject file, @NonNull Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        if (!file.isPublic()) {
             return;
         }
-        message.setSelector(selector);
-
-        DownloadStruct publicMessage = requestedDownload.get(DownloadStruct.generateRequestId(message.getCacheId(), selector));
+        DownloadObject publicMessage = requestedDownload.get(file.key);
         if (publicMessage != null) {
-            Status status = PRDownloader.getStatus(publicMessage.getDownloadId());
+            Status status = PRDownloader.getStatus(publicMessage.downloadId);
             switch (status) {
                 case COMPLETED:
-                    requestedDownload.remove(publicMessage.getRequestId());
+                    requestedDownload.remove(publicMessage.key);
                     return;
-
                 case PAUSED:
-                    PRDownloader.resume(publicMessage.getDownloadId());
+                    PRDownloader.resume(publicMessage.downloadId);
                     if (observer != null)
                         publicMessage.addObserver(observer);
                     return;
-
                 case CANCELLED:
                 case FAILED:
                 case UNKNOWN:
-                    requestedDownload.remove(publicMessage.getRequestId());
+                    requestedDownload.remove(publicMessage.key);
+                    break;
             }
         }
 
-        publicMessage = requestedDownload.get(DownloadStruct.generateRequestId(message.getCacheId(), selector));
+        publicMessage = requestedDownload.get(file.key);
         if (publicMessage == null) {
-            publicMessage = message;
+            publicMessage = file;
 
-            final DownloadStruct finalPublicMessage = publicMessage;
-            int downloadId = PRDownloader.download(publicMessage.getUrl(), publicMessage.getTempFile().getParent(), publicMessage.getTempFile().getName())
-                    .setTag(publicMessage.getRequestId())
+            final DownloadObject finalPublicMessage = publicMessage;
+            publicMessage.downloadId = PRDownloader.download(publicMessage.publicUrl, publicMessage.tempFile.getParent(), publicMessage.tempFile.getName())
+                    .setTag(publicMessage.key)
                     .build()
                     .setOnProgressListener(progress -> handleProgress(finalPublicMessage, progress))
                     .setOnCancelListener(() -> {
-                        requestedDownload.remove(finalPublicMessage.getRequestId());
+                        requestedDownload.remove(finalPublicMessage.key);
                         finalPublicMessage.removeAll();
                         handleError(finalPublicMessage, "canceled");
                     })
@@ -90,80 +94,73 @@ public class CdnDownloader implements IDownloader {
                             handleError(finalPublicMessage, error.getServerErrorMessage());
                         }
                     });
-            publicMessage.setDownloadId(downloadId);
-            requestedDownload.put(publicMessage.getRequestId(), publicMessage);
+            requestedDownload.put(publicMessage.key, publicMessage);
         }
         if (observer != null)
             publicMessage.addObserver(observer);
     }
 
-    private void handleProgress(DownloadStruct message, Progress progress) {
+    private void handleProgress(DownloadObject message, Progress progress) {
         int percent = (int) ((progress.currentBytes * 100) / progress.totalBytes);
-        if (percent > message.getProgress()) {
-            message.notifyObservers(Resource.loading(new HttpRequest.Progress(percent, message.getDestinationFile().getAbsolutePath())));
+        if (percent > message.progress) {
+            message.notifyObservers(Resource.loading(new HttpRequest.Progress(percent, message.destFile.getAbsolutePath())));
         }
     }
 
-    private void handleError(DownloadStruct message, String error) {
+    private void handleError(DownloadObject message, String error) {
         message.notifyObservers(Resource.error(error, null));
     }
 
-    private void downloadCompleted(DownloadStruct message) {
+    private void downloadCompleted(DownloadObject file) {
+        MessageDataStorage storage = MessageDataStorage.getInstance(currentAccount);
+        String path = null;
         try {
-            switch (message.getSelector()) {
-                case FILE:
-                    AndroidUtils.cutFromTemp(message.getTempFile().getAbsolutePath(), message.getDestinationFile().getAbsolutePath());
-                    RealmAttachment.setFilePAthToDataBaseAttachment(message.getCacheId(), message.getDestinationFile().getAbsolutePath());
-                    break;
-                case SMALL_THUMBNAIL:
-                case LARGE_THUMBNAIL:
-                    RealmAttachment.setThumbnailPathDataBaseAttachment(message.getCacheId(), message.getTempFile().getAbsolutePath());
-                    break;
+            if (file.selector == FILE_VALUE) {
+                AndroidUtils.cutFromTemp(file.tempFile.getAbsolutePath(), file.destFile.getAbsolutePath());
+                storage.setAttachmentFilePath(file.mainCacheId, path = file.destFile.getAbsolutePath(), false);
+            } else if (file.selector == SMALL_THUMBNAIL_VALUE || file.selector == LARGE_THUMBNAIL_VALUE) {
+                storage.setAttachmentFilePath(file.mainCacheId, path = file.tempFile.getAbsolutePath(), true);
             }
-            message.notifyObservers(Resource.success(new HttpRequest.Progress(100, message.getSelector() == Selector.FILE ? message.getDestinationFile().getAbsolutePath() : message.getTempFile().getAbsolutePath())));
+
+            file.notifyObservers(Resource.success(new HttpRequest.Progress(100, path)));
         } catch (IOException e) {
-            handleError(message, e.getMessage());
-            e.printStackTrace();
+            handleError(file, e.getMessage());
         }
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadObject file, @NonNull Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(file, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        download(message, Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
+    public void download(@NonNull DownloadObject file, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(file, Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        download(message, Selector.FILE, priority, observer);
+    public void download(@NonNull DownloadObject file, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        download(file, Selector.FILE, priority, observer);
     }
 
     @Override
     public void cancelDownload(@NonNull String cacheId) {
-        Selector selector = Selector.FILE;
-        DownloadStruct message = requestedDownload.get(DownloadStruct.generateRequestId(cacheId, selector));
+        String key = DownloadObject.createKey(cacheId, FILE_VALUE);
+        DownloadObject message = requestedDownload.get(key);
         if (message == null)
             return;
 
-        PRDownloader.pause(message.getDownloadId());
+        PRDownloader.pause(message.downloadId);
     }
 
     @Override
     public boolean isDownloading(@NonNull String cacheId) {
-        Selector selector = Selector.FILE;
-        DownloadStruct message = requestedDownload.get(DownloadStruct.generateRequestId(cacheId, selector));
+        String key = DownloadObject.createKey(cacheId, FILE_VALUE);
+        DownloadObject message = requestedDownload.get(key);
         if (message == null)
             return false;
 
-        Status status = PRDownloader.getStatus(message.getDownloadId());
+        Status status = PRDownloader.getStatus(message.downloadId);
         return status == Status.RUNNING;
-    }
-
-    private boolean isPublic(@NonNull DownloadStruct message) {
-        return message.getUrl() == null || !message.getUrl().isEmpty();
     }
 }

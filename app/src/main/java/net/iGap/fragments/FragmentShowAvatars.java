@@ -41,7 +41,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
@@ -573,7 +572,7 @@ public class FragmentShowAvatars extends BaseFragment {
             final RealmAttachment ra = avatarList.get(position).getFile();
 
 
-            if (Downloader.getInstance().isDownloading(ra.getCacheId())) {
+            if (getDownloader().isDownloading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
                 startDownload(position, progress, zoomableImageView);
             } else {
@@ -628,8 +627,8 @@ public class FragmentShowAvatars extends BaseFragment {
 
                 String _cashId = avatarList.get(position).getFile().getCacheId();
 
-                if (Downloader.getInstance().isDownloading(_cashId)) {
-                    Downloader.getInstance().cancelDownload(_cashId);
+                if (getDownloader().isDownloading(_cashId)) {
+                    getDownloader().cancelDownload(_cashId);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView);

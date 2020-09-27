@@ -52,7 +52,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
-import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructMessageInfo;
@@ -759,7 +759,11 @@ public class FragmentShowImage extends BaseFragment {
                 }
             }));
 
-            DownloadStruct struct = DownloadStruct.getForRoom(rm);
+            DownloadObject struct = DownloadObject.createForRoomMessage(rm);
+            if (struct == null) {
+                return;
+            }
+
             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
             getDownloader().download(struct, selector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> G.runOnUiThread(() -> {

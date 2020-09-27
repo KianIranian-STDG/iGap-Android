@@ -5,6 +5,8 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.controllers.BaseController;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoFileDownload;
 
 import java.util.ArrayList;
@@ -13,38 +15,37 @@ import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> {
-    private static HttpDownloader instance;
-    private Queue<HttpRequest> requestsQueue;
-    private List<HttpRequest> inProgressRequests;
+class HttpDownloader extends BaseController implements IDownloader, Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> {
+    private static HttpDownloader[] instance = new HttpDownloader[AccountManager.MAX_ACCOUNT_COUNT];
+    private Queue<HttpRequest> requestsQueue = new PriorityBlockingQueue<>();
+    private List<HttpRequest> inProgressRequests = new ArrayList<>();
     private AtomicInteger inProgressCount = new AtomicInteger(0);
     private static final int MAX_DOWNLOAD = 3;
 
-    public static HttpDownloader getInstance() {
-        HttpDownloader localInstance = instance;
+    public static HttpDownloader getInstance(int account) {
+        HttpDownloader localInstance = instance[account];
         if (localInstance == null) {
             synchronized (HttpDownloader.class) {
-                localInstance = instance;
+                localInstance = instance[account];
                 if (localInstance == null) {
-                    instance = localInstance = new HttpDownloader();
+                    instance[account] = localInstance = new HttpDownloader(account);
                 }
             }
         }
         return localInstance;
     }
 
-    private HttpDownloader() {
-        requestsQueue = new PriorityBlockingQueue<>();
-        inProgressRequests = new ArrayList<>();
+    private HttpDownloader(int account) {
+        super(account);
     }
 
-    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+    public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         if (requestsQueue == null)
             requestsQueue = new PriorityBlockingQueue<>();
 
-        HttpRequest existedRequest = findExistedRequest(HttpRequest.generateRequestId(message, selector));
+        HttpRequest existedRequest = findExistedRequest(message.key);
         if (existedRequest == null) {
-            existedRequest = new HttpRequest(message, selector, priority);
+            existedRequest = new HttpRequest(currentAccount, message);
             existedRequest.setDownloadStatusListener(this);
             requestsQueue.add(existedRequest);
             scheduleNewDownload();
@@ -55,27 +56,27 @@ class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDown
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+    public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+    public void download(@NonNull DownloadObject message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+    public void download(@NonNull DownloadObject message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 
     private HttpRequest findExistedRequest(String requestId) {
         for (HttpRequest request : requestsQueue) {
-            if (request.getRequestId().equals(requestId))
+            if (request.getRequestKey().equals(requestId))
                 return request;
         }
         for (HttpRequest request : inProgressRequests) {
-            if (request.getRequestId().equals(requestId))
+            if (request.getRequestKey().equals(requestId))
                 return request;
         }
         return null;
@@ -83,14 +84,14 @@ class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDown
 
     public void cancelDownload(@NonNull String cacheId) {
         for (int i = 0; i < inProgressRequests.size(); i++) {
-            if (inProgressRequests.get(i).getRequestId().contains(cacheId)) {
+            if (inProgressRequests.get(i).getRequestKey().contains(cacheId)) {
                 inProgressRequests.get(i).cancelDownload();
                 break;
             }
         }
 
         for (HttpRequest request : requestsQueue) {
-            if (cacheId.contains(request.getRequestId())) {
+            if (cacheId.contains(request.getRequestKey())) {
                 requestsQueue.remove(request);
                 break;
             }
@@ -99,10 +100,10 @@ class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDown
 
     @Override
     public boolean isDownloading(@NonNull String cacheId) {
-        String key = cacheId + "_" + ProtoFileDownload.FileDownload.Selector.FILE;
+        String key = DownloadObject.createKey(cacheId, ProtoFileDownload.FileDownload.Selector.FILE_VALUE);
         try {
             for (int i = 0; i < inProgressRequests.size(); i++) {
-                if (inProgressRequests.get(i).getRequestId().equals(key)) {
+                if (inProgressRequests.get(i).getRequestKey().equals(key)) {
                     return inProgressRequests.get(i).isDownloading();
                 }
             }
@@ -120,7 +121,7 @@ class HttpDownloader implements IDownloader, Observer<Pair<HttpRequest, HttpDown
             return;
 
         for (int i = 0; i < inProgressRequests.size(); i++) {
-            if (request.getRequestId().equals(inProgressRequests.get(i).getRequestId())) {
+            if (request.getRequestKey().equals(inProgressRequests.get(i).getRequestKey())) {
                 inProgressRequests.remove(i);
                 inProgressCount.decrementAndGet();
                 break;

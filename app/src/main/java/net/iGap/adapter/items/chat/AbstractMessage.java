@@ -82,7 +82,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
-import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
@@ -133,6 +133,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
     protected Theme theme;
     private VH holder;
+    private int currentAccount;
 
     /**
      * add this prt for video player
@@ -144,6 +145,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
         this.theme = Theme.getInstance();
+        currentAccount = AccountManager.selectedAccount;
     }
 
 
@@ -1412,7 +1414,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId())) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId())) {
             return;
         }
 
@@ -1517,8 +1519,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition());
             }
-        } else if (Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId())) {
-            Downloader.getInstance().cancelDownload(structMessage.getAttachment().getCacheId());
+        } else if (Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId())) {
+            Downloader.getInstance(currentAccount).cancelDownload(structMessage.getAttachment().getCacheId());
         } else {
             thumbnail.setVisibility(View.VISIBLE);
 
@@ -1559,24 +1561,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (structMessage.getAttachment() == null) return;
 
-        String token = structMessage.getAttachment().getToken();
-        String url = structMessage.getAttachment().getUrl();
-        String name = structMessage.getAttachment().getName();
-
-        long size = 0;
-
-        if (structMessage.getAttachment().getSmallThumbnail() != null)
-            size = structMessage.getAttachment().getSmallThumbnail().getSize();
-
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
         if (structMessage.getAttachment().getCacheId() == null || structMessage.getAttachment().getCacheId().length() == 0) {
             return;
         }
 
-
-        if (token != null && token.length() > 0 && size > 0) {
-            Downloader.getInstance().download(new DownloadStruct(mMessage), selector, null);
+        DownloadObject fileStruct = DownloadObject.createForThumb(mMessage, false);
+        if (fileStruct != null) {
+            Downloader.getInstance(currentAccount).download(fileStruct, selector, null);
         }
     }
 
@@ -1586,28 +1579,33 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        boolean _isDownloading = Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId());
+        boolean _isDownloading = Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId());
 
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
 
 
         final String token = structMessage.getAttachment().getToken();
-        final String url = structMessage.getAttachment().getUrl();
         String name = structMessage.getAttachment().getName();
         long size = structMessage.getAttachment().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
         final ProtoGlobal.RoomMessageType messageType = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
 
-        final String _path = AndroidUtils.getFilePathWithCashId(structMessage.getAttachment().getCacheId(), name, messageType);
 
         if (token != null && token.length() > 0 && size > 0) {
 
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-            Downloader.getInstance().download(new DownloadStruct(mMessage), selector, priority, arg -> {
+            DownloadObject struct = DownloadObject.createForRoomMessage(mMessage);
+
+            if (struct == null)
+                return;
+
+            progressBar.withProgress(1);
+
+            Downloader.getInstance(currentAccount).download(struct, selector, priority, arg -> {
                 if (FragmentChat.canUpdateAfterDownload) {
                     G.handler.post(() -> {
                         switch (arg.status) {
@@ -1714,7 +1712,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progress = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progress.progressBar);
 
-        if (Downloader.getInstance().isDownloading(structMessage.getAttachment().getCacheId())) {
+        if (Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, 0);

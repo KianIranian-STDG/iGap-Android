@@ -59,7 +59,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.downloader.DownloadStruct;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.observers.interfaces.OnAudioFocusChangeListener;
 import net.iGap.observers.interfaces.OnComplete;
@@ -1333,8 +1333,13 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     if (!new File(_path).exists()) {
 
                         result = true;
+                        DownloadObject fileObject = DownloadObject.createForRoomMessage(rm);
 
-                        Downloader.getInstance().download(new DownloadStruct(rm), selector, arg -> {
+                        if (fileObject == null) {
+                            return false;
+                        }
+
+                        Downloader.getInstance(AccountManager.selectedAccount).download(fileObject, selector, arg -> {
                             switch (arg.status) {
                                 case SUCCESS:
                                 case LOADING:

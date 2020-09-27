@@ -639,7 +639,7 @@ public class RealmRoomMessage extends RealmObject {
 
                         // stop download
                         if (roomMessage.getAttachment() != null) {
-                            Downloader.getInstance().cancelDownload(roomMessage.getAttachment().getCacheId());
+                            Downloader.getInstance(AccountManager.selectedAccount).cancelDownload(roomMessage.getAttachment().getCacheId());
                         }
                     }
 
