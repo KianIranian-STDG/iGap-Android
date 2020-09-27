@@ -26,6 +26,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.RequiresApi;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -210,6 +212,7 @@ public class FileUtils {
     /**
      * @return The MIME type for the give Uri.
      */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getMimeType(Context context, Uri uri) {
         File file = new File(getPath(context, uri));
         return getMimeType(file);
@@ -299,6 +302,7 @@ public class FileUtils {
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
      */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static String getPath(final Context context, final Uri uri) {
 
         if (DEBUG) {
@@ -388,6 +392,7 @@ public class FileUtils {
      * @author paulburke
      * @see #getPath(Context, Uri)
      */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
             String path = getPath(context, uri);
@@ -443,6 +448,7 @@ public class FileUtils {
      *
      * @author paulburke
      */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public static Bitmap getThumbnail(Context context, Uri uri) {
         return getThumbnail(context, uri, getMimeType(context, uri));
     }
@@ -615,15 +621,23 @@ public class FileUtils {
         return storageList;
     }
 
-    public String getFileTotalSize() {
-        return FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)) +
-                getFolderSize(new File(G.DIR_VIDEOS)) +
-                getFolderSize(new File(G.DIR_DOCUMENT)) +
-                getFolderSize(new File(G.DIR_AUDIOS)) +
-                getFolderSize(new File(G.DIR_TEMP)) +
-                getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
-                getFolderSize(new File(G.DIR_IMAGE_USER)) +
-                getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+    public void getFileTotalSize(final Delegate delegate) {
+        AndroidUtils.globalQueue.postRunnable(() -> {
+            final String size = FileUtils.formatFileSize(getFolderSize(new File(G.DIR_IMAGES)) +
+                    getFolderSize(new File(G.DIR_VIDEOS)) +
+                    getFolderSize(new File(G.DIR_DOCUMENT)) +
+                    getFolderSize(new File(G.DIR_AUDIOS)) +
+                    getFolderSize(new File(G.DIR_TEMP)) +
+                    getFolderSize(new File(G.DIR_CHAT_BACKGROUND)) +
+                    getFolderSize(new File(G.DIR_IMAGE_USER)) +
+                    getFolderSize(Configuration.getInstance().getOsmdroidBasePath()));
+
+            G.runOnUiThread(() -> delegate.onSize(size));
+        });
+    }
+
+    public interface Delegate {
+        void onSize(String size);
     }
 
     public String getImageFileSize() {
