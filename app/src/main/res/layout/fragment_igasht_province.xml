@@ -101,12 +101,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/dp8"
                             android:layout_weight="1"
+                            android:textSize="@dimen/standardTextSize"
                             android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"
                             android:background="@color/transparent"
                             android:completionThreshold="0"
                             android:maxLength="30"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:layout_marginLeft="@dimen/dp8" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/clearProvinceSearch"
