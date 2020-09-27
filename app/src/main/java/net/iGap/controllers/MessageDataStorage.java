@@ -148,6 +148,7 @@ public class MessageDataStorage extends BaseController {
     private void cleanUpInternal() {
         try {
             dataBase.close();
+            dataBase = null;
         } catch (Exception e) {
             FileLog.e(e);
         }

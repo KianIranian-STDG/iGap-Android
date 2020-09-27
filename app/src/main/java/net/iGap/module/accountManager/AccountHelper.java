@@ -48,13 +48,13 @@ public class AccountHelper {
         G.handler.removeCallbacksAndMessages(null);
         signOutWallet();
         AccountManager.getInstance().clearSomeStaticValue();
-        MessageDataStorage.getInstance(AccountManager.selectedAccount).cleanUp();
         //close realm ui
         DbManager.getInstance().closeUiRealm();
     }
 
     private void baseAfter() {
         DbManager.getInstance().openUiRealm();
+        MessageDataStorage.getInstance(AccountManager.selectedAccount).cleanUp();
         WebSocketClient.getInstance().connect(true);
     }
 
