@@ -10,6 +10,8 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
 
+import static net.iGap.proto.ProtoFileDownload.FileDownload.Selector.FILE_VALUE;
+
 class SocketDownloader implements IDownloader {
     private static SocketDownloader instance;
     private HelperDownloadFile oldDownloader;
@@ -32,26 +34,20 @@ class SocketDownloader implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
-        long size;
-        String filePath = "";
-        switch (selector) {
-            case SMALL_THUMBNAIL:
-                size = message.getSmallThumbnail().getSize();
-                break;
+    public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+        long size = message.fileSize;
+        String filePath;
 
-            case LARGE_THUMBNAIL:
-                size = message.getLargeThumbnail().getSize();
-                break;
-
-            default:
-                size = message.getFileSize();
-                filePath = generateDownloadFileForRequest(message.getCacheId(), message.getName(), message.getMessageType()).getAbsolutePath();
+        if (message.selector == FILE_VALUE) {
+            filePath = message.destFile.getAbsolutePath();
+        } else {
+            filePath = message.tempFile.getAbsolutePath();
         }
-        oldDownloader.startDownload(message.getMessageType(),
-                String.valueOf(message.getMessageId()), message.getToken(),
-                message.getUrl(), message.getCacheId(),
-                message.getName(), size, selector, filePath,
+
+        oldDownloader.startDownload(message.messageType,
+                String.valueOf(message.getMessageId()), message.fileToken,
+                message.publicUrl, message.thumbCacheId,
+                message.fileName, size, selector, filePath,
                 priority, new HelperDownloadFile.UpdateListener() {
                     @Override
                     public void OnProgress(String path, int progress) {
@@ -74,18 +70,18 @@ class SocketDownloader implements IDownloader {
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @NonNull ProtoFileDownload.FileDownload.Selector selector,
+    public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector,
                          @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, selector, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+    public void download(@NonNull DownloadObject message, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_DEFAULT, observer);
     }
 
     @Override
-    public void download(@NonNull DownloadStruct message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
+    public void download(@NonNull DownloadObject message, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         download(message, ProtoFileDownload.FileDownload.Selector.FILE, priority, observer);
     }
 
