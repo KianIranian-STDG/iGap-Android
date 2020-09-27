@@ -22,12 +22,12 @@ import io.realm.net_iGap_realm_RealmThumbnailRealmProxy;
 @Parcel(implementations = {net_iGap_realm_RealmThumbnailRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmThumbnail.class})
 public class RealmThumbnail extends RealmObject {
     @PrimaryKey
-    private long id;
-    private long messageId;
-    private long size;
-    private int width;
-    private int height;
-    private String cacheId;
+    public long id;
+    public long messageId;
+    public long size;
+    public int width;
+    public int height;
+    public String cacheId;
 
     public static RealmThumbnail put(Realm realm, long id, final long messageId, final ProtoGlobal.Thumbnail thumbnail) {
         RealmThumbnail realmThumbnail = realm.createObject(RealmThumbnail.class, id);

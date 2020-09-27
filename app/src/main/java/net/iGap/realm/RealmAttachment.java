@@ -37,26 +37,26 @@ import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
 public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey
-    private long id;
+    public long id;
 
     @Index
-    private String token;
-    private String url;
-    private String name;
-    private long size;
-    private int width;
-    private int height;
-    private double duration;
+    public String token;
+    public String url;
+    public String name;
+    public long size;
+    public int width;
+    public int height;
+    public double duration;
 
     @Index
-    private String cacheId;
-    private RealmThumbnail largeThumbnail;
-    private RealmThumbnail smallThumbnail;
+    public String cacheId;
+    public RealmThumbnail largeThumbnail;
+    public RealmThumbnail smallThumbnail;
     @Nullable
-    private String localThumbnailPath;
+    public String localThumbnailPath;
     @Nullable
-    private String localFilePath;
-    private String mimeType;
+    public String localFilePath;
+    public String mimeType;
 
     public static void updateToken(long fakeId, String token) {
         DbManager.getInstance().doRealmTask(realm -> {
