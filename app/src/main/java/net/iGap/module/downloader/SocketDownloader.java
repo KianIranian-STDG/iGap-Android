@@ -37,16 +37,19 @@ class SocketDownloader implements IDownloader {
     public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
         long size = message.fileSize;
         String filePath;
+        String cacheId;
 
         if (message.selector == FILE_VALUE) {
             filePath = message.destFile.getAbsolutePath();
+            cacheId = message.mainCacheId;
         } else {
             filePath = message.tempFile.getAbsolutePath();
+            cacheId = message.thumbCacheId;
         }
 
         oldDownloader.startDownload(message.messageType,
                 String.valueOf(message.getMessageId()), message.fileToken,
-                message.publicUrl, message.thumbCacheId,
+                message.publicUrl, cacheId,
                 message.fileName, size, selector, filePath,
                 priority, new HelperDownloadFile.UpdateListener() {
                     @Override
