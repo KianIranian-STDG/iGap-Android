@@ -12,6 +12,7 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
+import net.iGap.controllers.BaseController;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -34,7 +35,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
  * util for chat send messages
  * useful for having callback from different activities
  */
-public class ChatSendMessageUtil implements OnChatSendMessageResponse {
+public class ChatSendMessageUtil extends BaseController implements OnChatSendMessageResponse {
     private RequestChatSendMessage requestChatSendMessage;
     private RequestGroupSendMessage requestGroupSendMessage;
     private RequestChannelSendMessage requestChannelSendMessage;
@@ -42,6 +43,25 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     private ProtoGlobal.Room.Type roomType;
     private OnChatSendMessageResponse onChatSendMessageResponseChat;
     private OnChatSendMessageResponse onChatSendMessageResponseRoom;
+
+    private static volatile ChatSendMessageUtil[] instance = new ChatSendMessageUtil[AccountManager.MAX_ACCOUNT_COUNT];
+
+    public static ChatSendMessageUtil getInstance(int account) {
+        ChatSendMessageUtil localInstance = instance[account];
+        if (localInstance == null) {
+            synchronized (ChatSendMessageUtil.class) {
+                localInstance = instance[account];
+                if (localInstance == null) {
+                    instance[account] = localInstance = new ChatSendMessageUtil(account);
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    private ChatSendMessageUtil(int currentAccount) {
+        super(currentAccount);
+    }
 
     public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;

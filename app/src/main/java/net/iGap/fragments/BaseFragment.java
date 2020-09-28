@@ -32,6 +32,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.IDownloader;
@@ -215,5 +216,9 @@ public class BaseFragment extends SwipeBackFragment {
 
     public IUpload getIUploader() {
         return Uploader.getInstance();
+    }
+
+    public ChatSendMessageUtil getSendMessageUtil() {
+        return ChatSendMessageUtil.getInstance(currentAccount);
     }
 }

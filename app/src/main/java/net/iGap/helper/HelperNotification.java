@@ -870,7 +870,7 @@ public class HelperNotification {
                     if (message != null && message.length() > 0 && roomId > 0) {
                         RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
                         HelperRealm.copyOrUpdateToRealm(roomMessage);
-                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
                     }
 
                     break;

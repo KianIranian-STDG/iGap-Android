@@ -31,6 +31,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperUrl;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
@@ -539,7 +540,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
+                                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                 if (G.onBotClick != null) {
                                     G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                 }
@@ -565,7 +566,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
+                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                         if (G.onBotClick != null) {
                                             G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                         }

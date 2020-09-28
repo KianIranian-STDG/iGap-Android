@@ -280,7 +280,7 @@ public class HelperPublicMethod {
                 DbManager.getInstance().doRealmTask(realm -> {
                     if (message != null && message.length() > 0 && roomId > 0) {
                         RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
-                        new ChatSendMessageUtil().newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
                         AsyncTransaction.executeTransactionWithLoading(context, realm, realm1 -> realm1.copyToRealmOrUpdate(roomMessage), () -> {
                             Intent intent = new Intent(G.context, ActivityMain.class);
                             intent.putExtra(ActivityMain.openChat, roomId);

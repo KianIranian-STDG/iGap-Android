@@ -332,7 +332,6 @@ import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static java.lang.Long.parseLong;
-import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
@@ -2484,7 +2483,7 @@ public class FragmentChat extends BaseFragment
      * initialize some callbacks that used in this page
      */
     public void initCallbacks() {
-        chatSendMessageUtil.setOnChatSendMessageResponseChatPage(this);
+        getSendMessageUtil().setOnChatSendMessageResponseChatPage(this);
         G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatSendMessage = new OnChatSendMessage() {
@@ -3815,11 +3814,11 @@ public class FragmentChat extends BaseFragment
             if (!description.isEmpty()) {
                 G.handler.postDelayed(() -> {
                     if (roomMessage.isValid() && !roomMessage.isDeleted()) {
-                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                        getSendMessageUtil().build(chatType, mRoomId, roomMessage);
                     }
                 }, 1000);
             } else {
-                new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                getSendMessageUtil().build(chatType, mRoomId, roomMessage);
             }
         } else {
             Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
@@ -3867,12 +3866,12 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void run() {
                                 if (roomMessage.isValid() && !roomMessage.isDeleted()) {
-                                    new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                    getSendMessageUtil().build(chatType, mRoomId, roomMessage);
                                 }
                             }
                         }, 1000 * i);
                     } else {
-                        new ChatSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                        getSendMessageUtil().build(chatType, mRoomId, roomMessage);
                     }
                 } else {
                     Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
@@ -7764,7 +7763,7 @@ public class FragmentChat extends BaseFragment
 
 
         if (finalMessageType == CONTACT) {
-            ChatSendMessageUtil messageUtil = new ChatSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
+            ChatSendMessageUtil messageUtil = getSendMessageUtil().newBuilder(chatType, finalMessageType, mRoomId).message(getWrittenMessage());
             messageUtil.contact(structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getFirstName(),
                     structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getLastName(),
                     structMessageInfoNew.realmRoomMessage.getRoomMessageContact().getPhones().first().getString());
@@ -7860,7 +7859,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(roomMessage))), false);
-                chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                getSendMessageUtil().build(chatType, mRoomId, roomMessage);
                 scrollToEnd();
             }
         }, 300);
@@ -7978,7 +7977,7 @@ public class FragmentChat extends BaseFragment
                                     }
                                     RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", messageInfo.realmRoomMessage.getMessageId()).findFirst();
                                     if (roomMessage != null) {
-                                        chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
+                                        getSendMessageUtil().buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                                     }
                                 }
                             });

@@ -69,6 +69,7 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.MakeButtons;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
@@ -532,9 +533,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (isSelected() || structMessage.isSelected) {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            holder.itemView.setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
+            holder.itemView.setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
 
         /**
@@ -1771,7 +1772,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         });
                     }).start();
 
-                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage);
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, mMessage.getRoomId(), roomMessage);
                     messageClickListener.sendFromBot(roomMessage);
 
                 } else if (v.getId() == ButtonActionType.JOIN_LINK) {
@@ -1795,7 +1796,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage);
+                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, mMessage.getRoomId(), realmRoomMessage);
                                         messageClickListener.sendFromBot(realmRoomMessage);
                                     }
                                 });

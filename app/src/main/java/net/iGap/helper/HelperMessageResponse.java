@@ -10,7 +10,7 @@
 
 package net.iGap.helper;
 
-import net.iGap.G;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageOption;
@@ -115,12 +115,12 @@ public class HelperMessageResponse {
             /**
              * invoke following callback when i'm not the sender, because i already done everything after sending message
              */
-            G.chatSendMessageUtil.onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, roomType);
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageReceive(roomId, roomMessage.getMessage(), roomMessage.getMessageType(), roomMessage, roomType);
         } else {
             /**
              * invoke following callback when I'm the sender and the message has updated
              */
-            G.chatSendMessageUtil.onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
     }
 }

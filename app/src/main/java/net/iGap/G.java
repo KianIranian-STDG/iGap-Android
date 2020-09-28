@@ -45,7 +45,6 @@ import net.iGap.helper.LooperThreadHelper;
 import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.SingleLiveEvent;
@@ -167,7 +166,6 @@ public class G extends ApplicationContext {
     public static long latestResponse = System.currentTimeMillis();
     public static long serverHeartBeatTiming = 60 * 1000;
     public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
-    public static ChatSendMessageUtil chatSendMessageUtil = new ChatSendMessageUtil();
     public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
     public static ConnectionState connectionState;
     public static ConnectionState latestConnectionState;

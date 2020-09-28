@@ -9,6 +9,7 @@ import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
@@ -80,7 +81,7 @@ public class UploadManager {
                 message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT
         ) {
-            new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, message.getRoomId(), message);
             return;
         }
 
@@ -160,13 +161,13 @@ public class UploadManager {
                  * this code should exist in under of other codes in this block
                  */
                 if (message.getReplyTo() == null) {
-                    new ChatSendMessageUtil().newBuilder(roomType, message.getMessageType(), message.getRoomId())
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(roomType, message.getMessageType(), message.getRoomId())
                             .attachment(token)
                             .message(message.getMessage())
                             .sendMessage(message.getMessageId() + "");
                 } else {
 
-                    new ChatSendMessageUtil().newBuilder(roomType, message.getMessageType(), message.getRoomId())
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(roomType, message.getMessageType(), message.getRoomId())
                             .replyMessage(message.getReplyTo().getMessageId())
                             .attachment(token)
                             .message(message.getMessage())
@@ -220,7 +221,7 @@ public class UploadManager {
                     @Override
                     public void run() {
                         G.refreshRealmUi();
-                        G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageFailed(finalRoomId, Long.parseLong(identity));
                     }
                 });
             }

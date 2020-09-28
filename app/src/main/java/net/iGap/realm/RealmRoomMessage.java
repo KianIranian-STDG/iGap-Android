@@ -26,6 +26,7 @@ import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
@@ -756,7 +757,7 @@ public class RealmRoomMessage extends RealmObject {
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message.getMessageId());
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageFailed(message.getRoomId(), message.getMessageId());
         }
     }
 

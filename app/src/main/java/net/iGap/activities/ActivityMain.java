@@ -91,6 +91,7 @@ import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -1415,7 +1416,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         designLayout(chatLayoutMode.none);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-        G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
+        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).setOnChatSendMessageResponseRoomList(this);
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onPayment = this;

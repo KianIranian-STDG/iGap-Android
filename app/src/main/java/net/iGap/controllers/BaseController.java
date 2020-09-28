@@ -1,6 +1,7 @@
 package net.iGap.controllers;
 
 import net.iGap.helper.upload.UploadManager;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.IDownloader;
 import net.iGap.module.upload.IUpload;
@@ -41,5 +42,9 @@ public class BaseController {
 
     public IUpload getIUploader() {
         return Uploader.getInstance();
+    }
+
+    public ChatSendMessageUtil getSendMessageUtil() {
+        return ChatSendMessageUtil.getInstance(currentAccount);
     }
 }
