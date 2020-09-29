@@ -4132,7 +4132,18 @@ public class FragmentChat extends BaseFragment
         HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
 
         if (Uploader.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
-            deleteItem(message.realmRoomMessage.getMessageId(), pos);
+
+            getMessageController().cancelUploadFile(mRoomId, message.realmRoomMessage);
+
+            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                if (messageId == ((StructMessageInfo) edtChat.getTag()).realmRoomMessage.getMessageId()) {
+                    edtChat.setTag(null);
+                }
+            }
+
+            if (pos >= 0) {
+                mAdapter.removeMessage(pos);
+            }
         }
     }
 
@@ -5927,30 +5938,6 @@ public class FragmentChat extends BaseFragment
         ll_AppBarSelected.setVisibility(View.GONE);
         if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
         clearReplyView();
-    }
-
-    /**
-     * clear tag from edtChat and remove from view and delete from RealmRoomMessage
-     */
-    private void deleteItem(final long messageId, int position) {
-        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-            if (messageId == ((StructMessageInfo) edtChat.getTag()).realmRoomMessage.getMessageId()) {
-                edtChat.setTag(null);
-            }
-        }
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage.deleteMessage(realm, messageId);
-                }
-            });
-        });
-
-        if (position >= 0) {
-            mAdapter.removeMessage(position);
-        }
     }
 
     private void onSelectRoomMenu(String message, long item) {

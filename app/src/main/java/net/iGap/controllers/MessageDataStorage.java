@@ -16,6 +16,7 @@ import net.iGap.realm.RealmRoomMessage;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class MessageDataStorage extends BaseController {
 
@@ -202,5 +203,66 @@ public class MessageDataStorage extends BaseController {
                 FileLog.e(e);
             }
         });
+    }
+
+    private void putLastMessageInternal(final long roomId, RealmRoomMessage lastMessage) {
+        try {
+            dataBase.beginTransaction();
+            RealmRoom room = dataBase.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+            if (room != null) {
+                room.lastMessage = lastMessage;
+            }
+            dataBase.commitTransaction();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    public void resetRoomLastMessage(final long roomId, final long messageId) {
+        storageQueue.postRunnable(() -> {
+            try {
+                if (messageId != 0) {
+                    deleteMessage(roomId, messageId, false);
+                }
+
+                RealmRoomMessage newMessage = dataBase.where(RealmRoomMessage.class).equalTo("roomId", roomId)
+                        .notEqualTo("deleted", true)
+                        .sort(new String[]{"messageId"}, new Sort[]{Sort.DESCENDING})
+                        .findFirst();
+
+                if (newMessage != null) {
+                    putLastMessageInternal(roomId, newMessage);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    public void deleteMessage(final long roomId, final long messageId, final boolean useQueue) {
+        if (useQueue) {
+            storageQueue.postRunnable(() -> deleteMessageInternal(roomId, messageId));
+        } else {
+            deleteMessageInternal(roomId, messageId);
+        }
+    }
+
+    private void deleteMessageInternal(long roomId, long messageId) {
+        try {
+            if (roomId == 0 || messageId == 0) {
+                return;
+            }
+
+            dataBase.beginTransaction();
+
+            RealmRoomMessage message = dataBase.where(RealmRoomMessage.class).equalTo("messageId", messageId).equalTo("roomId", roomId).findFirst();
+            if (message != null) {
+                message.deleteFromRealm();
+            }
+
+            dataBase.commitTransaction();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 }

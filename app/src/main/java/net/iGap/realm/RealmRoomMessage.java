@@ -586,18 +586,6 @@ public class RealmRoomMessage extends RealmObject {
         });
     }
 
-
-    /**
-     * delete message from realm. call in transaction
-     */
-    public static RealmRoomMessage deleteMessage(Realm realm, long messageId) {
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
-        if (message != null) {
-            message.deleteFromRealm();
-        }
-        return message;
-    }
-
     public static RealmRoomMessage deleteMessage(Realm realm, long messageId, long roomId) {
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId)
                 .equalTo("roomId", roomId).findFirst();

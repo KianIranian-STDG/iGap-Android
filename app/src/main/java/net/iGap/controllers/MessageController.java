@@ -10,6 +10,7 @@ import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoom;
 
 import java.io.File;
@@ -118,5 +119,13 @@ public class MessageController extends BaseController implements EventListener {
                 getMessageDataStorage().deleteRoomFromStorage(res.roomId);
             }
         });
+    }
+
+    public void cancelUploadFile(long roomId, RealmRoomMessage message) {
+        if (message == null || roomId == 0) {
+            return;
+        }
+
+        getMessageDataStorage().resetRoomLastMessage(roomId, message.messageId);
     }
 }

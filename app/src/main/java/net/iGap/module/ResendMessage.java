@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -67,7 +68,8 @@ public class ResendMessage implements IResendMessage {
                 for (StructMessageInfo message : mMessages) {
                     if (message.realmRoomMessage != null) {
                         if (mSelectedMessageID == message.realmRoomMessage.getMessageId()) {
-                            RealmRoomMessage.deleteMessage(realm1, message.realmRoomMessage.getMessageId());
+//                            RealmRoomMessage.deleteMessage(realm1, message.realmRoomMessage.getMessageId());
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).deleteMessage(message.realmRoomMessage.roomId, message.realmRoomMessage.messageId, true);
                             break;
                         }
                     }
