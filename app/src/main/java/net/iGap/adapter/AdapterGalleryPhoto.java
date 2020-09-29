@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.R;
-import net.iGap.observers.interfaces.GalleryItemListener;
 import net.iGap.model.GalleryAlbumModel;
 import net.iGap.model.GalleryItemModel;
+import net.iGap.observers.interfaces.GalleryItemListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +106,18 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
             });
 
         }
+        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
 
+            @Override
+            public boolean onLongClick(View v) {
+                if (!isMultiSelect) {
+                    holder.check.setChecked(!holder.check.isChecked());
+                    listener.onMultiSelect(mSelectedPhotos.size());
+                    setMultiSelectState(!getMultiSelectState());
+                }
+                return true;
+            }
+        });
         //handle item click
         holder.image.setOnClickListener(v -> {
 
