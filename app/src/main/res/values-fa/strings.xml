@@ -185,7 +185,7 @@
     <string name="st_dialog_reset_all_notification_yes">"بلی"</string>
     <string name="st_dialog_reset_all_notification_no">"خیر"</string>
     <string name="st_title_Background">"پس زمينهٔ گفتگو"</string>
-
+    <string name="account_dialog_message">شما در حال برقراری تماس هستید آیا مایل به قطع آن هستید؟</string>
     <!-- privacy and security -->
     <string name="privacy">"حریم خصوصی"</string>
     <string name="Block_Users">"لیست مسدود‌ شده"</string>

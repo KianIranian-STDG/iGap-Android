@@ -2,6 +2,7 @@
 <resources>
     <string name="kuknos_toast">جواب غلط ہے! برائے مہربانی جواب دیں</string>
     <string name="text_line_1_introduce_page2">پارێزراوێتی لە ئای­گەپدا</string>
+    <string name="account_dialog_message">Zəng edirsən Qapılmaq istəyirsən?</string>
     <string name="text_line_2_introduce_page2">ئای­گەپ پێوەندییەکی پارێزراو بۆ تۆ پێک دەهێنێت. پەیام­نێری ئای­گەپ بە کەڵک­وەرگرتن لە ئەلگووریتمی رەمزیی تایبەت، لە جێگوڕکێی هەموو دەیتاکانتدا سەرترین ئاستی پارێزراوی بۆ پاراستنی هەرێمی تایبەتی تۆ دابین کردووە.</string>
     <string name="text_line_1_introduce_page3">وتووێژ لە ئای­گەپدا</string>
     <string name="text_line_2_introduce_page3">دەتوانن لە ئای­گەپدا بە شێوەی دووکەسی یان گرووپی وتووێژ بکەن و دڵنیا بین کە هەمیشە وتووێژەکانتان لە بەردەستدایە، هەروەها دەتوانیت کەناڵ دروست بکەیت و ئەندام وەربگریت و زانیارییەکانت لە نێوان ملیۆنان بەکارهێنەری دیکەدا شەیر بکەیت.</string>

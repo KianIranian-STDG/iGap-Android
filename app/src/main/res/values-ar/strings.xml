@@ -1470,6 +1470,8 @@
 
     <string name="no">"لا"</string>
 
+    <string name="account_dialog_message">أنت تجري مكالمة هل تريد إنهاء الخط؟</string>
+
     <string name="unavalable">خارج الشبكة </string>
 
     <string name="too_long">طويل جدّاً </string>
