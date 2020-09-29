@@ -123,6 +123,8 @@ public class CdnDownloader extends BaseController implements IDownloader {
             }
 
             file.notifyObservers(Resource.success(new HttpRequest.Progress(100, path)));
+            requestedDownload.remove(file.key);
+            Downloader.getInstance(currentAccount).onCdnDownloadComplete(file.mainCacheId);//must be change!
         } catch (IOException e) {
             handleError(file, e.getMessage());
         }

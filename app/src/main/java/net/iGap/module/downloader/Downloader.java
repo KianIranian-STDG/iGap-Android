@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import net.iGap.controllers.BaseController;
 import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.AppConfig;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 
 import java.util.HashSet;
@@ -65,6 +64,10 @@ public class Downloader extends BaseController implements IDownloader {
     @Override
     public void cancelDownload(@NonNull String cacheId) {
         getCurrentDownloader(cacheId).cancelDownload(cacheId);
+    }
+
+    public void onCdnDownloadComplete(String cacheId) {
+        publicCacheId.remove(cacheId);
     }
 
     @Override

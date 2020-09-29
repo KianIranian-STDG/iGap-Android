@@ -184,7 +184,6 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void setAttachmentFilePath(String cacheId, String absolutePath, boolean isThumb) {
-        FileLog.e("setAttachmentFilePath " + cacheId + " " + absolutePath + " " + isThumb);
         storageQueue.postRunnable(() -> {
             try {
                 dataBase.beginTransaction();
