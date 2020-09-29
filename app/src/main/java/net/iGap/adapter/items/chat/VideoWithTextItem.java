@@ -67,9 +67,9 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             if (structMessage.getAttachment() != null) {
 
                 if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                 } else {
-                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + ""));
+                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "",AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                 }
             }
         }
@@ -179,6 +179,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         @Override
         public MessageProgress getProgress() {
             return progress;
+        }
+
+        @Override
+        public TextView getProgressTextView() {
+            return duration;
         }
     }
 }

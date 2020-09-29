@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -506,7 +507,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             return progress;
         }
 
-
+        @Override
+        public TextView getProgressTextView() {
+            return songSize;
+        }
     }
     private String exractTimingInString(int currentVoiceGoTO) {
         int timeToSec = currentVoiceGoTO / 1000;
