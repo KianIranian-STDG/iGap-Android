@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import net.iGap.controllers.BaseController;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
 
 import java.util.HashSet;
