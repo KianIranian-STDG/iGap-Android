@@ -46,7 +46,7 @@ public class EventManager {
     public static final int ON_UPLOAD_PROGRESS = eventId++;
     public static final int ON_UPLOAD_COMPRESS = eventId++;
 
-    public static final int CALL_EVENT = eventId++;
+    public static final int CALL_STATE_CHANGED = eventId++;
 
     public static final int SOCKET_CONNECT_DENY = eventId++;
     public static final int SOCKET_CONNECT_OK = eventId++;

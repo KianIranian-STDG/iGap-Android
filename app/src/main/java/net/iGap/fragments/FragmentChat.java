@@ -715,7 +715,7 @@ public class FragmentChat extends BaseFragment
 
         edtChat.setListener(this::chatMotionEvent);
 
-        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().addEventListener(EventManager.ON_MESSAGE_DELETE, this);
         if (twoPaneMode)
@@ -1209,7 +1209,7 @@ public class FragmentChat extends BaseFragment
         mAttachmentPopup = null;
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().removeEventListener(EventManager.ON_MESSAGE_DELETE, this);
         if (twoPaneMode)
@@ -9322,7 +9322,7 @@ public class FragmentChat extends BaseFragment
      */
     @Override
     public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.CALL_EVENT) {
+        if (id == EventManager.CALL_STATE_CHANGED) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {
