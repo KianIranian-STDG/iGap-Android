@@ -71,6 +71,7 @@ import javax.crypto.spec.SecretKeySpec;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.realm.Realm;
 import ir.metrix.sdk.Metrix;
+import ir.metrix.sdk.MetrixConfig;
 import ir.radsense.raadcore.web.WebBase;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
@@ -402,6 +403,9 @@ public class G extends ApplicationContext {
         AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
+        MetrixConfig metrixConfig = new  MetrixConfig(this, "jpbnabzrmeqvxme");
+        metrixConfig.setFirebaseId("1:780057141561:android:69c59b7595e50096", "igap-im", "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA");
+        Metrix.onCreate(metrixConfig);
         Metrix.initialize(this, "jpbnabzrmeqvxme");
         Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
