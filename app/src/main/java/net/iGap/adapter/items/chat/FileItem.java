@@ -242,5 +242,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         public MessageProgress getProgress() {
             return progress;
         }
+
+        @Override
+        public TextView getProgressTextView() {
+            return cslf_txt_file_size;
+        }
     }
 }

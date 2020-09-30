@@ -111,6 +111,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -353,9 +354,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
                                 p = HelperCalander.convertToUnicodeFarsiNumber(p);
                             }
-                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
+                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), p+ "%" + G.context.getResources().getString(R.string.compressing)+"—"+AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                         } else {
-                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true)+" " ,AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))+ G.context.getResources().getString(R.string.Uploading)));
                         }
                     }
                 }
@@ -1575,7 +1576,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     void downLoadFile(final VH holder, int priority) {
-
         if (structMessage.getAttachment() == null || structMessage.getAttachment().getCacheId() == null) {
             return;
         }
@@ -1585,6 +1585,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
 
+        final TextView textView = ((IProgress) holder).getProgressTextView();
+        final String tempValue = textView != null ? textView.getText().toString() : "";
 
         final String token = structMessage.getAttachment().getToken();
         String name = structMessage.getAttachment().getName();
@@ -1619,9 +1621,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
                                         if (arg.data.getProgress() != 100) {
                                             progressBar.withProgress(arg.data.getProgress());
+                                            if (textView != null) {
+                                                textView.setText(String.format(Locale.US, "%s %s", HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(arg.data.getProgress())),"%"+" "+"—"+" "+tempValue));
+                                            }
                                         } else {
                                             progressBar.withProgress(99);
                                         }
+
                                     }
 
                                     if (arg.data.getProgress() == 100) {
@@ -1632,6 +1638,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
+                                        if (textView != null) {
+                                            textView.setText(tempValue);
+                                        }
                                     }
                                 }
                                 break;
@@ -1639,6 +1648,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
                                     progressBar.withProgress(1);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
+                                }
+                                if (textView != null) {
+                                    textView.setText(tempValue);
                                 }
                         }
                     });
