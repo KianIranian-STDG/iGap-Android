@@ -4777,8 +4777,12 @@ public class FragmentChat extends BaseFragment
         items.add(R.string.forward_item_dialog);
         items.add(R.string.delete_item_dialog);
 
-        if (isFileExistInLocalStorage(message))
+        if (String.valueOf(message.realmRoomMessage.getMessageId()).equals(MusicPlayer.messageId)) {
+            if (MusicPlayer.isPause)
+                items.add(R.string.delete_from_storage);
+        } else {
             items.add(R.string.delete_from_storage);
+        }
 
         //check and remove share base on type and download state
         if (roomMessageType.toString().equals("LOCATION") || roomMessageType.toString().equals("VOICE")) {
