@@ -22,6 +22,7 @@ import androidx.core.content.FileProvider;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
+import net.iGap.module.StartupActions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,6 +57,11 @@ public class HelperGetDataFromOtherApp {
             return;
         }
 
+        if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
+            checkData(activityCompat, intent);
+        } else {
+            StartupActions.makeFolder();
+        }
         checkData(activityCompat, intent);
     }
 
