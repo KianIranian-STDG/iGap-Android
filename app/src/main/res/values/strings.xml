@@ -820,7 +820,7 @@ Want to get it?</string>
     <string name="invalid_email">"Your email is invalid"</string>
     <string name="yes">"Yes"</string>
     <string name="no">"No"</string>
-
+    <string name="account_dialog_message">You are in calling. Do you want to hang up?</string>
 
     <string name="unavalable">Unavailable</string>
     <string name="too_long">Too Long</string>
