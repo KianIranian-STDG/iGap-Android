@@ -65,24 +65,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
                 this.userId = id;
                 ShowMsgDialog(getContext());
             } else {
-                if (isAssigned) {
-                    if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
-                        new AccountHelper().changeAccount(id);
-                        ((ActivityMain) getActivity()).updateUiForChangeAccount();
-                        RaadApp.onCreate(getContext());
-                    }
-                    dismiss();
-                } else {
-                    if (getActivity() != null) {
-                        new AccountHelper().addAccount();
-                        RaadApp.onCreate(getContext());
-                        // WebSocketClient.connectNewAccount();
-                        Intent intent = new Intent(getActivity(), ActivityRegistration.class);
-                        intent.putExtra("add account", true);
-                        getActivity().startActivity(intent);
-                        getActivity().finish();
-                    }
-                }
+                checkForAssigning(isAssigned, id);
             }
         }));
 
@@ -104,6 +87,29 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
                 }).onNegative((dialog, which) -> dialog.dismiss()).show();
     }
 
+    public void checkForAssigning(boolean assign, long id) {
+        if (assign) {
+
+            if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != id) {
+                new AccountHelper().changeAccount(id);
+                ((ActivityMain) getActivity()).updateUiForChangeAccount();
+                RaadApp.onCreate(getContext());
+            }
+            dismiss();
+        } else {
+            if (getActivity() != null) {
+
+                new AccountHelper().addAccount();
+                RaadApp.onCreate(getContext());
+                // WebSocketClient.connectNewAccount();
+                Intent intent = new Intent(getActivity(), ActivityRegistration.class);
+                intent.putExtra("add account", true);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        }
+    }
+
     @Override
     public int getTheme() {
         return R.style.BaseBottomSheetDialog;
@@ -118,26 +124,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
                     binding.accountDialogProgressbar.setVisibility(View.GONE);
 
                     if (CallManager.getInstance().getCurrentSate() == CallState.LEAVE_CALL) {
-                        if (isAssigned) {
-
-                            if (getActivity() instanceof ActivityMain && AccountManager.getInstance().getCurrentUser().getId() != userId) {
-                                new AccountHelper().changeAccount(userId);
-                                ((ActivityMain) getActivity()).updateUiForChangeAccount();
-                                RaadApp.onCreate(getContext());
-                            }
-                            dismiss();
-                        } else {
-                            if (getActivity() != null) {
-
-                                new AccountHelper().addAccount();
-                                RaadApp.onCreate(getContext());
-                                // WebSocketClient.connectNewAccount();
-                                Intent intent = new Intent(getActivity(), ActivityRegistration.class);
-                                intent.putExtra("add account", true);
-                                getActivity().startActivity(intent);
-                                getActivity().finish();
-                            }
-                        }
+                        checkForAssigning(isAssigned, userId);
                     }
                 }
             });
