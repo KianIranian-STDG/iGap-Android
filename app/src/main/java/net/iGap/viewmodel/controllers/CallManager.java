@@ -221,7 +221,7 @@ public class CallManager {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
-        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
+        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
         if (CallService.getInstance() != null) {
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
         }
@@ -233,7 +233,7 @@ public class CallManager {
     public void makeAccept(String sdp) {
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
-        EventManager.getInstance().postEvent(EventManager.CALL_EVENT, true);
+        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
         if (CallService.getInstance() != null) {
             CallService.getInstance().stopSoundAndVibrate();
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
@@ -275,7 +275,6 @@ public class CallManager {
             // call is declined in ringing mode
             isRinging = false;
             isCallActive = false;
-            EventManager.getInstance().postEvent(EventManager.CALL_EVENT, false);
             switch (builder.getType()) {
                 case REJECTED:
                     changeState(CallState.REJECT);
@@ -504,7 +503,6 @@ public class CallManager {
         if (timer != null)
             timer.cancel();
         callStartTime = 0;
-        instance = null;
     }
 
     public long getCallPeerId() {
@@ -552,7 +550,7 @@ public class CallManager {
     public void changeState(CallState callState) {
 
         currentSate = callState;
-
+        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, false);
         if (callState == CallState.CONNECTED) {
             if (callStartTime == 0) {
                 callStartTime = SystemClock.elapsedRealtime();

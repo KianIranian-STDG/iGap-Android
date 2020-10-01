@@ -258,7 +258,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
 
@@ -736,7 +736,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().removeEventListener(EventManager.ROOM_LIST_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -1141,7 +1141,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        if (id == EventManager.CALL_EVENT) {
+        if (id == EventManager.CALL_STATE_CHANGED) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {
