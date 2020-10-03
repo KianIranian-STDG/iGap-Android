@@ -499,6 +499,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             getContentBloke().addView(rootView, 0);
         }
 
+        public AppCompatTextView getSongTimeTv() {
+            return songTimeTv;
+        }
+
         @Override
         public ImageView getThumbNailImageView() {
             return thumbnail;
