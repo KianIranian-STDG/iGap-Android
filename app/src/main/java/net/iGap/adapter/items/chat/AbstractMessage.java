@@ -331,9 +331,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void run() {
                     if (message[0].equals(mMessage.getMessageId() + "")) {
+                        int progress = (int) message[1];
+                        String p = progress + "";
+                        if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
+                            p = HelperCalander.convertToUnicodeFarsiNumber(p);
+                        }
+
+                        if (holder instanceof FileItem.ViewHolder) {
+                            ((FileItem.ViewHolder) holder).cslf_txt_file_size.setText(String.format(G.context.getResources().getString(R.string.video_duration), p + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                        } else if (holder instanceof AudioItem.ViewHolder) {
+                            ((AudioItem.ViewHolder) holder).getSongTimeTv().setText(p + "%" + "—" + AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true));
+                        }
                         MessageProgress _Progress = ((IProgress) holder).getProgress();
                         if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                            int progress = (int) message[1];
                             if (progress >= 1 && progress != 100) {
                                 _Progress.withProgress(progress);
                             }
