@@ -23,11 +23,11 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
@@ -154,6 +154,11 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
         @Override
         public TextView getProgressTextView() {
+            return null;
+        }
+
+        @Override
+        public String getTempTextView() {
             return null;
         }
     }
