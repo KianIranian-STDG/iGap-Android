@@ -42,7 +42,6 @@ import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ChatUpdateStatusUtil;
@@ -454,7 +453,6 @@ public class G extends ApplicationContext {
             FileLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
             FileLog.i("---------------------------------------------------");
         }
-        UploadWorkerManager.initial(getApplicationContext());
     }
 
     @Override

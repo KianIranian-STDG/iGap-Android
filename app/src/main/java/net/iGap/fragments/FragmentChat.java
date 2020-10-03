@@ -207,6 +207,7 @@ import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructWebView;
+import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
@@ -5357,7 +5358,10 @@ public class FragmentChat extends BaseFragment
                     if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
                         if (failedMessages.get(i).getAttachment() != null) {
                             if (!Uploader.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
-                                Uploader.getInstance().uploadMessageAndSend(chatType, message.realmRoomMessage);
+                                UploadObject fileObject = UploadObject.createForMessage(message.realmRoomMessage, chatType);
+                                if (fileObject != null) {
+                                    Uploader.getInstance().upload(fileObject);
+                                }
                             }
                         }
                         break;

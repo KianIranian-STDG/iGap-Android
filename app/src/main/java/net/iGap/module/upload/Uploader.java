@@ -1,13 +1,8 @@
 package net.iGap.module.upload;
 
-import net.iGap.helper.upload.ApiBased.UploadWorkerManager;
-import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.module.accountManager.AppConfig;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
-
-import java.io.File;
 
 public class Uploader implements IUpload {
     private static Uploader instance;
@@ -17,7 +12,7 @@ public class Uploader implements IUpload {
 
     private Uploader() {
         uploadThroughProto = new UploadAdapter(UploadManager.getInstance());
-        uploadThroughApi = UploadWorkerManager.getInstance();
+        uploadThroughApi = HttpUploader.getInstance();
     }
 
     public static Uploader getInstance() {
@@ -30,31 +25,31 @@ public class Uploader implements IUpload {
         }
         return instance;
     }
-
-    @Override
-    public void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener) {
-        getCurrentUploader().upload(identity, file, type, onUploadListener);
-    }
-
-    @Override
-    public void upload(RealmRoomMessage message, OnUploadListener onUploadListener) {
-        getCurrentUploader().upload(message, onUploadListener);
-    }
-
-    @Override
-    public void upload(RealmRoomMessage message, String compressedPass, OnUploadListener onUploadListener) {
-        getCurrentUploader().upload(message, compressedPass, onUploadListener);
-    }
-
-    @Override
-    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
-        getCurrentUploader().uploadMessageAndSend(roomType, message);
-    }
-
-    @Override
-    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
-        getCurrentUploader().uploadMessageAndSend(roomType, message, ignoreCompress);
-    }
+//
+//    @Override
+//    public void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener) {
+//        getCurrentUploader().upload(identity, file, type, onUploadListener);
+//    }
+//
+//    @Override
+//    public void upload(RealmRoomMessage message, OnUploadListener onUploadListener) {
+//        getCurrentUploader().upload(message, onUploadListener);
+//    }
+//
+//    @Override
+//    public void upload(RealmRoomMessage message, String compressedPass, OnUploadListener onUploadListener) {
+//        getCurrentUploader().upload(message, compressedPass, onUploadListener);
+//    }
+//
+//    @Override
+//    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
+//        getCurrentUploader().uploadMessageAndSend(roomType, message);
+//    }
+//
+//    @Override
+//    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
+//        getCurrentUploader().uploadMessageAndSend(roomType, message, ignoreCompress);
+//    }
 
     @Override
     public boolean isUploading(String identity) {
@@ -96,6 +91,10 @@ public class Uploader implements IUpload {
         return getCurrentUploader().getCompressProgress(identity);
     }
 
+    @Override
+    public void upload(UploadObject fileObject) {
+        getCurrentUploader().upload(fileObject);
+    }
 
     // 0 => through proto
     // 1 => through api

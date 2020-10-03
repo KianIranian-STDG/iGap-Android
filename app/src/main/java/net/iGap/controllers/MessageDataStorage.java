@@ -264,4 +264,21 @@ public class MessageDataStorage extends BaseController {
             FileLog.e(e);
         }
     }
+
+    public void putAttachmentToken(final long messageId, final String token) {
+        storageQueue.postRunnable(() -> {
+            try {
+                dataBase.beginTransaction();
+                RealmAttachment attachment = dataBase.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
+
+                if (attachment != null) {
+                    attachment.token = token;
+                }
+
+                dataBase.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
 }

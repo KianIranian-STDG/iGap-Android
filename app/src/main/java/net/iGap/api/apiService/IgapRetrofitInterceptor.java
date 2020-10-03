@@ -71,7 +71,6 @@ public class IgapRetrofitInterceptor implements Interceptor {
         // end of checking for custom time outs
 
         Request.Builder builder = request.newBuilder();
-//        builder.header("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VySWQiOiIxNyIsInNlc3Npb25JZCI6IjI2MzQ0NTMyNjg1NzcwMTUyMyIsImVzayI6IlRkWFdtaFZ0cmtUaFwvWjdvc0xNRzJuUXFFa2NRcGRYc2VHcmttc1NVU3NMSHRhaEhcL282R3lmbFF2ZDhSXC9uSVIyMm9vS2ZzKzVTSWFvWk1cL3MxMEk3UT09IiwiaWF0IjoxNTgzOTE2MTU1LCJleHAiOjE2MTU0NTIxNTV9.OgOlnlQ2GQ_jNP9ULRkh9b4zP6Ci1empLIlVVAHjX9K3SVbi47CsPsvAQAhWX5HYgKxgYw6rUP54uuFUhRdAK3L33c0iaEEYjx4CjcHYOlGfw3aF5JF9KEQ7UBUyIjy33ujt5UDQ95kga4GlQ3VLQszWcHE-Dbs_U16yCCx7SBE");
         builder.header("Authorization", tokenContainer.getToken());
         builder.header("spec", getSpecifications());
         builder.header("Content-Type", "application/json");

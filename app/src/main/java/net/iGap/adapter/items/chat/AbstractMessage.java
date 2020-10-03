@@ -87,6 +87,7 @@ import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
@@ -402,7 +403,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
 
             if (!Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
-                Uploader.getInstance().uploadMessageAndSend(type, mMessage);
+                UploadObject fileObject = UploadObject.createForMessage(mMessage, type);
+                if (fileObject != null) {
+                    Uploader.getInstance().upload(fileObject);
+                }
             } else {
                 MessageProgress _Progress = ((IProgress) holder).getProgress();
                 _Progress.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
