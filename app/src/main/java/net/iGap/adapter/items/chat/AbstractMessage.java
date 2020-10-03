@@ -338,9 +338,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
 
                         if (holder instanceof FileItem.ViewHolder) {
-                            ((FileItem.ViewHolder) holder).cslf_txt_file_size.setText(String.format(G.context.getResources().getString(R.string.video_duration), p + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                            ((FileItem.ViewHolder) holder).cslf_txt_file_size.setText(HelperCalander.convertToUnicodeFarsiNumber(p + "%" + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true)));
                         } else if (holder instanceof AudioItem.ViewHolder) {
-                            ((AudioItem.ViewHolder) holder).getSongTimeTv().setText(p + "%" + "—" + AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true));
+                            ((AudioItem.ViewHolder) holder).getSongTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(p + "%" + "—" + AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true)));
                         }
                         MessageProgress _Progress = ((IProgress) holder).getProgress();
                         if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
