@@ -184,7 +184,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar , int progress , boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             }
 
@@ -284,6 +284,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         if (HelperCalander.isPersianUnicode) {
             (holder.songTimeTv).setText(HelperCalander.convertToUnicodeFarsiNumber(holder.songTimeTv.getText().toString()));
         }
+        holder.tempText = holder.songSize.getText().toString();
     }
 
     @Override
@@ -354,6 +355,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private CircleImageView coverIv;
+        private String tempText;
 
         public ViewHolder(View view) {
             super(view);
@@ -511,7 +513,13 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         public TextView getProgressTextView() {
             return songSize;
         }
+
+        @Override
+        public String getTempTextView() {
+            return tempText;
+        }
     }
+
     private String exractTimingInString(int currentVoiceGoTO) {
         int timeToSec = currentVoiceGoTO / 1000;
         long minutes = TimeUnit.MILLISECONDS.toMinutes(currentVoiceGoTO);
