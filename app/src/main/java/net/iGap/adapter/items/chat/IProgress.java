@@ -8,7 +8,11 @@ public interface IProgress {
 
     MessageProgress getProgress();
 
-    default TextView getProgressTextView(){
+    default TextView getProgressTextView() {
+        return null;
+    }
+
+    default String getTempTextView() {
         return null;
     }
 }

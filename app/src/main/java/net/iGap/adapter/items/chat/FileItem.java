@@ -80,7 +80,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true));
             }
         }
-
+        holder.tempText = holder.cslf_txt_file_size.getText().toString();
         setTextIfNeeded(holder.messageView);
         RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
             return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", mMessage.getMessageId()).findFirst());
@@ -140,6 +140,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         protected MessageProgress progress;
         private TextView fileType;
         private View spaceView;
+        protected String tempText;
 
         public ViewHolder(View view) {
             super(view);
@@ -246,6 +247,11 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         @Override
         public TextView getProgressTextView() {
             return cslf_txt_file_size;
+        }
+
+        @Override
+        public String getTempTextView() {
+            return tempText;
         }
     }
 }

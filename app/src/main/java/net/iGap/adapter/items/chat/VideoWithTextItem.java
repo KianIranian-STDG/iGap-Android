@@ -25,13 +25,13 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperRadius;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
@@ -69,11 +69,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                 if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                 } else {
-                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "",AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                 }
             }
         }
-
+        holder.tempText = holder.duration.getText().toString();
         setTextIfNeeded(holder.messageView);
 
     }
@@ -108,6 +108,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         protected MessageProgress progress;
         protected ReserveSpaceRoundedImageView image;
         public TextView duration;
+        public String tempText;
 
         public ViewHolder(View view) {
             super(view);
@@ -184,6 +185,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         @Override
         public TextView getProgressTextView() {
             return duration;
+        }
+
+        @Override
+        public String getTempTextView() {
+            return tempText;
         }
     }
 }
