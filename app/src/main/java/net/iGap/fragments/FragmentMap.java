@@ -610,11 +610,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
                 case R.id.mf_fab_openMap:
                     try {
-                        Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(im here)");
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
+                        String uri = "google.navigation:q=" + latitude + "," + longitude;
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                        startActivityForResult(intent, 500);
                     } catch (ActivityNotFoundException e) {
+                        //ignore
                     }
                     break;
 
