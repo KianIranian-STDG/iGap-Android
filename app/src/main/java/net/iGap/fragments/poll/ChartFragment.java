@@ -106,6 +106,7 @@ public class ChartFragment extends BaseFragment {
         xAxis.setGranularityEnabled(true);
         tryToUpdateOrFetchRecycleViewData(0);
         chart.setMaxVisibleValueCount(100);
+        chart.setNoDataText(getString(R.string.Submitـomment));
         chart.setPinchZoom(false);
         chart.setHighlightPerTapEnabled(false);
         chart.setDrawValueAboveBar(true);
