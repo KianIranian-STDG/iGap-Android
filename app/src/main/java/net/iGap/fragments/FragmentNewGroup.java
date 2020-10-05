@@ -57,6 +57,9 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.PassCode;
@@ -561,7 +564,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     }
 
     @Override
-    public void profileImageAdd(String path) {// FIXME: 10/3/20 
+    public void profileImageAdd(String path) {
         if (getActivity() != null) {
             getActivity().getSupportFragmentManager().popBackStack(FragmentNewGroup.class.getName(), 0);
         }
@@ -571,26 +574,26 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel.showProgressBar();
         //showProgressBar();
 
-//        Uploader.getInstance().upload(avatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
-//            @Override
-//            public void onProgress(String id, int progress) {
-//                fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
-//            }
-//
-//            @Override
-//            public void onFinish(String id, String token) {
-//                fragmentNewGroupViewModel.hideProgressBar();
-//                fragmentNewGroupViewModel.existAvatar = true;
-//                fragmentNewGroupViewModel.token = token;
-//                setImage(pathSaveImage);
-//            }
-//
-//            @Override
-//            public void onError(String id) {
-//                fragmentNewGroupViewModel.hideProgressBar();
-//
-//            }
-//        });
+        UploadManager.getInstance().upload(new UploadTask(avatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+            @Override
+            public void onProgress(String id, int progress) {
+                fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
+            }
+
+            @Override
+            public void onFinish(String id, String token) {
+                fragmentNewGroupViewModel.hideProgressBar();
+                fragmentNewGroupViewModel.existAvatar = true;
+                fragmentNewGroupViewModel.token = token;
+                setImage(pathSaveImage);
+            }
+
+            @Override
+            public void onError(String id) {
+                fragmentNewGroupViewModel.hideProgressBar();
+
+            }
+        }));
     }
 
     public interface OnRemoveFragmentNewGroup {
