@@ -40,7 +40,7 @@ ext {
 }
 
 project.ext {
-    protoMainVersion = "protoMain32"
+    protoMainVersion = "protoMain33"
     protoBetaVersion = "protoBeta32"
 }
 
