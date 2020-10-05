@@ -44,7 +44,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     private static final int NEWS_FRAGMENT = 6;
 
     public static final int START_TAB = CHAT_FRAGMENT;
-
+    public boolean isShowedAdd = false;
     public static final String DEEP_LINK_DISCOVERY = "discovery";
     public static final String DEEP_LINK_CONTACT = "contact";
     public static final String DEEP_LINK_CHAT = "chat";
@@ -123,7 +123,8 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     private void openAccountsDialog() {
         if (getActivity() == null) return;
         new AccountsDialog()
-                .setData(avatarHandler, (isAssigned, id) -> { })
+                .setData(avatarHandler, (isAssigned, id) -> {
+                })
                 .show(getActivity().getSupportFragmentManager(), "account");
 
     }

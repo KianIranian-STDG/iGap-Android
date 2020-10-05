@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -32,11 +34,14 @@ import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ir.tapsell.plus.AdHolder;
+import ir.tapsell.plus.AdRequestCallback;
+import ir.tapsell.plus.TapsellPlus;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -75,11 +80,45 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
+        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment) {
+            if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
+                requestAdd();
+            }
+        }
         if (isSwipeBackEnable) {
             return attachToSwipeBack(view);
         } else {
             return view;
         }
+    }
+
+    private void requestAdd() {
+        TapsellPlus.requestNativeBanner(
+                getActivity(),
+                "5f7b3016b32aee00019b7900",
+                new AdRequestCallback() {
+                    @Override
+                    public void response() {
+                        showMsgDialog();
+                    }
+
+                    @Override
+                    public void error(@NonNull String message) {
+                    }
+                });
+    }
+
+    public void showMsgDialog() {
+        FrameLayout dialogView = new FrameLayout(getContext());
+        dialogView.setId(R.id.add_container);
+        AdHolder adHolder = TapsellPlus.createAdHolder(
+                getActivity(), dialogView, R.layout.native_banner);
+
+        new MaterialDialog.Builder(getContext())
+                .customView(dialogView, true)
+                .show();
+        TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
+        ((BottomNavigationFragment) getParentFragment()).isShowedAdd = true;
     }
 
     @Override
