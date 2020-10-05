@@ -100,13 +100,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 new AdRequestCallback() {
                     @Override
                     public void response() {
-                        Log.e("cvmncmvnmc", "response: ");
                         showMsgDialog();
                     }
 
                     @Override
                     public void error(@NonNull String message) {
-                        Log.e("cvmncmvnmc", "error: ");
+
                     }
                 });
     }
