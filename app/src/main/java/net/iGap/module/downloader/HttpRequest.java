@@ -37,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> implements Comparable<HttpRequest> {
-    public static final String BASE_URL = ApiStatic.UPLOAD_URL + "download/";
+    public static final String BASE_URL = ApiStatic.FILE + "download/";
     private final int currentAccount;
     private DownloadObject fileObject;
     private int selector;

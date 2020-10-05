@@ -39,7 +39,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import shadow.org.apache.commons.io.FilenameUtils;
 
-import static net.iGap.api.apiService.ApiStatic.UPLOAD_URL;
+import static net.iGap.api.apiService.ApiStatic.FILE;
 
 public class UploadHttpRequest {
     public String key;
@@ -85,7 +85,7 @@ public class UploadHttpRequest {
     }
 
     private void initFile(String token) {
-        String url = UPLOAD_URL + "init";
+        String url = FILE + "init";
 
         try {
             if (isResume && token != null) {
@@ -192,7 +192,7 @@ public class UploadHttpRequest {
         storeTime = 0;
         resumeRetryCount = 0;
 
-        String url = UPLOAD_URL + "upload/" + fileObject.fileToken;
+        String url = FILE + "upload/" + fileObject.fileToken;
 
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = secureRandom.generateSeed(16);
