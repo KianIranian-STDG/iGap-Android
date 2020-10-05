@@ -73,6 +73,7 @@ import io.realm.Realm;
 import ir.metrix.sdk.Metrix;
 import ir.metrix.sdk.MetrixConfig;
 import ir.radsense.raadcore.web.WebBase;
+import ir.tapsell.plus.TapsellPlus;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
@@ -403,7 +404,7 @@ public class G extends ApplicationContext {
         AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
-        MetrixConfig metrixConfig = new  MetrixConfig(this, "jpbnabzrmeqvxme");
+        MetrixConfig metrixConfig = new MetrixConfig(this, "jpbnabzrmeqvxme");
         metrixConfig.setFirebaseId("1:780057141561:android:69c59b7595e50096", "igap-im", "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA");
         Metrix.onCreate(metrixConfig);
         Metrix.initialize(this, "jpbnabzrmeqvxme");
@@ -455,6 +456,11 @@ public class G extends ApplicationContext {
             FileLog.i("---------------------------------------------------");
         }
         UploadWorkerManager.initial(getApplicationContext());
+        //showing add
+        TapsellPlus.initialize(
+                this,
+                "alsoatsrtrotpqacegkehkaiieckldhrgsbspqtgqnbrrfccrtbdomgjtahflchkqtqosa");
+
     }
 
     @Override

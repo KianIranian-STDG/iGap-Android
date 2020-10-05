@@ -11,7 +11,7 @@
     <item name="songArtist" type="id" />
     <item name="fileSize" type="id" />
 
-
+    <item name="add_container" type="id"/>
     <item name="messageSenderAvatar" type="id" />
     <item name="messageForwardContainer" type="id" />
     <item name="messageSenderName" type="id" />
