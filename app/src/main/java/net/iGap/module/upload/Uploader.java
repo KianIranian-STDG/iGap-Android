@@ -71,8 +71,6 @@ public class Uploader implements IUpload {
         getCurrentUploader().upload(fileObject);
     }
 
-    // 0 => through proto
-    // 1 => through api
     private IUpload getCurrentUploader() {
         if (AppConfig.fileGateway == 0) {
             return uploadThroughProto;

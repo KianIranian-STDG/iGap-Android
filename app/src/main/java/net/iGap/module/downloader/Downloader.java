@@ -79,9 +79,9 @@ public class Downloader extends BaseController implements IDownloader {
     private IDownloader getCurrentDownloader(String cacheId) {
         if (publicCacheId.contains(cacheId))
             return downloadThroughCdn;
-        else if (AppConfig.fileGateway == 0) {
+        else if (AppConfig.fileGateway == 1) {
             return downloadThroughProto;
-        } else if (AppConfig.fileGateway == 1) {
+        } else if (AppConfig.fileGateway == 0) {
             return downloadThroughApi;
         }
         return downloadThroughProto;
