@@ -24,7 +24,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.poll.PollItem;
 import net.iGap.adapter.items.poll.PollItemField;
@@ -32,6 +31,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetPoll;
 
@@ -51,6 +51,7 @@ public class ChartFragment extends BaseFragment {
     private TextView emptyRecycle;
     private int pollId;
     private LinearLayout toolbar;
+    private int totalWith;
 
     public static ChartFragment newInstance(int page) {
         ChartFragment chartFragment = new ChartFragment();
@@ -105,6 +106,7 @@ public class ChartFragment extends BaseFragment {
         xAxis.setGranularityEnabled(true);
         tryToUpdateOrFetchRecycleViewData(0);
         chart.setMaxVisibleValueCount(100);
+        chart.setNoDataText(getString(R.string.Submitـomment));
         chart.setPinchZoom(false);
         chart.setHighlightPerTapEnabled(false);
         chart.setDrawValueAboveBar(true);
@@ -186,17 +188,23 @@ public class ChartFragment extends BaseFragment {
 
     public void bindView(String[] labels, ArrayList<BarEntry> barEntries) {
         int maxSize = 0;
-        int totalWith = (int) ViewMaker.pixelsToDp((float) Resources.getSystem().getDisplayMetrics().widthPixels, getContext());
-        for (int i = 0; i < labels.length; i++) {
-            if (labels[i].length() > 13) {
-                labels[i] = labels[i].substring(0, 10) + "...";
+        if (getContext() != null) {
+            totalWith = (int) ViewMaker.pixelsToDp((float) Resources.getSystem().getDisplayMetrics().widthPixels, getContext());
+            if (labels != null) {
+                for (int i = 0; i < labels.length; i++) {
+                    if (labels[i].length() > 13) {
+                        labels[i] = labels[i].substring(0, 10) + "...";
+                    }
+                    if (labels[i].length() > maxSize) {
+                        maxSize = labels[i].length();
+                    }
+                }
+            } else {
+                return;
             }
-            if (labels[i].length() > maxSize) {
-                maxSize = labels[i].length();
-            }
+
         }
         BarDataSet set1;
-
         chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
 
         set1 = new BarDataSet(barEntries, "Data Set");
