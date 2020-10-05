@@ -22,6 +22,9 @@ import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
@@ -31,9 +34,11 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.observers.interfaces.OnUserAvatarResponse;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.request.RequestUserAvatarAdd;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -213,30 +218,30 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         prgVisibility.set(View.GONE);
     }
 
-    public void uploadAvatar(String path) {// FIXME: 10/3/20 
+    public void uploadAvatar(String path) {
         existAvatar = false;
         pathImageUser = path;
         int lastUploadedAvatarId = idAvatar + 1;
         prgVisibility.set(View.VISIBLE);
-//        Uploader.getInstance().upload(lastUploadedAvatarId + "", new File(pathImageUser), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
-//            @Override
-//            public void onProgress(String id, int progress) {
-//                progressValue.postValue(progress);
-//            }
-//
-//            @Override
-//            public void onFinish(String id, String token) {
-//                Log.wtf(this.getClass().getName(), "onFinish: id: " + id);
-//                existAvatar = true;
-//                new RequestUserAvatarAdd().userAddAvatar(token);
-//            }
-//
-//            @Override
-//            public void onError(String id) {
-//                Log.wtf(this.getClass().getName(), "onError: id: " + id);
-//                existAvatar = true;
-//                prgVisibility.set(View.GONE);
-//            }
-//        });
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathImageUser), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+            @Override
+            public void onProgress(String id, int progress) {
+                progressValue.postValue(progress);
+            }
+
+            @Override
+            public void onFinish(String id, String token) {
+                Log.wtf(this.getClass().getName(), "onFinish: id: " + id);
+                existAvatar = true;
+                new RequestUserAvatarAdd().userAddAvatar(token);
+            }
+
+            @Override
+            public void onError(String id) {
+                Log.wtf(this.getClass().getName(), "onError: id: " + id);
+                existAvatar = true;
+                prgVisibility.set(View.GONE);
+            }
+        }));
     }
 }

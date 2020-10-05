@@ -31,6 +31,9 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
@@ -71,6 +74,7 @@ import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestInfoUpdate;
 import net.iGap.request.RequestInfoWallpaper;
+import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserIVandGetScore;
 import net.iGap.request.RequestUserProfileCheckUsername;
 import net.iGap.request.RequestUserProfileGetBio;
@@ -1105,25 +1109,25 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    public void uploadAvatar(String path) {// FIXME: 10/3/20 change upload struct
+    public void uploadAvatar(String path) {
         pathSaveImage = path;
         long lastUploadedAvatarId = idAvatar + 1L;
         showLoading.set(View.VISIBLE);
-//        Uploader.getInstance().upload(lastUploadedAvatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
-//            @Override
-//            public void onProgress(String id, int progress) {
-//            }
-//
-//            @Override
-//            public void onFinish(String id, String token) {
-//                new RequestUserAvatarAdd().userAddAvatar(token);
-//            }
-//
-//            @Override
-//            public void onError(String id) {
-//                G.handler.post(() -> showLoading.set(View.GONE));
-//            }
-//        });
+        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+            @Override
+            public void onProgress(String id, int progress) {
+            }
+
+            @Override
+            public void onFinish(String id, String token) {
+                new RequestUserAvatarAdd().userAddAvatar(token);
+            }
+
+            @Override
+            public void onError(String id) {
+                G.handler.post(() -> showLoading.set(View.GONE));
+            }
+        }));
     }
 
     public void onCountryCodeClick() {
