@@ -459,7 +459,7 @@ public class G extends ApplicationContext {
         //showing add
         TapsellPlus.initialize(
                 this,
-                "alsoatsrtrotpqacegkehkaiieckldhrgsbspqtgqnbrrfccrtbdomgjtahflchkqtqosa");
+                "ebooshceqodrpfrqscggitdtckqdpipnkbdhcpqbknqlqtjkepjcgslheaqkotkenqsclr");
 
     }
 

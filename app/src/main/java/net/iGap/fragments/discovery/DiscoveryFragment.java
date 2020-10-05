@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +95,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private void requestAdd() {
         TapsellPlus.requestNativeBanner(
                 getActivity(),
-                "5cfaa9deaede570001d5553a",
+                "5f7b3016b32aee00019b7900",
                 new AdRequestCallback() {
                     @Override
                     public void response() {
@@ -105,7 +104,6 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
                     @Override
                     public void error(@NonNull String message) {
-
                     }
                 });
     }
@@ -119,7 +117,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         new MaterialDialog.Builder(getContext())
                 .customView(dialogView, true)
                 .show();
-        TapsellPlus.showAd(getActivity(), adHolder, "5cfaa9deaede570001d5553a");
+        TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
         ((BottomNavigationFragment) getParentFragment()).isShowedAdd = true;
     }
 
