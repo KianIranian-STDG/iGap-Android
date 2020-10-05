@@ -7,6 +7,9 @@ import net.iGap.proto.ProtoChannelDelete;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
+import net.iGap.proto.ProtoInfoConfig;
+
+import java.util.HashMap;
 
 public class IG_RPC {
 
@@ -260,6 +263,83 @@ public class IG_RPC {
             return actionId;
         }
 
+    }
+
+    public static class InfoConfig extends AbstractObject {
+        public static final int actionId = 506;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Info_Config.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            return ProtoInfoConfig.InfoConfig.newBuilder();
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Info_Config extends AbstractObject {
+        public static final int actionId = 30506;
+
+        public long captionLengthMax;
+        public long channelAddMemberLimit;
+        public boolean debugMode;
+        public long defaultTimeout;
+        public long groupAddMemberLimit;
+        public long maxFileSize;
+        public long messageLengthMax;
+        public boolean optimizeMode;
+        public String servicesBaseUrl;
+        public int fileGateway;
+        public HashMap<String, Integer> microServices = new HashMap<>();
+
+        public static Res_Info_Config deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Info_Config object = null;
+            try {
+                object = new Res_Info_Config();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoInfoConfig.InfoConfigResponse response = ProtoInfoConfig.InfoConfigResponse.parseFrom(message);
+
+            resId = response.getResponse().getId();
+            servicesBaseUrl = response.getBaseUrl();
+            captionLengthMax = response.getCaptionLengthMax();
+            channelAddMemberLimit = response.getChannelAddMemberLimit();
+            debugMode = response.getDebugMode();
+            defaultTimeout = response.getDefaultTimeout();
+            maxFileSize = response.getMaxFileSize();
+            optimizeMode = response.getOptimizeMode();
+
+            for (int i = 0; i < response.getMicroServiceCount(); i++) {
+                ProtoInfoConfig.MicroService microService = response.getMicroServiceList().get(i);
+                microServices.put(microService.getName(), microService.getTypeValue());
+            }
+
+            Integer file = microServices.get("file");
+            if (file != null) {
+                fileGateway = file;
+            } else {
+                fileGateway = 1;// default socket
+            }
+        }
     }
 
 }

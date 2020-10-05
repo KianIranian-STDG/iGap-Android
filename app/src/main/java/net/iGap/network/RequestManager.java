@@ -4,7 +4,6 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
 import com.neovisionaries.ws.client.WebSocketFrame;
 
 import net.iGap.Config;
@@ -17,8 +16,6 @@ import net.iGap.helper.HelperClassNamePreparation;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.OkHttpClientInstance;
-import net.iGap.model.ConfigRes;
 import net.iGap.module.AESCrypt;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.AppConfig;
@@ -37,10 +34,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 public class RequestManager extends BaseController {
     private static volatile RequestManager[] instance = new RequestManager[AccountManager.MAX_ACCOUNT_COUNT];
     private DispatchQueue networkQueue = new DispatchQueue("networkQueue");
@@ -52,6 +45,7 @@ public class RequestManager extends BaseController {
 
     private boolean isSecure;
     private boolean userLogin;
+    private boolean configLoaded;
 
     public static RequestManager getInstance(int account) {
         RequestManager localInstance = instance[account];
@@ -68,42 +62,38 @@ public class RequestManager extends BaseController {
 
     public RequestManager(int currentAccount) {
         super(currentAccount);
-        getConfig();
     }
 
     private void getConfig() {
-        new Thread(() -> {
-            OkHttpClient okHttpClient = OkHttpClientInstance.getInstance();
+        if (configLoaded) {
+            return;
+        }
+        configLoaded = true;
 
-            Request req = new Request.Builder()
-                    .url("https://api.igap.net/config")
-                    .build();
-            try {
-                Response response = okHttpClient.newCall(req).execute();
-                if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
-                    String res = response.body().string();
-                    ConfigRes config = new Gson().fromJson(res, ConfigRes.class);
-
+        IG_RPC.InfoConfig req = new IG_RPC.InfoConfig();
+        sendRequest(req, (response, error) -> {
+            if (error == null) {
+                IG_RPC.Res_Info_Config res = (IG_RPC.Res_Info_Config) response;
+                try {
                     if (Config.FILE_LOG_ENABLE) {
-                        FileLog.i(TAG, res);
+                        FileLog.i(TAG, String.valueOf(res));
                     }
 
-                    try {
-                        AppConfig.webSocketUrl = config.webSocket;
-                        AppConfig.fileGateway = config.microServices.file.toLowerCase().equals("socket") ? 0 : 1;
-                        AppConfig.defaultTimeout = config.defaultTimeout;
-                        AppConfig.maxFileSize = config.maxFileSize;
-                        AppConfig.messageLengthMax = config.messageLengthMax;
-                        AppConfig.optimizeMode = config.optimizeMode;
-                        AppConfig.saveConfig();
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
+                    AppConfig.servicesBaseUrl = res.servicesBaseUrl;
+                    AppConfig.fileGateway = res.fileGateway;
+                    AppConfig.defaultTimeout = res.defaultTimeout;
+                    AppConfig.maxFileSize = res.maxFileSize;
+                    AppConfig.messageLengthMax = res.messageLengthMax;
+                    AppConfig.optimizeMode = res.optimizeMode;
+
+                    AppConfig.saveConfig();
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
-            } catch (Exception e) {
-                FileLog.e(e);
+            } else {
+                configLoaded = false;
             }
-        }).start();
+        });
     }
 
     public String sendRequest(AbstractObject request, OnResponse onResponse) {
@@ -336,7 +326,7 @@ public class RequestManager extends BaseController {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                FileLog.e(e);
             }
         }
     }
@@ -471,6 +461,10 @@ public class RequestManager extends BaseController {
 
     public void setSecure(boolean isSecure) {
         this.isSecure = isSecure;
+
+        if (!configLoaded && isSecure) {
+            getConfig();
+        }
     }
 
     public void setUserLogin(boolean userLogin) {

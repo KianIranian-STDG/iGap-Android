@@ -66,6 +66,6 @@ public class UploadRequestBody extends RequestBody {
     }
 
     public interface IOnProgressListener {
-        void onProgress(long totalByte);
+        void onProgress(final long totalByte);
     }
 }

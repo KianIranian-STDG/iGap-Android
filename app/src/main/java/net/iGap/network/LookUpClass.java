@@ -46,6 +46,8 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Channel_Delete.actionId, IG_RPC.Res_Channel_Delete.class);
         classes.put(IG_RPC.Res_Group_Create.actionId, IG_RPC.Res_Group_Create.class);
         classes.put(IG_RPC.Res_Channel_Avatar.actionId, IG_RPC.Res_Channel_Avatar.class);
+
+        classes.put(IG_RPC.Res_Info_Config.actionId, IG_RPC.Res_Info_Config.class);
     }
 
     public boolean validObject(int actionId) {
@@ -377,6 +379,7 @@ public class LookUpClass {
         unLogin.add("139");
         unLogin.add("140");
         unLogin.add("802");
+        unLogin.add("506");
     }
 
     /**

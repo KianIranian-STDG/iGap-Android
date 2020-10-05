@@ -1,23 +1,7 @@
 package net.iGap.module.upload;
 
-import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
-
-import java.io.File;
-
 public interface IUpload {
-    void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener);
-
-    void upload(RealmRoomMessage message, OnUploadListener onUploadListener);
-
-    void upload(RealmRoomMessage message, String compressedPass, OnUploadListener onUploadListener);
-
-    void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message);
-
-    void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress);
-
-    boolean isUploading(String identity);
+    boolean isUploading(String messageId);
 
     boolean isCompressing(String identity);
 
@@ -32,4 +16,6 @@ public interface IUpload {
     int getUploadProgress(String identity);
 
     int getCompressProgress(String identity);
+
+    void upload(UploadObject fileObject);
 }

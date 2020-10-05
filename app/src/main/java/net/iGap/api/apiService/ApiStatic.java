@@ -1,7 +1,8 @@
 package net.iGap.api.apiService;
 
+import net.iGap.module.accountManager.AppConfig;
+
 public class ApiStatic {
-    static final String KUKNOS_Horizan_Server = "https://hz1-test.kuknos.org/";
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
     static final String MOBILE_BANK = "http://192.168.8.109:3000/v1.0/";
     static final String WEATHER_URL = "http://192.168.8.66:7000/v1.0/";
@@ -23,6 +24,6 @@ public class ApiStatic {
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
     private static final String NEWS_BASE_URL = "https://api.cafetitle.com/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
-    public static final String UPLOAD_URL = "https://gate.igap.net/files/v1.0/";
+    public static final String FILE = AppConfig.servicesBaseUrl + "/files/v1.0/";
 }
 

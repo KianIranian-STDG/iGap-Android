@@ -19,6 +19,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.IResendMessage;
@@ -125,7 +126,11 @@ public class ResendMessage implements IResendMessage {
                                                     if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                         ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                                     } else {
-                                                        Uploader.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                        UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+
+                                                        if (fileObject != null) {
+                                                            Uploader.getInstance().upload(fileObject);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -148,7 +153,11 @@ public class ResendMessage implements IResendMessage {
                                             if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                 ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                             } else {
-                                                Uploader.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+
+                                                if (fileObject != null) {
+                                                    Uploader.getInstance().upload(fileObject);
+                                                }
                                             }
                                         }
                                     }

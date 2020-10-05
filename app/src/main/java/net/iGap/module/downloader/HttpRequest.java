@@ -37,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> implements Comparable<HttpRequest> {
-    public static final String BASE_URL = ApiStatic.UPLOAD_URL + "download/";
+    public static final String BASE_URL = ApiStatic.FILE + "download/";
     private final int currentAccount;
     private DownloadObject fileObject;
     private int selector;
@@ -45,7 +45,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     private volatile boolean isDownloaded;
     private int priority = PRIORITY.PRIORITY_DEFAULT;
     private AtomicBoolean cancelDownload = new AtomicBoolean(false);
-    private AppExecutors appExecutors;
+    private FileIOExecutor fileExecutors;
     private Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> downloadStatusObserver;
     private Call call;
 
@@ -53,7 +53,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         currentAccount = account;
         this.fileObject = fileObject;
         selector = fileObject.selector;
-        appExecutors = AppExecutors.getInstance();
+        fileExecutors = FileIOExecutor.getInstance();
         isDownloaded = fileObject.destFile.exists();
         isDownloading = false;
 
@@ -69,7 +69,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
             return;
         }
-        appExecutors.networkIO().execute(() -> download(TokenContainer.getInstance().getToken(), fileObject));
+        fileExecutors.execute(() -> download(TokenContainer.getInstance().getToken(), fileObject));
     }
 
     public void cancelDownload() {

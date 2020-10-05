@@ -37,6 +37,7 @@ import android.view.inputmethod.InputMethodManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.DispatchQueue;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
 import net.iGap.proto.ProtoGlobal;
@@ -831,5 +832,32 @@ public final class AndroidUtils {
         } else {
             return String.format(Locale.US, "%d:%02d:%02d", h, m, s);
         }
+    }
+
+    public static String MD5(String md5) {
+        if (md5 == null) {
+            return null;
+        }
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(AndroidUtils.getStringBytes(md5));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : array) {
+                sb.append(Integer.toHexString((b & 0xFF) | 0x100).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
+
+    public static byte[] getStringBytes(String src) {
+        try {
+            return src.getBytes("UTF-8");
+        } catch (Exception ignore) {
+
+        }
+        return new byte[0];
     }
 }

@@ -58,6 +58,8 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.upload.OnUploadListener;
+import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.PassCode;
@@ -67,7 +69,6 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructContactInfo;
-import net.iGap.module.upload.Uploader;
 import net.iGap.observers.interfaces.OnAvatarAdd;
 import net.iGap.observers.interfaces.OnChannelAvatarAdd;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -573,7 +574,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel.showProgressBar();
         //showProgressBar();
 
-        Uploader.getInstance().upload(avatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+        UploadManager.getInstance().upload(new UploadTask(avatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
                 fragmentNewGroupBinding.ngPrgWaiting.setProgress(progress);
@@ -592,7 +593,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 fragmentNewGroupViewModel.hideProgressBar();
 
             }
-        });
+        }));
     }
 
     public interface OnRemoveFragmentNewGroup {
