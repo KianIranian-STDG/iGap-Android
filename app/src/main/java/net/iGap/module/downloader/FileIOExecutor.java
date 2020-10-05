@@ -3,22 +3,22 @@ package net.iGap.module.downloader;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class FileExecutors {
+public class FileIOExecutor {
     private final Executor executor;
-    private static FileExecutors instance;
+    private static FileIOExecutor instance;
 
-    private FileExecutors() {
+    private FileIOExecutor() {
         int NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();
         executor = Executors.newFixedThreadPool(NUMBER_OF_CORES);
     }
 
-    public static FileExecutors getInstance() {
-        FileExecutors localInstance = instance;
+    public static FileIOExecutor getInstance() {
+        FileIOExecutor localInstance = instance;
         if (localInstance == null) {
-            synchronized (FileExecutors.class) {
+            synchronized (FileIOExecutor.class) {
                 localInstance = instance;
                 if (localInstance == null) {
-                    instance = localInstance = new FileExecutors();
+                    instance = localInstance = new FileIOExecutor();
                 }
             }
         }

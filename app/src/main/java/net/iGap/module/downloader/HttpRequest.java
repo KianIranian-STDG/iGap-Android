@@ -45,7 +45,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     private volatile boolean isDownloaded;
     private int priority = PRIORITY.PRIORITY_DEFAULT;
     private AtomicBoolean cancelDownload = new AtomicBoolean(false);
-    private FileExecutors fileExecutors;
+    private FileIOExecutor fileExecutors;
     private Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> downloadStatusObserver;
     private Call call;
 
@@ -53,7 +53,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         currentAccount = account;
         this.fileObject = fileObject;
         selector = fileObject.selector;
-        fileExecutors = FileExecutors.getInstance();
+        fileExecutors = FileIOExecutor.getInstance();
         isDownloaded = fileObject.destFile.exists();
         isDownloading = false;
 

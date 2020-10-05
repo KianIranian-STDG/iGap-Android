@@ -77,6 +77,6 @@ public class UploadAdapter implements IUpload {
 
     @Override
     public void upload(UploadObject fileObject) {
-
+        uploadManager.uploadMessageAndSend(fileObject.roomType, fileObject.message);
     }
 }

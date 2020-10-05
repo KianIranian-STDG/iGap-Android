@@ -2,14 +2,13 @@ package net.iGap.module.upload;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.helper.upload.UploadRequestBody;
 import net.iGap.module.AndroidUtils;
-import net.iGap.proto.ProtoGlobal;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -17,10 +16,13 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
 import java.security.SecureRandom;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.crypto.Cipher;
@@ -44,12 +46,11 @@ public class UploadHttpRequest {
     public UploadObject fileObject;
     private String md5Key;
     private OkHttpClient client;
-    private ProtoGlobal.RoomMessageType type;
+    private int resumeRetryCount;
     private UploadDelegate delegate;
     private boolean isResume;
     private Call requestCall;
 
-    private final int currentAccount;
     private volatile boolean isUploading;
     private AtomicBoolean cancelDownload = new AtomicBoolean(false);
     private String TAG = getClass().getSimpleName();
@@ -62,12 +63,11 @@ public class UploadHttpRequest {
 
         void onUploadFinish(UploadObject fileObject);
 
-        void onUploadFail(UploadObject fileObject, Exception e);
+        void onUploadFail(UploadObject fileObject, @Nullable Exception e);
     }
 
-    public UploadHttpRequest(int currentAccount, UploadObject fileObject, UploadDelegate delegate) {
+    public UploadHttpRequest(UploadObject fileObject, UploadDelegate delegate) {
         this.delegate = delegate;
-        this.currentAccount = currentAccount;
         this.fileObject = fileObject;
         this.key = fileObject.key;
 
@@ -77,15 +77,10 @@ public class UploadHttpRequest {
     }
 
     public void startUploadProcess() {
-        Log.i(TAG, "start upload: " + key);
-
         md5Key = AndroidUtils.MD5(fileObject.fileName);
 
         isResume = preferences.getLong("offset_" + md5Key, 0) != 0;
         String token = preferences.getString("token_" + md5Key, null);
-
-        Log.i(TAG, "UploadHttpRequest: " + md5Key + " resumeCache " + token);
-
         initFile(token);
     }
 
@@ -94,6 +89,12 @@ public class UploadHttpRequest {
 
         try {
             if (isResume && token != null) {
+                fileObject.progress = preferences.getInt("progress_" + md5Key, 1);
+
+                if (delegate != null) {
+                    delegate.onUploadProgress(fileObject);
+                }
+
                 Request req = new Request.Builder()
                         .url(url + "/" + token)
                         .addHeader("Authorization", userToken)
@@ -112,11 +113,39 @@ public class UploadHttpRequest {
                         fileObject.progress = (int) ((fileObject.offset * 100) / fileObject.fileSize);
                     }
                     startOrResume();
-                } else {// FIXME: 10/3/20 handel exception
-                    fileObject.progress = preferences.getInt("progress_" + md5Key, 0);
-                    if (delegate != null) {
-                        delegate.onUploadProgress(fileObject);
+                } else {
+                    int resCode = res.code();
+                    if (resCode == 407) {
+                        preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+                        isResume = false;
+                        startUploadProcess();
+                    } else if (resCode == 408) {
+                        if (resumeRetryCount < 5) {
+                            try {
+                                new Timer().schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        resumeRetryCount++;
+                                        isResume = preferences.getLong("offset_" + md5Key, 0) != 0;
+                                        String token = preferences.getString("token_" + md5Key, null);
+                                        initFile(token);
+                                    }
+                                }, 5000);
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                        } else {
+                            if (delegate != null) {
+                                delegate.onUploadFail(fileObject, null);
+                            }
+                        }
+                    } else if (resCode == 406) {
+                        preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+                        if (delegate != null) {
+                            delegate.onUploadFinish(fileObject);
+                        }
                     }
+                    FileLog.e("UploadHttpRequest " + req.toString() + " res -> " + res.code());
                 }
             } else if (token == null) {
                 String name = FilenameUtils.getName(fileObject.file.getName());
@@ -145,12 +174,10 @@ public class UploadHttpRequest {
                     JSONObject resObject = new JSONObject(resString);
                     fileObject.fileToken = resObject.getString("token");
 
-                    Log.i(TAG, "init res: " + resString);
-
                     startOrResume();
                 } else if (res.body() != null) {
                     String resString = res.body().string();
-                    Log.i(TAG, "init: " + resString);
+                    FileLog.e(req.toString() + " res -> " + resString);
                 }
             }
         } catch (IOException e) {
@@ -163,6 +190,8 @@ public class UploadHttpRequest {
     private void startOrResume() {
         isUploading = true;
         storeTime = 0;
+        resumeRetryCount = 0;
+
         String url = UPLOAD_URL + "upload/" + fileObject.fileToken;
 
         SecureRandom secureRandom = new SecureRandom();
@@ -170,7 +199,12 @@ public class UploadHttpRequest {
 
         try (FileInputStream fileInputStream = new FileInputStream(fileObject.file); ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(iv)) {
             if (fileObject.offset > 0 && isResume) {
-                long skip = fileInputStream.skip(fileObject.offset);
+                try {
+                    long skip = fileInputStream.skip(fileObject.offset);
+                } catch (IOException e) {
+                    fileObject.offset = 0;
+                    FileLog.e(e);
+                }
             }
 
             try (InputStream inputStream = new SequenceInputStream(byteArrayInputStream, new CipherInputStream(fileInputStream, getCipher(iv)))) {
@@ -184,7 +218,6 @@ public class UploadHttpRequest {
                     int progress = (int) ((totalByte * 100) / fileObject.file.length());
                     if (fileObject.progress < progress) {
                         fileObject.progress = progress;
-                        Log.i(TAG, "upload: " + key + " " + fileObject.progress);
 
                         if (delegate != null) {
                             delegate.onUploadProgress(fileObject);
@@ -196,8 +229,6 @@ public class UploadHttpRequest {
                                     .putString("token_" + md5Key, fileObject.fileToken)
                                     .putInt("progress_" + md5Key, fileObject.progress)
                                     .apply();
-
-                            Log.i(TAG, "storeShared: " + md5Key + "_offset " + totalByte);
                         }
 
                         storeTime++;
@@ -214,21 +245,24 @@ public class UploadHttpRequest {
                 Response response = requestCall.execute();
 
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.i(TAG, "upload: successfully " + response.body().string());
                     preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
 
                     if (delegate != null) {
                         delegate.onUploadFinish(fileObject);
                     }
                 } else if (response.body() != null) {
-                    Log.e(TAG, "upload fail: " + response.body().string());
+                    if (response.code() >= 500 && response.code() < 600) {
+                        preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+                    }
                     error(new Exception(response.body().string()));
                 }
             } catch (Exception e) {
                 error(e);
             }
-        } catch (Exception e) {
-            error(e);
+        } catch (FileNotFoundException e) {
+            FileLog.e(e);
+        } catch (IOException e) {
+            FileLog.e(e);
         }
     }
 
@@ -237,13 +271,9 @@ public class UploadHttpRequest {
 
         if (error instanceof Exception) {
             Exception exception = (Exception) error;
-            Log.e(TAG, "error: " + fileObject.key + " ", exception);
-
             if (delegate != null) {
                 delegate.onUploadFail(fileObject, exception);
             }
-        } else {
-
         }
     }
 
