@@ -497,7 +497,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void handleUiWithMultiSelect(int size) {
-        if (mGalleryMode==GalleryMode.PHOTO) {
+        if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
             if (size > 0) {
                 mHelperToolbar.getRightButton().setText(R.string.md_send_button);
             } else {
