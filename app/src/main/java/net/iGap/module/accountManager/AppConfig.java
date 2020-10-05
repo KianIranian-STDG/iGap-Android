@@ -18,6 +18,7 @@ public class AppConfig {
     public static long maxFileSize;
     public static long messageLengthMax;
     public static boolean optimizeMode;
+    public static boolean showAdvertisement;
 
     static {
         loadConfig();
@@ -38,6 +39,7 @@ public class AppConfig {
             maxFileSize = preferences.getLong("max_file_size", 100000000);
             messageLengthMax = preferences.getLong("message_length", 1024);
             optimizeMode = preferences.getBoolean("optimized_mode", false);
+            showAdvertisement = preferences.getBoolean("show_advertisement", false);
             configLoaded = true;
         }
     }
@@ -53,6 +55,7 @@ public class AppConfig {
                 editor.putLong("max_file_size", maxFileSize);
                 editor.putLong("message_length", messageLengthMax);
                 editor.putBoolean("optimized_mode", optimizeMode);
+                editor.putBoolean("show_advertisement", showAdvertisement);
                 editor.apply();
 
                 EventManager.getInstance().postEvent(EventManager.APP_CONFIG_CHANGED);

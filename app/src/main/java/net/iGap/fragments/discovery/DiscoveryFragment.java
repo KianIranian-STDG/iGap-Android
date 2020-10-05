@@ -33,6 +33,7 @@ import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
@@ -80,7 +81,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
-        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment) {
+        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement) {
             if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
                 requestAdd();
             }

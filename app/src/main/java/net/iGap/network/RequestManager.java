@@ -85,6 +85,7 @@ public class RequestManager extends BaseController {
                     AppConfig.maxFileSize = res.maxFileSize;
                     AppConfig.messageLengthMax = res.messageLengthMax;
                     AppConfig.optimizeMode = res.optimizeMode;
+                    AppConfig.showAdvertisement = res.showAdvertisement;
 
                     AppConfig.saveConfig();
                 } catch (Exception e) {
