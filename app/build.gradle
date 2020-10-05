@@ -166,17 +166,7 @@ dependencies {
 
     //for adMob
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
-    implementation 'com.unity3d.ads:unity-ads:3.4.0'
 
-
-    //for chartboost
-    implementation 'com.chartboost:chartboost-sdk:8.1.0'
-
-    //for applovin
-    implementation 'com.applovin:applovin-sdk:9.7.2'
-
-    //for adcolony
-    implementation 'com.adcolony:sdk:4.1.1'
     implementation project(path: ':lvl')
     implementation 'com.mikepenz:fastadapter:3.2.5'
     implementation 'com.mikepenz:fastadapter-commons:3.2.5'
