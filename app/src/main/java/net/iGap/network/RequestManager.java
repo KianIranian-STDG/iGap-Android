@@ -17,7 +17,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AESCrypt;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.AppConfig;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoError;
@@ -35,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RequestManager extends BaseController {
-    private static volatile RequestManager[] instance = new RequestManager[AccountManager.MAX_ACCOUNT_COUNT];
+    private static volatile RequestManager instance;
     private DispatchQueue networkQueue = new DispatchQueue("networkQueue");
 
     private String TAG = getClass().getSimpleName();
@@ -48,12 +47,12 @@ public class RequestManager extends BaseController {
     private boolean configLoaded;
 
     public static RequestManager getInstance(int account) {
-        RequestManager localInstance = instance[account];
+        RequestManager localInstance = instance;
         if (localInstance == null) {
             synchronized (RequestManager.class) {
-                localInstance = instance[account];
+                localInstance = instance;
                 if (localInstance == null) {
-                    instance[account] = localInstance = new RequestManager(account);
+                    instance = localInstance = new RequestManager(account);
                 }
             }
         }
