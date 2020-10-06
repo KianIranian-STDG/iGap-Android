@@ -73,9 +73,9 @@ public class Uploader implements IUpload {
 
     private IUpload getCurrentUploader() {
         if (AppConfig.fileGateway == 0) {
-            return uploadThroughProto;
-        } else if (AppConfig.fileGateway == 1) {
             return uploadThroughApi;
+        } else if (AppConfig.fileGateway == 1) {
+            return uploadThroughProto;
         }
 
         return uploadThroughProto;
