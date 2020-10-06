@@ -328,47 +328,55 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @Override
     public void receivedMessage(int id, Object... message) {
         if (id == EventManager.ON_UPLOAD_PROGRESS) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (message[0].equals(mMessage.getMessageId() + "")) {
-                        int progress = (int) message[1];
-                        String p = progress + "";
-                        if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                            p = HelperCalander.convertToUnicodeFarsiNumber(p);
-                        }
+            G.runOnUiThread(() -> {
+                String messageKey = (String) message[0];
+                String messageId = String.valueOf(mMessage.getMessageId());
 
-                        if (holder instanceof FileItem.ViewHolder) {
-                            ((FileItem.ViewHolder) holder).cslf_txt_file_size.setText(HelperCalander.convertToUnicodeFarsiNumber(p + "%" + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true)));
-                        } else if (holder instanceof AudioItem.ViewHolder) {
-                            ((AudioItem.ViewHolder) holder).getSongTimeTv().setText(HelperCalander.convertToUnicodeFarsiNumber(p + "%" + "—" + AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true)));
-                        }
-                        MessageProgress _Progress = ((IProgress) holder).getProgress();
-                        if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                            if (progress >= 1 && progress != 100) {
-                                _Progress.withProgress(progress);
-                            }
+                if (messageKey.equals(messageId)) {
+                    int progress = (int) message[1];
+                    String progressString = String.valueOf(progress);
+                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true);
+
+                    if (G.selectedLanguage.equals("fa")) {
+                        progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
+                        attachmentSizeString = HelperCalander.convertToUnicodeFarsiNumber(attachmentSizeString);
+                    }
+
+                    if (holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder) {
+                        TextView progressTextView = ((IProgress) holder).getProgressTextView();
+                        progressTextView.setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
+                    } else if (holder instanceof AudioItem.ViewHolder) {
+                        AudioItem.ViewHolder audioHolder = (AudioItem.ViewHolder) holder;
+                        audioHolder.getSongTimeTv().setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
+                    }
+
+                    MessageProgress progressView = ((IProgress) holder).getProgress();
+                    if (progressView.getTag() != null && progressView.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
+                        if (progress >= 1 && progress != 100) {
+                            progressView.withProgress(progress);
                         }
                     }
                 }
             });
         } else if (id == EventManager.ON_UPLOAD_COMPRESS) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (message[0].equals(mMessage.getMessageId() + "") && holder instanceof VideoWithTextItem.ViewHolder) {
-                        int percent = (int) message[1];
-                        if (percent <= 99) {
+            G.runOnUiThread(() -> {
+                String messageKey = (String) message[0];
+                String messageId = String.valueOf(mMessage.getMessageId());
 
-                            String p = percent + "";
+                if (messageKey.equals(messageId) && holder instanceof VideoWithTextItem.ViewHolder) {
+                    VideoWithTextItem.ViewHolder videoHolder = (VideoWithTextItem.ViewHolder) holder;
+                    int progress = (int) message[1];
 
-                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                                p = HelperCalander.convertToUnicodeFarsiNumber(p);
-                            }
-                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), p + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
-                        } else {
-                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " ", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
+                    if (progress <= 99) {
+                        String progressString = String.valueOf(progress);
+
+                        if (G.selectedLanguage.equals("fa")) {
+                            progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
                         }
+
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                    } else {
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " ", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
                     }
                 }
             });

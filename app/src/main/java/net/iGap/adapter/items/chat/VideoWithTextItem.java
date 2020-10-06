@@ -59,20 +59,22 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.getForwardMessage() != null) {
-            if (mMessage.getForwardMessage().getAttachment() != null) {
-                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.getForwardMessage().getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.getForwardMessage().getAttachment().getSize(), true)));
-            }
-        } else {
-            if (structMessage.getAttachment() != null) {
-
-                if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
-                } else {
-                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+        if (!mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+            if (mMessage.getForwardMessage() != null) {
+                if (mMessage.getForwardMessage().getAttachment() != null) {
+                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.getForwardMessage().getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.getForwardMessage().getAttachment().getSize(), true)));
+                }
+            } else {
+                if (structMessage.getAttachment() != null) {
+                    if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                    } else {
+                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                    }
                 }
             }
         }
+
         holder.tempText = holder.duration.getText().toString();
         setTextIfNeeded(holder.messageView);
 
@@ -82,17 +84,9 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
         if (fileType == LocalFileType.THUMBNAIL) {
-//                BitmapFactory.Options options = new BitmapFactory.Options();
-//                options.inPreferredConfig = Bitmap.Config.RGB_565;
-//                DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
-//                G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
-//                        new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
             G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-
         } else {
-
             AppUtils.setProgresColor(holder.progress.progressBar);
-
             holder.progress.setVisibility(View.VISIBLE);
             holder.progress.withDrawable(R.drawable.ic_play, true);
         }
@@ -112,7 +106,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         public ViewHolder(View view) {
             super(view);
-            boolean withText = true;
             FrameLayout frameLayout_642 = new FrameLayout(view.getContext());
             LinearLayout.LayoutParams layout_535 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             frameLayout_642.setLayoutParams(layout_535);
@@ -131,7 +124,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             duration.setGravity(Gravity.CENTER_VERTICAL);
             duration.setSingleLine(true);
             duration.setPadding(i_Dp(R.dimen.dp4), dpToPx(1), i_Dp(R.dimen.dp4), dpToPx(1));
-            duration.setText("3:48 (4.5 MB)");
             duration.setAllCaps(TRUE);
             duration.setTextColor(ContextCompat.getColor(view.getContext(), R.color.gray10));
             setTextSize(duration, R.dimen.verySmallTextSize);
@@ -154,18 +146,13 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));
             FrameLayout.LayoutParams layout_50 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layout_50.gravity = Gravity.RIGHT | Gravity.TOP;
-            /*layout_50.bottomMargin = -dpToPx(2);
-            layout_50.rightMargin = dpToPx(5);
-            layout_50.topMargin = dpToPx(7);*/
             more.setLayoutParams(layout_50);
             frameLayout_642.addView(more);
 
             progress = getProgressBar(view.getContext(), 0);
             frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
             getContentBloke().addView(frameLayout_642);
-            if (withText) {
-                setLayoutMessageContainer();
-            }
+            setLayoutMessageContainer();
         }
 
         public FontIconTextView getMoreButton() {
