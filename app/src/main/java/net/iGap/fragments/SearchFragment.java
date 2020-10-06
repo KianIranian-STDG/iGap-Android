@@ -78,9 +78,32 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     private String preventRepeatSearch = "";
     private ContentLoadingProgressBar loadingProgressBar;
     private HelperToolbar toolbar;
+    private static final String SEARCH_TXT = "searchText";
+    private static final String SEARCH_AUTO = "isSearchAuto";
+    private String searchTxt;
 
     public static SearchFragment newInstance() {
-        return new SearchFragment();
+        Bundle bundle = new Bundle();
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static SearchFragment newInstance(String searchText, boolean searchAuto) {
+        Bundle bundle = new Bundle();
+        SearchFragment fragment = new SearchFragment();
+        bundle.putString(SEARCH_TXT, searchText);
+        bundle.putBoolean(SEARCH_AUTO, searchAuto);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments().getBoolean(SEARCH_AUTO, false)) {
+            searchTxt = getArguments().getString(SEARCH_TXT);
+        }
     }
 
     @Nullable
@@ -95,6 +118,11 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
         initComponent(view);
         initRecycleView();
+        if (searchTxt != null) {
+            toolbar.getEditTextSearch().setText(searchTxt);
+            toolbar.getEditTextSearch().setSelection(toolbar.getEditTextSearch().getText().toString().length());
+            startOrReStartSearchTimer();
+        }
     }
 
     private void initComponent(View view) {
