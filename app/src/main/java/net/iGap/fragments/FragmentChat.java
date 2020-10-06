@@ -4769,8 +4769,8 @@ public class FragmentChat extends BaseFragment
 
         if (!isNotJoin)
             items.add(R.string.replay_item_dialog);
-
-        items.add(R.string.share_item_dialog);
+        if (!roomMessageType.equals(STICKER))
+            items.add(R.string.share_item_dialog);
 
         if (shareLinkIsOn)
             items.add(R.string.share_link_item_dialog);
