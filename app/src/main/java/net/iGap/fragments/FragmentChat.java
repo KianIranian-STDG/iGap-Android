@@ -6752,17 +6752,19 @@ public class FragmentChat extends BaseFragment
         hashListener = new OnComplete() {
             @Override
             public void complete(boolean result, String text, String messageId) {
-
-                if (!initHash) {
-                    initHash = true;
-                    initHashView();
-                }
-
-                searchHash.setHashString(text);
-                searchHash.setPosition(messageId);
-                ll_navigateHash.setVisibility(View.VISIBLE);
-                viewAttachFile.setVisibility(View.GONE);
-
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.ac_ll_parent, SearchFragment.newInstance(text, true)).commit();
+//                if (chatType == CHANNEL || chatType == GROUP) {
+//                    if (!initHash) {
+//                        initHash = true;
+//                        initHashView();
+//                    }
+//                    searchHash.setHashString(text);
+//                    searchHash.setPosition(messageId);
+//                    ll_navigateHash.setVisibility(View.VISIBLE);
+//                    viewAttachFile.setVisibility(View.GONE);
+//                } else {
+//
+//                }
                 if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
                     if (layoutMute != null) layoutMute.setVisibility(View.GONE);
                 }
@@ -6774,8 +6776,6 @@ public class FragmentChat extends BaseFragment
      * init layout hashtak for up and down
      */
     private void initHashView() {
-
-
         ll_navigateHash = rootView.findViewById(R.id.ac_ll_hash_navigation);
         btnUpHash = rootView.findViewById(R.id.ac_btn_hash_up);
         btnDownHash = rootView.findViewById(R.id.ac_btn_hash_down);
