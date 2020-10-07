@@ -503,6 +503,7 @@ public class CallManager {
         if (timer != null)
             timer.cancel();
         callStartTime = 0;
+        callPeerId = 0;
     }
 
     public long getCallPeerId() {
