@@ -209,6 +209,7 @@ public class MessageDataStorage extends BaseController {
             dataBase.beginTransaction();
             RealmRoom room = dataBase.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (room != null) {
+                room.updatedTime = Math.max(lastMessage.updateTime, lastMessage.createTime);
                 room.lastMessage = lastMessage;
             }
             dataBase.commitTransaction();
