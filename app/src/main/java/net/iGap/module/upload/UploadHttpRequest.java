@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.helper.upload.UploadRequestBody;
 import net.iGap.module.AndroidUtils;
@@ -176,6 +177,11 @@ public class UploadHttpRequest {
 
                     startOrResume();
                 } else if (res.body() != null) {
+                    if (res.code() == 451) {
+                        if (delegate != null) {
+                            delegate.onUploadFail(fileObject, null);
+                        }
+                    }
                     String resString = res.body().string();
                     FileLog.e(req.toString() + " res -> " + resString);
                 }
@@ -242,10 +248,14 @@ public class UploadHttpRequest {
                         .build();
 
                 requestCall = client.newCall(request);
+                HelperSetAction.setActionFiles(fileObject.message.getRoomId(), fileObject.messageId, HelperSetAction.getAction(fileObject.messageType), fileObject.roomType);
+
                 Response response = requestCall.execute();
 
                 if (response.isSuccessful() && response.body() != null) {
                     preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+
+                    HelperSetAction.sendCancel(fileObject.messageId);
 
                     if (delegate != null) {
                         delegate.onUploadFinish(fileObject);
@@ -268,6 +278,7 @@ public class UploadHttpRequest {
 
     private void error(Object error) {
         isUploading = false;
+        HelperSetAction.sendCancel(fileObject.messageId);
 
         if (error instanceof Exception) {
             Exception exception = (Exception) error;
