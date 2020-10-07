@@ -771,7 +771,7 @@ public class ChatAttachmentPopup {
                         MediaStore.MediaColumns.DATA
                 };
 
-                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC");
+                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
                 if (cursor != null) {
                     column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
