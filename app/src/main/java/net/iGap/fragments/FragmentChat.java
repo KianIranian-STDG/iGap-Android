@@ -4777,11 +4777,12 @@ public class FragmentChat extends BaseFragment
         items.add(R.string.forward_item_dialog);
         items.add(R.string.delete_item_dialog);
 
-        if (String.valueOf(message.realmRoomMessage.getMessageId()).equals(MusicPlayer.messageId)) {
-            if (MusicPlayer.isPause)
+        if (isFileExistInLocalStorage(message)) {
+            if (MusicPlayer.isPause && String.valueOf(message.realmRoomMessage.getMessageId()).equals(MusicPlayer.messageId)) {
                 items.add(R.string.delete_from_storage);
-        } else {
-            items.add(R.string.delete_from_storage);
+            } else if (!String.valueOf(message.realmRoomMessage.getMessageId()).equals(MusicPlayer.messageId)) {
+                items.add(R.string.delete_from_storage);
+            }
         }
 
         //check and remove share base on type and download state
@@ -8895,6 +8896,7 @@ public class FragmentChat extends BaseFragment
         if (path == null) return false;
         if (!path.contains(G.IGAP + "/") && !path.contains("/net.iGap/"))
             return false; //just remove from igap folder
+
         return new File(path).exists();
     }
 
