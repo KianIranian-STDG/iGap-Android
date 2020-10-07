@@ -38,6 +38,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -6756,7 +6757,19 @@ public class FragmentChat extends BaseFragment
         hashListener = new OnComplete() {
             @Override
             public void complete(boolean result, String text, String messageId) {
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.ac_ll_parent, SearchFragment.newInstance(text, true)).commit();
+                if (ll_Search != null && ll_Search.getVisibility() == View.VISIBLE && !text.startsWith("#")) {
+                    if (!initHash) {
+                        initHash = true;
+                        initHashView();
+                    }
+                    searchHash.setHashString(text);
+                    searchHash.setPosition(messageId);
+                    ll_navigateHash.setVisibility(View.VISIBLE);
+                    viewAttachFile.setVisibility(View.GONE);
+                } else if (text.startsWith("#")) {
+                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.ac_ll_parent, SearchFragment.newInstance(text, true)).commit();
+                }
+
 //                if (chatType == CHANNEL || chatType == GROUP) {
 //                    if (!initHash) {
 //                        initHash = true;
