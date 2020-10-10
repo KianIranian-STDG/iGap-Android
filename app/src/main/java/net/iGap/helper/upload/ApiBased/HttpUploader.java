@@ -178,7 +178,9 @@ public class HttpUploader implements IUpload {
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
                         pendingCompressTasks.remove(fileObject.messageId + "");
 
-                        fileObject.file = completedCompressFile;
+                        if (compress) {
+                            fileObject.file = completedCompressFile;
+                        }
                         startUpload(fileObject, completedCompressFile);
                     }
                 });

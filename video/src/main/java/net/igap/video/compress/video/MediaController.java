@@ -293,7 +293,7 @@ public class MediaController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            return false;
         } else {
             if (originalHeight > originalWidth) {
                 resultWidth = 360;
