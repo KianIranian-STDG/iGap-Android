@@ -39,7 +39,7 @@ public class UploadObject {
         object.path = message.attachment.localFilePath;
         object.file = new File(object.path);
         object.fileName = object.file.getName();
-        object.fileSize = message.attachment.size;
+        object.fileSize = object.file.length();
         object.fileToken = message.attachment.token;
         object.key = String.valueOf(message.messageId);
         object.messageType = ProtoGlobal.RoomMessageType.valueOf(message.messageType);
