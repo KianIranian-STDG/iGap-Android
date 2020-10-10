@@ -219,7 +219,9 @@ public class HttpUploader implements IUpload {
 
                     DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
 
-                    if (fileObject.message.replyTo == null) {
+                    if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.message.roomId, fileObject.message);
+                    } else if (fileObject.message.replyTo == null) {
                         ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
                                 .attachment(fileObject.fileToken)
                                 .message(fileObject.message.getMessage())
@@ -231,6 +233,7 @@ public class HttpUploader implements IUpload {
                                 .message(fileObject.message.message)
                                 .sendMessage(fileObject.message.messageId + "");
                     }
+
                     scheduleNewUpload();
                 }
 
