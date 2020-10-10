@@ -356,3 +356,53 @@
 }
 
 -keep public class com.bumptech.glide.**
+
+
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
+
+
+##---------------End: proguard configuration for admob  ----------
+
+
+##---------------Begin: proguard configuration for chartboost  ----------
+-keep class com.chartboost.** { *; }
+##---------------End: proguard configuration for chartboost  ----------
+
+
+##---------------Begin: proguard configuration for tapsell  ----------
+
+-keep interface ir.tapsell.sdk.NoNameProguard
+
+-keep enum * implements ir.tapsell.sdk.NoProguard { *; }
+-keepnames class * implements ir.tapsell.sdk.NoNameProguard { *; }
+-keepnames class * extends android.app.Activity
+-keep class ir.tapsell.plus.model.** { *; }
+
+-keep class ir.tapsell.sdk.nativeads.TapsellNativeVideoAdLoader$Builder {*;}
+-keep class ir.tapsell.sdk.nativeads.TapsellNativeBannerAdLoader$Builder {*;}
+
+-keepclasseswithmembers class * {
+    native <methods>;
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keep interface ir.tapsell.plus.NoProguard
+-keep interface * extends ir.tapsell.plus.NoProguard { *; }
+-keep class * implements ir.tapsell.plus.NoProguard { *; }
+
+##---------------End: proguard configuration for tapsell  ----------
+
+##---------------Begin: proguard configuration for AppLovin  ----------
+
+-dontwarn com.applovin.**
+-keep class com.applovin.** { *; }
+-keep class com.google.android.gms.ads.identifier.** { *; }
+
+##---------------End: proguard configuration for AppLovin  ----------
+
