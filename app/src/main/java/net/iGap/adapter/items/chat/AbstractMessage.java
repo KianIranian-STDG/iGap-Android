@@ -556,9 +556,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (isSelected() || structMessage.isSelected) {
-            holder.itemView.setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
-            holder.itemView.setForeground(new ColorDrawable(Color.TRANSPARENT));
+            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
 
         /**
