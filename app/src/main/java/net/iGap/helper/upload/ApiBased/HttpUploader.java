@@ -159,7 +159,6 @@ public class HttpUploader implements IUpload {
             if (!completedCompressFile.exists() && ignoreCompress()) {
                 if (pendingCompressTasks.containsKey(fileObject.messageId + ""))
                     return;
-
                 CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.message.attachment.localFilePath, savePathVideoCompress, new OnCompress() {
                     @Override
                     public void onCompressProgress(String id, int percent) {
@@ -170,6 +169,7 @@ public class HttpUploader implements IUpload {
                     public void onCompressFinish(String id, boolean compress) {
                         if (compress && compressFile.exists() && compressFile.length() < (new File(fileObject.message.attachment.localFilePath)).length()) {
                             compressFile.renameTo(completedCompressFile);
+                            fileObject.file = completedCompressFile;
                         } else {
                             if (compressFile.exists()) {
                                 compressFile.delete();
@@ -178,9 +178,6 @@ public class HttpUploader implements IUpload {
                         EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
                         pendingCompressTasks.remove(fileObject.messageId + "");
 
-                        if (compress) {
-                            fileObject.file = completedCompressFile;
-                        }
                         startUpload(fileObject, completedCompressFile);
                     }
                 });
@@ -284,7 +281,7 @@ public class HttpUploader implements IUpload {
     }
 
     private boolean ignoreCompress() {
-        return G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1;
+        return G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 0) == 1;
     }
 
     private boolean validForCompress(UploadObject fileObject) {
