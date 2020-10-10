@@ -81,11 +81,6 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
-        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement) {
-            if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
-                requestAdd();
-            }
-        }
         if (isSwipeBackEnable) {
             return attachToSwipeBack(view);
         } else {
@@ -292,7 +287,16 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 }
 
                 listLoaded = true;
-
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement) {
+                            if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
+                                requestAdd();
+                            }
+                        }
+                    }
+                }, 4000);
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
