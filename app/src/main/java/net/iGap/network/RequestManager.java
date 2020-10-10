@@ -80,6 +80,7 @@ public class RequestManager extends BaseController {
 
                     AppConfig.servicesBaseUrl = res.servicesBaseUrl;
                     AppConfig.fileGateway = res.fileGateway;
+                    AppConfig.defaultTab = res.defaultTab;
                     AppConfig.defaultTimeout = res.defaultTimeout;
                     AppConfig.maxFileSize = res.maxFileSize;
                     AppConfig.messageLengthMax = res.messageLengthMax;

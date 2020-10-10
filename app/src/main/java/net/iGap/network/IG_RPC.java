@@ -298,6 +298,7 @@ public class IG_RPC {
         public String servicesBaseUrl;
         public int fileGateway;
         public boolean showAdvertisement;
+        public int defaultTab;
         public HashMap<String, Integer> microServices = new HashMap<>();
 
         public static Res_Info_Config deserializeObject(int constructor, byte[] message) {
@@ -329,6 +330,7 @@ public class IG_RPC {
             maxFileSize = response.getMaxFileSize();
             optimizeMode = response.getOptimizeMode();
             showAdvertisement = response.getShowAdvertising();
+            defaultTab = response.getDefaultTabValue();
 
             for (int i = 0; i < response.getMicroServiceCount(); i++) {
                 ProtoInfoConfig.MicroService microService = response.getMicroServiceList().get(i);

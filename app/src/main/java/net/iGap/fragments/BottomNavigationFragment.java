@@ -27,6 +27,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.observers.interfaces.OnUnreadChange;
 
@@ -43,7 +44,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     private static final int POPULAR_CHANNEL_FRAGMENT = 5;
     private static final int NEWS_FRAGMENT = 6;
 
-    public static final int START_TAB = CHAT_FRAGMENT;
+    public static final int START_TAB = AppConfig.defaultTab;
     public boolean isShowedAdd = false;
     public static final String DEEP_LINK_DISCOVERY = "discovery";
     public static final String DEEP_LINK_CONTACT = "contact";
