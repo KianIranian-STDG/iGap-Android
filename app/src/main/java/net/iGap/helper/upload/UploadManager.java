@@ -60,7 +60,7 @@ public class UploadManager {
     }
 
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
-        uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) != 1);
+        uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 0) != 1);
     }
 
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
