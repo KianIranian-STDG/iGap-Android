@@ -1673,7 +1673,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 final String tempFilePath;
                 String filePath;
 
-                holder1.txtVideoTime.setText(AppUtils.humanReadableDuration(at.getDuration()));
+                holder1.txtVideoTime.setText(AndroidUtils.formatDuration((int) (at.getDuration() * 1000L)));
 
                 holder1.txtVideoSize.setVisibility(View.GONE);
                 //holder1.txtVideoIcon.setVisibility(View.GONE);
