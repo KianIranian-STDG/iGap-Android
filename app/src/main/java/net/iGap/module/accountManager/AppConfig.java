@@ -12,7 +12,7 @@ public class AppConfig {
     private static final Object sync = new Object();
 
     public static String servicesBaseUrl;
-    //in Gateway socket is 0 and api is 1
+    //in Gateway socket is 1 and api is 0
     public static int fileGateway;
     public static long defaultTimeout;
     public static long maxFileSize;
