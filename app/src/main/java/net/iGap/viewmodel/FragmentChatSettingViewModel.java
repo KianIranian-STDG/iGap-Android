@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
+import net.iGap.module.Theme;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,7 +61,7 @@ public class FragmentChatSettingViewModel extends ViewModel {
         isCameraButtonSheet.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true));
         isShowVote.set(sharedPreferences.getInt(SHP_SETTING.KEY_VOTE, 1) != 0);
         isSenderNameGroup.set(sharedPreferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0) != 0);
-        isCompress.set(sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) != 0);
+        isCompress.set(sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 0) != 0);
         isSendEnter.set(sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) != 0);
         isSoundPlayInChat.set(sharedPreferences.getInt(SHP_SETTING.KEY_PLAY_SOUND_IN_CHAT, 1) != 0);
         isInAppBrowser.set(sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1) != 0);
