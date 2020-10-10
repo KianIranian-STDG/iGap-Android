@@ -199,25 +199,26 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         int strSize = text.length();
 
 
-        if (strSize < 3) {
-
-            txtEmptyListComment.setVisibility(View.VISIBLE);
-            txtEmptyListComment.setText(R.string.empty_message3);
-            imvNothingFound.setVisibility(View.VISIBLE);
-            return;
-
-        }
+//        if (strSize < 3) {
+//
+//            txtEmptyListComment.setVisibility(View.VISIBLE);
+//            txtEmptyListComment.setText(R.string.empty_message3);
+//            imvNothingFound.setVisibility(View.VISIBLE);
+//            return;
+//
+//        }
 
         if (text.startsWith("#")) {
             fillListItemHashtag(text);
             return;
-        } else if (Character.getDirectionality(text.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-            fillListItemGlobal(text);
-            return;
         }
+//        else if (Character.getDirectionality(text.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+//            fillListItemGlobal(text);
+//            return;
+//        }
 
 
-        if (strSize >= 5) {
+        if (strSize >= 2) {
             if (getRequestManager().isUserLogin()) {
                 if ((!text.equals(preventRepeatSearch))) {
                     itemAdapter.clear();
@@ -765,7 +766,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onSearchTextChangeListener(View view, String text) {
-        if (text.trim().length() < 5) {
+        if (text.trim().length() < 2) {
             cancelSearchTimer();
             fillList("");
             preventRepeatSearch = "";
