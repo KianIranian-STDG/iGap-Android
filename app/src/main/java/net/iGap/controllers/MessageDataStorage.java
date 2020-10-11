@@ -3,6 +3,7 @@ package net.iGap.controllers;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
@@ -14,7 +15,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -46,8 +46,7 @@ public class MessageDataStorage extends BaseController {
     private void openDataBase() {
         storageQueue.postRunnable(() -> {
             if (dataBase == null || dataBase.isClosed()) {
-                RealmConfiguration config = AccountManager.getInstance().getCurrentUser().getRealmConfiguration();
-                dataBase = Realm.getInstance(config);
+                dataBase = DbManager.getInstance().getRealm();
             }
         });
     }

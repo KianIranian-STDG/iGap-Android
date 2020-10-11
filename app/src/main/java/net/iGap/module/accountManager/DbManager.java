@@ -74,6 +74,10 @@ public class DbManager {
         }
     }
 
+    public Realm getRealm() {
+        return Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
+    }
+
     /***
      Very important Not:
      All transaction using this method have low priority and may not execute in order of transaction but order of all low transaction is guaranteed.
