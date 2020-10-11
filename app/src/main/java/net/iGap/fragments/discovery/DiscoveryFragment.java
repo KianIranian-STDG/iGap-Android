@@ -105,16 +105,18 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     }
 
     public void showMsgDialog() {
-        FrameLayout dialogView = new FrameLayout(getContext());
-        dialogView.setId(R.id.add_container);
-        AdHolder adHolder = TapsellPlus.createAdHolder(
-                getActivity(), dialogView, R.layout.native_banner);
+        if (isAdded() && isVisible()) {
+            FrameLayout dialogView = new FrameLayout(getContext());
+            dialogView.setId(R.id.add_container);
+            AdHolder adHolder = TapsellPlus.createAdHolder(
+                    getActivity(), dialogView, R.layout.native_banner);
 
-        new MaterialDialog.Builder(getContext())
-                .customView(dialogView, true)
-                .show();
-        TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
-        ((BottomNavigationFragment) getParentFragment()).isShowedAdd = true;
+            new MaterialDialog.Builder(getContext())
+                    .customView(dialogView, true)
+                    .show();
+            TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
+            ((BottomNavigationFragment) getParentFragment()).isShowedAdd = true;
+        }
     }
 
     @Override
@@ -224,6 +226,12 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), rcDiscovery.getWidth(), discoveryArrayList));
         if (discoveryArrayList == null) {
             tryToUpdateOrFetchRecycleViewData(0);
+        } else {
+            if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement && isAdded()) {
+                if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
+                    showMsgDialog();
+                }
+            }
         }
 
         if (needToReload) {
@@ -290,13 +298,13 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 G.handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement) {
+                        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement && isAdded()) {
                             if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
                                 requestAdd();
                             }
                         }
                     }
-                }, 4000);
+                }, 2000);
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
