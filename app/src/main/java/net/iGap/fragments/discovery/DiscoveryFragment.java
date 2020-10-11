@@ -89,33 +89,32 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     }
 
     private void requestAdd() {
-        TapsellPlus.requestNativeBanner(
-                getActivity(),
-                "5f7b3016b32aee00019b7900",
-                new AdRequestCallback() {
-                    @Override
-                    public void response() {
-                        showMsgDialog();
-                    }
+        TapsellPlus.requestNativeBanner(getActivity(), "5f7b3016b32aee00019b7900", new AdRequestCallback() {
+            @Override
+            public void response() {
+                showMsgDialog();
+            }
 
-                    @Override
-                    public void error(@NonNull String message) {
-                    }
-                });
+            @Override
+            public void error(@NonNull String message) {
+            }
+        });
     }
 
     public void showMsgDialog() {
-        if (isAdded() && isVisible()) {
+        if (isAdded() && isVisible() && getContext() != null) {
             FrameLayout dialogView = new FrameLayout(getContext());
             dialogView.setId(R.id.add_container);
-            AdHolder adHolder = TapsellPlus.createAdHolder(
-                    getActivity(), dialogView, R.layout.native_banner);
+            AdHolder adHolder = TapsellPlus.createAdHolder(getActivity(), dialogView, R.layout.native_banner);
 
             new MaterialDialog.Builder(getContext())
                     .customView(dialogView, true)
                     .show();
             TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
-            ((BottomNavigationFragment) getParentFragment()).isShowedAdd = true;
+            BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getParentFragment();
+            if (bottomNavigationFragment != null) {
+                bottomNavigationFragment.isShowedAdd = true;
+            }
         }
     }
 
