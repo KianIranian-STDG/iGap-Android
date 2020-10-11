@@ -38,7 +38,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -9376,6 +9375,12 @@ public class FragmentChat extends BaseFragment
                     messages.add(messageId);
                     deleteSelectedMessageFromAdapter(messages);
 
+                    if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
+                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
+                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
+                            clearReplyView();
+                        }
+                    }
                 });
             }
         }
