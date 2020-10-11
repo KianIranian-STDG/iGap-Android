@@ -1650,7 +1650,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                                 } else {
                                                     percent = String.valueOf(arg.data.getProgress());
                                                 }
-                                                textView.setText(String.format(Locale.US, "%s %s", percent, "%" + " " + "—" + " " + tempValue));
+                                                textView.setText(String.format(Locale.US, "%s %s", percent, "%" + " " + "—" + " " + AndroidUtils.humanReadableByteCount(size, true)));
                                             }
                                         } else {
                                             progressBar.withProgress(99);
@@ -1667,7 +1667,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                             }
                                         }
                                         if (textView != null) {
-                                            textView.setText(tempValue);
+                                            textView.setText(AndroidUtils.humanReadableByteCount(size, true));
                                         }
                                     }
                                 }
@@ -1678,7 +1678,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     progressBar.withDrawable(R.drawable.ic_download, true);
                                 }
                                 if (textView != null) {
-                                    textView.setText(tempValue);
+                                    textView.setText(AndroidUtils.humanReadableByteCount(size, true));
                                 }
                         }
                     });
