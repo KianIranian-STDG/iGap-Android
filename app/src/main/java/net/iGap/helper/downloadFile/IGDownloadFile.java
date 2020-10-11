@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 public class IGDownloadFile {
     private static IGDownloadFile IGDownloadFile;
-    private String TAG = "abbasiDownloadFile";
 
     private HashMap<String, IGDownloadFileStruct> fileHashMap = new HashMap<>();
 

@@ -1,6 +1,5 @@
 package net.iGap.module.downloader;
 
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.WorkerThread;
@@ -82,7 +81,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     @WorkerThread
     private void download(String jwtToken, DownloadObject fileStruct) {
-        Log.i("AbbasiDownload", "download: " + fileStruct.thumbCacheId);
         isDownloading = true;
         notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADING);
 
