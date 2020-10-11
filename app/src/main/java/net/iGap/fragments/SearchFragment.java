@@ -158,8 +158,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         }, 150);
 
 
-        txtEmptyListComment.setText(R.string.empty_message3);
-
         recyclerView = view.findViewById(R.id.sfl_recycleview);
     }
 
@@ -199,22 +197,23 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         int strSize = text.length();
 
 
-        if (strSize < 3) {
-
-            txtEmptyListComment.setVisibility(View.VISIBLE);
-            txtEmptyListComment.setText(R.string.empty_message3);
-            imvNothingFound.setVisibility(View.VISIBLE);
-            return;
-
-        }
+//        if (strSize < 3) {
+//
+//            txtEmptyListComment.setVisibility(View.VISIBLE);
+//            txtEmptyListComment.setText(R.string.empty_message3);
+//            imvNothingFound.setVisibility(View.VISIBLE);
+//            return;
+//
+//        }
 
         if (text.startsWith("#")) {
             fillListItemHashtag(text);
             return;
-        } else if (Character.getDirectionality(text.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-            fillListItemGlobal(text);
-            return;
         }
+//        else if (Character.getDirectionality(text.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+//            fillListItemGlobal(text);
+//            return;
+//        }
 
 
         if (strSize >= 5) {
@@ -233,6 +232,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             } else {
                 HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
+        } else if (strSize >= 1 && strSize < 5) {
+            fillAfterResponse();
+            return;
         } else {
             preventRepeatSearch = "";
         }
@@ -765,7 +767,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     @Override
     public void onSearchTextChangeListener(View view, String text) {
-        if (text.trim().length() < 5) {
+        if (text.trim().length() < 2) {
             cancelSearchTimer();
             fillList("");
             preventRepeatSearch = "";
