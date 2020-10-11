@@ -1644,7 +1644,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                         if (arg.data.getProgress() != 100) {
                                             progressBar.withProgress(arg.data.getProgress());
                                             if (textView != null) {
-                                                textView.setText(String.format(Locale.US, "%s %s", HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(arg.data.getProgress())), "%" + " " + "—" + " " + tempValue));
+                                                String percent;
+                                                if (G.selectedLanguage.equals("fa")) {
+                                                    percent = HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(arg.data.getProgress()));
+                                                } else {
+                                                    percent = String.valueOf(arg.data.getProgress());
+                                                }
+                                                textView.setText(String.format(Locale.US, "%s %s", percent, "%" + " " + "—" + " " + tempValue));
                                             }
                                         } else {
                                             progressBar.withProgress(99);
