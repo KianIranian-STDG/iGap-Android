@@ -37,7 +37,7 @@
         android:textSize="@dimen/standardTextSize"
         android:inputType="textMultiLine"
         android:minLines="1"
-        android:maxLines="4" />
+        android:maxLines="6" />
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/tv_chatRoom_botAction"
