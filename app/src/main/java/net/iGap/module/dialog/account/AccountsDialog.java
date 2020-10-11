@@ -122,8 +122,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
                 @Override
                 public void run() {
                     binding.accountDialogProgressbar.setVisibility(View.GONE);
-
-                    if (CallManager.getInstance().getCurrentSate() == CallState.LEAVE_CALL) {
+                    if (CallManager.getInstance().getCurrentSate() == CallState.LEAVE_CALL || CallManager.getInstance().getCurrentSate() == CallState.REJECT) {
                         checkForAssigning(isAssigned, userId);
                     }
                 }
