@@ -31,7 +31,7 @@
                         android:layout_height="@dimen/dp260"
                         android:layout_gravity="top|center"
                         android:layout_marginLeft="@dimen/dp20"
-                        android:layout_marginTop="@dimen/dp20"
+                        android:layout_marginTop="@dimen/dp32"
                         android:layout_marginRight="@dimen/dp20"
                         android:layout_marginBottom="@dimen/dp12"
                         android:adjustViewBounds="true"
@@ -48,7 +48,6 @@
                         android:gravity="center"
                         android:paddingLeft="@dimen/dp20"
                         android:paddingRight="@dimen/dp20"
-                        android:text="@string/empty_message"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/dp13"
                         android:visibility="gone" />

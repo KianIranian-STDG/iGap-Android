@@ -158,8 +158,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         }, 150);
 
 
-        txtEmptyListComment.setText(R.string.empty_message3);
-
         recyclerView = view.findViewById(R.id.sfl_recycleview);
     }
 
@@ -218,7 +216,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 //        }
 
 
-        if (strSize >= 2) {
+        if (strSize >= 5) {
             if (getRequestManager().isUserLogin()) {
                 if ((!text.equals(preventRepeatSearch))) {
                     itemAdapter.clear();
@@ -234,6 +232,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             } else {
                 HelperError.showSnackMessage(getString(R.string.there_is_no_connection_to_server), false);
             }
+        } else if (strSize >= 1 && strSize < 5) {
+            fillAfterResponse();
+            return;
         } else {
             preventRepeatSearch = "";
         }
