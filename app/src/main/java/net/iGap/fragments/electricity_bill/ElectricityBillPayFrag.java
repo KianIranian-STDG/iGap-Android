@@ -254,10 +254,9 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
         }
         File dir = getDownloadStorageDir(getString(R.string.elecBill_image_Directory));
         try {
-            final File dwldsPath = new File(dir, "ElectricityBill" + data.getPaymentDeadLine().split("T")[0] + ".pdf");
+            final File dwldsPath = new File(dir, "ElectricityBill" + data.getBillID() + ".pdf");
             byte[] pdfAsBytes = Base64.decode(data.getDocumentBase64(), 0);
-            FileOutputStream os;
-            os = new FileOutputStream(dwldsPath, false);
+            FileOutputStream os = new FileOutputStream(dwldsPath, false);
             os.write(pdfAsBytes);
             os.flush();
             os.close();
