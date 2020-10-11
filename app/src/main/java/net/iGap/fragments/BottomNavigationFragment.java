@@ -201,10 +201,10 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
 
     public boolean isFirstTabItem() {
-        if (bottomNavigation.getSelectedItemPosition() == START_TAB) {
+        if (bottomNavigation.getSelectedItemPosition() == CHAT_FRAGMENT) {
             return true;
         } else {
-            bottomNavigation.setCurrentItem(START_TAB);
+            bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
             return false;
         }
     }
