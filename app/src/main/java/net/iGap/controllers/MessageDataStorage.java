@@ -158,6 +158,7 @@ public class MessageDataStorage extends BaseController {
 //            cleanUpInternal();
 //            openDatabase();
 //        });
+        storageQueue.cleanupQueue();
     }
 
     public void deleteRoomFromStorage(long roomId) {
