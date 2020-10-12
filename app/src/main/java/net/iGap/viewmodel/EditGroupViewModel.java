@@ -14,12 +14,12 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.interfaces.OnGroupAvatarResponse;
 import net.iGap.observers.interfaces.OnGroupDelete;
 import net.iGap.observers.interfaces.OnGroupEdit;
@@ -34,7 +34,6 @@ import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
 import net.iGap.request.RequestGroupLeft;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import io.realm.RealmResults;
@@ -329,7 +328,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public void uploadAvatar(String path) {
         long avatarId = SUID.id().get();
         long lastUploadedAvatarId = avatarId + 1L;
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+        Uploader.getInstance().upload(UploadObject.createForAvatar(lastUploadedAvatarId, path, null, ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
                 showUploadProgressLiveData.postValue(View.VISIBLE);
@@ -344,6 +343,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
             public void onError(String id) {
                 showUploadProgressLiveData.postValue(View.GONE);
             }
+
         }));
     }
 

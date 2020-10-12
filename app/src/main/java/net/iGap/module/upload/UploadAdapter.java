@@ -1,6 +1,9 @@
 package net.iGap.module.upload;
 
+import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadManager;
+import net.iGap.helper.upload.UploadTask;
+import net.iGap.proto.ProtoGlobal;
 
 public class UploadAdapter implements IUpload {
     private final UploadManager uploadManager;
@@ -9,11 +12,12 @@ public class UploadAdapter implements IUpload {
         this.uploadManager = uploadManager;
     }
 
-//    @Override
-//    public void upload(String identity, File file, ProtoGlobal.RoomMessageType type, OnUploadListener onUploadListener) {
-//        UploadTask uploadTask =  new UploadTask(identity, file, type, onUploadListener);
-//        uploadManager.upload(uploadTask);
-//    }
+    //    @Override
+    public void upload(UploadObject fileObject, OnUploadListener onUploadListener) {
+        UploadTask uploadTask = new UploadTask(fileObject.key, fileObject.file, ProtoGlobal.RoomMessageType.IMAGE, onUploadListener);
+        uploadManager.upload(uploadTask);
+    }
+
 //
 //    @Override
 //    public void upload(RealmRoomMessage message, OnUploadListener onUploadListener) {
@@ -77,6 +81,10 @@ public class UploadAdapter implements IUpload {
 
     @Override
     public void upload(UploadObject fileObject) {
-        uploadManager.uploadMessageAndSend(fileObject.roomType, fileObject.message);
+        if (fileObject.message == null) {
+            upload(fileObject, fileObject.onUploadListener);
+        } else {
+            uploadManager.uploadMessageAndSend(fileObject.roomType, fileObject.message);
+        }
     }
 }

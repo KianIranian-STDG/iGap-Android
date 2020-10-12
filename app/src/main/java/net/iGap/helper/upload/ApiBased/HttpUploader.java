@@ -201,6 +201,9 @@ public class HttpUploader implements IUpload {
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress);
+                    if (fileObject.onUploadListener != null) {
+                        fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
+                    }
                 }
 
                 @Override
@@ -210,30 +213,33 @@ public class HttpUploader implements IUpload {
                         inProgressUploads.remove(fileObject.key);
                         inProgressCount.decrementAndGet();
                     }
+                    if (fileObject.message != null) {
+                        if (completedCompressFile != null && completedCompressFile.exists()) {
+                            completedCompressFile.delete();
+                        }
 
-                    if (completedCompressFile != null && completedCompressFile.exists()) {
-                        completedCompressFile.delete();
+                        HelperSetAction.sendCancel(fileObject.messageId);
+
+                        DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
+
+                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
+                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.message.roomId, fileObject.message);
+                        } else if (fileObject.message.replyTo == null) {
+                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
+                                    .attachment(fileObject.fileToken)
+                                    .message(fileObject.message.getMessage())
+                                    .sendMessage(fileObject.messageId + "");
+                        } else {
+                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
+                                    .replyMessage(fileObject.message.replyTo.messageId)
+                                    .attachment(fileObject.fileToken)
+                                    .message(fileObject.message.message)
+                                    .sendMessage(fileObject.message.messageId + "");
+                        }
                     }
-
-                    HelperSetAction.sendCancel(fileObject.messageId);
-
-                    DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
-
-                    if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
-                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.message.roomId, fileObject.message);
-                    } else if (fileObject.message.replyTo == null) {
-                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
-                                .attachment(fileObject.fileToken)
-                                .message(fileObject.message.getMessage())
-                                .sendMessage(fileObject.messageId + "");
-                    } else {
-                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
-                                .replyMessage(fileObject.message.replyTo.messageId)
-                                .attachment(fileObject.fileToken)
-                                .message(fileObject.message.message)
-                                .sendMessage(fileObject.message.messageId + "");
+                    if (fileObject.onUploadListener != null) {
+                        fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
                     }
-
                     scheduleNewUpload();
                 }
 
@@ -251,6 +257,10 @@ public class HttpUploader implements IUpload {
                         HelperSetAction.sendCancel(fileObject.messageId);
 
                     makeFailed(fileObject.messageId);
+                    if (fileObject.onUploadListener != null) {
+                        Log.e("fgryhifhsufs", "onUploadFail: " + e);
+                        fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
+                    }
                 }
             });
 
