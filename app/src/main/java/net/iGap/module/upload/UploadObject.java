@@ -1,5 +1,6 @@
 package net.iGap.module.upload;
 
+import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -20,6 +21,7 @@ public class UploadObject {
     public ProtoGlobal.RoomMessageType messageType;
     public RealmRoomMessage message;
     public ProtoGlobal.Room.Type roomType;
+    public OnUploadListener onUploadListener;
 
     private UploadObject() {
 
@@ -47,6 +49,22 @@ public class UploadObject {
         object.message = message;
         object.roomType = roomType;
 
+        return object;
+    }
+
+    public static UploadObject createForAvatar(long avatarId, String imagePath, String token, ProtoGlobal.RoomMessageType roomType, OnUploadListener onUploadListener) {
+        UploadObject object = new UploadObject();
+
+
+        object.path = imagePath;
+        object.file = new File(object.path);
+        object.fileName = object.file.getName();
+        object.fileSize = object.file.length();
+        object.fileToken = token;
+        object.key = String.valueOf(avatarId);
+        object.messageId = avatarId;
+        object.messageType = roomType;
+        object.onUploadListener = onUploadListener;
         return object;
     }
 }

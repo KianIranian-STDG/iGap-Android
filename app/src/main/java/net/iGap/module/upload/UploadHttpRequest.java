@@ -248,7 +248,11 @@ public class UploadHttpRequest {
                         .build();
 
                 requestCall = client.newCall(request);
-                HelperSetAction.setActionFiles(fileObject.message.getRoomId(), fileObject.messageId, HelperSetAction.getAction(fileObject.messageType), fileObject.roomType);
+
+                // FIXME: 10/12/2020 remove to SendMessageUtil
+                if (fileObject.message != null) {
+                    HelperSetAction.setActionFiles(fileObject.message.getRoomId(), fileObject.messageId, HelperSetAction.getAction(fileObject.messageType), fileObject.roomType);
+                }
 
                 Response response = requestCall.execute();
 

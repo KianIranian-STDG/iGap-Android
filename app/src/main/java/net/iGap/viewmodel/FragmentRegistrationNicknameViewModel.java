@@ -23,8 +23,6 @@ import net.iGap.adapter.BindingAdapter;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
@@ -32,13 +30,14 @@ import net.iGap.module.CountryListComparator;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.interfaces.OnUserAvatarResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserAvatarAdd;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -223,7 +222,8 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
         pathImageUser = path;
         int lastUploadedAvatarId = idAvatar + 1;
         prgVisibility.set(View.VISIBLE);
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathImageUser), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+
+        Uploader.getInstance().upload(UploadObject.createForAvatar(lastUploadedAvatarId, pathImageUser, null, ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
                 progressValue.postValue(progress);
@@ -242,6 +242,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                 existAvatar = true;
                 prgVisibility.set(View.GONE);
             }
+
         }));
     }
 }
