@@ -133,7 +133,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             }
         };
 
-        holder.btnPlayMusic.setOnLongClickListener(getLongClickPerform(holder));
+        holder.rootView.setOnLongClickListener(getLongClickPerform(holder));
 
         holder.btnPlayMusic.setOnClickListener(v -> {
 
