@@ -22,6 +22,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import net.iGap.fragments.FragmentPreventRoot;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
@@ -134,6 +135,12 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         };
 
         holder.rootView.setOnLongClickListener(getLongClickPerform(holder));
+
+        holder.rootView.setOnClickListener(v -> {
+            if (FragmentChat.isInSelectionMode) {
+                holder.itemView.performLongClick();
+            }
+        });
 
         holder.btnPlayMusic.setOnClickListener(v -> {
 
