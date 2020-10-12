@@ -44,7 +44,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         final RealmThumbnail thumbnail = big ? finalMessage.attachment.largeThumbnail : finalMessage.attachment.smallThumbnail;
 
-        if (thumbnail == null) {
+        if (thumbnail == null || (thumbnail.cacheId == null || thumbnail.cacheId.isEmpty())) {
             return null;
         }
 
