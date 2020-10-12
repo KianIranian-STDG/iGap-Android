@@ -11,7 +11,6 @@
 package net.iGap.adapter.items.chat;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,23 +21,22 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
-import net.iGap.fragments.FragmentPreventRoot;
-import net.iGap.module.AndroidUtils;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.observers.interfaces.IMessageItem;
-import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.libs.audio.AudioWave;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.FontIconTextView;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.observers.interfaces.IMessageItem;
+import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -51,9 +49,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import yogesh.firzen.mukkiasevaigal.S;
-
-import static java.lang.Long.min;
 import static java.lang.Long.parseLong;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
