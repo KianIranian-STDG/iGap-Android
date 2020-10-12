@@ -55,7 +55,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private boolean needToCrawl = false;
     private boolean listLoaded = false;
     private boolean needToReload = false;
-
+    private MaterialDialog materialDialog;
     private ArrayList<DiscoveryItem> discoveryArrayList;
 
     public static DiscoveryFragment newInstance(int page) {
@@ -106,8 +106,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             FrameLayout dialogView = new FrameLayout(getContext());
             dialogView.setId(R.id.add_container);
             AdHolder adHolder = TapsellPlus.createAdHolder(getActivity(), dialogView, R.layout.native_banner);
-
-            new MaterialDialog.Builder(getContext())
+            materialDialog = new MaterialDialog.Builder(getContext())
                     .customView(dialogView, true)
                     .show();
             TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
@@ -228,7 +227,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         } else {
             if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement && isAdded()) {
                 if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
-                    showMsgDialog();
+                    requestAdd();
                 }
             }
         }
@@ -429,6 +428,9 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         super.onDestroyView();
         needToCrawl = false;
         needToReload = false;
+        if (materialDialog != null) {
+            materialDialog.dismiss();
+        }
     }
 
     public static class CrawlerStruct {
