@@ -340,8 +340,6 @@ public class IG_RPC {
             Integer file = microServices.get("file");
             if (file != null) {
                 fileGateway = file;
-            } else {
-                fileGateway = 1;// default socket
             }
         }
     }

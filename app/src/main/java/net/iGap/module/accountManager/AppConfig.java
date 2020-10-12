@@ -36,7 +36,7 @@ public class AppConfig {
 
             SharedPreferences preferences = G.context.getSharedPreferences("app_config", Context.MODE_PRIVATE);
             servicesBaseUrl = preferences.getString("services_base_url", "https://gate.igap.net");
-            fileGateway = preferences.getInt("file_gateway", 1);
+            fileGateway = preferences.getInt("file_gateway", 0);
             defaultTab = preferences.getInt("default_tab", BottomNavigationFragment.CHAT_FRAGMENT);
             defaultTimeout = preferences.getLong("time_out", 10);
             maxFileSize = preferences.getLong("max_file_size", 100000000);
