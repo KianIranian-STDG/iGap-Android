@@ -1235,6 +1235,7 @@ public class FragmentChat extends BaseFragment
         G.onSetAction = null;
         G.onUpdateUserStatusInChangePage = null;
         G.onUserUpdateStatus = null;
+        G.onChannelAddMessageReaction = null;
 
         removeRoomAccessChangeListener();
     }
@@ -5551,9 +5552,8 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction, final long forwardedMessageId) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+        G.handler.post(() -> {
+            if (mAdapter != null) {
                 mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction, forwardedMessageId);
             }
         });
