@@ -142,6 +142,7 @@ public class UploadHttpRequest {
                         }
                     } else if (resCode == 406) {
                         preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+                        fileObject.fileToken = token;
                         if (delegate != null) {
                             delegate.onUploadFinish(fileObject);
                         }
