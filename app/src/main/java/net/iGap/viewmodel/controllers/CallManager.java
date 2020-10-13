@@ -8,6 +8,7 @@ import android.os.SystemClock;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
@@ -314,6 +315,7 @@ public class CallManager {
     }
 
     public void onError(int actionId, int major, int minor) {
+        HelperLog.getInstance().setErrorLog(new Exception("CallManagerError/" + "majorCode : " + major + " * minorCode : " + minor));
         int messageID = R.string.e_call_permision;
         switch (major) {
             case 900://                RINGING_BAD_PAYLOAD
