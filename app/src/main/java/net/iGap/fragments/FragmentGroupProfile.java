@@ -331,11 +331,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
                 layoutGroupLink.addView(inputGroupLink, layoutParams);
                 layoutGroupLink.addView(txtLink, layoutParams);
-
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
+                if (getActivity() != null) {
+                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getActivity(), R.string.copied, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
