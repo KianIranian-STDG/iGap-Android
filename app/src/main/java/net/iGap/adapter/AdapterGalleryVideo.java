@@ -100,7 +100,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
 
             @Override
             public boolean onLongClick(View v) {
-                if (!isMultiSelect) {
+                if (!isMultiSelect && isVideoMode) {
                     holder.check.setChecked(!holder.check.isChecked());
                     listener.onMultiSelect(mSelectedVideos.size());
                     setMultiSelectState(!getMultiSelectState());
