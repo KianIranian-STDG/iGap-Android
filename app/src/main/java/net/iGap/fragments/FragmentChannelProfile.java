@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -226,21 +227,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 layoutChannelLink.addView(inputChannelLink, layoutParams);
                 layoutChannelLink.addView(txtLink, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.channel_link)
-                        .positiveText(R.string.array_Copy)
-                        .customView(layoutChannelLink, true)
-                        .widgetColor(new Theme().getAccentColor(getContext()))
-                        .negativeText(R.string.B_cancel)
-                        .onPositive((dialog1, which) -> {
-                            if (getActivity() != null) {
-                                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
-                                clipboard.setPrimaryClip(clip);
-                            }
-                        })
-                        .build();
 
-                dialog.show();
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
             }
         });
 

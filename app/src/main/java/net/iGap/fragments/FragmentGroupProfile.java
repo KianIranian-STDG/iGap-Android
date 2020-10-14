@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -331,19 +332,10 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 layoutGroupLink.addView(inputGroupLink, layoutParams);
                 layoutGroupLink.addView(txtLink, layoutParams);
 
-                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
-                        .positiveText(R.string.array_Copy)
-                        .customView(layoutGroupLink, true)
-                        .widgetColor(new Theme().getPrimaryColor(getContext()))
-                        .negativeText(R.string.no)
-                        .onPositive((dialog1, which) -> {
-                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
-                            clipboard.setPrimaryClip(clip);
-                        })
-                        .build();
-
-                dialog.show();
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
             }
         });
 
