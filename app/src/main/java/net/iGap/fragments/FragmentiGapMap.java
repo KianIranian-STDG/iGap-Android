@@ -398,9 +398,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             @Override
             public String getTileURLString(MapTile aTile) {
                 if (state)
-                    return "http://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+                    return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
                 else
-                    return "http://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+                    return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
             }
         });
     }
@@ -810,9 +810,9 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 public String getTileURLString(MapTile aTile) {
 
                     if (!changeState)
-                        return "http://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+                        return "https://mt1.google.com/vt/lyrs=m&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
                     else
-                        return "http://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+                        return "https://mt1.google.com/vt/lyrs=y&hl=fa&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
                 }
             });
 
