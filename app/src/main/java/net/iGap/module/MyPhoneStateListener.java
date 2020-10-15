@@ -3,7 +3,6 @@ package net.iGap.module;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import net.iGap.G;
 import net.iGap.module.webrtc.WebRTC;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -41,34 +40,19 @@ public class MyPhoneStateListener extends PhoneStateListener {
             return;
         else
             lastPhoneState = state;
-        // if webRTC is not active thus there is nothing to do in our side.
-        if (!WebRTC.isAlive())
-            return;
-        // in this part we manage call and webRTC state when phone state changes.
-        if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
 
+        if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
             CallManager.getInstance().holdCall(true);
             WebRTC.getInstance().toggleSound(false);
             WebRTC.getInstance().pauseVideoCapture();
-
-            G.isCalling = true;
+            CallManager.getInstance().setUserInCall(true);
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-            if (CallManager.getInstance().isRinging()) {
-                try {
-                    // TODO: 5/9/2020 do we need this anymore? 
-                    CallManager.getInstance().leaveCall();
-                } catch (Exception e) {
-                }
-
-            }
-            G.isCalling = true;
+            CallManager.getInstance().setUserInCall(false);
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-
             CallManager.getInstance().holdCall(false);
             WebRTC.getInstance().toggleSound(true);
             WebRTC.getInstance().startVideoCapture();
-
-            G.isCalling = false;
+            CallManager.getInstance().setUserInCall(false);
         }
     }
 

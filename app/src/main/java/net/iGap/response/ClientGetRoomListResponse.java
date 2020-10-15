@@ -15,6 +15,8 @@ import net.iGap.G;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.module.BotInit;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
@@ -65,8 +67,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
          * getRoomList and finally send condition that before get clientCondition;
          * in else changeState compute new client condition with latest messaging changeState
          */
-        if (!G.userLogin) {
-            G.userLogin = true;
+        if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
+            RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
             sendClientCondition();
         } else if (fromLogin || FragmentMain.mOffset == 0) {
             if (G.clientConditionGlobal != null) {

@@ -31,6 +31,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperUrl;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
@@ -40,7 +41,6 @@ import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
@@ -116,10 +116,9 @@ public class BotInit implements MakeButtons.OnClickListener {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
+                            RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo("isFromPromote", true).findAll();
                             for (RealmRoom room : roomList) {
                                 if (!promoteIds.contains(room.getPromoteId())) {
-                                    //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
                                     room.setFromPromote(false);
                                     new RequestClientPinRoom().pinRoom(room.getId(), false);
                                 }
@@ -133,9 +132,9 @@ public class BotInit implements MakeButtons.OnClickListener {
                         RealmRoom realmRoom;
 
                         if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
+                            realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", builder.getPromoteList().get(i).getId()).equalTo("isFromPromote", true).findFirst();
                         } else {
-                            realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
+                            realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getPromoteList().get(i).getId()).equalTo("isFromPromote", true).findFirst();
                         }
 
                         if (realmRoom == null) {
@@ -541,7 +540,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
+                                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                 if (G.onBotClick != null) {
                                     G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                 }
@@ -567,7 +566,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
+                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage);
                                         if (G.onBotClick != null) {
                                             G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
                                         }

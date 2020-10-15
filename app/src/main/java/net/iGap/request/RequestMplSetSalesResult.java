@@ -10,7 +10,8 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoMplSetSalesResult;
 
 public class RequestMplSetSalesResult {
@@ -27,7 +28,7 @@ public class RequestMplSetSalesResult {
 
         RequestWrapper requestWrapper = new RequestWrapper(9103, builder, onSetSalesResult);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {

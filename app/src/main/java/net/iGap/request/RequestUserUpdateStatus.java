@@ -10,7 +10,8 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoUserUpdateStatus;
 
 public class RequestUserUpdateStatus {
@@ -27,7 +28,7 @@ public class RequestUserUpdateStatus {
 
         RequestWrapper requestWrapper = new RequestWrapper(124, builder);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {
@@ -45,7 +46,7 @@ public class RequestUserUpdateStatus {
 
         RequestWrapper requestWrapper = new RequestWrapper(124, builder, onUserStatus);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {

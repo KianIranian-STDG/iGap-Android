@@ -18,7 +18,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupChangeMemberRights;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomFields;
 
 public class GroupChangeMemberRightsResponse extends MessageHandler {
 
@@ -33,7 +32,7 @@ public class GroupChangeMemberRightsResponse extends MessageHandler {
         ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse.Builder builder = (ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse.Builder) message;
 
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", builder.getRoomId()).findFirst();
 
             if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                 if (realmRoom.getGroupRoom().getRole() == GroupChatRole.OWNER || realmRoom.getGroupRoom().getRole() == GroupChatRole.ADMIN) {

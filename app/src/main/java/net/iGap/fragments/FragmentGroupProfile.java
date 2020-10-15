@@ -63,7 +63,6 @@ import net.iGap.observers.interfaces.OnGroupUpdateUsername;
 import net.iGap.proto.ProtoGroupCheckUsername;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupCheckUsername;
@@ -138,7 +137,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
         currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+            return realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
         });
 
         return attachToSwipeBack(binding.getRoot());
@@ -611,7 +610,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
 
 
                 if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
-                    if (G.userLogin) {
+                    if (getRequestManager().isUserLogin()) {
                         String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                         new RequestGroupCheckUsername().GroupCheckUsername(viewModel.roomId, userName, new OnGroupCheckUsername() {
                             @Override
@@ -672,7 +671,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             public void onClick(View view) {
                 hideKeyboard();
                 String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
-                if (G.userLogin) {
+                if (getRequestManager().isUserLogin()) {
                     progressBar.setVisibility(View.VISIBLE);
                     positive.setEnabled(false);
                     new RequestGroupUpdateUsername().groupUpdateUsername(viewModel.roomId, userName, new OnGroupUpdateUsername() {

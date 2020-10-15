@@ -3,7 +3,6 @@ package net.iGap.fragments.beepTunes.main;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,12 +200,10 @@ public class BeepTunesPlayer extends BaseFragment {
                         nextSong.setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                         songFromPlayerLiveData.postValue(nextSong);
                     } else {
-                        Log.i(TAG, "have not next song: " + i + " " + realmDownloadSongs.size());
+
                     }
                 }
             }
-        } else {
-            Log.i(TAG, "list just have 1 song: " + realmDownloadSongs.size());
         }
     }
 
@@ -224,12 +221,9 @@ public class BeepTunesPlayer extends BaseFragment {
                         nextSong.setAlbumId(realmDownloadSong.getAlbumId());
                         nextSong.setBehaviorStatus(BottomSheetBehavior.STATE_EXPANDED);
                         songFromPlayerLiveData.postValue(nextSong);
-                    } else
-                        Log.i(TAG, "have not previous song: " + i);
+                    }
                 }
             }
-        } else {
-            Log.i(TAG, "list just have 1 song ");
         }
 
     }

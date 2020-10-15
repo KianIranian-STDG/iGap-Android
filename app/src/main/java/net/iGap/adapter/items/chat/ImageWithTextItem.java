@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -149,6 +150,16 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         @Override
         public MessageProgress getProgress() {
             return progress;
+        }
+
+        @Override
+        public TextView getProgressTextView() {
+            return null;
+        }
+
+        @Override
+        public String getTempTextView() {
+            return null;
         }
     }
 }

@@ -31,7 +31,7 @@ public class RealmChatRoom extends RealmObject {
      * @return RealmChatRoom
      */
     public static RealmChatRoom convert(Realm realm, ProtoGlobal.ChatRoom room) {
-        RealmChatRoom realmChatRoom = realm.where(RealmChatRoom.class).equalTo(RealmChatRoomFields.PEER_ID, room.getPeer().getId()).findFirst();
+        RealmChatRoom realmChatRoom = realm.where(RealmChatRoom.class).equalTo("peer_id", room.getPeer().getId()).findFirst();
         if (realmChatRoom == null) {
             realmChatRoom = realm.createObject(RealmChatRoom.class, room.getPeer().getId());
         }
@@ -40,7 +40,7 @@ public class RealmChatRoom extends RealmObject {
 
     public boolean isVerified() {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, peer_id).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", peer_id).findFirst();
             if (realmRegisteredInfo != null) {
                 return realmRegisteredInfo.isVerified();
             }

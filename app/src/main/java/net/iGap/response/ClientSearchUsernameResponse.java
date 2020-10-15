@@ -15,7 +15,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 
 public class ClientSearchUsernameResponse extends MessageHandler {
 
@@ -41,7 +40,7 @@ public class ClientSearchUsernameResponse extends MessageHandler {
                 if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
                     RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
                 } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
-                    if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst() == null) {
+                    if (realm.where(RealmRoom.class).equalTo("id", item.getRoom().getId()).findFirst() == null) {
                         RealmRoom realmRoom = RealmRoom.putOrUpdate(item.getRoom(), realm);
                         realmRoom.setDeleted(true);
                     }

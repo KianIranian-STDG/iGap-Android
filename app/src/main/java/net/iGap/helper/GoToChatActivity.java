@@ -20,8 +20,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
-import net.iGap.realm.RealmRoomFields;
 
 import java.util.List;
 
@@ -73,7 +71,7 @@ public class GoToChatActivity {
 
         if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData || FragmentChat.structIGSticker != null) {
             roomName = DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomid).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomid).findFirst();
 
                 if (realmRoom != null) {
                     if (realmRoom.getReadOnly() || hasSendMessagePermission() || (realmRoom.getType() != ProtoGlobal.Room.Type.CHAT && FragmentChat.structIGSticker != null) || (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null && RealmRoom.isBot(realmRoom.getChatRoom().getPeerId()))) {
@@ -236,7 +234,7 @@ public class GoToChatActivity {
 
     private boolean hasSendMessagePermission() {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomid + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+            RealmRoomAccess realmRoomAccess = realm.where(RealmRoomAccess.class).equalTo("id", roomid + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
             return realmRoomAccess != null && !realmRoomAccess.isCanPostMessage();
         });
     }

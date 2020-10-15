@@ -18,8 +18,8 @@
             android:id="@+id/lineViewTop"
             android:layout_width="@dimen/dp100"
             android:layout_height="4dp"
-            android:layout_marginTop="8dp"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:background="?attr/iGapBottomSheetHeaderLine" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -30,10 +30,17 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/dp10"
             android:padding="@dimen/dp8"
+            android:singleLine="true"
             android:textColor="?attr/iGapTitleTextColor"
             android:textSize="@dimen/largeTextSize"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/account_dialog_progressbar"
+            android:layout_gravity="center"
             android:visibility="gone"
-            android:singleLine="true" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bottomSheetList"
@@ -42,7 +49,6 @@
             android:layout_marginTop="@dimen/dp8"
             android:layout_marginBottom="@dimen/dp8"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
     </LinearLayout>
 
 </layout>

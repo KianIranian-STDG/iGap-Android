@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <resources>
+    <string name="kuknos_toast">Ответ неверный! Пожалуйста ответьте внимательно</string>
     <string name="text_line_1_introduce_page2">Безопасность в  iGap</string>
+    <string name="account_dialog_message">Вы звоните. Вы хотите положить трубку?</string>
     <string name="text_line_2_introduce_page2">iGap обеспечивает безопасное и надежное соединение для вас. Мессенджер iGap использует уникальные алгоритмы шифрования для перемещения всех ваших данных, чтобы обеспечить максимальную безопасность вашей конфиденциальности.</string>
     <string name="text_line_1_introduce_page3">Чат в iGap</string>
     <string name="text_line_2_introduce_page3">Вы можете сообщаться в iGap как вдвоем так и в группе , и вы можете быть увереными, что у вас всегда есть доступ к вашим разговорам.Вы также можете создать канал и подписаться на него, а также поделиться своей информацией с миллионами других пользователей.</string>
@@ -25,6 +27,7 @@
     <string name="verify_invalid_code_message">К сожалению, ваш код подтверждения недействителен, пожалуйста, введите правильный код еще раз.</string>
     <string name="phone_number">Номер телефона</string>
     <string name="ra_enter_reagent_code">Пожалуйста, введите ваш номер идентификатора (необязательно)</string>
+    <string name="ra_confirm">Подтверждение</string>
     <string name="reagent_error_message">Введенный номер неверен</string>
     <string name="Toast_Location_Not_Found">Ваше местоположение не было найдено</string>
     <string name="Toast_First_0">Номер не обязательно должен начинаться с 0</string>
@@ -476,6 +479,7 @@
     <string name="shared_gif">Анимированное изображение, которым поделились</string>
     <string name="images">Изображение</string>
     <string name="charge">зарядка</string>
+    <string name="transfer_mony">Перевод денег</string>
     <string name="gift_message">Сумма подарочного кредита *.Хотите получить это?</string>
     <string name="toast_success_gift">Подождите, пока подарок не будет подтвержден.</string>
     <string name="amount_to_pay_factor">Счет, подлежащий к оплате (риалы):</string>
@@ -489,6 +493,7 @@
     <string name="five_day">Пять дней назад</string>
     <string name="six_day">Шесть дней назад</string>
     <string name="group_link">Ссылка группы</string>
+    <string name="normal_error">не возможно сделать это, пожалуйста попробуйте позже</string>
     <string name="channel_description">Описание канала</string>
     <string name="channel_name">Название канала</string>
     <string name="channel_delete">Удалить канал</string>
@@ -704,7 +709,6 @@
     <string name="invalid_email">Неверный адрес электронной почты</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
-    <string name="not_answered">Ответ не получен</string>
     <string name="unavalable">Не доступно</string>
     <string name="too_long">Очень долго</string>
     <string name="signaling">Идет звонок</string>
@@ -891,6 +895,7 @@
     <string name="charge_10">100 000 риалов</string>
     <string name="charge_20">200 000 риалов</string>
 
+    <string name="value_added">добавленной стоимости</string>
     <string name="biling_id_not_valid">Неверная идентификация счета</string>
     <string name="pay_id_is_not_valid">Неверная идентификация платежа</string>
     <string name="charge_type">Вид зарядки</string>
@@ -998,7 +1003,6 @@
     <string name="Select">Выбор</string>
     <string name="Create_new_Folder_here">Создайте новую папку здесь</string>
     <string name="on_hold">Звонок в режиме ожидания…</string>
-    <string name="switchTo">переключиться на :</string>
     <string name="stop">Остановить</string>
     <string name="stop_message_bot">Вы уверены, что хотите остановить робота?</string>
     <string name="startUpdate">Обновление</string>
@@ -1030,6 +1034,7 @@
     <string name="rial">Риал</string>
     <string name="toman">Туман</string>
     <string name="resend_code">Переслать СМС</string>
+    <string name="enter_username">Введите ваше имя пользователя</string>
     <string name="country_code_not_valid">Неверный код страны</string>
     <string name="enter_your_password">Введите ваш пароль</string>
     <string name="referral_code">Код реферала</string>
@@ -1112,6 +1117,7 @@
     <string name="cash_out_paygear">Снятие с кошелька</string>
     <string name="cashable">Обналичиваемая сумма</string>
     <string name="gift">Подарок</string>
+    <string name="cards">Карты</string>
     <string name="my_cards">Мои карты</string>
     <string name="cashout_today_limit">Предел суммы вывода на сегодня</string>
     <string name="cash_out_request_done">Запрос на расчет завершен</string>
@@ -1247,6 +1253,7 @@
     <string name="channel_type">Тип канала</string>
     <string name="sign_message_title">Подписание сообщений</string>
     <string name="payment_continue_title">продолжение</string>
+    <string name="Inventory">баланс</string>
     <string name="bills">Счета и штрафы</string>
     <string name="charge_amount">Сумма заряда(Rial)</string>
     <string name="buy_internet_package_title">Купить интернет-пакет</string>
@@ -1351,6 +1358,7 @@
     <string name="cardtocard_morethan_error">Минимальная сумма для карты на карту составляет 10 тысяч риалов.</string>
     <string name="cardtocard_cartnumber_error">Номер карты должен состоять из 16 цифр.</string>
     <string name="cardtocard_cardnumber_error">Номер карты назначения не может быть пустым.</string>
+    <string name="payment_rrn_title">Номер транзакции:% .0f</string>
     <string name="insert_amount_in_rial">Введите сумму в риалах.</string>
     <string name="enter_16_digit_card_number">Введите 16-значный номер карты.</string>
     <string name="buy_internet_package_volume_type_title">Объем</string>
@@ -1416,6 +1424,8 @@
     <string name="elecBill_pay_billImage">Показать изображение счета</string>
     <string name="elecBill_Entry_nameError">Имя Билла не может быть пустым. например: Домой</string>
     <string name="elecBill_Entry_billIDError">ID Билла не может быть пустым.</string>
+    <string name="elecBill_Entry_userIDError">Ваш национальный ID не может быть пустым.</string>
+    <string name="elecBill_Entry_userIDLengthError">Ваш национальный ID должен быть 10 символов.</string>
     <string name="elecBill_add_form">Пожалуйста, заполните форму.</string>
     <string name="elecBill_add_name">Имя Билла *</string>
     <string name="elecBill_add_billID">ID Билла *</string>
@@ -1458,7 +1468,52 @@
     <string name="delete_from_storage">Удалить из хранилища</string>
     <string name="map_registration_enable">Включить видимость поблизости</string>
     <string name="need_browser">Требуется браузер для использования.</string>
+    <string name="parsian_bank">Мой Parsian</string>
+    <string name="mobile_bank_load_detail_personalInfo">Информация для клиентов</string>
+    <string name="mobile_bank_load_detail_customerCode">Код клиента: %1$s</string>
+    <string name="mobile_bank_load_detail_customerName">Имя клиента: %1$s</string>
+    <string name="mobile_bank_load_detail_loadInfo">Кредитная информация</string>
+    <string name="mobile_bank_load_detail_amount">миссионер: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_discount">скидка: %1$s</string>
+    <string name="mobile_bank_load_detail_penalty">неустойка: %1$s</string>
+    <string name="mobile_bank_load_detail_MUnpaidInfo">Просроченная рассрочка платежа</string>
+    <string name="mobile_bank_load_detail_MUCount">Количество неоплаченных взносов: %1$s</string>
+    <string name="mobile_bank_load_detail_MUAmount">Сумма неоплаченных взносов: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paidInfo">Информация об оплате в рассрочку</string>
+    <string name="mobile_bank_load_detail_paidCount">Количество внесенных платежей: %1$s</string>
+    <string name="mobile_bank_load_detail_paidAmount">Оплаченная сумма:: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_unpaidInfo">Информация о неоплаченном взносе</string>
+    <string name="mobile_bank_load_detail_unpaidCount">Количество неоплаченных взносов: %1$s</string>
+    <string name="mobile_bank_load_detail_unpaidAmount">Сумма не оплачена: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paymentList">Рассрочка</string>
+    <string name="mobile_bank_detail_cell_payStatus">Статус оплаты: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">Сумма платежа: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">Оставшаяся сумма: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">Сумма штрафа: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">Дата оплаты: %1$s</string>
 
+    <string name="mobile_bank_load_detail_bankCode">Код банка: %1$s</string>
+    <string name="temporary_password">POOYA пароль</string>
+    <string name="transactions">операции</string>
+    <string name="sheba_number">SHEBA номер</string>
+    <string name="get_temporary_password">получить пароль POOYA</string>
+    <string name="accounts">Счета</string>
+    <string name="account">учетная запись</string>
+    <string name="cheque">Проверить</string>
+    <string name="facilities">оборудование</string>
+    <string name="services">Сервисы</string>
+    <string name="cheque_number">Номер чека :</string>
+    <string name="page_count">страниц</string>
+    <string name="reject_count">отклонять :</string>
+    <string name="pass_count">прошло :</string>
+    <string name="usable_count">годный к употреблению :</string>
+    <string name="loan_number">номер займа: </string>
+    <string name="branch_name">название филиала:</string>
+    <string name="start_date">Дата начала:</string>
+    <string name="end_date">Дата окончания:</string>
+    <string name="loan_count">количество займов:</string>
+    <string name="remained_loan">остался: </string>
+    <string name="state">государство:</string>
     <string name="requester_mobile_number">Номер мобильного телефона заявителя</string>
     <string name="charger_mobile_number">Перезаряжаемый номер мобильного телефона</string>
     <string name="terminal_No">Номер терминала</string>
@@ -1468,6 +1523,7 @@
     <string name="bill_title">Оплатить счет</string>
     <string name="topUp_message">Пополнить сообщение о покупке</string>
     <string name="bill_message">Сообщение об оплате счета</string>
+    <string name="soon">скоро...</string>
     <string name="delete_recently_sticker">Удалить недавно стикер</string>
     <string name="sticker_setting">Настройка стикера</string>
     <string name="empty_sticker">Вы еще не добавили наклейки!</string>
@@ -1480,11 +1536,46 @@
     <string name="emoji_category_symbols">Symbols</string>
     <string name="emoji_category_travel">Travel And Place</string>
     <string name="gift_sticker_title">Подарочная наклейка</string>
+    <string name="active_gift_sticker_title">Подарочная наклейка</string>
+    <string name="national_code_not_match_with_phone_number_error">Национальный код несовместим с информацией SIM-карты</string>
     <string name="gift_sticker_visit">наблюдение</string>
+    <string name="my_gift_sticker">Мои подарочные наклейки</string>
+    <string name="my_recived_gift_sticker">Подарочные наклейки получены</string>
+    <string name="expire_date">Срок годности</string>
+    <string name="send_gift_sticker">Отправить стикер</string>
+    <string name="gift_sticker_send_to_other">Отправить другому</string>
+    <string name="gift_sticker_card_info_title">Информация о подарочной карте</string>
+    <string name="click_for_copy_title">Нажмите, чтобы скопировать</string>
+    <string name="gift_sticker_empty_list_message">Там нет наклейки</string>
+    <string name="inquiry_and_shopping">Запрос и покупки</string>
+    <string name="activate_or_send_as_message">Activate or send as message</string>
     <string name="poll_dialog_question">Вы уверены в своем мнении</string>
 
+    <string name="mobile_bank_sorathesab">Список счетов</string>
+    <string name="mobile_bank_balance_title">Баланс банковской карты</string>
+    <string name="mobile_bank_balance_expireDate">Срок годности (год / месяц)</string>
+    <string name="mobile_bank_balance_cardError">пожалуйста, введите номер вашей карты Parsian.</string>
+    <string name="mobile_bank_balance_cardLengthError">your card number must be 16 digits.</string>
+    <string name="mobile_bank_balance_passwordError">Пожалуйста, введите пароль.</string>
+    <string name="mobile_bank_balance_passwordLengthError">Ваш пароль должен содержать не менее 6 символов.</string>
+    <string name="mobile_bank_balance_CVVError">пожалуйста, введите ваш номер CVV2.</string>
+    <string name="mobile_bank_balance_CVVLengthError">Ваш номер CVV2 должен быть не менее 3 цифр.</string>
+    <string name="mobile_bank_balance_dateError">please enter your expire date.</string>
+    <string name="mobile_bank_balance_message">Ваш баланс %1$s.</string>
+    <string name="mobile_bank_hotCard">Заблокировать карту</string>
     <string name="delete_recent_emoji">Удалить последние Emoji</string>
+    <string name="mobile_bank_balance_error_no_price">Нет цены.</string>
+    <string name="usable">قابل استفاده</string>
     <string name="activated">فعال شده</string>
+    <string name="posted">Posted</string>
+    <string name="gift_sticker_inquiry_and_activated">استعلام و فعال سازی</string>
+    <string name="kuknos_send_token_error">Не могу отправить этот токен.</string>
+    <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
+    <string name="inter_cheque_amount">Введите сумму</string>
+    <string name="take_turn">Принять поворот</string>
+    <string name="secondary_password">Второй пароль</string>
+    <string name="default_deposit">Депозит по умолчанию</string>
+    <string name="custom_deposit">Пользовательский депозит</string>
     <string name="internal_desc">Просмотрите вашу файловую систему</string>
     <string name="external_desc">Просмотрите ваше внешнее хранилище</string>
     <string name="file_manager_app_desc">Просмотрите папку приложения</string>
@@ -1497,7 +1588,11 @@
     <string name="file_manager">Файловый менеджер</string>
 
     <string name="E_4_14">You do not have access!</string>
+    <string name="mobile_bank_login_hint">Используйте логин и пароль для входа в мобильный банк Parsian.</string>
+    <string name="gift_card_already_in_use">Эта подарочная карта уже используется!</string>
+    <string name="gift_carde_sended">Вы уже отправили подарочную карту кому-то еще!</string>
     <string name="trim_error">Обрезка слишком короткая, пожалуйста, попробуйте с действительной продолжительностью.</string>
+    <string name="card_is_disable">Текущий пункт отключен.</string>
     <string name="restrictions_on_sending_stickers">Ограничения на отправку стикеров!</string>
     <string name="restrictions_on_sending_multimedia_messages">Ограничения на отправку мультимедийных сообщений!</string>
     <string name="restrictions_on_sending_messages">Restrictions on sending messages</string>
@@ -1515,5 +1610,7 @@
     <string name="sim_type_not_choosed">Тип SIM-карты не указан</string>
     <string name="no_history_found">​​История не найдена</string>
     <string name="no_number_found">Там нет предварительного номера</string>
-    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
+    <string name="payment_userScore">Твой счет</string>
+    <string name="Increase_score">Увеличьте свой счет \n прямо сейчас!</string>
+    <string name="Submitـomment">Чтобы увидеть результаты опроса, сначала зарегистрируйте свой голос!</string>
 </resources>

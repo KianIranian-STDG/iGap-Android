@@ -15,7 +15,6 @@ import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserContactsGetBlockedList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 
 import java.util.List;
 
@@ -51,12 +50,12 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    RealmResults<RealmRegisteredInfo> results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+                    RealmResults<RealmRegisteredInfo> results = realm.where(RealmRegisteredInfo.class).equalTo("blockUser", true).findAll();
                     for (RealmRegisteredInfo item : results) {
                         item.setBlockUser(false);
                     }
 
-                    RealmResults<RealmContacts> resultsContacts = realm.where(RealmContacts.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+                    RealmResults<RealmContacts> resultsContacts = realm.where(RealmContacts.class).equalTo("blockUser", true).findAll();
                     for (RealmContacts item : resultsContacts) {
                         item.setBlockUser(false);
                     }

@@ -121,6 +121,14 @@ public class FragmentGallery extends BaseFragment {
 
     private void initToolbar(View view) {
         ViewGroup lytToolbar = view.findViewById(R.id.toolbar);
+        String toolbarTitle = "";
+        if (mGalleryMode == GalleryMode.PHOTO) {
+            toolbarTitle = getString(R.string.gallery);
+        } else if (mGalleryMode == GalleryMode.VIDEO) {
+            toolbarTitle = getString(R.string.videos);
+        } else {
+            toolbarTitle = getString(R.string.audios);
+        }
 
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -128,7 +136,7 @@ public class FragmentGallery extends BaseFragment {
                 .setLeftIcon(R.string.back_icon)
                 .setLogoShown(true)
                 .setIGapLogoCheck(false)
-                .setDefaultTitle(isSubFolder ? mFolderName : getString(R.string.gallery))
+                .setDefaultTitle(isSubFolder ? mFolderName : toolbarTitle)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -489,10 +497,12 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void handleUiWithMultiSelect(int size) {
-        if (size > 0) {
-            mHelperToolbar.getRightButton().setText(R.string.md_send_button);
-        } else {
-            mHelperToolbar.getRightButton().setText(R.string.close_icon);
+        if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
+            if (size > 0) {
+                mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+            } else {
+                mHelperToolbar.getRightButton().setText(R.string.close_icon);
+            }
         }
     }
 

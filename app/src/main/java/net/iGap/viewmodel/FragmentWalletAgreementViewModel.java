@@ -13,7 +13,6 @@ import android.text.Html;
 
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -24,7 +23,7 @@ import net.iGap.request.RequestWalletRegister;
 
 import ir.radsense.raadcore.model.Auth;
 
-public class FragmentWalletAgreementViewModel extends ViewModel {
+public class FragmentWalletAgreementViewModel extends BaseViewModel {
 
 
     private ObservableField<String> callbackTxtAgreement = new ObservableField<>("");
@@ -71,7 +70,7 @@ public class FragmentWalletAgreementViewModel extends ViewModel {
     }
 
     public void acceptTerms() {
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             new RequestWalletRegister().walletRegister();
             goToWalletPage();
         } else {

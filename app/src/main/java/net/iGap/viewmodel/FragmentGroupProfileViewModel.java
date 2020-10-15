@@ -7,7 +7,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -26,12 +25,10 @@ import net.iGap.observers.interfaces.OnGroupRemoveUsername;
 import net.iGap.observers.interfaces.OnGroupRevokeLink;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
@@ -43,7 +40,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 
-public class FragmentGroupProfileViewModel extends ViewModel {
+public class FragmentGroupProfileViewModel extends BaseViewModel {
 
     public ObservableInt haveDescription = new ObservableInt(View.VISIBLE);
     public ObservableBoolean isUnMuteNotification = new ObservableBoolean(true);
@@ -116,7 +113,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
         //group info
         realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
             goBack.setValue(true);
@@ -266,7 +263,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
 
     public void onClickRippleGroupAvatar() {
         if (DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst();
+            return realm.where(RealmAvatar.class).equalTo("ownerId", roomId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(roomId);
         }
@@ -291,7 +288,7 @@ public class FragmentGroupProfileViewModel extends ViewModel {
     }
 
     public void sendRequestRemoveGroupUsername() {
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             showProgressBar();
             new RequestGroupRemoveUsername().groupRemoveUsername(roomId, new OnGroupRemoveUsername() {
                 @Override

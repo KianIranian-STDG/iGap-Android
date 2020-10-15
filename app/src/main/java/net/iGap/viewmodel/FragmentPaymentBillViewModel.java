@@ -16,7 +16,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -25,7 +24,7 @@ import net.iGap.request.RequestMplGetBillToken;
 
 import org.jetbrains.annotations.NotNull;
 
-public class FragmentPaymentBillViewModel extends ViewModel {
+public class FragmentPaymentBillViewModel extends BaseViewModel {
 
     private ObservableInt haveAmount = new ObservableInt(View.VISIBLE);
     private ObservableInt showLoadingView = new ObservableInt(View.INVISIBLE);
@@ -135,7 +134,7 @@ public class FragmentPaymentBillViewModel extends ViewModel {
 
     public void onPayBillClick(String billId, String payId) {
         hideKeyword.setValue(true);
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             if (isPolice) {
                 if (billId.length() == 0) {
                     showErrorMessage.setValue(R.string.biling_id_not_valid);

@@ -18,7 +18,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -139,7 +138,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
             int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
                 AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-                Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
             }
         }
 

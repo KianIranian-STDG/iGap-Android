@@ -20,7 +20,6 @@ package net.iGap.module.transition.core;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import java.io.BufferedOutputStream;
@@ -56,7 +55,6 @@ public class TransitionBundleFactory {
             @Override
             public void run() {
                 TransitionAnimation.isImageFileReady = false;
-                Boolean isDebug = (Boolean) BuildConfigUtils.getBuildConfigValue(context, "DEBUG");
                 BufferedOutputStream bos = null;
                 try {
                     if (imageFile.exists()) {
@@ -66,21 +64,14 @@ public class TransitionBundleFactory {
                     bos = new BufferedOutputStream(new FileOutputStream(imageFile));
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
                 } catch (FileNotFoundException e) {
-                    if (isDebug) {
-                        Log.i(TAG, "file not found", e);
-                    }
+                    e.printStackTrace();
                 } catch (IOException e) {
-                    if (isDebug) {
-                        Log.i(TAG, "can't create file", e);
-                    }
+                    e.printStackTrace();
                 } finally {
                     try {
                         bos.close();
                     } catch (Exception e) {
-                        if (isDebug) {
-                            //IOException, NullPointerException
-                            Log.i(TAG, "fail save image", e);
-                        }
+                        e.printStackTrace();
                     }
                     TransitionAnimation.isImageFileReady = true;
                 }

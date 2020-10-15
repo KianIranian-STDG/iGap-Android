@@ -10,8 +10,9 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
 import net.iGap.fragments.poll.OnPollList;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoClientGetPoll;
 
 public class RequestClientGetPoll {
@@ -24,7 +25,7 @@ public class RequestClientGetPoll {
 
         RequestWrapper requestWrapper = new RequestWrapper(624, builder, onPollList);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {

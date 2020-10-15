@@ -630,9 +630,21 @@ public class ChatAttachmentPopup {
                 HelperPermission.getStoragePermision(mFrgActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
-                        FragmentEditImage.itemGalleryList = getAllShownImagesPath(mFrgActivity);
-                        if (rcvBottomSheet != null) rcvBottomSheet.setVisibility(View.VISIBLE);
-                        checkCameraAndLoadImage();
+                        getAllShownImagesPath(mFrgActivity, new ChatAttachmentPopup.OnImagesGalleryPrepared() {
+                            @Override
+                            public void imagesList(ArrayList<StructBottomSheet> listOfAllImages) {
+                                FragmentEditImage.itemGalleryList = listOfAllImages;
+                                if (rcvBottomSheet != null)
+                                    rcvBottomSheet.setVisibility(View.VISIBLE);
+                                G.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        checkCameraAndLoadImage();
+                                    }
+                                });
+
+                            }
+                        });
                     }
 
                     @Override
@@ -737,39 +749,49 @@ public class ChatAttachmentPopup {
 
     }
 
+    public interface OnImagesGalleryPrepared {
+        void imagesList(ArrayList<StructBottomSheet> listOfAllImages);
+    }
+
     /**
      * get images for show in bottom sheet
      */
-    private ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
-        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
-        Uri uri;
-        Cursor cursor;
-        int column_index_data;
-        String absolutePathOfImage;
-        uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+    private void getAllShownImagesPath(Activity activity, OnImagesGalleryPrepared onImagesGalleryPrepared) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+                Uri uri;
+                Cursor cursor;
+                int column_index_data;
+                String absolutePathOfImage;
+                uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        String[] projection = {
-                MediaStore.MediaColumns.DATA
-        };
+                String[] projection = {
+                        MediaStore.MediaColumns.DATA
+                };
 
-        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
 
-        if (cursor != null) {
-            column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                if (cursor != null) {
+                    column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
 
-            while (cursor.moveToNext()) {
-                absolutePathOfImage = cursor.getString(column_index_data);
+                    while (cursor.moveToNext()) {
+                        absolutePathOfImage = cursor.getString(column_index_data);
 
-                StructBottomSheet item = new StructBottomSheet();
-                item.setId(listOfAllImages.size());
-                item.setPath(absolutePathOfImage);
-                item.isSelected = true;
-                listOfAllImages.add(item);
-                if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setId(listOfAllImages.size());
+                        item.setPath(absolutePathOfImage);
+                        item.isSelected = true;
+                        listOfAllImages.add(item);
+                        if (listOfAllImages.size() >= MAX_COUNT_OF_IMAGE) break;
+                    }
+                    cursor.close();
+                    onImagesGalleryPrepared.imagesList(listOfAllImages);
+
+                }
             }
-            cursor.close();
-        }
-        return listOfAllImages;
+        }).start();
     }
 
     private void animateViews() {

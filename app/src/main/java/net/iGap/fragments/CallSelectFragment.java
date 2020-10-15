@@ -12,12 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.CallActivity;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.module.webrtc.CallService;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -41,12 +42,16 @@ public class CallSelectFragment extends BaseBottomSheet {
     }
 
     private void startCall(Activity activity, long userId, ProtoSignalingOffer.SignalingOffer.Type callType) {
+        if (CallManager.getInstance().isUserInCall() && activity != null) {
+            Toast.makeText(activity, "You are in Calling", Toast.LENGTH_LONG).show();
+            return;
+        }
         if (activity == null || userId <= 0) {
             return;
         }
         this.activity = activity;
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             if (CallManager.getInstance().getCallPeerId() == userId) {
                 Intent activityIntent = new Intent(getActivity(), CallActivity.class);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

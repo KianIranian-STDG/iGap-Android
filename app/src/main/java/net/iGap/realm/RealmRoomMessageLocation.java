@@ -32,7 +32,7 @@ public class RealmRoomMessageLocation extends RealmObject {
     public static RealmRoomMessageLocation put(Realm realm, final ProtoGlobal.RoomMessageLocation input, Long id) {
         RealmRoomMessageLocation messageLocation = null;
         if (id != null) {
-            messageLocation = realm.where(RealmRoomMessageLocation.class).equalTo(RealmRoomMessageLocationFields.ID, id).findFirst();
+            messageLocation = realm.where(RealmRoomMessageLocation.class).equalTo("id", id).findFirst();
         }
         if (messageLocation == null) {
             messageLocation = realm.createObject(RealmRoomMessageLocation.class, AppUtils.makeRandomId());

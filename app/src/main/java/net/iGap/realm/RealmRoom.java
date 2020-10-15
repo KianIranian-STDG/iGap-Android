@@ -44,35 +44,35 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class RealmRoom extends RealmObject {
     @PrimaryKey
-    private long id;
-    private String type;
-    private String title;
-    private String initials;
-    private String color;
-    private int unreadCount;
-    private boolean readOnly;
-    private RealmChatRoom chatRoom;
-    private boolean mute;
-    private RealmGroupRoom groupRoom;
-    private RealmChannelRoom channelRoom;
-    private RealmRoomMessage lastMessage;
-    private RealmRoomMessage firstUnreadMessage;
-    private RealmRoomDraft draft;
-    private RealmDraftFile draftFile;
-    private RealmAvatar avatar;
-    private long updatedTime;
-    private String sharedMediaCount = "";
+    public long id;
+    public String type;
+    public String title;
+    public String initials;
+    public String color;
+    public int unreadCount;
+    public boolean readOnly;
+    public RealmChatRoom chatRoom;
+    public boolean mute;
+    public RealmGroupRoom groupRoom;
+    public RealmChannelRoom channelRoom;
+    public RealmRoomMessage lastMessage;
+    public RealmRoomMessage firstUnreadMessage;
+    public RealmRoomDraft draft;
+    public RealmDraftFile draftFile;
+    public RealmAvatar avatar;
+    public long updatedTime;
+    public String sharedMediaCount = "";
     //if it was needed in the future we can combine this two under fields in RealmAction (actionStateUserId and actionState).
-    private long actionStateUserId;
-    private String actionState;
-    private boolean isDeleted = false;
-    private boolean isPinned;
-    private long pinId;
-    private long pinMessageId;
-    private long pinMessageIdDeleted;
-    private int priority;
-    private boolean isFromPromote;
-    private long promoteId;
+    public long actionStateUserId;
+    public String actionState;
+    public boolean isDeleted = false;
+    public boolean isPinned;
+    public long pinId;
+    public long pinMessageId;
+    public long pinMessageIdDeleted;
+    public int priority;
+    public boolean isFromPromote;
+    public long promoteId;
 
     public long getPromoteId() {
         return promoteId;
@@ -107,7 +107,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public static RealmRoom getRealmRoom(Realm realm, long roomId) {
-        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
     }
 
     public static void putOrUpdate(final ProtoGlobal.Room room) {
@@ -127,7 +127,7 @@ public class RealmRoom extends RealmObject {
 
         RealmClientCondition.putOrUpdateIncomplete(realm, room.getId());
 
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
 
         if (realmRoom == null) {
             realmRoom = realm.createObject(RealmRoom.class, room.getId());
@@ -269,7 +269,7 @@ public class RealmRoom extends RealmObject {
 
     public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId, int draftTime) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId, draftTime));
                 if (!message.isEmpty() && draftTime != 0) {
@@ -292,7 +292,7 @@ public class RealmRoom extends RealmObject {
      */
     public static void createEmptyRoom(final long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom == null) {
                 realmRoom = realm.createObject(RealmRoom.class, roomId);
             }
@@ -305,7 +305,7 @@ public class RealmRoom extends RealmObject {
 
     public static void needGetRoom(long roomId) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom == null) {
                 new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.justInfo);
             }
@@ -318,7 +318,7 @@ public class RealmRoom extends RealmObject {
     public static boolean isMainRoom(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             boolean isMainRoom = false;
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).equalTo("isDeleted", false).findFirst();
             if (realmRoom != null) {
                 isMainRoom = true;
             }
@@ -337,7 +337,7 @@ public class RealmRoom extends RealmObject {
     public static void clearUnreadCount(long roomId, String authorHash, ProtoGlobal.RoomMessageStatus messageStatus, long messageId) {
         if (RealmUserInfo.getCurrentUserAuthorHash().equals(authorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
             DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null && (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getMessageId() <= messageId)) {
                     realmRoom.setUnreadCount(0);
                 }
@@ -348,7 +348,7 @@ public class RealmRoom extends RealmObject {
     public static void updateMineRole(long roomId, long memberId, final String role) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             if (memberId == AccountManager.getInstance().getCurrentUser().getId()) {
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom == null) {
                     return;
                 }
@@ -399,7 +399,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updateMemberRole(final long roomId, final long userId, final String role) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 RealmList<RealmMember> realmMemberRealmList = null;
                 if (realmRoom.getType() == GROUP) {
@@ -429,7 +429,7 @@ public class RealmRoom extends RealmObject {
     public static String getMemberCount(Realm realm, long roomId) {
 
         String memberCount = "";
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             if (realmRoom.getType() == GROUP) {
                 memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
@@ -447,7 +447,7 @@ public class RealmRoom extends RealmObject {
      */
     public static void deleteRoom(final long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 realmRoom.deleteFromRealm();
             }
@@ -459,7 +459,7 @@ public class RealmRoom extends RealmObject {
 
     public static void addOwnerToDatabase(long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getType() == CHANNEL) {
                     RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -481,7 +481,7 @@ public class RealmRoom extends RealmObject {
     public static boolean showSignature(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             boolean signature = false;
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
                 signature = true;
             }
@@ -494,7 +494,7 @@ public class RealmRoom extends RealmObject {
      */
     public static boolean needUpdateRoomInfo(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 return false;
             }
@@ -505,7 +505,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updateChatTitle(final long userId, final String title) {// TODO [Saeed Mozaffari] [2017-10-24 3:36 PM] - Can Write Better Code?
         DbManager.getInstance().doRealmTransaction(realm -> {
-            for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
+            for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo("type", ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
                 if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
                     realmRoom.setTitle(title.trim());
                 }
@@ -515,7 +515,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updateMemberCount(long roomId, final ProtoGlobal.Room.Type roomType, final long memberCount) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (roomType == CHANNEL) {
                 if (realmRoom != null && realmRoom.getChannelRoom() != null) {
                     realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount + "");
@@ -535,7 +535,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public static int updateMemberCount(Realm realm, final long roomId, final boolean plus) {
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             String participantsCountLabel;
             if (realmRoom.getType() == GROUP) {
@@ -581,7 +581,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updateSignature(final long roomId, final boolean signature) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
                 if (realmChannelRoom != null) {
@@ -593,7 +593,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updateUsername(final long roomId, final String username) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getType() == GROUP) {
                     RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -617,7 +617,7 @@ public class RealmRoom extends RealmObject {
      */
     public static void updateChatRoom(final long userId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, CHAT.toString()).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+            RealmRoom room = realm.where(RealmRoom.class).equalTo("type", CHAT.toString()).equalTo("chatRoom.peer_id", userId).findFirst();
             if (room != null) {
                 room.setReadOnly(room.getReadOnly());// set data for update room item
             }
@@ -625,14 +625,14 @@ public class RealmRoom extends RealmObject {
     }
 
     public static void updateTime(Realm realm, long roomId, long time) {
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             realmRoom.setUpdatedTime(time);
         }
     }
 
     public static void setPrivateInTransaction(Realm realm, final long roomId) {
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             if (realmRoom.getType() == GROUP) {
                 RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -667,7 +667,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setCountShearedMedia(final long roomId, final String count) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (room != null) {
                 room.setSharedMediaCount(count);
             }
@@ -675,7 +675,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public static RealmRoom setCount(Realm realm, final long roomId, final int count) {
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (room != null) {
             room.setUnreadCount(count);
         }
@@ -683,7 +683,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public static RealmRoom removeFirstUnreadMessage(Realm realm, final long roomId) {
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (room != null) {
             room.setFirstUnreadMessage(null);
         }
@@ -691,7 +691,7 @@ public class RealmRoom extends RealmObject {
     }
 
     public static RealmRoom setCountWithCallBack(Realm realm, final long roomId, final int count) {
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (room != null) {
             room.setUnreadCount(count);
         }
@@ -701,7 +701,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setAction(final long roomId, final long userId, final String action) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 realmRoom.setActionState(action, userId);
             }
@@ -711,7 +711,7 @@ public class RealmRoom extends RealmObject {
     public static void setLastScrollPosition(final long roomId, final long messageId, final int offset) {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setLastScrollPositionMessageId(messageId);
                     realmRoom.setLastScrollPositionOffset(offset);
@@ -729,7 +729,7 @@ public class RealmRoom extends RealmObject {
     }
 
     private static void setLastScrollPosition(Realm realm, long roomId) {
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (realmRoom != null) {
             realmRoom.setLastScrollPositionMessageId(0);
             realmRoom.setLastScrollPositionOffset(0);
@@ -739,7 +739,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setDraft(final long roomId, final String message, final long replyToMessageId, ProtoGlobal.Room.Type chatType) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
             if (realmRoom != null) {
                 if (realmRoom.getDraft() == null || realmRoom.getDraft().getMessage() == null || !realmRoom.getDraft().getMessage().equals(message)) {
@@ -757,7 +757,7 @@ public class RealmRoom extends RealmObject {
 
     public static void editRoom(final long roomId, final String title, final String description) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 realmRoom.setTitle(title);
                 if (realmRoom.getType() == GROUP) {
@@ -778,7 +778,7 @@ public class RealmRoom extends RealmObject {
     public static void clearDraft(final long roomId) {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null && realmRoom.getLastMessage() != null) {
                     if (realmRoom.getLastMessage().getUpdateTime() == 0) {
                         realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
@@ -806,7 +806,7 @@ public class RealmRoom extends RealmObject {
 
     public static void joinRoom(final long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null && realmRoom.isValid()) {
                 realmRoom.setDeleted(false);
                 if (realmRoom.getType() == GROUP) {
@@ -820,7 +820,7 @@ public class RealmRoom extends RealmObject {
 
     public static void joinByInviteLink(long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                     realmRoom.setReadOnly(false);
@@ -833,7 +833,7 @@ public class RealmRoom extends RealmObject {
     public static boolean isNotificationServices(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             boolean isNotificationService = false;
-            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (room != null && room.getType() == CHAT && room.getChatRoom() != null) {
                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
                 if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
@@ -847,7 +847,7 @@ public class RealmRoom extends RealmObject {
     public static ProtoGlobal.Room.Type detectType(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             ProtoGlobal.Room.Type roomType = ProtoGlobal.Room.Type.UNRECOGNIZED;
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 roomType = realmRoom.getType();
             }
@@ -859,7 +859,7 @@ public class RealmRoom extends RealmObject {
     public static String detectTitle(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             String title = "";
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 title = realmRoom.getTitle();
             }
@@ -869,7 +869,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setLastMessageWithRoomMessage(Realm realm, long roomId, RealmRoomMessage roomMessage) {
         if (roomMessage != null) {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 realmRoom.setLastMessage(roomMessage);
             }
@@ -886,9 +886,9 @@ public class RealmRoom extends RealmObject {
         //TODO [Saeed Mozaffari] [2017-10-23 9:38 AM] - Write Better Code
         DbManager.getInstance().doRealmTransaction(realm -> {
             try {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 RealmRoomMessage realmRoomMessage = null;
-                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.EDITED, false).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId).findAll();
+                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("edited", false).equalTo("roomId", roomId).lessThan("messageId", messageId).findAll();
                 if (realmRoomMessages.size() > 0) {
                     realmRoomMessage = realmRoomMessages.last();
                 }
@@ -904,7 +904,7 @@ public class RealmRoom extends RealmObject {
 
     public static void convertChatToGroup(final long roomId, final String title, final String description, final ProtoGlobal.GroupRoom.Role role) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null) {
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setTitle(title);
@@ -916,7 +916,7 @@ public class RealmRoom extends RealmObject {
 
     public static long getRoomIdByPeerId(long peerId) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
             if (realmRoom != null) {
                 return realmRoom.getId();
             }
@@ -926,7 +926,7 @@ public class RealmRoom extends RealmObject {
 
     public static void clearMessage(final long roomId, final long clearId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= clearId))) {
                 realmRoom.setUnreadCount(0);
                 realmRoom.setLastMessage(null);
@@ -1197,8 +1197,8 @@ public class RealmRoom extends RealmObject {
             RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
             if (room != null) {
                 if (room.getPinMessageId() > 0) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                            equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
+                            equalTo("messageId", room.getPinMessageId()).findFirst();
                     if (roomMessage == null) {
                         new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
                             @Override
@@ -1219,9 +1219,9 @@ public class RealmRoom extends RealmObject {
                             }
                         });
                     } else {
-                        RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                                equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
-                                equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findFirst();
+                        RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).
+                                equalTo("messageId", room.getPinMessageId()).notEqualTo("messageId", room.getPinMessageIdDeleted()).
+                                equalTo("deleted", false).equalTo("showMessage", true).findFirst();
                         if (roomMessage1 != null) {
                             result = roomMessage1.getMessageId();
                         }
@@ -1296,9 +1296,9 @@ public class RealmRoom extends RealmObject {
     public static void setLastMessage(final long roomId) {
         //TODO [Saeed Mozaffari] [2017-10-22 5:26 PM] - Write Better Code
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().sort("messageId", Sort.DESCENDING);
             if (realmRoomMessages.size() > 0 && realmRoomMessages.first() != null) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setLastMessage(realmRoomMessages.first());
                 }
@@ -1332,7 +1332,7 @@ public class RealmRoom extends RealmObject {
 
     public static String[] getUnreadCountPages() {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+            RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("mute", false).equalTo("isDeleted", false).findAll();
             int all = 0, chat = 0, group = 0, channel = 0;
             for (RealmRoom rm : results) {
                 switch (rm.getType()) {
@@ -1360,7 +1360,7 @@ public class RealmRoom extends RealmObject {
 
     public static boolean isPromote(Long id) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
             if (realmRoom != null) {
                 return realmRoom.isFromPromote();
             }

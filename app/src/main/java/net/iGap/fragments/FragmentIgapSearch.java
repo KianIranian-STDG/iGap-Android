@@ -153,7 +153,7 @@ public class FragmentIgapSearch extends BaseFragment {
                 }
 
                 if (strSize > 5) {
-                    if (G.userLogin) {
+                    if (getRequestManager().isUserLogin()) {
                         if ((!edtSearch.getText().toString().equals(preventRepeatSearch))) {
                             itemAdapter.clear();
                             new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));
@@ -193,7 +193,7 @@ public class FragmentIgapSearch extends BaseFragment {
         });
         */
 
-        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
+        btnClose = view.findViewById(R.id.sfl_btn_close);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

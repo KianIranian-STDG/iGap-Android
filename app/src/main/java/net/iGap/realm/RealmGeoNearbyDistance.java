@@ -25,7 +25,7 @@ public class RealmGeoNearbyDistance extends RealmObject {
 
     public static void updateComment(final long roomId, final String comment) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, roomId).findFirst();
+            RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo("userId", roomId).findFirst();
             if (realmGeoNearbyDistance != null) {
                 realmGeoNearbyDistance.setComment(comment);
             }

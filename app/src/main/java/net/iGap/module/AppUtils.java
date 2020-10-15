@@ -49,9 +49,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -562,7 +560,7 @@ public final class AppUtils {
     public static String computeLastMessage(long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             String lastMessage = "";
-            RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+            RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().sort("messageId", Sort.DESCENDING);
             for (RealmRoomMessage realmRoomMessage : realmList) {
                 if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
                     lastMessage = AppUtils.rightLastMessage(realmRoomMessage);
@@ -755,8 +753,8 @@ public final class AppUtils {
         int chatCount = 0;
         int[] result = new int[2];
 
-        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).notEqualTo(RealmRoomFields.ID, roomId).findAll();
+        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).equalTo("keepRoom", false).
+                equalTo("mute", false).equalTo("isDeleted", false).notEqualTo("id", roomId).findAll();
 
         for (RealmRoom realmRoom1 : realmRooms) {
             if (realmRoom1.getUnreadCount() > 0) {

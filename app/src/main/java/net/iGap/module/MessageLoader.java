@@ -18,7 +18,6 @@ import net.iGap.observers.interfaces.OnClientGetRoomHistoryResponse;
 import net.iGap.observers.interfaces.OnMessageReceive;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientGetRoomHistory;
 
 import java.util.ArrayList;
@@ -63,15 +62,15 @@ public final class MessageLoader {
 
             if (direction == UP) {
                 if (duplicateMessage) {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, gapMessageId, messageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThanOrEqualTo("messageId", messageId).notEqualTo("deleted", true).between("messageId", gapMessageId, messageId).findAll().sort("messageId", Sort.DESCENDING);
                 } else {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, gapMessageId, messageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThan("messageId", messageId).notEqualTo("deleted", true).between("messageId", gapMessageId, messageId).findAll().sort("messageId", Sort.DESCENDING);
                 }
             } else {
                 if (duplicateMessage) {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, messageId, gapMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThanOrEqualTo("messageId", messageId).notEqualTo("deleted", true).between("messageId", messageId, gapMessageId).findAll().sort("messageId", Sort.ASCENDING);
                 } else {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThan(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, messageId, gapMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThan("messageId", messageId).notEqualTo("deleted", true).between("messageId", messageId, gapMessageId).findAll().sort("messageId", Sort.ASCENDING);
                 }
             }
 
@@ -79,16 +78,16 @@ public final class MessageLoader {
 
             if (direction == UP) {
                 if (duplicateMessage) {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThanOrEqualTo("messageId", messageId).notEqualTo("deleted", true).findAll().sort("messageId", Sort.DESCENDING);
                 } else {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThan("messageId", messageId).notEqualTo("deleted", true).findAll().sort("messageId", Sort.DESCENDING);
                 }
 
             } else {
                 if (duplicateMessage) {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThanOrEqualTo("messageId", messageId).notEqualTo("deleted", true).findAll().sort("messageId", Sort.ASCENDING);
                 } else {
-                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThan(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.DELETED, true).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                    realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThan("messageId", messageId).notEqualTo("deleted", true).findAll().sort("messageId", Sort.ASCENDING);
                 }
             }
         }
@@ -198,7 +197,7 @@ public final class MessageLoader {
                             sort = Sort.ASCENDING;
                         }
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
+                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("deleted", true).between("messageId", startMessageId, endMessageId).findAll().sort("messageId", sort);
                         List<RealmRoomMessage> list = realm.copyFromRealm(realmRoomMessages);
                         G.handler.post(new Runnable() {
                             @Override
@@ -222,12 +221,12 @@ public final class MessageLoader {
                     //    public void execute(Realm realm) {
                     //
                     //        if (direction.equals(UP.toString())) {
-                    //            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo("previousMessageId", 0).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+                    //            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("previousMessageId", 0).findAll().sort("messageId", Sort.ASCENDING);
                     //            if (realmRoomMessages.size() > 0) {
                     //                realmRoomMessages.first().setPreviousMessageId(0);
                     //            }
                     //        } else {
-                    //            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo("futureMessageId", 0).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    //            RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("futureMessageId", 0).findAll().sort("messageId", Sort.DESCENDING);
                     //            if (realmRoomMessages.size() > 0) {
                     //                realmRoomMessages.first().setFutureMessageId(0);
                     //            }
@@ -267,24 +266,24 @@ public final class MessageLoader {
          * detect message that have previousMessageId or futureMessageId
          */
         if (direction == UP) {
-            Number maxMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0).max(RealmRoomMessageFields.MESSAGE_ID);
+            Number maxMessageId = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThanOrEqualTo("messageId", messageId).notEqualTo("previousMessageId", 0).max("messageId");
             if (maxMessageId != null) {
-                realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, (long) maxMessageId).findFirst();
+                realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", (long) maxMessageId).findFirst();
                 if (realmRoomMessage != null) {
                     checkMessageId = realmRoomMessage.getPreviousMessageId();
                 }
             }
         } else {
-            Number minMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.FUTURE_MESSAGE_ID, 0).min(RealmRoomMessageFields.MESSAGE_ID);
+            Number minMessageId = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThanOrEqualTo("messageId", messageId).notEqualTo("futureMessageId", 0).min("messageId");
             if (minMessageId != null) {
                 // add this for handle down gap is not set before up gap
                 Number upGap = realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                        .greaterThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                        .notEqualTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0)
-                        .min(RealmRoomMessageFields.MESSAGE_ID);
+                        .equalTo("roomId", roomId)
+                        .greaterThanOrEqualTo("messageId", messageId)
+                        .notEqualTo("previousMessageId", 0)
+                        .min("messageId");
                 if (upGap != null && upGap.longValue() < minMessageId.longValue()) {
-                    Number downGapMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, upGap.longValue()).max(RealmRoomMessageFields.MESSAGE_ID);
+                    Number downGapMessageId = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThan("messageId", upGap.longValue()).max("messageId");
                     if (downGapMessageId != null) {
                         DbManager.getInstance().doRealmTransaction(new DbManager.RealmTransaction() {
                             @Override
@@ -293,10 +292,10 @@ public final class MessageLoader {
                             }
                         });
                         checkMessageId = downGapMessageId.longValue();
-                        realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, downGapMessageId.longValue()).findFirst();
+                        realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", downGapMessageId.longValue()).findFirst();
                     }
                 } else {
-                    realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, (long) minMessageId).findFirst();
+                    realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", (long) minMessageId).findFirst();
                     if (realmRoomMessage != null) {
                         checkMessageId = realmRoomMessage.getFutureMessageId();
                     }
@@ -308,7 +307,7 @@ public final class MessageLoader {
          * check that exist any message with (message == checkMessageId) or not
          */
         if (realmRoomMessage != null) {
-            RealmRoomMessage realmRoomMessageGap = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, checkMessageId).findFirst();
+            RealmRoomMessage realmRoomMessageGap = realm.where(RealmRoomMessage.class).equalTo("messageId", checkMessageId).findFirst();
 
             /**
              * if any message with checkMessageId isn't exist in local so
@@ -331,28 +330,28 @@ public final class MessageLoader {
          */
         if (gapMessageId > 0) {
             if (direction == UP) {
-                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).equalTo(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, 0);
-                if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.max(RealmRoomMessageFields.MESSAGE_ID) != null) {
-                    reachMessageId = (long) realmRoomMessageRealmQuery.max(RealmRoomMessageFields.MESSAGE_ID);
+                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThan("messageId", realmRoomMessage.getMessageId()).equalTo("previousMessageId", 0);
+                if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.max("messageId") != null) {
+                    reachMessageId = (long) realmRoomMessageRealmQuery.max("messageId");
                 }
 
                 if (reachMessageId == 0) {
-                    RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId());
-                    if (realmRoomMessageRealmQuery1 != null && realmRoomMessageRealmQuery1.max(RealmRoomMessageFields.MESSAGE_ID) != null) {
-                        reachMessageId = (long) realmRoomMessageRealmQuery1.max(RealmRoomMessageFields.MESSAGE_ID);
+                    RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery1 = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThan("messageId", realmRoomMessage.getMessageId());
+                    if (realmRoomMessageRealmQuery1 != null && realmRoomMessageRealmQuery1.max("messageId") != null) {
+                        reachMessageId = (long) realmRoomMessageRealmQuery1.max("messageId");
                     }
                 }
 
             } else {
-                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId()).equalTo(RealmRoomMessageFields.FUTURE_MESSAGE_ID, 0);
-                if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.min(RealmRoomMessageFields.MESSAGE_ID) != null) {
-                    reachMessageId = (long) realmRoomMessageRealmQuery.min(RealmRoomMessageFields.MESSAGE_ID);
+                RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThan("messageId", realmRoomMessage.getMessageId()).equalTo("futureMessageId", 0);
+                if (realmRoomMessageRealmQuery != null && realmRoomMessageRealmQuery.min("messageId") != null) {
+                    reachMessageId = (long) realmRoomMessageRealmQuery.min("messageId");
                 }
 
                 if (reachMessageId == 0) {
-                    RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).greaterThan(RealmRoomMessageFields.MESSAGE_ID, realmRoomMessage.getMessageId());
-                    if (realmRoomMessageRealmQuery1 != null && realmRoomMessageRealmQuery1.min(RealmRoomMessageFields.MESSAGE_ID) != null) {
-                        reachMessageId = (long) realmRoomMessageRealmQuery1.min(RealmRoomMessageFields.MESSAGE_ID);
+                    RealmQuery<RealmRoomMessage> realmRoomMessageRealmQuery1 = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).greaterThan("messageId", realmRoomMessage.getMessageId());
+                    if (realmRoomMessageRealmQuery1 != null && realmRoomMessageRealmQuery1.min("messageId") != null) {
+                        reachMessageId = (long) realmRoomMessageRealmQuery1.min("messageId");
                     }
                 }
             }
@@ -382,7 +381,7 @@ public final class MessageLoader {
             toPosition = finalMessageId;
         }
 
-        RealmResults<RealmRoomMessage> realmRoomMessages1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).between(RealmRoomMessageFields.MESSAGE_ID, fromPosition, toPosition).findAll();
+        RealmResults<RealmRoomMessage> realmRoomMessages1 = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).between("messageId", fromPosition, toPosition).findAll();
         for (RealmRoomMessage realmRoomMessage : realmRoomMessages1) {
             realmRoomMessage.setPreviousMessageId(0);
             realmRoomMessage.setFutureMessageId(0);
@@ -396,7 +395,7 @@ public final class MessageLoader {
      */
     private static boolean isGap(Realm realm, long messageId, String direction) {
 
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (realmRoomMessage != null) {
             if (direction.equals(UP.toString())) {
                 return realmRoomMessage.getPreviousMessageId() != 0;
@@ -416,7 +415,7 @@ public final class MessageLoader {
      * @param messageId message that want set gapMessageId to that
      */
     private static void setGap(final long messageId, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction, Realm realm) {
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (realmRoomMessage != null) {
             if (direction == UP) {
                 realmRoomMessage.setPreviousMessageId(messageId);
@@ -425,8 +424,6 @@ public final class MessageLoader {
             }
         }
     }
-
-
 
 
     /**

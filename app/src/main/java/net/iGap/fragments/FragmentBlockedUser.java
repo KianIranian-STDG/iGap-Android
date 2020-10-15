@@ -39,7 +39,6 @@ import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
 import net.iGap.observers.interfaces.OnBlockStateChanged;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsUnblock;
 
 import org.jetbrains.annotations.NotNull;
@@ -87,9 +86,9 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
         RealmResults<RealmRegisteredInfo> results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
+            return realm.where(RealmRegisteredInfo.class).equalTo("blockUser", true).findAll();
         });
-        BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME));
+        BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort("displayName"));
         realmRecyclerView.setAdapter(blockListAdapter);
 
         fastScroller = view.findViewById(R.id.fast_scroller);

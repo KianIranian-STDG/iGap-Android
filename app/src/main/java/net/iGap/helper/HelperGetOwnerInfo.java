@@ -18,7 +18,6 @@ import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
 
@@ -40,7 +39,7 @@ public class HelperGetOwnerInfo {
     private static void checkRoomExist(long id, final Listener listener) {
 
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
 
             if (realmRoom == null) {
 

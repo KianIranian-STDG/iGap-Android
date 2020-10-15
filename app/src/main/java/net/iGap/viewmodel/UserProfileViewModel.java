@@ -32,8 +32,6 @@ import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
@@ -43,6 +41,8 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.eventbus.socketMessages;
@@ -66,12 +66,9 @@ import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
-import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestInfoCountry;
@@ -478,7 +475,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         showLoading.set(View.VISIBLE);
         retryRequestTime++;
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userInfo.getUserId()).findFirst();
+            return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userInfo.getUserId()).findFirst();
         });
         if (realmRoom != null) {
             showLoading.set(View.GONE);
@@ -602,7 +599,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     public void onAvatarClick() {
         if (DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findFirst();
+            return realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
         }
@@ -953,7 +950,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
             G.isNeedToCheckProfileWallpaper = false;
             DbManager.getInstance().doRealmTask(realm -> {
-                RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+                RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
                 if (realmWallpaper != null) {
 
@@ -981,7 +978,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
      */
     private void checkProfileWallpaper(Realm realm) {
         try {
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
             if (realmWallpaper != null) {
                 RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
@@ -998,7 +995,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void getProfileWallpaper(Realm realm) {
         try {
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
             if (realmWallpaper != null) {
 
@@ -1116,7 +1113,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         pathSaveImage = path;
         long lastUploadedAvatarId = idAvatar + 1L;
         showLoading.set(View.VISIBLE);
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(pathSaveImage), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+        Uploader.getInstance().upload(UploadObject.createForAvatar(lastUploadedAvatarId, pathSaveImage, null, ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
             }
@@ -1130,6 +1127,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onError(String id) {
                 G.handler.post(() -> showLoading.set(View.GONE));
             }
+
         }));
     }
 

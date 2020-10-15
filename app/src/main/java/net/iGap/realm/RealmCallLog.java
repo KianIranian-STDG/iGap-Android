@@ -33,7 +33,7 @@ public class RealmCallLog extends RealmObject {
     // log id
 
     private static void addLog(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog, Realm realm) {
-        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
+        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo("id", callLog.getId()).findFirst();
         if (realmCallLog == null) {
             realmCallLog = realm.createObject(RealmCallLog.class, callLog.getId());
         }
@@ -55,7 +55,7 @@ public class RealmCallLog extends RealmObject {
 
     public static void clearCallLog(final long clearId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
+            realm.where(RealmCallLog.class).lessThanOrEqualTo("id", clearId).findAll().deleteAllFromRealm();
         });
     }
 

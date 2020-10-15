@@ -14,16 +14,18 @@ import android.app.Activity;
 import android.content.Context;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.upload.UploadManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.util.List;
 
@@ -67,7 +69,8 @@ public class ResendMessage implements IResendMessage {
                 for (StructMessageInfo message : mMessages) {
                     if (message.realmRoomMessage != null) {
                         if (mSelectedMessageID == message.realmRoomMessage.getMessageId()) {
-                            RealmRoomMessage.deleteMessage(realm1, message.realmRoomMessage.getMessageId());
+//                            RealmRoomMessage.deleteMessage(realm1, message.realmRoomMessage.getMessageId());
+                            MessageDataStorage.getInstance(AccountManager.selectedAccount).deleteMessage(message.realmRoomMessage.roomId, message.realmRoomMessage.messageId, true);
                             break;
                         }
                     }
@@ -78,7 +81,7 @@ public class ResendMessage implements IResendMessage {
 
     private void resend(final boolean all) {
 
-        if (!G.userLogin) {
+        if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             return;
         }
         DbManager.getInstance().doRealmTask(realm -> {
@@ -112,18 +115,22 @@ public class ResendMessage implements IResendMessage {
                                 @Override
                                 public void run() {
                                     DbManager.getInstance().doRealmTask(realm1 -> {
-                                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
+                                        RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                                         if (roomMessage != null) {
-                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
                                             if (realmRoom != null) {
                                                 if (roomMessage.getAttachment() == null) {
                                                     ProtoGlobal.Room.Type roomType = realmRoom.getType();
-                                                    G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
+                                                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, roomMessage.getRoomId(), roomMessage);
                                                 } else {
                                                     if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                        new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
+                                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                                     } else {
-                                                        UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                        UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+
+                                                        if (fileObject != null) {
+                                                            Uploader.getInstance().upload(fileObject);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -135,18 +142,22 @@ public class ResendMessage implements IResendMessage {
                     } else {
                         if (mMessages.get(j).realmRoomMessage.getMessageId() == mSelectedMessageID) {
                             if (FragmentChat.allowResendMessage(mSelectedMessageID)) {
-                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
+                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", mMessages.get(j).realmRoomMessage.getMessageId()).findFirst();
                                 if (roomMessage != null) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
                                     if (realmRoom != null) {
                                         ProtoGlobal.Room.Type roomType = realmRoom.getType();
                                         if (roomMessage.getAttachment() == null) {
-                                            G.chatSendMessageUtil.build(roomType, roomMessage.getRoomId(), roomMessage);
+                                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, roomMessage.getRoomId(), roomMessage);
                                         } else {
                                             if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                new ChatSendMessageUtil().build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
+                                                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                             } else {
-                                                UploadManager.getInstance().uploadMessageAndSend(realmRoom.getType(), roomMessage);
+                                                UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+
+                                                if (fileObject != null) {
+                                                    Uploader.getInstance().upload(fileObject);
+                                                }
                                             }
                                         }
                                     }

@@ -5,15 +5,14 @@ import android.view.View;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.OperatorType;
 import net.iGap.observers.interfaces.GeneralResponseCallBack;
 import net.iGap.request.RequestBillInquiryMci;
+import net.iGap.viewmodel.BaseViewModel;
 
-public class PaymentInquiryMobileViewModel extends ViewModel {
+public class PaymentInquiryMobileViewModel extends BaseViewModel {
 
     private ObservableInt showLoadingView = new ObservableInt(View.GONE);
     private ObservableBoolean enableButton = new ObservableBoolean(true);
@@ -37,7 +36,7 @@ public class PaymentInquiryMobileViewModel extends ViewModel {
     }
 
     public void onInquiryClick(String phoneNumber) {
-        if (G.userLogin) {
+        if (getRequestManager().isUserLogin()) {
             if (!isNumeric(phoneNumber) || phoneNumber.length() < 11) {
                 showErrorMessage.setValue(R.string.phone_number_is_not_valid);
             } else {

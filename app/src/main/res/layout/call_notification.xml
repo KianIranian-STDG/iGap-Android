@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#E1E1E1"
     android:orientation="vertical">
 
@@ -13,7 +13,7 @@
         android:layout_toRightOf="@+id/iv_app_icon"
         android:gravity="center"
         android:text="iGap secure call"
-        android:textSize="@dimen/verySmallTextSize" />
+        android:textSize="10dp" />
 
     <LinearLayout
         android:id="@+id/ll_info"
@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/main_font_bold"
             android:maxLines="1"
+            android:textColor="#4c4c4c"
             android:text="Abolfazl Abbasi"
             android:textSize="22dp" />
 
@@ -39,23 +40,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:textColor="#4c4c4c"
             android:text="@string/video_calls"
-            android:textSize="@dimen/smallTextSize" />
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/tv_call_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
+            android:textColor="#4c4c4c"
             android:text="abolfazl abbasi"
-            android:textSize="@dimen/smallTextSize" />
+            android:textSize="12dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_info"
-        android:layout_marginTop="@dimen/dp8"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:baselineAligned="false"
         android:weightSum="2">
@@ -75,7 +78,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="Answer call"
-                android:textColor="@color/green" />
+                android:textColor="#41B120" />
         </FrameLayout>
 
         <FrameLayout
@@ -93,7 +96,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="Decline call"
-                android:textColor="@color/red" />
+                android:textColor="#f23131" />
         </FrameLayout>
 
     </LinearLayout>

@@ -125,5 +125,6 @@
     <dimen name="default_indicator_margins">5dp</dimen>
     <dimen name="default_dash_indicator_width">12dp</dimen>
     <dimen name="round_square_indicator_radius">2dp</dimen>
+    <dimen name="pager_margin">50dp</dimen>
 
 </resources>

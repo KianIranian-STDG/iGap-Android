@@ -69,7 +69,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
@@ -672,7 +671,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     public void loadContacts() {
         results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort(RealmContactsFields.DISPLAY_NAME).findAll());
+            return realm.copyFromRealm(realm.where(RealmContacts.class).limit(CONTACT_LIMIT).sort("display_name").findAll());
         });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);
@@ -680,7 +679,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     private void loadContact(String key) {
         results = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.copyFromRealm(realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, key, Case.INSENSITIVE).findAll().sort(RealmContactsFields.DISPLAY_NAME));
+            return realm.copyFromRealm(realm.where(RealmContacts.class).contains("display_name", key, Case.INSENSITIVE).findAll().sort("display_name"));
         });
         if (realmRecyclerView.getAdapter() != null)
             ((ContactListAdapter) realmRecyclerView.getAdapter()).adapterUpdate(results);

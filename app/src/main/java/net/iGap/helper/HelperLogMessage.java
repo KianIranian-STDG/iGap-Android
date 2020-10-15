@@ -32,7 +32,6 @@ import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetRoom;
@@ -130,7 +129,7 @@ public class HelperLogMessage {
                 new RequestUserInfo().userInfoAvoidDuplicate(ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getUser().getUserId());
             }
         } else if (ProtoGlobal.RoomMessage.Author.parseFrom(log.author).hasRoom()) {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getRoom().getRoomId()).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getRoom().getRoomId()).findFirst();
             if (realmRoom != null) {
                 result = " " + realmRoom.getTitle() + " ";
             } else {
@@ -160,7 +159,7 @@ public class HelperLogMessage {
 
     private static String getRoomTypeString(StructMyLog log, Realm realm) {
         String result = G.fragmentActivity.getResources().getString(R.string.conversation);
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, log.roomId).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", log.roomId).findFirst();
         if (realmRoom != null && realmRoom.getType() != null) {
             switch (realmRoom.getType()) {
                 case GROUP:
@@ -416,7 +415,7 @@ public class HelperLogMessage {
 
     private static void gotToUserRoom(final long id) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).findFirst();
             if (realmRoom != null) {
                 //Intent intent = new Intent(G.currentActivity, ActivityChat.class);
                 //intent.putExtra("RoomId", realmRoom.getId());
@@ -477,7 +476,7 @@ public class HelperLogMessage {
 
     private static void goToRoom(Long roomId) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             //ToDo:fixed it and change to do not use G.currentActivity
             if (realmRoom != null) {
                 new GoToChatActivity(realmRoom.getId()).startActivity(G.currentActivity);

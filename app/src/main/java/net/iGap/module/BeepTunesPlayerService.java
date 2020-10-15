@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -55,7 +54,6 @@ public class BeepTunesPlayerService extends Service {
         serviceRunning = true;
         mediaPlayer = new MediaPlayer();
         playingSong = new PlayingSong();
-        Log.i(TAG, "Player Service Create ");
         super.onCreate();
     }
 
@@ -106,7 +104,6 @@ public class BeepTunesPlayerService extends Service {
     public void onDestroy() {
         serviceRunning = false;
         mediaPlayer.release();
-        Log.i(TAG, "Player Service Destroy");
         super.onDestroy();
     }
 
@@ -121,7 +118,6 @@ public class BeepTunesPlayerService extends Service {
         playingSong.setStatus(PlayingSong.PLAY);
         playingSongId = playingSong.getSongId();
         playingSongMutableLiveData.postValue(playingSong);
-        Log.i(TAG, "play: " + playingSong.getSongId());
     }
 
     private void pause(PlayingSong playingSong) {
@@ -130,7 +126,6 @@ public class BeepTunesPlayerService extends Service {
         getSongInfo(playingSong);
         playingSong.setStatus(PlayingSong.PAUSE);
         playingSongMutableLiveData.postValue(playingSong);
-        Log.i(TAG, "pause: " + playingSong.getSongId());
     }
 
     private void getSongInfo(PlayingSong playingSong) {

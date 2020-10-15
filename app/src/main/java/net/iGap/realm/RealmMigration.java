@@ -15,6 +15,8 @@ import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 import net.iGap.module.accountManager.AccountManager;
 
+import javax.activation.MimetypesFileTypeMap;
+
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
@@ -57,7 +59,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 3) {
-            schema.create(RealmWallpaper.class.getSimpleName()).addField(RealmWallpaperFields.LAST_TIME_GET_LIST, long.class, FieldAttribute.REQUIRED).addField("wallPaperList", byte[].class).addField(RealmWallpaperFields.LOCAL_LIST, byte[].class);
+            schema.create(RealmWallpaper.class.getSimpleName()).addField("lastTimeGetList", long.class, FieldAttribute.REQUIRED).addField("wallPaperList", byte[].class).addField("localList", byte[].class);
             oldVersion++;
         }
 
@@ -69,10 +71,10 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 5) {
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
             if (realmRoomMessageSchema != null) {
-                realmRoomMessageSchema.addField(RealmRoomMessageFields.PREVIOUS_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
-                realmRoomMessageSchema.addField(RealmRoomMessageFields.SHOW_TIME, boolean.class, FieldAttribute.REQUIRED);
-                realmRoomMessageSchema.addField(RealmRoomMessageFields.HAS_EMOJI_IN_TEXT, boolean.class, FieldAttribute.REQUIRED);
-                realmRoomMessageSchema.addField(RealmRoomMessageFields.LINK_INFO, String.class);
+                realmRoomMessageSchema.addField("previousMessageId", long.class, FieldAttribute.REQUIRED);
+                realmRoomMessageSchema.addField("showTime", boolean.class, FieldAttribute.REQUIRED);
+                realmRoomMessageSchema.addField("hasEmojiInText", boolean.class, FieldAttribute.REQUIRED);
+                realmRoomMessageSchema.addField("linkInfo", String.class);
             }
             oldVersion++;
         }
@@ -80,14 +82,14 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 6) {
             RealmObjectSchema realmRoomSchema = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoomSchema != null) {
-                realmRoomSchema.addField(RealmRoomFields.LAST_SCROLL_POSITION_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
+                realmRoomSchema.addField("lastScrollPositionMessageId", long.class, FieldAttribute.REQUIRED);
             }
             oldVersion++;
         }
 
         if (oldVersion == 7) {
-            RealmObjectSchema realmPhoneContacts = schema.create(RealmPhoneContacts.class.getSimpleName()).addField(RealmPhoneContactsFields.PHONE, String.class).addField(RealmPhoneContactsFields.FIRST_NAME, String.class).addField(RealmPhoneContactsFields.LAST_NAME, String.class);
-            realmPhoneContacts.addPrimaryKey(RealmPhoneContactsFields.PHONE);
+            RealmObjectSchema realmPhoneContacts = schema.create(RealmPhoneContacts.class.getSimpleName()).addField("phone", String.class).addField("firstName", String.class).addField("lastName", String.class);
+            realmPhoneContacts.addPrimaryKey("phone");
             oldVersion++;
         }
 
@@ -105,17 +107,17 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 9) {
-            schema.create(RealmCallConfig.class.getSimpleName()).addField(RealmCallConfigFields.VOICE_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.VIDEO_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.SCREEN_SHARING, boolean.class, FieldAttribute.REQUIRED).addField("IceServer", byte[].class);
+            schema.create(RealmCallConfig.class.getSimpleName()).addField("voice_calling", boolean.class, FieldAttribute.REQUIRED).addField("video_calling", boolean.class, FieldAttribute.REQUIRED).addField("screen_sharing", boolean.class, FieldAttribute.REQUIRED).addField("IceServer", byte[].class);
 
-            RealmObjectSchema realmCallLog = schema.create(RealmCallLog.class.getSimpleName()).addField(RealmCallLogFields.ID, long.class, FieldAttribute.REQUIRED).addField("name", String.class).addField("time", long.class, FieldAttribute.REQUIRED).addField("logProto", byte[].class);
-            realmCallLog.addPrimaryKey(RealmCallLogFields.ID);
+            RealmObjectSchema realmCallLog = schema.create(RealmCallLog.class.getSimpleName()).addField("id", long.class, FieldAttribute.REQUIRED).addField("name", String.class).addField("time", long.class, FieldAttribute.REQUIRED).addField("logProto", byte[].class);
+            realmCallLog.addPrimaryKey("id");
             oldVersion++;
         }
 
         if (oldVersion == 10) {
             RealmObjectSchema realmPrivacySchema = schema.get(RealmPrivacy.class.getSimpleName());
             if (realmPrivacySchema != null) {
-                realmPrivacySchema.addField(RealmPrivacyFields.WHO_CAN_VOICE_CALL_TO_ME, String.class);
+                realmPrivacySchema.addField("whoCanVoiceCallToMe", String.class);
             }
 
             RealmObjectSchema realmGroupSchema = schema.get(RealmGroupRoom.class.getSimpleName());
@@ -134,8 +136,8 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 11) {
             RealmObjectSchema realmClientCondition = schema.get(RealmClientCondition.class.getSimpleName());
 
-            RealmObjectSchema realmOfflineListen = schema.create(RealmOfflineListen.class.getSimpleName()).addField(RealmOfflineListenFields.ID, long.class, FieldAttribute.REQUIRED).addField("offlineListen", long.class);
-            realmOfflineListen.addPrimaryKey(RealmOfflineListenFields.ID);
+            RealmObjectSchema realmOfflineListen = schema.create(RealmOfflineListen.class.getSimpleName()).addField("id", long.class, FieldAttribute.REQUIRED).addField("offlineListen", long.class);
+            realmOfflineListen.addPrimaryKey("id");
 
             if (realmClientCondition != null) {
                 realmClientCondition.addRealmListField("offlineListen", realmOfflineListen);
@@ -143,22 +145,22 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             RealmObjectSchema realmAvatar = schema.get(RealmAvatar.class.getSimpleName());
             if (realmAvatar != null) {
-                realmAvatar.addIndex(RealmAvatarFields.OWNER_ID);
+                realmAvatar.addIndex("ownerId");
             }
 
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoom != null) {
-                realmRoom.addField(RealmRoomFields.IS_PINNED, boolean.class, FieldAttribute.REQUIRED);
+                realmRoom.addField("isPinned", boolean.class, FieldAttribute.REQUIRED);
             }
 
             oldVersion++;
         }
 
         if (oldVersion == 12) {
-            RealmObjectSchema realmGeoNearbyDistance = schema.create(RealmGeoNearbyDistance.class.getSimpleName()).addField(RealmGeoNearbyDistanceFields.USER_ID, long.class).addField(RealmGeoNearbyDistanceFields.HAS_COMMENT, boolean.class).addField(RealmGeoNearbyDistanceFields.DISTANCE, int.class).addField(RealmGeoNearbyDistanceFields.COMMENT, String.class);
-            realmGeoNearbyDistance.addPrimaryKey(RealmGeoNearbyDistanceFields.USER_ID);
+            RealmObjectSchema realmGeoNearbyDistance = schema.create(RealmGeoNearbyDistance.class.getSimpleName()).addField("userId", long.class).addField("hasComment", boolean.class).addField("distance", int.class).addField("comment", String.class);
+            realmGeoNearbyDistance.addPrimaryKey("userId");
 
-            schema.create(RealmGeoGetConfiguration.class.getSimpleName()).addField(RealmGeoGetConfigurationFields.MAP_CACHE, String.class);
+            schema.create(RealmGeoGetConfiguration.class.getSimpleName()).addField("mapCache", String.class);
             oldVersion++;
         }
 
@@ -176,12 +178,12 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 14) {
             RealmObjectSchema realmOfflineDelete = schema.get(RealmOfflineDelete.class.getSimpleName());
             if (realmOfflineDelete != null) {
-                realmOfflineDelete.addField(RealmOfflineDeleteFields.BOTH, boolean.class, FieldAttribute.REQUIRED);
+                realmOfflineDelete.addField("both", boolean.class, FieldAttribute.REQUIRED);
             }
 
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoom != null) {
-                realmRoom.addField(RealmRoomFields.PIN_ID, long.class, FieldAttribute.REQUIRED);
+                realmRoom.addField("pinId", long.class, FieldAttribute.REQUIRED);
             }
 
             RealmObjectSchema registeredInfo = schema.get(RealmRegisteredInfo.class.getSimpleName());
@@ -223,8 +225,8 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 17) {
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoom != null) {
-                realmRoom.addField(RealmRoomFields.PIN_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
-                realmRoom.addField(RealmRoomFields.PIN_MESSAGE_ID_DELETED, long.class, FieldAttribute.REQUIRED);
+                realmRoom.addField("pinMessageId", long.class, FieldAttribute.REQUIRED);
+                realmRoom.addField("pinMessageIdDeleted", long.class, FieldAttribute.REQUIRED);
             }
 
             RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
@@ -237,7 +239,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     realmRoomMessage.removeField("logMessage");
                 }
 
-                realmRoomMessage.addField(RealmRoomMessageFields.LOGS, byte[].class);
+                realmRoomMessage.addField("Logs", byte[].class);
             }
 
             RealmObjectSchema realmRegisteredInfo = schema.get(RealmRegisteredInfo.class.getSimpleName());
@@ -262,7 +264,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 18) {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
-                realmUserInfo.addField(RealmUserInfoFields.PUSH_NOTIFICATION_TOKEN, String.class);
+                realmUserInfo.addField("pushNotificationToken", String.class);
             }
 
             oldVersion++;
@@ -271,15 +273,15 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 19) {
 
             RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
-                    .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
-                    .addPrimaryKey(RealmRoomMessageWalletFields.ID)
+                    .addField("id", long.class, FieldAttribute.REQUIRED)
+                    .addPrimaryKey("id")
                     .addField("fromUserId", long.class, FieldAttribute.REQUIRED)
                     .addField("toUserId", long.class, FieldAttribute.REQUIRED)
                     .addField("amount", long.class, FieldAttribute.REQUIRED)
                     .addField("traceNumber", long.class, FieldAttribute.REQUIRED)
                     .addField("invoiceNumber", long.class, FieldAttribute.REQUIRED)
                     .addField("payTime", int.class, FieldAttribute.REQUIRED)
-                    .addField(RealmRoomMessageWalletFields.TYPE, String.class)
+                    .addField("type", String.class)
                     .addField("description", String.class);
 
             RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
@@ -435,7 +437,7 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
             if (realmAttachment != null) {
-                realmAttachment.addIndex(RealmAttachmentFields.CACHE_ID);
+                realmAttachment.addIndex("cacheId");
             }
             oldVersion++;
         }
@@ -451,7 +453,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 30) {
             RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
             if (realmAttachment != null) {
-                realmAttachment.addIndex(RealmAttachmentFields.TOKEN);
+                realmAttachment.addIndex("token");
             }
 
             RealmObjectSchema realmStickers = schema.get("RealmStickers");
@@ -541,7 +543,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 32) {
             RealmObjectSchema realmGroupRoom = schema.get(RealmGroupRoom.class.getSimpleName());
             if (realmGroupRoom != null) {
-                realmGroupRoom.addField(RealmGroupRoomFields.START_FROM, int.class, FieldAttribute.REQUIRED);
+                realmGroupRoom.addField("startFrom", int.class, FieldAttribute.REQUIRED);
             }
             oldVersion++;
         }
@@ -577,7 +579,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 34) {
             RealmObjectSchema realmCallLog = schema.get(RealmCallLog.class.getSimpleName());
             if (realmCallLog != null) {
-                realmCallLog.addField(RealmCallLogFields.LOG_ID, long.class, FieldAttribute.REQUIRED);
+                realmCallLog.addField("logId", long.class, FieldAttribute.REQUIRED);
             }
 
             oldVersion++;
@@ -709,21 +711,6 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-
-        if (oldVersion == 43) {
-
-            RealmObjectSchema realmMB = schema.create(RealmMobileBankCards.class.getSimpleName())
-                    .addField("cardName", String.class)
-                    .addField("cardNumber", String.class)
-                    .addField("bankName", String.class)
-                    .addField("expireDate", String.class)
-                    .addField("isOrigin", boolean.class, FieldAttribute.REQUIRED);
-
-            realmMB.addPrimaryKey("cardNumber");
-
-            oldVersion++;
-        }
-
         if (oldVersion == 44) {
             RealmObjectSchema realmBill = schema.create(RealmRoomMessageWalletBill.class.getSimpleName())
                     .addField("orderId", long.class, FieldAttribute.REQUIRED)
@@ -774,12 +761,6 @@ public class RealmMigration implements io.realm.RealmMigration {
 
 
         if (oldVersion == 45) {
-
-            RealmObjectSchema realmMB = schema.create(RealmMobileBankAccounts.class.getSimpleName())
-                    .addField("accountNumber", String.class)
-                    .addField("accountName", String.class);
-            realmMB.addPrimaryKey("accountNumber");
-
             RealmObjectSchema realmUser = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUser != null) {
                 realmUser.addField("nationalCode", String.class);
@@ -794,40 +775,25 @@ public class RealmMigration implements io.realm.RealmMigration {
             }
 
             RealmObjectSchema realmStickerItem = schema.create(RealmStickerItem.class.getSimpleName())
-                    .addField(RealmStickerItemFields.ID, String.class)
-                    .addField(RealmStickerItemFields.FILE_NAME, String.class)
-                    .addField(RealmStickerItemFields.GROUP_ID, String.class)
-                    .addField(RealmStickerItemFields.NAME, String.class)
-                    .addField(RealmStickerItemFields.TOKEN, String.class)
-                    .addField(RealmStickerItemFields.IS_FAVORITE, boolean.class)
-                    .addField(RealmStickerItemFields.RECENT_TIME, long.class)
-                    .addField(RealmStickerItemFields.FILE_SIZE, long.class);
+                    .addField("id", String.class)
+                    .addField("fileName", String.class)
+                    .addField("groupId", String.class)
+                    .addField("name", String.class)
+                    .addField("token", String.class)
+                    .addField("isFavorite", boolean.class)
+                    .addField("recentTime", long.class)
+                    .addField("fileSize", long.class);
 
             schema.create(RealmStickerGroup.class.getSimpleName())
-                    .addField(RealmStickerGroupFields.ID, String.class)
-                    .addField(RealmStickerGroupFields.NAME, String.class)
-                    .addField(RealmStickerGroupFields.TYPE, String.class)
-                    .addField(RealmStickerGroupFields.AVATAR_NAME, String.class)
-                    .addField(RealmStickerGroupFields.AVATAR_TOKEN, String.class)
-                    .addField(RealmStickerGroupFields.CATEGORY_ID, String.class)
-                    .addField(RealmStickerGroupFields.IS_GIFTABLE, boolean.class)
-                    .addField(RealmStickerGroupFields.AVATAR_SIZE, long.class)
-                    .addRealmListField(RealmStickerGroupFields.STICKER_ITEMS.$, realmStickerItem);
-
-            oldVersion++;
-        }
-
-        if (oldVersion == 46) {
-
-            RealmObjectSchema realmMbCards = schema.get(RealmMobileBankCards.class.getSimpleName());
-            if (realmMbCards != null) {
-                realmMbCards.addField("status", String.class);
-            }
-
-            RealmObjectSchema realmMbDeposits = schema.get(RealmMobileBankAccounts.class.getSimpleName());
-            if (realmMbDeposits != null) {
-                realmMbDeposits.addField("status", String.class);
-            }
+                    .addField("id", String.class)
+                    .addField("name", String.class)
+                    .addField("type", String.class)
+                    .addField("avatarName", String.class)
+                    .addField("avatarToken", String.class)
+                    .addField("categoryId", String.class)
+                    .addField("isGiftable", boolean.class)
+                    .addField("avatarSize", long.class)
+                    .addRealmListField("stickerItems", realmStickerItem);
 
             oldVersion++;
         }
@@ -835,25 +801,45 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 47) {
 
             RealmObjectSchema realmPostMessageRights = schema.create(RealmPostMessageRights.class.getSimpleName())
-                    .addField(RealmPostMessageRightsFields.CAN_SEND_GIF, boolean.class)
-                    .addField(RealmPostMessageRightsFields.CAN_SEND_LINK, boolean.class)
-                    .addField(RealmPostMessageRightsFields.CAN_SEND_MEDIA, boolean.class)
-                    .addField(RealmPostMessageRightsFields.CAN_SEND_STICKER, boolean.class)
-                    .addField(RealmPostMessageRightsFields.CAN_SEND_TEXT, boolean.class);
+                    .addField("canSendGif", boolean.class)
+                    .addField("canSendLink", boolean.class)
+                    .addField("canSendMedia", boolean.class)
+                    .addField("canSendSticker", boolean.class)
+                    .addField("canSendText", boolean.class);
 
             schema.create(RealmRoomAccess.class.getSimpleName())
-                    .addField(RealmRoomAccessFields.ID, String.class, FieldAttribute.PRIMARY_KEY)
-                    .addField(RealmRoomAccessFields.USER_ID, long.class)
-                    .addField(RealmRoomAccessFields.ROOM_ID, long.class)
-                    .addField(RealmRoomAccessFields.CAN_ADD_NEW_ADMIN, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_ADD_NEW_MEMBER, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_BAN_MEMBER, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_DELETE_MESSAGE, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_EDIT_MESSAGE, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_GET_MEMBER_LIST, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_MODIFY_ROOM, boolean.class)
-                    .addField(RealmRoomAccessFields.CAN_PIN_MESSAGE, boolean.class)
-                    .addRealmObjectField(RealmRoomAccessFields.REALM_POST_MESSAGE_RIGHTS.$, realmPostMessageRights);
+                    .addField("id", String.class, FieldAttribute.PRIMARY_KEY)
+                    .addField("userId", long.class)
+                    .addField("roomId", long.class)
+                    .addField("canAddNewAdmin", boolean.class)
+                    .addField("canAddNewMember", boolean.class)
+                    .addField("canBanMember", boolean.class)
+                    .addField("canDeleteMessage", boolean.class)
+                    .addField("canEditMessage", boolean.class)
+                    .addField("canGetMemberList", boolean.class)
+                    .addField("canModifyRoom", boolean.class)
+                    .addField("canPinMessage", boolean.class)
+                    .addRealmObjectField("realmPostMessageRights", realmPostMessageRights);
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 48) {
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+            if (realmAttachment != null) {
+                realmAttachment.addField("mimeType", String.class);
+
+                RealmResults<DynamicRealmObject> realmAttachments = realm.where(RealmAttachment.class.getSimpleName()).findAll();
+                for (DynamicRealmObject attachment : realmAttachments) {
+                    if (attachment != null) {
+                        String fileName = attachment.getString("name");
+                        if (fileName != null) {
+                            String mimeType = new MimetypesFileTypeMap().getContentType(fileName);
+                            attachment.setString("mimeType", mimeType);
+                        }
+                    }
+                }
+            }
 
             oldVersion++;
         }

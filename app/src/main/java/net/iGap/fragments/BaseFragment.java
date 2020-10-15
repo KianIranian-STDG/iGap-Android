@@ -13,32 +13,49 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
+import net.iGap.controllers.MessageController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
-
+import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.IDownloader;
+import net.iGap.module.upload.IUpload;
+import net.iGap.module.upload.Uploader;
+import net.iGap.network.RequestManager;
+import net.iGap.observers.eventbus.EventManager;
 
 
 public class BaseFragment extends SwipeBackFragment {
 
     public boolean isNeedResume = false;
     protected Fragment currentFragment;
+    public int currentAccount = AccountManager.selectedAccount;
     public AvatarHandler avatarHandler;
+    private Context context;
+    protected View fragmentView;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        this.context = context;
+
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
         hideKeyboard();
@@ -63,10 +80,6 @@ public class BaseFragment extends SwipeBackFragment {
 
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
 
-        if (G.oneFragmentIsOpen != null) {
-            G.oneFragmentIsOpen.justOne();
-        }
-
         getSwipeBackLayout().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -80,6 +93,16 @@ public class BaseFragment extends SwipeBackFragment {
                 return false;
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return createView(context);
+    }
+
+    public View createView(Context context) {
+        return null;
     }
 
     public void closeKeyboard(View v) {
@@ -97,9 +120,6 @@ public class BaseFragment extends SwipeBackFragment {
     public void onDetach() {
         super.onDetach();
 
-        if (G.oneFragmentIsOpen != null) {
-            G.oneFragmentIsOpen.justOne();
-        }
         hideKeyboard();
         if (getActivity() != null) {
             //Todo : check logic and fixed this
@@ -171,5 +191,34 @@ public class BaseFragment extends SwipeBackFragment {
 
     public boolean onBackPressed() {
         return false;
+    }
+
+
+    public EventManager getEventManager() {
+        return EventManager.getInstance();
+    }
+
+    public MessageController getMessageController() {
+        return MessageController.getInstance(currentAccount);
+    }
+
+    public MessageDataStorage getMessageDataStorage() {
+        return MessageDataStorage.getInstance(currentAccount);
+    }
+
+    public RequestManager getRequestManager() {
+        return RequestManager.getInstance(currentAccount);
+    }
+
+    public IDownloader getDownloader() {
+        return Downloader.getInstance(currentAccount);
+    }
+
+    public IUpload getIUploader() {
+        return Uploader.getInstance();
+    }
+
+    public ChatSendMessageUtil getSendMessageUtil() {
+        return ChatSendMessageUtil.getInstance(currentAccount);
     }
 }

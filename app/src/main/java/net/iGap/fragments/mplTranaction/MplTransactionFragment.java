@@ -1,7 +1,6 @@
 package net.iGap.fragments.mplTranaction;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ public class MplTransactionFragment extends BaseFragment implements ToolbarListe
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.i(TAG, "onScrolled: ");
                 viewModel.getMorePageOffset(start, end);
             }
         });

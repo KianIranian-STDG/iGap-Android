@@ -51,6 +51,7 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
 import net.iGap.module.UploadService;
 import net.iGap.module.VoiceRecord;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IPopUpListener;
 import net.iGap.observers.interfaces.OnVoiceRecord;
@@ -262,7 +263,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     public static void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
         RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message);
         HelperRealm.copyOrUpdateToRealm(roomMessage);
-        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(roomMessage.getMessageId() + "");
+        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(roomMessage.getMessageId() + "");
     }
 
     private void goToChatActivity() {
@@ -334,7 +335,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         private void initAppbar() {
 
-            RippleView rippleBackButton = (RippleView) findViewById(R.id.apn_ripple_back_Button);
+            RippleView rippleBackButton = findViewById(R.id.apn_ripple_back_Button);
 
             rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                 @Override
@@ -344,7 +345,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             });
 
 
-            txtName = (TextView) findViewById(R.id.apn_txt_name);
+            txtName = findViewById(R.id.apn_txt_name);
             txtName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -352,9 +353,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            txtLastSeen = (TextView) findViewById(R.id.apn_txt_last_seen);
+            txtLastSeen = findViewById(R.id.apn_txt_last_seen);
 
-            imvUserPicture = (ImageView) findViewById(R.id.apn_imv_user_picture);
+            imvUserPicture = findViewById(R.id.apn_imv_user_picture);
             imvUserPicture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -362,7 +363,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            btnMessageCounter = (Button) findViewById(R.id.apn_btn_message_counter);
+            btnMessageCounter = findViewById(R.id.apn_btn_message_counter);
             btnMessageCounter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -373,7 +374,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         private void initViewPager() {
 
-            viewPager = (ViewPager) findViewById(R.id.apn_view_pager);
+            viewPager = findViewById(R.id.apn_view_pager);
             /** Hint : always read count of view pager with "listSize", for avoid from view pager get count error */
             listSize = mList.size();
             if (viewPager != null && mAdapter != null) {
@@ -407,7 +408,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
         private void initLayoutAttach() {
 
-            btnSmileButton = (MaterialDesignTextView) findViewById(R.id.apn_btn_smile_button);
+            btnSmileButton = findViewById(R.id.apn_btn_smile_button);
             btnSmileButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -477,7 +478,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 }
             });
 
-            btnMic = (MaterialDesignTextView) findViewById(R.id.apn_btn_mic);
+            btnMic = findViewById(R.id.apn_btn_mic);
             btnMic.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {

@@ -42,7 +42,7 @@ public class RealmRoomMessageWalletTopup extends RealmObject {
 
 
     public static RealmRoomMessageWalletTopup put(Realm realm, final ProtoGlobal.RoomMessageWallet.Topup input) {
-        RealmRoomMessageWalletTopup messageWallet = realm.where(RealmRoomMessageWalletTopup.class).equalTo(RealmRoomMessageWalletTopupFields.ORDER_ID, input.getOrderId()).findFirst();
+        RealmRoomMessageWalletTopup messageWallet = realm.where(RealmRoomMessageWalletTopup.class).equalTo("orderId", input.getOrderId()).findFirst();
         if (messageWallet == null) {
             messageWallet = realm.createObject(RealmRoomMessageWalletTopup.class, input.getOrderId());
         }

@@ -19,12 +19,12 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.observers.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestUserInfo;
@@ -36,7 +36,7 @@ public class HelperPublicMethod {
 
     public static void goToChatRoom(final long peerId, final OnComplete onComplete, final OnError onError) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
             if (realmRoom != null) {
 
@@ -79,7 +79,7 @@ public class HelperPublicMethod {
                     }
                 };
 
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     new RequestChatGetRoom().chatGetRoom(peerId);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -94,7 +94,7 @@ public class HelperPublicMethod {
 
     public static void goToChatRoomWithMessage(final Context context, final long peerId, String message, final OnComplete onComplete, final OnError onError) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
             if (realmRoom != null) {
 
@@ -139,7 +139,7 @@ public class HelperPublicMethod {
                     }
                 };
 
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     new RequestChatGetRoom().chatGetRoom(peerId);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -153,7 +153,7 @@ public class HelperPublicMethod {
 
     public static void goToChatRoomFromFirstContact(final long peerId, final OnComplete onComplete, final OnError onError) {
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
             if (realmRoom != null) {
 
@@ -190,7 +190,7 @@ public class HelperPublicMethod {
                     }
                 };
 
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     new RequestChatGetRoom().chatGetRoom(peerId);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -280,7 +280,7 @@ public class HelperPublicMethod {
                 DbManager.getInstance().doRealmTask(realm -> {
                     if (message != null && message.length() > 0 && roomId > 0) {
                         RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
-                        new ChatSendMessageUtil().newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(type, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
                         AsyncTransaction.executeTransactionWithLoading(context, realm, realm1 -> realm1.copyToRealmOrUpdate(roomMessage), () -> {
                             Intent intent = new Intent(G.context, ActivityMain.class);
                             intent.putExtra(ActivityMain.openChat, roomId);

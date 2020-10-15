@@ -30,24 +30,24 @@ import io.realm.annotations.PrimaryKey;
 // https://github.com/realm/realm-java/issues/776
 public class RealmClientCondition extends RealmObject {
     @PrimaryKey
-    private long roomId;
-    private long messageVersion;
-    private long statusVersion;
-    private long deleteVersion;
-    private RealmList<RealmOfflineDelete> offlineDeleted;
-    private RealmList<RealmOfflineEdited> offlineEdited;
-    private RealmList<RealmOfflineSeen> offlineSeen;
-    private RealmList<RealmOfflineListen> offlineListen;
-    private long clearId;
-    private long cacheStartId;
-    private long cacheEndId;
-    private String offlineMute;
+    public long roomId;
+    public long messageVersion;
+    public long statusVersion;
+    public long deleteVersion;
+    public RealmList<RealmOfflineDelete> offlineDeleted;
+    public RealmList<RealmOfflineEdited> offlineEdited;
+    public RealmList<RealmOfflineSeen> offlineSeen;
+    public RealmList<RealmOfflineListen> offlineListen;
+    public long clearId;
+    public long cacheStartId;
+    public long cacheEndId;
+    public String offlineMute;
 
     /**
      * Hint: use this method in Transaction
      */
     public static RealmClientCondition putOrUpdateIncomplete(Realm realm, long roomId) {
-        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
         if (realmClientCondition == null) {
             realmClientCondition = realm.createObject(RealmClientCondition.class, roomId);
         }
@@ -56,7 +56,7 @@ public class RealmClientCondition extends RealmObject {
 
     public static void setClearId(final long roomId, final long clearId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
             if (realmClientCondition != null) {
                 realmClientCondition.setClearId(clearId);
             }
@@ -65,7 +65,7 @@ public class RealmClientCondition extends RealmObject {
 
     public static void setVersion(final long roomId, final long version, final ClientConditionVersion conditionVersion) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+            RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
             if (realmClientCondition != null) {
                 realmClientCondition.setVersion(version, conditionVersion);
             }
@@ -87,7 +87,7 @@ public class RealmClientCondition extends RealmObject {
     }
 
     public static void addOfflineSeen(Realm realm, final long roomId, final long messageId) {
-        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
         if (realmClientCondition != null) {
             realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, messageId));
         }
@@ -103,7 +103,7 @@ public class RealmClientCondition extends RealmObject {
             @Override
             public void run() {
                 DbManager.getInstance().doRealmTransaction(realm -> {
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
                     if (realmClientCondition != null) {
                         realmClientCondition.getOfflineListen().add(RealmOfflineListen.put(realm, messageId));
                     }
@@ -124,22 +124,22 @@ public class RealmClientCondition extends RealmObject {
     public static void deleteOfflineAction(final long messageId, final ClientConditionOffline messageStatus) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             if (messageStatus == ClientConditionOffline.DELETE) {
-                RealmOfflineDelete offlineDelete = realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, messageId).findFirst();
+                RealmOfflineDelete offlineDelete = realm.where(RealmOfflineDelete.class).equalTo("offlineDelete", messageId).findFirst();
                 if (offlineDelete != null) {
                     offlineDelete.deleteFromRealm();
                 }
             } else if (messageStatus == ClientConditionOffline.EDIT) {
-                RealmOfflineEdited offlineEdited = realm.where(RealmOfflineEdited.class).equalTo(RealmOfflineEditedFields.MESSAGE_ID, messageId).findFirst();
+                RealmOfflineEdited offlineEdited = realm.where(RealmOfflineEdited.class).equalTo("messageId", messageId).findFirst();
                 if (offlineEdited != null) {
                     offlineEdited.deleteFromRealm();
                 }
             } else if (messageStatus == ClientConditionOffline.SEEN) {
-                RealmOfflineSeen offlineSeen = realm.where(RealmOfflineSeen.class).equalTo(RealmOfflineSeenFields.OFFLINE_SEEN, messageId).findFirst();
+                RealmOfflineSeen offlineSeen = realm.where(RealmOfflineSeen.class).equalTo("offlineSeen", messageId).findFirst();
                 if (offlineSeen != null) {
                     offlineSeen.deleteFromRealm();
                 }
             } else if (messageStatus == ClientConditionOffline.LISTEN) {
-                RealmOfflineListen offlineListen = realm.where(RealmOfflineListen.class).equalTo(RealmOfflineListenFields.OFFLINE_LISTEN, messageId).findFirst();
+                RealmOfflineListen offlineListen = realm.where(RealmOfflineListen.class).equalTo("offlineListen", messageId).findFirst();
                 if (offlineListen != null) {
                     offlineListen.deleteFromRealm();
                 }
@@ -162,21 +162,21 @@ public class RealmClientCondition extends RealmObject {
      * Hint: call this method in Transaction
      */
     public static void deleteCondition(Realm realm, long roomId) {
-        realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+        realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
     }
 
     public static ProtoClientCondition.ClientCondition.Builder computeClientCondition(Long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
             ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
 
-            if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).count() == 0) {
+            if (realm.where(RealmRoom.class).equalTo("isDeleted", false).count() == 0) {
                 return clientCondition;
             }
 
             RealmResults<RealmClientCondition> clientConditionList;
 
             if (roomId != null) {
-                clientConditionList = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findAll();
+                clientConditionList = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findAll();
             } else {
                 /**
                  * find all client condition that deleted is false
@@ -189,13 +189,13 @@ public class RealmClientCondition extends RealmObject {
                  */
                 RealmQuery<RealmClientCondition> conditionQuery = realm.where(RealmClientCondition.class);
                 // Important Note : checking size 1 is very important
-                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll().size() > 1) {
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                        conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId()).or();
+                if (realm.where(RealmRoom.class).equalTo("isDeleted", false).findAll().size() > 1) {
+                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo("isDeleted", false).findAll()) {
+                        conditionQuery.equalTo("roomId", realmRoom.getId()).or();
                     }
                 } else {
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll()) {
-                        conditionQuery.equalTo(RealmClientConditionFields.ROOM_ID, realmRoom.getId());
+                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo("isDeleted", false).findAll()) {
+                        conditionQuery.equalTo("roomId", realmRoom.getId());
                     }
                 }
                 clientConditionList = conditionQuery.findAll();
@@ -205,12 +205,12 @@ public class RealmClientCondition extends RealmObject {
                 ProtoClientCondition.ClientCondition.Room.Builder room = ProtoClientCondition.ClientCondition.Room.newBuilder();
                 room.setRoomId(realmClientCondition.getRoomId());
 
-                Number messageVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).max(RealmRoomMessageFields.MESSAGE_VERSION);
+                Number messageVersion = realm.where(RealmRoomMessage.class).equalTo("roomId", realmClientCondition.getRoomId()).max("messageVersion");
                 if (messageVersion != null) {
                     room.setMessageVersion((long) messageVersion);
                 }
 
-                Number statusVersion = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).max(RealmRoomMessageFields.STATUS_VERSION);
+                Number statusVersion = realm.where(RealmRoomMessage.class).equalTo("roomId", realmClientCondition.getRoomId()).max("statusVersion");
                 if (statusVersion != null) {
                     room.setStatusVersion((long) statusVersion);
                 }
@@ -242,12 +242,12 @@ public class RealmClientCondition extends RealmObject {
 
                 room.setClearId(realmClientCondition.getClearId());
 
-                Number numberMin = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).min(RealmRoomMessageFields.MESSAGE_ID);
+                Number numberMin = realm.where(RealmRoomMessage.class).equalTo("roomId", realmClientCondition.getRoomId()).min("messageId");
                 if (numberMin != null) {
                     room.setCacheStartId((long) numberMin);
                 }
 
-                Number numberMax = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).max(RealmRoomMessageFields.MESSAGE_ID);
+                Number numberMax = realm.where(RealmRoomMessage.class).equalTo("roomId", realmClientCondition.getRoomId()).max("messageId");
                 if (numberMax != null) {
                     room.setCacheEndId((long) numberMax);
                 }

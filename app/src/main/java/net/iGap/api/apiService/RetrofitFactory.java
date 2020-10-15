@@ -9,7 +9,6 @@ import net.iGap.api.CharityApi;
 import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.IgashtApi;
-import net.iGap.api.MobileBankApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.StickerApi;
 import net.iGap.api.WeatherApi;
@@ -36,28 +35,6 @@ public class RetrofitFactory {
             builder.addInterceptor(httpLoggingInterceptor);
         }
         builder.addInterceptor(new IgapRetrofitInterceptor());
-
-        if (BuildConfig.DEBUG) {
-            httpClient = builder.build();
-        } else {
-            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                    .tlsVersions(TlsVersion.TLS_1_2)
-                    .build();
-            httpClient = builder.connectionSpecs(Collections.singletonList(spec)).build();
-        }
-        return httpClient;
-    }
-
-    public OkHttpClient getHttpClientForMobileBank() {
-        OkHttpClient httpClient;
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        if (BuildConfig.DEBUG) {
-            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(httpLoggingInterceptor);
-        }
-        builder.addInterceptor(new MobileBankRetrofitInterceptor());
 
         if (BuildConfig.DEBUG) {
             httpClient = builder.build();
@@ -150,33 +127,6 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(BillsApi.class);
-    }
-
-    public MobileBankApi getMobileBankRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl(ApiStatic.MOBILE_BANK)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getHttpClientForMobileBank())
-                .build()
-                .create(MobileBankApi.class);
-    }
-
-    public MobileBankApi getMobileBankOTPRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl(ApiStatic.MOBILE_BANK_OTP)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getHttpClient())
-                .build()
-                .create(MobileBankApi.class);
-    }
-
-    public MobileBankApi getMobileBankLoginRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl(ApiStatic.MOBILE_BANK)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getHttpClient())
-                .build()
-                .create(MobileBankApi.class);
     }
 
     public StickerApi getStickerRetrofit() {

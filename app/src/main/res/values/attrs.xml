@@ -84,6 +84,7 @@
     <!--=======================custom theme=====================-->
     <attr name="colorPrimaryLight" format="reference|color" />
     <attr name="colorAccentDark" format="reference|color" />
+    <attr name="toolbarBackgroundColor" format="reference|color" />
     <!--general color-->
     <attr name="rootBackgroundColor" format="reference|color" />
     <attr name="iGapTitleTextColor" format="reference|color" />
@@ -134,13 +135,6 @@
     <attr name="iGapTimerPinter" format="reference" />
 
     <!--=======================custom theme=====================-->
-
-
-    <!--bottom navigation-->
-    <declare-styleable name="BottomNavigation">
-        <attr name="background_color" format="color" />
-        <attr name="corner_radius" format="integer" />
-    </declare-styleable>
 
     <declare-styleable name="TabItem">
         <attr name="selected_icon" format="reference" />

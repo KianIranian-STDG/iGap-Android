@@ -21,7 +21,7 @@
 -keep class net.iGap.model.popularChannel.**
 -keep class net.iGap.payment.**
 -keep class net.iGap.proto.** , com.neovisionaries.ws.client.** { *; }
--keep class net.iGap.helper.HelperFillLookUpClass { *; }
+-keep class net.iGap.network.LookUpClass { *; }
 -keep public class * extends net.iGap.response.MessageHandler
 -keepclasseswithmembers class * {
    public <init>(int, java.lang.Object, java.lang.String);
@@ -314,3 +314,95 @@
 # prevent proguard from destroying bouncy castle for kuknos
 -dontwarn org.bouncycastle.**
 -keep class org.bouncycastle.**
+# Ignore annotation used for build tooling.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+-keep interface ir.tapsell.sdk.NoProguard
+-keep class * implements ir.tapsell.sdk.NoProguard { *; }
+-keep interface * extends ir.tapsell.sdk.NoProguard { *; }
+-keep enum * extends ir.tapsell.sdk.NoProguard { *; }
+-keepnames class * extends android.app.Activity
+-keep class ir.tapsell.sdk.models.** { *; }
+
+-keep class com.google.obf.** { *; }
+-keep interface com.google.obf.** { *; }
+
+-keep class com.google.ads.interactivemedia.** { *; }
+-keep interface com.google.ads.interactivemedia.** { *; }
+
+# For Google Play Services
+-keep public class com.google.android.gms.ads.**{
+   public *;
+}
+
+# For old ads classes
+-keep public class com.google.ads.**{
+   public *;
+}
+
+# Other required classes for Google Play Services
+# Read more at http://developer.android.com/google/play-services/setup.html
+-keep class * extends java.util.ListResourceBundle {
+   protected Object[][] getContents();
+}
+
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+   public static final *** NULL;
+}
+
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+   @com.google.android.gms.common.annotation.KeepName *;
+}
+
+-keep public class com.bumptech.glide.**
+
+
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
+
+
+##---------------End: proguard configuration for admob  ----------
+
+
+##---------------Begin: proguard configuration for chartboost  ----------
+-keep class com.chartboost.** { *; }
+##---------------End: proguard configuration for chartboost  ----------
+
+
+##---------------Begin: proguard configuration for tapsell  ----------
+
+-keep interface ir.tapsell.sdk.NoNameProguard
+
+-keep enum * implements ir.tapsell.sdk.NoProguard { *; }
+-keepnames class * implements ir.tapsell.sdk.NoNameProguard { *; }
+-keepnames class * extends android.app.Activity
+-keep class ir.tapsell.plus.model.** { *; }
+
+-keep class ir.tapsell.sdk.nativeads.TapsellNativeVideoAdLoader$Builder {*;}
+-keep class ir.tapsell.sdk.nativeads.TapsellNativeBannerAdLoader$Builder {*;}
+
+-keepclasseswithmembers class * {
+    native <methods>;
+}
+
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+}
+
+-keep interface ir.tapsell.plus.NoProguard
+-keep interface * extends ir.tapsell.plus.NoProguard { *; }
+-keep class * implements ir.tapsell.plus.NoProguard { *; }
+
+##---------------End: proguard configuration for tapsell  ----------
+
+##---------------Begin: proguard configuration for AppLovin  ----------
+
+-dontwarn com.applovin.**
+-keep class com.applovin.** { *; }
+-keep class com.google.android.gms.ads.identifier.** { *; }
+
+##---------------End: proguard configuration for AppLovin  ----------
+

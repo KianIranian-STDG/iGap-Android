@@ -80,7 +80,7 @@
     <!--custom theme-->
 
     <style name="iGapEditTextStyle">
-        <item name="android:textColorHint">?attr/iGapHintTextColor</item>
+        <item name="android:textColorHint">?attr/iGapSubtitleTextColor</item>
         <item name="android:textColor">?attr/iGapTitleTextColor</item>
     </style>
 
@@ -166,6 +166,14 @@
     </style>
     z
 
+    <style name="mobileBankButton" parent="BaseIGapButtonStyle">
+        <item name="backgroundTint">@color/brown</item>
+    </style>
+
+    <style name="iGapButtonSecondary" parent="BaseIGapButtonStyle">
+        <item name="backgroundTint">?iGapSubtitleTextColor</item>
+    </style>
+
     <style name="iGapOutlinedButton" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAllCaps">false</item>
         <item name="cornerRadius">@dimen/dp18</item>
@@ -183,12 +191,6 @@
 
     <style name="primaryIconTextViewStyle" parent="baseFontIcon">
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
-    </style>
-
-    <style name="Widget.WaveView" parent="@android:style/Widget">
-        <item name="waveStrokeWidth">1dp</item>
-        <item name="wavesColor">@color/black</item>
-        <item name="waveGap">@dimen/dp26</item>
     </style>
 
 </resources>

@@ -16,7 +16,7 @@ public class RealmStickerItem extends RealmObject {
     private long fileSize;
 
     public static RealmStickerItem put(Realm realm, StructIGSticker structIGSticker) {
-        RealmStickerItem realmStickerItem = realm.where(RealmStickerItem.class).equalTo(RealmStickerItemFields.ID, structIGSticker.getId()).findFirst();
+        RealmStickerItem realmStickerItem = realm.where(RealmStickerItem.class).equalTo("id", structIGSticker.getId()).findFirst();
 
         if (realmStickerItem == null)
             realmStickerItem = realm.createObject(RealmStickerItem.class);

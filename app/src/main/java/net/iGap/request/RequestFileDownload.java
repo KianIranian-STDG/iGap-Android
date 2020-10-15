@@ -18,12 +18,18 @@ import android.telephony.TelephonyManager;
 
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.HashSet;
 
 public class RequestFileDownload {
+
+    public RequestFileDownload() {
+
+    }
 
     public static int maxLimitDownload = 0;
     private final int KB_10 = 10 * 1024;
@@ -51,7 +57,7 @@ public class RequestFileDownload {
         }
 
         try {
-            if (checkDuplicate && G.userLogin) {
+            if (checkDuplicate && RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestWrapper requestWrapper = new RequestWrapper(705, builder, identity);
                 RequestQueue.sendRequest(requestWrapper);
                 downloadPending.add(token + "" + offset);

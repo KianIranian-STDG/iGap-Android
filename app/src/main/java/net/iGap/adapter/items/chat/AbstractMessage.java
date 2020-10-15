@@ -61,7 +61,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.helper.upload.UploadManager;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messageprogress.MessageProgress;
@@ -70,6 +69,7 @@ import net.iGap.messageprogress.OnProgress;
 import net.iGap.model.CardToCardValue;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.MakeButtons;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
@@ -83,8 +83,13 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IChatItemAttachment;
@@ -95,7 +100,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
@@ -108,6 +112,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -131,6 +136,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
     protected Theme theme;
     private VH holder;
+    private int currentAccount;
 
     /**
      * add this prt for video player
@@ -142,6 +148,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
         this.theme = Theme.getInstance();
+        currentAccount = AccountManager.selectedAccount;
     }
 
 
@@ -196,7 +203,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     messageId = messageId * (-1);
                 }
 
-                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
                 if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
                     AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
             } else {
@@ -321,37 +328,55 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @Override
     public void receivedMessage(int id, Object... message) {
         if (id == EventManager.ON_UPLOAD_PROGRESS) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (message[0].equals(mMessage.getMessageId() + "")) {
-                        MessageProgress _Progress = ((IProgress) holder).getProgress();
-                        if (_Progress.getTag() != null && _Progress.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                            int progress = (int) message[1];
-                            if (progress >= 1 && progress != 100) {
-                                _Progress.withProgress(progress);
-                            }
+            G.runOnUiThread(() -> {
+                String messageKey = (String) message[0];
+                String messageId = String.valueOf(mMessage.getMessageId());
+
+                if (messageKey.equals(messageId)) {
+                    int progress = (int) message[1];
+                    String progressString = String.valueOf(progress);
+                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true);
+
+                    if (G.selectedLanguage.equals("fa")) {
+                        progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
+                        attachmentSizeString = HelperCalander.convertToUnicodeFarsiNumber(attachmentSizeString);
+                    }
+
+                    if (holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder) {
+                        TextView progressTextView = ((IProgress) holder).getProgressTextView();
+                        progressTextView.setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
+                    } else if (holder instanceof AudioItem.ViewHolder) {
+                        AudioItem.ViewHolder audioHolder = (AudioItem.ViewHolder) holder;
+                        audioHolder.getSongTimeTv().setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
+                    }
+
+                    MessageProgress progressView = ((IProgress) holder).getProgress();
+                    if (progressView.getTag() != null && progressView.getTag().equals(mMessage.getMessageId()) && !(mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
+                        if (progress >= 1 && progress != 100) {
+                            progressView.withProgress(progress);
                         }
                     }
                 }
             });
         } else if (id == EventManager.ON_UPLOAD_COMPRESS) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (message[0].equals(mMessage.getMessageId() + "") && holder instanceof VideoWithTextItem.ViewHolder) {
-                        int percent = (int) message[1];
-                        if (percent <= 99) {
+            G.runOnUiThread(() -> {
+                String messageKey = (String) message[0];
+                String messageId = String.valueOf(mMessage.getMessageId());
 
-                            String p = percent + "";
+                if (messageKey.equals(messageId) && holder instanceof VideoWithTextItem.ViewHolder) {
+                    VideoWithTextItem.ViewHolder videoHolder = (VideoWithTextItem.ViewHolder) holder;
+                    int progress = (int) message[1];
 
-                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                                p = HelperCalander.convertToUnicodeFarsiNumber(p);
-                            }
-                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
-                        } else {
-                            ((VideoWithTextItem.ViewHolder) holder).duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                    if (progress <= 99) {
+                        String progressString = String.valueOf(progress);
+
+                        if (G.selectedLanguage.equals("fa")) {
+                            progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
                         }
+
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+                    } else {
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " ", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
                     }
                 }
             });
@@ -385,11 +410,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
 
-            if (!UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
-                UploadManager.getInstance().uploadMessageAndSend(type, mMessage);
+            if (!Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+                UploadObject fileObject = UploadObject.createForMessage(mMessage, type);
+                if (fileObject != null) {
+                    Uploader.getInstance().upload(fileObject);
+                }
             } else {
                 MessageProgress _Progress = ((IProgress) holder).getProgress();
-                _Progress.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                _Progress.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             }
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -528,9 +556,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (isSelected() || structMessage.isSelected) {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
+            holder.itemView.setForeground(new ColorDrawable(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg)));
         } else {
-            ((FrameLayout) holder.itemView).setForeground(new ColorDrawable(Color.TRANSPARENT));
+            holder.itemView.setForeground(new ColorDrawable(Color.TRANSPARENT));
         }
 
         /**
@@ -845,7 +873,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 forwardMessageId = forwardMessageId * (-1);
             }
             RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
+                return realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
             });
             if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                 new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId(), reaction, forwardMessageId);
@@ -944,77 +972,72 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getContentBloke().removeView(cslr_replay_layout);
         }
 
-        if (mMessage.getReplyTo() != null && mMessage.getReplyTo().isValid()) {
+        if (mMessage.replyTo != null && mMessage.replyTo.isValid() && !mMessage.replyTo.deleted) {
 
             final View replayView = ViewMaker.getViewReplay(((NewChatItemHolder) holder).getContext());
 
-            if (replayView != null) {
-                final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
-                final AppCompatTextView replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
-                replayView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (FragmentChat.isInSelectionMode) {
-                            holder.itemView.performLongClick();
-                            return;
-                        }
-
-                        messageClickListener.onReplyClick(mMessage.getReplyTo());
-                    }
-                });
-
-                replayView.setOnLongClickListener(getLongClickPerform(holder));
-
-                try {
-                    AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), mMessage.getReplyTo().getForwardMessage() == null ? mMessage.getReplyTo().getMessageType() : mMessage.getReplyTo().getForwardMessage().getMessageType(), mMessage.getReplyTo().getForwardMessage() == null ? mMessage.getReplyTo() : mMessage.getReplyTo().getForwardMessage());
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
+            final TextView replyFrom = replayView.findViewById(R.id.chslr_txt_replay_from);
+            final AppCompatTextView replayMessage = replayView.findViewById(R.id.chslr_txt_replay_message);
+            replayView.setOnClickListener(v -> {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return;
                 }
 
-                if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                    if (mAdapter.getRealmRoom() != null) {
-                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(mAdapter.getRealmRoom().getTitle(), replyFrom.getPaint().getFontMetricsInt()));
-                    }
-                } else {
-                    RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
-                        return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getReplyTo().getUserId());
-                    });
-                    if (replayToInfo != null) {
-                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
-                    }
-                }
+                messageClickListener.onReplyClick(mMessage.replyTo);
+            });
 
-                String replayText = AppUtils.replyTextMessage(mMessage.getReplyTo(), holder.itemView.getResources());
-                replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
+            replayView.setOnLongClickListener(getLongClickPerform(holder));
 
-                if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                    replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
-                } else {
-                    replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
-                }
-                replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
-                replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
-
-                replyFrom.measure(0, 0);       //must call measure!
-                replayMessage.measure(0, 0);
-
-                int maxWith, withMessage, withTitle;
-                withTitle = replyFrom.getMeasuredWidth();
-                withMessage = replayMessage.getMeasuredWidth();
-                maxWith = withTitle > withMessage ? withTitle : withMessage;
-                maxWith += i_Dp(R.dimen.dp44);
-                if (replayView.findViewById(R.id.chslr_imv_replay_pic).getVisibility() == View.VISIBLE) {
-                    maxWith += i_Dp(R.dimen.dp52);
-                }
-
-                minWith = maxWith;
-                mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
-
-                mHolder.getContentBloke().addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            try {
+                AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), mMessage.replyTo.forwardMessage == null ? mMessage.replyTo.getMessageType() : mMessage.replyTo.forwardMessage.getMessageType(), mMessage.replyTo.forwardMessage == null ? mMessage.replyTo : mMessage.replyTo.forwardMessage);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
             }
+
+            if (type == ProtoGlobal.Room.Type.CHANNEL) {
+                if (mAdapter.getRealmRoom() != null) {
+                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(mAdapter.getRealmRoom().getTitle(), replyFrom.getPaint().getFontMetricsInt()));
+                }
+            } else {
+                RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.replyTo.userId);
+                });
+                if (replayToInfo != null) {
+                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
+                }
+            }
+
+            String replayText = AppUtils.replyTextMessage(mMessage.replyTo, holder.itemView.getResources());
+            replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
+
+            if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
+                replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
+            } else {
+                replayView.setBackgroundResource(theme.getReceivedReplay(replayView.getContext()));
+            }
+            replyFrom.setTextColor(theme.getSendReplayUserColor(replyFrom.getContext()));
+            replayMessage.setTextColor(theme.getSendMessageTextColor(replayMessage.getContext()));
+
+            replyFrom.measure(0, 0);       //must call measure!
+            replayMessage.measure(0, 0);
+
+            int maxWith, withMessage, withTitle;
+            withTitle = replyFrom.getMeasuredWidth();
+            withMessage = replayMessage.getMeasuredWidth();
+            maxWith = Math.max(withTitle, withMessage);
+            maxWith += i_Dp(R.dimen.dp44);
+            if (replayView.findViewById(R.id.chslr_imv_replay_pic).getVisibility() == View.VISIBLE) {
+                maxWith += i_Dp(R.dimen.dp52);
+            }
+
+            minWith = maxWith;
+            mHolder.getContentBloke().setMinimumWidth(Math.min(minWith, G.maxChatBox));
+
+            mHolder.getContentBloke().addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 
@@ -1084,7 +1107,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
                 RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getForwardMessage().getRoomId()).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getRoomId()).findFirst();
                 });
                 if (realmRoom != null) {
                     txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
@@ -1411,12 +1434,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         final MessageProgress _Progress = ((IProgress) holder).getProgress();
 
-
         if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.getMessageId())) {
             return;
         }
 
-        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId())) {
             return;
         }
 
@@ -1510,9 +1532,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         View thumbnail = ((IThumbNailItem) holder).getThumbNailImageView();
 
 
-        if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
+        if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "")) {
             if (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(structMessage.getAttachment().getLocalFilePath())) {
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     messageClickListener.onFailedMessageClick(progress, structMessage, holder.getAdapterPosition());
 
                 } else {
@@ -1521,8 +1543,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, structMessage, holder.getAdapterPosition());
             }
-        } else if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
-            HelperDownloadFile.getInstance().stopDownLoad(structMessage.getAttachment().getCacheId());
+        } else if (Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId())) {
+            Downloader.getInstance(currentAccount).cancelDownload(structMessage.getAttachment().getCacheId());
         } else {
             thumbnail.setVisibility(View.VISIBLE);
 
@@ -1563,133 +1585,103 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (structMessage.getAttachment() == null) return;
 
-        String token = structMessage.getAttachment().getToken();
-        String url = structMessage.getAttachment().getUrl();
-        String name = structMessage.getAttachment().getName();
-
-        long size = 0;
-
-        if (structMessage.getAttachment().getSmallThumbnail() != null)
-            size = structMessage.getAttachment().getSmallThumbnail().getSize();
-
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
 
         if (structMessage.getAttachment().getCacheId() == null || structMessage.getAttachment().getCacheId().length() == 0) {
             return;
         }
 
-
-        if (token != null && token.length() > 0 && size > 0) {
-
-            HelperDownloadFile.getInstance().startDownload(mMessage.getMessageType(), mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, int progress) {
-
-                    if (FragmentChat.canUpdateAfterDownload) {
-                        if (progress == 100) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String type;
-                                    if (mMessage.getForwardMessage() != null) {
-                                        type = mMessage.getForwardMessage().getMessageType().toString().toLowerCase();
-                                    } else {
-                                        type = mMessage.getMessageType().toString().toLowerCase();
-                                    }
-//                                    if (type.contains("image") || type.contains("video") || type.contains("gif")) {
-//                                        onLoadThumbnailFromLocal(holder, structMessage.getAttachment().getCacheId(), path, LocalFileType.THUMBNAIL);
-//                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                public void OnError(String token) {
-                }
-            });
+        DownloadObject fileStruct = DownloadObject.createForThumb(mMessage, false);
+        if (fileStruct != null) {
+            Downloader.getInstance(currentAccount).download(fileStruct, selector, null);
         }
     }
 
     void downLoadFile(final VH holder, int priority) {
-
         if (structMessage.getAttachment() == null || structMessage.getAttachment().getCacheId() == null) {
             return;
         }
 
-        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId());
+        boolean _isDownloading = Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId());
 
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
 
+        final TextView textView = ((IProgress) holder).getProgressTextView();
+        final String tempValue = ((IProgress) holder).getTempTextView();
 
         final String token = structMessage.getAttachment().getToken();
-        final String url = structMessage.getAttachment().getUrl();
         String name = structMessage.getAttachment().getName();
         long size = structMessage.getAttachment().getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
         final ProtoGlobal.RoomMessageType messageType = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
 
-        final String _path = AndroidUtils.getFilePathWithCashId(structMessage.getAttachment().getCacheId(), name, messageType);
 
         if (token != null && token.length() > 0 && size > 0) {
 
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
+            DownloadObject struct = DownloadObject.createForRoomMessage(mMessage);
 
-            HelperDownloadFile.getInstance().startDownload(messageType, mMessage.getMessageId() + "", token, url, structMessage.getAttachment().getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(final String path, final int progress) {
+            if (struct == null)
+                return;
 
-                    if (FragmentChat.canUpdateAfterDownload) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+            progressBar.withProgress(1);
+
+            Downloader.getInstance(currentAccount).download(struct, selector, priority, arg -> {
+                if (FragmentChat.canUpdateAfterDownload) {
+                    G.handler.post(() -> {
+                        switch (arg.status) {
+                            case SUCCESS:
+                            case LOADING:
+                                if (arg.data == null) {
+                                    return;
+                                }
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
                                     if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
-                                        if (progress != 100) {
-                                            progressBar.withProgress(progress);
+                                        if (arg.data.getProgress() != 100) {
+                                            progressBar.withProgress(arg.data.getProgress());
+                                            if (textView != null) {
+                                                String percent;
+                                                if (G.selectedLanguage.equals("fa")) {
+                                                    percent = HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(arg.data.getProgress()));
+                                                } else {
+                                                    percent = String.valueOf(arg.data.getProgress());
+                                                }
+                                                textView.setText(String.format(Locale.US, "%s %s", percent, "%" + " " + "—" + " " + AndroidUtils.humanReadableByteCount(size, true)));
+                                            }
                                         } else {
                                             progressBar.withProgress(99);
                                         }
+
                                     }
 
-                                    if (progress == 100) {
-
+                                    if (arg.data.getProgress() == 100) {
+                                        int position = mAdapter.getPosition(this);
+                                        mAdapter.notifyItemChanged(position);
                                         if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
                                             if (mMessage.getRoomId() == MusicPlayer.roomId) {
                                                 MusicPlayer.downloadNewItem = true;
                                             }
                                         }
-//                                        onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
+                                        if (textView != null) {
+                                            textView.setText(AndroidUtils.humanReadableByteCount(size, true));
+                                        }
                                     }
                                 }
-                            }
-                        });
-                    }
-
-                }
-
-                @Override
-                public void OnError(String token) {
-
-                    if (FragmentChat.canUpdateAfterDownload) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
+                                break;
+                            case ERROR:
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
                                     progressBar.withProgress(1);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
-
                                 }
-                            }
-                        });
-                    }
-
-
+                                if (textView != null) {
+                                    textView.setText(AndroidUtils.humanReadableByteCount(size, true));
+                                }
+                        }
+                    });
                 }
             });
 
@@ -1721,12 +1713,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
              */
-            if (UploadManager.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
+            if (Uploader.getInstance().isCompressingOrUploading(mMessage.getMessageId() + "") || (mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) /*|| FragmentChat.compressingFiles.containsKey(mMessage.getMessageId())*/)) {
                 //(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) this code newly added
                 hideThumbnailIf(holder);
 
                 ((IProgress) holder).getProgress().setVisibility(View.VISIBLE);
-                progressBar.withProgress(UploadManager.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                progressBar.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
             } else {
                 checkForDownloading(holder);
             }
@@ -1761,7 +1753,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progress = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progress.progressBar);
 
-        if (HelperDownloadFile.getInstance().isDownLoading(structMessage.getAttachment().getCacheId())) {
+        if (Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, 0);
@@ -1820,7 +1812,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         });
                     }).start();
 
-                    G.chatSendMessageUtil.build(type, mMessage.getRoomId(), roomMessage);
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, mMessage.getRoomId(), roomMessage);
                     messageClickListener.sendFromBot(roomMessage);
 
                 } else if (v.getId() == ButtonActionType.JOIN_LINK) {
@@ -1844,7 +1836,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.getRoomId(), identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        G.chatSendMessageUtil.build(type, mMessage.getRoomId(), realmRoomMessage);
+                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, mMessage.getRoomId(), realmRoomMessage);
                                         messageClickListener.sendFromBot(realmRoomMessage);
                                     }
                                 });
@@ -1875,7 +1867,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } else if (v.getId() == ButtonActionType.PAY_DIRECT) {
                     JSONObject jsonObject = new JSONObject(((ArrayList<String>) v.getTag()).get(0));
-                    RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.getRoomId()).findFirst();
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mMessage.getRoomId()).findFirst();
                     long peerId;
                     if (room != null && room.getChatRoom() != null) {
                         peerId = room.getChatRoom().getPeerId();

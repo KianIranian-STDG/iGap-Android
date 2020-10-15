@@ -106,7 +106,17 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
             });
 
         }
-
+        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (!isMultiSelect) {
+                    holder.check.setChecked(!holder.check.isChecked());
+                    listener.onMultiSelect(mSelectedPhotos.size());
+                    setMultiSelectState(!getMultiSelectState());
+                }
+                return true;
+            }
+        });
         //handle item click
         holder.image.setOnClickListener(v -> {
 

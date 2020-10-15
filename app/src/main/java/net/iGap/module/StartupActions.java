@@ -24,15 +24,14 @@ import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
-import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.LookUpClass;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -101,13 +100,13 @@ public final class StartupActions {
 
                             for (RealmRoom room : realmRooms) {
                                 if (room.getLastMessage() != null) {
-                                    roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                                    roomMessages = roomMessages.notEqualTo("messageId", room.getLastMessage().getMessageId());
                                 }
                             }
 
                             RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                                    .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0)
-                                    .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                                    .greaterThan("messageId", 0)
+                                    .lessThan("createTime", time)
                                     .limit(100).findAll();
 
                             for (RealmRoomMessage var : realmRoomMessages)
@@ -519,7 +518,7 @@ public final class StartupActions {
         ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
         imageLoader = ImageLoader.getInstance();
 
-        HelperFillLookUpClass.fillArrays();
+        LookUpClass.fillArrays();
     }
 
     /**

@@ -227,10 +227,7 @@ public class HelperGetAction {
                 return true;
             }
         }
-        if (action == ProtoGlobal.ClientAction.CANCEL) {
-            return true;
-        }
-        return false;
+        return action == ProtoGlobal.ClientAction.CANCEL;
     }
 
     /**

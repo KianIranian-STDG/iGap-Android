@@ -242,7 +242,7 @@ public class MyInfoWindow extends InfoWindow {
 
         //for show old comment
         //
-        //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
+        //RealmGeoNearbyDistance realmGeoNearbyDistance = realm.where(RealmGeoNearbyDistance.class).equalTo("userId", userId).findFirst();
         //if (realmGeoNearbyDistance != null && hasComment) {
         //    if (realmGeoNearbyDistance.getComment() != null && !realmGeoNearbyDistance.getComment().isEmpty()) {
         //        txtComment.setText(realmGeoNearbyDistance.getComment());
@@ -259,7 +259,7 @@ public class MyInfoWindow extends InfoWindow {
 
     /*public void onOpen(Object arg0) {
     DbManager.getInstance().doRealmTask(realm-> {
-     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+     RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo("id", userId).findFirst();
         if (realmRegisteredInfo == null) {
             return;
         }

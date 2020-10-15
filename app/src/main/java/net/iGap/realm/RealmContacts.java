@@ -59,7 +59,7 @@ public class RealmContacts extends RealmObject {
 
     public static void deleteContact(final String phone) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
+            RealmContacts contact = realm.where(RealmContacts.class).equalTo("phone", Long.parseLong(phone)).findFirst();
             if (contact != null) {
                 contact.deleteFromRealm();
             }
@@ -68,7 +68,7 @@ public class RealmContacts extends RealmObject {
 
     public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+            RealmContacts contact = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
             if (contact != null) {
                 contact.setFirst_name(firstName);
                 contact.setLast_name(lastName);
@@ -80,7 +80,7 @@ public class RealmContacts extends RealmObject {
 
     public static void updateBlock(final long userId, final boolean block) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+            RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo("id", userId).findFirst();
             if (realmContacts != null) {
                 realmContacts.setBlockUser(block);
             }

@@ -54,7 +54,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
@@ -67,10 +66,8 @@ import net.iGap.observers.interfaces.OnVersionCallBack;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.Room;
-import net.iGap.request.RequestChannelDelete;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestClientGetRoomList;
@@ -97,7 +94,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -201,7 +198,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (mSelectedRoomList.size() > 0)
                     item = DbManager.getInstance().doRealmTask(realm -> {
                         return realm.where(RealmRoom.class)
-                                .equalTo(RealmRoomFields.ID, mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
+                                .equalTo("id", mSelectedRoomList.get(mSelectedRoomList.size() - 1).getId()).findFirst();
                     });
             }
 
@@ -261,7 +258,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
 
@@ -325,7 +322,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
     private void confirmActionForReadAllRoom() {
         List<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan(RealmRoomFields.UNREAD_COUNT, 0).equalTo(RealmRoomFields.IS_DELETED, false).findAll());
+            return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan("unreadCount", 0).equalTo("isDeleted", false).findAll());
         });
 
         if (unreadList.size() == 0) {
@@ -410,7 +407,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         if (results == null) {
             results = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(new String[]{RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
+                return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).sort(new String[]{"isPinned", "pinId", "updatedTime"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
             roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, mSelectedRoomList, this::disableMultiSelect);
         } else {
@@ -552,7 +549,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
             if (item.getChannelRole() == ChannelChatRole.OWNER) {
-                new RequestChannelDelete().channelDelete(item.getId());
+                getMessageController().deleteChannel(item.getId());
             } else {
                 new RequestChannelLeft().channelLeft(item.getId());
             }
@@ -581,7 +578,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
 
             if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                new RequestChannelDelete().channelDelete(item.getId());
+                getMessageController().deleteChannel(item.getId());
             } else {
                 new RequestChannelLeft().channelLeft(item.getId());
             }
@@ -704,21 +701,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public void onChannelDelete(long roomId) {
-
-    }
-
-    @Override
-    public void onChannelDeleteError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onChannelDeleteTimeOut() {
-
-    }
-
-    @Override
     public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
 
     }
@@ -754,7 +736,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(EventManager.CALL_EVENT, this);
+        EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().removeEventListener(EventManager.ROOM_LIST_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -942,7 +924,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     boolean isCloud = peerId > 0 && peerId == AccountManager.getInstance().getCurrentUser().getId();
 
                     int pinCount = DbManager.getInstance().doRealmTask(realm -> {
-                        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll().size();
+                        return realm.where(RealmRoom.class).equalTo("isPinned", true).findAll().size();
                     });
 
 
@@ -1159,7 +1141,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        if (id == EventManager.CALL_EVENT) {
+        if (id == EventManager.CALL_STATE_CHANGED) {
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {

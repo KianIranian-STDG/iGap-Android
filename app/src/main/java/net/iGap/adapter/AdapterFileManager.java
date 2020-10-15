@@ -72,7 +72,11 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         }
 
         if (rowItem.nameStr == null) {
-            holder.txtTitle.setText(rowItem.name);
+            try {
+                holder.txtTitle.setText(rowItem.name);
+            } catch (Exception e) {
+                holder.txtTitle.setText(holder.imageView.getContext().getResources().getString(R.string.unknown));
+            }
         } else {
             holder.txtTitle.setText(rowItem.nameStr);
         }
@@ -80,7 +84,11 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         if (rowItem.descriptionStr != null) {
             holder.txtSubtitle.setText(rowItem.descriptionStr);
         } else {
-            holder.txtSubtitle.setText(rowItem.description);
+            try {
+                holder.txtSubtitle.setText(rowItem.description);
+            } catch (Exception e) {
+                holder.txtSubtitle.setText(holder.imageView.getContext().getResources().getString(R.string.unknown));
+            }
         }
 
         holder.itemView.setOnClickListener(view -> {
@@ -89,11 +97,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
                 if (new File(item.path).isDirectory()) {
                     onItemClickListener.onFolderClicked(item.path, holder.getAdapterPosition());
                 } else {
-                    if (items.get(holder.getAdapterPosition()).isSelected) {
-                        items.get(holder.getAdapterPosition()).isSelected = false;
-                    } else {
-                        items.get(holder.getAdapterPosition()).isSelected = true;
-                    }
+                    items.get(holder.getAdapterPosition()).isSelected = !items.get(holder.getAdapterPosition()).isSelected;
                     onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition(), items.get(holder.getAdapterPosition()).isSelected);
                 }
             } else {

@@ -70,6 +70,7 @@ import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
 import net.iGap.helper.HelperError;
@@ -81,13 +82,13 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
-import net.iGap.helper.IGLog;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -99,6 +100,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.SubmitScoreDialog;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.eventbus.socketMessages;
@@ -115,16 +117,13 @@ import net.iGap.observers.interfaces.OnPayment;
 import net.iGap.observers.interfaces.OnUpdating;
 import net.iGap.observers.interfaces.OnUserInfoMyClient;
 import net.iGap.observers.interfaces.OnVerifyNewDevice;
-import net.iGap.observers.interfaces.OneFragmentIsOpen;
 import net.iGap.observers.interfaces.OpenFragment;
 import net.iGap.observers.interfaces.RefreshWalletBalance;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -169,6 +168,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static OnBackPressedListener onBackPressedListener;
     private static long oldTime;
     public static boolean isUseCamera = false;
+    public static boolean isStoragePage = true;
     public static boolean waitingForConfiguration = false;
     private SharedPreferences sharedPreferences;
     private TextView iconLock;
@@ -261,7 +261,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("Main activity on destroy");
+            FileLog.i("Main activity on destroy");
         }
 
         if (G.ISRealmOK) {
@@ -389,7 +389,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e("Main activity on create");
+            FileLog.i("Main activity on create");
         }
 
         setContentView(R.layout.activity_main);
@@ -493,13 +493,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             if (G.twoPaneMode) {
                 G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-
-                G.oneFragmentIsOpen = new OneFragmentIsOpen() {
-                    @Override
-                    public void justOne() {
-
-                    }
-                };
 
                 designLayout(chatLayoutMode.none);
                 setDialogFragmentSize();
@@ -644,7 +637,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             AndroidUtils.statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-            Log.i("abbasiKeyboard", "status height set ->  " + AndroidUtils.statusBarHeight);
         }
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -738,7 +730,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     /*private void getWallpaperAsDefault() {
         try {
             RealmWallpaper realmWallpaper = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+                return realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
             });
             if (realmWallpaper != null) {
                 if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
@@ -1200,7 +1192,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
         }
 
-        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera) {
+        if (PassCode.getInstance().isPassCode() && isLock && !G.isRestartActivity && !isUseCamera && isStoragePage) {
             enterPassword();
         } else if (!G.isRestartActivity) {
             long currentTime = System.currentTimeMillis();
@@ -1396,7 +1388,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         designLayout(chatLayoutMode.none);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-        G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
+        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).setOnChatSendMessageResponseRoomList(this);
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onPayment = this;
@@ -1510,7 +1502,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void check(final long userId) {
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             CallSelectFragment.call(userId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
         } else {
             G.handler.postDelayed(new Runnable() {
@@ -1539,8 +1531,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
             if (room != null && realmRoomMessage != null) {
                 /**
                  * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++

@@ -5,8 +5,8 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.ExceptionMessageFactory;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.IGLog;
 import net.iGap.observers.eventbus.EventManager;
 
 import io.reactivex.SingleObserver;
@@ -31,7 +31,7 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
     public void onError(Throwable e) {
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e(e);
+            FileLog.e(e);
         }
 
         e.printStackTrace();

@@ -13,7 +13,6 @@ package net.iGap.response;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoSignalingClearLog;
 import net.iGap.realm.RealmCallLog;
-import net.iGap.realm.RealmCallLogFields;
 
 public class SignalingClearLogResponse extends MessageHandler {
 
@@ -42,7 +41,7 @@ public class SignalingClearLogResponse extends MessageHandler {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 for (int i = 0; i < builder.getLogIdCount(); i++) {
                     try {
-                        realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.LOG_ID, builderRequest.getLogIdList().get(i)).findFirst().deleteFromRealm();
+                        realm.where(RealmCallLog.class).equalTo("logId", builderRequest.getLogIdList().get(i)).findFirst().deleteFromRealm();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

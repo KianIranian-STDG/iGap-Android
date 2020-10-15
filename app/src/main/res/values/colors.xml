@@ -102,12 +102,10 @@
 
     <color name="start_color">#706e6a</color>
 
-    <color name="callingUserImageLayerEnd">#FFFFFF</color>
-    <color name="callingUserImageLayerStart">#50FFFFFF</color>
     <color name="bottomSheetHeaderLine">#EEEEEE</color>
     <color name="bottomSheetHeaderLineDark">@color/toolbar_search_box_dark_bg</color>
     <color name="setting_items_value_color">#41B120</color>
-    <color name="colorToolbarBackgroundEnd">#41B120</color>
+    <color name="colorToolbarBackgroundEnd">#FF5EBC45</color>
     <color name="colorToolbarBackgroundStart">#B9E244</color>
     <color name="toolbar_search_box_bg">#F6F6F9</color>
     <color name="notification_badge">#5ebc45</color>
@@ -137,6 +135,7 @@
 
 
     <color name="videoCallButton">#FF00FF</color>
+    <color name="brown">#B6774E</color>
 
     <color name="voice_round">#468da7</color>
     <color name="navigation_dark_mode_bg">#555857</color>

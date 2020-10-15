@@ -27,6 +27,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
 import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.observers.interfaces.OnUnreadChange;
 
@@ -43,8 +44,8 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     private static final int POPULAR_CHANNEL_FRAGMENT = 5;
     private static final int NEWS_FRAGMENT = 6;
 
-    public static final int START_TAB = CHAT_FRAGMENT;
-
+    public static final int START_TAB = AppConfig.defaultTab;
+    public boolean isShowedAdd = false;
     public static final String DEEP_LINK_DISCOVERY = "discovery";
     public static final String DEEP_LINK_CONTACT = "contact";
     public static final String DEEP_LINK_CHAT = "chat";
@@ -186,7 +187,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        G.onUnreadChange = null;
+//        G.onUnreadChange = null;
     }
 
     @Override
@@ -200,10 +201,10 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
 
 
     public boolean isFirstTabItem() {
-        if (bottomNavigation.getSelectedItemPosition() == START_TAB) {
+        if (bottomNavigation.getSelectedItemPosition() == CHAT_FRAGMENT) {
             return true;
         } else {
-            bottomNavigation.setCurrentItem(START_TAB);
+            bottomNavigation.setCurrentItem(CHAT_FRAGMENT);
             return false;
         }
     }

@@ -44,7 +44,7 @@ public class RealmChannelExtra extends RealmObject {
     }
 
     public static RealmChannelExtra putOrUpdate(Realm realm, long messageId, ProtoGlobal.RoomMessage.ChannelExtra channelExtra) {
-        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", messageId).findFirst();
         if (realmChannelExtra == null) {
             realmChannelExtra = realm.createObject(RealmChannelExtra.class);
         }
@@ -71,7 +71,7 @@ public class RealmChannelExtra extends RealmObject {
 
     public static void setVote(final long messageId, final ProtoGlobal.RoomMessageReaction messageReaction, final String counterLabel) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", messageId).findFirst();
             if (realmChannelExtra != null) {
                 if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
                     realmChannelExtra.setThumbsUp(counterLabel);
@@ -85,7 +85,7 @@ public class RealmChannelExtra extends RealmObject {
     public static void updateMessageStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsArrayList) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {
-                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", stats.getMessageId()).findFirst();
                 if (realmChannelExtra != null) {
                     realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
                     realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
@@ -97,7 +97,7 @@ public class RealmChannelExtra extends RealmObject {
 
     public static boolean hasChannelExtra(long messageId) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", messageId).findFirst();
             return realmChannelExtra != null;
         });
     }

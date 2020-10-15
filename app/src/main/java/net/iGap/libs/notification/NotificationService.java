@@ -1,8 +1,6 @@
 package net.iGap.libs.notification;
 
 
-import android.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -54,9 +52,7 @@ public class NotificationService extends FirebaseMessagingService {
 
         if (remoteMessage.getData().containsKey(TYPE) && remoteMessage.getData().containsKey(USER_ID)) {
             String type = remoteMessage.getData().get(TYPE);
-            Log.i("iGapCall", "on Message Received " + type);
             if (type != null && type.equals(SIGNALING_OFFER)) {
-                Log.i("iGapCall", "on Message Received " + type + " " + remoteMessage.getData().get(USER_ID));
                 CallManager.getInstance();
             }
         }

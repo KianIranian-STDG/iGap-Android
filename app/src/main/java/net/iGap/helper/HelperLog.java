@@ -31,7 +31,7 @@ public class HelperLog {
         crashlytics.recordException(e);
 
         if (Config.FILE_LOG_ENABLE) {
-            IGLog.e(e);
+            FileLog.e(e);
         }
 
         if (BuildConfig.DEBUG) {

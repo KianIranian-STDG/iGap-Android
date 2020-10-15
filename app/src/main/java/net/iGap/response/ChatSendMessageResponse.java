@@ -17,7 +17,6 @@ import net.iGap.proto.ProtoChatSendMessage;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import static net.iGap.realm.RealmRoomMessage.makeFailed;
 
@@ -53,7 +52,7 @@ public class ChatSendMessageResponse extends MessageHandler {
         int waitTime = errorResponse.getWait();
         if (majorCode == 233 && minorCode == 1) {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
                 if (message != null) {
                     message.removeFromRealm(realm);
                 }

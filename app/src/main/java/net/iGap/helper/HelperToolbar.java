@@ -38,7 +38,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.fragments.FragmentWalletAgrement;
@@ -734,7 +733,6 @@ public class HelperToolbar {
 
         if (isChat) {
             MusicPlayer.chatLayout = musicLayout;
-            ActivityCall.stripLayoutChat = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> {
@@ -751,7 +749,6 @@ public class HelperToolbar {
 
         } else {
             MusicPlayer.mainLayout = musicLayout;
-            ActivityCall.stripLayoutMain = view.getCallLayout();
 
             TextView txtCallActivityBack = rootView.findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(v -> {
@@ -810,31 +807,6 @@ public class HelperToolbar {
         } catch (Exception e) {
             e.printStackTrace();
             HelperLog.getInstance().setErrorLog(e);
-        }
-    }
-
-    private void setStripLayoutCall() {
-        if (G.isInCall) {
-            if (ActivityCall.stripLayoutChat != null) {
-                ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-
-                if (ActivityCall.stripLayoutMain != null) {
-                    ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                }
-            } else {
-                if (ActivityCall.stripLayoutMain != null) {
-                    ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-                }
-            }
-        } else {
-
-            if (ActivityCall.stripLayoutMain != null) {
-                ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-            }
-
-            if (ActivityCall.stripLayoutChat != null) {
-                ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-            }
         }
     }
 

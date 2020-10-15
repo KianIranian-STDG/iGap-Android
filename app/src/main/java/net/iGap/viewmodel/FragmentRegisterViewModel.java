@@ -18,7 +18,6 @@ import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.google.protobuf.ByteString;
 
@@ -43,7 +42,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FragmentRegisterViewModel extends ViewModel {
+public class FragmentRegisterViewModel extends BaseViewModel {
 
     //view callback
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
@@ -182,7 +181,7 @@ public class FragmentRegisterViewModel extends ViewModel {
     private void getTermsAndConditionData() {
         isShowLoading.set(View.VISIBLE);
         showRetryView.set(View.GONE);
-        if (G.isSecure) {
+        if (getRequestManager().isSecure()) {
             isShowLoading.set(View.VISIBLE);
             showRetryView.set(View.GONE);
             repository.getTermsOfServiceBody(new RegisterRepository.RepositoryCallback<String>() {
@@ -353,7 +352,6 @@ public class FragmentRegisterViewModel extends ViewModel {
                 });
     }
 
-    //that is fucking code i wrote because top manager in Pressure :D
     public void onTermsAndConditionClick() {
         if (agreementDescription == null || agreementDescription.isEmpty()) {
             getTermsAndConditionData();

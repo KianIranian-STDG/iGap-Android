@@ -53,6 +53,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
+    private static final String TAG = "FragmentUserProfile1";
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
@@ -260,7 +261,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
 
     private void handleGalleryImageResult(String path) {
         if (getActivity() != null) {
-            ImageHelper.correctRotateImage(path, true);
             FragmentEditImage.insertItemList(path, false);
             FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, false, false, 0);
             fragmentEditImage.setOnProfileImageEdited(this);

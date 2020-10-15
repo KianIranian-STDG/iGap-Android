@@ -20,24 +20,23 @@ import com.google.gson.JsonObject;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.AttachmentFor;
-import net.iGap.module.enums.ClientConditionOffline;
-import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestGroupDeleteMessage;
@@ -63,39 +62,39 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class})
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey
-    private long messageId;
+    public long messageId;
     @Index
-    private long roomId;
-    private long messageVersion;
-    private String status;
-    private long statusVersion;
-    private String messageType;
-    private String message;
-    private boolean hasMessageLink = false;
-    private RealmAttachment attachment;
-    private long userId;
-    private RealmRoomMessageLocation location;
-    private RealmRoomMessageContact roomMessageContact;
-    private RealmRoomMessageWallet roomMessageWallet;
-    private RealmAdditional realmAdditional;
-    private boolean edited;
-    private long createTime;
-    private long updateTime;
-    private boolean deleted = false;
-    private RealmRoomMessage forwardMessage;
-    private RealmRoomMessage replyTo;
-    private boolean showMessage = true;
-    private String authorHash;
-    private boolean hasEmojiInText;
-    private boolean showTime = false;
+    public long roomId;
+    public long messageVersion;
+    public String status;
+    public long statusVersion;
+    public String messageType;
+    public String message;
+    public boolean hasMessageLink = false;
+    public RealmAttachment attachment;
+    public long userId;
+    public RealmRoomMessageLocation location;
+    public RealmRoomMessageContact roomMessageContact;
+    public RealmRoomMessageWallet roomMessageWallet;
+    public RealmAdditional realmAdditional;
+    public boolean edited;
+    public long createTime;
+    public long updateTime;
+    public boolean deleted = false;
+    public RealmRoomMessage forwardMessage;
+    public RealmRoomMessage replyTo;
+    public boolean showMessage = true;
+    public String authorHash;
+    public boolean hasEmojiInText;
+    public boolean showTime = false;
     //if it was needed in the future we can use RealmAuthor instead of author hash and also maybe authorRoomId
-    private long authorRoomId;
+    public long authorRoomId;
     // for channel message should be exist in other rooms (forwarded message)
-    private RealmChannelExtra channelExtra;
-    private long previousMessageId;
-    private long futureMessageId;
-    private String linkInfo;
-    private byte[] Logs;
+    public RealmChannelExtra channelExtra;
+    public long previousMessageId;
+    public long futureMessageId;
+    public String linkInfo;
+    public byte[] Logs;
 
     /**
      * if has forward return that otherwise return enter value
@@ -110,7 +109,7 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static RealmRoomMessage findMessage(Realm realm, long messageId) {
-        return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        return realm.where(RealmRoomMessage.class).equalTo("deleted", false).equalTo("messageId", messageId).findFirst();
     }
 
     public static RealmRoomMessage findLastMessage(Realm realm, long roomId) {
@@ -124,44 +123,44 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static RealmResults<RealmRoomMessage> findDescending(Realm realm, long roomId) {
-        return findSorted(realm, roomId, RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        return findSorted(realm, roomId, "messageId", Sort.DESCENDING);
     }
 
     public static RealmResults<RealmRoomMessage> findAscending(Realm realm, long roomId) {
-        return findSorted(realm, roomId, RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
+        return findSorted(realm, roomId, "messageId", Sort.ASCENDING);
     }
 
     public static RealmResults<RealmRoomMessage> findSorted(Realm realm, long roomId, String fieldName, Sort sortOrder) {
-        return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).findAll().sort(fieldName, sortOrder);
+        return realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).equalTo("deleted", false).findAll().sort(fieldName, sortOrder);
     }
 
     public static RealmResults<RealmRoomMessage> findNotificationMessage(Realm realm) {
         return realm.where(RealmRoomMessage.class)
-                .in(RealmRoomMessageFields.STATUS, new String[]{ProtoGlobal.RoomMessageStatus.SENT.toString(), ProtoGlobal.RoomMessageStatus.DELIVERED.toString()})
-                .equalTo(RealmRoomMessageFields.DELETED, false)
-                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, RealmUserInfo.getCurrentUserAuthorHash())
-                .notEqualTo(RealmRoomMessageFields.USER_ID, AccountManager.getInstance().getCurrentUser().getId())
-                .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
-                .findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+                .in("status", new String[]{ProtoGlobal.RoomMessageStatus.SENT.toString(), ProtoGlobal.RoomMessageStatus.DELIVERED.toString()})
+                .equalTo("deleted", false)
+                .notEqualTo("authorHash", RealmUserInfo.getCurrentUserAuthorHash())
+                .notEqualTo("userId", AccountManager.getInstance().getCurrentUser().getId())
+                .notEqualTo("messageType", ProtoGlobal.RoomMessageType.LOG.toString())
+                .findAll().sort("updateTime", Sort.DESCENDING);
     }
 
     public static RealmResults<RealmRoomMessage> filterMessage(Realm realm, long roomId, ProtoGlobal.RoomMessageType messageType) {
         RealmResults<RealmRoomMessage> results;
         if (messageType == ProtoGlobal.RoomMessageType.TEXT) {
             results = realm.where(RealmRoomMessage.class).
-                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
-                    equalTo(RealmRoomMessageFields.DELETED, false).
-                    equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
-                    contains(RealmRoomMessageFields.LINK_INFO, HelperUrl.linkType.webLink.toString()).
-                    findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+                    equalTo("roomId", roomId).
+                    equalTo("messageType", messageType.toString()).
+                    equalTo("deleted", false).
+                    equalTo("hasMessageLink", true).
+                    contains("linkInfo", HelperUrl.linkType.webLink.toString()).
+                    findAll().sort("updateTime", Sort.DESCENDING);
         } else {
             //TODO [Saeed Mozaffari] [2017-10-28 9:59 AM] - Can Write Better Code?
             results = realm.where(RealmRoomMessage.class).
-                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                    in(RealmRoomMessageFields.MESSAGE_TYPE, new String[]{messageType.toString(), messageType.toString() + "_TEXT"}).
-                    equalTo(RealmRoomMessageFields.DELETED, false).
-                    findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+                    equalTo("roomId", roomId).
+                    in("messageType", new String[]{messageType.toString(), messageType.toString() + "_TEXT"}).
+                    equalTo("deleted", false).
+                    findAll().sort("updateTime", Sort.DESCENDING);
         }
         return results;
     }
@@ -226,11 +225,11 @@ public class RealmRoomMessage extends RealmObject {
         // use for chat or group
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (room != null && room.getType() != ProtoGlobal.Room.Type.CHANNEL) {
                     RealmResults<RealmRoomMessage> realmRoomMessages =
-                            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                            realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAll().sort("messageId", Sort.ASCENDING);
+                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
                     if (realmClientCondition != null) {
                         for (RealmRoomMessage roomMessage : realmRoomMessages) {
                             if (roomMessage != null) {
@@ -257,7 +256,7 @@ public class RealmRoomMessage extends RealmObject {
         } else {
             messageId = input.getMessageId();
         }
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
 
         if (message == null) {
             message = realm.createObject(RealmRoomMessage.class, messageId);
@@ -375,18 +374,18 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static RealmRoomMessage getRealmRoomMessage(Realm realm, long messageId) {
-        return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        return realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
     }
 
     public static void ClearAllMessage(Realm realm) {
         RealmQuery<RealmRoomMessage> roomRealmQuery = realm.where(RealmRoomMessage.class);
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
             if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId());
+                roomRealmQuery.notEqualTo("messageId", realmRoom.getLastMessage().getMessageId());
             }
 
             if (realmRoom.getFirstUnreadMessage() != null && realmRoom.getFirstUnreadMessage().getForwardMessage() == null && realmRoom.getFirstUnreadMessage().getReplyTo() == null) {
-                roomRealmQuery.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getFirstUnreadMessage().getMessageId());
+                roomRealmQuery.notEqualTo("messageId", realmRoom.getFirstUnreadMessage().getMessageId());
             }
         }
         roomRealmQuery.findAll().deleteAllFromRealm();
@@ -398,12 +397,12 @@ public class RealmRoomMessage extends RealmObject {
             @Override
             public void execute(Realm realm) {
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null) {
                     if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
+                        realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("messageId", realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
                     } else {
-                        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+                        realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
                     }
                 }
             }
@@ -416,11 +415,11 @@ public class RealmRoomMessage extends RealmObject {
             return;
         }
 
-        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+        RealmRoomMessage nextMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", message.getRoomId()).equalTo("showTime", true).equalTo("showMessage", true).equalTo("deleted", false).greaterThan("messageId", message.getMessageId()).findFirst();
 
         RealmRoomMessage lastMessage = null;
 
-        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, message.getRoomId()).equalTo(RealmRoomMessageFields.SHOW_TIME, true).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).equalTo(RealmRoomMessageFields.DELETED, false).lessThan(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findAll();
+        RealmResults<RealmRoomMessage> list = realm.where(RealmRoomMessage.class).equalTo("roomId", message.getRoomId()).equalTo("showTime", true).equalTo("showMessage", true).equalTo("deleted", false).lessThan("messageId", message.getMessageId()).findAll();
 
         if (list.size() > 0) {
             lastMessage = list.last();
@@ -479,7 +478,7 @@ public class RealmRoomMessage extends RealmObject {
 
         if (attachment != null && attachment.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, attachment.getId())
+                    .equalTo("attachment.id", attachment.getId())
                     .count();
 
             if (count == 1) // 1 is for this message
@@ -497,9 +496,9 @@ public class RealmRoomMessage extends RealmObject {
 
         if (forwardMessage != null && forwardMessage.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, forwardMessage.getMessageId())
+                    .equalTo("forwardMessage.messageId", forwardMessage.getMessageId())
                     .or()
-                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, forwardMessage.getMessageId())
+                    .equalTo("replyTo.messageId", forwardMessage.getMessageId())
                     .count();
             if (count == 1) // 1 is for this message
                 forwardMessage.deleteFromRealm();
@@ -507,9 +506,9 @@ public class RealmRoomMessage extends RealmObject {
 
         if (replyTo != null && replyTo.isValid()) {
             long count = realm.where(RealmRoomMessage.class)
-                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, replyTo.getMessageId())
+                    .equalTo("forwardMessage.messageId", replyTo.getMessageId())
                     .or()
-                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, replyTo.getMessageId())
+                    .equalTo("replyTo.messageId", replyTo.getMessageId())
                     .count();
             if (count == 1) // 1 is for this message
                 replyTo.deleteFromRealm();
@@ -540,21 +539,18 @@ public class RealmRoomMessage extends RealmObject {
      */
     public static boolean existMessageInRoom(long messageId, long roomId) {
         return DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                    .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+            RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId)
+                    .equalTo("roomId", roomId)
                     .findFirst();
-            if (realmRoomMessage != null) {
-                return true;
-            }
-            return false;
+            return realmRoomMessage != null;
         });
     }
 
     public static void clearHistoryMessage(final long roomId) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
             if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
                 if (realmRoom == null || !realmRoom.isLoaded() || !realmRoom.isValid()) {
                     return;
@@ -564,7 +560,7 @@ public class RealmRoomMessage extends RealmObject {
                 if (realmRoom.getLastMessage() != null) {
                     clearMessageId = realmRoom.getLastMessage().getMessageId();
                 } else {
-                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().sort("messageId", Sort.DESCENDING);
                     if (results.size() > 0) {
                         if (results.first() != null) {
                             clearMessageId = results.first().getMessageId();
@@ -580,7 +576,7 @@ public class RealmRoomMessage extends RealmObject {
                 realmRoom.setUpdatedTime(0);
                 realmRoom.setLastScrollPositionMessageId(0);
 
-                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
+                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll();
                 realmRoomMessages.deleteAllFromRealm();
 
                 if (G.onClearChatHistory != null) {
@@ -590,21 +586,9 @@ public class RealmRoomMessage extends RealmObject {
         });
     }
 
-
-    /**
-     * delete message from realm. call in transaction
-     */
-    public static RealmRoomMessage deleteMessage(Realm realm, long messageId) {
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-        if (message != null) {
-            message.deleteFromRealm();
-        }
-        return message;
-    }
-
     public static RealmRoomMessage deleteMessage(Realm realm, long messageId, long roomId) {
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId)
+                .equalTo("roomId", roomId).findFirst();
         if (message != null) {
             message.deleteFromRealm();
         }
@@ -612,7 +596,7 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void deleteAllMessage(Realm realm, long roomId) {
-        realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+        realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
     }
 
     public static void deleteAllMessage(final long roomId) {
@@ -623,7 +607,7 @@ public class RealmRoomMessage extends RealmObject {
 
     public static void deleteAllMessageLessThan(final long roomId, final long lessThan) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, lessThan).findAll().deleteAllFromRealm();
+            realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThanOrEqualTo("messageId", lessThan).findAll().deleteAllFromRealm();
         });
     }
 
@@ -634,17 +618,17 @@ public class RealmRoomMessage extends RealmObject {
             public void execute(Realm realm) {
                 // get offline delete list , add new deleted list and update in
                 // client condition , then send request for delete message to server
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, RoomId).findFirst();
+                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", RoomId).findFirst();
 
                 for (final Long messageId : list) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
 
                     if (roomMessage != null) {
                         roomMessage.setDeleted(true);
 
                         // stop download
                         if (roomMessage.getAttachment() != null) {
-                            HelperDownloadFile.getInstance().stopDownLoad(roomMessage.getAttachment().getCacheId());
+                            Downloader.getInstance(AccountManager.selectedAccount).cancelDownload(roomMessage.getAttachment().getCacheId());
                         }
                     }
 
@@ -671,68 +655,9 @@ public class RealmRoomMessage extends RealmObject {
         });
     }
 
-    public static void deleteMessageServerResponse(final long roomId, final long messageId, final long deleteVersion, final ProtoResponse.Response response) {
-        RealmClientCondition.setVersion(roomId, deleteVersion, ClientConditionVersion.DELETE);
-        RealmClientCondition.deleteOfflineAction(messageId, ClientConditionOffline.DELETE);
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            /**
-             * if another account deleted this message set deleted true
-             * otherwise before this state was set
-             */
-
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (
-                    realmRoom != null && roomMessage != null && !roomMessage.isDeleted()
-                            && !roomMessage.isSenderMe()
-                            && !roomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())
-                            && realmRoom.getFirstUnreadMessage() != null
-                            && realmRoom.getFirstUnreadMessage().getMessageId() <= messageId
-                            && realmRoom.getUnreadCount() > 0
-            ) {
-                realmRoom.setUnreadCount(realmRoom.getUnreadCount() - 1);
-                if (realmRoom.getUnreadCount() == 0) {
-                    realmRoom.setFirstUnreadMessage(null);
-                }
-            }
-
-            if (response.getId().isEmpty()) {
-                if (roomMessage != null) {
-                    roomMessage.setDeleted(true);
-                }
-            }
-
-            if (G.onChatDeleteMessageResponse != null) {
-                G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);
-            }
-
-            if (realmRoom != null) {
-                if (realmRoom.getLastMessage().getMessageId() == messageId) {
-
-                    Number newLastMessageId = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                            .notEqualTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                            .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                            .lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId)
-                            .max(RealmRoomMessageFields.MESSAGE_ID);
-
-                    if (newLastMessageId != null) {
-                        RealmRoomMessage newLastMessage = realm.where(RealmRoomMessage.class)
-                                .equalTo(RealmRoomMessageFields.MESSAGE_ID, newLastMessageId.longValue())
-                                .findFirst();
-
-                        realmRoom.setLastMessage(newLastMessage);
-                    } else {
-                        realmRoom.setLastMessage(null);
-                    }
-                }
-            }
-
-        });
-    }
-
     public static boolean isBothDelete(long messageTime) {
         long currentTime;
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             currentTime = G.currentServerTime * DateUtils.SECOND_IN_MILLIS;
         } else {
             currentTime = System.currentTimeMillis();
@@ -752,7 +677,7 @@ public class RealmRoomMessage extends RealmObject {
             @Override
             public void run() {
                 DbManager.getInstance().doRealmTransaction(realm -> {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
                     if (roomMessage != null) {
                         RealmRoom.updateTime(realm, roomId, TimeUtils.currentLocalTime());
 
@@ -779,7 +704,7 @@ public class RealmRoomMessage extends RealmObject {
                                 break;
                         }
 
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
 
                         if (realmClientCondition != null) {
                             realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
@@ -793,7 +718,7 @@ public class RealmRoomMessage extends RealmObject {
 
     public static void editMessageServerResponse(final long messageId, final long messageVersion, final String message, final ProtoGlobal.RoomMessageType messageType) {
         DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
             if (roomMessage != null) {
                 roomMessage.setMessage(message);
                 roomMessage.setMessageVersion(messageVersion);
@@ -808,7 +733,7 @@ public class RealmRoomMessage extends RealmObject {
      * send status again enter ro chat fetchMessage method will be send status so client shouldn't
      */
     public static void setStatusSeenInChat(Realm realm, final long messageId) {
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
         if (realmRoomMessage != null) {
             if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                 realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
@@ -817,10 +742,10 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void setStatusFailedInChat(Realm realm, long messageId) {
-        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message.getMessageId());
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageFailed(message.getRoomId(), message.getMessageId());
         }
     }
 
@@ -831,7 +756,7 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void setStatus(Realm realm, long messageId, ProtoGlobal.RoomMessageStatus messageStatus) {
-        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (roomMessage != null) {
             roomMessage.setStatus(messageStatus.toString());
         }
@@ -840,9 +765,9 @@ public class RealmRoomMessage extends RealmObject {
     public static RealmRoomMessage setStatusServerResponse(Realm realm, long messageId, long statusVersion, ProtoGlobal.RoomMessageStatus messageStatus) {
         RealmRoomMessage roomMessage;
         if (messageStatus != ProtoGlobal.RoomMessageStatus.LISTENED) {
-            roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+            roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
         } else {
-            roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+            roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         }
 
         if (roomMessage != null) {
@@ -865,7 +790,7 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public static void setGapInTransaction(Realm realm, final long messageId) {
-        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
         if (realmRoomMessage != null) {
             realmRoomMessage.setPreviousMessageId(messageId);
             realmRoomMessage.setFutureMessageId(messageId);
@@ -948,7 +873,7 @@ public class RealmRoomMessage extends RealmObject {
              *  user wants to replay to a message
              */
             if (replyMessageId > 0) {
-                RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replyMessageId).findFirst();
+                RealmRoomMessage messageToReplay = realm.where(RealmRoomMessage.class).equalTo("messageId", replyMessageId).findFirst();
                 if (messageToReplay != null) {
                     roomMessage.setReplyTo(realm.copyFromRealm(messageToReplay));
                 }
@@ -1064,7 +989,7 @@ public class RealmRoomMessage extends RealmObject {
             message.setUserId(AccountManager.getInstance().getCurrentUser().getId());
             realm.copyToRealmOrUpdate(message);
         } else {
-            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
+            RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", message.getMessageId()).findFirst();
             if (roomMessage != null) {
                 RealmRoomMessage forwardedMessage = realm.createObject(RealmRoomMessage.class, messageId);
                 if (roomMessage.getForwardMessage() != null) {
@@ -1378,7 +1303,7 @@ public class RealmRoomMessage extends RealmObject {
         }
         DbManager.getInstance().doRealmTask(realm -> {
             if (attachment == null) {
-                RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+                RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
                 if (realmAttachment == null) {
                     realmAttachment = realm.createObject(RealmAttachment.class, messageId);
                 }

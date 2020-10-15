@@ -46,7 +46,7 @@ public class EventManager {
     public static final int ON_UPLOAD_PROGRESS = eventId++;
     public static final int ON_UPLOAD_COMPRESS = eventId++;
 
-    public static final int CALL_EVENT = eventId++;
+    public static final int CALL_STATE_CHANGED = eventId++;
 
     public static final int SOCKET_CONNECT_DENY = eventId++;
     public static final int SOCKET_CONNECT_OK = eventId++;
@@ -60,6 +60,13 @@ public class EventManager {
 
     public static final int ROOM_LIST_CHANGED = eventId++;
     public static final int CHAT_BACKGROUND_CHANGED = eventId++;
+    public static final int ON_MESSAGE_DELETE = eventId++;
+    public static final int AVATAR_UPDATE = eventId++;
+
+    public static final int FILE_UPLOAD_PROGRESS = eventId++;
+    public static final int FILE_UPLOAD_FAILED = eventId++;
+    public static final int FILE_UPLOAD_SUCCESS = eventId++;
+    public static final int APP_CONFIG_CHANGED = eventId++;
 
     private static EventManager eventListenerInstance;
 

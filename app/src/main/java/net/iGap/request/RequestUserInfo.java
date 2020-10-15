@@ -12,7 +12,8 @@ package net.iGap.request;
 
 import android.text.format.DateUtils;
 
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserInfo;
@@ -112,7 +113,7 @@ public class RequestUserInfo {
 
             RequestWrapper requestWrapper = new RequestWrapper(117, builder, userId + "");
             try {
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     userIdArrayList.add(String.valueOf(userId));
                     RequestQueue.sendRequest(requestWrapper);
                 }

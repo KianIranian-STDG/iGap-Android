@@ -64,6 +64,7 @@
                 android:textSize="@dimen/dp14" />
 
             <View
+                android:id="@+id/bottomLine"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="?iGapDividerLine"

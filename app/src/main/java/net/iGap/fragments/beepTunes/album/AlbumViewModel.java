@@ -1,7 +1,6 @@
 package net.iGap.fragments.beepTunes.album;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
@@ -190,7 +189,6 @@ public class AlbumViewModel extends BaseViewModel implements OnSongDownload {
     public void startOrResume(DownloadSong downloadSong) {
         downloadSong.setDownloadStatus(DownloadSong.STATUS_START);
         downloadStatusMutableLiveData.postValue(downloadSong);
-        Log.i(TAG, "startOrResume: " + downloadSong.getId());
     }
 
     @Override

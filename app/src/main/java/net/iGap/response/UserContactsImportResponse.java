@@ -10,8 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.module.Contacts;
@@ -60,8 +58,6 @@ public class UserContactsImportResponse extends MessageHandler {
 
 
         if (getContactList) {
-            Log.i("import_contact", "contact import response");
-
             G.serverHashContact = G.localHashContact;
             new RequestUserContactsGetList().userContactGetList();
         }

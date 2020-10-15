@@ -10,52 +10,44 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/imageView5"
         style="@style/myIconTextViewStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
+        android:gravity="end"
         android:text="@string/score_star_icon"
         android:textColor="?attr/colorAccent"
         android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/textView8"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.25" />
+        app:layout_constraintWidth_percent="0.20" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView8"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:maxLines="1"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:text="@string/payment_userScore"
         android:textColor="?iGapSubtitleTextColor"
         android:textSize="@dimen/largeTextSize"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintEnd_toStartOf="@+id/view12"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:layout_constraintVertical_bias="0.120000005" />
+        app:layout_constraintWidth_percent="0.30" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:maxLength="15"
         android:textColor="?attr/colorAccent"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintEnd_toEndOf="@+id/textView8"
         app:layout_constraintStart_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toTopOf="@+id/textView8"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
         tools:text="1520" />
 
     <View
@@ -64,26 +56,25 @@
         android:layout_height="50dp"
         android:background="?iGapSubtitleTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-        app:layout_constraintEnd_toStartOf="@+id/textView2"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toTopOf="@+id/imageView5" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="2"
         android:paddingStart="@dimen/dp8"
         android:paddingLeft="@dimen/dp8"
+        android:gravity="center"
+        android:maxLines="2"
         android:text="@string/Increase_score"
         android:textColor="?attr/colorAccent"
         android:textSize="@dimen/largeTextSize"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageView5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/view12"
-        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+        app:layout_constraintStart_toEndOf="@id/view12"
+        app:layout_constraintTop_toTopOf="@+id/imageView5"
+        app:layout_constraintWidth_percent="0.50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

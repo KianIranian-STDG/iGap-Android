@@ -38,11 +38,12 @@ public class DataStorageViewModel extends ViewModel {
     private ObservableBoolean isAutoGif = new ObservableBoolean(false);
     private ObservableInt showLayoutSdk = new ObservableInt(View.GONE);
     private ObservableField<String> cleanUpSize = new ObservableField<>("0 KB");
-    private ObservableField<String> clearCacheSize = new ObservableField<>("0 KB");
+    private ObservableField<String> clearCacheSize = new ObservableField<>("...");
 
 
     private SharedPreferences sharedPreferences;
     private int keepMediaState;
+    private String totalSize;
 
     public DataStorageViewModel(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -56,7 +57,8 @@ public class DataStorageViewModel extends ViewModel {
             keepMediaTime.set(R.string.keep_media_forever);
         }
 
-        clearCacheSize.set(new FileUtils().getFileTotalSize());
+        new FileUtils().getFileTotalSize(size -> clearCacheSize.set(totalSize = size));
+
         DbManager.getInstance().doRealmTask(realm -> {
             cleanUpSize.set(FileUtils.formatFileSize(new File(realm.getConfiguration().getPath()).length()));
         });
@@ -313,7 +315,7 @@ public class DataStorageViewModel extends ViewModel {
     public void onClickClearCache() {
         String[] tmp = new String[7];
         FileUtils fileUtils = new FileUtils();
-        tmp[0] = fileUtils.getFileTotalSize();
+        tmp[0] = totalSize;
         tmp[1] = fileUtils.getImageFileSize();
         tmp[2] = fileUtils.getVideoFileSize();
         tmp[3] = fileUtils.getDocumentFileSize();
@@ -343,7 +345,8 @@ public class DataStorageViewModel extends ViewModel {
         if (isOther) {
             fileUtils.clearOtherFile();
         }
-        clearCacheSize.set(fileUtils.getFileTotalSize());
+
+        fileUtils.getFileTotalSize(size -> clearCacheSize.set(totalSize = size));
     }
 
     public void onClickCleanUp() {

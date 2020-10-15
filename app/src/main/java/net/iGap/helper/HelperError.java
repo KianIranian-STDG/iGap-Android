@@ -20,6 +20,8 @@ import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 
 public class HelperError {
 
@@ -36,7 +38,7 @@ public class HelperError {
         switch (majorCode) {
             case 2:
                 if (minorCode == 1) {
-                    G.userLogin = false;
+                    RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(false);
 //                    error = G.fragmentActivity.getResources().getString(R.string.E_2);
                     LoginActions.login();
                 }

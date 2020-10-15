@@ -10,8 +10,9 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
 import net.iGap.fragments.discovery.OnDiscoveryList;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoClientGetDiscovery;
 
 public class RequestClientGetDiscovery {
@@ -23,7 +24,7 @@ public class RequestClientGetDiscovery {
 
         RequestWrapper requestWrapper = new RequestWrapper(620, builder, discoveryListener);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {

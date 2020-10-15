@@ -1,10 +1,11 @@
 package net.iGap.helper.upload;
 
-import android.util.Log;
-
 import net.iGap.G;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileUploadStatus;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
@@ -45,6 +46,10 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         this.progress = 1;
     }
 
+    public UploadTask(String identity, File file, ProtoGlobal.RoomMessageType type) {
+        this(identity, file, type, null);
+    }
+
     public UploadTask(RealmRoomMessage message, OnUploadListener onUploadListener) {
         this(message.getMessageId() + "", new File(message.getAttachment().getLocalFilePath()), message.getMessageType(), onUploadListener);
     }
@@ -57,7 +62,6 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         return progress;
     }
 
-
     @Override
     public void run() {
         super.run();
@@ -66,8 +70,6 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Log.d("bagi", file.getAbsolutePath());
-        Log.d("bagi", file.length() + "fileLen");
 
         fileHash = AndroidUtils.getFileHashFromPath(file.getAbsolutePath());
 
@@ -124,7 +126,11 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         this.progress = (int) progress;
         this.token = token;
 
-        onUploadListener.onProgress(identity, this.progress);
+        if (onUploadListener != null) {
+            onUploadListener.onProgress(identity, this.progress);
+        }
+
+        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_PROGRESS, identity, progress));
 
         if (progress != 100.0) {
             upload(offset, limit);
@@ -148,7 +154,11 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         this.progress = (int) progress;
 
         if (progress != 100.0) {
-            onUploadListener.onProgress(identity, this.progress);
+            if (onUploadListener != null)
+                onUploadListener.onProgress(identity, this.progress);
+
+            G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_PROGRESS, identity, progress));
+
             upload(nextOffset, nextLimit);
         } else {
             onFinishUpload();
@@ -164,7 +174,12 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
     public void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS) {
         if (status == ProtoFileUploadStatus.FileUploadStatusResponse.Status.PROCESSED) {
             this.progress = 100;
-            onUploadListener.onFinish(identity, token);
+
+            if (onUploadListener != null)
+                onUploadListener.onFinish(identity, token);
+
+            G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_SUCCESS, identity, token));
+
             try {
                 closeFile();
             } catch (IOException e) {
@@ -188,8 +203,12 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
 
     @Override
     public void onFileUploadOptionError(int major, int minor) {
-        Log.d("bagi", "onFileUploadOptionError major:" + major + "minor:" + minor);
-        onUploadListener.onError(identity);
+
+        if (onUploadListener != null)
+            onUploadListener.onError(identity);
+
+        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_FAILED, identity));
+
         synchronized (this) {
             notify();
         }
@@ -197,8 +216,12 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
 
     @Override
     public void onFileUploadInitError(int major, int minor) {
-        Log.d("bagi", "onFileUploadInitError major:" + major + "minor:" + minor);
-        onUploadListener.onError(identity);
+
+        if (onUploadListener != null)
+            onUploadListener.onError(identity);
+
+        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_PROGRESS, identity));
+
         synchronized (this) {
             notify();
         }
@@ -206,8 +229,12 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
 
     @Override
     public void onFileUploadError(int major, int minor) {
-        Log.d("bagi", "onFileUploadError major:" + major + "minor:" + minor);
-        onUploadListener.onError(identity);
+
+        if (onUploadListener != null)
+            onUploadListener.onError(identity);
+
+        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_FAILED, identity));
+
         synchronized (this) {
             notify();
         }
@@ -215,8 +242,12 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
 
     @Override
     public void onFileUploadStatusError(int major, int minor) {
-        Log.d("bagi", "onFileUploadStatusError major:" + major + "minor:" + minor);
-        onUploadListener.onError(identity);
+
+        if (onUploadListener != null)
+            onUploadListener.onError(identity);
+
+        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_FAILED, identity));
+
         synchronized (this) {
             notify();
         }
@@ -225,7 +256,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
 
     public void cancel() {
         if (lastRequestId != null) {
-            G.requestQueueMap.remove(lastRequestId);
+            RequestManager.getInstance(AccountManager.selectedAccount).cancelRequest(lastRequestId);
         }
 
         synchronized (this) {

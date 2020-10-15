@@ -9,12 +9,12 @@ import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.igap.video.compress.OnCompress;
 
 import java.io.File;
@@ -60,10 +60,10 @@ public class UploadManager {
     }
 
     public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message) {
-        uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 1) != 1);
+        uploadMessageAndSend(roomType, message, G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getInt(SHP_SETTING.KEY_COMPRESS, 0) != 1);
     }
 
-    private void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
+    public void uploadMessageAndSend(ProtoGlobal.Room.Type roomType, RealmRoomMessage message, boolean ignoreCompress) {
         Log.d("bagi", "uploadMessageAndSend" + message.getMessageId());
         if (message.isManaged()) {
             uploadMessageAndSend(
@@ -81,7 +81,7 @@ public class UploadManager {
                 message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT
         ) {
-            new ChatSendMessageUtil().build(roomType, message.getRoomId(), message);
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, message.getRoomId(), message);
             return;
         }
 
@@ -161,13 +161,13 @@ public class UploadManager {
                  * this code should exist in under of other codes in this block
                  */
                 if (message.getReplyTo() == null) {
-                    new ChatSendMessageUtil().newBuilder(roomType, message.getMessageType(), message.getRoomId())
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(roomType, message.getMessageType(), message.getRoomId())
                             .attachment(token)
                             .message(message.getMessage())
                             .sendMessage(message.getMessageId() + "");
                 } else {
 
-                    new ChatSendMessageUtil().newBuilder(roomType, message.getMessageType(), message.getRoomId())
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(roomType, message.getMessageType(), message.getRoomId())
                             .replyMessage(message.getReplyTo().getMessageId())
                             .attachment(token)
                             .message(message.getMessage())
@@ -213,7 +213,7 @@ public class UploadManager {
         }
 
         DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+            final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", Long.parseLong(identity)).findFirst();
             if (message != null) {
                 message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
                 long finalRoomId = message.getRoomId();
@@ -221,13 +221,12 @@ public class UploadManager {
                     @Override
                     public void run() {
                         G.refreshRealmUi();
-                        G.chatSendMessageUtil.onMessageFailed(finalRoomId, Long.parseLong(identity));
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageFailed(finalRoomId, Long.parseLong(identity));
                     }
                 });
             }
         });
     }
-
 
     public boolean isUploading(String identity) {
         UploadTask uploadTask = pendingUploadTasks.get(identity);
@@ -258,12 +257,8 @@ public class UploadManager {
     public boolean cancelCompressing(String identity) {
         CompressTask compressTask = pendingCompressTasks.remove(identity);
 
-        if (compressTask == null) {
-            return false;
-        } else {
-            // cancel compress task
-            return true;
-        }
+        // cancel compress task
+        return compressTask != null;
     }
 
     public boolean cancelCompressingAndUploading(String identity) {

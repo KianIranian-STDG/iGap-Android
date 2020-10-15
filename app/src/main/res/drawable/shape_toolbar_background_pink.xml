@@ -2,13 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <gradient
-        android:angle="135"
-        android:endColor="#ffb5b5"
-        android:startColor="#f68787" />
-
-    <corners
-        android:bottomLeftRadius="@dimen/toolbar_radius"
-        android:bottomRightRadius="@dimen/toolbar_radius" />
+    <solid android:color="#f68787" />
 
 </shape>

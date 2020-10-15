@@ -14,12 +14,12 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.interfaces.OnGroupAvatarResponse;
 import net.iGap.observers.interfaces.OnGroupDelete;
 import net.iGap.observers.interfaces.OnGroupEdit;
@@ -29,13 +29,11 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestGroupAvatarAdd;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
 import net.iGap.request.RequestGroupLeft;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import io.realm.RealmResults;
@@ -82,7 +80,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
 
         this.roomId = roomId;
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
 
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
@@ -304,7 +302,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         //ToDo: move this code to repository
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm1 -> {
-                realm1.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().getGroupRoom().setStartFrom(status);
+                realm1.where(RealmRoom.class).equalTo("id", roomId).findFirst().getGroupRoom().setStartFrom(status);
             });
         }).start();
 
@@ -330,7 +328,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
     public void uploadAvatar(String path) {
         long avatarId = SUID.id().get();
         long lastUploadedAvatarId = avatarId + 1L;
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+        Uploader.getInstance().upload(UploadObject.createForAvatar(lastUploadedAvatarId, path, null, ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
             @Override
             public void onProgress(String id, int progress) {
                 showUploadProgressLiveData.postValue(View.VISIBLE);
@@ -345,6 +343,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
             public void onError(String id) {
                 showUploadProgressLiveData.postValue(View.GONE);
             }
+
         }));
     }
 

@@ -17,8 +17,10 @@ import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperConnectionState;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
@@ -89,7 +91,7 @@ public class UserLoginResponse extends MessageHandler {
         G.isNeedToCheckProfileWallpaper = true;
         G.currentServerTime = builder.getResponse().getTimestamp();
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
-        G.userLogin = true;
+        RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
 
         TokenContainer.getInstance().updateToken(builder.getAccessToken());
 
@@ -130,7 +132,7 @@ public class UserLoginResponse extends MessageHandler {
     public void timeOut() {
         super.timeOut();
 
-        if (G.isSecure) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {
             retryLogin();
         } else {
             WebSocketClient.getInstance().disconnectSocket(true);

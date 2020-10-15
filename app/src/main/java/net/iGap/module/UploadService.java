@@ -16,8 +16,9 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.helper.upload.UploadManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
@@ -52,7 +53,10 @@ public class UploadService extends Service {
             });
         }).start();
 
-        UploadManager.getInstance().uploadMessageAndSend(chatType, roomMessage);
+        UploadObject fileObject = UploadObject.createForMessage(roomMessage, chatType);
+
+        if (fileObject != null)
+            Uploader.getInstance().upload(fileObject);
 
     }
 }

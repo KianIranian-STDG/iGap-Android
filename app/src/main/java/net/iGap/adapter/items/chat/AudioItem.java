@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -283,6 +284,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         if (HelperCalander.isPersianUnicode) {
             (holder.songTimeTv).setText(HelperCalander.convertToUnicodeFarsiNumber(holder.songTimeTv.getText().toString()));
         }
+        holder.tempText = holder.songSize.getText().toString();
     }
 
     @Override
@@ -353,6 +355,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private CircleImageView coverIv;
+        private String tempText;
 
         public ViewHolder(View view) {
             super(view);
@@ -496,6 +499,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             getContentBloke().addView(rootView, 0);
         }
 
+        public AppCompatTextView getSongTimeTv() {
+            return songTimeTv;
+        }
+
         @Override
         public ImageView getThumbNailImageView() {
             return thumbnail;
@@ -506,7 +513,15 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             return progress;
         }
 
+        @Override
+        public TextView getProgressTextView() {
+            return songSize;
+        }
 
+        @Override
+        public String getTempTextView() {
+            return tempText;
+        }
     }
 
     private String exractTimingInString(int currentVoiceGoTO) {

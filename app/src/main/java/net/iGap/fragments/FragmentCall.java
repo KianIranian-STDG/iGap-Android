@@ -42,7 +42,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
-import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetLog;
 
@@ -257,13 +256,13 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         //clear all logs
         mBtnDeleteAllLogs.setOnClickListener(v -> {
-            if (G.userLogin) {
+            if (getRequestManager().isUserLogin()) {
                 new MaterialDialog.Builder(v.getContext()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {
                     DbManager.getInstance().doRealmTask(realm -> {
                         //ToDo: add callback to proto request
                         setViewState(false);
-                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING).first();
+                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort("offerTime", Sort.DESCENDING).first();
                         new RequestSignalingClearLog().signalingClearLog(realmCallLog.getId());
                         view.findViewById(R.id.empty_layout).setVisibility(View.VISIBLE);
                         mSelectedLogList.clear();
@@ -283,7 +282,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                 return;
             }
 
-            if (G.userLogin) {
+            if (getRequestManager().isUserLogin()) {
                 new MaterialDialog.Builder(getActivity()).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_log).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
 
                     try {
@@ -345,16 +344,16 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         switch (status) {
             case ALL:
-                return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+                return realm.where(RealmCallLog.class).findAll().sort("offerTime", Sort.DESCENDING);
 
             case MISSED:
             case OUTGOING:
             case CANCELED:
             case INCOMING:
-                return realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.STATUS, status.name()).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+                return realm.where(RealmCallLog.class).equalTo("status", status.name()).findAll().sort("offerTime", Sort.DESCENDING);
 
             default:
-                return realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.OFFER_TIME, Sort.DESCENDING);
+                return realm.where(RealmCallLog.class).findAll().sort("offerTime", Sort.DESCENDING);
         }
 
     }
@@ -372,7 +371,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
     private void getLogListWithOffset() {
 
-        if (G.isSecure && G.userLogin) {
+        if (getRequestManager().isSecure() && getRequestManager().isUserLogin()) {
             isSendRequestForLoading = true;
             int mLimit = 50;
             new RequestSignalingGetLog().signalingGetLog(mOffset, mLimit, mSelectedStatus);

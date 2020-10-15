@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -70,7 +69,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private MediaPlayer player;
     private Vibrator vibrator;
     private SharedPreferences sharedPreferences;
-
+    //    private RealmRegisteredInfo info;
     private CallAudioManager audioManager = null;
     private CallAudioManager.AudioManagerEvents audioManagerEvents;
 
@@ -91,7 +90,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     }
 
     public void setCallStateChange(CallManager.CallStateChange callStateChange) {
-        Log.i(TAG, "setCallStateChange: " + callStateChange);
         this.callStateChange = callStateChange;
     }
 
@@ -104,7 +102,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "onCreate: ");
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -113,15 +110,12 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Log.i(TAG, "onStartCommand: " + intent + flags + startId);
 
         if (instance != null) {
-            Log.e(TAG, "try to restart live service");
             return START_NOT_STICKY;
         }
 
         if (intent == null) {
-            Log.i(TAG, "onStartCommand intent null");
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -171,10 +165,12 @@ public class CallService extends Service implements CallManager.CallStateChange 
         audioManager = CallAudioManager.create(getApplicationContext());
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
-        Log.d(TAG, "Starting the audio manager...");
         // This method will be called each time the number of available audio
         // devices has changed.
-        audioManager.setDefaultAudioDevice(CallAudioManager.AudioDevice.SPEAKER_PHONE);
+        if (!isIncoming && isVoiceCall)
+            audioManager.setDefaultAudioDevice(CallAudioManager.AudioDevice.EARPIECE);
+        else
+            audioManager.setDefaultAudioDevice(CallAudioManager.AudioDevice.SPEAKER_PHONE);
 
         audioManager.start((selectedAudioDevice, availableAudioDevices) -> {
             if (audioManagerEvents != null)
@@ -232,16 +228,11 @@ public class CallService extends Service implements CallManager.CallStateChange 
                 } else {
                     player.setDataSource(this, alert);
                 }
-
-                if (audioManager.hasWiredHeadset()) {
-                    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                } else {
-                    player.setAudioStreamType(AudioManager.STREAM_RING);
-                }
-
+                player.setOnPreparedListener(mediaPlayer -> player.start());
+//                player.setAudioStreamType(AudioManager.STREAM_RING);
                 player.setLooping(true);
-                player.prepare();
-                player.start();
+                player.setVolume(1f, 1f);
+                player.prepareAsync();
             } catch (Exception e) {
                 HelperLog.getInstance().setErrorLog(e);
             }
@@ -297,8 +288,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @SuppressLint("WrongConstant")
     private void showIncomingNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
-
-        Log.i(TAG, "showIncomingNotification: " + callerInfo.getName());
 
         Intent intent = new Intent(this, CallActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -357,16 +346,14 @@ public class CallService extends Service implements CallManager.CallStateChange 
         Intent endIntent = new Intent(this, CallActionsReceiver.class);
         endIntent.setAction(ACTION_DECLINE_CALL);
         endIntent.putExtra("callerId", callerInfo.getUserId());
-        CharSequence endTitle = getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon);
         PendingIntent endPendingIntent = PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.addAction(R.drawable.ic_call_notif_decline, endTitle, endPendingIntent);
+        builder.addAction(R.drawable.ic_call_notif_decline, "End call", endPendingIntent);
 
         Intent answerIntent = new Intent(this, CallActionsReceiver.class);
         answerIntent.setAction(ACTION_ANSWER_CALL);
         answerIntent.putExtra("callerId", callerInfo.getUserId());
-        CharSequence answerTitle = getResources().getString(isVoiceCall ? R.string.end_voice_call_icon : R.string.end_video_call_icon);
         PendingIntent answerPendingIntent = PendingIntent.getBroadcast(this, 0, answerIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.addAction(R.drawable.ic_call_notif_answer, answerTitle, answerPendingIntent);
+        builder.addAction(R.drawable.ic_call_notif_answer, "Answer call", answerPendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             builder.setShowWhen(false);
@@ -400,7 +387,8 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private void showInCallNotification() {
         CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
 
-        Log.i(TAG, "showInCallNotification: " + callerInfo.getName());
+        if (callerInfo == null)
+            return;
 
         Intent intent = new Intent(this, CallActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -415,7 +403,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
             builder.setPriority(Notification.PRIORITY_MAX);
             Intent endIntent = new Intent(this, CallActionsReceiver.class);
             endIntent.setAction(ACTION_END_CALL);
-            NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_call_notif_decline, "End Call", PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+            NotificationCompat.Action action = new NotificationCompat.Action(0, "End Call", PendingIntent.getBroadcast(this, 0, endIntent, PendingIntent.FLAG_UPDATE_CURRENT));
             builder.addAction(action);
         }
 
@@ -433,7 +421,9 @@ public class CallService extends Service implements CallManager.CallStateChange 
             builder.setLargeIcon(getAvatarBitmap());
         }
 
-        startForeground(ID_SERVICE_NOTIFICATION, builder.build());
+        Notification notification = builder.build();
+
+        startForeground(ID_SERVICE_NOTIFICATION, notification);
     }
 
     private Bitmap getAvatarBitmap() {
@@ -464,7 +454,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(CallState.LEAVE_CALL);
@@ -483,12 +472,10 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
         CallManager.getInstance().cleanUp();
 
-        Log.i(TAG, "-----------------------------------------------------");
     }
 
     public void onBroadcastReceived(Intent intent) {
         if (instance != null && intent != null && intent.getAction() != null) {
-            Log.i(TAG, "onBroadcastReceived: " + intent.getAction());
 
             stopSoundAndVibrate();
 
@@ -501,15 +488,60 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
             } else if (intent.getAction().equals(ACTION_DECLINE_CALL) || intent.getAction().equals(ACTION_END_CALL)) {
                 CallManager.getInstance().endCall();
-                Log.i(getClass().getSimpleName(), "onBroadcastReceived ACTION_DECLINE_CALL");
                 onDestroy();
             }
         }
     }
 
+//    @SuppressLint("WrongConstant")
+//    @TargetApi(Build.VERSION_CODES.O)
+//    private PhoneAccountHandle addAccountToTelecomManager() {
+//        TelecomManager tm = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+//        PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, CallConnectionService.class), "1001");
+//        DbManager.getInstance().doRealmTask(realm -> {
+//            info = realm.where(RealmUserInfo.class).findFirst().getUserInfo();
+//        });
+//        PhoneAccount account = new PhoneAccount.Builder(handle, info.getDisplayName())
+//                .setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
+//                .setIcon(Icon.createWithResource(this, R.drawable.logo_igap))
+//                .setHighlightColor(0xff2ca5e0)
+//                .addSupportedUriScheme("sip")
+//                .build();
+//        tm.registerPhoneAccount(account);
+//        return handle;
+//    }
+//
+//    @SuppressLint({"MissingPermission", "WrongConstant"})
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    private void placeOutgoingCall() {
+//        TelecomManager tm = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+//        PhoneAccountHandle phoneAccountHandle = addAccountToTelecomManager();
+//        if (!tm.isOutgoingCallPermitted(phoneAccountHandle)) {
+//            Toast.makeText(this, "R.string.outgoingCallNotPermitted", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        Bundle extras = new Bundle();
+//        extras.putParcelable(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, phoneAccountHandle);
+//        tm.placeCall(Uri.fromParts("tel", "+98" + info.getPhoneNumber(), null), extras);
+//    }
+
+//    @SuppressLint("WrongConstant")
+//    @TargetApi(Build.VERSION_CODES.O)
+//    private void placeIncomingCall() {
+//        Log.e("checkfortelch", "placeIncomingCall");
+//        TelecomManager tm = (TelecomManager) this.getSystemService(Context.TELECOM_SERVICE);
+//        PhoneAccountHandle phoneAccountHandle = addAccountToTelecomManager();
+//        if (!tm.isIncomingCallPermitted(phoneAccountHandle)) {
+//            Toast.makeText(this, "R.string.incomingCallNotPermitted", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        Bundle extras = new Bundle();
+//        extras.putParcelable(TelecomManager.EXTRA_INCOMING_CALL_ADDRESS, Uri.parse(info.getPhoneNumber()));
+//        tm.addNewIncomingCall(phoneAccountHandle, extras);
+//    }
+
     @Override
     public void onCallStateChanged(@NotNull CallState state) {
-        Log.i(TAG, "onCallStateChanged: " + state);
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(state);
@@ -530,7 +562,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
     @Override
     public void onError(int messageID, int major, int minor) {
-        Log.i(TAG, "onError: " + major + " " + minor);
         if (callStateChange != null)
             callStateChange.onError(messageID, major, minor);
     }

@@ -25,7 +25,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmWallpaper;
-import net.iGap.realm.RealmWallpaperFields;
 import net.iGap.realm.RealmWallpaperProto;
 import net.iGap.request.RequestInfoWallpaper;
 
@@ -230,7 +229,7 @@ public class ChatBackgroundViewModel extends ViewModel {
         wList.clear();
 
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo(RealmWallpaperFields.TYPE, ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
+            RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.CHAT_BACKGROUND_VALUE).findFirst();
 
             if (realmWallpaper != null) {
                 Log.wtf(this.getClass().getName(), "realmWallpaper != null");

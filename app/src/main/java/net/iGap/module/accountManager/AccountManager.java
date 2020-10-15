@@ -11,6 +11,7 @@ import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.model.AccountUser;
+import net.iGap.network.RequestManager;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
@@ -20,7 +21,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.paygear.utils.Utils.signOutWallet;
 
@@ -36,6 +36,8 @@ public class AccountManager {
     private List<AccountUser> userAccountList;
     private List<String> DbNameList = Arrays.asList("iGapLocalDatabaseEncrypted3.realm", "iGapLocalDatabaseEncrypted2.realm", defaultDBName);
     private int currentUser;
+    public static int selectedAccount;
+    public static final int MAX_ACCOUNT_COUNT = 3;
 
     public static AccountManager getInstance() {
         if (ourInstance != null) {
@@ -60,6 +62,7 @@ public class AccountManager {
             accountUser.setDbName(getDbName());
             userAccountList.add(accountUser);
             currentUser = 0;
+            internalChange(currentUser);
         }
         getCurrentUserFromSharedPreferences();
         SharedPreferences sharedPreferences = context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
@@ -97,6 +100,7 @@ public class AccountManager {
 
     private void getCurrentUserFromSharedPreferences() {
         this.currentUser = sharedPreferences.getInt("currentUser", 0);
+        internalChange(currentUser);
     }
 
     private void getUserAccountListFromSharedPreferences() {
@@ -133,6 +137,7 @@ public class AccountManager {
         userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
         setUserAccountListInSharedPreferences();
         this.currentUser = userAccountList.size() - 1;
+        internalChange(currentUser);
         setCurrentUserInSharedPreferences();
     }
 
@@ -152,6 +157,7 @@ public class AccountManager {
     public void changeCurrentUserForAddAccount() {
         clearSomeStaticValue();
         currentUser = 0;
+        internalChange(currentUser);
     }
 
     public void changeCurrentUserAccount(long userId) {
@@ -159,6 +165,7 @@ public class AccountManager {
         int t = indexOfUser(userId);
         if (t != -1) {
             currentUser = t;
+            internalChange(currentUser);
             setCurrentUserInSharedPreferences();
         } else {
             throw new IllegalArgumentException("not exist this user");
@@ -182,6 +189,7 @@ public class AccountManager {
                 userAccountList.remove(accountUser);
                 clearSomeStaticValue();
                 currentUser = userAccountList.size() - 1;
+                internalChange(currentUser);
                 userAccountList.get(0).setDbName(getDbName());
                 userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
                 setCurrentUserInSharedPreferences();
@@ -216,10 +224,9 @@ public class AccountManager {
         RequestClientGetRoomList.isPendingGetRoomList = false;
         FragmentMain.mOffset = 0;
         G.serverHashContact = null;
-        G.jwt = null;
         G.selectedCard = null;
         G.nationalCode = null;
-        G.pullRequestQueueRunned = new AtomicBoolean(false);
+        RequestManager.getInstance(AccountManager.selectedAccount).setPullRequestQueueRunned(false);
     }
 
     public boolean haveAccount() {
@@ -228,6 +235,7 @@ public class AccountManager {
         } else {
             if (userAccountList.size() > 1) {
                 currentUser = userAccountList.size() - 1;
+                internalChange(currentUser);
                 setCurrentUser();
                 return userAccountList.get(userAccountList.size() - 1).isAssigned();
             } else {
@@ -241,5 +249,12 @@ public class AccountManager {
         G.handler.removeCallbacksAndMessages(null);
 
         signOutWallet();
+    }
+
+    private static void internalChange(int num) {
+        if (num > 0)
+            selectedAccount = num - 1;
+        else
+            selectedAccount = num;
     }
 }

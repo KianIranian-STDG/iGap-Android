@@ -180,9 +180,6 @@ public class HelperFragment {
                 fragmentTransaction.commit();
             }
 
-            if (G.oneFragmentIsOpen != null && G.twoPaneMode) {
-                G.oneFragmentIsOpen.justOne();
-            }
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }

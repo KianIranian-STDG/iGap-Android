@@ -51,10 +51,8 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAvatarDelete;
 import net.iGap.request.RequestChannelAvatarGetList;
 import net.iGap.request.RequestGroupAvatarDelete;
@@ -257,7 +255,7 @@ public class FragmentShowAvatars extends BaseFragment {
                 break;
             case group:
                 RealmRoom roomGroup = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mPeerId).findFirst();
                 });
                 if (roomGroup != null) {
                     new RequestGroupAvatarGetList().groupAvatarGetList(mPeerId);
@@ -267,7 +265,7 @@ public class FragmentShowAvatars extends BaseFragment {
                 break;
             case channel:
                 RealmRoom roomChannel = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mPeerId).findFirst();
+                    return realm.where(RealmRoom.class).equalTo("id", mPeerId).findFirst();
                 });
                 if (roomChannel != null) {
                     new RequestChannelAvatarGetList().channelAvatarGetList(mPeerId);
@@ -280,7 +278,7 @@ public class FragmentShowAvatars extends BaseFragment {
         if (isRoomExist) {
 
             avatarList = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
+                return realm.where(RealmAvatar.class).equalTo("ownerId", mPeerId).findAll().sort("id", Sort.DESCENDING);
             });
             avatarListSize = avatarList.size();
         }
@@ -574,7 +572,7 @@ public class FragmentShowAvatars extends BaseFragment {
             final RealmAttachment ra = avatarList.get(position).getFile();
 
 
-            if (HelperDownloadFile.getInstance().isDownLoading(ra.getCacheId())) {
+            if (getDownloader().isDownloading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
                 startDownload(position, progress, zoomableImageView);
             } else {
@@ -629,8 +627,8 @@ public class FragmentShowAvatars extends BaseFragment {
 
                 String _cashId = avatarList.get(position).getFile().getCacheId();
 
-                if (HelperDownloadFile.getInstance().isDownLoading(_cashId)) {
-                    HelperDownloadFile.getInstance().stopDownLoad(_cashId);
+                if (getDownloader().isDownloading(_cashId)) {
+                    getDownloader().cancelDownload(_cashId);
                 } else {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, zoomableImageView);

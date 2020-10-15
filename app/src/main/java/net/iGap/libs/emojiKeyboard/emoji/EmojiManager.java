@@ -14,7 +14,6 @@ import android.os.Build;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.DynamicDrawableSpan;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -325,7 +324,6 @@ public class EmojiManager {
 //            }
         }
         if (drawableInfo == null) {
-            Log.e(TAG, "No drawable for emoji " + code);
             return null;
         }
         EmojiDrawable emojiDrawable = new EmojiDrawable(drawableInfo);
@@ -374,7 +372,7 @@ public class EmojiManager {
             G.cancelRunOnUiThread(invalidateRunnable);
             G.runOnUiThread(invalidateRunnable);
         } catch (Throwable x) {
-            Log.e(TAG, "Error loading emoji ", x);
+            x.printStackTrace();
         }
     }
 
@@ -389,7 +387,6 @@ public class EmojiManager {
             recentEmoji.set(recentEmoji.size() - 1, code);
         }
         emojiUseHistory.put(code, ++count);
-        Log.i(TAG, "addRecentEmoji: " + code + " size " + code);
     }
 
     public void sortEmoji() {
@@ -416,7 +413,6 @@ public class EmojiManager {
         while (recentEmoji.size() > MAX_RECENT_EMOJI_COUNT) {
             recentEmoji.remove(recentEmoji.size() - 1);
         }
-        Log.i(TAG, "sortEmoji: " + recentEmoji.size());
     }
 
     public void saveRecentEmoji() {
@@ -443,7 +439,6 @@ public class EmojiManager {
 
     public void loadRecentEmoji() {
         if (recentEmojiLoaded) {
-            Log.i(TAG, "recentEmojiLoaded return ");
             return;
         }
         recentEmojiLoaded = true;
@@ -472,7 +467,6 @@ public class EmojiManager {
                     for (int i = 0; i < newRecent.length; i++) {
                         emojiUseHistory.put(newRecent[i], newRecent.length - i);
                     }
-                    Log.i(TAG, "load default emoji");
                     preferences.edit().putBoolean(EMOJI_DEFAULT_KEY, true).apply();
                     saveRecentEmoji();
                 }

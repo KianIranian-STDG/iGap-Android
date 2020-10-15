@@ -86,7 +86,7 @@ public class MobileDebit {
 
         public String getAmount() {
             if (status == 0)
-                return amount;
+                return amount == null ? "0" : amount;
             else
                 return "0";
         }

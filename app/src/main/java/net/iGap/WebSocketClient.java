@@ -21,16 +21,16 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.neovisionaries.ws.client.WebSocketState;
 
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperConnectionState;
-import net.iGap.helper.IGLog;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientGetRoomList;
-import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 import net.iGap.response.ClientGetRoomListResponse;
-import net.iGap.response.HandleResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -66,7 +66,7 @@ public class WebSocketClient {
                     );
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("on Connected");
+                        FileLog.i("on Connected");
                     }
 
                     super.onConnected(websocket, headers);
@@ -74,8 +74,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onBinaryMessage(WebSocket websocket, final byte[] binary) throws Exception {
-                    new HandleResponse(binary).run();
-                    super.onBinaryMessage(websocket, binary);
+                    RequestManager.getInstance(AccountManager.selectedAccount).onBinaryReceived(binary);
                 }
 
                 @Override
@@ -86,7 +85,7 @@ public class WebSocketClient {
 
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("on onError " + cause.getMessage());
+                        FileLog.e("on Error " + cause.getMessage());
                     }
 
                     super.onError(websocket, cause);
@@ -94,14 +93,7 @@ public class WebSocketClient {
 
                 @Override
                 public void onFrameSent(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                    super.onFrameSent(websocket, frame);
-
-                    /**
-                     * set time after that actually frame was sent
-                     */
-                    RequestWrapper requestWrapper = G.requestQueueMap.get(((RequestWrapper) frame.getRequestWrapper()).getRandomId());
-                    requestWrapper.setTime(System.currentTimeMillis());
-                    G.requestQueueMap.put(requestWrapper.getRandomId(), requestWrapper);
+                    RequestManager.getInstance(AccountManager.selectedAccount).onFrameSent(frame);
                 }
 
                 @Override
@@ -113,8 +105,7 @@ public class WebSocketClient {
                 @Override
                 public void onDisconnected(WebSocket websocket, com.neovisionaries.ws.client.WebSocketFrame serverCloseFrame, com.neovisionaries.ws.client.WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                     Log.wtf(this.getClass().getName(), "onDisconnected");
-                    RequestQueue.timeOutImmediately(null, true);
-                    RequestQueue.clearPriorityQueue();
+                    RequestManager.getInstance(AccountManager.selectedAccount).timeOutImmediately(null, true);
                     resetMainInfo();
 
                     if (autoConnect)
@@ -126,7 +117,7 @@ public class WebSocketClient {
                     );
 
                     if (Config.FILE_LOG_ENABLE) {
-                        IGLog.e("on onDisconnected ");
+                        FileLog.i("on onDisconnected ");
                     }
 
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
@@ -178,9 +169,9 @@ public class WebSocketClient {
         /**
          * when secure is false set useMask true otherwise set false
          */
-        G.isSecure = false;
+        RequestManager.getInstance(AccountManager.selectedAccount).setSecure(false);
         WebSocket.useMask = true;
-        G.userLogin = false;
+        RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(false);
     }
 
     /**

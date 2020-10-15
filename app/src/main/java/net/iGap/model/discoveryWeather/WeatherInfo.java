@@ -1,4 +1,3 @@
-
 package net.iGap.model.discoveryWeather;
 
 import com.google.gson.annotations.SerializedName;

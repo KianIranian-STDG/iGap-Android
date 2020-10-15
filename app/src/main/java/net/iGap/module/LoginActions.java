@@ -12,20 +12,20 @@ import com.google.gson.Gson;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.UserStatusController;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnContactFetchForServer;
 import net.iGap.observers.interfaces.OnSecuring;
 import net.iGap.observers.interfaces.OnUserLogin;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestGeoGetRegisterStatus;
-import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
-import net.iGap.request.RequestWrapper;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -94,11 +94,11 @@ public class LoginActions {
 
             }
         };
-        if (G.isSecure) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
                 Log.wtf(LoginActions.class.getName(), "bagi: ");
-                if (!G.userLogin) {
+                if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     if (userInfo != null) {
                         if (userInfo.getUserRegistrationState()) {
                             Log.wtf(LoginActions.class.getName(), "LoginActions.login: RequestUserLogin().userLogin");
@@ -145,7 +145,6 @@ public class LoginActions {
          * just import contact in each enter to app
          * when user login was done
          */
-        //Log.i("import_contact", "start");
 
         G.onContactFetchForServer = new OnContactFetchForServer() {
             @Override
@@ -153,24 +152,19 @@ public class LoginActions {
 
                 String md5Local = md5(new Gson().toJson(contacts));
                 G.localHashContact = md5Local;
-                //Log.i("import_contact", "l: " + G.localHashContact);
-                //Log.i("import_contact", "s: " + G.serverHashContact);
 
                 if (G.serverHashContact != null && G.serverHashContact.equals(md5Local)) {
                     //request get list
-                    //Log.i("tag", "importContact: " + G.localHashContact);
 
-                    //Log.i("import_contact", "contact are equal with server");
                     new RequestUserContactsGetList().userContactGetList();
                     return;
                 }
 
-                //Log.i("import_contact", "start send contact to server ,, size = " + contacts.size());
                 RealmPhoneContacts.sendContactList(contacts, false, getContactList);
             }
         };
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             /**
              * this can be go in the activity for check permission in api 6+
              */
@@ -181,7 +175,6 @@ public class LoginActions {
                         @Override
                         public void run() {
                             G.isSendContact = true;
-                            //Log.i("import_contact", "request");
                             new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                     });
@@ -204,7 +197,6 @@ public class LoginActions {
     }
 
     private static String md5(String s) {
-        //Log.i("import_contact", "array " + s);
 
         try {
             // Create MD5 Hash
@@ -222,34 +214,6 @@ public class LoginActions {
             e.printStackTrace();
         }
         return "";
-    }
-
-
-    /**
-     * resend some of requests
-     */
-    public static void sendWaitingRequestWrappers() {
-        for (RequestWrapper requestWrapper : RequestQueue.WAITING_REQUEST_WRAPPERS) {
-            RequestQueue.RUNNING_REQUEST_WRAPPERS.add(requestWrapper);
-        }
-        RequestQueue.WAITING_REQUEST_WRAPPERS.clear();
-
-        for (int i = 0; i < RequestQueue.RUNNING_REQUEST_WRAPPERS.size(); i++) {
-            final int j = i;
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        RequestQueue.sendRequest(RequestQueue.RUNNING_REQUEST_WRAPPERS.get(j));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                    if (j == (RequestQueue.RUNNING_REQUEST_WRAPPERS.size() - 1)) {
-                        RequestQueue.RUNNING_REQUEST_WRAPPERS.clear();
-                    }
-                }
-            }, 1000 * j);
-        }
     }
 
     /**

@@ -44,7 +44,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.realm.RealmRoomAccess;
-import net.iGap.realm.RealmRoomAccessFields;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
@@ -119,7 +118,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         binding.setLifecycleOwner(this);
 
         currentRoomAccess = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoomAccess.class).equalTo(RealmRoomAccessFields.ID, roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
+            return realm.where(RealmRoomAccess.class).equalTo("id", roomId + "_" + AccountManager.getInstance().getCurrentUser().getId()).findFirst();
         });
 
         return attachToSwipeBack(binding.getRoot());

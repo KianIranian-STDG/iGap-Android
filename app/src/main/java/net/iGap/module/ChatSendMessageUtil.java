@@ -12,15 +12,19 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
-import net.iGap.G;
+import net.iGap.controllers.BaseController;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
@@ -31,7 +35,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
  * util for chat send messages
  * useful for having callback from different activities
  */
-public class ChatSendMessageUtil implements OnChatSendMessageResponse {
+public class ChatSendMessageUtil extends BaseController implements OnChatSendMessageResponse {
     private RequestChatSendMessage requestChatSendMessage;
     private RequestGroupSendMessage requestGroupSendMessage;
     private RequestChannelSendMessage requestChannelSendMessage;
@@ -39,6 +43,25 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
     private ProtoGlobal.Room.Type roomType;
     private OnChatSendMessageResponse onChatSendMessageResponseChat;
     private OnChatSendMessageResponse onChatSendMessageResponseRoom;
+
+    private static volatile ChatSendMessageUtil[] instance = new ChatSendMessageUtil[AccountManager.MAX_ACCOUNT_COUNT];
+
+    public static ChatSendMessageUtil getInstance(int account) {
+        ChatSendMessageUtil localInstance = instance[account];
+        if (localInstance == null) {
+            synchronized (ChatSendMessageUtil.class) {
+                localInstance = instance[account];
+                if (localInstance == null) {
+                    instance[account] = localInstance = new ChatSendMessageUtil(account);
+                }
+            }
+        }
+        return localInstance;
+    }
+
+    private ChatSendMessageUtil(int currentAccount) {
+        super(currentAccount);
+    }
 
     public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;
@@ -243,7 +266,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             requestChannelSendMessage.sendMessage(fakeMessageIdAsIdentity);
         }
 
-        if (!G.userLogin) {
+        if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             makeFailed(Long.parseLong(fakeMessageIdAsIdentity));
         }
     }
@@ -271,6 +294,45 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
 
         if (onChatSendMessageResponseRoom != null) {
             onChatSendMessageResponseRoom.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
+        }
+
+        if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
+
+            String userId = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                    return String.valueOf(realmRoom.getChatRoom().getPeerId());
+                }
+                return null;
+            });
+
+
+            if (sticker != null && userId != null) {
+                StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
+            }
+        } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
+
+            boolean roomIsMyCloud = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null)
+                    return realmRoom.getChatRoom().getPeerId() > 0 && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
+                else
+                    return false;
+            });
+
+            String userId = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                    return String.valueOf(realmRoom.getChatRoom().getPeerId());
+                }
+                return null;
+            });
+
+            if (sticker != null && userId != null && !roomIsMyCloud) {
+                StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
+            }
         }
     }
 

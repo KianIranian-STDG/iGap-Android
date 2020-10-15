@@ -32,7 +32,6 @@ import net.iGap.module.structs.StructListOfContact;
 import net.iGap.observers.interfaces.OnPhoneContact;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -308,7 +307,7 @@ public class LocalContactFragment extends BaseFragment implements ToolbarListene
                 }
             }
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+                RealmResults<RealmContacts> mList = realm.where(RealmContacts.class).findAll().sort("display_name");
 
                 ArrayList<StructListOfContact> slc = new ArrayList();
 

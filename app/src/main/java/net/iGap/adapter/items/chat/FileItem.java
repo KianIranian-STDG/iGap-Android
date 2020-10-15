@@ -35,7 +35,6 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import java.util.List;
 
@@ -81,10 +80,10 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true));
             }
         }
-
+        holder.tempText = holder.cslf_txt_file_size.getText().toString();
         setTextIfNeeded(holder.messageView);
         RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
-            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.getMessageId()).findFirst());
+            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", mMessage.getMessageId()).findFirst());
         });
 
         if (roomMessage != null) {
@@ -141,6 +140,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         protected MessageProgress progress;
         private TextView fileType;
         private View spaceView;
+        protected String tempText;
 
         public ViewHolder(View view) {
             super(view);
@@ -242,6 +242,16 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         @Override
         public MessageProgress getProgress() {
             return progress;
+        }
+
+        @Override
+        public TextView getProgressTextView() {
+            return cslf_txt_file_size;
+        }
+
+        @Override
+        public String getTempTextView() {
+            return tempText;
         }
     }
 }

@@ -5,6 +5,7 @@
         <item name="colorAccent">@color/green</item>
         <item name="colorAccentDark">#333635</item>
         <item name="colorPrimary">@color/navigation_dark_mode_bg</item>
+        <item name="toolbarBackgroundColor">@color/navigation_dark_mode_bg</item>
         <item name="colorPrimaryDark">@color/background_setting_dark</item>
         <item name="colorPrimaryLight">#565656</item>
 
@@ -66,6 +67,7 @@
         <item name="colorAccent">@color/green</item>
         <item name="colorAccentDark">#28820d</item>
         <item name="colorPrimary">@color/colorToolbarBackgroundStart</item>
+        <item name="toolbarBackgroundColor">@color/colorToolbarBackgroundEnd</item>
         <item name="colorPrimaryDark">@color/colorToolbarBackgroundEnd</item>
         <item name="colorPrimaryLight">#ececee</item>
 
@@ -131,6 +133,7 @@
         <item name="colorAccentDark">#720505</item>
         <item name="colorPrimary">#c82121</item>
         <item name="colorPrimaryDark">#9e1010</item>
+        <item name="toolbarBackgroundColor">#9e1010</item>
         <item name="colorPrimaryLight">#f2b6b6</item>
 
         <item name="md_dark_theme">false</item>
@@ -193,6 +196,7 @@
         <item name="colorAccentDark">#da6463</item>
         <item name="colorPrimary">#ffb5b5</item>
         <item name="colorPrimaryDark">#f68787</item>
+        <item name="toolbarBackgroundColor">#f68787</item>
         <item name="colorPrimaryLight">#ffcbca</item>
 
         <item name="md_dark_theme">false</item>
@@ -253,6 +257,7 @@
         <item name="colorAccent">#aa5c9f</item>
         <item name="colorAccentDark">#68265b</item>
         <item name="colorPrimary">#aa5c9f</item>
+        <item name="toolbarBackgroundColor">#854777</item>
         <item name="colorPrimaryDark">#854777</item>
         <item name="colorPrimaryLight">#e8bae8</item>
 
@@ -317,6 +322,7 @@
         <item name="colorAccent">#207dff</item>
         <item name="colorAccentDark">#07439b</item>
         <item name="colorPrimary">#207dff</item>
+        <item name="toolbarBackgroundColor">#064acb</item>
         <item name="colorPrimaryDark">#064acb</item>
         <item name="colorPrimaryLight">#9fd4ff</item>
 
@@ -378,6 +384,7 @@
         <item name="colorAccent">#b5e663</item>
         <item name="colorAccentDark">#8cb238</item>
         <item name="colorPrimary">#b5e663</item>
+        <item name="toolbarBackgroundColor">#9dc756</item>
         <item name="colorPrimaryDark">#9dc756</item>
         <item name="colorPrimaryLight">#dceab7</item>
 
@@ -440,6 +447,7 @@
         <item name="colorAccent">#f6d365</item>
         <item name="colorAccentDark">#dd9f07</item>
         <item name="colorPrimary">#f6d365</item>
+        <item name="toolbarBackgroundColor">#f7be16</item>
         <item name="colorPrimaryDark">#f7be16</item>
         <item name="colorPrimaryLight">#ffe292</item>
 
@@ -502,6 +510,7 @@
         <item name="colorAccent">#ff9d00</item>
         <item name="colorAccentDark">#ff6700</item>
         <item name="colorPrimary">#ff9d00</item>
+        <item name="toolbarBackgroundColor">#ff8000</item>
         <item name="colorPrimaryDark">#ff8000</item>
         <item name="colorPrimaryLight">#ffc176</item>
 
@@ -568,6 +577,7 @@
         <item name="colorAccent">#4e698a</item>
         <item name="colorAccentDark">#182d44</item>
         <item name="colorPrimary">#4e698a</item>
+        <item name="toolbarBackgroundColor">#2d4059</item>
         <item name="colorPrimaryDark">#2d4059</item>
         <item name="colorPrimaryLight">#a6c0d1</item>
 

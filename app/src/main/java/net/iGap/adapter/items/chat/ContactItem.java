@@ -12,7 +12,6 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -270,7 +269,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
                     contactStatus = NOT_CONTACT_AND_HAVE_NOT_IGAP;
             });
 
-            Log.i("aabolfazl", "getContactInfo: " + contactStatus);
         }
 
         private String getContactName() {

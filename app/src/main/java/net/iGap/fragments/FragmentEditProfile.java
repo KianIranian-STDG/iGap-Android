@@ -30,6 +30,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentEditProfileBinding;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.module.Theme;
@@ -222,4 +223,15 @@ public class FragmentEditProfile extends BaseFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
+    }
 }

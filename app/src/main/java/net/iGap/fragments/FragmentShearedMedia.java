@@ -54,7 +54,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
@@ -76,6 +75,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
@@ -1199,7 +1199,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     holder1.messageProgress.setTag(mList.get(position).messageId);
                     holder1.messageProgress.withDrawable(R.drawable.ic_download, true);
 
-                    if (HelperDownloadFile.getInstance().isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
+                    if (getDownloader().isDownloading(mList.get(position).item.getAttachment().getCacheId())) {
                         startDownload(position, holder1.messageProgress);
                     }
                 }
@@ -1308,8 +1308,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             final RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
             ProtoGlobal.RoomMessageType messageType = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
 
-            String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
-
             messageProgress.withOnProgress(new OnProgress() {
                 @Override
                 public void onProgressFinished() {
@@ -1326,38 +1324,27 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 }
             });
 
-            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
-                @Override
-                public void OnProgress(String path, final int progress) {
+            DownloadObject fileObject = DownloadObject.createForRoomMessage(mList.get(position).item);
 
+            if (fileObject != null)
+                getDownloader().download(fileObject, ProtoFileDownload.FileDownload.Selector.FILE, arg -> {
                     if (canUpdateAfterDownload) {
-                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
-                            G.currentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    messageProgress.withProgress(progress);
-                                }
-                            });
-                        }
+                        G.handler.post(() -> {
+                            switch (arg.status) {
+                                case LOADING:
+                                case SUCCESS:
+                                    if (arg.data != null)
+                                        messageProgress.withProgress(arg.data.getProgress());
+                                    break;
+                                case ERROR:
+                                    if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
+                                        messageProgress.withProgress(0);
+                                        messageProgress.withDrawable(R.drawable.ic_download, true);
+                                    }
+                            }
+                        });
                     }
-                }
-
-                @Override
-                public void OnError(String token) {
-                    if (canUpdateAfterDownload) {
-
-                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
-                            G.currentActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    messageProgress.withProgress(0);
-                                    messageProgress.withDrawable(R.drawable.ic_download, true);
-                                }
-                            });
-                        }
-                    }
-                }
-            });
+                });
         }
 
         private void updateViewAfterDownload(String cashId) {
@@ -1391,12 +1378,12 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
         private void stopDownload(int position) {
 
-            HelperDownloadFile.getInstance().stopDownLoad(mList.get(position).item.getAttachment().getCacheId());
+            getDownloader().cancelDownload(mList.get(position).item.getAttachment().getCacheId());
         }
 
         private void downloadFile(int position, MessageProgress messageProgress) {
 
-            if (HelperDownloadFile.getInstance().isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
+            if (getDownloader().isDownloading(mList.get(position).item.getAttachment().getCacheId())) {
                 stopDownload(position);
             } else {
                 startDownload(position, messageProgress);
@@ -1577,38 +1564,26 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         G.imageLoader.displayImage(suitablePath(vh.tempFilePath), vh.imvPicFile);
                     }
                 } else {
+                    DownloadObject fileObject = DownloadObject.createForThumb(mList.get(position).item, false);
 
-                    RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
-
-                    if (at != null && at.getSmallThumbnail() != null) {
-                        if (at.getSmallThumbnail().getSize() > 0) {
-                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
-
-                                    if (progress == 100) {
-
-                                        if (canUpdateAfterDownload) {
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), vh.imvPicFile);
-                                                    }
+                    if (fileObject != null) {
+                        getDownloader().download(fileObject, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                            if (canUpdateAfterDownload) {
+                                G.handler.post(() -> {
+                                    switch (arg.status) {
+                                        case LOADING:
+                                        case SUCCESS:
+                                            if (arg.data == null)
+                                                return;
+                                            if (arg.data.getProgress() == 100) {
+                                                if (vh.imvPicFile.getTag() != null && vh.imvPicFile.getTag().equals(mList.get(position).messageId)) {
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), vh.imvPicFile);
                                                 }
-                                            });
-                                        }
+                                            }
                                     }
-
-                                }
-
-                                @Override
-                                public void OnError(String token) {
-
-                                }
-                            });
-                        }
+                                });
+                            }
+                        });
                     }
                 }
 
@@ -1698,7 +1673,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 final String tempFilePath;
                 String filePath;
 
-                holder1.txtVideoTime.setText(AppUtils.humanReadableDuration(at.getDuration()));
+                holder1.txtVideoTime.setText(AndroidUtils.formatDuration((int) (at.getDuration() * 1000L)));
 
                 holder1.txtVideoSize.setVisibility(View.GONE);
                 //holder1.txtVideoIcon.setVisibility(View.GONE);
@@ -1714,35 +1689,24 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     }
                 } else {
                     holder1.imvPicFile.setImageResource(R.drawable.shared_media_videos_holder);
+                    DownloadObject fileObject = DownloadObject.createForThumb(mList.get(position).item, false);
 
-                    if (at.getSmallThumbnail() != null) {
-                        if (at.getSmallThumbnail().getSize() > 0) {
-
-                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
-
-                                    if (progress == 100) {
-                                        if (canUpdateAfterDownload) {
-                                            G.currentActivity.runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-
-                                                    if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
-                                                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.imvPicFile);
-                                                    }
-                                                }
-                                            });
+                    if (fileObject != null) {
+                        getDownloader().download(fileObject, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                            if (canUpdateAfterDownload) {
+                                switch (arg.status) {
+                                    case SUCCESS:
+                                    case LOADING:
+                                        if (arg.data == null)
+                                            return;
+                                        if (arg.data.getProgress() == 100) {
+                                            if (holder1.imvPicFile.getTag() != null && holder1.imvPicFile.getTag().equals(mList.get(position).messageId)) {
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), holder1.imvPicFile);
+                                            }
                                         }
-                                    }
                                 }
-
-                                @Override
-                                public void OnError(String token) {
-
-                                }
-                            });
-                        }
+                            }
+                        });
                     }
                 }
 
@@ -2152,34 +2116,24 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(holder1.tempFilePath), holder1.gifView);
                         }
                     } else {
-                        if (at.getSmallThumbnail() != null) {
-                            if (at.getSmallThumbnail().getSize() > 0) {
+                        DownloadObject fileObject = DownloadObject.createForThumb(mList.get(position).item, false);
+                        if (fileObject != null) {
+                            getDownloader().download(fileObject, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, arg -> {
+                                if (canUpdateAfterDownload) {
+                                    switch (arg.status) {
+                                        case LOADING:
+                                        case SUCCESS:
+                                            if (arg.data == null)
+                                                return;
 
-                                HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
-                                    @Override
-                                    public void OnProgress(final String path, int progress) {
-
-                                        if (progress == 100) {
-                                            if (canUpdateAfterDownload) {
-                                                G.currentActivity.runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-
-                                                        if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
-                                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder1.gifView);
-                                                        }
-                                                    }
-                                                });
+                                            if (arg.data.getProgress() == 100) {
+                                                if (holder1.gifView.getTag() != null && holder1.gifView.getTag().equals(mList.get(position).messageId)) {
+                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(arg.data.getFilePath()), holder1.gifView);
+                                                }
                                             }
-                                        }
                                     }
-
-                                    @Override
-                                    public void OnError(String token) {
-
-                                    }
-                                });
-                            }
+                                }
+                            });
                         }
                     }
                 }

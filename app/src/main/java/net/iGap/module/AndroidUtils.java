@@ -28,7 +28,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -37,9 +36,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.DispatchQueue;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
-import net.iGap.libs.emojiKeyboard.emoji.DispatchQueue;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -53,7 +53,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -509,7 +508,7 @@ public final class AndroidUtils {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             buffer = input.getBytes(StandardCharsets.UTF_8);
         } else {
-            buffer = input.getBytes(Charset.forName("UTF-8"));
+            buffer = input.getBytes(StandardCharsets.UTF_8);
         }
         md.update(buffer);
         byte[] digest = md.digest();
@@ -737,11 +736,8 @@ public final class AndroidUtils {
                     displaySize.y = newSize;
                 }
             }
-
-            Log.i("abbasiKeyboard", "display size = x -> " + displaySize.x + " y -> " + displaySize.y + " " + displayMetrics.xdpi + " " + displayMetrics.ydpi);
-
         } catch (Exception e) {
-            Log.e("abbasiKeyboard", "checkDisplaySize: ", e);
+            e.printStackTrace();
         }
     }
 
@@ -835,5 +831,32 @@ public final class AndroidUtils {
         } else {
             return String.format(Locale.US, "%d:%02d:%02d", h, m, s);
         }
+    }
+
+    public static String MD5(String md5) {
+        if (md5 == null) {
+            return null;
+        }
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] array = md.digest(AndroidUtils.getStringBytes(md5));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : array) {
+                sb.append(Integer.toHexString((b & 0xFF) | 0x100).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            FileLog.e(e);
+        }
+        return null;
+    }
+
+    public static byte[] getStringBytes(String src) {
+        try {
+            return src.getBytes(StandardCharsets.UTF_8);
+        } catch (Exception ignore) {
+
+        }
+        return new byte[0];
     }
 }

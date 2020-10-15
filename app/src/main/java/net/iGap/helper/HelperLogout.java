@@ -23,6 +23,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnUserSessionLogout;
 import net.iGap.request.RequestUserSessionLogout;
 
@@ -108,7 +109,7 @@ public final class HelperLogout {
 
 
     private void resetStaticField() {
-        G.userLogin = false;
+        RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(false);
         G.isTimeWhole = false;
         G.isFirstPassCode = false;
         G.isSaveToGallery = false;

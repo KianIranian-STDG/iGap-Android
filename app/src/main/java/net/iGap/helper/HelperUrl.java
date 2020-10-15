@@ -51,11 +51,13 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.libs.Tuple;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.BottomSheetItemClickCallback;
 import net.iGap.module.dialog.JoinDialogFragment;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.observers.interfaces.OnClientCheckInviteLink;
 import net.iGap.observers.interfaces.OnClientGetRoomResponse;
@@ -66,9 +68,7 @@ import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
 import net.iGap.request.RequestClientGetRoom;
@@ -831,7 +831,7 @@ public class HelperUrl {
 
     public static void checkAndJoinToRoom(FragmentActivity activity, final String token) {
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             showIndeterminateProgressDialog(activity);
 
             G.onClientCheckInviteLink = new OnClientCheckInviteLink() {
@@ -859,7 +859,7 @@ public class HelperUrl {
             return;
         }
         DbManager.getInstance().doRealmTask(realm -> {
-            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
+            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).equalTo("isDeleted", false).findFirst();
             if (realmRoom != null) {
                 if (room.getId() != FragmentChat.lastChatRoomId) {
                     new GoToChatActivity(room.getId()).startActivity(activity);
@@ -895,7 +895,7 @@ public class HelperUrl {
     }
 
     private static void joinToRoom(FragmentActivity activity, String token, final ProtoGlobal.Room room) {
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             showIndeterminateProgressDialog(activity);
 
             G.onClientJoinByInviteLink = new OnClientJoinByInviteLink() {
@@ -929,7 +929,7 @@ public class HelperUrl {
     private static boolean isInCurrentChat(String userName) {
         if (FragmentChat.lastChatRoomId > 0) {
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, FragmentChat.lastChatRoomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", FragmentChat.lastChatRoomId).findFirst();
                 String currentChatUserName = "";
                 String currentChatInviteLink = "";
                 if (realmRoom != null) {
@@ -955,9 +955,7 @@ public class HelperUrl {
                     int index = currentChatInviteLink.lastIndexOf("/");
                     if (index != -1) {
                         String st = currentChatInviteLink.toLowerCase().substring(index + 1);
-                        if (st.equals(userName.toLowerCase())) {
-                            return true;
-                        }
+                        return st.equals(userName.toLowerCase());
                     }
                 }
 
@@ -981,7 +979,7 @@ public class HelperUrl {
     public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity, final String username, final ChatEntry chatEntry, final long messageId) {
         if (username == null || username.length() < 1) return;
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
 
             // this methode check user name and if it is ok go to room
             G.onClientResolveUsername = new OnClientResolveUsername() {
@@ -1016,7 +1014,7 @@ public class HelperUrl {
         DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
             @Override
             public void doTask(Realm realm) {
-                RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo("roomId", room.getId()).equalTo("messageId", messageId).findFirst();
                 if (rm != null) {
                     openChat(activity, username, type, user, room, chatEntry, messageId);
                 } else {
@@ -1109,7 +1107,7 @@ public class HelperUrl {
                     DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
                         @Override
                         public void doTask(Realm realm) {
-                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
 
                             if (realmRoom != null) {
                                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(activity);
@@ -1118,7 +1116,7 @@ public class HelperUrl {
                                     @Override
                                     public void onChatGetRoom(final ProtoGlobal.Room room) {
                                         DbManager.getInstance().doRealmTransaction(realm2 -> {
-                                            if (realm2.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                            if (realm2.where(RealmRoom.class).equalTo("id", room.getId()).findFirst() == null) {
                                                 RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm2);
                                                 realmRoom1.setDeleted(true);
                                             } else {
@@ -1173,13 +1171,13 @@ public class HelperUrl {
 
         if (roomId != FragmentChat.lastChatRoomId) {
             DbManager.getInstance().doRealmTask(realm -> {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
                 if (realmRoom != null) {
                     // room with given roomID exists.
                     new GoToChatActivity(realmRoom.getId()).startActivity(activity);
                 } else if (peerId > 0) {
-                    realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+                    realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", peerId).findFirst();
                     if (realmRoom != null) {
                         new GoToChatActivity(realmRoom.getId()).startActivity(activity);
                     } else {
@@ -1192,7 +1190,7 @@ public class HelperUrl {
                                         realm1.executeTransaction(new Realm.Transaction() {
                                             @Override
                                             public void execute(Realm realm) {
-                                                if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst() == null) {
+                                                if (realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst() == null) {
                                                     RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
                                                     realmRoom1.setDeleted(true);
                                                 } else {
@@ -1255,14 +1253,14 @@ public class HelperUrl {
     private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).equalTo("isDeleted", false).findFirst();
 
             if (realmRoom != null) {
                 closeDialogWaiting();
                 goToActivity(activity, realmRoom.getId(), id, user.getBot() ? ChatEntry.chat : chatEntery, messageId);
 
             } else {
-                if (G.userLogin) {
+                if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     addChatToDatabaseAndGoToChat(activity, user, -1, user.getBot() ? ChatEntry.chat : chatEntery);
                 } else {
                     closeDialogWaiting();
@@ -1320,7 +1318,7 @@ public class HelperUrl {
 
     private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
 
             if (realmRoom != null) {
 
@@ -1402,7 +1400,7 @@ public class HelperUrl {
     private static void checkConnection(FragmentActivity activity, final Uri path, int countTime) {
         countTime++;
 
-        if (G.userLogin) {
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             Matcher matcher = patternMessageLink.matcher(path.toString());
             Matcher matcher2 = patternMessageLink2.matcher(path.toString());
             if (matcher.find()) {

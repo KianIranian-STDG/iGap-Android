@@ -38,13 +38,14 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
 import net.iGap.databinding.ActivityMediaPlayerLandBinding;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
 import net.iGap.observers.interfaces.OnComplete;
@@ -53,7 +54,6 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientSearchRoomHistory;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
 
@@ -336,7 +336,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                     holder.messageProgress.withDrawable(R.drawable.ic_download, true);
                     holder.iconPlay.setVisibility(View.GONE);
 
-                    if (HelperDownloadFile.getInstance().isDownLoading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
+                    if (getDownloader().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
                         startDownload(holder.getAdapterPosition(), holder.messageProgress);
                     }
                 }
@@ -384,7 +384,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                 iconPlay = itemView.findViewById(R.id.ml_btn_play_music);
                 root = itemView.findViewById(R.id.rootViewMuciPlayer);
 
-                messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+                messageProgress = itemView.findViewById(R.id.progress);
                 AppUtils.setProgresColor(messageProgress.progressBar);
             }
         }
@@ -479,7 +479,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void downloadFile(int position, MessageProgress messageProgress) {
 
-        if (HelperDownloadFile.getInstance().isDownLoading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
+        if (getDownloader().isDownloading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
             stopDownload(position, messageProgress);
         } else {
             startDownload(position, messageProgress);
@@ -488,7 +488,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void stopDownload(int position, final MessageProgress messageProgress) {
 
-        HelperDownloadFile.getInstance().stopDownLoad(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
+        getDownloader().cancelDownload(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
     }
 
     private void startDownload(final int position, final MessageProgress messageProgress) {
@@ -520,45 +520,32 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
+        DownloadObject fileObject = DownloadObject.createForRoomMessage(MusicPlayer.mediaList.get(position));
 
-        HelperDownloadFile.getInstance().startDownload(messageType, MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
-            @Override
-            public void OnProgress(String path, final int progress) {
+        if (fileObject == null) {
+            return;
+        }
 
-                if (canUpdateAfterDownload) {
+        getDownloader().download(fileObject, ProtoFileDownload.FileDownload.Selector.FILE, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
+            if (canUpdateAfterDownload) {
+                G.handler.post(() -> {
+                    switch (arg.status) {
+                        case SUCCESS:
+                        case LOADING:
+                            if (arg.data == null)
+                                return;
 
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
                             if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
-
-                                G.currentActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        messageProgress.withProgress(progress);
-                                    }
-                                });
+                                messageProgress.withProgress(arg.data.getProgress());
                             }
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void OnError(String token) {
-                if (canUpdateAfterDownload) {
-
-                    if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                            break;
+                        case ERROR:
+                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
                                 messageProgress.withProgress(0);
                                 messageProgress.withDrawable(R.drawable.ic_download, true);
                             }
-                        });
                     }
-                }
+                });
             }
         });
     }
@@ -612,11 +599,11 @@ public class FragmentMediaPlayer extends BaseFragment {
         try {
             realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoomMessage.class)
-                        .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
-                        .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                        .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
-                        .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
-                        .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                        .equalTo("roomId", MusicPlayer.roomId)
+                        .notEqualTo("deleted", true)
+                        .contains("messageType", ProtoGlobal.RoomMessageType.AUDIO.toString())
+                        .lessThan("messageId", MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                        .findAll().sort("messageId", Sort.DESCENDING);
             });
         } catch (IllegalStateException e) {
         }

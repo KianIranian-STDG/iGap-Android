@@ -14,7 +14,7 @@
 
     <!-- Page 3 introduce app -->
 
-
+    <string name="kuknos_toast">الجواب خاطئ! الرجاء الإجابة بعناية</string>
     <string name="text_line_1_introduce_page3">"المحادثة في آیکب"</string>
 
     <string name="text_line_2_introduce_page3">"يمكنك المحادثة في آیکب بين شخصين أو بين مجموعة من الأشخاص و كُن مرتاح البال أنّ محادثاتك متوفّرة لديك دائماً، إضافة إلى ذلك يمكنك انشاء القنوات و الانضمام إليها و اشتراك معلوماتك مع ملايين الأشخاص من المستخدمين الآخرين.."</string>
@@ -1010,6 +1010,8 @@
 
     <string name="charge">الشحن </string>
 
+    <string name="transfer_mony">نقل النقود</string>
+
     <string name="gift_message">مبلغ رصيد الهدية *.
 تريد الحصول عليها؟</string>
 
@@ -1036,6 +1038,8 @@
     <string name="six_day">قبل ستة أيام </string>
 
     <string name="group_link">رابط المجموعة </string>
+
+    <string name="normal_error">can\'t do it please try later</string>
 
     <string name="channel_description">تفاصيل القناة</string>
 
@@ -1466,7 +1470,7 @@
 
     <string name="no">"لا"</string>
 
-    <string name="not_answered">لم يتم استلام أي ردّ </string>
+    <string name="account_dialog_message">أنت تجري مكالمة هل تريد إنهاء الخط؟</string>
 
     <string name="unavalable">خارج الشبكة </string>
 
@@ -1766,6 +1770,8 @@
     <string name="charge_50"> 500.000 ریالی</string>
     <string name="charge_100"> 1.000.000 ریالی</string>
 
+    <string name="value_added">القيمة المضافة</string>
+
     <string name="biling_id_not_valid">معرف الفوترة غير صالح</string>
     <string name="pay_id_is_not_valid">معرف الدفع غير صالح</string>
     <string name="charge_type">نوع التهمة</string>
@@ -1895,7 +1901,6 @@
     <string name="Select">تحديد</string>
     <string name="Create_new_Folder_here">قم بإنشاء مجلد جديد هنا</string>
     <string name="on_hold">دعوة معلقة...</string>
-    <string name="switchTo">التبديل إلى :</string>
     <string name="stop">توقف</string>
     <string name="stop_message_bot">هل أنت متأكد من أنك تريد إيقاف الروبوت؟</string>
     <string name="startUpdate">تحديث</string>
@@ -1936,6 +1941,7 @@
     <string name="toman">تومان</string>
 
     <string name="resend_code">إعادة إرسال الرسائل القصيرة</string>
+    <string name="enter_username">أدخل اسم المستخدم الخاص بك</string>
     <string name="country_code_not_valid">كود البلد غير صحيح</string>
     <string name="enter_your_password">أدخل كلمة مرورك</string>
     <string name="referral_code">رمز المرجع</string>
@@ -2029,6 +2035,7 @@
     <string name="cash_out_paygear">السحوبات من المحفظة</string>
     <string name="cashable">قابل للنقل</string>
     <string name="gift">هدية</string>
+    <string name="cards">بطاقات</string>
     <string name="my_cards">بطاقاتي</string>
     <string name="cashout_today_limit">سقف الحصاد اليوم</string>
     <string name="cash_out_request_done">تم استكمال طلب التسوية</string>
@@ -2174,6 +2181,7 @@
     <string name="payment_continue_title">استمر</string>
     <string name="sign_message_title">توقيع الرسائل</string>
     <string name="sign_channel_message_description">أضف أسماء المسؤولين إلى الرسائل التي ينشرونها.</string>
+    <string name="Inventory">المخزون</string>
     <string name="bills">فواتير</string>
     <string name="charge_amount">مستوى الشحن(ریال)</string>
     <string name="buy_internet_package_title">شراء حزمة الإنترنت</string>
@@ -2290,6 +2298,7 @@
     <string name="cardtocard_morethan_error">Minimum amount must be more than 10,000 Rials</string>
     <string name="cardtocard_cartnumber_error">Card number must be 4 digits</string>
     <string name="cardtocard_cardnumber_error">Card number can not be empty</string>
+    <string name="payment_rrn_title">شماره تراکنش: %.0f</string>
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید</string>
     <string name="buy_internet_package_volume_type_title">الصوت</string>
@@ -2391,6 +2400,8 @@
     <string name="elecBill_pay_billImage">إظهار صورة الفاتورة</string>
     <string name="elecBill_Entry_nameError">لا يمكن أن يكون اسم الفاتورة فارغًا. على سبيل المثال: الصفحة الرئيسية</string>
     <string name="elecBill_Entry_billIDError">لا يمكن أن يكون معرف الفاتورة فارغًا.</string>
+    <string name="elecBill_Entry_userIDError">لا يمكن أن يكون هويتك الوطنية فارغة.</string>
+    <string name="elecBill_Entry_userIDLengthError">يجب أن يكون هويتك الوطنية 10 أحرف.</string>
     <string name="elecBill_add_form">يرجى ملء النموذج.</string>
     <string name="elecBill_add_name">اسم الفاتورة *</string>
     <string name="elecBill_add_billID">معرف الفاتورة *</string>
@@ -2436,7 +2447,52 @@
     <string name="map_registration_enable">تمكين الرؤية القريبة</string>
     <string name="need_browser">يتطلب متصفح للاستخدام.</string>
     <string name="install_latest_version">قم بتثبيت أحدث إصدار لاستخدام هذه الميزة</string>
+    <string name="temporary_password">كلمة مرور مؤقتة</string>
+    <string name="parsian_bank">پارسیانی</string>
+    <string name="mobile_bank_load_detail_personalInfo">معلومات العملاء</string>
+    <string name="mobile_bank_load_detail_bankCode">رمز البنك: %1$s</string>
+    <string name="mobile_bank_load_detail_customerCode">كود العميل: %1$s</string>
+    <string name="mobile_bank_load_detail_customerName">اسم العميل: %1$s</string>
+    <string name="mobile_bank_load_detail_loadInfo">معلومات القرض</string>
+    <string name="mobile_bank_load_detail_amount">مبشر: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_discount">خصم: %1$s</string>
+    <string name="mobile_bank_load_detail_penalty">عقوبة: %1$s</string>
+    <string name="mobile_bank_load_detail_MUnpaidInfo">معلومات الدفع المتأخرة</string>
+    <string name="mobile_bank_load_detail_MUCount">عدد الاقساط غير المدفوعة: %1$s</string>
+    <string name="mobile_bank_load_detail_MUAmount">مبلغ الأقساط غير المدفوعة: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paidInfo">معلومات الدفعة المدفوعة</string>
+    <string name="mobile_bank_load_detail_paidCount">عدد الاقساط المدفوعة: %1$s</string>
+    <string name="mobile_bank_load_detail_paidAmount">المبلغ المدفوع:: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_unpaidInfo">معلومات الدفعة غير المدفوعة</string>
+    <string name="mobile_bank_load_detail_unpaidCount">عدد الاقساط غير المدفوعة: %1$s</string>
+    <string name="mobile_bank_load_detail_unpaidAmount">المبلغ غير المدفوع: %1$s %2$s</string>
+    <string name="mobile_bank_load_detail_paymentList">قائمة التقسيط</string>
+    <string name="mobile_bank_detail_cell_payStatus">وضعیت پرداخت: %1$s</string>
+    <string name="mobile_bank_detail_cell_payAmount">مبلغ الدفع: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_unpaidAmount">المبلغ المتبقي: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_penaltyAmount">مقدار الغرامة: %1$s %2$s</string>
+    <string name="mobile_bank_detail_cell_paymentDate">تاريخ الدفع: %1$s</string>
 
+    <string name="transactions">المعاملات</string>
+    <string name="sheba_number">رقم شبا</string>
+    <string name="get_temporary_password">الحصول على كلمة السر پویا</string>
+    <string name="accounts">حسابات</string>
+    <string name="account">حساب</string>
+    <string name="cheque">التحقق من</string>
+    <string name="facilities">مرافق</string>
+    <string name="services">خدمات</string>
+    <string name="cheque_number">التحقق من الرقم :</string>
+    <string name="page_count">الصفحه</string>
+    <string name="reject_count">رفض :</string>
+    <string name="pass_count">مرر :</string>
+    <string name="usable_count">صالح للإستعمال :</string>
+    <string name="loan_number">رقم القرض: </string>
+    <string name="branch_name">اسم الفرع:</string>
+    <string name="start_date">تاريخ البدء:</string>
+    <string name="end_date">تاريخ الانتهاء:</string>
+    <string name="loan_count">عدد القروض:</string>
+    <string name="remained_loan">بقي القرض:</string>
+    <string name="state">حالة:</string>
     <string name="requester_mobile_number">رقم هاتف مقدم الطلب</string>
     <string name="charger_mobile_number">رقم الجوال القابلة لإعادة الشحن</string>
     <string name="terminal_No">رقم المحطة</string>
@@ -2446,6 +2502,7 @@
     <string name="bill_title">دفع الفاتورة</string>
     <string name="topUp_message">رسالة شراء الشحن</string>
     <string name="bill_message">رسالة دفع الفواتير</string>
+    <string name="soon">قريبا...</string>
     <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
     <string name="sticker_setting">إعداد الملصقات</string>
     <string name="empty_sticker">لم تقم بإضافة أي ملصقات بعد!</string>
@@ -2458,11 +2515,47 @@
     <string name="emoji_category_symbols">حرف او رمز</string>
     <string name="emoji_category_travel">السفر والمكان</string>
     <string name="gift_sticker_title">ملصق هدية</string>
+    <string name="active_gift_sticker_title">ملصق هدية</string>
+    <string name="national_code_not_match_with_phone_number_error">عدم تناسق الكود الوطني مع معلومات بطاقة SIM</string>
     <string name="gift_sticker_visit">ملاحظة</string>
+    <string name="my_gift_sticker">ملصقات هدية بلدي</string>
+    <string name="my_recived_gift_sticker">تلقى هدية ملصقات</string>
+    <string name="expire_date">تاريخ انتهاء الصلاحية</string>
+    <string name="send_gift_sticker">إرسال الملصق</string>
+    <string name="gift_sticker_send_to_other">إرسال إلى آخر</string>
+    <string name="gift_sticker_card_info_title">معلومات بطاقة الهدية</string>
+    <string name="click_for_copy_title">انقر لنسخ</string>
+    <string name="gift_sticker_empty_list_message">لا يوجد ملصق</string>
+    <string name="inquiry_and_shopping">التحقيق والتسوق</string>
+    <string name="activate_or_send_as_message">تنشيط أو إرسال كرسالة</string>
 
+    <string name="mobile_bank_sorathesab">قائمة الفواتير</string>
+    <string name="mobile_bank_balance_CVVError">يرجى إدخال رقم CVV2 الخاص بك.</string>
+    <string name="mobile_bank_balance_cardError">يرجى إدخال رقم البطاقة البارسية.</string>
+    <string name="mobile_bank_balance_dateError">الرجاء إدخال تاريخ انتهاء الصلاحية.</string>
+    <string name="mobile_bank_balance_expireDate">تاريخ الانتهاء (السنة / الشهر)</string>
+    <string name="mobile_bank_balance_passwordError">من فضلك أدخل رقمك السري.</string>
+    <string name="mobile_bank_balance_title">رصيد البطاقة المصرفية</string>
+    <string name="mobile_bank_balance_CVVLengthError">يجب أن يتكون رقم CVV2 من 3 أرقام على الأقل.</string>
+    <string name="mobile_bank_balance_cardLengthError">يجب أن يكون رقم بطاقتك 16 رقمًا.</string>
+    <string name="mobile_bank_balance_passwordLengthError">يجب أن تحتوي كلمة مرورك على 6 أحرف على الأقل.</string>
+    <string name="mobile_bank_balance_message">رصيدك هو %1$s.</string>
+    <string name="mobile_bank_hotCard">بطاقة بلوك</string>
     <string name="poll_dialog_question">هل أنت متأكد من رأيك </string>
     <string name="delete_recent_emoji">حذف الرموز التعبيرية الحديثة</string>
+    <string name="mobile_bank_balance_error_no_price">لا ثمن</string>
+    <string name="usable">صالح للإستعمال</string>
     <string name="activated">المنشط</string>
+    <string name="posted">نشر</string>
+    <string name="gift_sticker_inquiry_and_activated">التحقيق وتفعيلها</string>
+    <string name="kuknos_send_token_error">لا يمكن إرسال هذا الرمز المميز.</string>
+    <string name="active_gift_card_note">هل أنت متأكد أنك تريد تفعيل بطاقة الهدية الخاصة بك؟ لاحظ أنه بمجرد تنشيطه ، لن يكون من الممكن إرساله إلى آخر ، ولن تكون معلومات بطاقة الهدية مرئية إلا لحسابك.</string>
+    <string name="inter_cheque_amount">أدخل المبلغ</string>
+    <string name="take_turn">يأخذ منحى</string>
+    <string name="secondary_password">كلمة المرور الثانية</string>
+    <string name="default_deposit">الودائع الافتراضية</string>
+    <string name="custom_deposit">إيداع مخصص</string>
+    <string name="mobile_bank_login_hint">استخدم اسم المستخدم وكلمة المرور للدخول إلى بنك پارسیان للجوال.</string>
     <string name="internal_desc">تصفح نظام الملفات الخاص بك</string>
     <string name="external_desc">تصفح التخزين الخارجية الخاصة بك</string>
     <string name="file_manager_app_desc">تصفح مجلد التطبيق</string>
@@ -2473,7 +2566,10 @@
     <string name="internal_storage">التخزين الداخلي</string>
     <string name="external_storage">تخزين خارجي</string>
     <string name="file_manager">مدير الملفات</string>
+    <string name="gift_card_already_in_use">بطاقة الهدايا هذه قيد الاستخدام بالفعل!</string>
+    <string name="gift_carde_sended">لقد أرسلت بالفعل بطاقة هدايا لشخص آخر!</string>
     <string name="trim_error">التقليم قصير جدًا ، يرجى المحاولة بمدة صالحة.</string>
+    <string name="card_is_disable">العنصر الحالي معطل.</string>
     <string name="restrictions_on_sending_stickers">قيود على إرسال الملصقات!</string>
     <string name="restrictions_on_sending_multimedia_messages">قيود على إرسال رسائل الوسائط المتعددة!</string>
     <string name="post_message">أرسل رسالة</string>
@@ -2516,6 +2612,7 @@
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
     <string name="mic">Mic</string>
     <string name="hold">Hold</string>
-
-    <string name="Increase_score">همین حالا امتیازت رو افزایش بده!</string>
+    <string name="payment_userScore">درجاتك</string>
+    <string name="Increase_score">زيادة درجاتك الآن!</string>
+    <string name="Submitـomment">لعرض نتائج الاستطلاع ، يرجى تسجيل تصويتك أولاً!</string>
 </resources>

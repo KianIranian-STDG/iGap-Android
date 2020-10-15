@@ -43,7 +43,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
@@ -629,7 +628,7 @@ public class HelperNotification {
     }
 
     public void addMessage(Realm realm, long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, AccountUser accountUser) {
-        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         if (room != null) {
             addMessage(roomId, roomMessage, roomType, room, realm, accountUser);
         }
@@ -828,6 +827,17 @@ public class HelperNotification {
         showNotification.notificationManager.cancelAll();
     }
 
+    public void cancelNotification(long roomId) {
+        if (settingValue.separateNotification) {
+            SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.KEY_NOTIF_KEYS, Context.MODE_PRIVATE);
+            int roomNotifId = sharedPreferences.getInt(String.valueOf(roomId), -1);
+            if (roomNotifId == -1) {
+                return;
+            }
+            showNotification.notificationManager.cancel(roomNotifId);
+        }
+    }
+
     public static class RemoteActionReceiver extends BroadcastReceiver {
 
         public RemoteActionReceiver() {
@@ -860,7 +870,7 @@ public class HelperNotification {
                     if (message != null && message.length() > 0 && roomId > 0) {
                         RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(roomId, message);
                         HelperRealm.copyOrUpdateToRealm(roomMessage);
-                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(roomMessage.getMessageId() + "");
                     }
 
                     break;

@@ -14,16 +14,10 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.upload.OnUploadListener;
-import net.iGap.helper.upload.UploadManager;
-import net.iGap.helper.upload.UploadTask;
-import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.observers.interfaces.OnChannelAvatarAdd;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
-import net.iGap.observers.interfaces.OnChannelDelete;
 import net.iGap.observers.interfaces.OnChannelEdit;
 import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.observers.interfaces.OnChannelUpdateSignature;
@@ -32,16 +26,13 @@ import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
-import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
 
-import java.io.File;
 import java.util.ArrayList;
 
-public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarAdd, OnChannelAvatarDelete, OnChannelUpdateReactionStatus, OnChannelDelete {
+public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, OnChannelUpdateReactionStatus {
 
     public ObservableField<String> channelName = new ObservableField<>("");
     public ObservableField<String> channelDescription = new ObservableField<>("");
@@ -88,14 +79,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
 
-        G.onChannelAvatarAdd = this;
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
         /*G.onChannelAddAdmin = this;*/
         /*G.onChannelKickAdmin = this;*/
         /*G.onChannelAddModerator = this;*/
         /*G.onChannelKickModerator = this;*/
-        G.onChannelDelete = this;
         /*G.onChannelRevokeLink = this;*/
 
         FragmentShowAvatars.onComplete = (result, messageOne, MessageTow) -> {
@@ -121,7 +110,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         };
 
         RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
         });
 
         //todo:fixed it
@@ -340,24 +329,8 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     }
 
     @Override
-    public void onAvatarAdd(long roomId, ProtoGlobal.Avatar avatar) {
-        channelAvatarUpdatedLiveData.postValue(roomId);
-        showUploadProgressLiveData.postValue(View.GONE);
-    }
-
-    @Override
-    public void onAvatarAddError() {
-        showUploadProgressLiveData.postValue(View.GONE);
-    }
-
-    @Override
     public void onChannelAvatarDelete(long roomId, long avatarId) {
         channelAvatarUpdatedLiveData.postValue(roomId);
-    }
-
-    @Override
-    public void onChannelDelete(long roomId) {
-        closeActivity();
     }
 
     @Override
@@ -396,27 +369,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             isShowLoading.set(View.GONE);
             goToChatRoom.setValue(true);
         });
-    }
-
-    public void uploadAvatar(String path) {
-        long avatarId = SUID.id().get();
-        long lastUploadedAvatarId = avatarId + 1L;
-        UploadManager.getInstance().upload(new UploadTask(lastUploadedAvatarId + "", new File(path), ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
-            @Override
-            public void onProgress(String id, int progress) {
-                showUploadProgressLiveData.postValue(View.VISIBLE);
-            }
-
-            @Override
-            public void onFinish(String id, String token) {
-                new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
-            }
-
-            @Override
-            public void onError(String id) {
-                showUploadProgressLiveData.postValue(View.GONE);
-            }
-        }));
     }
 
     public MutableLiveData<Long> getChannelAvatarUpdatedLiveData() {

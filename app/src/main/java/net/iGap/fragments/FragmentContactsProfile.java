@@ -192,6 +192,7 @@ public class FragmentContactsProfile extends BaseFragment {
             if (name != null) {
                 binding.toolbarTxtNameCollapsed.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameCollapsed.getPaint().getFontMetricsInt()));
                 binding.toolbarTxtNameExpanded.setText(EmojiManager.getInstance().replaceEmoji(name, binding.toolbarTxtNameExpanded.getPaint().getFontMetricsInt()));
+                binding.toolbarTxtNameExpanded.setSelected(true);
             }
         });
 
@@ -252,7 +253,7 @@ public class FragmentContactsProfile extends BaseFragment {
 
                 if (enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString()) || enterFrom.equals("Others")) { // Others is from FragmentMapUsers adapter
 
-final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", userId).findFirst();
 
                     if (realmRoom != null) {
                         new HelperFragment().removeAll(true);

@@ -136,7 +136,6 @@
     <string name="md_dialpad">\ue912</string>
     <!-- igap_magnify  -->
     <!-- igap_magnify  -->
-    <string name="md_igap_bluetooth">\uf0af</string>
 
     <string name="md_igap_arrow_up_thick">\ue99f</string>
     <string name="md_igap_arrow_down_thick">\ue933</string>
@@ -189,13 +188,7 @@
     <string name="reply_icon">\ue97f</string>
     <string name="message_icon">\ue911</string>
     <string name="mic_on_icon">\ue960</string>
-    <string name="mic_off_icon">\ue95f</string>
-    <string name="speaker_on_icon">\ue998</string>
     <string name="unmute_icon">\ue998</string>
-    <string name="speaker_off_icon">\ue997</string>
-    <string name="switch_camera_icon">\ue995</string>
-    <string name="end_voice_call_icon">\ue937</string>
-    <string name="end_video_call_icon">\ue9a2</string>
     <string name="play_icon">\ue977</string>
     <string name="pause_icon">\ue973</string>
     <string name="igap_fa_icon">\ue95a</string>
@@ -232,5 +225,10 @@
     <string name="horizontal_more_icon">\ue9b8</string>
 
     <string name="error_icon">\ue938</string>
+    <string name="valid_icon">\ue9a9</string>
+    <string name="download_ic">\ue933</string>
+    <string name="upload_ic">\ue99f</string>
 
+    <string name="bank_withdraw_ic">\ue9ad</string>
+    <string name="bank_income_ic">\ue9ac</string>
 </resources>

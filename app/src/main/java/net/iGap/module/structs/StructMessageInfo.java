@@ -25,12 +25,9 @@ import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmChannelExtra;
-import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 import org.parceler.Parcels;
 
@@ -163,9 +160,7 @@ public class StructMessageInfo implements Parcelable {
 
     private boolean isEqualTwoString(String a, String b) {
         if (a == null) {
-            if (b == null)
-                return true;
-            return false;
+            return b == null;
         } else {
             return a.equals(b);
         }
@@ -179,7 +174,7 @@ public class StructMessageInfo implements Parcelable {
         }
 
         DbManager.getInstance().doRealmTask(realm -> {
-            liverRealmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, getAttachment().getId()).findFirstAsync();
+            liverRealmAttachment = realm.where(RealmAttachment.class).equalTo("id", getAttachment().getId()).findFirstAsync();
 
             realmAttachmentRealmChangeListener = (realmAttachment, changeSet) -> {
                 if (realmAttachment.isValid() && realmAttachment.isManaged()) {
@@ -235,15 +230,15 @@ public class StructMessageInfo implements Parcelable {
             return message.getChannelExtra();
         } else {
             DbManager.getInstance().doRealmTransactionLowPriorityAsync(realm -> {
-                RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, message.getMessageId()).findFirst();
-                RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, message.getMessageId()).findFirst();
+                RealmRoomMessage newMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", message.getMessageId()).findFirst();
+                RealmChannelExtra channelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", message.getMessageId()).findFirst();
                 if (newMessage != null && channelExtra != null) {
                     newMessage.setChannelExtra(channelExtra);
                 }
             });
 
             return DbManager.getInstance().doRealmTask(realm -> {
-                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, message.getMessageId()).findFirst();
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", message.getMessageId()).findFirst();
                 if (realmChannelExtra != null) {
                     realmChannelExtra = realm.copyFromRealm(realmChannelExtra);
                 }

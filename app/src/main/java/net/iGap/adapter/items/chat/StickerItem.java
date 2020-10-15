@@ -21,7 +21,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
@@ -29,6 +28,7 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 import java.util.List;
@@ -74,7 +74,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             }
         });
 
-        String path = HelperDownloadSticker.downloadStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
         if (new File(path).exists()) {
             G.imageLoader.displayImage(suitablePath(path), holder.image);
         } else {

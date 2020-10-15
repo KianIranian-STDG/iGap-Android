@@ -20,7 +20,7 @@ import net.iGap.observers.interfaces.OnQueueSendContact;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,7 +157,7 @@ public class RealmPhoneContacts extends RealmObject {
                 }
 
                 try {
-                    if (realm.where(RealmPhoneContacts.class).equalTo(RealmPhoneContactsFields.PHONE, checkString(_item)).findFirst() == null) {
+                    if (realm.where(RealmPhoneContacts.class).equalTo("phone", checkString(_item)).findFirst() == null) {
                         notImportedList.add(_item);
                     }
                 } catch (IllegalArgumentException e) {
@@ -173,11 +173,7 @@ public class RealmPhoneContacts extends RealmObject {
     private static String checkString(StructListOfContact item) {
         String phoneText = item.getPhone() + "_" + item.firstName + item.lastName;
 
-        try {
-            phoneText.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        phoneText.getBytes(StandardCharsets.UTF_8);
         return phoneText;
     }
 

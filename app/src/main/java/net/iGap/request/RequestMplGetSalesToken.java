@@ -10,7 +10,8 @@
 
 package net.iGap.request;
 
-import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoMplGetSalesToken;
 
 public class RequestMplGetSalesToken {
@@ -32,7 +33,7 @@ public class RequestMplGetSalesToken {
         builder.setInvoiceNumber(invoiceNumber);
         RequestWrapper requestWrapper = new RequestWrapper(9102, builder, getSalesToken);
         try {
-            if (G.userLogin) {
+            if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                 RequestQueue.sendRequest(requestWrapper);
                 return true;
             } else {
