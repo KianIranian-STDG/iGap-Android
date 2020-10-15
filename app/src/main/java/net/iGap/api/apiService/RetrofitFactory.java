@@ -9,7 +9,7 @@ import net.iGap.api.CharityApi;
 import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.IgashtApi;
-import net.iGap.api.KuknosApi;
+import net.iGap.kuknos.Repository.KuknosApi;
 import net.iGap.api.MobileBankApi;
 import net.iGap.api.NewsApi;
 import net.iGap.api.PaymentApi;

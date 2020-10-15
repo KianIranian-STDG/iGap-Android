@@ -14,6 +14,7 @@
     <string name="pu_desc_profileUser">Entrez votre nom d’utilisateur et choisissiez une photo de profil , si vous voulez. </string>
     <string name="pu_nikname_profileUser">Prénom</string>
     <string name="pu_Lets_Go">Continuez</string>
+    <string name="kuknos_panelStr_buyAgain">Rachat</string>
     <string name="rg_confirm_text_register">Confirmez votre pays et son code puis entrez votre numéro de téléphone sans le 0 au début</string>
     <string name="rg_Start">Allons-y</string>
     <string name="rg_Select_Country">Choisissez votre pays</string>

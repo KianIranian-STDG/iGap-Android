@@ -1690,6 +1690,7 @@ Want to get it?</string>
     <string name="kuknos_panelStr_recieve">Recieve</string>
     <string name="kuknos_panelStr_send">Send</string>
     <string name="kuknos_panelStr_history">History</string>
+    <string name="kuknos_panelStr_buyAgain">Redemption</string>
     <string name="kuknos_panelStr_trading">Trading</string>
     <string name="kuknos_panelStr_kyc">KYC</string>
     <string name="kuknos_panelStr_buyPeyman">Buy Token</string>

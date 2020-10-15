@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="net.iGap.viewmodel.kuknos.KuknosBuyPeymanVM" />
+            type="net.iGap.kuknos.viewmodel.KuknosBuyPeymanVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

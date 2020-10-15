@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.kuknos.Parsian.KuknosBalance;
+import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 
 import java.util.ArrayList;
 import java.util.List;

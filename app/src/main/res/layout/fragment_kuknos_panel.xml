@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.viewmodel.kuknos.KuknosPanelVM" />
+            type="net.iGap.kuknos.viewmodel.KuknosPanelVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -47,8 +47,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:minHeight="38dp"
                     android:background="?attr/iGapSpinnerShape"
+                    android:minHeight="38dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -111,11 +111,11 @@
                     android:layout_marginLeft="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
+                    android:onClick="@{()->viewmodel.togglePrice()}"
                     android:text="@{viewmodel.balance}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dp22"
                     android:textStyle="bold"
-                    android:onClick="@{()->viewmodel.togglePrice()}"
                     app:layout_constraintBottom_toTopOf="@id/fragKuknosPCurrency"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
@@ -127,9 +127,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:onClick="@{()->viewmodel.togglePrice()}"
                     android:text="@{viewmodel.currency}"
                     android:textColor="@color/black"
-                    android:onClick="@{()->viewmodel.togglePrice()}"
                     app:layout_constraintBottom_toBottomOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintLeft_toLeftOf="@id/fragKuknosPBalanceCircle"
                     app:layout_constraintRight_toRightOf="@id/fragKuknosPBalanceCircle"
@@ -212,6 +212,19 @@
                     app:layout_constraintTop_toTopOf="@+id/fragKuknosPRecieve"
                     app:layout_constraintWidth_percent="0.3" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragKuknosBuyAgain"
+                    style="@style/iGapButton"
+                    android:layout_width="377dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:minHeight="48dp"
+                    android:onClick="@{()->viewmodel.historyW()}"
+                    android:text="@string/kuknos_panelStr_buyAgain"
+                    android:textSize="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPSend" />
 
                 <LinearLayout
                     android:id="@+id/fragKuknosPSetting"
@@ -229,7 +242,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/fragKuknosPBuyPMN"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosPRecieve"
+                    app:layout_constraintTop_toBottomOf="@+id/fragKuknosBuyAgain"
                     app:layout_constraintWidth_percent="0.2">
 
                     <androidx.appcompat.widget.AppCompatTextView

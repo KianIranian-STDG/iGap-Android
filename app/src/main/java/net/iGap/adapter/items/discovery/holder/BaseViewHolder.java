@@ -43,7 +43,7 @@ import net.iGap.fragments.electricity_bill.ElectricityBillMainFrag;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
-import net.iGap.fragments.kuknos.KuknosEntryOptionFrag;
+import net.iGap.kuknos.Fragment.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.news.NewsMainFrag;

@@ -14,6 +14,7 @@
     <string name="pu_desc_profileUser">Введите свое имя и выберите свою фотографию пользователя</string>
     <string name="pu_nikname_profileUser">Имя</string>
     <string name="pu_Lets_Go">Продолжение</string>
+    <string name="kuknos_panelStr_buyAgain">Выкуп</string>
     <string name="rg_confirm_text_register">Пожалуйста, подтвердите название и код своей страны, а затем введите номер своего мобильного телефона без первого нуля.</string>
     <string name="rg_Start">давайте пойдем</string>
     <string name="rg_Select_Country">Выберите свою страну</string>

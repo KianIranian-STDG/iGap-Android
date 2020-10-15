@@ -2061,7 +2061,7 @@
     <string name="cvv2">CVV2</string>
     <string name="select_card">اختيار البطاقة</string>
 
-
+    <string name="kuknos_panelStr_buyAgain">فداء</string>
     <string name="new_pass">كلمة مرور جديدة</string>
     <string name="confirm_pass">كرر كلمة المرور</string>
     <string name="current_pass">كلمة المرور الحالية</string>

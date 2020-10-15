@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.model.kuknos.Parsian.KuknosOfferResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.module.dialog.DefaultRoundDialog;
 
 import java.text.DecimalFormat;

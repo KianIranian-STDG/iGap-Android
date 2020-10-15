@@ -69,7 +69,7 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.fragments.kuknos.KuknosSendFrag;
+import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;

@@ -1651,6 +1651,7 @@
     <string name="kuknos_panelStr_trading">مبادله</string>
     <string name="kuknos_panelStr_kyc">احراز هویت</string>
     <string name="kuknos_panelStr_buyPeyman">خرید دارایی</string>
+    <string name="kuknos_panelStr_buyAgain">بازخرید</string>
     <string name="kuknos_panelStr_setting">تنظیمات</string>
     <string name="kuknos_recieve_title">جهت دریافت اعتبار از افراد دیگر، شناسه کیف پول خود را برای آنها ارسال نمایید.</string>
     <string name="kuknos_recieve_walletID">شناسه کیف پول شما: </string>
