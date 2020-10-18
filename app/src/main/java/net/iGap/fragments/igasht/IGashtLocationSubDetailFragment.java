@@ -1,16 +1,21 @@
 package net.iGap.fragments.igasht;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
+import net.iGap.adapter.igahst.IGashtDetailSliderAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentIgashtLocationSubDetailBinding;
 import net.iGap.viewmodel.igasht.IGashtLocationSubDetailViewModel;
@@ -18,6 +23,7 @@ import net.iGap.viewmodel.igasht.IGashtLocationSubDetailViewModel;
 public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocationSubDetailViewModel> {
 
     private FragmentIgashtLocationSubDetailBinding binding;
+    private IGashtDetailSliderAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,8 +40,23 @@ public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocat
         return binding.getRoot();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Spanned titleText = Html.fromHtml(viewModel.getLocationDetail().getmShortDescription());
+        binding.subTitle.setText(titleText);
+
+        Spanned detailText = Html.fromHtml(viewModel.getLocationDetail().getmFullDescription());
+        binding.subDetail.setText(detailText);
+
+        binding.bannerSlider.postDelayed(() -> {
+            adapter = new IGashtDetailSliderAdapter(viewModel.getLocationDetail().getmGallery());
+            binding.bannerSlider.setAdapter(adapter);
+            binding.bannerSlider.setSelectedSlide(0);
+            binding.bannerSlider.setInterval(2000);
+        }, 100);
+
     }
 }

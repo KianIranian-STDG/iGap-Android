@@ -2615,4 +2615,5 @@
     <string name="payment_userScore">درجاتك</string>
     <string name="Increase_score">زيادة درجاتك الآن!</string>
     <string name="Submitـomment">لعرض نتائج الاستطلاع ، يرجى تسجيل تصويتك أولاً!</string>
+    <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
 </resources>

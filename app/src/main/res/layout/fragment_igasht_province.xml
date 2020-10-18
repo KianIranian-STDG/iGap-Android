@@ -51,6 +51,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:background="?attr/iGapCardToCardButtonBackground"
+                android:backgroundTint="?toolbarBackgroundColor"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:padding="@dimen/dp8"
@@ -95,35 +96,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            style="@style/baseFontIcon"
-                            android:layout_width="@dimen/dp40"
-                            android:layout_height="@dimen/dp40"
-                            android:layout_gravity="center"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
-                            android:text="@string/search_icon" />
-
-                        <View
-                            android:layout_width="@dimen/dp1"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/dp8"
-                            android:layout_marginTop="@dimen/dp4"
-                            android:layout_marginRight="@dimen/dp8"
-                            android:layout_marginBottom="@dimen/dp4"
-                            android:background="@color/gray" />
-
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/provinceSearchText"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/dp8"
                             android:layout_weight="1"
+                            android:textSize="@dimen/standardTextSize"
                             android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"
                             android:background="@color/transparent"
                             android:completionThreshold="0"
                             android:maxLength="30"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:layout_marginLeft="@dimen/dp8" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/clearProvinceSearch"
@@ -139,6 +125,38 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bottom_view"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="?toolbarBackgroundColor"
+                android:onClick="@{()->viewModel.onSearchPlaceButtonClick()}"
+                android:visibility="@{viewModel.showMainView}"
+                app:cardCornerRadius="@dimen/dp12"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="@dimen/dp8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/frameLayout"
+                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintStart_toStartOf="@+id/frameLayout"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:layout_constraintVertical_bias="0.042">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/location_list_tile"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/largeTextSize" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <ProgressBar
                 android:id="@+id/loadingView"
                 android:layout_width="wrap_content"
@@ -152,6 +170,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView4"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"

@@ -2,158 +2,51 @@ package net.iGap.model.igasht;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class ExtraDetail {
 
-    @SerializedName("attentions")
-    private String mAttentions;
-    @SerializedName("closing_times")
-    private String mClosingTimes;
-    @SerializedName("coffee_shop")
-    private Boolean mCoffeeShop;
-    @SerializedName("content")
-    private String mContent;
-    @SerializedName("lat")
-    private String mLat;
-    @SerializedName("location_name")
-    private String mLocationName;
-    @SerializedName("long")
-    private String mLong;
-    @SerializedName("main_picture")
-    private String mMainPicture;
-    @SerializedName("parking")
-    private Boolean mParking;
-    @SerializedName("prayer_room")
-    private Boolean mPrayerRoom;
-    @SerializedName("resturant")
-    private Boolean mResturant;
-    @SerializedName("wc")
-    private Boolean mWc;
-    @SerializedName("weelchair_ramp")
-    private Boolean mWeelchairRamp;
-    @SerializedName("wifi")
-    private Boolean mWifi;
-    @SerializedName("working_time")
-    private String mWorkingTime;
+    @SerializedName("CoverImage")
+    private String mCoverImage;
+    @SerializedName("FullDescription")
+    private String mFullDescription;
+    @SerializedName("ShortDescription")
+    private String mShortDescription;
 
-    public String getAttentions() {
-        return mAttentions;
+    public List<Gallery> getmGallery() {
+        return mGallery;
     }
 
-    public void setAttentions(String attentions) {
-        mAttentions = attentions;
+    public void setmGallery(List<Gallery> mGallery) {
+        this.mGallery = mGallery;
     }
 
-    public String getClosingTimes() {
-        return mClosingTimes;
+    @SerializedName("Gallery")
+    private List<Gallery> mGallery;
+
+
+    public String getmCoverImage() {
+        return mCoverImage;
     }
 
-    public void setClosingTimes(String closingTimes) {
-        mClosingTimes = closingTimes;
+    public void setmCoverImage(String mCoverImage) {
+        this.mCoverImage = mCoverImage;
     }
 
-    public Boolean getCoffeeShop() {
-        return mCoffeeShop;
+    public String getmFullDescription() {
+        return mFullDescription;
     }
 
-    public void setCoffeeShop(Boolean coffeeShop) {
-        mCoffeeShop = coffeeShop;
+    public void setmFullDescription(String mFullDescription) {
+        this.mFullDescription = mFullDescription;
     }
 
-    public String getContent() {
-        return mContent;
+    public String getmShortDescription() {
+        return mShortDescription;
     }
 
-    public void setContent(String content) {
-        mContent = content;
+    public void setmShortDescription(String mShortDescription) {
+        this.mShortDescription = mShortDescription;
     }
-
-    public String getLat() {
-        return mLat;
-    }
-
-    public void setLat(String lat) {
-        mLat = lat;
-    }
-
-    public String getLocationName() {
-        return mLocationName;
-    }
-
-    public void setLocationName(String locationName) {
-        mLocationName = locationName;
-    }
-
-    public void setmLong(String mLong) {
-        this.mLong = mLong;
-    }
-
-    public String getmLong() {
-        return mLong;
-    }
-
-    public String getMainPicture() {
-        return mMainPicture;
-    }
-
-    public void setMainPicture(String mainPicture) {
-        mMainPicture = mainPicture;
-    }
-
-    public Boolean getParking() {
-        return mParking;
-    }
-
-    public void setParking(Boolean parking) {
-        mParking = parking;
-    }
-
-    public Boolean getPrayerRoom() {
-        return mPrayerRoom;
-    }
-
-    public void setPrayerRoom(Boolean prayerRoom) {
-        mPrayerRoom = prayerRoom;
-    }
-
-    public Boolean getResturant() {
-        return mResturant;
-    }
-
-    public void setResturant(Boolean resturant) {
-        mResturant = resturant;
-    }
-
-    public Boolean getWc() {
-        return mWc;
-    }
-
-    public void setWc(Boolean wc) {
-        mWc = wc;
-    }
-
-    public Boolean getWeelchairRamp() {
-        return mWeelchairRamp;
-    }
-
-    public void setWeelchairRamp(Boolean weelchairRamp) {
-        mWeelchairRamp = weelchairRamp;
-    }
-
-    public Boolean getmWifi() {
-        return mWifi;
-    }
-
-    public void setWifi(Boolean wifi) {
-        mWifi = wifi;
-    }
-
-    public String getWorkingTime() {
-        return mWorkingTime;
-    }
-
-    public void setWorkingTime(String workingTime) {
-        mWorkingTime = workingTime;
-    }
-
 }

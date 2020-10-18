@@ -2,17 +2,16 @@ package net.iGap.model.igasht;
 
 import androidx.annotation.Nullable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class IGashtVouchers {
 
-    @SerializedName("voucher_id")
-    @Expose
-    private int voucherId;
     @SerializedName("count")
-    @Expose
     private int count;
+    @SerializedName("service_time_id")
+    private Long mServiceTimeId;
+    @SerializedName("voucher_id")
+    private int voucherId;
 
     public IGashtVouchers(int voucherId, int count) {
         this.voucherId = voucherId;
@@ -33,5 +32,13 @@ public class IGashtVouchers {
             return voucherId == ((IGashtVouchers) obj).getVoucherId();
         }
         return super.equals(obj);
+    }
+
+    public Long getmServiceTimeId() {
+        return mServiceTimeId;
+    }
+
+    public void setmServiceTimeId(Long mServiceTimeId) {
+        this.mServiceTimeId = mServiceTimeId;
     }
 }

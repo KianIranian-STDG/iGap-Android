@@ -30,6 +30,57 @@ public class IGashtLocationService {
     private String modelId;
     @SerializedName("type_amounts")
     private List<IGashtServiceAmount> amounts;
+    @SerializedName("location_id")
+    private Long mLocationId;
+    @SerializedName("location_name")
+    private String mLocationName;
+    @SerializedName("normal_sale")
+    private Boolean mNormalSale;
+
+    public String getServiceNameWithLanguage() {
+        switch (G.selectedLanguage) {
+            case "en":
+                return getEnglishName();
+            case "fa":
+                return getServiceName();
+            default:
+                return getServiceName();
+        }
+    }
+
+    public IGashtServiceAmount getPersianTicket() {
+        for (int i = 0; i < amounts.size(); i++) {
+            if (amounts.get(i).getVoucherTypeId() == 3) {
+                return amounts.get(i);
+            }
+        }
+        return null;
+    }
+
+    public Long getmLocationId() {
+        return mLocationId;
+    }
+
+    public void setmLocationId(Long mLocationId) {
+        this.mLocationId = mLocationId;
+    }
+
+    public String getmLocationName() {
+        return mLocationName;
+    }
+
+    public void setmLocationName(String mLocationName) {
+        this.mLocationName = mLocationName;
+    }
+
+    public Boolean getmNormalSale() {
+        return mNormalSale;
+    }
+
+    public void setmNormalSale(Boolean mNormalSale) {
+        this.mNormalSale = mNormalSale;
+    }
+
 
     private int count;
 
@@ -85,23 +136,5 @@ public class IGashtLocationService {
         this.count = count;
     }
 
-    public String getServiceNameWithLanguage() {
-        switch (G.selectedLanguage) {
-            case "en":
-                return getEnglishName();
-            case "fa":
-                return getServiceName();
-            default:
-                return getServiceName();
-        }
-    }
 
-    public IGashtServiceAmount getPersianTicket() {
-        for (int i = 0; i < amounts.size(); i++) {
-            if (amounts.get(i).getVoucherTypeId() == 3) {
-                return amounts.get(i);
-            }
-        }
-        return null;
-    }
 }

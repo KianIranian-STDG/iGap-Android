@@ -1811,4 +1811,5 @@
     <string name="payment_userScore">Ton score</string>
     <string name="Increase_score">Augmentez votre score \n dès maintenant!</string>
     <string name="Submitـomment">Pour voir les résultats du sondage, veuillez d\'abord enregistrer votre vote!</string>
+    <string name="location_list_tile">Rechercher des centres de divertissement</string>
 </resources>

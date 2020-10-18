@@ -9,6 +9,8 @@ public class IGashtProvince implements Parcelable {
 
     @SerializedName("id")
     private int id;
+    @SerializedName("project_id")
+    private int projectId;
     @SerializedName("province_name")
     private String provinceName;
     @SerializedName("english_name")
@@ -18,9 +20,19 @@ public class IGashtProvince implements Parcelable {
 
     protected IGashtProvince(Parcel in) {
         id = in.readInt();
+        projectId = in.readInt();
         provinceName = in.readString();
         englishName = in.readString();
         activation = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(projectId);
+        dest.writeString(provinceName);
+        dest.writeString(englishName);
+        dest.writeByte((byte) (activation ? 1 : 0));
     }
 
     public static final Creator<IGashtProvince> CREATOR = new Creator<IGashtProvince>() {
@@ -51,16 +63,13 @@ public class IGashtProvince implements Parcelable {
         return activation;
     }
 
+    public int getProjectId() {
+        return projectId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(provinceName);
-        dest.writeString(englishName);
-        dest.writeByte((byte) (activation ? 1 : 0));
-    }
 }

@@ -1613,4 +1613,5 @@
     <string name="payment_userScore">Твой счет</string>
     <string name="Increase_score">Увеличьте свой счет \n прямо сейчас!</string>
     <string name="Submitـomment">Чтобы увидеть результаты опроса, сначала зарегистрируйте свой голос!</string>
+    <string name="location_list_tile">Поиск развлекательных центров</string>
 </resources>

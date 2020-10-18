@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.model.igasht.BaseIGashtResponse;
-import net.iGap.repository.IGashtRepository;
 import net.iGap.model.igasht.IGashtLocationService;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.repository.IGashtRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +51,7 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     @Override
     public void onSuccess(BaseIGashtResponse<IGashtLocationService> data) {
         serviceList.setValue(getPersianTicket(data.getData()));
+        repository.setLocationServices(data.getData());
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
