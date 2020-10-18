@@ -70,17 +70,17 @@ public class IGashtHistoryPlaceViewModel extends BaseIGashtViewModel<TicketHisto
     }
 
     public void loadMoreItems(int totalCount, int lastVisibleItem) {
-        if (!isLoadMoreItem && totalCount <= (lastVisibleItem + 1) && totalCount != 0) {
-            //load more
-            isLoadMoreItem = true;
+        if (!isLoadMoreItem && totalCount != 0) {
             if (response.getTotal() < (response.getOffset() * response.getLimit())) {
                 showLoadingView.set(View.GONE);
                 isLoadMoreItem = false;
                 return;
+            } else {
+                isLoadMoreItem = true;
+                showLoadingView.set(View.VISIBLE);
+                repository.getHistoryList(response.getOffset() + 1, response.getLimit(), this, this);
             }
-            showLoadingView.set(View.VISIBLE);
-            //Load more data for recyclerView
-            repository.getHistoryList(response.getOffset() + 1, response.getLimit(), this, this);
+
         }
     }
 

@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IGashtRepository {
 
@@ -110,11 +111,10 @@ public class IGashtRepository {
 
     public void createVoucherList(@NotNull List<IGashtLocationService> data) {
         for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getCount() > 0) {
+            if (data.get(i).getCount() > 0 && voucherId != 0 && selectedServiceList != null) {
                 selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getVoucherinfoId(), data.get(i).getCount()));
                 count = getLocationServices().get(i).getCount();
                 voucherId = getLocationServices().get(i).getAmounts().get(i).getVoucherinfoId();
-                //       serviceTime = getLocationServices().get(i).getAmounts().get(i).getmServiceTimes().get(i);
             }
         }
     }
@@ -128,7 +128,7 @@ public class IGashtRepository {
             JsonArray vouchers = new JsonArray();
             vouchers.add(jsonObject1);
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("phone_number", realm.where(RealmUserInfo.class).findFirst().getUserInfo().getPhoneNumber().replaceAll("^98", "0"));
+            jsonObject.addProperty("phone_number", Objects.requireNonNull(realm.where(RealmUserInfo.class).findFirst()).getUserInfo().getPhoneNumber().replaceAll("^98", "0"));
             jsonObject.addProperty("province_id", selectedProvince.getId());
             jsonObject.add("vouchers", vouchers);
 
