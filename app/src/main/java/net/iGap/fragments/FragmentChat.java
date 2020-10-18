@@ -2188,10 +2188,10 @@ public class FragmentChat extends BaseFragment
                         if (channelRole == ChannelChatRole.MEMBER || groupRole == GroupChatRole.MEMBER || isNotJoin) {
                             RealmRoom.updatePinedMessageDeleted(mRoomId, false);
                             pinedMessageLayout.setVisibility(View.GONE);
+                            isPinAvailable = false;
                         } else {
                             sendRequestPinMessage(0);
                         }
-                        isPinAvailable = false;
                     }
                 });
 
@@ -2262,6 +2262,7 @@ public class FragmentChat extends BaseFragment
                                 pinedMessageLayout.setVisibility(View.GONE);
                             }
                             RealmRoom.updatePinedMessageDeleted(mRoomId, false);
+                            isPinAvailable = false;
                         }
                     }).negativeText(R.string.cancel);
 
@@ -2273,6 +2274,7 @@ public class FragmentChat extends BaseFragment
                             } else {
                                 new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
                             }
+                            isPinAvailable = false;
                         });
             }
 
