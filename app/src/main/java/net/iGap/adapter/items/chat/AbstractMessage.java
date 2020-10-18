@@ -22,7 +22,6 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -417,8 +416,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     Uploader.getInstance().upload(fileObject);
                 }
             } else {
-                MessageProgress _Progress = ((IProgress) holder).getProgress();
-                _Progress.withProgress(Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + ""));
+                MessageProgress messageProgress = ((IProgress) holder).getProgress();
+                int progress = Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + "");
+                messageProgress.withProgress(progress);
+                receivedMessage(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(mMessage.getMessageId()), progress);
             }
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
