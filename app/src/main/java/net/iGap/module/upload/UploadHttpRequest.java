@@ -82,6 +82,9 @@ public class UploadHttpRequest {
 
         isResume = preferences.getLong("offset_" + md5Key, 0) != 0;
         String token = preferences.getString("token_" + md5Key, null);
+
+        FileLog.i("UploadHttpRequest md5Key " + md5Key + " isResume " + isResume + " token " + token);
+
         initFile(token);
     }
 
@@ -137,7 +140,7 @@ public class UploadHttpRequest {
                             }
                         } else {
                             if (delegate != null) {
-                                delegate.onUploadFail(fileObject, null);
+                                delegate.onUploadFail(fileObject, new Exception("resumeRetryCount max limited"));
                             }
                         }
                     } else if (resCode == 406) {
@@ -180,7 +183,7 @@ public class UploadHttpRequest {
                 } else if (res.body() != null) {
                     if (res.code() == 451) {
                         if (delegate != null) {
-                            delegate.onUploadFail(fileObject, null);
+                            delegate.onUploadFail(fileObject, new Exception("451 error for -> " + req.toString()));
                         }
                     }
                     String resString = res.body().string();
@@ -287,6 +290,7 @@ public class UploadHttpRequest {
 
         if (error instanceof Exception) {
             Exception exception = (Exception) error;
+            FileLog.e("UploadHttpRequest", exception);
             if (delegate != null) {
                 delegate.onUploadFail(fileObject, exception);
             }
@@ -310,7 +314,7 @@ public class UploadHttpRequest {
             cipher.init(Cipher.ENCRYPT_MODE, key2, ivSpec);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FileLog.e(e);
             return null;
         }
         return cipher;

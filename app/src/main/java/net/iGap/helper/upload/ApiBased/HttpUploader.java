@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 
 import net.iGap.G;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.upload.CompressTask;
 import net.iGap.module.ChatSendMessageUtil;
@@ -200,6 +201,7 @@ public class HttpUploader implements IUpload {
             existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
+                    FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress);
                     if (fileObject.onUploadListener != null) {
                         fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
@@ -208,6 +210,7 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFinish(UploadObject fileObject) {
+                    FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {
                         inProgressUploads.remove(fileObject.key);
@@ -245,6 +248,7 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
+                    FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {
                         inProgressUploads.remove(fileObject.key);
