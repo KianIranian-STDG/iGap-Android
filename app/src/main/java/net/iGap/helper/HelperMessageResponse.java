@@ -35,6 +35,9 @@ public class HelperMessageResponse {
             /**
              * put message to realm
              */
+
+            FileLog.i("HelperMessageResponse roomType -> " + roomType.toString() + " messageId -> " + roomMessage.getMessageId() + " roomId -> " + roomId);
+
             RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm, roomId, roomMessage, new StructMessageOption().setGap());
             final RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
             /**
