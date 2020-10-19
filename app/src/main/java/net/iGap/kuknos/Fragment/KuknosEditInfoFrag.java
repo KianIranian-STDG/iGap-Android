@@ -38,7 +38,7 @@ public class KuknosEditInfoFrag extends BaseFragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), KuknosBuyAgainFrag.newInstance()).setAddToBackStack(true).setReplace(true).load();
+
             }
         });
 
