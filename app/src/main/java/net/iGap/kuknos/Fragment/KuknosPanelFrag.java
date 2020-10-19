@@ -1,7 +1,6 @@
 package net.iGap.kuknos.Fragment;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,8 +32,6 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
-import net.iGap.fragments.FragmentEditImage;
-import net.iGap.fragments.FragmentWebView;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -42,6 +39,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
+import net.iGap.module.Theme;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.observers.interfaces.ToolbarListener;
 
@@ -133,9 +131,10 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         binding.fragKuknosBuyAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), KuknosBuyAgainFrag.newInstance()).setReplace(true).load();
+              viewModel.getInFoFromServerToCheckUserProfile();
             }
         });
+        onUserInfoObserver();
         onErrorObserver();
         openPage();
         onDataChanged();
@@ -154,6 +153,21 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 //        popBackStackFragment();
         ((ActivityMain) getActivity()).removeAllFragmentFromMain();
         return true;
+    }
+
+    private void onUserInfoObserver() {
+        viewModel.getUserInfo().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), KuknosBuyAgainFrag.newInstance()).setReplace(true).load();
+            } else {
+                View dialogView=LayoutInflater.from(getContext()).inflate(R.layout.kuknos_buy_again_dialog,null);
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                        .customView(dialogView, true)
+                        .widgetColor(new Theme().getPrimaryColor(getContext()))
+                        .build();
+                dialog.show();
+            }
+        });
     }
 
     private void initialSettingBS() {

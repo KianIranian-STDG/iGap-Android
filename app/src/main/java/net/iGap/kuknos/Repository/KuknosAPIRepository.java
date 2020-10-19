@@ -18,6 +18,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosUsernameStatus;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -64,7 +65,9 @@ class KuknosAPIRepository {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
     }*/
-
+     void getUserInfo(String userID,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
+         new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.getUserInfo(userID), handShakeCallback, apiResponse);
+    }
     void getUserHistory(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosOperationResponse>>().initAPI(apiService.getWalletHistory(userID, 100, "desc"), handShakeCallback, apiResponse);
     }

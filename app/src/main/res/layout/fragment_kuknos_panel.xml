@@ -219,7 +219,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp10"
                     android:minHeight="48dp"
-                    android:onClick="@{()->viewmodel.historyW()}"
                     android:text="@string/kuknos_panelStr_buyAgain"
                     android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"

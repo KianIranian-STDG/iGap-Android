@@ -1,5 +1,7 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.util.Log;
+
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,9 +14,11 @@ import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
+import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Repository.PanelRepo;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.kuknos.Repository.PanelRepo;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     private KuknosAsset asset = null;
     private MutableLiveData<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
+    private MutableLiveData<Boolean> userInfo;
     private MutableLiveData<Integer> openPage;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;
@@ -45,6 +50,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
+        userInfo=new MutableLiveData<>();
         openPage = new SingleLiveEvent<>();
         openPage.setValue(-1);
         TandCAgree = new MutableLiveData<>(null);
@@ -53,6 +59,37 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     public void initApis() {
         getAccountOptionStatus();
         getDataFromServer();
+    }
+
+    public void getInFoFromServerToCheckUserProfile() {
+        progressState.setValue(true);
+        panelRepo.getUserInfoResponse(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
+                if (data.getData().getIban()!=null) {
+                    userInfo.setValue(true);
+                }else{
+                    userInfo.setValue(false);
+                }
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onError(String errorM) {
+                BAndCState.postValue(0);
+                userInfo.setValue(false);
+                error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                BAndCState.postValue(0);
+                error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
+                progressState.setValue(false);
+                userInfo.setValue(false);
+            }
+        });
     }
 
     private void getDataFromServer() {
@@ -193,6 +230,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     public void historyW() {
         openPage.setValue(2);
     }
+
     public void goToSetting() {
         openPage.setValue(3);
     }
@@ -269,6 +307,14 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     public MutableLiveData<String> getTandCAgree() {
         return TandCAgree;
+    }
+
+    public MutableLiveData<Boolean> getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(MutableLiveData<Boolean> userInfo) {
+        this.userInfo = userInfo;
     }
 
     public void setTandCAgree(MutableLiveData<String> tandCAgree) {

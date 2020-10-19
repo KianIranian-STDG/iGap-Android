@@ -15,6 +15,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
+import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosUsernameStatus;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
@@ -61,6 +62,16 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("get-account-assets")
     Call<KuknosResponseModel<KuknosBalance>> getUserAsset(@Field("public_key") String publicKey);
+
+    /**
+     * This api returns all of user's info
+     *
+     * @param publicKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("get-account")
+    Call<KuknosResponseModel<KuknosUserInfoResponse>> getUserInfo(@Field("public_key") String publicKey);
 
     /**
      * This api returns a user's asset detail
@@ -211,6 +222,7 @@ public interface KuknosApi {
 
     /**
      * this api make a request for payment and charge the account.
+     *
      * @param publicKey
      * @param assetCode
      * @param assetAmount
