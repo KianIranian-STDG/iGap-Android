@@ -43,6 +43,7 @@ import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.electricity_bill.ElectricityBillMainFrag;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.fragments.giftStickers.GiftStickerMainFragment;
+import net.iGap.fragments.igasht.IGashtProvinceFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.kuknos.KuknosEntryOptionFrag;
 import net.iGap.fragments.mobileBank.MobileBankLoginFragment;
@@ -155,6 +156,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case TOPUP_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), PaymentChargeFragment.newInstance()).setReplace(false).load();
                 break;
+
             case BILL_MENU:/** tested **/
 
                 try {
@@ -181,6 +183,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case PARSLAND:
                 new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+                break;
+            case FUN_SERVICE:
+                new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
             case BLOCKCHAIN:
 //                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
