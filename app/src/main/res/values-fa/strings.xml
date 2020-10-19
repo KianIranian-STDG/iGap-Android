@@ -256,7 +256,6 @@
     <string name="New_Chanel">"کانال جدید"</string>
 
     <!-- tarjome nashavad -->
-
     <string name="of">"از"</string>
     <string name="save_to_music_folder">"با موفقیت ذخیره کردن در پوشهٔ موسیقی"</string>
     <string name="choose_picture">"انتخاب تصویر از"</string>
@@ -1289,7 +1288,7 @@
     <string name="sheba_20_digits">شماره ۲۴ رقمی شبا</string>
 
     <string name="no_camera_found">دوربین دستگاه یافت نشد</string>
-
+    <string name="IBAN">"شبا"</string>
     <string name="paygear_balance">موجودی کیف پول</string>
     <string name="paygear_card_balance">موجودی کیف پول</string>
     <string name="paygear_account_balance">موجودی حساب کیف پول</string>
@@ -1600,6 +1599,21 @@
     <string name="igasht_count_title">تعداد</string>
     <string name="igasht_service_title">سرویس</string>
 
+    <string name="kuknos_rial_max_buy">"حداکثر مجاز"</string>
+    <string name="kuknos_rial_price_of_day">"قیمت روز"</string>
+    <string name="kuknos_rial_percentage_of_commission">"درصد کارمزد"</string>
+    <string name="kuknos_rial_Deposit_sheba_number">"شماره شبای واریزی"</string>
+    <string name="kuknos_rial_Maximum_redeemable_token">"حداکثر توکن قابل بازخرید"</string>
+    <string name="kuknos_rial_Number_of_contracts">"تعداد پیمان"</string>
+    <string name="kuknos_rial_Redemption_fee">"کارمزد بازخرید PMN"</string>
+    <string name="kuknos_rial_Redemption_feee">"کارمزد بازخرید"</string>
+    <string name="kuknos_rial_Total_number_of_contracts">"تعداد کل پیمان"</string>
+    <string name="kuknos_rial_Deposit_amount">"مبلغ واریزی (ریال)"</string>
+    <string name="kuknos_rial_Deposit_amount2">"مبلغ واریزی"</string>
+    <string name="kuknos_rial_min_buy">"حداقل مجاز"</string>
+    <string name="kuknos_rial_dialog_Repurchase_tokens">"توکن بازخرید"</string>
+    <string name="kuknos_edit_info_birthday">"تاریخ تولد"</string>
+    <string name="kuknos_panel_Edit_and_change_account_information">"ویرایش و تغییر اطلاعات حساب کاربری"</string>
     <string name="kuknos_login_id_str">کد ملی *</string>
     <string name="kuknos_login_tel_str">تلفن *</string>
     <string name="kuknos_login_progress_str">بررسی...</string>
@@ -1677,6 +1691,7 @@
     <string name="kuknos_wHistory_error">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_setting_title">تنظیمات</string>
     <string name="kuknos_setting_viewRecoveryP">نمایش اطلاعات حساب کاربری</string>
+    <string name="kuknos_setting_dialog">تاییدیه بازخرید توکن</string>
     <string name="kuknos_setting_logout">خروج از کیف پول</string>
     <string name="kuknos_changePIN_successTitle">موفقیت</string>
     <string name="kuknos_changePIN_failTitle">خطا</string>

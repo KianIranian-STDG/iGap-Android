@@ -1423,6 +1423,7 @@ Want to get it?</string>
     <string name="shopAccountType">Shop</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
+    <string name="IBAN">IBAN</string>
     <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
     <string name="recover_password">Recover password</string>
     <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
@@ -1691,6 +1692,22 @@ Want to get it?</string>
     <string name="kuknos_panelStr_send">Send</string>
     <string name="kuknos_panelStr_history">History</string>
     <string name="kuknos_panelStr_buyAgain">Redemption</string>
+    <string name="kuknos_rial_max_buy">"Maximum allowed"</string>
+    <string name="kuknos_rial_min_buy">"Minimum allowed"</string>
+    <string name="kuknos_rial_price_of_day">"Price of the day"</string>
+    <string name="kuknos_rial_percentage_of_commission">"Percentage of commission"</string>
+    <string name="kuknos_rial_Deposit_sheba_number">"Deposit sheba number"</string>
+    <string name="kuknos_rial_Maximum_redeemable_token">"Maximum redeemable token"</string>
+    <string name="kuknos_rial_Number_of_contracts">"Number of contracts"</string>
+    <string name="kuknos_setting_dialog">Token redemption confirmation</string>
+    <string name="kuknos_rial_Redemption_fee">"Redemption fee PMN"</string>
+    <string name="kuknos_rial_Redemption_feee">"Redemption fee"</string>
+    <string name="kuknos_rial_Deposit_amount2">"Deposit amount"</string>
+    <string name="kuknos_rial_dialog_Repurchase_tokens">"Repurchase tokens"</string>
+    <string name="kuknos_rial_Total_number_of_contracts">"Total number of contracts"</string>
+    <string name="kuknos_edit_info_birthday">BirthDate</string>
+    <string name="kuknos_rial_Deposit_amount">"Deposit amount (Rials)"</string>
+    <string name="kuknos_panel_Edit_and_change_account_information">"Edit and change account information"</string>
     <string name="kuknos_panelStr_trading">Trading</string>
     <string name="kuknos_panelStr_kyc">KYC</string>
     <string name="kuknos_panelStr_buyPeyman">Buy Token</string>

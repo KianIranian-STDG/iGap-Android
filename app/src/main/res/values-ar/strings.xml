@@ -2060,7 +2060,22 @@
     <string name="internet_pin_2">كلمة مرور الإنترنت الثانية</string>
     <string name="cvv2">CVV2</string>
     <string name="select_card">اختيار البطاقة</string>
-
+    <string name="kuknos_rial_max_buy">"الحد الأقصى المسموح به"</string>
+    <string name="kuknos_rial_min_buy">"الحد الأدنى المسموح به"</string>
+    <string name="kuknos_rial_price_of_day">"سعر اليوم"</string>
+    <string name="kuknos_rial_percentage_of_commission">"نسبة العمولة"</string>
+    <string name="kuknos_rial_Deposit_sheba_number">"رقم شبعا الإيداع"</string>
+    <string name="kuknos_rial_Maximum_redeemable_token">"الحد الأقصى من الرمز المميز القابل للاسترداد"</string>
+    <string name="kuknos_rial_Redemption_fee">"رسوم الاسترداد PMN"</string>
+    <string name="kuknos_rial_Redemption_feee">"رسوم الاسترداد"</string>
+    <string name="kuknos_rial_Deposit_amount2">"مبلغ الإيداع"</string>
+    <string name="kuknos_edit_info_birthday">"تاريخ الولادة"</string>
+    <string name="kuknos_panel_Edit_and_change_account_information">"تحرير وتغيير معلومات الحساب"</string>
+    <string name="kuknos_rial_Total_number_of_contracts">"العدد الإجمالي للعقود"</string>
+    <string name="kuknos_rial_Deposit_amount">"مبلغ الإيداع (ريال)"</string>
+    <string name="kuknos_rial_dialog_Repurchase_tokens">"إعادة شراء الرموز"</string>
+    <string name="kuknos_rial_Number_of_contracts">"عدد العقود"</string>
+    <string name="kuknos_setting_dialog">تأكيد استرداد الرمز المميز</string>
     <string name="kuknos_panelStr_buyAgain">فداء</string>
     <string name="new_pass">كلمة مرور جديدة</string>
     <string name="confirm_pass">كرر كلمة المرور</string>
