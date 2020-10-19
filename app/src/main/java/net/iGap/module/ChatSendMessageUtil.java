@@ -12,6 +12,7 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
+import net.iGap.G;
 import net.iGap.controllers.BaseController;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.module.accountManager.AccountManager;
@@ -42,7 +43,7 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
 
     private ProtoGlobal.Room.Type roomType;
     private OnChatSendMessageResponse onChatSendMessageResponseChat;
-    private OnChatSendMessageResponse onChatSendMessageResponseRoom;
+//    private OnChatSendMessageResponse onChatSendMessageResponseRoom;
 
     private static volatile ChatSendMessageUtil[] instance = new ChatSendMessageUtil[AccountManager.MAX_ACCOUNT_COUNT];
 
@@ -253,10 +254,6 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         this.onChatSendMessageResponseChat = response;
     }
 
-    public void setOnChatSendMessageResponseRoomList(OnChatSendMessageResponse response) {
-        this.onChatSendMessageResponseRoom = response;
-    }
-
     public void sendMessage(String fakeMessageIdAsIdentity) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.sendMessage(fakeMessageIdAsIdentity);
@@ -290,10 +287,6 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
     public void onMessageUpdate(long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
         if (onChatSendMessageResponseChat != null) {
             onChatSendMessageResponseChat.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
-        }
-
-        if (onChatSendMessageResponseRoom != null) {
-            onChatSendMessageResponseRoom.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
         }
 
         if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
@@ -342,9 +335,7 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
             onChatSendMessageResponseChat.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
         }
 
-        if (onChatSendMessageResponseRoom != null) {
-            onChatSendMessageResponseRoom.onMessageReceive(roomId, message, messageType, roomMessage, roomType);
-        }
+        onRoomMessageReceive(roomId, roomMessage, roomType);
 
         if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
@@ -356,14 +347,39 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
 
     }
 
+    private void onRoomMessageReceive(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
+            if (room != null && realmRoomMessage != null) {
+                /**
+                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                 */
+                if (room.getUnreadCount() <= 1) {
+                    realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                }
+            }
+        });
+
+        /**
+         * don't send update status for own message
+         */
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
+            // user has received the message, so I make a new delivered update status request
+            // todo:please check in group and channel that user is joined
+
+            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
+        }
+    }
+
     @Override
     public void onMessageFailed(long roomId, long roomMessageId) {
         if (onChatSendMessageResponseChat != null) {
             onChatSendMessageResponseChat.onMessageFailed(roomId, roomMessageId);
-        }
-
-        if (onChatSendMessageResponseRoom != null) {
-            onChatSendMessageResponseRoom.onMessageFailed(roomId, roomMessageId);
         }
     }
 }

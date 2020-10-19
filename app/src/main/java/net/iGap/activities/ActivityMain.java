@@ -91,7 +91,6 @@ import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -111,7 +110,6 @@ import net.iGap.observers.interfaces.DataTransformerListener;
 import net.iGap.observers.interfaces.FinishActivity;
 import net.iGap.observers.interfaces.ITowPanModDesinLayout;
 import net.iGap.observers.interfaces.OnChatClearMessageResponse;
-import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnGroupAvatarResponse;
 import net.iGap.observers.interfaces.OnMapRegisterState;
@@ -126,7 +124,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
@@ -144,7 +141,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse, OnChatSendMessageResponse, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
     public static final String userId = "userId";
@@ -1416,7 +1413,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         designLayout(chatLayoutMode.none);
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).setOnChatSendMessageResponseRoomList(this);
+//        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).setOnChatSendMessageResponseRoomList(this);
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onPayment = this;
@@ -1549,47 +1546,47 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-    @Override
-    public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
-        //empty
-    }
+//    @Override
+//    public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
+//        //empty
+//    }
 
     //*****************************************************************************************************************************
 
-    @Override
-    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
-            if (room != null && realmRoomMessage != null) {
-                /**
-                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                 */
-                if (room.getUnreadCount() <= 1) {
-                    realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                }
-            }
-        });
+//    @Override
+//    public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
+//        DbManager.getInstance().doRealmTransaction(realm -> {
+//            RealmRoom room = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+//            final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", roomMessage.getMessageId()).findFirst();
+//            if (room != null && realmRoomMessage != null) {
+//                /**
+//                 * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+//                 */
+//                if (room.getUnreadCount() <= 1) {
+//                    realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+//                }
+//            }
+//        });
+//
+//        /**
+//         * don't send update status for own message
+//         */
+//        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
+//            // user has received the message, so I make a new delivered update status request
+//            // todo:please check in group and channel that user is joined
+//
+//            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+//                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+//            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+//                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+//            }
+//        }
+//    }
 
-        /**
-         * don't send update status for own message
-         */
-        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != AccountManager.getInstance().getCurrentUser().getId()) {
-            // user has received the message, so I make a new delivered update status request
-            // todo:please check in group and channel that user is joined
-
-            if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-            }
-        }
-    }
-
-    @Override
-    public void onMessageFailed(final long roomId, long messageId) {
-        //empty
-    }
+//    @Override
+//    public void onMessageFailed(final long roomId, long messageId) {
+//        //empty
+//    }
 
     //*************************************************************
 
