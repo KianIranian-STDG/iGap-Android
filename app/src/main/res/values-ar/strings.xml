@@ -2075,6 +2075,7 @@
     <string name="kuknos_rial_Deposit_amount">"مبلغ الإيداع (ريال)"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"إعادة شراء الرموز"</string>
     <string name="kuknos_rial_Number_of_contracts">"عدد العقود"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"أكمل معلوماتك \n بالذهاب إلى \n قسم الإعدادات"</string>
     <string name="kuknos_setting_dialog">تأكيد استرداد الرمز المميز</string>
     <string name="kuknos_panelStr_buyAgain">فداء</string>
     <string name="new_pass">كلمة مرور جديدة</string>

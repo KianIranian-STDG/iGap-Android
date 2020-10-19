@@ -27,6 +27,7 @@
     <string name="kuknos_rial_Total_number_of_contracts">"Общее количество контрактов"</string>
     <string name="kuknos_rial_Deposit_amount">"Сумма депозита (риалы)"</string>
     <string name="kuknos_rial_Deposit_amount2">"Сумма депозита"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"Дополните информацию,\n перейдя в \n раздел настроек"</string>
     <string name="kuknos_edit_info_birthday">"Дата рождения"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Редактировать и изменять информацию об учетной записи"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"Выкупить токены"</string>

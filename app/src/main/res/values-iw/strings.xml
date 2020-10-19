@@ -26,6 +26,7 @@
     <string name="kuknos_rial_Total_number_of_contracts">"Hejmara tevahî ya peymanan"</string>
     <string name="kuknos_rial_Deposit_amount">"Mîqeya spartinê (Riyal)"</string>
     <string name="kuknos_rial_Redemption_feee">"Xerca xilaskirina"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"Bi çûna beşa mîhengan\n agahdariya xwe \n temam bikin"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Agahdariya hesabê biguherînin û biguherînin"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"Tokenan bikirin"</string>
     <string name="Block_Users">مسدود ائدیلمیش لیست</string>

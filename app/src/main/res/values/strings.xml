@@ -1705,6 +1705,7 @@ Want to get it?</string>
     <string name="kuknos_rial_Deposit_amount2">"Deposit amount"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"Repurchase tokens"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Total number of contracts"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"Complete your information \n by going to the \n settings section"</string>
     <string name="kuknos_edit_info_birthday">BirthDate</string>
     <string name="kuknos_rial_Deposit_amount">"Deposit amount (Rials)"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Edit and change account information"</string>

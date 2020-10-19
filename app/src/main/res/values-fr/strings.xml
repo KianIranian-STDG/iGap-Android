@@ -29,6 +29,7 @@
     <string name="kuknos_edit_info_birthday">"Date de naissance"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"Rachat de jetons"</string>
     <string name="kuknos_rial_Redemption_feee">"Frais de rachat"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"Complétez vos informations \n en allant dans la  \n section des paramètres"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Modifier et modifier les informations de compte"</string>
     <string name="kuknos_rial_price_of_day">"Prix ​du jour"</string>
     <string name="rg_confirm_text_register">Confirmez votre pays et son code puis entrez votre numéro de téléphone sans le 0 au début</string>

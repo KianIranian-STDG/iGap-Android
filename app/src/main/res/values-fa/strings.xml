@@ -1612,6 +1612,7 @@
     <string name="kuknos_rial_Deposit_amount2">"مبلغ واریزی"</string>
     <string name="kuknos_rial_min_buy">"حداقل مجاز"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"توکن بازخرید"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"با مراجعه به بخش تنظیمات \n نسبت به تکمیل اطلاعات خود \n اقدام نمایید"</string>
     <string name="kuknos_edit_info_birthday">"تاریخ تولد"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"ویرایش و تغییر اطلاعات حساب کاربری"</string>
     <string name="kuknos_login_id_str">کد ملی *</string>
