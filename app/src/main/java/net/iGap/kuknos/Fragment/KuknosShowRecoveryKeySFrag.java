@@ -56,22 +56,6 @@ public class KuknosShowRecoveryKeySFrag extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
-        HelperToolbar mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                })
-                .setLogoShown(true);
-
-        LinearLayout toolbarLayout = binding.fragKuknosSRToolbar;
-        toolbarLayout.addView(mHelperToolbar.getView());
-
         binding.fragKuknosSRkeysET.setOnClickListener(v -> {
             copyWalletID(getResources().getString(R.string.kuknos_accountInfo_recoveryKey_title), kuknosShowRecoveryKeyVM.getRecoveryKeys().get());
         });
