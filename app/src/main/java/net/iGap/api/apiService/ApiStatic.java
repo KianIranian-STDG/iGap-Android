@@ -5,6 +5,7 @@ class ApiStatic {
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
     static final String MOBILE_BANK = "http://192.168.8.109:3000/v1.0/";
     static final String WEATHER_URL = "http://192.168.8.66:7000/v1.0/";
+    static final String KUKNOS_TEST_URL = "http://192.168.8.109:3002/v1.0/";
     static final String VERSION1_1 = "v1.1/";
     static final String STICKER_URL = "https://api.igap.net/sticker/" + VERSION1_1;
     private static final String BASE_URL = "https://api.igap.net/";
@@ -12,7 +13,7 @@ class ApiStatic {
     private static final String VERSION = "v1.0/";
     static final String BEEP_TUNES_URL = BASE_URL + SERVICES + VERSION + "beep-tunes/";
     static final String CHANNEL_URL = BASE_URL + SERVICES + VERSION + "channel/";
-    static final String KUKNOS_URL = BASE_URL + "kuknos/" + VERSION;
+    static final String KUKNOS_URL = KUKNOS_TEST_URL;
     static final String PAYMENT_URL = BASE_URL + SERVICES + VERSION + "payment/";
     static final String ATI_URL = BASE_URL + SERVICES + VERSION + "ati/";
     static final String CHARGE_URL = BASE_URL + "operator-services/" + VERSION;

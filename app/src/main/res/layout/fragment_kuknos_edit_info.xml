@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layoutDirection="rtl"
-    tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="net.iGap.kuknos.viewmodel.KuknosEditInfoVM" />
+    </data>
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layoutDirection="rtl"
+        tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView3"
@@ -23,6 +29,7 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_editInfo_nationalCode"
+            app:layout_constraintEnd_toEndOf="@+id/kuknos_editInfo_nationalCode"
             app:layout_constraintStart_toStartOf="@+id/kuknos_editInfo_nationalCode"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0"
@@ -36,11 +43,11 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            style="@style/iGapEditTextStyle"
             android:layout_marginRight="16dp"
             android:background="@drawable/button_round_shape_black"
             android:textColor="?iGapSubtitleTextColor"
             android:textStyle="bold"
+            android:text="@={viewModel.nationalId}"
             app:layout_constraintBottom_toTopOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +64,7 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_editInfo_birthDay"
+            app:layout_constraintEnd_toEndOf="@+id/kuknos_editInfo_birthDay"
             app:layout_constraintStart_toStartOf="@+id/kuknos_editInfo_birthDay"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_nationalCode" />
 
@@ -65,7 +73,6 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dp40"
             android:layout_marginStart="16dp"
-            style="@style/iGapEditTextStyle"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
@@ -89,6 +96,7 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_editInfo_name"
+            app:layout_constraintEnd_toEndOf="@+id/kuknos_editInfo_name"
             app:layout_constraintStart_toStartOf="@+id/kuknos_editInfo_name"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_birthDay" />
 
@@ -96,7 +104,6 @@
             android:id="@+id/kuknos_editInfo_name"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp40"
-            style="@style/iGapEditTextStyle"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
@@ -105,6 +112,7 @@
             android:background="@drawable/button_round_shape_black"
             android:textColor="?iGapSubtitleTextColor"
             android:textStyle="bold"
+            android:text="@={viewModel.firstName}"
             app:layout_constraintBottom_toTopOf="@+id/textView6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,6 +129,7 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_editInfo_lastName"
+            app:layout_constraintEnd_toEndOf="@+id/kuknos_editInfo_lastName"
             app:layout_constraintStart_toStartOf="@+id/kuknos_editInfo_lastName"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_name" />
 
@@ -133,10 +142,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            style="@style/iGapEditTextStyle"
             android:background="@drawable/button_round_shape_black"
             android:textColor="?iGapSubtitleTextColor"
             android:textStyle="bold"
+            android:text="@={viewModel.lastName}"
             app:layout_constraintBottom_toTopOf="@+id/textView7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -153,6 +162,7 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_editInfo_shaba"
+            app:layout_constraintEnd_toEndOf="@+id/kuknos_editInfo_shaba"
             app:layout_constraintStart_toStartOf="@+id/kuknos_editInfo_shaba"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_lastName" />
 
@@ -162,7 +172,6 @@
             android:layout_height="@dimen/dp40"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            style="@style/iGapEditTextStyle"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
@@ -174,22 +183,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/fragKuknosEditInfoSubmit"
-            style="@style/iGapButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:minHeight="48dp"
-            android:text="ذخیره"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_shaba" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fragKuknosEditInfoSubmit"
+                style="@style/iGapButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="48dp"
+                android:text="ذخیره"
+                android:onClick="@{()->viewModel.saveAccountInfo()}"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_shaba" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
