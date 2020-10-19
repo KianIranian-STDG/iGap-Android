@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import net.iGap.G;
 import net.iGap.controllers.BaseController;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.additionalData.AdditionalType;
@@ -262,6 +263,8 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
             requestChannelSendMessage.sendMessage(fakeMessageIdAsIdentity);
         }
+
+        FileLog.i("ChatSendMessageUtil sendMessage -> " + fakeMessageIdAsIdentity);
 
         if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             makeFailed(Long.parseLong(fakeMessageIdAsIdentity));
