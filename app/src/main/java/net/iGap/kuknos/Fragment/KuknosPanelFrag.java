@@ -1,6 +1,7 @@
 package net.iGap.kuknos.Fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,6 +33,8 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.kuknos.WalletSpinnerArrayAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.FragmentKuknosPanelBinding;
+import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.FragmentWebView;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -130,7 +133,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         binding.fragKuknosBuyAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new HelperFragment(getActivity().getSupportFragmentManager(), KuknosBuyAgainFrag.newInstance()).setReplace(true).load();
             }
         });
         onErrorObserver();
@@ -156,7 +159,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     private void initialSettingBS() {
         List<String> items = new ArrayList<>();
 //        items.add(getString(R.string.kuknos_setting_changePin));
-        items.add(getString(R.string.kuknos_setting_viewRecoveryP));
+        items.add(getString(R.string.kuknos_panel_Edit_and_change_account_information));
         items.add(getString(R.string.kuknos_setting_copySeedKey));
         items.add(getString(R.string.kuknos_setting_sepid));
         items.add(getString(R.string.kuknos_setting_logout));
@@ -202,9 +205,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     private void goToShowRecovery() {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment = fragmentManager.findFragmentByTag(KuknosShowRecoveryKeySFrag.class.getName());
+        Fragment fragment = fragmentManager.findFragmentByTag(KuknosAccountInfoFrag.class.getName());
         if (fragment == null) {
-            fragment = KuknosShowRecoveryKeySFrag.newInstance();
+            fragment = KuknosAccountInfoFrag.newInstance();
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
