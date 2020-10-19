@@ -34,7 +34,7 @@
         android:paddingTop="@dimen/dp4"
         android:paddingRight="@dimen/dp8"
         android:paddingBottom="@dimen/dp8"
-        android:textSize="@dimen/standardTextSize"
+        android:textSize="@dimen/largeTextSize"
         android:inputType="textMultiLine"
         android:minLines="1"
         android:maxLines="6" />

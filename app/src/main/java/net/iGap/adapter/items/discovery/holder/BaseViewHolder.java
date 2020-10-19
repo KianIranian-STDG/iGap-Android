@@ -33,6 +33,7 @@ import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentInquiryTelephone;
+import net.iGap.fragments.FragmentUserScore;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.FragmentiGapMap;
@@ -132,7 +133,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }
                 break;
             case IVAND:
-                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), new FragmentUserScore()).setReplace(false).load();
                 break;
             case IVANDQR:
                 UserScoreViewModel.scanBarCode(activity);
