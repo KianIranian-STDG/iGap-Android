@@ -14,6 +14,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosHash;
 import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
@@ -47,6 +48,12 @@ class KuknosAPIRepository {
         new ApiInitializer<KuknosResponseModel<KuknosAsset>>().initAPI(apiService.getAllAssets(assetCode), handShakeCallback, apiResponse);
     }
 
+    void getRefundInfo(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosRefundModel>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosRefundModel>>().initAPI(apiService.getRefundInfo(assetCode), handShakeCallback, apiResponse);
+    }
+
+
+
     /*void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
         KuknosAPIAsync<AccountResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.USER_ACCOUNT);
         temp.execute(userID);
@@ -65,13 +72,13 @@ class KuknosAPIRepository {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
     }*/
-     void getUserInfo(String userID,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
-         new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.getUserInfo(userID), handShakeCallback, apiResponse);
+    void getUserInfo(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.getUserInfo(userID), handShakeCallback, apiResponse);
     }
 
-    void updateUserInfo(String userID,KuknosUserInfoResponse userInfo,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.updateAccount(userID,userInfo.getIban(),userInfo.getFirstName()
-        ,userInfo.getLastName(),userInfo.getBirthDate()), handShakeCallback, apiResponse);
+    void updateUserInfo(String userID, KuknosUserInfoResponse userInfo, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.updateAccount(userID, userInfo.getIban(), userInfo.getFirstName()
+                , userInfo.getLastName(), userInfo.getBirthDate()), handShakeCallback, apiResponse);
     }
 
     void getUserHistory(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {

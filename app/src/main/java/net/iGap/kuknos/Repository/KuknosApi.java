@@ -11,6 +11,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosHash;
 import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
@@ -273,6 +274,16 @@ public interface KuknosApi {
      */
     @GET("get-fees")
     Call<KuknosResponseModel<KuknosFeeModel>> getFee();
+
+    /**
+     * this api makes a request for Refund information
+     *
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("get-refund-info")
+    Call<KuknosResponseModel<KuknosRefundModel>> getRefundInfo(@Field("asset_code") String assetCode);
+
 
     /*@FormUrlEncoded
     @POST("activate-account")

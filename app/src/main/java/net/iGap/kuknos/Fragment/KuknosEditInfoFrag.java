@@ -1,6 +1,5 @@
 package net.iGap.kuknos.Fragment;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,24 +53,8 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         firstName.setEnabled(false);
         lastName.setEnabled(false);
         nationalId.setEnabled(false);
-
-        datePickerDialog = new PersianDatePickerDialog(getActivity())
-                .setPositiveButtonString("حله")
-                .setNegativeButton("بیخیال")
-                .setMaxYear(1400)
-                .setListener(new Listener() {
-                    @Override
-                    public void onDateSelected(PersianCalendar persianCalendar) {
-                        birthDate.setText(persianCalendar.getPersianShortDate().replace("/","-"));
-                    }
-
-                    @Override
-                    public void onDismissed() {
-
-                    }
-                });
-
         birthDate.setFocusable(false);
+
         birthDate.setOnClickListener(v -> datePickerDialog.show());
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +118,22 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         lastName = view.findViewById(R.id.kuknos_editInfo_lastName);
         birthDate = view.findViewById(R.id.kuknos_editInfo_birthDate_editText);
         IBN = view.findViewById(R.id.kuknos_editInfo_shaba);
+
+        datePickerDialog = new PersianDatePickerDialog(getActivity())
+                .setPositiveButtonString("حله")
+                .setNegativeButton("بیخیال")
+                .setMaxYear(1400)
+                .setListener(new Listener() {
+                    @Override
+                    public void onDateSelected(PersianCalendar persianCalendar) {
+                        birthDate.setText(persianCalendar.getPersianShortDate().replace("/","-"));
+                    }
+
+                    @Override
+                    public void onDismissed() {
+
+                    }
+                });
     }
 
 }

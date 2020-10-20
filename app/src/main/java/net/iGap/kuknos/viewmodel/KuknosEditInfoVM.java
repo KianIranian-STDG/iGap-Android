@@ -6,7 +6,6 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Repository.PanelRepo;
-import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmKuknos;
 
@@ -14,7 +13,6 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
     private MutableLiveData<Boolean> progressState;
     private MutableLiveData<KuknosUserInfoResponse> userInfo;
     private PanelRepo panelRepo = new PanelRepo();
-    private SingleLiveEvent<Boolean> datePick = new SingleLiveEvent<>();
 
     public KuknosEditInfoVM() {
         progressState = new MutableLiveData<>();
@@ -67,12 +65,7 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
             }
         });
     }
-    public void datePickerAction() {
-        datePick.setValue(true);
-    }
-    public SingleLiveEvent<Boolean> getDatePick() {
-        return datePick;
-    }
+
     public MutableLiveData<Boolean> getProgressState() {
         return progressState;
     }
