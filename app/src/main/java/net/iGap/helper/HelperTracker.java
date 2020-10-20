@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import com.caspian.otpsdk.context.ApplicationContext;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -21,6 +22,7 @@ import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
 
 import ir.metrix.sdk.Metrix;
+import ir.metrix.sdk.MetrixConfig;
 
 public class HelperTracker {
 
@@ -60,6 +62,16 @@ public class HelperTracker {
     public static final String TRACKER_FINANCIAL_SERVICES = CATEGORY_DISCOVERY + "TRACKER_FINANCIAL_SERVICES";
 
 
+    private static HelperTracker instance;
+    private static boolean canSendMetrixEvent = false;
+
+    public static HelperTracker getInstance() {
+        if (instance == null) {
+            instance = new HelperTracker();
+        }
+        return instance;
+    }
+
     synchronized private static Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(G.context);
@@ -81,14 +93,7 @@ public class HelperTracker {
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.KEY_TRACKER_FILE, SHP_SETTING.KEY_TRACKER_INSTALL_USER, true);
         }
 
-        try {
-            String packageName = G.context.getPackageName();
-            allowSendTracker = (packageName != null && packageName.toLowerCase().equals("net.igap")) && allowSendTracker;
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-
-        if (allowSendTracker) {
+        if (allowSendTracker && canSendMetrixEvent) {
             switch (trackerTag) {
                 case TRACKER_CHANGE_LANGUAGE:
                     Metrix.getInstance().newEvent("rvwun");
@@ -178,6 +183,26 @@ public class HelperTracker {
 
             tracker.setScreenName(action);
             tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
+    }
+
+    public void initMetrix(ApplicationContext context) {
+        try {
+            String packageName = context.getPackageName();
+            canSendMetrixEvent = packageName != null && packageName.toLowerCase().equals("net.igap");
+
+            if (canSendMetrixEvent) {
+                MetrixConfig metrixConfig = new MetrixConfig(context, "jpbnabzrmeqvxme");
+                metrixConfig.setFirebaseId("1:780057141561:android:69c59b7595e50096", "igap-im", "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA");
+                Metrix.onCreate(metrixConfig);
+                Metrix.initialize(context, "jpbnabzrmeqvxme");
+                if (!BuildConfig.DEBUG) {
+                    Metrix.getInstance().setStore(BuildConfig.Store);
+                    Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
         }
     }
 }

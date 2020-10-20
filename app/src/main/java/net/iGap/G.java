@@ -41,6 +41,7 @@ import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -69,8 +70,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.realm.Realm;
-import ir.metrix.sdk.Metrix;
-import ir.metrix.sdk.MetrixConfig;
 import ir.radsense.raadcore.web.WebBase;
 import ir.tapsell.plus.TapsellPlus;
 
@@ -403,17 +402,10 @@ public class G extends ApplicationContext {
         AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
-        MetrixConfig metrixConfig = new MetrixConfig(this, "jpbnabzrmeqvxme");
-        metrixConfig.setFirebaseId("1:780057141561:android:69c59b7595e50096", "igap-im", "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA");
-        Metrix.onCreate(metrixConfig);
-        Metrix.initialize(this, "jpbnabzrmeqvxme");
-        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
-        // dont remove below line please
-        if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
-            Metrix.getInstance().setStore(BuildConfig.Store);
-            Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
-        }
+        HelperTracker.getInstance().initMetrix(this);
+
+        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
         handler = new Handler();
 
