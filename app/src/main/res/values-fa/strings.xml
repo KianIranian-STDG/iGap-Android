@@ -1627,6 +1627,8 @@
     <string name="kuknos_Restore_Hint">برای مثال: دریا، میز، کابل...</string>
     <string name="kuknos_Restore_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_Restore_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
+    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"دریافت پشتوانه \n فیزیکی PMN"</string>
+    <string name="kuknos_buy_again_tab_Rial_equivalent">"معادل ریالی  \n پرداخت PMN"</string>
     <string name="kuknos_Restore_Error_Snack">باشه</string>
     <string name="kuknos_RestoreSeed_Title">لطفا کلید خصوصی خود را وارد کنید.</string>
     <string name="kuknos_RestoreSeed_Message">با استفاده از این کلید، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
@@ -2124,6 +2126,7 @@
     <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
     <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
     <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
+    <string name="koknos_account_infp_tab_User_information">"اطلاعات کاربری"</string>
     <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال توکن کنید.</string>
     <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
     <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>

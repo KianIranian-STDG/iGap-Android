@@ -1,12 +1,6 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
-import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-
-import com.google.gson.internal.$Gson$Types;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
@@ -14,75 +8,84 @@ import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Repository.PanelRepo;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmKuknos;
 
 public class KuknosEditInfoVM extends BaseAPIViewModel {
-
-    private static final String TAG = "KuknosEditInfoVM";
-    private ObservableField<String> nationalId = new ObservableField<>();
-    private ObservableField<String> firstName = new ObservableField<>();
-    private ObservableField<String> lastName = new ObservableField<>();
-    private SingleLiveEvent<Boolean> saveEdit = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> datePick = new SingleLiveEvent<>();
+    private MutableLiveData<Boolean> progressState;
+    private MutableLiveData<KuknosUserInfoResponse> userInfo;
     private PanelRepo panelRepo = new PanelRepo();
+    private SingleLiveEvent<Boolean> datePick = new SingleLiveEvent<>();
 
     public KuknosEditInfoVM() {
+        progressState = new MutableLiveData<>();
+        userInfo = new MutableLiveData<>();
+        userInfo.setValue(null);
+    }
+
+    public void getInFoFromServerToCheckUserProfile() {
+        progressState.setValue(true);
         panelRepo.getUserInfoResponse(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
-                nationalId.set(data.getData().getNationalCode());
-                firstName.set(data.getData().getFirstName());
-                lastName.set(data.getData().getLastName());
+                if (data.getData().getIban() != null) {
+                    RealmKuknos.updateIban(data.getData().getIban());
+                }
+                userInfo.setValue(data.getData());
+                progressState.setValue(false);
             }
 
             @Override
-            public void onError(String error) {
-                Log.e(TAG, "onError: " + error );
+            public void onError(String errorM) {
+                userInfo.setValue(null);
+                progressState.setValue(false);
             }
 
             @Override
             public void onFailed() {
-                Log.e(TAG, "onFailed: " );
+                userInfo.setValue(null);
+                progressState.setValue(false);
+
             }
         });
-
     }
 
+    public void sendUserInfo(KuknosUserInfoResponse userInfo) {
+        panelRepo.updateUserInfo(userInfo, this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressState.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                progressState.setValue(false);
+            }
+        });
+    }
     public void datePickerAction() {
         datePick.setValue(true);
     }
-    public void saveAccountInfo(){
-        saveEdit.setValue(true);
-    }
-
     public SingleLiveEvent<Boolean> getDatePick() {
         return datePick;
     }
-
-    public ObservableField<String> getNationalId() {
-        return nationalId;
+    public MutableLiveData<Boolean> getProgressState() {
+        return progressState;
     }
 
-    public void setNationalId(ObservableField<String> nationalId) {
-        this.nationalId = nationalId;
+    public MutableLiveData<KuknosUserInfoResponse> getUserInfo() {
+        return userInfo;
     }
 
-    public ObservableField<String> getFirstName() {
-        return firstName;
+    public void setUserInfo(MutableLiveData<KuknosUserInfoResponse> userInfo) {
+        this.userInfo = userInfo;
     }
 
-    public void setFirstName(ObservableField<String> firstName) {
-        this.firstName = firstName;
-    }
-
-    public ObservableField<String> getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(ObservableField<String> lastName) {
-        this.lastName = lastName;
-    }
-
-    public SingleLiveEvent<Boolean> getSaveEdit() {
-        return saveEdit;
+    public void setProgressState(MutableLiveData<Boolean> progressState) {
+        this.progressState = progressState;
     }
 }

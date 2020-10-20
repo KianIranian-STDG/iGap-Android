@@ -76,11 +76,12 @@ public class KuknosBuyAgainFrag extends BaseFragment {
             @Override
             public CharSequence getPageTitle(int position) {
                 if (position == 0)
-                    return "دریافت پشتوانه \n فیزیکی PMN";
+                    return getString(R.string.kuknos_buy_again_tab_Get_PMN_physical_support);
                 else
-                    return "معادل ریالی \n پرداخت PMN";
+                    return getString(R.string.kuknos_buy_again_tab_Rial_equivalent);
             }
         });
+        mViewPager.setCurrentItem(1);
         mTabLayout = view.findViewById(R.id.kuknos_buy_again_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
         return view;

@@ -68,6 +68,12 @@ class KuknosAPIRepository {
      void getUserInfo(String userID,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
          new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.getUserInfo(userID), handShakeCallback, apiResponse);
     }
+
+    void updateUserInfo(String userID,KuknosUserInfoResponse userInfo,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.updateAccount(userID,userInfo.getIban(),userInfo.getFirstName()
+        ,userInfo.getLastName(),userInfo.getBirthDate()), handShakeCallback, apiResponse);
+    }
+
     void getUserHistory(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosOperationResponse>>().initAPI(apiService.getWalletHistory(userID, 100, "desc"), handShakeCallback, apiResponse);
     }

@@ -77,11 +77,12 @@ public class KuknosAccountInfoFrag extends Fragment {
             @Override
             public CharSequence getPageTitle(int position) {
                 if (position == 0)
-                    return "اطلاعات اکانت";
+                    return getString(R.string.kuknos_accountInfo_title);
                 else
-                    return "اطلاعات کاربری";
+                    return getString(R.string.koknos_account_infp_tab_User_information);
             }
         });
+        mViewPager.setCurrentItem(1);
         mTabLayout = view.findViewById(R.id.kuknos_buy_again_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
 

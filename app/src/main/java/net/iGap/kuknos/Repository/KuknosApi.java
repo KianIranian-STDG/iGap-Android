@@ -64,6 +64,20 @@ public interface KuknosApi {
     Call<KuknosResponseModel<KuknosBalance>> getUserAsset(@Field("public_key") String publicKey);
 
     /**
+     * This api update user's info
+     *
+     * @param publicKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("update-account")
+    Call<KuknosResponseModel<KuknosUserInfoResponse>> updateAccount(@Field("public_key") String publicKey,
+                                                                    @Field("iban") String iban,
+                                                                    @Field("first_name") String firstName,
+                                                                    @Field("last_name") String lastName,
+                                                                    @Field("birth_date") String birthDate);
+
+    /**
      * This api returns all of user's info
      *
      * @param publicKey

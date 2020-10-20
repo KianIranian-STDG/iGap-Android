@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
+    android:layoutDirection="locale"
     android:layout_height="match_parent"
     tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
 
@@ -247,7 +248,6 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/editText5"
-            app:layout_constraintEnd_toEndOf="@+id/editText5"
             app:layout_constraintStart_toStartOf="@+id/editText5"
             app:layout_constraintTop_toBottomOf="@+id/imageView3"
             app:layout_constraintVertical_bias="0.0"
@@ -281,7 +281,6 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/editText2"
-            app:layout_constraintEnd_toEndOf="@+id/editText2"
             app:layout_constraintStart_toStartOf="@+id/editText2"
             app:layout_constraintTop_toBottomOf="@+id/editText5" />
 
@@ -312,7 +311,6 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/editText3"
-            app:layout_constraintEnd_toEndOf="@+id/editText3"
             app:layout_constraintStart_toStartOf="@+id/editText3"
             app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
@@ -343,7 +341,6 @@
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/editText4"
-            app:layout_constraintEnd_toEndOf="@+id/editText4"
             app:layout_constraintStart_toStartOf="@+id/editText4"
             app:layout_constraintTop_toBottomOf="@+id/editText3" />
 
