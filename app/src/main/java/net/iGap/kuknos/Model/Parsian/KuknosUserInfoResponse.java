@@ -21,8 +21,10 @@ public class KuknosUserInfoResponse {
     private String domain;
     @SerializedName("iban")
     private String iban;
+    @SerializedName("birth_date")
+    private String birthDate;
 
-    public KuknosUserInfoResponse(String nationalCode, String federationName, String status, String firstName, String lastName, String mail, String publicKey, String domain, String iban) {
+    public KuknosUserInfoResponse(String nationalCode, String federationName, String status, String firstName, String lastName, String mail, String publicKey, String domain, String iban, String birthDate) {
         this.nationalCode = nationalCode;
         this.federationName = federationName;
         this.status = status;
@@ -32,6 +34,7 @@ public class KuknosUserInfoResponse {
         this.publicKey = publicKey;
         this.domain = domain;
         this.iban = iban;
+        this.birthDate = birthDate;
     }
 
     public KuknosUserInfoResponse() {
@@ -108,5 +111,13 @@ public class KuknosUserInfoResponse {
 
     public void setIban(String iban) {
         this.iban = iban;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
     }
 }
