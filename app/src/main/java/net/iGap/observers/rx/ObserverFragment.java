@@ -81,6 +81,12 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.onDestroyView();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
     }
@@ -89,7 +95,6 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     public void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
-        viewModel.onDestroyView();
         Log.e(getClass().getName(), "onDestroy: ");
     }
 
