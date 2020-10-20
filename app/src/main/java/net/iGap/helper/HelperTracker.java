@@ -81,6 +81,13 @@ public class HelperTracker {
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.KEY_TRACKER_FILE, SHP_SETTING.KEY_TRACKER_INSTALL_USER, true);
         }
 
+        try {
+            String packageName = G.context.getPackageName();
+            allowSendTracker = (packageName != null && packageName.toLowerCase().equals("net.igap")) && allowSendTracker;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
         if (allowSendTracker) {
             switch (trackerTag) {
                 case TRACKER_CHANGE_LANGUAGE:
