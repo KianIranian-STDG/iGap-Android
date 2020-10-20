@@ -1,5 +1,6 @@
 package net.iGap.kuknos.Fragment;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,8 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         lastName.setEnabled(false);
         nationalId.setEnabled(false);
 
-        datePickerDialog.setPositiveButtonString("حله")
+        datePickerDialog = new PersianDatePickerDialog(getActivity())
+                .setPositiveButtonString("حله")
                 .setNegativeButton("بیخیال")
                 .setMaxYear(1400)
                 .setListener(new Listener() {
@@ -68,6 +70,9 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
 
                     }
                 });
+
+        birthDate.setFocusable(false);
+        birthDate.setOnClickListener(v -> datePickerDialog.show());
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
