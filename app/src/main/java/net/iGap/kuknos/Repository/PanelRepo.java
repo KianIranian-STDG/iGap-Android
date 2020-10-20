@@ -65,6 +65,9 @@ public class PanelRepo {
     public void getUserInfoResponse(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
         kuknosAPIRepository.getUserInfo(userRepo.getAccountID(), handShakeCallback, apiResponse);
     }
+    public void updateUserInfo(KuknosUserInfoResponse userInfo,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
+        kuknosAPIRepository.updateUserInfo(userRepo.getAccountID(),userInfo, handShakeCallback, apiResponse);
+    }
     public void buyAsset(String assetCode, String assetAmount, String totalPrice, String description, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosBankPayment>> apiResponse) {
         kuknosAPIRepository.buyAsset(userRepo.getAccountID(), assetCode, assetAmount, totalPrice, description, handShakeCallback, apiResponse);
     }
