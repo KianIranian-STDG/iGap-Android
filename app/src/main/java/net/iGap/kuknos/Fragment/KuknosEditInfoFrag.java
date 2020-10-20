@@ -15,6 +15,9 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.viewmodel.KuknosEditInfoVM;
+import net.iGap.libs.persianDatePicker.Listener;
+import net.iGap.libs.persianDatePicker.PersianDatePickerDialog;
+import net.iGap.libs.persianDatePicker.util.PersianCalendar;
 
 
 public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
@@ -26,6 +29,7 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
     private EditText firstName;
     private EditText lastName;
     private KuknosUserInfoResponse userInfo;
+    private PersianDatePickerDialog datePickerDialog;
 
     public static KuknosEditInfoFrag newInstance() {
         KuknosEditInfoFrag fragment = new KuknosEditInfoFrag();
@@ -49,6 +53,22 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         firstName.setEnabled(false);
         lastName.setEnabled(false);
         nationalId.setEnabled(false);
+
+        datePickerDialog.setPositiveButtonString("حله")
+                .setNegativeButton("بیخیال")
+                .setMaxYear(1400)
+                .setListener(new Listener() {
+                    @Override
+                    public void onDateSelected(PersianCalendar persianCalendar) {
+                        birthDate.setText(persianCalendar.getPersianShortDate().replace("/","-"));
+                    }
+
+                    @Override
+                    public void onDismissed() {
+
+                    }
+                });
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
