@@ -76,15 +76,20 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     @Override
     public void onStop() {
         super.onStop();
-        viewModel.onDestroyView();
         EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
         Log.e(getClass().getName(), "onStop: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
+        viewModel.onDestroyView();
         Log.e(getClass().getName(), "onDestroy: ");
     }
 
