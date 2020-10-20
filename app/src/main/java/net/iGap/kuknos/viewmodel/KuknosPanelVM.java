@@ -19,6 +19,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Repository.PanelRepo;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmKuknos;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
                 if (data.getData().getIban()!=null) {
+                    RealmKuknos.updateIban(data.getData().getIban());
                     userInfo.setValue(true);
                 }else{
                     userInfo.setValue(false);
