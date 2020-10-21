@@ -291,6 +291,7 @@ public class UploadHttpRequest {
         if (error instanceof Exception) {
             Exception exception = (Exception) error;
             FileLog.e("UploadHttpRequest", exception);
+            preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
             if (delegate != null) {
                 delegate.onUploadFail(fileObject, exception);
             }
