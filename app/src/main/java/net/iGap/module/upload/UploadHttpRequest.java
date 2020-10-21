@@ -191,9 +191,9 @@ public class UploadHttpRequest {
                 }
             }
         } catch (IOException e) {
-            error(e);
+            error(e, true);
         } catch (JSONException e) {
-            error(e);
+            error(e, true);
         }
     }
 
@@ -221,7 +221,7 @@ public class UploadHttpRequest {
                 RequestBody requestBody = new UploadRequestBody(null, fileObject.offset, inputStream, totalByte -> {
                     if (cancelDownload.get() && isUploading) {
                         isUploading = false;
-                        error(new Exception("Download Canceled"));
+                        error(new Exception("Download Canceled"), false);
                         return;
                     }
 
@@ -272,10 +272,10 @@ public class UploadHttpRequest {
                     if (response.code() >= 500 && response.code() < 600) {
                         preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
                     }
-                    error(new Exception(response.body().string()));
+                    error(new Exception(response.body().string()), false);
                 }
             } catch (Exception e) {
-                error(e);
+                error(e, true);
             }
         } catch (FileNotFoundException e) {
             FileLog.e(e);
@@ -284,17 +284,24 @@ public class UploadHttpRequest {
         }
     }
 
-    private void error(Object error) {
+    private void error(Exception exception, boolean needReset) {
+        if (exception == null) {
+            return;
+        }
+
         isUploading = false;
         HelperSetAction.sendCancel(fileObject.messageId);
 
-        if (error instanceof Exception) {
-            Exception exception = (Exception) error;
-            FileLog.e("UploadHttpRequest", exception);
+        FileLog.e("UploadHttpRequest CustomException ", exception);
+
+        if (!exception.getMessage().equals("Canceled") && needReset) {
             preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
-            if (delegate != null) {
-                delegate.onUploadFail(fileObject, exception);
-            }
+        }
+
+        FileLog.e("UploadHttpRequest Exception ", exception);
+
+        if (delegate != null) {
+            delegate.onUploadFail(fileObject, exception);
         }
     }
 
