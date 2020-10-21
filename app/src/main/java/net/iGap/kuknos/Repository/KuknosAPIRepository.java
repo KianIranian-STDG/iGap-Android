@@ -1,5 +1,7 @@
 package net.iGap.kuknos.Repository;
 
+import android.util.Log;
+
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.kuknos.Model.KuknosPaymentResponse;
@@ -28,6 +30,7 @@ import org.stellar.sdk.responses.SubmitTransactionResponse;
 
 class KuknosAPIRepository {
     private KuknosApi apiService = new RetrofitFactory().getKuknosRetrofit();
+    private static final String TAG = "KuknosAPIRepository";
 
     void registerUser(KuknosSignupM info, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel> apiResponse) {
         new ApiInitializer<KuknosResponseModel>()
@@ -60,8 +63,14 @@ class KuknosAPIRepository {
     }*/
 
     void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosHash>> apiResponse) {
-        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, XDR -> new ApiInitializer<KuknosResponseModel<KuknosHash>>()
-                .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse))
+        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, new KuknosSDKRepo.callBack() {
+            @Override
+            public void getResponseXDR(String XDR) {
+                Log.e(TAG, "getResponseXDR: " + XDR);
+                new ApiInitializer<KuknosResponseModel<KuknosHash>>()
+                        .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse);
+            }
+        })
                 .execute(model.getSrc(), model.getDest(), model.getAssetCode(), model.getAssetInssuer(), model.getAmount(), model.getMemo());
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.payment(new KuknosSDKRepo().paymentToOtherXDR(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo()))

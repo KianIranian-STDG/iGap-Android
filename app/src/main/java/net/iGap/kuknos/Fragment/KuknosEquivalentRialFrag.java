@@ -1,11 +1,16 @@
 package net.iGap.kuknos.Fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -17,15 +22,27 @@ import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosRefundVM;
+import net.iGap.module.StructWallpaper;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmKuknos;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import io.realm.Realm;
+import retrofit2.Call;
 
 
 public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
+    private static final String TAG = "KuknosEquivalentRialFra";
     private Button submit;
     private TextView txtMaxAmount, txtMinAmount, txtFeeFixed, txtSellRate, txtMaxSell, txtIBAN;
+    private TextView txtPeymanCount, txtFinalFeeFixed, txtTotalPeyman, txtTotalPrice;
+    private KuknosRefundModel refundModel;
+    private KuknosBalance balance;
 
     public static KuknosEquivalentRialFrag newInstance() {
         KuknosEquivalentRialFrag fragment = new KuknosEquivalentRialFrag();
@@ -38,6 +55,8 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(KuknosRefundVM.class);
+        refundModel = new KuknosRefundModel();
+        balance = new KuknosBalance();
     }
 
     @Override
@@ -50,19 +69,79 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         viewModel.getPMNAssetData();
         viewModel.getAccountAssets();
 
-        RealmKuknos realmKuknos = new RealmKuknos();
-        txtIBAN.setText(realmKuknos.getIban());
+
+        String iBan = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
+            @Override
+            public String doTask(Realm realm) {
+                RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
+                if (realmKuknos != null && realmKuknos.getIban() != null) {
+                    return realmKuknos.getIban();
+                } else {
+                    return null;
+                }
+            }
+        });
+        txtIBAN.setText(iBan);
+
+        txtPeymanCount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    float peymanCount = Float.parseFloat(s.toString());
+                    if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
+                        txtPeymanCount.setTextColor(Color.BLACK);
+                        float finalFee = peymanCount * (refundModel.getFeeFixed() / 100.0f);
+                        float totalPeyman = finalFee + peymanCount;
+                        int totalPrice = (int) (peymanCount * Integer.parseInt(txtSellRate.getText().toString()));
+
+                        txtFinalFeeFixed.setText("" + finalFee);
+                        txtTotalPeyman.setText("" + totalPeyman);
+                        txtTotalPrice.setText("" + totalPrice);
+
+                    } else {
+                        txtPeymanCount.setTextColor(Color.RED);
+                    }
+                } else {
+                    txtFinalFeeFixed.setText("");
+                    txtTotalPeyman.setText("");
+                    txtTotalPrice.setTag("");
+                }
+            }
+        });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                float maxPeymanRefund = 0;
+                float peymanCount = 0;
+                if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
+                    peymanCount  = Float.parseFloat(txtPeymanCount.getText().toString());
+                    maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
+                }
+                viewModel.requestForFetchHash();
+                if ( peymanCount <= maxPeymanRefund ) {
 
+                } else {
+                    Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         onRefundDataReceived();
         onAssetDataReceived();
         onUserAssetsReceived();
+
+
         return view;
     }
 
@@ -74,6 +153,12 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     txtMaxAmount.setText("" + kuknosRefundModel.getMaxRefund());
                     txtMinAmount.setText("" + kuknosRefundModel.getMinRefund());
                     txtFeeFixed.setText("" + kuknosRefundModel.getFeeFixed());
+
+                    refundModel.setFeeFixed(kuknosRefundModel.getFeeFixed());
+                    refundModel.setMaxRefund(kuknosRefundModel.getMaxRefund());
+                    refundModel.setMinRefund(kuknosRefundModel.getMinRefund());
+
+
                 }
             }
         });
@@ -85,6 +170,7 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(KuknosAsset kuknosAsset) {
                 if (kuknosAsset != null) {
                     txtSellRate.setText("" + kuknosAsset.getAssets().get(0).getSellRate());
+
                 }
             }
         });
@@ -95,7 +181,10 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void onChanged(KuknosBalance kuknosBalance) {
                 if (kuknosBalance != null) {
-                    txtMaxSell.setText("" + kuknosBalance.getAssets().get(0).getLimit());
+                    float maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - 1.5);
+                    txtMaxSell.setText("" + maxPeymanRefund);
+                    balance.setAssets(kuknosBalance.getAssets());
+
                 }
             }
         });
@@ -109,5 +198,9 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         txtSellRate = view.findViewById(R.id.textView21);
         txtMaxSell = view.findViewById(R.id.textView31);
         txtIBAN = view.findViewById(R.id.textView30);
+        txtPeymanCount = view.findViewById(R.id.editText5);
+        txtFinalFeeFixed = view.findViewById(R.id.editText2);
+        txtTotalPeyman = view.findViewById(R.id.editText3);
+        txtTotalPrice = view.findViewById(R.id.editText4);
     }
 }
