@@ -2,6 +2,8 @@ package net.iGap.kuknos.Repository;
 
 import android.util.Log;
 
+import com.google.protobuf.Api;
+
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.kuknos.Model.KuknosPaymentResponse;
@@ -23,6 +25,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 
@@ -55,6 +58,9 @@ class KuknosAPIRepository {
         new ApiInitializer<KuknosResponseModel<KuknosRefundModel>>().initAPI(apiService.getRefundInfo(assetCode), handShakeCallback, apiResponse);
     }
 
+    void getVirtualRefund(String publicKey, String assetCode, float assetCount, int amount, float fee, String hash, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosVirtualRefund>>().initAPI(apiService.getVirtualRefund(publicKey, assetCode, assetCount, amount, fee, hash),handShakeCallback, apiResponse);
+    }
 
 
     /*void getUserAccount(String userID, ApiResponse<AccountResponse> apiResponse) {
@@ -66,7 +72,6 @@ class KuknosAPIRepository {
         new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, new KuknosSDKRepo.callBack() {
             @Override
             public void getResponseXDR(String XDR) {
-                Log.e(TAG, "getResponseXDR: " + XDR);
                 new ApiInitializer<KuknosResponseModel<KuknosHash>>()
                         .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse);
             }

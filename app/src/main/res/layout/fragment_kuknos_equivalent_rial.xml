@@ -371,12 +371,24 @@
             android:layout_marginTop="@dimen/dp20"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:minHeight="48dp"
+            android:minHeight="58dp"
             android:text="@string/kuknos_setting_copySKeyBtn"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText4" />
+
+        <ProgressBar
+            android:id="@+id/progressRefund"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="@dimen/dp2"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="@id/fragKuknosRialSubmit"
+            app:layout_constraintTop_toTopOf="@id/fragKuknosRialSubmit"
+            app:layout_constraintBottom_toBottomOf="@id/fragKuknosRialSubmit"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintHorizontal_bias="0.08"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

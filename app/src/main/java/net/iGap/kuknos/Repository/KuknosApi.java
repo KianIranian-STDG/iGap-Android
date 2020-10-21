@@ -18,6 +18,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
 
@@ -283,6 +284,15 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("get-refund-info")
     Call<KuknosResponseModel<KuknosRefundModel>> getRefundInfo(@Field("asset_code") String assetCode);
+
+    @FormUrlEncoded
+    @POST("virtual-refund")
+    Call<KuknosResponseModel<KuknosVirtualRefund>> getVirtualRefund(@Field("public_key") String publicKey,
+                                                                    @Field("asset_code") String assetCode,
+                                                                    @Field("asset_count") float assetCount,
+                                                                    @Field("amount") int amount,
+                                                                    @Field("fee") float fee,
+                                                                    @Field("hash") String hash);
 
 
     /*@FormUrlEncoded

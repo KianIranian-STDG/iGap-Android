@@ -15,6 +15,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 
@@ -54,6 +55,10 @@ public class PanelRepo {
 
     public void getRefundData(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosRefundModel>> apiResponse) {
         kuknosAPIRepository.getRefundInfo(assetCode, handShakeCallback,apiResponse);
+    }
+
+    public void getVirtualRefund(String publicKey, String assetCode, float assetCount, int amount, float fee, String hash, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>> apiResponse) {
+        kuknosAPIRepository.getVirtualRefund(publicKey,assetCode, assetCount, amount, fee, hash, handShakeCallback, apiResponse);
     }
 
     public void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosHash>> apiResponse) {

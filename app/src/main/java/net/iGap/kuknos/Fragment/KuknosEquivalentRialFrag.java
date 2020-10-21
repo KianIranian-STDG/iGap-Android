@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private TextView txtPeymanCount, txtFinalFeeFixed, txtTotalPeyman, txtTotalPrice;
     private KuknosRefundModel refundModel;
     private KuknosBalance balance;
+    private ProgressBar refundProgress;
 
     public static KuknosEquivalentRialFrag newInstance() {
         KuknosEquivalentRialFrag fragment = new KuknosEquivalentRialFrag();
@@ -128,8 +130,10 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     peymanCount  = Float.parseFloat(txtPeymanCount.getText().toString());
                     maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
                 }
-                viewModel.requestForFetchHash();
+
                 if ( peymanCount <= maxPeymanRefund ) {
+
+                    viewModel.requestForVirtualRefund(txtTotalPeyman.getText().toString(),Integer.parseInt(txtTotalPrice.getText().toString()), Float.parseFloat(txtFinalFeeFixed.getText().toString()));
 
                 } else {
                     Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();
@@ -140,7 +144,7 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         onRefundDataReceived();
         onAssetDataReceived();
         onUserAssetsReceived();
-
+        onProgress();
 
         return view;
     }
@@ -164,6 +168,18 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         });
     }
 
+    private void onProgress() {
+        viewModel.getRefundProgress().observe(getActivity(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    refundProgress.setVisibility(View.VISIBLE);
+                } else {
+                    refundProgress.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
     private void onAssetDataReceived() {
         viewModel.getAssetData().observe(getActivity(), new Observer<KuknosAsset>() {
             @Override
@@ -202,5 +218,6 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         txtFinalFeeFixed = view.findViewById(R.id.editText2);
         txtTotalPeyman = view.findViewById(R.id.editText3);
         txtTotalPrice = view.findViewById(R.id.editText4);
+        refundProgress = view.findViewById(R.id.progressRefund);
     }
 }
