@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,7 @@ import net.iGap.G;
 import net.iGap.activities.ActivityMain;
 import net.iGap.controllers.MessageController;
 import net.iGap.controllers.MessageDataStorage;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.swipeback.SwipeBackFragment;
@@ -50,6 +52,8 @@ public class BaseFragment extends SwipeBackFragment {
     public AvatarHandler avatarHandler;
     private Context context;
     protected View fragmentView;
+    protected Dialog currentDialog;
+    protected int fragmentUniqueId;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -76,6 +80,8 @@ public class BaseFragment extends SwipeBackFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         avatarHandler = new AvatarHandler();
+        fragmentUniqueId = RequestManager.getLastClassUniqueId();
+        createFragment();
         super.onCreate(savedInstanceState);
 
         getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_LEFT);
@@ -103,6 +109,53 @@ public class BaseFragment extends SwipeBackFragment {
 
     public View createView(Context context) {
         return null;
+    }
+
+    public View createToolbar(Context context) {
+        return null;
+    }
+
+    public void createFragment() {
+
+    }
+
+    public Dialog showDialog(Dialog dialog, final Dialog.OnDismissListener onDismissListener) {
+        if (dialog == null || fragmentView == null) {
+            return null;
+        }
+
+        try {
+            if (currentDialog != null) {
+                currentDialog.dismiss();
+                currentDialog = null;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        try {
+            currentDialog = dialog;
+            currentDialog.setCanceledOnTouchOutside(true);
+            currentDialog.setOnDismissListener(dialog1 -> {
+                if (onDismissListener != null) {
+                    onDismissListener.onDismiss(dialog1);
+                }
+                onDialogDismiss((Dialog) dialog1);
+                if (dialog1 == currentDialog) {
+                    currentDialog = null;
+                }
+            });
+            currentDialog.show();
+            return currentDialog;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        return null;
+    }
+
+    protected void onDialogDismiss(Dialog dialog) {
+
     }
 
     public void closeKeyboard(View v) {
@@ -165,6 +218,39 @@ public class BaseFragment extends SwipeBackFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        try {
+            if (currentDialog != null && currentDialog.isShowing()) {
+                currentDialog.dismiss();
+                currentDialog = null;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        super.onPause();
+    }
+
+    public void dismissCurrentDialog() {
+        if (currentDialog == null) {
+            return;
+        }
+
+        try {
+            currentDialog.dismiss();
+            currentDialog = null;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getRequestManager().cancelRequestByUniqueId(fragmentUniqueId);
     }
 
     public void removeFromBaseFragment() {
