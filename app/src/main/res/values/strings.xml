@@ -2228,6 +2228,12 @@ Want to get it?</string>
     <string name="hold">Hold</string>
     <string name="Increase_score">Increase your score\n right now!</string>
     <string name="error_term_not_accepted">\"Terms and conditions should be accepted!\"</string>
+    <string name="refund_button">Refund</string>
+    <string name="refund_token">Refund token</string>
+    <string name="kuknos_submit_count">Count</string>
+    <string name="kuknos_dialog_refund_fixed_fee">Refund fixed fee</string>
+    <string name="refund_amount">Refund amount</string>
+    <string name="submit">Submit</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>

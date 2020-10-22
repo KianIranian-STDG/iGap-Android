@@ -2189,6 +2189,11 @@
     <string name="hold">نگه‌داشتن</string>
     <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
     <string name="error_term_not_accepted">شرایط و مقررات تایید نشده است!</string>
+    <string name="refund_token">توکن بازخرید</string>
+    <string name="kuknos_submit_count">مقدار</string>
+    <string name="kuknos_dialog_refund_fixed_fee">کارمزد بازخرید</string>
+    <string name="refund_amount">مبلغ واریزی</string>
+    <string name="submit">قبول</string>
     <string-array name="billsOptions">
         <item>برق</item>
         <item>گاز</item>

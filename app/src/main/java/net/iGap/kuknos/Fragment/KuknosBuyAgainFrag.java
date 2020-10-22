@@ -63,7 +63,7 @@ public class KuknosBuyAgainFrag extends BaseFragment {
                 if (position == 0) {
                     return KuknosGetSupportFrag.newInstance();
                 } else {
-                    return KuknosEquivalentRialFrag.newInstance();
+                    return KuknosRefundRialFrag.newInstance();
                 }
             }
 

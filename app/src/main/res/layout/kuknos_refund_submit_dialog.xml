@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/dp40"
+    style="@style/IGapRootViewStyle">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/refund_token"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/dialog_refund_asset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PMN"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dp10"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/kuknos_submit_count"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dialog_refund_asset"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/dialog_refund_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dialog_refund_asset"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dp10"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/kuknos_dialog_refund_fixed_fee"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dialog_refund_count"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/dialog_fixed_fee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5%"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dialog_refund_count"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dp10"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/refund_amount"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/dialog_fixed_fee"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/dialog_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="22000"
+        android:textSize="@dimen/dp16"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/dialog_fixed_fee"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dp20"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_amount">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/kuknos_refund_dialog_submit"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp52"
+            android:layout_weight="0.3"
+            android:minHeight="58dp"
+            android:layout_marginEnd="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
+            style="@style/iGapButton"
+            android:text="@string/submit"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/kuknos_refund_dialog_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp52"
+            android:layout_weight="0.3"
+            android:text="@string/B_cancel"
+            android:minHeight="58dp"
+            style="@style/iGapButton"
+            android:backgroundTint="@color/red" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

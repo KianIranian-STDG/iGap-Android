@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,41 +12,40 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperError;
 import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosRefundVM;
-import net.iGap.module.StructWallpaper;
+import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.realm.RealmKuknos;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.realm.Realm;
-import retrofit2.Call;
+import ir.radsense.raadcore.widget.BottomSheet;
 
 
-public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
+public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private static final String TAG = "KuknosEquivalentRialFra";
     private Button submit;
     private TextView txtMaxAmount, txtMinAmount, txtFeeFixed, txtSellRate, txtMaxSell, txtIBAN;
     private TextView txtPeymanCount, txtFinalFeeFixed, txtTotalPeyman, txtTotalPrice;
     private KuknosRefundModel refundModel;
     private KuknosBalance balance;
-    private ProgressBar refundProgress;
+    private ProgressBar refundProgress, mainProgress;
+    private ConstraintLayout fragKRRConstrain;
 
-    public static KuknosEquivalentRialFrag newInstance() {
-        KuknosEquivalentRialFrag fragment = new KuknosEquivalentRialFrag();
+    public static KuknosRefundRialFrag newInstance() {
+        KuknosRefundRialFrag fragment = new KuknosRefundRialFrag();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -126,31 +124,66 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onClick(View v) {
                 float maxPeymanRefund = 0;
                 float peymanCount = 0;
-                if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
-                    peymanCount  = Float.parseFloat(txtPeymanCount.getText().toString());
+                if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText().toString() != null) {
+                    peymanCount = Float.parseFloat(txtPeymanCount.getText().toString());
                     maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
-                }
+                    if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
-                if ( peymanCount <= maxPeymanRefund ) {
+                        if (peymanCount <= maxPeymanRefund) {
+                            showRefundDialog("PMN", peymanCount, Float.parseFloat(txtFinalFeeFixed.getText().toString()),Long.parseLong(txtTotalPrice.getText().toString()));
 
-                    viewModel.requestForVirtualRefund(txtTotalPeyman.getText().toString(),Integer.parseInt(txtTotalPrice.getText().toString()), Float.parseFloat(txtFinalFeeFixed.getText().toString()));
+                        } else {
+                            Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(_mActivity, "You have not complied with the token limit.", Toast.LENGTH_SHORT).show();
+                    }
 
                 } else {
-                    Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please enter PMN count", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         });
 
         onRefundDataReceived();
         onAssetDataReceived();
         onUserAssetsReceived();
-        onProgress();
+        onRefundSuccess();
+        onRefundButtonProgress();
+        onNetworkCallSuccess();
+        onNetworkCallError();
 
         return view;
     }
 
+    private void showRefundDialog(String assetCode, float assetCount, float feeFixed, long amount) {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.kuknos_refund_submit_dialog, null);
+        TextView edtAssetCode, edtAssetCount, edtFeeFixed, edtAmount;
+        edtAssetCode = dialogView.findViewById(R.id.dialog_refund_asset);
+        edtAssetCount = dialogView.findViewById(R.id.dialog_refund_count);
+        edtFeeFixed = dialogView.findViewById(R.id.dialog_fixed_fee);
+        edtAmount = dialogView.findViewById(R.id.dialog_amount);
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .customView(dialogView, true)
+                .widgetColor(new Theme().getPrimaryColor(getContext()))
+                .build();
+        dialogView.findViewById(R.id.kuknos_refund_dialog_submit).setOnClickListener(v -> {
+            viewModel.requestForVirtualRefund(txtTotalPeyman.getText().toString(), Integer.parseInt(txtTotalPrice.getText().toString()), Float.parseFloat(txtFinalFeeFixed.getText().toString()));
+            dialog.dismiss();
+        });
+
+        dialogView.findViewById(R.id.kuknos_refund_dialog_cancel).setOnClickListener(v -> dialog.dismiss());
+        edtAssetCode.setText(assetCode);
+        edtAssetCount.setText("" + assetCount);
+        edtFeeFixed.setText("" + feeFixed);
+        edtAmount.setText("" + amount);
+        dialog.show();
+    }
     private void onRefundDataReceived() {
-        viewModel.getRefundData().observe(getActivity(), new Observer<KuknosRefundModel>() {
+        viewModel.getRefundData().observe(getViewLifecycleOwner(), new Observer<KuknosRefundModel>() {
             @Override
             public void onChanged(KuknosRefundModel kuknosRefundModel) {
                 if (kuknosRefundModel != null) {
@@ -168,8 +201,18 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         });
     }
 
-    private void onProgress() {
-        viewModel.getRefundProgress().observe(getActivity(), new Observer<Boolean>() {
+    private void onRefundSuccess() {
+        viewModel.getIsRefundSuccess().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    Toast.makeText(_mActivity, "Refund done successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void onRefundButtonProgress() {
+        viewModel.getRefundProgress().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
@@ -180,8 +223,9 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             }
         });
     }
+
     private void onAssetDataReceived() {
-        viewModel.getAssetData().observe(getActivity(), new Observer<KuknosAsset>() {
+        viewModel.getAssetData().observe(getViewLifecycleOwner(), new Observer<KuknosAsset>() {
             @Override
             public void onChanged(KuknosAsset kuknosAsset) {
                 if (kuknosAsset != null) {
@@ -193,7 +237,7 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     }
 
     private void onUserAssetsReceived() {
-        viewModel.getBalanceData().observe(getActivity(), new Observer<KuknosBalance>() {
+        viewModel.getBalanceData().observe(getViewLifecycleOwner(), new Observer<KuknosBalance>() {
             @Override
             public void onChanged(KuknosBalance kuknosBalance) {
                 if (kuknosBalance != null) {
@@ -202,6 +246,28 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     balance.setAssets(kuknosBalance.getAssets());
 
                 }
+            }
+        });
+    }
+
+    private void onNetworkCallSuccess() {
+        viewModel.getRequestsSuccess().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer == 0) {
+                    fragKRRConstrain.setVisibility(View.VISIBLE);
+                    mainProgress.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+
+    private void onNetworkCallError() {
+        viewModel.getRequestsError().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                mainProgress.setVisibility(View.INVISIBLE);
+                HelperError.showSnackMessage(getString(R.string.network_error), false);
             }
         });
     }
@@ -219,5 +285,7 @@ public class KuknosEquivalentRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         txtTotalPeyman = view.findViewById(R.id.editText3);
         txtTotalPrice = view.findViewById(R.id.editText4);
         refundProgress = view.findViewById(R.id.progressRefund);
+        fragKRRConstrain = view.findViewById(R.id.fragKRRConstrain);
+        mainProgress = view.findViewById(R.id.mainProgress);
     }
 }

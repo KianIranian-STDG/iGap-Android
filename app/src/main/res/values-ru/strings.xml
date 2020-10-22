@@ -1629,4 +1629,8 @@
     <string name="no_number_found">Там нет предварительного номера</string>
     <string name="payment_userScore">Твой счет</string>
     <string name="Increase_score">Увеличьте свой счет \n прямо сейчас!</string>
+    <string name="refund_token">Refund token</string>
+    <string name="kuknos_submit_count">Count</string>
+    <string name="kuknos_dialog_refund_fixed_fee">Refund fixed fee</string>
+    <string name="refund_amount">Refund amount</string>
 </resources>

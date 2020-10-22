@@ -277,7 +277,7 @@ public interface KuknosApi {
     Call<KuknosResponseModel<KuknosFeeModel>> getFee();
 
     /**
-     * this api makes a request for Refund information
+     * this api makes a request for Refund information.
      *
      * @return
      */
@@ -285,6 +285,16 @@ public interface KuknosApi {
     @POST("get-refund-info")
     Call<KuknosResponseModel<KuknosRefundModel>> getRefundInfo(@Field("asset_code") String assetCode);
 
+    /**
+     * this method makes a request for refund.
+     * @param publicKey This is the owner pubic key.
+     * @param assetCode This is the asset code that we want to refund.
+     * @param assetCount
+     * @param amount
+     * @param fee
+     * @param hash This param will returns from a transfer endpoint call.
+     * @return
+     */
     @FormUrlEncoded
     @POST("virtual-refund")
     Call<KuknosResponseModel<KuknosVirtualRefund>> getVirtualRefund(@Field("public_key") String publicKey,

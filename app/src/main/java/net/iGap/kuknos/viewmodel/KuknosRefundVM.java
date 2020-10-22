@@ -1,7 +1,5 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -16,6 +14,8 @@ import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
 import net.iGap.kuknos.Repository.PanelRepo;
 import net.iGap.observers.interfaces.ResponseCallback;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class KuknosRefundVM extends BaseAPIViewModel {
     private static final String TAG = "KuknosRefundVM";
     private PanelRepo panelRepo = new PanelRepo();
@@ -23,8 +23,13 @@ public class KuknosRefundVM extends BaseAPIViewModel {
     private MutableLiveData<KuknosAsset> assetData;
     private MutableLiveData<KuknosBalance> balanceData;
     private MutableLiveData<Boolean> refundProgress;
+    private MutableLiveData<Boolean> isRefundSuccess;
     private String hashString;
     private KuknosSendM sendModel;
+    private MutableLiveData<Integer> requestsSuccess;
+    private MutableLiveData<Boolean> requestsError;
+    private AtomicInteger success = new AtomicInteger(3);
+    private String assetCode;
 
     public KuknosRefundVM() {
         refundData = new MutableLiveData<>();
@@ -32,6 +37,10 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         balanceData = new MutableLiveData<>();
         sendModel = new KuknosSendM();
         refundProgress = new MutableLiveData<>();
+        requestsSuccess = new MutableLiveData<>();
+        requestsError = new MutableLiveData<>();
+        isRefundSuccess = new MutableLiveData<>();
+
     }
 
     public void getRefundInfoFromServer() {
@@ -40,18 +49,17 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             public void onSuccess(KuknosResponseModel<KuknosRefundModel> data) {
 
                 refundData.setValue(data.getData());
-                Log.e(TAG, "onSuccess: " + data.getData().getRefundType() );
-
+                requestsSuccess.setValue(success.decrementAndGet());
             }
 
             @Override
             public void onError(String error) {
-                Log.e(TAG, "onError: " + error );
+                requestsError.setValue(true);
             }
 
             @Override
             public void onFailed() {
-                Log.e(TAG, "onFailed: " );
+                requestsError.setValue(true);
             }
         });
     }
@@ -66,11 +74,6 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         sendModel.setMemo("TRANSFER");
         sendModel.setDest(refundData.getValue().getPublicKey());
 
-        Log.e(TAG, "requestForFetchHash: "
-                + panelRepo.getUserRepo().getSeedKey() + " ---"
-                + assetData.getValue().getAssets().get(0).getAssetCode() + " ===== "
-                + assetData.getValue().getAssets().get(0).getAssetIssuer() + " ------"
-                + refundData.getValue().getPublicKey());
 
         panelRepo.paymentUser(sendModel, this, new ResponseCallback<KuknosResponseModel<KuknosHash>>() {
             @Override
@@ -78,9 +81,9 @@ public class KuknosRefundVM extends BaseAPIViewModel {
 
                 if (data != null) {
                     hashString = data.getData().getHash();
-                    Log.e(TAG, "Hash String: " + hashString );
 
-                    panelRepo.getUserInfoResponse(KuknosRefundVM.this , new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
+
+                    panelRepo.getUserInfoResponse(KuknosRefundVM.this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
                         @Override
                         public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
 
@@ -88,17 +91,19 @@ public class KuknosRefundVM extends BaseAPIViewModel {
                                 @Override
                                 public void onSuccess(KuknosResponseModel<KuknosVirtualRefund> data) {
                                     refundProgress.setValue(false);
-                                    Log.e(TAG, "onSuccess: " + data.getMessage());
+                                    isRefundSuccess.setValue(true);
                                 }
 
                                 @Override
                                 public void onError(String error) {
                                     refundProgress.setValue(false);
+                                    isRefundSuccess.setValue(false);
                                 }
 
                                 @Override
                                 public void onFailed() {
                                     refundProgress.setValue(false);
+                                    isRefundSuccess.setValue(false);
                                 }
                             });
 
@@ -120,12 +125,12 @@ public class KuknosRefundVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String error) {
-                Log.e(TAG, "Hash onError: " + error );
+
             }
 
             @Override
             public void onFailed() {
-                Log.e(TAG, "Hash onFailed: " );
+
             }
         });
     }
@@ -135,16 +140,17 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 assetData.setValue(data.getData());
+                requestsSuccess.setValue(success.decrementAndGet());
             }
 
             @Override
             public void onError(String error) {
-                Log.e(TAG, "onError: " + error );
+                requestsError.setValue(true);
             }
 
             @Override
             public void onFailed() {
-                Log.e(TAG, "onFailed: " );
+                requestsError.setValue(true);
             }
         });
     }
@@ -154,16 +160,17 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
                 balanceData.setValue(data.getData());
+                requestsSuccess.setValue(success.decrementAndGet());
             }
 
             @Override
             public void onError(String error) {
-                Log.e(TAG, "onError: " + error );
+                requestsError.setValue(true);
             }
 
             @Override
             public void onFailed() {
-                Log.e(TAG, "onFailed: " );
+                requestsError.setValue(true);
             }
         });
     }
@@ -184,7 +191,15 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         return refundProgress;
     }
 
-    public void setRefundProgress(MutableLiveData<Boolean> refundProgress) {
-        this.refundProgress = refundProgress;
+    public MutableLiveData<Integer> getRequestsSuccess() {
+        return requestsSuccess;
+    }
+
+    public MutableLiveData<Boolean> getRequestsError() {
+        return requestsError;
+    }
+
+    public MutableLiveData<Boolean> getIsRefundSuccess() {
+        return isRefundSuccess;
     }
 }

@@ -8,387 +8,404 @@
     android:layout_height="match_parent"
     tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView15"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="@string/kuknos_rial_max_buy"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView14"
-            app:layout_constraintEnd_toStartOf="@+id/textView28"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread" />
-
-
-        <TextView
-            android:id="@+id/textView28"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="1000"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView15"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView15"
-            app:layout_constraintTop_toTopOf="@+id/textView15" />
-
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/kuknos_rial_min_buy"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView16"
-            app:layout_constraintEnd_toStartOf="@+id/textView20"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-        <TextView
-            android:id="@+id/textView20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="1"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView14"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView14"
-            app:layout_constraintTop_toTopOf="@+id/textView14" />
-
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/kuknos_rial_price_of_day"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView17"
-            app:layout_constraintEnd_toStartOf="@+id/textView21"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-        <TextView
-            android:id="@+id/textView21"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="15.931 ریال"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView16"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView16"
-            app:layout_constraintTop_toTopOf="@+id/textView16" />
-
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/kuknos_rial_percentage_of_commission"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView18"
-            app:layout_constraintEnd_toStartOf="@+id/textView29"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
-
-        <TextView
-            android:id="@+id/textView29"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="1 درصد"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView17"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView17"
-            app:layout_constraintTop_toTopOf="@+id/textView17" />
-
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/kuknos_rial_Deposit_sheba_number"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView19"
-            app:layout_constraintEnd_toStartOf="@+id/textView30"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-        <TextView
-            android:id="@+id/textView30"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="00000000"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView18"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView18"
-            app:layout_constraintTop_toTopOf="@+id/textView18" />
-
-
-        <TextView
-            android:id="@+id/textView19"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/kuknos_rial_Maximum_redeemable_token"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imageView3"
-            app:layout_constraintEnd_toStartOf="@+id/textView31"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView18" />
-
-        <TextView
-            android:id="@+id/textView31"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:text="10.7662"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView19"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView19"
-            app:layout_constraintTop_toTopOf="@+id/textView19" />
-
-
-        <ImageView
-            android:id="@+id/imageView3"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragKRRConstrain"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:src="#000"
-            app:layout_constraintBottom_toTopOf="@+id/editText5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            android:layout_height="match_parent"
+            android:visibility="invisible">
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp20"
-            android:text="@string/kuknos_rial_Number_of_contracts"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText5"
-            app:layout_constraintStart_toStartOf="@+id/editText5"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintVertical_chainStyle="packed" />
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:text="@string/kuknos_rial_max_buy"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView14"
+                app:layout_constraintEnd_toStartOf="@+id/textView28"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
 
-        <EditText
-            android:id="@+id/editText5"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textStyle="bold"
-            android:inputType="numberDecimal"
-            app:layout_constraintBottom_toTopOf="@+id/textView10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:text="@string/kuknos_rial_Redemption_fee"
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="1000"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView15"
+                app:layout_constraintTop_toTopOf="@+id/textView15" />
 
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText2"
-            app:layout_constraintStart_toStartOf="@+id/editText2"
-            app:layout_constraintTop_toBottomOf="@+id/editText5" />
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_rial_min_buy"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView16"
+                app:layout_constraintEnd_toStartOf="@+id/textView20"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:text="@string/kuknos_rial_Total_number_of_contracts"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText3"
-            app:layout_constraintStart_toStartOf="@+id/editText3"
-            app:layout_constraintTop_toBottomOf="@+id/editText2" />
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="1"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView14"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toTopOf="@+id/textView14" />
 
-        <EditText
-            android:id="@+id/editText3"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView13"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp16"
-            android:text="@string/kuknos_rial_Deposit_amount"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textSize="@dimen/standardTextSize"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/editText4"
-            app:layout_constraintStart_toStartOf="@+id/editText4"
-            app:layout_constraintTop_toBottomOf="@+id/editText3" />
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_rial_price_of_day"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView17"
+                app:layout_constraintEnd_toStartOf="@+id/textView21"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="15.931 ریال"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView16"
+                app:layout_constraintTop_toTopOf="@+id/textView16" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/fragKuknosRialSubmit"
-            style="@style/iGapButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="@dimen/dp20"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:minHeight="58dp"
-            android:text="@string/kuknos_setting_copySKeyBtn"
-            android:textSize="@dimen/standardTextSize"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText4" />
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_rial_percentage_of_commission"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView18"
+                app:layout_constraintEnd_toStartOf="@+id/textView29"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+
+            <TextView
+                android:id="@+id/textView29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="1 درصد"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView17"
+                app:layout_constraintTop_toTopOf="@+id/textView17" />
+
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_rial_Deposit_sheba_number"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textView19"
+                app:layout_constraintEnd_toStartOf="@+id/textView30"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="00000000"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView18"
+                app:layout_constraintTop_toTopOf="@+id/textView18" />
+
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_rial_Maximum_redeemable_token"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/imageView3"
+                app:layout_constraintEnd_toStartOf="@+id/textView31"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+            <TextView
+                android:id="@+id/textView31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="10.7662"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView19"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView19"
+                app:layout_constraintTop_toTopOf="@+id/textView19" />
+
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:src="#000"
+                app:layout_constraintBottom_toTopOf="@+id/editText5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp20"
+                android:text="@string/kuknos_rial_Number_of_contracts"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/editText5"
+                app:layout_constraintStart_toStartOf="@+id/editText5"
+                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp40"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/button_round_shape_black"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textStyle="bold"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toTopOf="@+id/textView10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:text="@string/kuknos_rial_Redemption_fee"
+
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/editText2"
+                app:layout_constraintStart_toStartOf="@+id/editText2"
+                app:layout_constraintTop_toBottomOf="@+id/editText5" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp40"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/button_round_shape_black"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textStyle="bold"
+                android:enabled="false"
+                app:layout_constraintBottom_toTopOf="@+id/textView12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:text="@string/kuknos_rial_Total_number_of_contracts"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/editText3"
+                app:layout_constraintStart_toStartOf="@+id/editText3"
+                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp40"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/button_round_shape_black"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textStyle="bold"
+                android:enabled="false"
+                app:layout_constraintBottom_toTopOf="@+id/textView13"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp16"
+                android:text="@string/kuknos_rial_Deposit_amount"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textSize="@dimen/standardTextSize"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/editText4"
+                app:layout_constraintStart_toStartOf="@+id/editText4"
+                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+
+            <EditText
+                android:id="@+id/editText4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp40"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/button_round_shape_black"
+                android:textColor="?iGapSubtitleTextColor"
+                android:textStyle="bold"
+                android:enabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fragKuknosRialSubmit"
+                style="@style/iGapButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="@dimen/dp20"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="58dp"
+                android:text="@string/refund_button"
+                android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText4" />
+
+            <ProgressBar
+                android:id="@+id/progressRefund"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:elevation="@dimen/dp2"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@id/fragKuknosRialSubmit"
+                app:layout_constraintTop_toTopOf="@id/fragKuknosRialSubmit"
+                app:layout_constraintBottom_toBottomOf="@id/fragKuknosRialSubmit"
+                app:layout_constraintHeight_percent="0.08"
+                app:layout_constraintHorizontal_bias="0.08"
+                android:indeterminateTint="@color/kuknos_WH_itembg"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
-            android:id="@+id/progressRefund"
+            android:id="@+id/mainProgress"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:elevation="@dimen/dp2"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="@id/fragKuknosRialSubmit"
-            app:layout_constraintTop_toTopOf="@id/fragKuknosRialSubmit"
-            app:layout_constraintBottom_toBottomOf="@id/fragKuknosRialSubmit"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintHorizontal_bias="0.08"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
 </ScrollView>

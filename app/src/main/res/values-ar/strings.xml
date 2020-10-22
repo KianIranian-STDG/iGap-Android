@@ -2628,4 +2628,8 @@
     <string name="hold">Hold</string>
     <string name="payment_userScore">درجاتك</string>
     <string name="Increase_score">زيادة درجاتك الآن!</string>
+    <string name="refund_token">Refund token</string>
+    <string name="kuknos_submit_count">Count</string>
+    <string name="kuknos_dialog_refund_fixed_fee">Refund fixed fee</string>
+    <string name="refund_amount">Refund amount</string>
 </resources>
