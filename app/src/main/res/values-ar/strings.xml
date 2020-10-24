@@ -2601,6 +2601,11 @@
     <string name="edit_rights">تحرير الوصول</string>
     <string name="edit_admin_rights">تحرير وصول المسؤول</string>
     <string name="edit_member_rights">تحرير حقوق العضو</string>
+    <string name="kuknos_receipt_token">"رمز"</string>
+    <string name="kuknos_receipt_Refund_address">"عنوان الاسترداد"</string>
+    <string name="kunos_receipt_type_refund">"نوع الاسترداد"</string>
+    <string name="kunos_receipt_hash">"تجزئة"</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"العودة إلى حقيبة الرمز الرقمي"</string>
     <string name="edit_room_rights">تحديد الوصول العام للمجموعة</string>
     <string name="restrictions_on_sending_messages">قيود على إرسال الرسائل!</string>
     <string name="change_group_rights">تحديد الوصول العام للمجموعة</string>

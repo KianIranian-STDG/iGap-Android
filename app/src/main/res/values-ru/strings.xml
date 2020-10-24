@@ -15,6 +15,12 @@
     <string name="pu_nikname_profileUser">Имя</string>
     <string name="pu_Lets_Go">Продолжение</string>
     <string name="kuknos_panelStr_buyAgain">Выкуп</string>
+    <string name="kuknos_receipt_token">"Токен"</string>
+    <string name="kuknos_receipt_Refund_address">"Адрес возврата"</string>
+    <string name="kunos_receipt_type_refund">"Тип возврата"</string>
+    <string name="kunos_receipt_hash">"Хеш"</string>
+    <string name="kunos_receipt_date_apply">"Дата подачи заявки"</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"Вернуться в сумку с цифровыми жетонами"</string>
     <string name="kuknos_setting_dialog">Подтверждение выкупа токена</string>
     <string name="kuknos_rial_max_buy">"Максимально допустимый"</string>
     <string name="kuknos_rial_min_buy">"Минимально допустимый"</string>

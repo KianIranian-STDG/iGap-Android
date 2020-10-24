@@ -14,6 +14,12 @@
     <string name="kuknos_rial_max_buy">"Maksimum izin verilen"</string>
     <string name="kuknos_rial_min_buy">"İzin verilen minimum"</string>
     <string name="kuknos_rial_price_of_day">"Günün fiyatı"</string>
+    <string name="kuknos_receipt_token">"Jeton"</string>
+    <string name="kuknos_receipt_Refund_address">"Geri ödeme adresi"</string>
+    <string name="kunos_receipt_type_refund">"Geri ödeme türü"</string>
+    <string name="kunos_receipt_hash">"Hash"</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"Dijital jeton çantasına dön"</string>
+    <string name="kunos_receipt_date_apply">"uygulama tarihi"</string>
     <string name="kuknos_rial_percentage_of_commission">"Komisyon yüzdesi"</string>
     <string name="kuknos_rial_Deposit_sheba_number">"Depozito Shaba numarası"</string>
     <string name="kuknos_rial_Maximum_redeemable_token">"Kullanılabilir maksimum jeton"</string>

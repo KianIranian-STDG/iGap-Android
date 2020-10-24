@@ -15,6 +15,12 @@
     <string name="pu_nikname_profileUser">Prénom</string>
     <string name="pu_Lets_Go">Continuez</string>
     <string name="kuknos_panelStr_buyAgain">Rachat</string>
+    <string name="kuknos_receipt_token">"Jeton"</string>
+    <string name="kunos_receipt_hash">"Hacher"</string>
+    <string name="kunos_receipt_date_apply">"Date d'application"</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"Retour au sac de jetons numériques"</string>
+    <string name="kuknos_receipt_Refund_address">"Adresse de remboursement"</string>
+    <string name="kunos_receipt_type_refund">"Type de remboursement"</string>
     <string name="kuknos_setting_dialog">Confirmation dechange de jetons</string>
     <string name="kuknos_rial_max_buy">"Maximum autorisé"</string>
     <string name="kuknos_rial_min_buy">"Minimum autorisé"</string>

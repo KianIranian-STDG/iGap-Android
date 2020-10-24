@@ -1703,6 +1703,12 @@ Want to get it?</string>
     <string name="kuknos_rial_Redemption_fee">"Redemption fee PMN"</string>
     <string name="kuknos_rial_Redemption_feee">"Redemption fee"</string>
     <string name="kuknos_rial_Deposit_amount2">"Deposit amount"</string>
+    <string name="kuknos_receipt_token">"Token"</string>
+    <string name="kuknos_receipt_Refund_address">"Refund address"</string>
+    <string name="kunos_receipt_type_refund">"Type of refund"</string>
+    <string name="kunos_receipt_hash">"Hash"</string>
+    <string name="kunos_receipt_date_apply">"Date of application"</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"Return to digital token bag"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"Repurchase tokens"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Total number of contracts"</string>
     <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"Get support \n %1$s physical"</string>

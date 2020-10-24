@@ -167,6 +167,7 @@
     <string name="st_messagePreview">"پیش نمایش پیام"</string>
     <string name="st_led_color">"رنگ چراغ صفحه نمایش"</string>
     <string name="st_vibrate">"لرزش"</string>
+    <string name="kunos_receipt_hash">"هش"</string>
     <string name="st_popupNotification">"پنجره اعلان پیام"</string>
     <string name="st_sound">"صدا"</string>
     <string name="st_title_groupNotification">"اعلانات گروهی"</string>
@@ -494,6 +495,7 @@
     <string name="terminate_all">لغو تمامی جلسات فعال</string>
     <string name="forwarded_from">ارسال شده از</string>
     <string name="photo">عکس</string>
+    <string name="kunos_receipt_date_apply">"تاریخ درخواست"</string>
     <string name="music_name">عنوان موسیقی</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
@@ -794,6 +796,7 @@
 
     <string name="iGap_has_crashed">آیگپ با خطای پیش بینی نشده برخورد کرده است!</string>
     <string name="iGap_has_crashed_reload">شروع مجدد</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"بازگشت به کیف توکن دیجیتال"</string>
     <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
     <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس ها اطمینان دارید؟</string>
@@ -1610,6 +1613,7 @@
     <string name="kuknos_rial_Total_number_of_contracts">"تعداد کل پیمان"</string>
     <string name="kuknos_rial_Deposit_amount">"مبلغ واریزی (ریال)"</string>
     <string name="kuknos_rial_Deposit_amount2">"مبلغ واریزی"</string>
+    <string name="kuknos_receipt_token">"توکن"</string>
     <string name="kuknos_rial_min_buy">"حداقل مجاز"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"توکن بازخرید"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"با مراجعه به بخش تنظیمات \n نسبت به تکمیل اطلاعات خود \n اقدام نمایید"</string>
@@ -1756,6 +1760,7 @@
     <string name="kuknos_setting_copySKeyBtn">ذخیره</string>
     <string name="kuknos_setting_copySFailTitle">خطا</string>
     <string name="kuknos_setting_copySFailBtn">باشه</string>
+    <string name="kuknos_receipt_Refund_address">"آدرس بازپرداخت"</string>
     <string name="kuknos_setting_copySFailReadM">آیگپ اجازه خواندن فایل ها را ندارد.</string>
     <string name="kuknos_setting_copySFailWriteM">آیگپ اجازه نوشتن فایل را ندارد.</string>
     <string name="kuknos_setting_copySFailDir">آیگپ اجازه ایجاد مسیر مناسب را ندارد.</string>
@@ -1939,6 +1944,7 @@
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
     <string name="elecBill_main_serviceMode">قبوض خدماتی</string>
     <string name="elecBill_main_PhoneMode">قبوض موبایل و تلفن</string>
+    <string name="kunos_receipt_type_refund">"نوع بازپرداخت"</string>
     <string name="elecBill_main_billTypeTitle">نوع قبض: </string>
     <string name="elecBill_main_billPhoneTitle">لطفا شماره تلفن ثابت یا موبایل مورد نظر خود را وارد کنید.\nنمونه شماره تلفن: ********۰۲۱\nنمونه شماره موبایل: *********۰۹</string>
     <string name="elecBill_cell_billPayLastTerm">پایان دوره</string>
