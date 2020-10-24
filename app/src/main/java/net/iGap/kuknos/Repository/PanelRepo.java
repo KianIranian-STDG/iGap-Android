@@ -16,11 +16,15 @@ import net.iGap.kuknos.Model.Parsian.KuknosRefundHistory;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosUserRefundResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
+import net.iGap.kuknos.Model.Parsian.Owners;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
+
+import java.util.List;
 
 public class PanelRepo {
 
@@ -77,8 +81,14 @@ public class PanelRepo {
     public void getSpecificAssets(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {
         kuknosAPIRepository.getSpecificAssets(assetCode, handShakeCallback, apiResponse);
     }
+    public void getIbanInfo(String iban,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<Owners>> apiResponse) {
+        kuknosAPIRepository.getIbanInfo(iban, handShakeCallback, apiResponse);
+    }
     public void getUserInfoResponse(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
         kuknosAPIRepository.getUserInfo(userRepo.getAccountID(), handShakeCallback, apiResponse);
+    }
+    public void getUserRefundDetail(int refundNo,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserRefundResponse>> apiResponse) {
+        kuknosAPIRepository.getUserRefundDetail(userRepo.getAccountID(),refundNo, handShakeCallback, apiResponse);
     }
     public void updateUserInfo(KuknosUserInfoResponse userInfo,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
         kuknosAPIRepository.updateUserInfo(userRepo.getAccountID(),userInfo, handShakeCallback, apiResponse);

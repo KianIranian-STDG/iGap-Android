@@ -2,6 +2,8 @@ package net.iGap.kuknos.Model.Parsian;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class KuknosUserInfoResponse {
     @SerializedName("national_code")
     private String nationalCode;
@@ -23,6 +25,8 @@ public class KuknosUserInfoResponse {
     private String iban;
     @SerializedName("birth_date")
     private String birthDate;
+    @SerializedName("owners")
+    private List<Owners> owners;
 
     public KuknosUserInfoResponse(String nationalCode, String federationName, String status, String firstName, String lastName, String mail, String publicKey, String domain, String iban, String birthDate) {
         this.nationalCode = nationalCode;
@@ -115,6 +119,14 @@ public class KuknosUserInfoResponse {
 
     public String getBirthDate() {
         return birthDate;
+    }
+
+    public List<Owners> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(List<Owners> owners) {
+        this.owners = owners;
     }
 
     public void setBirthDate(String birthDate) {

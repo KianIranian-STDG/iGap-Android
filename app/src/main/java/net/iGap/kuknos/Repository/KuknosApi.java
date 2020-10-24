@@ -18,7 +18,9 @@ import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosUserRefundResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.Model.Parsian.Owners;
 import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
 
 import org.stellar.sdk.responses.SubmitTransactionResponse;
@@ -81,6 +83,16 @@ public interface KuknosApi {
                                                                     @Field("birth_date") String birthDate);
 
     /**
+     * This api get user's info with iban
+     *
+     * @param iban
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("get-iban-info")
+    Call<KuknosResponseModel<Owners>> getIbanInfo(@Field("iban") String iban);
+
+    /**
      * This api returns all of user's info
      *
      * @param publicKey
@@ -89,6 +101,17 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("get-account")
     Call<KuknosResponseModel<KuknosUserInfoResponse>> getUserInfo(@Field("public_key") String publicKey);
+
+    /**
+     * This api returns all of user's refund info
+     *
+     * @param publicKey
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("get-refund-details")
+    Call<KuknosResponseModel<KuknosUserRefundResponse>> getUserRefundDetail(@Field("public_key") String publicKey,
+                                                                            @Field("ref_no") int refundNo);
 
     /**
      * This api returns a user's asset detail

@@ -67,6 +67,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         panelRepo.getUserInfoResponse(this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
+                Log.e("vjsguiwhs", "onSuccess: ");
                 if (data.getData().getIban()!=null) {
                     RealmKuknos.updateIban(data.getData().getIban());
                     userInfo.setValue(true);
@@ -78,6 +79,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String errorM) {
+                Log.e("vjsguiwhs", "onError: "+errorM);
                 BAndCState.postValue(0);
                 userInfo.setValue(false);
                 error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
@@ -86,6 +88,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
             @Override
             public void onFailed() {
+                Log.e("vjsguiwhs", "onFailed: ");
                 BAndCState.postValue(0);
                 error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
                 progressState.setValue(false);

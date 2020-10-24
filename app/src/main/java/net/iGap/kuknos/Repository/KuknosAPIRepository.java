@@ -1,9 +1,5 @@
 package net.iGap.kuknos.Repository;
 
-import android.util.Log;
-
-import com.google.protobuf.Api;
-
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.kuknos.Model.KuknosPaymentResponse;
@@ -25,7 +21,9 @@ import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosTransactionResult;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosUserRefundResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosUsernameStatus;
+import net.iGap.kuknos.Model.Parsian.Owners;
 import net.iGap.kuknos.Model.Parsian.KuknosVirtualRefund;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -74,13 +72,8 @@ class KuknosAPIRepository {
     }*/
 
     void paymentUser(KuknosSendM model, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosHash>> apiResponse) {
-        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, new KuknosSDKRepo.callBack() {
-            @Override
-            public void getResponseXDR(String XDR) {
-                new ApiInitializer<KuknosResponseModel<KuknosHash>>()
-                        .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse);
-            }
-        })
+        new KuknosSDKRepo(KuknosSDKRepo.API.PAYMENT_SEND, XDR -> new ApiInitializer<KuknosResponseModel<KuknosHash>>()
+                .initAPI(apiService.payment(XDR), handShakeCallback, apiResponse))
                 .execute(model.getSrc(), model.getDest(), model.getAssetCode(), model.getAssetInssuer(), model.getAmount(), model.getMemo());
         /*new ApiInitializer<KuknosResponseModel<KuknosTransactionResult>>()
                 .initAPI(apiService.payment(new KuknosSDKRepo().paymentToOtherXDR(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo()))
@@ -91,8 +84,16 @@ class KuknosAPIRepository {
         KuknosAPIAsync<SubmitTransactionResponse> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENT_SEND);
         temp.execute(model.getSrc(), model.getDest(), model.getAmount(), model.getMemo());
     }*/
-    void getUserInfo(String userID, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
-        new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.getUserInfo(userID), handShakeCallback, apiResponse);
+     void getUserInfo(String userID,HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {
+         new ApiInitializer<KuknosResponseModel<KuknosUserInfoResponse>>().initAPI(apiService.getUserInfo(userID), handShakeCallback, apiResponse);
+    }
+
+    void getUserRefundDetail(String userID, int refundNo, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserRefundResponse>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosUserRefundResponse>>().initAPI(apiService.getUserRefundDetail(userID, refundNo), handShakeCallback, apiResponse);
+    }
+
+    void getIbanInfo(String userIban, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<Owners>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<Owners>>().initAPI(apiService.getIbanInfo(userIban), handShakeCallback, apiResponse);
     }
 
     void updateUserInfo(String userID, KuknosUserInfoResponse userInfo, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>> apiResponse) {

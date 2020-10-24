@@ -1,23 +1,53 @@
 package net.iGap.kuknos.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Model.Parsian.Owners;
 import net.iGap.kuknos.Repository.PanelRepo;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmKuknos;
 
 public class KuknosEditInfoVM extends BaseAPIViewModel {
-    private MutableLiveData<Boolean> progressState;
-    private MutableLiveData<KuknosUserInfoResponse> userInfo;
+    private MutableLiveData<String> responseState;
+    private MutableLiveData<KuknosUserInfoResponse> userInfo = new MutableLiveData<>();
+    private MutableLiveData<Owners> ibanInfo = new MutableLiveData<>();
+    private MutableLiveData<Boolean> progressState = new MutableLiveData<>();
     private PanelRepo panelRepo = new PanelRepo();
 
+
     public KuknosEditInfoVM() {
-        progressState = new MutableLiveData<>();
-        userInfo = new MutableLiveData<>();
-        userInfo.setValue(null);
+        responseState = new MutableLiveData<>();
+    }
+
+    public void getIbanInfo(String iban) {
+        panelRepo.getIbanInfo(iban, this, new ResponseCallback<KuknosResponseModel<Owners>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<Owners> data) {
+                Log.e("vjsguiwhs", "onSuccess: ");
+//                if (data.getData().get(0).getIban() != null) {
+//                    RealmKuknos.updateIban(data.getData().getIban());
+//                }
+                ibanInfo.setValue(data.getData());
+            }
+
+            @Override
+            public void onError(String errorM) {
+                Log.e("vjsguiwhs", "onError: " + errorM);
+                ibanInfo.setValue(null);
+            }
+
+            @Override
+            public void onFailed() {
+                Log.e("vjsguiwhs", "onFailed: ");
+                ibanInfo.setValue(null);
+            }
+        });
     }
 
     public void getInFoFromServerToCheckUserProfile() {
@@ -51,23 +81,32 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
         panelRepo.updateUserInfo(userInfo, this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
-                progressState.setValue(false);
+
+                responseState.setValue("true");
             }
 
             @Override
             public void onError(String error) {
-                progressState.setValue(false);
+                Log.e("vjhughr", "onError: " + error);
+                responseState.setValue(error);
             }
 
             @Override
             public void onFailed() {
-                progressState.setValue(false);
+                Log.e("vjhughr", "onFailed: ");
+                responseState.setValue("onFailed");
             }
         });
     }
 
-    public MutableLiveData<Boolean> getProgressState() {
-        return progressState;
+
+
+    public MutableLiveData<Owners> getIbanInfo() {
+        return ibanInfo;
+    }
+
+    public void setIbanInfo(MutableLiveData<Owners> ibanInfo) {
+        this.ibanInfo = ibanInfo;
     }
 
     public MutableLiveData<KuknosUserInfoResponse> getUserInfo() {
@@ -78,7 +117,12 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
         this.userInfo = userInfo;
     }
 
-    public void setProgressState(MutableLiveData<Boolean> progressState) {
-        this.progressState = progressState;
+    public MutableLiveData<String> getResponseState() {
+        return responseState;
     }
+
+    public void setResponseState(MutableLiveData<String> responseState) {
+        this.responseState = responseState;
+    }
+
 }
