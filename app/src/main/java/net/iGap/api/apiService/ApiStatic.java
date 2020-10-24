@@ -4,7 +4,6 @@ import net.iGap.module.accountManager.AppConfig;
 
 public class ApiStatic {
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
-    static final String MOBILE_BANK = "http://192.168.8.109:3000/v1.0/";
     static final String WEATHER_URL = "http://192.168.8.66:7000/v1.0/";
     static final String VERSION1_1 = "v1.1/";
     static final String STICKER_URL = "https://api.igap.net/sticker/" + VERSION1_1;
@@ -21,6 +20,7 @@ public class ApiStatic {
     static final String CHARITY_URL = BASE_URL + SERVICES + VERSION + "charity/";
     static final String ELECTRICITY_BILL_URL = BASE_URL + "bill/" + VERSION + "api/";
     static final String BILL_URL = BASE_URL + "bill-manager/" + VERSION;
+    static final String MOBILE_BANK = BASE_URL + "parsian/" + VERSION;
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
     private static final String NEWS_BASE_URL = "https://api.cafetitle.com/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
