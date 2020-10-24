@@ -1361,11 +1361,11 @@
     <string name="cardtocard_morethan_error">کەمترین رادەی پارە بۆ کارت بۆ کارت، ١٠ هەزار ریاڵە.</string>
     <string name="cardtocard_cartnumber_error">ژمارەی کارت دەبێ ١٦ ژمارە بێت.</string>
     <string name="cardtocard_cardnumber_error">ژمارەی کارتی مەبەست نابێ خاڵی بێت.</string>
-    <string name="payment_rrn_title">ژمارەی ترانسەکشێن: %.f0</string>
+    <string name="payment_rrn_title">ژمارەی ترانسەکشێن: %.0f</string>
     <string name="insert_amount_in_rial">بڕی پارەکە بە ریاڵ بنووسە.</string>
     <string name="enter_16_digit_card_number">ژمارەی کارتی ١٦ ژمارەیی بنووسە.</string>
     <string name="buy_internet_package_volume_type_title">قەبارە</string>
-    <string name="buy_internet_package_daily_filter_title">0f% رۆژ</string>
+    <string name="buy_internet_package_daily_filter_title">0f.% رۆژ</string>
     <string name="buy_internet_package_weekly_filter_title">0f.% هەفتە</string>
     <string name="buy_internet_package_month_filter_title">0f.% مانگ</string>
     <string name="buy_internet_package_year_filter_title">0f.% ساڵ</string>
