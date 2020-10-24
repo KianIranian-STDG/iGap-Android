@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,7 +151,17 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 if (iban == null) {
                     viewModel.getInFoFromServerToCheckUserProfile();
                 } else {
-                    new HelperFragment(getActivity().getSupportFragmentManager(), KuknosBuyAgainFrag.newInstance()).setReplace(true).load();
+                    KuknosBuyAgainFrag buyAgainFrag = KuknosBuyAgainFrag.newInstance();
+                    KuknosBalance.Balance balance = null;
+                    if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
+
+                        balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
+                    }
+                    String assetCode = balance.getAssetType();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("assetType", assetCode);
+                    buyAgainFrag.setArguments(bundle);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
                 }
 
             }

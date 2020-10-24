@@ -1627,8 +1627,8 @@
     <string name="kuknos_Restore_Hint">برای مثال: دریا، میز، کابل...</string>
     <string name="kuknos_Restore_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_Restore_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
-    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"دریافت پشتوانه \n فیزیکی PMN"</string>
-    <string name="kuknos_buy_again_tab_Rial_equivalent">"معادل ریالی  \n پرداخت PMN"</string>
+    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"دریافت پشتوانه \n فیزیکی %1$s"</string>
+    <string name="kuknos_buy_again_tab_Rial_equivalent">"معادل ریالی  \n پرداخت %1$s"</string>
     <string name="kuknos_Restore_Error_Snack">باشه</string>
     <string name="kuknos_RestoreSeed_Title">لطفا کلید خصوصی خود را وارد کنید.</string>
     <string name="kuknos_RestoreSeed_Message">با استفاده از این کلید، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
@@ -2194,8 +2194,16 @@
     <string name="kuknos_dialog_refund_fixed_fee">کارمزد بازخرید</string>
     <string name="refund_amount">مبلغ واریزی</string>
     <string name="submit">قبول</string>
+    <string name="refund_history">سابقه بازخرید</string>
+    <string name="history">سابقه تراکنش</string>
     <string-array name="billsOptions">
         <item>برق</item>
         <item>گاز</item>
     </string-array>
+    <string name="refund_button">بازخرید</string>
+    <string name="history_asset_type">نوع توکن</string>
+    <string name="history_hash">هش</string>
+    <string name="history_amount">مبلغ</string>
+    <string name="histroy_fee">کارمزد</string>
+    <string name="history_count">مقدار</string>
 </resources>

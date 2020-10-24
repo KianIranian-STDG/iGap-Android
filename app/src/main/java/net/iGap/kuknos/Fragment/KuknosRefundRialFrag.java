@@ -43,6 +43,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private KuknosBalance balance;
     private ProgressBar refundProgress, mainProgress;
     private ConstraintLayout fragKRRConstrain;
+    private String assetCode;
 
     public static KuknosRefundRialFrag newInstance() {
         KuknosRefundRialFrag fragment = new KuknosRefundRialFrag();
@@ -65,8 +66,11 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kuknos_equivalent_rial, container, false);
         initViews(view);
-        viewModel.getRefundInfoFromServer();
-        viewModel.getPMNAssetData();
+        if (getArguments() != null) {
+            assetCode = getArguments().getString("assetType");
+        }
+        viewModel.getRefundInfoFromServer(assetCode);
+        viewModel.getPMNAssetData(assetCode);
         viewModel.getAccountAssets();
 
 
@@ -130,7 +134,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
                         if (peymanCount <= maxPeymanRefund) {
-                            showRefundDialog("PMN", peymanCount, Float.parseFloat(txtFinalFeeFixed.getText().toString()),Long.parseLong(txtTotalPrice.getText().toString()));
+                            showRefundDialog(assetCode, peymanCount, Float.parseFloat(txtFinalFeeFixed.getText().toString()),Long.parseLong(txtTotalPrice.getText().toString()));
 
                         } else {
                             Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();

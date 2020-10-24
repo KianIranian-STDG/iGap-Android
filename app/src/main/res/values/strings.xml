@@ -1705,8 +1705,8 @@ Want to get it?</string>
     <string name="kuknos_rial_Deposit_amount2">"Deposit amount"</string>
     <string name="kuknos_rial_dialog_Repurchase_tokens">"Repurchase tokens"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Total number of contracts"</string>
-    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"Get support \n PMN physical"</string>
-    <string name="kuknos_buy_again_tab_Rial_equivalent">"Rial equivalent  \n payment PMN"</string>
+    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"Get support \n %1$s physical"</string>
+    <string name="kuknos_buy_again_tab_Rial_equivalent">"Rial equivalent  \n payment %1$s"</string>
     <string name="koknos_account_infp_tab_User_information">"User information"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"Complete your information \n by going to the \n settings section"</string>
     <string name="kuknos_edit_info_birthday">BirthDate</string>
@@ -2234,6 +2234,13 @@ Want to get it?</string>
     <string name="kuknos_dialog_refund_fixed_fee">Refund fixed fee</string>
     <string name="refund_amount">Refund amount</string>
     <string name="submit">Submit</string>
+    <string name="refund_history">Refund History</string>
+    <string name="history">History</string>
+    <string name="history_asset_type">Asset Type</string>
+    <string name="history_hash">Hash</string>
+    <string name="history_amount">Amount</string>
+    <string name="histroy_fee">Fee</string>
+    <string name="history_count">Count</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>

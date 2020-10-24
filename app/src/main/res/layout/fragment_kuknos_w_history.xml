@@ -1,123 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
-    <data>
-
-        <variable
-            name="viewmodel"
-            type="net.iGap.kuknos.viewmodel.KuknosWHistoryVM" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/IGapRootViewStyle"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/fragKuknosWHToolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/kuknos_wHistory_header"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="@dimen/dp10"
-            android:background="@drawable/kuknos_list_header_style"
-            app:layout_constraintBottom_toTopOf="@+id/pullToRefresh"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragKuknosWHToolbar"
-            app:layout_constraintWidth_percent="0.9">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="6"
-                android:gravity="center"
-                android:minHeight="38dp"
-                android:text="@string/kuknos_wHistory_desc"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/dp14"
-                android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:minHeight="38dp"
-                android:text="@string/kuknos_wHistory_date"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/dp14"
-                android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:minHeight="38dp"
-                android:text="@string/kuknos_wHistory_time"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/dp14"
-                android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:minHeight="38dp"
-                android:text="@string/kuknos_wHistory_amount"
-                android:textColor="@color/buttonTextColor"
-                android:textSize="@dimen/dp14"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/pullToRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_wHistory_header">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/kuknos_wHistory_recycler"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scrollbars="vertical" />
+                android:layout_height="match_parent"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                app:toolbarId="@+id/toolbar">
 
-        <ProgressBar
-            android:id="@+id/kuknos_wHistory_ProgressV"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:elevation="2dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.08"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/fragKuknosWHToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                </LinearLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/historyViewPager"
+                android:layout_width="match_parent"
+                android:layoutDirection="ltr"
+                android:layout_height="match_parent">
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/historyTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/refund_history"/>
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/history"/>
+
+                </com.google.android.material.tabs.TabLayout>
+            </androidx.viewpager.widget.ViewPager>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

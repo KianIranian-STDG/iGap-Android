@@ -215,10 +215,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/fragKuknosBuyAgain"
                     style="@style/iGapButton"
-                    android:layout_width="377dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp10"
                     android:minHeight="48dp"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginEnd="@dimen/dp16"
                     android:text="@string/kuknos_panelStr_buyAgain"
                     android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"

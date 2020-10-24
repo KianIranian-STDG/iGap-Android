@@ -43,8 +43,8 @@ public class KuknosRefundVM extends BaseAPIViewModel {
 
     }
 
-    public void getRefundInfoFromServer() {
-        panelRepo.getRefundData("PMN", this, new ResponseCallback<KuknosResponseModel<KuknosRefundModel>>() {
+    public void getRefundInfoFromServer(String assetCode) {
+        panelRepo.getRefundData(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosRefundModel>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosRefundModel> data) {
 
@@ -66,7 +66,6 @@ public class KuknosRefundVM extends BaseAPIViewModel {
 
     public void requestForVirtualRefund(String assetCount, int amount, float fee) {
         refundProgress.setValue(true);
-
         sendModel.setAmount(assetCount);
         sendModel.setSrc(panelRepo.getUserRepo().getSeedKey());
         sendModel.setAssetCode(assetData.getValue().getAssets().get(0).getAssetCode());
@@ -82,41 +81,23 @@ public class KuknosRefundVM extends BaseAPIViewModel {
                 if (data != null) {
                     hashString = data.getData().getHash();
 
-
-                    panelRepo.getUserInfoResponse(KuknosRefundVM.this, new ResponseCallback<KuknosResponseModel<KuknosUserInfoResponse>>() {
+                    panelRepo.getVirtualRefund(panelRepo.getUserRepo().getAccountID(), assetData.getValue().getAssets().get(0).getAssetCode(), Float.parseFloat(assetCount), amount, fee, hashString, KuknosRefundVM.this, new ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>>() {
                         @Override
-                        public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
-
-                            panelRepo.getVirtualRefund(data.getData().getPublicKey(), assetData.getValue().getAssets().get(0).getAssetCode(), Float.parseFloat(assetCount), amount, fee, hashString, KuknosRefundVM.this, new ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>>() {
-                                @Override
-                                public void onSuccess(KuknosResponseModel<KuknosVirtualRefund> data) {
-                                    refundProgress.setValue(false);
-                                    isRefundSuccess.setValue(true);
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    refundProgress.setValue(false);
-                                    isRefundSuccess.setValue(false);
-                                }
-
-                                @Override
-                                public void onFailed() {
-                                    refundProgress.setValue(false);
-                                    isRefundSuccess.setValue(false);
-                                }
-                            });
-
+                        public void onSuccess(KuknosResponseModel<KuknosVirtualRefund> data) {
+                            refundProgress.setValue(false);
+                            isRefundSuccess.setValue(true);
                         }
 
                         @Override
                         public void onError(String error) {
-
+                            refundProgress.setValue(false);
+                            isRefundSuccess.setValue(false);
                         }
 
                         @Override
                         public void onFailed() {
-
+                            refundProgress.setValue(false);
+                            isRefundSuccess.setValue(false);
                         }
                     });
 
@@ -135,8 +116,8 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         });
     }
 
-    public void getPMNAssetData() {
-        panelRepo.getSpecificAssets("PMN", this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
+    public void getPMNAssetData(String assetCode) {
+        panelRepo.getSpecificAssets(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosAsset> data) {
                 assetData.setValue(data.getData());

@@ -23,6 +23,7 @@ import net.iGap.observers.interfaces.ToolbarListener;
 public class KuknosBuyAgainFrag extends BaseFragment {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    private String assetType;
 
     public static KuknosBuyAgainFrag newInstance() {
         KuknosBuyAgainFrag fragment = new KuknosBuyAgainFrag();
@@ -41,6 +42,9 @@ public class KuknosBuyAgainFrag extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kuknos_buy_again, container, false);
+        if (getArguments() != null) {
+            assetType = getArguments().getString("assetType").equals("native") ? "PMN" : getArguments().getString("assetType");
+        }
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -63,7 +67,11 @@ public class KuknosBuyAgainFrag extends BaseFragment {
                 if (position == 0) {
                     return KuknosGetSupportFrag.newInstance();
                 } else {
-                    return KuknosRefundRialFrag.newInstance();
+                    KuknosRefundRialFrag refundRialFrag = KuknosRefundRialFrag.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("assetType", assetType);
+                    refundRialFrag.setArguments(bundle);
+                    return refundRialFrag;
                 }
             }
 
@@ -76,9 +84,9 @@ public class KuknosBuyAgainFrag extends BaseFragment {
             @Override
             public CharSequence getPageTitle(int position) {
                 if (position == 0)
-                    return getString(R.string.kuknos_buy_again_tab_Get_PMN_physical_support);
+                    return getString(R.string.kuknos_buy_again_tab_Get_PMN_physical_support, assetType);
                 else
-                    return getString(R.string.kuknos_buy_again_tab_Rial_equivalent);
+                    return getString(R.string.kuknos_buy_again_tab_Rial_equivalent, assetType);
             }
         });
         mViewPager.setCurrentItem(1);

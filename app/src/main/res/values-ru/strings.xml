@@ -1633,4 +1633,6 @@
     <string name="kuknos_submit_count">Count</string>
     <string name="kuknos_dialog_refund_fixed_fee">Refund fixed fee</string>
     <string name="refund_amount">Refund amount</string>
+    <string name="refund_history">Refund History</string>
+    <string name="history">History</string>
 </resources>

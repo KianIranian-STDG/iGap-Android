@@ -8,24 +8,21 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.tabs.TabLayout;
 
 import net.iGap.R;
-import net.iGap.adapter.kuknos.WalletHistoryRAdapter;
-import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.databinding.FragmentKuknosWHistoryBinding;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.kuknos.viewmodel.KuknosWHistoryVM;
 
-public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
-
-    private FragmentKuknosWHistoryBinding binding;
+public class KuknosWHistoryFrag extends BaseFragment {
+    private ViewPager historyViewPager;
+    private TabLayout historyTabLayout;
+    private static final String TAG = "KuknosWHistoryFrag";
 
     public static KuknosWHistoryFrag newInstance() {
         return new KuknosWHistoryFrag();
@@ -34,25 +31,54 @@ public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(KuknosWHistoryVM.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_kuknos_w_history, container, false);
-        binding.setViewmodel(viewModel);
-        binding.setLifecycleOwner(this);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_kuknos_w_history, container, false);
 
-        return binding.getRoot();
+        historyViewPager = view.findViewById(R.id.historyViewPager);
+        historyTabLayout = view.findViewById(R.id.historyTabLayout);
+
+        historyViewPager.setAdapter(new FragmentStatePagerAdapter(getActivity().getSupportFragmentManager()) {
+            @NonNull
+            @Override
+            public Fragment getItem(int position) {
+                if (position == 0) {
+                    return KuknosTransactionHistoryFrag.newInstance();
+                } else {
+
+                    return KuknosRefundHistoryFrag.newInstance();
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+
+            @Nullable
+            @Override
+            public CharSequence getPageTitle(int position) {
+                if (position == 0) {
+                    return getString(R.string.history);
+                } else {
+                    return getString(R.string.refund_history);
+                }
+            }
+        });
+
+
+        historyTabLayout.setupWithViewPager(historyViewPager);
+        return view;
 
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
@@ -67,59 +93,9 @@ public class KuknosWHistoryFrag extends BaseAPIViewFrag<KuknosWHistoryVM> {
                 })
                 .setLogoShown(true);
 
-        LinearLayout toolbarLayout = binding.fragKuknosWHToolbar;
+        LinearLayout toolbarLayout = view.findViewById(R.id.fragKuknosWHToolbar);
         toolbarLayout.addView(mHelperToolbar.getView());
 
-        binding.kuknosWHistoryRecycler.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        binding.kuknosWHistoryRecycler.setLayoutManager(layoutManager);
-
-        viewModel.getDataFromServer();
-        binding.pullToRefresh.setRefreshing(true);
-        binding.pullToRefresh.setOnRefreshListener(() -> viewModel.getDataFromServer());
-
-        onError();
-        onProgressVisibility();
-        onDataChanged();
-    }
-
-    private void onDataChanged() {
-        viewModel.getListMutableLiveData().observe(getViewLifecycleOwner(), operationResponsePage -> {
-            if (operationResponsePage.getOperations().size() != 0) {
-                WalletHistoryRAdapter mAdapter = new WalletHistoryRAdapter(viewModel.getListMutableLiveData().getValue(), getContext());
-                binding.kuknosWHistoryRecycler.setAdapter(mAdapter);
-            }
-        });
-    }
-
-    private void onError() {
-        viewModel.getErrorM().observe(getViewLifecycleOwner(), errorM -> {
-            if (errorM.getState()) {
-                new MaterialDialog.Builder(getContext())
-                        .title(getResources().getString(R.string.kuknos_wHistory_dialogTitle))
-                        .positiveText(getResources().getString(R.string.kuknos_RecoverySK_Error_Snack))
-                        .content(getResources().getString(R.string.kuknos_wHistory_error))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                //close frag
-                                popBackStackFragment();
-                            }
-                        })
-                        .show();
-            }
-        });
-    }
-
-    private void onProgressVisibility() {
-        viewModel.getProgressState().observe(getViewLifecycleOwner(), aBoolean -> {
-            binding.pullToRefresh.setRefreshing(aBoolean);
-            /*if (aBoolean) {
-                binding.kuknosWHistoryProgressV.setVisibility(View.VISIBLE);
-            } else {
-                binding.kuknosWHistoryProgressV.setVisibility(View.GONE);
-            }*/
-        });
     }
 
 }

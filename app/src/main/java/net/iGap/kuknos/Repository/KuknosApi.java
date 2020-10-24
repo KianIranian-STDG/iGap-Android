@@ -11,6 +11,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosHash;
 import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosRefundHistory;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
@@ -304,6 +305,9 @@ public interface KuknosApi {
                                                                     @Field("fee") float fee,
                                                                     @Field("hash") String hash);
 
+    @FormUrlEncoded
+    @POST("get-user-refunds")
+    Call<KuknosResponseModel<KuknosRefundHistory>> getUserRefunds(@Field("public_key") String publicKey);
 
     /*@FormUrlEncoded
     @POST("activate-account")

@@ -18,6 +18,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosHash;
 import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosRefundHistory;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosTradeResponse;
@@ -60,6 +61,10 @@ class KuknosAPIRepository {
 
     void getVirtualRefund(String publicKey, String assetCode, float assetCount, int amount, float fee, String hash, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>> apiResponse) {
         new ApiInitializer<KuknosResponseModel<KuknosVirtualRefund>>().initAPI(apiService.getVirtualRefund(publicKey, assetCode, assetCount, amount, fee, hash),handShakeCallback, apiResponse);
+    }
+
+    void getUserRefunds(String publicKey, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosRefundHistory>> apiResponse) {
+        new ApiInitializer<KuknosResponseModel<KuknosRefundHistory>>().initAPI(apiService.getUserRefunds(publicKey), handShakeCallback, apiResponse);
     }
 
 
