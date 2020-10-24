@@ -206,10 +206,8 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void onChanged(KuknosRefundModel kuknosRefundModel) {
                 if (kuknosRefundModel != null) {
-                    String maxAmount = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Long.valueOf(kuknosRefundModel.getMaxRefund())))
-                            : df.format(kuknosRefundModel.getMaxRefund());
-                    Log.e(TAG, "onChanged: " + maxAmount + "----" );
-                    txtMaxAmount.setText(maxAmount);
+
+                    txtMaxAmount.setText(kuknosRefundModel.getMaxRefund());
                     txtMinAmount.setText("" + kuknosRefundModel.getMinRefund());
                     txtFeeFixed.setText("" + kuknosRefundModel.getFeeFixed());
 
