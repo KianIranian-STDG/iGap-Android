@@ -10,12 +10,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragKRRConstrain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textView15"
@@ -271,10 +272,13 @@
                 android:textColor="?iGapSubtitleTextColor"
                 android:textStyle="bold"
                 android:inputType="numberDecimal"
+                android:paddingStart="@dimen/dp4"
+                android:paddingLeft="@dimen/dp4"
                 app:layout_constraintBottom_toTopOf="@+id/textView10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                 />
 
             <TextView
                 android:id="@+id/textView10"
@@ -303,6 +307,8 @@
                 android:textColor="?iGapSubtitleTextColor"
                 android:textStyle="bold"
                 android:enabled="false"
+                android:paddingStart="@dimen/dp4"
+                android:paddingLeft="@dimen/dp4"
                 app:layout_constraintBottom_toTopOf="@+id/textView12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -334,6 +340,8 @@
                 android:textColor="?iGapSubtitleTextColor"
                 android:textStyle="bold"
                 android:enabled="false"
+                android:paddingStart="@dimen/dp4"
+                android:paddingLeft="@dimen/dp4"
                 app:layout_constraintBottom_toTopOf="@+id/textView13"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -365,6 +373,8 @@
                 android:textColor="?iGapSubtitleTextColor"
                 android:textStyle="bold"
                 android:enabled="false"
+                android:paddingStart="@dimen/dp4"
+                android:paddingLeft="@dimen/dp4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
