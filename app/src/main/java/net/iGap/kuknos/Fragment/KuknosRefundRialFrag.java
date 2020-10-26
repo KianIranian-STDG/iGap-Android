@@ -163,12 +163,11 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         });
 
         submit.setOnClickListener(v -> {
-            float maxPeymanRefund;
+
             float peymanCount;
 
             if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
                 peymanCount = refundRequestCount;
-                maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
                 if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
                     if (peymanCount <= maxPeymanRefund) {
@@ -284,7 +283,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
-                    Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
                     Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(_mActivity, R.string.refund_error , Toast.LENGTH_SHORT).show();
