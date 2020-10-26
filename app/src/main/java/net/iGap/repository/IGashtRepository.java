@@ -1,11 +1,17 @@
 package net.iGap.repository;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import net.iGap.G;
+import net.iGap.R;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.helper.HelperError;
 import net.iGap.model.igasht.BaseIGashtResponse;
 import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.IGashtLocationService;
@@ -110,13 +116,11 @@ public class IGashtRepository {
     }
 
     public void createVoucherList(@NotNull List<IGashtLocationService> data) {
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getCount() > 0 && voucherId != 0 && selectedServiceList != null) {
+            for (int i = 0; i < data.size(); i++) {
                 selectedServiceList.add(new IGashtVouchers(data.get(i).getPersianTicket().getVoucherinfoId(), data.get(i).getCount()));
                 count = getLocationServices().get(i).getCount();
                 voucherId = getLocationServices().get(i).getAmounts().get(i).getVoucherinfoId();
             }
-        }
     }
 
     public void getRegisteredOrder(HandShakeCallback handShakeCallback, ResponseCallback<purchaseResponse> callback) {
