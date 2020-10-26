@@ -17,6 +17,7 @@ import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 
 import net.iGap.G;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.RequestManager;
@@ -55,6 +56,8 @@ public class RequestFileDownload {
         if (checkDuplicate && downloadPending.contains(token + "" + offset)) {
             return;
         }
+
+        FileLog.i("RequestFileDownload ", "token " + token + " offset " + offset + " selector " + selector);
 
         try {
             if (checkDuplicate && RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
