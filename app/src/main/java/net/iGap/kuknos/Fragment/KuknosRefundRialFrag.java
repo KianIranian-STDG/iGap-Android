@@ -211,7 +211,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                 .widgetColor(new Theme().getPrimaryColor(getContext()))
                 .build();
         dialogView.findViewById(R.id.kuknos_refund_dialog_submit).setOnClickListener(v -> {
-            viewModel.requestForVirtualRefund(txtTotalPeyman.getText().toString(), Integer.parseInt(txtTotalPrice.getText().toString()), Float.parseFloat(txtFinalFeeFixed.getText().toString()));
+            viewModel.requestForVirtualRefund(String.valueOf(totalPeyman), totalPrice, finalFee);
             dialog.dismiss();
         });
 
