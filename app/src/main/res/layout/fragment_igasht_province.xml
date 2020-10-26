@@ -36,6 +36,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/image_igasht_province"
+                android:visibility="@{viewModel.showMainView}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -102,14 +103,14 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginLeft="@dimen/dp8"
                             android:layout_weight="1"
-                            android:textSize="@dimen/standardTextSize"
                             android:afterTextChanged="@{(s)->viewModel.onProvinceSearchTextChange(s.toString())}"
                             android:background="@color/transparent"
                             android:completionThreshold="0"
                             android:maxLength="30"
                             android:maxLines="1"
-                            android:layout_marginLeft="@dimen/dp8" />
+                            android:textSize="@dimen/standardTextSize" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/clearProvinceSearch"
@@ -183,6 +184,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/frameLayout"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </layout>
