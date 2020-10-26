@@ -16,6 +16,7 @@ public abstract class BaseIGashtViewModel<T> extends BaseAPIViewModel implements
     protected ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
     protected ObservableInt showViewRefresh = new ObservableInt(View.GONE);
     private MutableLiveData<String> requestErrorMessage = new MutableLiveData<>();
+    protected boolean showMessage = true;
 
     public ObservableInt getShowLoadingView() {
         return showLoadingView;
@@ -37,7 +38,8 @@ public abstract class BaseIGashtViewModel<T> extends BaseAPIViewModel implements
     public void onError(String error) {
         showLoadingView.set(View.GONE);
         showViewRefresh.set(View.VISIBLE);
-        requestErrorMessage.setValue(error);
+        if (showMessage)
+            requestErrorMessage.setValue(error);
     }
 
     @Override
