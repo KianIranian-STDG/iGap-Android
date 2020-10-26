@@ -79,13 +79,19 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/refundHistoryRecycler"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refundHistoryRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kuknos_refund_history_header"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/kuknos_refund_history_header">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/refundHistoryRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

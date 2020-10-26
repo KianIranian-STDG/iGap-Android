@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperCalander;
-import net.iGap.kuknos.JalaliCalendar;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.viewmodel.KuknosEditInfoVM;
 import net.iGap.libs.persianDatePicker.Listener;
@@ -23,10 +22,6 @@ import net.iGap.libs.persianDatePicker.PersianDatePickerDialog;
 import net.iGap.libs.persianDatePicker.util.PersianCalendar;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmKuknos;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import io.realm.Realm;
 
