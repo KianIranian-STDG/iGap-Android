@@ -62,6 +62,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     int sellRate;
     float maxPeymanRefund;
     float refundRequestCount;
+    private float minBalance;
 
     public static KuknosRefundRialFrag newInstance() {
         KuknosRefundRialFrag fragment = new KuknosRefundRialFrag();
@@ -90,7 +91,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         }
         viewModel.getRefundInfoFromServer(assetCode);
         viewModel.getPMNAssetData(assetCode);
-        viewModel.getAccountAssets();
+        viewModel.getPMNMinBalance();
 
 
         String iBan = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
@@ -173,21 +174,22 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                             showRefundDialog(assetCode, peymanCount, finalFee, totalPrice);
 
                         } else {
-                            Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(_mActivity, R.string.payman_token_not_enough , Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
-                        Toast.makeText(_mActivity, "You have not complied with the token limit.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(_mActivity, R.string.payman_refund_limitation_error , Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Toast.makeText(getActivity(), "Please enter PMN count", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.enter_pmn_count, Toast.LENGTH_SHORT).show();
                 }
 
 
             }
         });
 
+        onMinBalance();
         onRefundDataReceived();
         onAssetDataReceived();
         onUserAssetsReceived();
@@ -247,13 +249,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     String min = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(minRefund))
                             : String.valueOf(minRefund);
 
-                    String strfeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(feeFixed))
+                    String strFeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(feeFixed))
                             : String.valueOf(feeFixed);
 
-                    Log.e(TAG, "onChanged: " + max + "-----" );
                     txtMaxAmount.setText(max);
                     txtMinAmount.setText(min);
-                    txtFeeFixed.setText(strfeeFixed + " %");
+                    txtFeeFixed.setText(strFeeFixed + " %");
 
                     refundModel.setFeeFixed(kuknosRefundModel.getFeeFixed());
                     refundModel.setMaxRefund(kuknosRefundModel.getMaxRefund());
@@ -271,9 +272,9 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(_mActivity, "Refund done successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(_mActivity, "Refund Not successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(_mActivity, R.string.refund_error , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -323,7 +324,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(KuknosBalance kuknosBalance) {
                 if (kuknosBalance != null) {
 
-                    maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - 1.5);
+                    maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - minBalance);
+
+                    if (maxPeymanRefund < 0) {
+                        maxPeymanRefund = 0;
+                    }
+
                     String maxRefund = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(maxPeymanRefund)))
                             : df.format(Float.valueOf(maxPeymanRefund));
 
@@ -353,6 +359,17 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(Boolean aBoolean) {
                 mainProgress.setVisibility(View.INVISIBLE);
                 HelperError.showSnackMessage(getString(R.string.network_error), false);
+            }
+        });
+    }
+
+    private void onMinBalance() {
+        viewModel.getMinBalance().observe(getViewLifecycleOwner(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                if (aFloat != null) {
+                    minBalance = aFloat;
+                }
             }
         });
     }

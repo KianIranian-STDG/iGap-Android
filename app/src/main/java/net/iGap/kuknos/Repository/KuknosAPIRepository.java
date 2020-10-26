@@ -11,6 +11,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosBankPayment;
 import net.iGap.kuknos.Model.Parsian.KuknosFederation;
 import net.iGap.kuknos.Model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.Model.Parsian.KuknosHash;
+import net.iGap.kuknos.Model.Parsian.KuknosMinBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
@@ -105,6 +106,9 @@ class KuknosAPIRepository {
         new ApiInitializer<KuknosResponseModel<KuknosOperationResponse>>().initAPI(apiService.getWalletHistory(userID, 100, "desc"), handShakeCallback, apiResponse);
     }
 
+    void getMinBalance(String publicKey, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosMinBalance>> apiResponse) {
+         new ApiInitializer<KuknosResponseModel<KuknosMinBalance>>().initAPI(apiService.getMinBalance(publicKey), handShakeCallback, apiResponse);
+    }
     /*void getUserHistory(String userID, ApiResponse<Page<OperationResponse>> apiResponse) {
         KuknosAPIAsync<Page<OperationResponse>> temp = new KuknosAPIAsync(apiResponse, KuknosAPIAsync.API.PAYMENTS_ACCOUNT);
         temp.execute(userID);

@@ -7,6 +7,7 @@ import net.iGap.kuknos.Model.KuknosSendM;
 import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosHash;
+import net.iGap.kuknos.Model.Parsian.KuknosMinBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
@@ -25,11 +26,13 @@ public class KuknosRefundVM extends BaseAPIViewModel {
     private MutableLiveData<Boolean> refundProgress;
     private MutableLiveData<Boolean> isRefundSuccess;
     private MutableLiveData<Integer> refNo;
+    private MutableLiveData<Float> minBalance;
     private String hashString;
     private KuknosSendM sendModel;
     private MutableLiveData<Integer> requestsSuccess;
     private MutableLiveData<Boolean> requestsError;
-    private AtomicInteger success = new AtomicInteger(3);
+
+    private AtomicInteger success = new AtomicInteger(4);
     private String assetCode;
 
     public KuknosRefundVM() {
@@ -42,6 +45,7 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         requestsError = new MutableLiveData<>();
         isRefundSuccess = new MutableLiveData<>();
         refNo=new MutableLiveData<>();
+        minBalance = new MutableLiveData<>();
 
     }
 
@@ -161,6 +165,30 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         });
     }
 
+    public void getPMNMinBalance() {
+        panelRepo.getMinBalance(panelRepo.getUserRepo().getAccountID(), this, new ResponseCallback<KuknosResponseModel<KuknosMinBalance>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosMinBalance> data) {
+                if (data != null) {
+                    minBalance.setValue(data.getData().getMinBalance());
+                    requestsSuccess.setValue(success.decrementAndGet());
+
+                    getAccountAssets();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                    requestsError.setValue(true);
+            }
+
+            @Override
+            public void onFailed() {
+                    requestsError.setValue(true);
+            }
+        });
+    }
+
     public MutableLiveData<KuknosAsset> getAssetData() {
         return assetData;
     }
@@ -195,5 +223,9 @@ public class KuknosRefundVM extends BaseAPIViewModel {
 
     public void setRefNo(MutableLiveData<Integer> refNo) {
         this.refNo = refNo;
+    }
+
+    public MutableLiveData<Float> getMinBalance() {
+        return minBalance;
     }
 }

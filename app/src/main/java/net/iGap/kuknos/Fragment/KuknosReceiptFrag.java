@@ -24,6 +24,8 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmKuknos;
 
+import java.text.DecimalFormat;
+
 import io.realm.Realm;
 
 
@@ -194,6 +196,7 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
     }
 
     private void onUserRefundInfoObserver() {
+        DecimalFormat df = new DecimalFormat("#,##0.00");
         viewModel.getRefundInfo().observe(getViewLifecycleOwner(), refundResponse -> {
             progressBar.setVisibility(View.GONE);
             if (refundResponse != null) {
@@ -203,8 +206,8 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
                 typeRefund.setText(refundResponse.getRefundType());
                 hash.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getHash()) : refundResponse.getHash());
                 state.setText(refundResponse.getSettlementStatus());
-                amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getAmount()) : refundResponse.getAmount());
-                token.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getAssetCode()) : refundResponse.getAssetCode());
+                amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(refundResponse.getAmount())) : df.format(refundResponse.getAmount()));
+                token.setText(refundResponse.getAssetCode());
                 dateApply.setText(HelperCalander.getPersianCalander(Long.valueOf(refundResponse.getInsertDate())));
                 shebaNumber.setText(iban);
                 refundAddress.setText(viewModel.getPanelRepo().getUserRepo().getAccountID());

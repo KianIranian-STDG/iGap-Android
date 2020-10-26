@@ -10,6 +10,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosBankPayment;
 import net.iGap.kuknos.Model.Parsian.KuknosFederation;
 import net.iGap.kuknos.Model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.Model.Parsian.KuknosHash;
+import net.iGap.kuknos.Model.Parsian.KuknosMinBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundHistory;
@@ -76,6 +77,10 @@ public class PanelRepo {
 
     public void getUserHistory(HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosOperationResponse>> apiResponse) {
         kuknosAPIRepository.getUserHistory(userRepo.getAccountID(), handShakeCallback, apiResponse);
+    }
+
+    public void getMinBalance(String publicKey, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosMinBalance>> apiResponse) {
+        kuknosAPIRepository.getMinBalance(publicKey, handShakeCallback, apiResponse);
     }
 
     public void getSpecificAssets(String assetCode, HandShakeCallback handShakeCallback, ResponseCallback<KuknosResponseModel<KuknosAsset>> apiResponse) {

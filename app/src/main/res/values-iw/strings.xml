@@ -1919,5 +1919,9 @@
     <string name="refund_amount">Refund amount</string>
     <string name="refund_history">Refund History</string>
     <string name="history">History</string>
-    <string name="refund_done">Refund done successfully</string>
+    <string name="refund_done">Refund is done successfully</string>
+    <string name="payman_token_not_enough">Peyman Token in not enough</string>
+    <string name="payman_refund_limitation_error">You have not complied with the token limit.</string>
+    <string name="enter_pmn_count">Please enter PMN count</string>
+    <string name="refund_error">Refund progress error</string>
 </resources>

@@ -8,6 +8,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosBankPayment;
 import net.iGap.kuknos.Model.Parsian.KuknosFederation;
 import net.iGap.kuknos.Model.Parsian.KuknosFeeModel;
 import net.iGap.kuknos.Model.Parsian.KuknosHash;
+import net.iGap.kuknos.Model.Parsian.KuknosMinBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosOfferResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
@@ -311,12 +312,13 @@ public interface KuknosApi {
 
     /**
      * this method makes a request for refund.
-     * @param publicKey This is the owner pubic key.
-     * @param assetCode This is the asset code that we want to refund.
+     *
+     * @param publicKey  This is the owner pubic key.
+     * @param assetCode  This is the asset code that we want to refund.
      * @param assetCount
      * @param amount
      * @param fee
-     * @param hash This param will returns from a transfer endpoint call.
+     * @param hash       This param will returns from a transfer endpoint call.
      * @return
      */
     @FormUrlEncoded
@@ -331,6 +333,10 @@ public interface KuknosApi {
     @FormUrlEncoded
     @POST("get-user-refunds")
     Call<KuknosResponseModel<KuknosRefundHistory>> getUserRefunds(@Field("public_key") String publicKey);
+
+    @FormUrlEncoded
+    @POST("account-min-balance")
+    Call<KuknosResponseModel<KuknosMinBalance>> getMinBalance(@Field("public_key") String publicKey);
 
     /*@FormUrlEncoded
     @POST("activate-account")
