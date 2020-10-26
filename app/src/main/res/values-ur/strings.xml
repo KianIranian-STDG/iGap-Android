@@ -14,6 +14,11 @@
     <string name="kuknos_rial_max_buy">"Maksimum izin verilen"</string>
     <string name="kuknos_rial_min_buy">"İzin verilen minimum"</string>
     <string name="kuknos_rial_price_of_day">"Günün fiyatı"</string>
+    <string name="kuknos_edit_info_sending_info">"Bilgi gönderiliyor ..."</string>
+    <string name="kuknos_receipt_bill">"Geri ödeme makbuzu"</string>
+    <string name="kuknos_edit_info_empty_sheba">"Gece alanı boş olamaz"</string>
+    <string name="kuknos_edit_info_saved_successfully">"Bilgiler başarıyla kaydedildi"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"Doğum tarihi alanı boş bırakılamaz"</string>
     <string name="kuknos_receipt_token">"Jeton"</string>
     <string name="kuknos_receipt_Refund_address">"Geri ödeme adresi"</string>
     <string name="kunos_receipt_type_refund">"Geri ödeme türü"</string>

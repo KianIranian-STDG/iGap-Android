@@ -14,6 +14,12 @@
     <string name="pu_desc_profileUser">Entrez votre nom d’utilisateur et choisissiez une photo de profil , si vous voulez. </string>
     <string name="pu_nikname_profileUser">Prénom</string>
     <string name="pu_Lets_Go">Continuez</string>
+    <string name="kuknos_edit_info_empty_sheba_and_birthdate">"La date de naissance et la nuit n'ont pas changé!"</string>
+    <string name="kuknos_edit_info_sending_info">"Envoi d'informations ..."</string>
+    <string name="kuknos_edit_info_empty_sheba">"Le champ de nuit ne peut pas être vide"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"Le champ de la date de naissance ne peut pas être vide"</string>
+    <string name="kuknos_edit_info_saved_successfully">"Informations enregistrées avec succès"</string>
+    <string name="kuknos_receipt_bill">"Reçu de remboursement"</string>
     <string name="kuknos_panelStr_buyAgain">Rachat</string>
     <string name="kuknos_receipt_token">"Jeton"</string>
     <string name="kunos_receipt_hash">"Hacher"</string>

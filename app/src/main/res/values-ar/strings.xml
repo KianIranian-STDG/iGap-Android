@@ -2068,7 +2068,13 @@
     <string name="kuknos_rial_Maximum_redeemable_token">"الحد الأقصى من الرمز المميز القابل للاسترداد"</string>
     <string name="kuknos_rial_Redemption_fee">"رسوم الاسترداد PMN"</string>
     <string name="kuknos_rial_Redemption_feee">"رسوم الاسترداد"</string>
+    <string name="kuknos_edit_info_sending_info">"إرسال المعلومات ..."</string>
+    <string name="kuknos_edit_info_empty_sheba_and_birthdate">"تاريخ الميلاد والشبا لم يتغير!"</string>
     <string name="kuknos_rial_Deposit_amount2">"مبلغ الإيداع"</string>
+    <string name="kuknos_receipt_bill">"إيصال الاسترداد"</string>
+    <string name="kuknos_edit_info_empty_sheba">"لا يمكن أن يكون الحقل الليلي فارغًا"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"لا يمكن ترك حقل تاريخ الميلاد فارغًا"</string>
+    <string name="kuknos_edit_info_saved_successfully">"تم حفظ المعلومات بنجاح"</string>
     <string name="kuknos_edit_info_birthday">"تاريخ الولادة"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"تحرير وتغيير معلومات الحساب"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"العدد الإجمالي للعقود"</string>

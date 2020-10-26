@@ -1791,6 +1791,7 @@
     <string name="kuknos_AddAsset_AddBTN">افزودن دارایی جدید</string>
     <string name="kuknos_AddAsset_title">دارایی های فعلی</string>
     <string name="kuknos_trade_noItem">هیچ موردی یافت نشد.</string>
+    <string name="kuknos_edit_info_saved_successfully">"اطلاعات با موفقیت ذخیره شد"</string>
     <string name="kuknos_Restore_CheckPIN">من در هنگام ساخت حساب رمز ورود ایجاد کرده ام.</string>
     <string name="kuknos_RestorePass_title">رمز 4 رقمی خود را وارد کنید.</string>
     <string name="kuknos_RestorePass_message">این رمز 4 رقمی برای تولید کلید عمومی و خصوصی شما مورد استفاده قرار میگیرد.</string>
@@ -1805,9 +1806,13 @@
     <string name="kuknos_enterPin_btnNormal">تایید</string>
     <string name="kuknos_enterPin_btnProgress">بررسی رمز…</string>
     <string name="kuknos_payment_title">رسید تراکنش</string>
+    <string name="kuknos_edit_info_sending_info">"در حال ارسال اطلاعات..."</string>
     <string name="kuknos_payment_assetCode">دارایی: </string>
+    <string name="kuknos_edit_info_empty_sheba">"فیلد شبا نمی تواند خالی باشد"</string>
     <string name="kuknos_payment_assetCount">تعداد دارایی: </string>
     <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
+    <string name="kuknos_edit_info_empty_sheba_and_birthdate">"فیلد تاریخ تولد و شبا تغییری نکرده اند!"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"فیلد تاریخ تولد نمی تواند خالی باشد"</string>
     <string name="kuknos_payment_totalAmount">قیمت کل: </string>
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="kuknos_Currency">نام توکن</string>
@@ -1972,6 +1977,7 @@
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">ساختار کد ملی اشتباه است.</string>
     <string name="kuknos_SignupInfo_errorNameEmptyInvalid">نام نمیتواند خالی باشد.</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">طول نام کوتاه است.</string>
+    <string name="kuknos_receipt_bill">"رسید بازپرداخت"</string>
     <string name="kuknos_buyAsset">خرید دارایی</string>
     <string name="kuknos_buyP_MaxAmount">شما از حداکثر تعداد خرید این دارایی فراتر رفته اید.</string>
     <string name="kuknos_buyP_btn_server3">دریافت داده...</string>

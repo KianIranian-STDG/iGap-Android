@@ -15,6 +15,12 @@
     <string name="kuknos_rial_max_buy">"Maximum destûr"</string>
     <string name="kuknos_rial_min_buy">"Kêmtirîn destûr"</string>
     <string name="kuknos_panelStr_buyAgain">Rizgarkirin</string>
+    <string name="kuknos_edit_info_empty_sheba_and_birthdate">"Dîroka jidayikbûnê û şevê neguheriye!"</string>
+    <string name="kuknos_receipt_bill">"Wergirtina vegerê"</string>
+    <string name="kuknos_edit_info_sending_info">"Informationandina agahiyan ..."</string>
+    <string name="kuknos_edit_info_empty_sheba">"Qada şevê vala nabe"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"Dîroka zayînê nikare vala bibe"</string>
+    <string name="kuknos_edit_info_saved_successfully">"Agahdarî bi serfirazî hate hilanîn"</string>
     <string name="kuknos_rial_price_of_day">"Bihayê rojê"</string>
     <string name="kuknos_receipt_token">"Token"</string>
     <string name="kunos_receipt_hash">"Haş"</string>

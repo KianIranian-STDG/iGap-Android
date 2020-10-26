@@ -1651,6 +1651,12 @@ Want to get it?</string>
     <string name="kuknos_SignupInfo_title">User Information</string>
     <string name="kuknos_SignupInfo_desc">Please complete the fields:</string>
     <string name="kuknos_SignupInfo_username">Username *</string>
+    <string name="kuknos_receipt_bill">"Refund receipt"</string>
+    <string name="kuknos_edit_info_saved_successfully">"Information saved successfully"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"The date of birth field cannot be empty"</string>
+    <string name="kuknos_edit_info_empty_sheba">"The IBAN field cannot be empty"</string>
+    <string name="kuknos_edit_info_sending_info">"Sending information ..."</string>
+    <string name="kuknos_edit_info_empty_sheba_and_birthdate">"The date of birth and IBAN have not changed!"</string>
     <string name="kuknos_SignupInfo_name">Name *</string>
     <string name="kuknos_SignupInfo_email">Email Address *</string>
     <string name="kuknos_SignupInfo_submitBtn">Submit</string>
