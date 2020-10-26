@@ -1,10 +1,13 @@
 package net.iGap.viewmodel.igasht;
 
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.purchaseResponse;
 import net.iGap.repository.IGashtRepository;
@@ -24,6 +27,8 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<purchaseR
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
+        showMessage = false;
+
     }
 
     public IGashtLocationItem getLocationItem() {
@@ -65,6 +70,12 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<purchaseR
         showLoadingView.set(View.GONE);
         goPayment.setValue(data.getmToken());
         //    goHistoryPage.setValue(true);
+    }
+
+    @Override
+    public void onError(String error) {
+        super.onError(error);
+        showMessage=false;
     }
 
     @Override
