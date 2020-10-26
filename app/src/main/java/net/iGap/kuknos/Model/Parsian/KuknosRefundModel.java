@@ -17,13 +17,15 @@ public class KuknosRefundModel {
     @SerializedName("destination_public_key")
     private String publicKey;
     @SerializedName("fee_fixed")
-    private int feeFixed;
+    private float feeFixed;
+    @SerializedName("fee_percent")
+    private float feePercent;
 
     public KuknosRefundModel() {
 
     }
 
-    public KuknosRefundModel(String assetType, String assetCode, String refundType, int maxRefund, int minRefund, String publicKey, int feeFixed) {
+    public KuknosRefundModel(String assetType, String assetCode, String refundType, int maxRefund, int minRefund, String publicKey, float feeFixed, float feePercent) {
         this.assetType = assetType;
         this.assetCode = assetCode;
         this.refundType = refundType;
@@ -31,6 +33,27 @@ public class KuknosRefundModel {
         this.minRefund = minRefund;
         this.publicKey = publicKey;
         this.feeFixed = feeFixed;
+        this.feePercent = feePercent;
+    }
+
+    public float getFeeFixed() {
+        return feeFixed;
+    }
+
+    public void setFeeFixed(float feeFixed) {
+        this.feeFixed = feeFixed;
+    }
+
+    public float getFeePercent() {
+        return feePercent;
+    }
+
+    public void setFeePercent(float feePercent) {
+        this.feePercent = feePercent;
+    }
+
+    public void setFeePercent(int feePercent) {
+        this.feePercent = feePercent;
     }
 
     public String getAssetType() {
@@ -81,9 +104,6 @@ public class KuknosRefundModel {
         this.publicKey = publicKey;
     }
 
-    public int getFeeFixed() {
-        return feeFixed;
-    }
 
     public void setFeeFixed(int feeFixed) {
         this.feeFixed = feeFixed;

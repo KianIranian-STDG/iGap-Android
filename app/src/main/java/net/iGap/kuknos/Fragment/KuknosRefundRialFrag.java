@@ -1,12 +1,10 @@
 package net.iGap.kuknos.Fragment;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +31,11 @@ import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosRefundVM;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.realm.RealmKuknos;
 
 import java.text.DecimalFormat;
 
 import io.realm.Realm;
-import ir.radsense.raadcore.widget.BottomSheet;
 
 
 public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
@@ -58,11 +54,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     int totalPrice;
     int maxRefund;
     int minRefund;
-    int feeFixed;
+    float fee;
     int sellRate;
     float maxPeymanRefund;
     float refundRequestCount;
     private float minBalance;
+    boolean isPercentMode;
 
     public static KuknosRefundRialFrag newInstance() {
         KuknosRefundRialFrag fragment = new KuknosRefundRialFrag();
@@ -105,7 +102,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                 }
             }
         });
-        txtIBAN.setText(iBan);
+        txtIBAN.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(iBan) : iBan);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             txtPeymanCount.setTypeface(getActivity().getResources().getFont(R.font.main_font));
@@ -133,7 +130,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
                         txtPeymanCount.setTextColor(Color.BLACK);
 
-                        finalFee = peymanCount * (refundModel.getFeeFixed() / 100.0f);
+                        if (isPercentMode) {
+                            finalFee = peymanCount * fee;
+                        } else {
+                            finalFee = fee;
+                        }
+
                         totalPeyman = finalFee + peymanCount;
                         totalPrice = (int) (peymanCount * sellRate);
 
@@ -160,33 +162,31 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             }
         });
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                float maxPeymanRefund = 0;
-                float peymanCount = 0;
-                if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
-                    peymanCount = refundRequestCount;
-                    maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
-                    if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
+        submit.setOnClickListener(v -> {
+            float maxPeymanRefund;
+            float peymanCount;
 
-                        if (peymanCount <= maxPeymanRefund) {
-                            showRefundDialog(assetCode, peymanCount, finalFee, totalPrice);
+            if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
+                peymanCount = refundRequestCount;
+                maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
+                if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
-                        } else {
-                            Toast.makeText(_mActivity, R.string.payman_token_not_enough , Toast.LENGTH_SHORT).show();
-                        }
+                    if (peymanCount <= maxPeymanRefund) {
+                        showRefundDialog(assetCode, peymanCount, finalFee, totalPrice);
 
                     } else {
-                        Toast.makeText(_mActivity, R.string.payman_refund_limitation_error , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(_mActivity, R.string.payman_token_not_enough , Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Toast.makeText(getActivity(), R.string.enter_pmn_count, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(_mActivity, R.string.payman_refund_limitation_error , Toast.LENGTH_SHORT).show();
                 }
 
-
+            } else {
+                Toast.makeText(getActivity(), R.string.enter_pmn_count, Toast.LENGTH_SHORT).show();
             }
+
+
         });
 
         onMinBalance();
@@ -242,19 +242,32 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
                     maxRefund = kuknosRefundModel.getMaxRefund();
                     minRefund = kuknosRefundModel.getMinRefund();
-                    feeFixed = kuknosRefundModel.getFeeFixed() ;
+
+                    if (kuknosRefundModel.getFeeFixed() != 0) {
+                        fee = kuknosRefundModel.getFeeFixed();
+                        isPercentMode = false;
+                    } else {
+                        fee = kuknosRefundModel.getFeePercent();
+                        isPercentMode = true;
+                    }
+
                     String max =  HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(maxRefund))
                             : String.valueOf(maxRefund);
 
                     String min = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(minRefund))
                             : String.valueOf(minRefund);
 
-                    String strFeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(feeFixed))
-                            : String.valueOf(feeFixed);
+                    String strFeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(fee))
+                            : String.valueOf(fee);
 
                     txtMaxAmount.setText(max);
                     txtMinAmount.setText(min);
-                    txtFeeFixed.setText(strFeeFixed + " %");
+
+                    if (isPercentMode) {
+                        txtFeeFixed.setText(strFeeFixed + " %");
+                    } else {
+                        txtFeeFixed.setText(strFeeFixed);
+                    }
 
                     refundModel.setFeeFixed(kuknosRefundModel.getFeeFixed());
                     refundModel.setMaxRefund(kuknosRefundModel.getMaxRefund());

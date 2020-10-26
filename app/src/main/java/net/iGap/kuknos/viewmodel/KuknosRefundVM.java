@@ -31,9 +31,8 @@ public class KuknosRefundVM extends BaseAPIViewModel {
     private KuknosSendM sendModel;
     private MutableLiveData<Integer> requestsSuccess;
     private MutableLiveData<Boolean> requestsError;
-
     private AtomicInteger success = new AtomicInteger(4);
-    private String assetCode;
+
 
     public KuknosRefundVM() {
         refundData = new MutableLiveData<>();
@@ -69,14 +68,13 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             }
         });
     }
-
     public void requestForVirtualRefund(String assetCount, int amount, float fee) {
         refundProgress.setValue(true);
         sendModel.setAmount(assetCount);
         sendModel.setSrc(panelRepo.getUserRepo().getSeedKey());
         sendModel.setAssetCode(assetData.getValue().getAssets().get(0).getAssetCode());
         sendModel.setAssetInssuer(assetData.getValue().getAssets().get(0).getAssetIssuer());
-        sendModel.setMemo("TRANSFER");
+        sendModel.setMemo("REFUND");
         sendModel.setDest(refundData.getValue().getPublicKey());
 
 
@@ -87,28 +85,7 @@ public class KuknosRefundVM extends BaseAPIViewModel {
                 if (data != null) {
                     hashString = data.getData().getHash();
 
-                    panelRepo.getVirtualRefund(panelRepo.getUserRepo().getAccountID(), assetData.getValue().getAssets().get(0).getAssetCode(), Float.parseFloat(assetCount), amount, fee, hashString, KuknosRefundVM.this, new ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>>() {
-                        @Override
-                        public void onSuccess(KuknosResponseModel<KuknosVirtualRefund> data) {
-                            refundProgress.setValue(false);
-                            isRefundSuccess.setValue(true);
-                            refNo.setValue(data.getData().getRefNumber());
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            refundProgress.setValue(false);
-                            isRefundSuccess.setValue(false);
-                            refNo.setValue(0);
-                        }
-
-                        @Override
-                        public void onFailed() {
-                            refundProgress.setValue(false);
-                            isRefundSuccess.setValue(false);
-                            refNo.setValue(0);
-                        }
-                    });
+                    sendRefundRequest(assetCount, amount, fee);
 
                 }
             }
@@ -124,7 +101,6 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             }
         });
     }
-
     public void getPMNAssetData(String assetCode) {
         panelRepo.getSpecificAssets(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosAsset>>() {
             @Override
@@ -144,27 +120,6 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             }
         });
     }
-
-    public void getAccountAssets() {
-        panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
-            @Override
-            public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
-                balanceData.setValue(data.getData());
-                requestsSuccess.setValue(success.decrementAndGet());
-            }
-
-            @Override
-            public void onError(String error) {
-                requestsError.setValue(true);
-            }
-
-            @Override
-            public void onFailed() {
-                requestsError.setValue(true);
-            }
-        });
-    }
-
     public void getPMNMinBalance() {
         panelRepo.getMinBalance(panelRepo.getUserRepo().getAccountID(), this, new ResponseCallback<KuknosResponseModel<KuknosMinBalance>>() {
             @Override
@@ -188,6 +143,52 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             }
         });
     }
+
+    private void sendRefundRequest(String assetCount, int amount, float fee) {
+
+        panelRepo.getVirtualRefund(panelRepo.getUserRepo().getAccountID(), assetData.getValue().getAssets().get(0).getAssetCode(), Float.parseFloat(assetCount), amount, fee, hashString, KuknosRefundVM.this, new ResponseCallback<KuknosResponseModel<KuknosVirtualRefund>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosVirtualRefund> data) {
+                refundProgress.setValue(false);
+                isRefundSuccess.setValue(true);
+                refNo.setValue(data.getData().getRefNumber());
+            }
+
+            @Override
+            public void onError(String error) {
+                refundProgress.setValue(false);
+                isRefundSuccess.setValue(false);
+                refNo.setValue(0);
+            }
+
+            @Override
+            public void onFailed() {
+                refundProgress.setValue(false);
+                isRefundSuccess.setValue(false);
+                refNo.setValue(0);
+            }
+        });
+    }
+    private void getAccountAssets() {
+        panelRepo.getAccountInfo(this, new ResponseCallback<KuknosResponseModel<KuknosBalance>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosBalance> data) {
+                balanceData.setValue(data.getData());
+                requestsSuccess.setValue(success.decrementAndGet());
+            }
+
+            @Override
+            public void onError(String error) {
+                requestsError.setValue(true);
+            }
+
+            @Override
+            public void onFailed() {
+                requestsError.setValue(true);
+            }
+        });
+    }
+
 
     public MutableLiveData<KuknosAsset> getAssetData() {
         return assetData;

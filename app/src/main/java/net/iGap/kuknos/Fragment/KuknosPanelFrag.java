@@ -156,7 +156,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
                         balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
                     }
-                    if (balance != null) {
+                    if (balance != null && !balance.getAssetType().isEmpty()) {
                         String assetCode = balance.getAssetType();
                         Bundle bundle = new Bundle();
                         bundle.putString("assetType", assetCode);

@@ -206,7 +206,7 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
                 typeRefund.setText(refundResponse.getRefundType());
                 hash.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getHash()) : refundResponse.getHash());
                 state.setText(refundResponse.getSettlementStatus());
-                amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(refundResponse.getAmount())) : df.format(refundResponse.getAmount()));
+                amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(refundResponse.getAmount()))) : df.format(Float.valueOf(refundResponse.getAmount())));
                 token.setText(refundResponse.getAssetCode());
                 dateApply.setText(HelperCalander.getPersianCalander(Long.valueOf(refundResponse.getInsertDate())));
                 shebaNumber.setText(iban);
