@@ -1,6 +1,8 @@
 package net.iGap.kuknos.Fragment;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -30,11 +33,13 @@ import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosRefundVM;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.realm.RealmKuknos;
 
 import java.text.DecimalFormat;
 
 import io.realm.Realm;
+import ir.radsense.raadcore.widget.BottomSheet;
 
 
 public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
@@ -48,6 +53,15 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private ConstraintLayout fragKRRConstrain;
     private String assetCode;
     private DecimalFormat df;
+    float finalFee;
+    float totalPeyman;
+    int totalPrice;
+    int maxRefund;
+    int minRefund;
+    int feeFixed;
+    int sellRate;
+    float maxPeymanRefund;
+    float refundRequestCount;
 
     public static KuknosRefundRialFrag newInstance() {
         KuknosRefundRialFrag fragment = new KuknosRefundRialFrag();
@@ -92,6 +106,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         });
         txtIBAN.setText(iBan);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            txtPeymanCount.setTypeface(getActivity().getResources().getFont(R.font.main_font));
+        } else {
+            ResourcesCompat.getFont(getActivity(), R.font.main_font);
+        }
+
         txtPeymanCount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -106,16 +126,27 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty()) {
+                    refundRequestCount = Float.parseFloat(s.toString());
+
                     float peymanCount = Float.parseFloat(s.toString());
                     if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
                         txtPeymanCount.setTextColor(Color.BLACK);
-                        float finalFee = peymanCount * (refundModel.getFeeFixed() / 100.0f);
-                        float totalPeyman = finalFee + peymanCount;
-                        int totalPrice = (int) (peymanCount * Integer.parseInt(txtSellRate.getText().toString()));
 
-                        txtFinalFeeFixed.setText("" + finalFee);
-                        txtTotalPeyman.setText("" + totalPeyman);
-                        txtTotalPrice.setText("" + totalPrice);
+                        finalFee = peymanCount * (refundModel.getFeeFixed() / 100.0f);
+                        totalPeyman = finalFee + peymanCount;
+                        totalPrice = (int) (peymanCount * sellRate);
+
+                        txtFinalFeeFixed.setText(
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(finalFee)))
+                                : df.format(Float.valueOf(finalFee)));
+
+                        txtTotalPeyman.setText(
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(totalPeyman)))
+                                        : df.format(Float.valueOf(totalPeyman)));
+
+                        txtTotalPrice.setText(
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(totalPrice)))
+                                        : df.format(Integer.valueOf(assetCode)));
 
                     } else {
                         txtPeymanCount.setTextColor(Color.RED);
@@ -133,13 +164,13 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onClick(View v) {
                 float maxPeymanRefund = 0;
                 float peymanCount = 0;
-                if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText().toString() != null) {
-                    peymanCount = Float.parseFloat(txtPeymanCount.getText().toString());
+                if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
+                    peymanCount = refundRequestCount;
                     maxPeymanRefund = (float) (Float.parseFloat(balance.getAssets().get(0).getBalance()) - 1.5);
                     if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
                         if (peymanCount <= maxPeymanRefund) {
-                            showRefundDialog(assetCode, peymanCount, Float.parseFloat(txtFinalFeeFixed.getText().toString()), Long.parseLong(txtTotalPrice.getText().toString()));
+                            showRefundDialog(assetCode, peymanCount, finalFee, totalPrice);
 
                         } else {
                             Toast.makeText(_mActivity, "Peyman Token in not enough", Toast.LENGTH_SHORT).show();
@@ -206,9 +237,23 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(KuknosRefundModel kuknosRefundModel) {
                 if (kuknosRefundModel != null) {
 
-                    txtMaxAmount.setText("" + kuknosRefundModel.getMaxRefund());
-                    txtMinAmount.setText("" + kuknosRefundModel.getMinRefund());
-                    txtFeeFixed.setText("" + kuknosRefundModel.getFeeFixed());
+
+                    maxRefund = kuknosRefundModel.getMaxRefund();
+                    minRefund = kuknosRefundModel.getMinRefund();
+                    feeFixed = kuknosRefundModel.getFeeFixed() ;
+                    String max =  HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(maxRefund))
+                            : String.valueOf(maxRefund);
+
+                    String min = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(minRefund))
+                            : String.valueOf(minRefund);
+
+                    String strfeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(feeFixed))
+                            : String.valueOf(feeFixed);
+
+                    Log.e(TAG, "onChanged: " + max + "-----" );
+                    txtMaxAmount.setText(max);
+                    txtMinAmount.setText(min);
+                    txtFeeFixed.setText(strfeeFixed + " %");
 
                     refundModel.setFeeFixed(kuknosRefundModel.getFeeFixed());
                     refundModel.setMaxRefund(kuknosRefundModel.getMaxRefund());
@@ -225,6 +270,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
+                    Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
                     Toast.makeText(_mActivity, "Refund done successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(_mActivity, "Refund Not successfully", Toast.LENGTH_SHORT).show();
@@ -259,7 +305,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void onChanged(KuknosAsset kuknosAsset) {
                 if (kuknosAsset != null) {
-                    txtSellRate.setText("" + kuknosAsset.getAssets().get(0).getSellRate());
+
+                    sellRate = kuknosAsset.getAssets().get(0).getSellRate();
+                    String strSellRate = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(sellRate)))
+                            : df.format(Integer.valueOf(sellRate));
+
+                    txtSellRate.setText(strSellRate);
 
                 }
             }
@@ -271,8 +322,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             @Override
             public void onChanged(KuknosBalance kuknosBalance) {
                 if (kuknosBalance != null) {
-                    float maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - 1.5);
-                    txtMaxSell.setText("" + maxPeymanRefund);
+
+                    maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - 1.5);
+                    String maxRefund = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(maxPeymanRefund)))
+                            : df.format(Float.valueOf(maxPeymanRefund));
+
+                    txtMaxSell.setText(maxRefund);
                     balance.setAssets(kuknosBalance.getAssets());
 
                 }

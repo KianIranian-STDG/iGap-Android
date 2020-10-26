@@ -2218,4 +2218,5 @@
     <string name="history_amount">مبلغ</string>
     <string name="histroy_fee">کارمزد</string>
     <string name="history_count">مقدار</string>
+    <string name="refund_done">Refund done successfully</string>
 </resources>

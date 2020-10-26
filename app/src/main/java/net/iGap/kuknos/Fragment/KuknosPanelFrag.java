@@ -156,11 +156,13 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
                         balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
                     }
-                    String assetCode = balance.getAssetType();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("assetType", assetCode);
-                    buyAgainFrag.setArguments(bundle);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
+                    if (balance != null) {
+                        String assetCode = balance.getAssetType();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("assetType", assetCode);
+                        buyAgainFrag.setArguments(bundle);
+                        new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
+                    }
                 }
 
             }

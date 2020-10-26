@@ -2253,6 +2253,7 @@ Want to get it?</string>
     <string name="history_amount">Amount</string>
     <string name="histroy_fee">Fee</string>
     <string name="history_count">Count</string>
+    <string name="refund_done">Refund done successfully</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>
