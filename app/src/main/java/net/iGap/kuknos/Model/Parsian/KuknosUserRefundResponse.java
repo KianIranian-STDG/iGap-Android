@@ -24,10 +24,9 @@ public class KuknosUserRefundResponse {
     private String hash;
     @SerializedName("refund_type")
     private String refundType;
-    @SerializedName("transaction_date")
-    private String transactionDate;
-    @SerializedName("deposit_date")
-    private String depositDate;
+    @SerializedName("insert_date")
+    private String insertDate;
+
 
     public String getRefNo() {
         return refNo;
@@ -85,20 +84,12 @@ public class KuknosUserRefundResponse {
         this.settlementStatus = settlementStatus;
     }
 
-    public String getTransactionDate() {
-        return transactionDate;
+    public String getInsertDate() {
+        return insertDate;
     }
 
-    public void setTransactionDate(String transactionDate) {
-        this.transactionDate = transactionDate;
-    }
-
-    public String getDepositDate() {
-        return depositDate;
-    }
-
-    public void setDepositDate(String depositDate) {
-        this.depositDate = depositDate;
+    public void setInsertDate(String insertDate) {
+        this.insertDate = insertDate;
     }
 
     public String getSettlementDescription() {
