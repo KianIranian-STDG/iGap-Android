@@ -146,7 +146,13 @@ public class HelperSaveFile {
     }
 
     public static void savePicToGallery(final String filePath, final boolean showToast) {
-        saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image, R.string.file_save_to_picture_folder);
+        try {
+            String extension = filePath.substring(filePath.lastIndexOf("."));
+            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + extension, FolderType.image, R.string.file_save_to_picture_folder);
+        } catch (Exception e) {
+            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image, R.string.file_save_to_picture_folder);
+            FileLog.e(e);
+        }
     }
 
     private static File getAlbumDir() {
