@@ -1,17 +1,16 @@
 package net.iGap.kuknos.Fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -21,7 +20,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 
-public class KuknosAccountInfoFrag extends Fragment {
+public class KuknosAccountInfoFrag extends BaseFragment {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
@@ -41,7 +40,7 @@ public class KuknosAccountInfoFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_kuknos_account_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_kuknos_account_info, container, false);
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -49,7 +48,7 @@ public class KuknosAccountInfoFrag extends Fragment {
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
-
+                        popBackStackFragment();
                     }
                 })
                 .setLogoShown(true);

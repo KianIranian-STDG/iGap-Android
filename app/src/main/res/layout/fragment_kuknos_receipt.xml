@@ -9,26 +9,39 @@
     tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
         android:id="@+id/kuknos_receipt"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/fragKuknosReceiptToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/kuknos_receipt_error_txt"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/connection_error"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/kuknos_receipt_side_sheba_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -37,12 +50,13 @@
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
+          android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/divider1"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_sheba_number"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragKuknosReceiptToolbar"
             app:layout_constraintVertical_chainStyle="spread" />
 
 
@@ -52,30 +66,30 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="0000000"
-            android:maxEms="10"
+            android:text="4564894589454894fgdfgfdg56484"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView15"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_side_sheba_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView15"
-            app:layout_constraintTop_toTopOf="@+id/textView15" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_side_sheba_number"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_side_sheba_number" />
 
         <ImageView
             android:id="@+id/divider1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:src="#000"
-            app:layout_constraintBottom_toTopOf="@+id/textView14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_side_token"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_side_sheba_number" />
 
         <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/kuknos_receipt_side_token"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -85,7 +99,8 @@
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_side_amount"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_token"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -98,47 +113,48 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="PMN"
             android:maxEms="10"
+            android:text="PMN"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_side_token"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView14"
-            app:layout_constraintTop_toTopOf="@+id/textView14" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_side_token"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_side_token" />
 
 
         <ImageView
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:src="#000"
-            app:layout_constraintBottom_toTopOf="@+id/textView16"
+
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_side_amount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_token" />
 
         <TextView
-            android:id="@+id/textView16"
+            android:id="@+id/kuknos_receipt_side_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-
             android:layout_marginTop="@dimen/dp20"
             android:text="@string/kuknos_wHistory_amount"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView17"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_refund_side_address"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_amount"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_side_token" />
 
         <TextView
             android:id="@+id/kuknos_receipt_amount"
@@ -146,45 +162,47 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="10.1"
             android:maxEms="10"
+            android:text="10.1"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_side_amount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView16"
-            app:layout_constraintTop_toTopOf="@+id/textView16" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_side_amount"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_side_amount" />
 
         <ImageView
             android:id="@+id/divider3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="#000"
-            app:layout_constraintBottom_toTopOf="@+id/textView17"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_refund_side_address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_amount" />
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/kuknos_receipt_refund_side_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-
             android:layout_marginTop="@dimen/dp40"
             android:text="@string/kuknos_receipt_Refund_address"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView18"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_type_side_refund"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_refund_address"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_side_amount" />
 
 
         <TextView
@@ -193,16 +211,17 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="00000000"
             android:maxEms="10"
+            android:text="00000000"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView17"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_refund_side_address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView17"
-            app:layout_constraintTop_toTopOf="@+id/textView17" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_refund_side_address"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_refund_side_address" />
 
         <ImageView
             android:id="@+id/divider4"
@@ -210,111 +229,115 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp10"
             android:src="#000"
-            app:layout_constraintBottom_toTopOf="@+id/textView18"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_type_side_refund"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_refund_address" />
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/kuknos_receipt_type_side_refund"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="@dimen/dp40"
-
             android:text="@string/kunos_receipt_type_refund"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView19"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_state_side"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_type_refund"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_refund_side_address" />
 
         <TextView
             android:id="@+id/kuknos_receipt_type_refund"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-
             android:layout_marginRight="8dp"
             android:text="ریالی"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_type_side_refund"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView18"
-            app:layout_constraintTop_toTopOf="@+id/textView18" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_type_side_refund"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_type_side_refund" />
 
         <ImageView
             android:id="@+id/divider5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="#000"
-            app:layout_constraintBottom_toTopOf="@+id/textView19"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_receipt_state_side"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_type_refund" />
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/kuknos_receipt_state_side"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="@dimen/dp40"
-
             android:text="@string/state"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imageView3"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/divider6"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_state"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView18" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_type_side_refund" />
 
         <TextView
             android:id="@+id/kuknos_receipt_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
             android:layout_marginRight="8dp"
-            android:text="GDLXG47ZQ5MZLJCOVSH65YBI7T5S754OM63BOI2I2SH5X3WZPVN7J36Y"
-            android:maxLines="6"
             android:ellipsize="end"
             android:maxEms="10"
+            android:maxLines="6"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:text="GDLXG47ZQ5MZLJCOVSH65YBI7T5S754OM63BOI2I2SH5X3WZPVN7J36Y"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView19"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_state_side"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView19"
-            app:layout_constraintTop_toTopOf="@+id/textView19" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_state_side"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_state_side" />
 
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/divider6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-android:layout_marginTop="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp10"
             android:src="#000"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/editText5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_state" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/kuknos_receipt_hash_side"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -324,46 +347,49 @@ android:layout_marginTop="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imageView4"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/divider7"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_hash"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_state_side" />
 
         <TextView
             android:id="@+id/kuknos_receipt_hash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="@dimen/dp20"
+            android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:text="GDLXG47ZQ5MZLJCOVSH65YBI7T5S754OM63BOI2I2SH5X3WZPVN7J36Y"
-            android:maxLines="5"
             android:maxEms="10"
-            android:paddingLeft="5dp"
+            android:maxLines="5"
             android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:text="GDLXG47ZQ5MZLJCOVSH65YBI7T5S754OM63BOI2I2SH5X3WZPVN7J36Y"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView22"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_hash_side"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView22"
-            app:layout_constraintTop_toTopOf="@+id/textView22" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_hash_side"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_hash_side" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/divider7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
             android:src="#000"
-           android:layout_marginTop="@dimen/dp10"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kuknos_receipt_hash" />
 
         <TextView
-            android:id="@+id/textView23"
+            android:id="@+id/kuknos_receipt_date_apply_side"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -371,15 +397,15 @@ android:layout_marginTop="@dimen/dp10"
             android:layout_marginTop="@dimen/dp20"
             android:text="@string/kunos_receipt_date_apply"
             android:textColor="?iGapSubtitleTextColor"
-
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/imageView5"
             app:layout_constraintEnd_toStartOf="@+id/kuknos_receipt_date_apply"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/divider7" />
 
         <TextView
             android:id="@+id/kuknos_receipt_date_apply"
@@ -391,11 +417,12 @@ android:layout_marginTop="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView23"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/kuknos_receipt_date_apply_side"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView23"
-            app:layout_constraintTop_toTopOf="@+id/textView23" />
+            app:layout_constraintStart_toEndOf="@+id/kuknos_receipt_date_apply_side"
+            app:layout_constraintTop_toTopOf="@+id/kuknos_receipt_date_apply_side" />
 
         <ProgressBar
             android:id="@+id/kuknos_receipt_progressbar"
@@ -409,7 +436,7 @@ android:layout_marginTop="@dimen/dp10"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/fragKuknosRialSubmit"
+            android:id="@+id/fragKuknosReceiptSubmit"
             style="@style/iGapButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -421,6 +448,7 @@ android:layout_marginTop="@dimen/dp10"
             android:minHeight="48dp"
             android:text="@string/kuknos_receipt_Return_to_digital_token_bag"
             android:textSize="@dimen/standardTextSize"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

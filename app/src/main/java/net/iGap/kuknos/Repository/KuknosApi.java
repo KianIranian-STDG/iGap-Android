@@ -80,7 +80,7 @@ public interface KuknosApi {
                                                                     @Field("iban") String iban,
                                                                     @Field("first_name") String firstName,
                                                                     @Field("last_name") String lastName,
-                                                                    @Field("birth_date") String birthDate);
+                                                                    @Field("birth_date") long birthDate);
 
     /**
      * This api get user's info with iban

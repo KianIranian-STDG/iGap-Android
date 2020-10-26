@@ -3,7 +3,6 @@ package net.iGap.realm;
 import net.iGap.module.accountManager.DbManager;
 
 import io.realm.RealmObject;
-import io.realm.annotations.RealmField;
 
 public class RealmKuknos extends RealmObject {
 
@@ -12,16 +11,18 @@ public class RealmKuknos extends RealmObject {
     private String kuknosPIN;
     private String kuknosMnemonic;
     private String iban;
+    private String birthDate;
 
     public RealmKuknos() {
     }
 
-    public RealmKuknos(String kuknosSeedKey, String kuknosPublicKey, String kuknosPIN, String kuknosMnemonic,String iban) {
+    public RealmKuknos(String kuknosSeedKey, String kuknosPublicKey, String kuknosPIN, String kuknosMnemonic, String iban,String birthDate) {
         this.kuknosSeedKey = kuknosSeedKey;
         this.kuknosPublicKey = kuknosPublicKey;
         this.kuknosPIN = kuknosPIN;
         this.kuknosMnemonic = kuknosMnemonic;
-        this.iban=iban;
+        this.iban = iban;
+        this.birthDate=birthDate;
     }
 
     public String getKuknosSeedKey() {
@@ -108,6 +109,7 @@ public class RealmKuknos extends RealmObject {
             });
         }).start();
     }
+
     public static void updateIban(String iban) {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {

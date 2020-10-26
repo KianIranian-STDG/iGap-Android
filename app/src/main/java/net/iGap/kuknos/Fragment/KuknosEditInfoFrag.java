@@ -1,7 +1,6 @@
 package net.iGap.kuknos.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,11 @@ import net.iGap.libs.persianDatePicker.util.PersianCalendar;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmKuknos;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import io.realm.Realm;
 
 
@@ -37,9 +41,11 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
     private KuknosUserInfoResponse userInfo;
     private PersianDatePickerDialog datePickerDialog;
     private String iban;
-    private String miladiDate;
+    private long miladiDate;
     private String ibanOldValue;
-    private String birthDateOldValue;
+    private long birthDateOldValue;
+    private boolean ibanInfo = true;
+    private boolean userInfoR = true;
 
     public static KuknosEditInfoFrag newInstance() {
         KuknosEditInfoFrag fragment = new KuknosEditInfoFrag();
@@ -77,6 +83,9 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             }
         });
         viewModel.getInFoFromServerToCheckUserProfile();
+        if (iban != null) {
+            viewModel.getIbanInfo(iban);
+        }
     }
 
     @Override
@@ -91,7 +100,7 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         IBN.setEnabled(false);
         submit.setEnabled(false);
         birthDate.setFocusable(false);
-
+        progressBar.setVisibility(View.VISIBLE);
         birthDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,9 +108,10 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             }
         });
         datePickerDialog = new PersianDatePickerDialog(getActivity())
-                .setPositiveButtonString("حله")
-                .setNegativeButton("بیخیال")
+                .setPositiveButtonString(getString(R.string.kuknos_SetPassConf_submit))
+                .setNegativeButton(getString(R.string.your_confirm_email_skip))
                 .setMaxYear(1399)
+                .setMinYear(1300)
                 .setListener(new Listener() {
                     @Override
                     public void onDateSelected(PersianCalendar persianCalendar) {
@@ -124,25 +134,25 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                 birthDate.setEnabled(false);
                 IBN.setEnabled(false);
                 userInfo = new KuknosUserInfoResponse();
-                if (ibanOldValue.equals(IBN.getText().toString().trim()) && birthDateOldValue.equals(miladiDate)) {
-                    Toast.makeText(getContext(), "فیلد تاریخ تولد و شبا تغییری نکرده اند!", Toast.LENGTH_SHORT).show();
+                if (ibanOldValue != null && ibanOldValue.equals(IBN.getText().toString().trim()) && birthDateOldValue == miladiDate) {
+                    Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_sheba_and_birthdate), Toast.LENGTH_SHORT).show();
                     submit.setEnabled(true);
                     birthDate.setEnabled(true);
                     IBN.setEnabled(true);
                 } else if (!IBN.getText().toString().isEmpty() && !birthDate.getText().toString().isEmpty()) {
                     progressBar.setVisibility(View.VISIBLE);
-                    submit.setText("در حال ارسال اطلاعات...");
+                    submit.setText(getText(R.string.kuknos_edit_info_sending_info));
                     userInfo.setIban(IBN.getText().toString().trim());
                     userInfo.setFirstName(firstName.getText().toString().trim());
                     userInfo.setLastName(lastName.getText().toString().trim());
-                    userInfo.setBirthDate(miladiDate.trim());
+                    userInfo.setBirthDate(miladiDate);
                     RealmKuknos.updateIban(IBN.getText().toString().trim());
                     viewModel.sendUserInfo(userInfo);
                 } else {
                     if (birthDate.getText().toString().isEmpty()) {
-                        Toast.makeText(getContext(), "فیلد تاریخ تولد نمی تواند خالی باشد", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_birthdate), Toast.LENGTH_SHORT).show();
                     } else if (IBN.getText().toString().isEmpty()) {
-                        Toast.makeText(getContext(), "فیلد شبا نمی تواند خالی باشد", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_sheba), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -156,35 +166,35 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
 
     private void onIbanInfo() {
         viewModel.getIbanInfo().observe(getViewLifecycleOwner(), infoResponse -> {
+            progressBar.setVisibility(View.GONE);
             if (infoResponse != null) {
+                ibanInfo = true;
                 firstName.setText(infoResponse.getOwners().get(0).getFirst_name());
                 lastName.setText(infoResponse.getOwners().get(0).getLast_name());
                 ibanOldValue = iban;
                 IBN.setText(iban);
             }
-            birthDate.setEnabled(true);
-            IBN.setEnabled(true);
-            submit.setEnabled(true);
+            if (userInfoR && ibanInfo) {
+                birthDate.setEnabled(true);
+                IBN.setEnabled(true);
+                submit.setEnabled(true);
+            }
         });
     }
 
     private void setMiladiDate(PersianCalendar persianCalendar) {
 
-//        miladiDate = َHelperCalander.checkHijriAndReturnTime(persianCalendar.getTimeInMillis());
-        Log.e("cvjkabijghsad", "" +miladiDate);
-
-
-//        String[] finalResult = miladiDate.split("-");
-//        if (Integer.valueOf(finalResult[1]) < 10) {
-//            miladiDate = finalResult[0] + "-0" + finalResult[1] + "-" + finalResult[2];
-//        }
-
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy/MM/dd", Locale.ENGLISH);
+        String birthdate = simpleDateFormat.format(new Date(persianCalendar.getTimeInMillis())).replace("/", "-").trim();
+        Timestamp timestamp = new Timestamp(new Date(persianCalendar.getTimeInMillis()).getTime());
+        miladiDate = timestamp.getTime();
     }
 
     private void onResponseState() {
         viewModel.getResponseState().observe(getViewLifecycleOwner(), state -> {
+            progressBar.setVisibility(View.GONE);
             if (state.equals("true")) {
-                Toast.makeText(getContext(), "اطلاعات با موفقیت ذخیره شد", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_saved_successfully), Toast.LENGTH_SHORT).show();
                 if (!iban.equals(IBN.getText().toString().trim())) {
                     iban = IBN.getText().toString().trim();
                     viewModel.getIbanInfo(IBN.getText().toString().trim());
@@ -192,18 +202,21 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             } else {
                 Toast.makeText(getContext(), state, Toast.LENGTH_SHORT).show();
             }
-            submit.setText("دخیره");
-            progressBar.setVisibility(View.GONE);
-            submit.setEnabled(true);
-            birthDate.setEnabled(true);
-            IBN.setEnabled(true);
+            if (ibanInfo && userInfoR) {
+                submit.setText(getText(R.string.save));
+                submit.setEnabled(true);
+                birthDate.setEnabled(true);
+                IBN.setEnabled(true);
+            }
         });
     }
 
 
     private void onUserInfoObserver() {
         viewModel.getUserInfo().observe(getViewLifecycleOwner(), userInfo -> {
+            progressBar.setVisibility(View.GONE);
             if (userInfo != null) {
+                userInfoR = true;
                 nationalId.setText(userInfo.getNationalCode());
                 if (iban == null) {
                     firstName.setText(userInfo.getFirstName());
@@ -214,49 +227,29 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     }
                 }
 
-                if (userInfo.getBirthDate() != null) {
-                    Log.e("cvjkabijghsad", " "+userInfo.getBirthDate());
-//                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy/MM/dd", Locale.ENGLISH);
-//                    String birthdate = simpleDateFormat.format(new Date(Long.valueOf(userInfo.getBirthDate()))).replace("/", "-");
-//                    Log.e("cvjkabijghsad", "" + birthdate);
-//                    String day = "";
-//                    String month = "";
-//                    String year = "";
-//                    int counter = 0;
-//                    char[] date = birthdate.toCharArray();
-//                    for (int i = 0; i < birthdate.length(); i++) {
-//                        if (date[i] != '-') {
-//                            if (counter == 0) {
-//                                year += String.valueOf(date[i]);
-//                            } else if (counter == 1) {
-//                                month += String.valueOf(date[i]);
-//                            } else {
-//                                day += String.valueOf(date[i]);
-//                            }
-//                        } else {
-//                            counter++;
-//                        }
-//                    }
-//                    miladiDate = JalaliCalendar.gregorianToJalali(new JalaliCalendar.YearMonthDate(Integer.valueOf(year), Integer.valueOf(month), Integer.valueOf(day))).toString().replace("/", "-");
-//                    Log.e("cvjkabijghsad", "" + miladiDate);
-//                    String[] finalResult = miladiDate.split("-");
-//                    if (Integer.valueOf(finalResult[1]) < 10 && Integer.valueOf(finalResult[2]) < 10) {
-//                        miladiDate = finalResult[0] + "-0" + finalResult[1] + "-0" + finalResult[2];
-//                    }else {
-//                        if (Integer.valueOf(finalResult[1]) < 10){
-//                            miladiDate = finalResult[0] + "-0" + finalResult[1] + "-" + finalResult[2];
-//                        }else {
-//                            miladiDate = finalResult[0] + "-" + finalResult[1] + "-0" + finalResult[2];
-//                        }
-//                    }
-//                    Log.e("cvjkabijghsad", "" + miladiDate);
-                    birthDate.setText(HelperCalander.getPersianCalander(Long.valueOf(userInfo.getBirthDate())));
+                if (userInfo.getBirthDate() != 0) {
+                    String birthDateTime;
+                    miladiDate = userInfo.getBirthDate();
+                    String[] finalResult = HelperCalander.getPersianCalander(userInfo.getBirthDate()).replace("/", "-").split("-");
+                    if (Integer.valueOf(finalResult[1]) < 10 && Integer.valueOf(finalResult[2]) < 10) {
+                        birthDateTime = finalResult[0] + "-0" + finalResult[1] + "-0" + finalResult[2];
+                    } else {
+                        if (Integer.valueOf(finalResult[1]) < 10) {
+                            birthDateTime = finalResult[0] + "-0" + finalResult[1] + "-" + finalResult[2];
+                        } else {
+                            birthDateTime = finalResult[0] + "-" + finalResult[1] + "-0" + finalResult[2];
+                        }
+                    }
+                    birthDate.setText(birthDateTime);
                     birthDateOldValue = miladiDate;
                 }
+                if (userInfoR && ibanInfo) {
+                    birthDate.setEnabled(true);
+                    IBN.setEnabled(true);
+                    submit.setEnabled(true);
+                }
             }
-            birthDate.setEnabled(true);
-            IBN.setEnabled(true);
-            submit.setEnabled(true);
+
         });
     }
 

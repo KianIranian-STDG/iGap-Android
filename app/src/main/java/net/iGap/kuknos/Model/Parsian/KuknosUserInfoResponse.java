@@ -24,11 +24,11 @@ public class KuknosUserInfoResponse {
     @SerializedName("iban")
     private String iban;
     @SerializedName("birth_date")
-    private String birthDate;
+    private long birthDate;
     @SerializedName("owners")
     private List<Owners> owners;
 
-    public KuknosUserInfoResponse(String nationalCode, String federationName, String status, String firstName, String lastName, String mail, String publicKey, String domain, String iban, String birthDate) {
+    public KuknosUserInfoResponse(String nationalCode, String federationName, String status, String firstName, String lastName, String mail, String publicKey, String domain, String iban, long birthDate) {
         this.nationalCode = nationalCode;
         this.federationName = federationName;
         this.status = status;
@@ -117,10 +117,6 @@ public class KuknosUserInfoResponse {
         this.iban = iban;
     }
 
-    public String getBirthDate() {
-        return birthDate;
-    }
-
     public List<Owners> getOwners() {
         return owners;
     }
@@ -129,7 +125,11 @@ public class KuknosUserInfoResponse {
         this.owners = owners;
     }
 
-    public void setBirthDate(String birthDate) {
+    public long getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Long birthDate) {
         this.birthDate = birthDate;
     }
 }

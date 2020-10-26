@@ -24,6 +24,7 @@ public class KuknosRefundVM extends BaseAPIViewModel {
     private MutableLiveData<KuknosBalance> balanceData;
     private MutableLiveData<Boolean> refundProgress;
     private MutableLiveData<Boolean> isRefundSuccess;
+    private MutableLiveData<Integer> refNo;
     private String hashString;
     private KuknosSendM sendModel;
     private MutableLiveData<Integer> requestsSuccess;
@@ -40,6 +41,7 @@ public class KuknosRefundVM extends BaseAPIViewModel {
         requestsSuccess = new MutableLiveData<>();
         requestsError = new MutableLiveData<>();
         isRefundSuccess = new MutableLiveData<>();
+        refNo=new MutableLiveData<>();
 
     }
 
@@ -86,18 +88,21 @@ public class KuknosRefundVM extends BaseAPIViewModel {
                         public void onSuccess(KuknosResponseModel<KuknosVirtualRefund> data) {
                             refundProgress.setValue(false);
                             isRefundSuccess.setValue(true);
+                            refNo.setValue(data.getData().getRefNumber());
                         }
 
                         @Override
                         public void onError(String error) {
                             refundProgress.setValue(false);
                             isRefundSuccess.setValue(false);
+                            refNo.setValue(0);
                         }
 
                         @Override
                         public void onFailed() {
                             refundProgress.setValue(false);
                             isRefundSuccess.setValue(false);
+                            refNo.setValue(0);
                         }
                     });
 
@@ -182,5 +187,13 @@ public class KuknosRefundVM extends BaseAPIViewModel {
 
     public MutableLiveData<Boolean> getIsRefundSuccess() {
         return isRefundSuccess;
+    }
+
+    public MutableLiveData<Integer> getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(MutableLiveData<Integer> refNo) {
+        this.refNo = refNo;
     }
 }

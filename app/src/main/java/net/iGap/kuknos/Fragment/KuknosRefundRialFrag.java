@@ -23,19 +23,18 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosRefundVM;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.realm.RealmKuknos;
 
 import java.text.DecimalFormat;
 
 import io.realm.Realm;
-import ir.radsense.raadcore.widget.BottomSheet;
 
 
 public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
@@ -165,7 +164,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         onRefundButtonProgress();
         onNetworkCallSuccess();
         onNetworkCallError();
-
+        onRefNoReceive();
         return view;
     }
 
@@ -207,7 +206,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(KuknosRefundModel kuknosRefundModel) {
                 if (kuknosRefundModel != null) {
 
-                    txtMaxAmount.setText(kuknosRefundModel.getMaxRefund());
+                    txtMaxAmount.setText("" + kuknosRefundModel.getMaxRefund());
                     txtMinAmount.setText("" + kuknosRefundModel.getMinRefund());
                     txtFeeFixed.setText("" + kuknosRefundModel.getFeeFixed());
 
@@ -227,7 +226,17 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
                     Toast.makeText(_mActivity, "Refund done successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(_mActivity, "Refund Not successfully", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+
+    private void onRefNoReceive() {
+        viewModel.getRefNo().observe(getViewLifecycleOwner(), refNo -> {
+            if (refNo != 0) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), KuknosReceiptFrag.newInstance(refNo)).setReplace(false).load();
             }
         });
     }
