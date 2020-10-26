@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.kuknos.viewmodel.KuknosReceiptVM;
 import net.iGap.module.accountManager.DbManager;
@@ -89,6 +90,7 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
                 }
             }
         });
+        iban = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(iban) : iban;
         viewModel = ViewModelProviders.of(this).get(KuknosReceiptVM.class);
         viewModel.getUserRefundDetail(getArguments().getInt(REFUND_NO));
     }
@@ -199,10 +201,10 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
                 vidisbleViews();
                 returnTokenDigital.setEnabled(true);
                 typeRefund.setText(refundResponse.getRefundType());
-                hash.setText(refundResponse.getHash());
+                hash.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getHash()) : refundResponse.getHash());
                 state.setText(refundResponse.getSettlementStatus());
-                amount.setText(refundResponse.getAmount());
-                token.setText(refundResponse.getAssetCode());
+                amount.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getAmount()) : refundResponse.getAmount());
+                token.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(refundResponse.getAssetCode()) : refundResponse.getAssetCode());
                 dateApply.setText(refundResponse.getTransactionDate());
                 shebaNumber.setText(iban);
                 refundAddress.setText(viewModel.getPanelRepo().getUserRepo().getAccountID());
