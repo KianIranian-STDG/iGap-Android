@@ -44,19 +44,26 @@ public class IGashtLocationSubDetailFragment extends BaseAPIViewFrag<IGashtLocat
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (viewModel.getLocationDetail() != null) {
+            if (viewModel.getLocationDetail().getmShortDescription() != null) {
+                Spanned titleText = Html.fromHtml(viewModel.getLocationDetail().getmShortDescription());
+                binding.subTitle.setText(titleText);
+            }
 
-        Spanned titleText = Html.fromHtml(viewModel.getLocationDetail().getmShortDescription());
-        binding.subTitle.setText(titleText);
+            if (viewModel.getLocationDetail().getmFullDescription() != null) {
+                Spanned detailText = Html.fromHtml(viewModel.getLocationDetail().getmFullDescription());
+                binding.subDetail.setText(detailText);
+            }
 
-        Spanned detailText = Html.fromHtml(viewModel.getLocationDetail().getmFullDescription());
-        binding.subDetail.setText(detailText);
-
-        binding.bannerSlider.postDelayed(() -> {
-            adapter = new IGashtDetailSliderAdapter(viewModel.getLocationDetail().getmGallery());
-            binding.bannerSlider.setAdapter(adapter);
-            binding.bannerSlider.setSelectedSlide(0);
-            binding.bannerSlider.setInterval(2000);
-        }, 100);
+            if (viewModel.getLocationDetail().getmGallery() != null) {
+                binding.bannerSlider.postDelayed(() -> {
+                    adapter = new IGashtDetailSliderAdapter(viewModel.getLocationDetail().getmGallery());
+                    binding.bannerSlider.setAdapter(adapter);
+                    binding.bannerSlider.setSelectedSlide(0);
+                    binding.bannerSlider.setInterval(2000);
+                }, 100);
+            }
+        }
 
     }
 }
