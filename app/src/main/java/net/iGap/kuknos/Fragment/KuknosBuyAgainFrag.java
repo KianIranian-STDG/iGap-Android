@@ -32,6 +32,7 @@ public class KuknosBuyAgainFrag extends BaseFragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

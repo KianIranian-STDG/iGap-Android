@@ -181,6 +181,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         super.onResume();
     }
 
+
     @Override
     public boolean onBackPressed() {
 //        popBackStackFragment();

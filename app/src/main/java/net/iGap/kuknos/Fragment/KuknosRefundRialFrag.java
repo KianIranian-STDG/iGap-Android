@@ -91,15 +91,12 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         viewModel.getPMNMinBalance();
 
 
-        String iBan = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
-            @Override
-            public String doTask(Realm realm) {
-                RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
-                if (realmKuknos != null && realmKuknos.getIban() != null) {
-                    return realmKuknos.getIban();
-                } else {
-                    return null;
-                }
+        String iBan = DbManager.getInstance().doRealmTask(realm -> {
+            RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
+            if (realmKuknos != null && realmKuknos.getIban() != null) {
+                return realmKuknos.getIban();
+            } else {
+                return null;
             }
         });
         txtIBAN.setText(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(iBan) : iBan);
@@ -233,60 +230,54 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     }
 
     private void onRefundDataReceived() {
-        viewModel.getRefundData().observe(getViewLifecycleOwner(), new Observer<KuknosRefundModel>() {
-            @Override
-            public void onChanged(KuknosRefundModel kuknosRefundModel) {
-                if (kuknosRefundModel != null) {
+        viewModel.getRefundData().observe(getViewLifecycleOwner(), kuknosRefundModel -> {
+            if (kuknosRefundModel != null) {
 
 
-                    maxRefund = kuknosRefundModel.getMaxRefund();
-                    minRefund = kuknosRefundModel.getMinRefund();
+                maxRefund = kuknosRefundModel.getMaxRefund();
+                minRefund = kuknosRefundModel.getMinRefund();
 
-                    if (kuknosRefundModel.getFeeFixed() != 0) {
-                        fee = kuknosRefundModel.getFeeFixed();
-                        isPercentMode = false;
-                    } else {
-                        fee = kuknosRefundModel.getFeePercent();
-                        isPercentMode = true;
-                    }
-
-                    String max =  HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(maxRefund))
-                            : String.valueOf(maxRefund);
-
-                    String min = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(minRefund))
-                            : String.valueOf(minRefund);
-
-                    String strFeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(fee))
-                            : String.valueOf(fee);
-
-                    txtMaxAmount.setText(max);
-                    txtMinAmount.setText(min);
-
-                    if (isPercentMode) {
-                        txtFeeFixed.setText(strFeeFixed + " %");
-                    } else {
-                        txtFeeFixed.setText(strFeeFixed);
-                    }
-
-                    refundModel.setFeeFixed(kuknosRefundModel.getFeeFixed());
-                    refundModel.setMaxRefund(kuknosRefundModel.getMaxRefund());
-                    refundModel.setMinRefund(kuknosRefundModel.getMinRefund());
-
-
+                if (kuknosRefundModel.getFeeFixed() != 0) {
+                    fee = kuknosRefundModel.getFeeFixed();
+                    isPercentMode = false;
+                } else {
+                    fee = kuknosRefundModel.getFeePercent();
+                    isPercentMode = true;
                 }
+
+                String max =  HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(maxRefund))
+                        : String.valueOf(maxRefund);
+
+                String min = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(minRefund))
+                        : String.valueOf(minRefund);
+
+                String strFeeFixed = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(fee))
+                        : String.valueOf(fee);
+
+                txtMaxAmount.setText(max);
+                txtMinAmount.setText(min);
+
+                if (isPercentMode) {
+                    txtFeeFixed.setText(strFeeFixed + " %");
+                } else {
+                    txtFeeFixed.setText(strFeeFixed);
+                }
+
+                refundModel.setFeeFixed(kuknosRefundModel.getFeeFixed());
+                refundModel.setMaxRefund(kuknosRefundModel.getMaxRefund());
+                refundModel.setMinRefund(kuknosRefundModel.getMinRefund());
+
+
             }
         });
     }
 
     private void onRefundSuccess() {
-        viewModel.getIsRefundSuccess().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(_mActivity, R.string.refund_error , Toast.LENGTH_SHORT).show();
-                }
+        viewModel.getIsRefundSuccess().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(_mActivity, R.string.refund_error , Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -300,14 +291,13 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     }
 
     private void onRefundButtonProgress() {
-        viewModel.getRefundProgress().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    refundProgress.setVisibility(View.VISIBLE);
-                } else {
-                    refundProgress.setVisibility(View.INVISIBLE);
-                }
+        viewModel.getRefundProgress().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                refundProgress.setVisibility(View.VISIBLE);
+                submit.setEnabled(false);
+            } else {
+                refundProgress.setVisibility(View.INVISIBLE);
+                submit.setEnabled(true);
             }
         });
     }
@@ -330,24 +320,21 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     }
 
     private void onUserAssetsReceived() {
-        viewModel.getBalanceData().observe(getViewLifecycleOwner(), new Observer<KuknosBalance>() {
-            @Override
-            public void onChanged(KuknosBalance kuknosBalance) {
-                if (kuknosBalance != null) {
+        viewModel.getBalanceData().observe(getViewLifecycleOwner(), (Observer<KuknosBalance>) kuknosBalance -> {
+            if (kuknosBalance != null) {
 
-                    maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - minBalance);
+                maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - minBalance);
 
-                    if (maxPeymanRefund < 0) {
-                        maxPeymanRefund = 0;
-                    }
-
-                    String maxRefund = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(maxPeymanRefund)))
-                            : df.format(Float.valueOf(maxPeymanRefund));
-
-                    txtMaxSell.setText(maxRefund);
-                    balance.setAssets(kuknosBalance.getAssets());
-
+                if (maxPeymanRefund < 0) {
+                    maxPeymanRefund = 0;
                 }
+
+                String maxRefund = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(maxPeymanRefund)))
+                        : df.format(Float.valueOf(maxPeymanRefund));
+
+                txtMaxSell.setText(maxRefund);
+                balance.setAssets(kuknosBalance.getAssets());
+
             }
         });
     }
@@ -375,12 +362,9 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     }
 
     private void onMinBalance() {
-        viewModel.getMinBalance().observe(getViewLifecycleOwner(), new Observer<Float>() {
-            @Override
-            public void onChanged(Float aFloat) {
-                if (aFloat != null) {
-                    minBalance = aFloat;
-                }
+        viewModel.getMinBalance().observe(getViewLifecycleOwner(), aFloat -> {
+            if (aFloat != null) {
+                minBalance = aFloat;
             }
         });
     }

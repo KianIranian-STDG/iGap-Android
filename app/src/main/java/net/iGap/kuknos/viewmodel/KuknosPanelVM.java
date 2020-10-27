@@ -14,7 +14,6 @@ import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
-import net.iGap.kuknos.Model.Parsian.KuknosUserInfo;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Repository.PanelRepo;
 import net.iGap.module.SingleLiveEvent;
@@ -51,7 +50,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
         error = new MutableLiveData<>();
         progressState = new MutableLiveData<>();
-        userInfo=new MutableLiveData<>();
+        userInfo = new MutableLiveData<>();
         openPage = new SingleLiveEvent<>();
         openPage.setValue(-1);
         TandCAgree = new MutableLiveData<>(null);
@@ -68,10 +67,10 @@ public class KuknosPanelVM extends BaseAPIViewModel {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserInfoResponse> data) {
                 Log.e("vjsguiwhs", "onSuccess: ");
-                if (data.getData().getIban()!=null) {
+                if (data.getData().getIban() != null) {
                     RealmKuknos.updateIban(data.getData().getIban());
                     userInfo.setValue(true);
-                }else{
+                } else {
                     userInfo.setValue(false);
                 }
                 progressState.setValue(false);
@@ -79,7 +78,7 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String errorM) {
-                Log.e("vjsguiwhs", "onError: "+errorM);
+                Log.e("vjsguiwhs", "onError: " + errorM);
                 BAndCState.postValue(0);
                 userInfo.setValue(false);
                 error.setValue(new KuknosError(true, "Fail to get data", "0", 0));
