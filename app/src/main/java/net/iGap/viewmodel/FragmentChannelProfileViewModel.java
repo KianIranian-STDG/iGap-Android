@@ -191,10 +191,13 @@ public class FragmentChannelProfileViewModel extends ViewModel
         admins.addChangeListener((realmMembers, changeSet) -> administratorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size())) : String.valueOf(realmMembers.size())));
         moderators.addChangeListener((realmMembers, changeSet) -> moderatorsCount.set(G.isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(realmMembers.size())) : String.valueOf(realmMembers.size())));
 
-        if (role == ChannelChatRole.ADMIN || role == ChannelChatRole.OWNER) {
+        if (role == ChannelChatRole.OWNER) {
             //Todo : fixed it
             channelSecondsTitle.setValue(mRoom.getChannelRoom().isPrivate() ? G.currentActivity.getString(R.string.private_channel) : G.currentActivity.getString(R.string.public_channel));
             showLeaveChannel.set(View.GONE);
+        } else if (role == ChannelChatRole.ADMIN) {
+            channelSecondsTitle.setValue(mRoom.getChannelRoom().isPrivate() ? G.currentActivity.getString(R.string.private_channel) : G.currentActivity.getString(R.string.public_channel));
+            showLeaveChannel.set(View.VISIBLE);
         } else {
             channelSecondsTitle.setValue(String.format("%s %s", mRoom.getChannelRoom().getParticipantsCountLabel(), G.currentActivity.getString(R.string.subscribers_title)));
             showLeaveChannel.set(View.VISIBLE);
