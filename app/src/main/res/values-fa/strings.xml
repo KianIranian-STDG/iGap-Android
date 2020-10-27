@@ -2223,4 +2223,5 @@
     <string name="enter_pmn_count">لطفا تعداد توکن بازخرید را وارد کنید</string>
     <string name="refund_done">بازخرید با موفقیت انجام شد</string>
     <string name="refund_error">خطا در عملیات بازخرید</string>
+    <string name="token_not_selected">هیچ توکنی انتخاب نشده است</string>
 </resources>

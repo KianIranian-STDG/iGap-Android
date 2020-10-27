@@ -2258,6 +2258,7 @@ Want to get it?</string>
     <string name="payman_refund_limitation_error">You have not complied with the token limit.</string>
     <string name="enter_pmn_count">please enter the token count</string>
     <string name="refund_error">Refund progress error</string>
+    <string name="token_not_selected">Token not selected</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>

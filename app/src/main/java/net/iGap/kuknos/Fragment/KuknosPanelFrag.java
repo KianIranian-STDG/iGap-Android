@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,16 +153,19 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                 } else {
                     KuknosBuyAgainFrag buyAgainFrag = KuknosBuyAgainFrag.newInstance();
                     KuknosBalance.Balance balance = null;
-                    if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
 
+                    if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
                         balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
                     }
-                    if (balance != null && !balance.getAssetType().isEmpty()) {
+                    if (balance != null && balance.getAssetType() != null) {
+
                         String assetCode = balance.getAssetType();
                         Bundle bundle = new Bundle();
                         bundle.putString("assetType", assetCode);
                         buyAgainFrag.setArguments(bundle);
                         new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
+                    } else {
+                        Toast.makeText(_mActivity, R.string.token_not_selected, Toast.LENGTH_SHORT).show();
                     }
                 }
 
