@@ -10,7 +10,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/kuknos_receipt"
-        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -48,6 +47,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:text="@string/sheba_number"
+            android:layout_marginTop="@dimen/dp20"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             android:textStyle="bold"
