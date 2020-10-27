@@ -15,6 +15,7 @@ import android.util.Log;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.BuildConfig;
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
@@ -530,7 +531,8 @@ public class HelperError {
                     error = G.fragmentActivity.getResources().getString(R.string.E_714);
                 break;
             case 715:
-                error = G.fragmentActivity.getResources().getString(R.string.E_715);
+                if (Config.FILE_LOG_ENABLE)
+                    error = G.fragmentActivity.getResources().getString(R.string.E_715);
                 break;
 
             case 9001:
