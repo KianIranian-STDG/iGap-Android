@@ -21,7 +21,6 @@ import net.iGap.observers.interfaces.OnSecuring;
 import net.iGap.observers.interfaces.OnUserLogin;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestUserContactsGetBlockedList;
 import net.iGap.request.RequestUserContactsGetList;
 import net.iGap.request.RequestUserInfo;
@@ -79,7 +78,10 @@ public class LoginActions {
                             UserStatusController.getInstance().setOnline();
                         }
 
-                        new RequestGeoGetRegisterStatus().getRegisterStatus();
+                        if (AndroidUtils.isAppOnForeground(G.context)) {
+                            GPSTracker.getGpsTrackerInstance().checkLocation();
+                        }
+
                         //sendWaitingRequestWrappers();
 
                         HelperCheckInternetConnection.detectConnectionTypeForDownload();

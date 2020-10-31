@@ -93,6 +93,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
+import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyPhonStateService;
@@ -664,6 +665,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 Log.wtf(this.getClass().getName(), "------------------------------------------------");
             }
         });
+
+        GPSTracker.getGpsTrackerInstance().checkLocation();
+
         Log.wtf(this.getClass().getName(), "onCreate");
     }
 

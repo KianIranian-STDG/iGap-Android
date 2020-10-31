@@ -1,25 +1,24 @@
 package net.iGap.module;
 
 import android.Manifest;
-import android.app.Service;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.format.DateUtils;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperTimeOut;
+import net.iGap.request.RequestGeoGetRegisterStatus;
 import net.iGap.request.RequestGeoUpdatePosition;
 
+import static android.content.Context.LOCATION_SERVICE;
 import static net.iGap.G.context;
 
-public class GPSTracker extends Service implements LocationListener {
+public class GPSTracker implements LocationListener {
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 2;
@@ -39,6 +38,7 @@ public class GPSTracker extends Service implements LocationListener {
     double latitude; // latitude
     double longitude; // longitude
     private long latestUpdateLocation = 0;
+    private boolean locationChecked;
 
     public static GPSTracker getGpsTrackerInstance() {
         if (gpsTracker == null) {
@@ -82,7 +82,7 @@ public class GPSTracker extends Service implements LocationListener {
                     }
                 }
                 // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
+                if (isGPSEnabled && locationManager != null) {
                     if (location == null) {
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         if (locationManager != null) {
@@ -175,9 +175,12 @@ public class GPSTracker extends Service implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return null;
-    }
+    public void checkLocation() {
+        if (locationChecked) {
+            return;
+        }
 
+        new RequestGeoGetRegisterStatus().getRegisterStatus();
+        locationChecked = true;
+    }
 }
