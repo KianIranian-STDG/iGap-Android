@@ -187,7 +187,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
         onMinBalance();
         onRefundDataReceived();
-        onAssetDataReceived();
         onUserAssetsReceived();
         onRefundSuccess();
         onRefundButtonProgress();
@@ -237,6 +236,11 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                 maxRefund = kuknosRefundModel.getMaxRefund();
                 minRefund = kuknosRefundModel.getMinRefund();
 
+                sellRate = kuknosRefundModel.getSellRate();
+                String strSellRate = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(sellRate)))
+                        : df.format(Integer.valueOf(sellRate));
+
+
                 if (kuknosRefundModel.getFeeFixed() != 0) {
                     fee = kuknosRefundModel.getFeeFixed();
                     isPercentMode = false;
@@ -256,6 +260,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
                 txtMaxAmount.setText(max);
                 txtMinAmount.setText(min);
+                txtSellRate.setText(strSellRate);
 
                 if (isPercentMode) {
                     txtFeeFixed.setText(strFeeFixed + " %");
@@ -298,23 +303,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             } else {
                 refundProgress.setVisibility(View.INVISIBLE);
                 submit.setEnabled(true);
-            }
-        });
-    }
-
-    private void onAssetDataReceived() {
-        viewModel.getAssetData().observe(getViewLifecycleOwner(), new Observer<KuknosAsset>() {
-            @Override
-            public void onChanged(KuknosAsset kuknosAsset) {
-                if (kuknosAsset != null) {
-
-                    sellRate = kuknosAsset.getAssets().get(0).getSellRate();
-                    String strSellRate = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(sellRate)))
-                            : df.format(Integer.valueOf(sellRate));
-
-                    txtSellRate.setText(strSellRate);
-
-                }
             }
         });
     }

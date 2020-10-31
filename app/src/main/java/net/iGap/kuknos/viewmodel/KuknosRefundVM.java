@@ -190,9 +190,6 @@ public class KuknosRefundVM extends BaseAPIViewModel {
     }
 
 
-    public MutableLiveData<KuknosAsset> getAssetData() {
-        return assetData;
-    }
 
     public MutableLiveData<KuknosBalance> getBalanceData() {
         return balanceData;
