@@ -250,7 +250,9 @@ public class RegisterRepository {
         requestRegister(phoneNumber, callback);
     }
 
-    private void requestRegister(@NotNull String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+    private void requestRegister(String phoneNumber, RepositoryCallbackWithError<ErrorWithWaitTime> callback) {
+        if (phoneNumber == null)
+            return;
         this.phoneNumber = phoneNumber.replace("-", "");
         ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
         builder.setCountryCode(isoCode);
