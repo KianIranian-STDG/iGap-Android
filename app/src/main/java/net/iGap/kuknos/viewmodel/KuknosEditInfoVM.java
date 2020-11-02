@@ -1,7 +1,5 @@
 package net.iGap.kuknos.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
@@ -9,7 +7,6 @@ import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Model.Parsian.Owners;
 import net.iGap.kuknos.Repository.PanelRepo;
-import net.iGap.module.SingleLiveEvent;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmKuknos;
 
@@ -29,22 +26,16 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
         panelRepo.getIbanInfo(iban, this, new ResponseCallback<KuknosResponseModel<Owners>>() {
             @Override
             public void onSuccess(KuknosResponseModel<Owners> data) {
-                Log.e("vjsguiwhs", "onSuccess: ");
-//                if (data.getData().get(0).getIban() != null) {
-//                    RealmKuknos.updateIban(data.getData().getIban());
-//                }
                 ibanInfo.setValue(data.getData());
             }
 
             @Override
             public void onError(String errorM) {
-                Log.e("vjsguiwhs", "onError: " + errorM);
                 ibanInfo.setValue(null);
             }
 
             @Override
             public void onFailed() {
-                Log.e("vjsguiwhs", "onFailed: ");
                 ibanInfo.setValue(null);
             }
         });
@@ -87,18 +78,15 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String error) {
-                Log.e("vjhughr", "onError: " + error);
                 responseState.setValue(error);
             }
 
             @Override
             public void onFailed() {
-                Log.e("vjhughr", "onFailed: ");
                 responseState.setValue("onFailed");
             }
         });
     }
-
 
 
     public MutableLiveData<Owners> getIbanInfo() {
