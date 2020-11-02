@@ -70,18 +70,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                 }
             }
         });
-        iban = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
-
-            @Override
-            public String doTask(Realm realm) {
-                RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
-                if (realmKuknos != null && realmKuknos.getIban() != null) {
-                    return realmKuknos.getIban();
-                } else {
-                    return null;
-                }
-            }
-        });
         viewModel.getInFoFromServerToCheckUserProfile();
         if (iban != null) {
             viewModel.getIbanInfo(iban);
