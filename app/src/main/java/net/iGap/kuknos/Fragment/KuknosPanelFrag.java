@@ -136,46 +136,52 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         binding.fragKuknosBuyAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String iban = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
+                KuknosBalance.Balance balance = null;
+                if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
+                    balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
+                }
+                if (balance != null && balance.getAssetType() != null) {
 
-                    @Override
-                    public String doTask(Realm realm) {
-                        RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
-                        if (realmKuknos != null && realmKuknos.getIban() != null) {
-                            return realmKuknos.getIban();
-                        } else {
-                            return null;
+                    String iban = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
+
+                        @Override
+                        public String doTask(Realm realm) {
+                            RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
+                            if (realmKuknos != null && realmKuknos.getIban() != null) {
+                                return realmKuknos.getIban();
+                            } else {
+                                return null;
+                            }
                         }
-                    }
-                });
-                if (iban == null) {
-                    viewModel.getInFoFromServerToCheckUserProfile();
-                } else {
-                    KuknosBuyAgainFrag buyAgainFrag = KuknosBuyAgainFrag.newInstance();
-                    KuknosBalance.Balance balance = null;
-
-                    if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
-                        balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
-                    }
-                    if (balance != null && balance.getAssetType() != null) {
-
+                    });
+                    if (iban == null) {
+                        viewModel.getInFoFromServerToCheckUserProfile();
+                    } else {
+                        KuknosBuyAgainFrag buyAgainFrag = KuknosBuyAgainFrag.newInstance();
                         String assetCode = balance.getAssetType();
                         Bundle bundle = new Bundle();
                         bundle.putString("assetType", assetCode);
                         buyAgainFrag.setArguments(bundle);
                         new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
-                    } else {
-                        Toast.makeText(_mActivity, R.string.token_not_selected, Toast.LENGTH_SHORT).show();
-                    }
-                }
 
+                    }
+
+                } else {
+                    Toast.makeText(_mActivity, R.string.token_not_selected, Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
         onUserInfoObserver();
+
         onErrorObserver();
+
         openPage();
+
         onDataChanged();
+
         onProgress();
+
         onTermsDownload();
     }
 
@@ -196,7 +202,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     private void onUserInfoObserver() {
         viewModel.getUserInfo().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), KuknosBuyAgainFrag.newInstance()).setReplace(true).load();
+                binding.fragKuknosBuyAgain.performClick();
             } else {
                 View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.kuknos_buy_again_dialog, null);
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
@@ -500,7 +506,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         boolean tmp = true;
         for (int grantResult : grantResults) {
             tmp = tmp && grantResult == PackageManager.PERMISSION_GRANTED;
