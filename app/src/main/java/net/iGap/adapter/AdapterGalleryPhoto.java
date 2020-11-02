@@ -107,9 +107,10 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
 
         }
         holder.image.setOnLongClickListener(new View.OnLongClickListener() {
+
             @Override
             public boolean onLongClick(View v) {
-                if (!isMultiSelect) {
+                if (!isMultiSelect && isPhotoMode) {
                     holder.check.setChecked(!holder.check.isChecked());
                     listener.onMultiSelect(mSelectedPhotos.size());
                     setMultiSelectState(!getMultiSelectState());

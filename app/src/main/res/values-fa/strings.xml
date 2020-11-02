@@ -1214,7 +1214,7 @@
     <string name="email">ایمیل</string>
     <string name="edit_profile_hint">این اطلاعات به صورت رمزنگاری شده روی سرورهای امن کیف پول ذخیره می‌شوند و فقط در صورت نیاز با مجوز شما به سایر نرم افزارهای طرف سوم انتقال داده خواهد شد. کاربرد این اطلاعات به منظور راحتی فرآیندهای خرید می‌باشد.</string>
     <string name="username_copied">شناسه کاربری کپی شد.</string>
-    <string name="select_province">انتخاب استان</string>
+    <string name="select_province"> استان را انتخاب کنید</string>
     <string name="mobile_number">شماره موبایل</string>
     <string name="paygear_user">کاربر کیف پول</string>
     <string name="login">ورود</string>
@@ -1565,12 +1565,12 @@
     <string name="insert_amount_in_rial">مبلغ را به ریال وارد کنید</string>
     <string name="enter_16_digit_card_number">شماره کارت ۱۶ رقمی را وارد کنید</string>
     <string name="buy_internet_package_volume_type_title">حجم</string>
-    <string name="buy_internet_package_daily_filter_title">%.0f روز</string>
-    <string name="buy_internet_package_weekly_filter_title">%.0f هفته</string>
-    <string name="buy_internet_package_month_filter_title">%.0f ماه</string>
-    <string name="buy_internet_package_year_filter_title">%.0f سال</string>
-    <string name="buy_internet_package_volume_filter_gb_title">%.0f گیگابایت</string>
-    <string name="buy_internet_package_volume_filter_mb_title">%.0f مگابایت</string>
+    <string name="buy_internet_package_daily_filter_title">روز %.0f</string>
+    <string name="buy_internet_package_weekly_filter_title">هفته %.0f</string>
+    <string name="buy_internet_package_month_filter_title">ماه %.0f</string>
+    <string name="buy_internet_package_year_filter_title">سال %.0f</string>
+    <string name="buy_internet_package_volume_filter_gb_title">گیگابایت %.0f</string>
+    <string name="buy_internet_package_volume_filter_mb_title">مگابایت %.0f</string>
     <string name="buy_internet_package_choose_title">انتخاب کنید</string>
     <string name="beeptunes_purchase_song">آهنگ های خریداری شده</string>
     <string name="beeptunes_sync_song">آهنگ های بارگیری شده</string>
@@ -2171,6 +2171,7 @@
     <string name="error_term_not_accepted">شرایط و مقررات تایید نشده است!</string>
     <string name="error_resume_file_expired">فایل منقضی شده است. لطفا دوباره تلاش کنید</string>
     <string name="Submitـomment">برای مشاهده نتیجه نظرسنجی لطفا ابتدا رای خود را ثبت نمایید !</string>
+    <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string-array name="billsOptions">
         <item>برق</item>
         <item>گاز</item>

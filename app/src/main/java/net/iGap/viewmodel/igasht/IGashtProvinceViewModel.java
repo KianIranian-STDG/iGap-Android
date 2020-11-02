@@ -64,7 +64,6 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     public void setSelectedLocation(int position) {
         if (provinceList.getValue() != null) {
             repository.setSelectedProvince(provinceList.getValue().get(position));
-            onSearchPlaceButtonClick();
         }
     }
 

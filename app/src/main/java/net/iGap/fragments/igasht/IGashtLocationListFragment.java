@@ -47,7 +47,7 @@ public class IGashtLocationListFragment extends IGashtBaseView<IGashtLocationVie
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(/*R.string.score_star_icon,*/ R.string.history_icon)
+                .setRightIcons(R.string.history_icon)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override
@@ -63,13 +63,6 @@ public class IGashtLocationListFragment extends IGashtBaseView<IGashtLocationVie
                             new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
                         }
                     }
-
-                 /*   @Override
-                    public void onSecondRightIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            new HelperFragment(getActivity().getSupportFragmentManager(), new IGashtHistoryPlaceListFragment()).setReplace(false).load(true);
-                        }
-                    }*/
                 }).getView());
 
         binding.locationListView.addItemDecoration(new DividerItemDecoration(binding.locationListView.getContext(), DividerItemDecoration.VERTICAL));
@@ -102,7 +95,6 @@ public class IGashtLocationListFragment extends IGashtBaseView<IGashtLocationVie
             }
         });
 
-//        ((IGashtLocationViewModel) viewModel).getAddToFavorite().observe(getViewLifecycleOwner(), aBoolean -> Toast.makeText(getContext(), "add to favorite", Toast.LENGTH_SHORT).show());
 
     }
 

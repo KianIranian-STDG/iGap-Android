@@ -42,6 +42,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragmentAgreement;
 import net.iGap.fragments.electricity_bill.ElectricityBillMainFrag;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.igasht.IGashtProvinceFragment;
 import net.iGap.fragments.inquiryBill.FragmentPaymentInquiryMobile;
 import net.iGap.fragments.mplTranaction.MplTransactionFragment;
 import net.iGap.fragments.news.NewsMainFrag;
@@ -174,6 +175,9 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
+                break;
+            case FUN_SERVICE:
+                new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();

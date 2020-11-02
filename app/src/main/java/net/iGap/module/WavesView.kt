@@ -108,7 +108,7 @@ constructor(context: Context,
         return color and 0x00ffffff or ((alpha * 255).toInt() shl 24)
     }
 
-    public fun stopAnimation() {
+    fun stopAnimation() {
         waveAnimator?.repeatCount = 0
     }
 }

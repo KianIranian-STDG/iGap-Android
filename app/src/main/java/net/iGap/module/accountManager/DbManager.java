@@ -1,7 +1,8 @@
 package net.iGap.module.accountManager;
 
 import android.os.Looper;
-import android.util.Log;
+
+import net.iGap.helper.FileLog;
 
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -38,7 +39,7 @@ public class DbManager {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must open realm in ui thread.");
         }
-        Log.wtf(this.getClass().getName(), "openUiRealm: " + AccountManager.getInstance().getCurrentUser().getRealmConfiguration().getRealmFileName());
+        FileLog.i("DbManager " + "openUiRealm: databaseName -> " + AccountManager.getInstance().getCurrentUser().getRealmConfiguration().getRealmFileName() + " userId -> " + AccountManager.getInstance().getCurrentUser().getId());
         this.uiRealm = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
     }
 
@@ -46,7 +47,7 @@ public class DbManager {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must close realm in ui thread.");
         }
-        Log.wtf("bagi", "LocalOpenRealmBeforeClose=" + Realm.getLocalInstanceCount(uiRealm.getConfiguration()) + "");
+        FileLog.i("DbManager " + "closeUiRealm: databaseName -> " + AccountManager.getInstance().getCurrentUser().getRealmConfiguration().getRealmFileName() + " userId -> " + AccountManager.getInstance().getCurrentUser().getId());
 
         if (uiRealm != null) {
             uiRealm.removeAllChangeListeners();

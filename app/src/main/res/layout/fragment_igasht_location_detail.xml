@@ -87,7 +87,6 @@
                         android:padding="@dimen/dp8"
                         android:setSelected="@{viewModel.showBuyTicketView}"
                         android:text="@string/igasht_buy_ticket_title"
-                        android:textColor="@color/igasht_tab_text_color"
                         android:textSize="@dimen/standardTextSize" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -101,7 +100,6 @@
                         android:padding="@dimen/dp8"
                         android:setSelected="@{!viewModel.showBuyTicketView}"
                         android:text="@string/detail_title"
-                        android:textColor="@color/igasht_tab_text_color"
                         app:layout_constraintBottom_toBottomOf="@id/buyTicket"
                         app:layout_constraintEnd_toEndOf="@id/v"
                         app:layout_constraintStart_toEndOf="@id/buyTicket"
@@ -171,7 +169,7 @@
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/dp4"
                             android:padding="@dimen/dp4"
-                            app:imageUrl="@{viewModel.locationItem.getmExtraDetail().getMainPicture()}"
+                            app:imageUrl="@{viewModel.locationItem.getmExtraDetail().getmCoverImage()}"
                             app:layout_constraintDimensionRatio="116:83"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"

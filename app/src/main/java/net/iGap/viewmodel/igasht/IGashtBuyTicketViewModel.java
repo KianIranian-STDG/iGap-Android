@@ -19,6 +19,7 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     private ObservableInt totalPrice = new ObservableInt(0);
     private SingleLiveEvent<Boolean> registerVoucher = new SingleLiveEvent<>();
     private MutableLiveData<List<IGashtLocationService>> serviceList = new MutableLiveData<>();
+    private SingleLiveEvent<Boolean> showPriceNull = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> showErrorMessage = new SingleLiveEvent<>();
     private IGashtRepository repository;
 
@@ -36,6 +37,10 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
         this.totalPrice.set(totalPrice);
     }
 
+    public SingleLiveEvent<Boolean> getShowPriceNull() {
+        return showPriceNull;
+    }
+
     public SingleLiveEvent<Boolean> getRegisterVoucher() {
         return registerVoucher;
     }
@@ -51,13 +56,10 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
     @Override
     public void onSuccess(BaseIGashtResponse<IGashtLocationService> data) {
         serviceList.setValue(getPersianTicket(data.getData()));
+        repository.setLocationServices(data.getData());
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
-    }
-
-    public void onAddPlaceClick() {
-
     }
 
     public void onRetryClick() {
@@ -66,6 +68,9 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
 
     public void onPayClick() {
         if (serviceList.getValue() != null) {
+            if (totalPrice.get() == 0) {
+                showPriceNull.setValue(true);
+            }
             if (checkEntranceTicketCount(serviceList.getValue())) {
                 repository.clearSelectedServiceList();
                 repository.createVoucherList(serviceList.getValue());
@@ -73,6 +78,7 @@ public class IGashtBuyTicketViewModel extends BaseIGashtViewModel<BaseIGashtResp
             } else {
                 showErrorMessage.setValue(R.string.error);
             }
+
         }
     }
 

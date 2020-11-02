@@ -1,19 +1,17 @@
 package net.iGap.viewmodel.igasht;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.model.igasht.IGashtLocationItem;
-import net.iGap.model.igasht.RegisterTicketResponse;
+import net.iGap.model.igasht.purchaseResponse;
 import net.iGap.repository.IGashtRepository;
 
-public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterTicketResponse> {
+public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<purchaseResponse> {
 
     private ObservableBoolean showBuyTicketView = new ObservableBoolean(true);
-
     private MutableLiveData<Boolean> loadBuyTicketView = new MutableLiveData<>();
     private MutableLiveData<Boolean> goHistoryPage = new MutableLiveData<>();
     private MutableLiveData<String> goPayment = new MutableLiveData<>();
@@ -26,6 +24,8 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
         showLoadingView.set(View.GONE);
         showMainView.set(View.VISIBLE);
         showViewRefresh.set(View.GONE);
+        showMessage = false;
+
     }
 
     public IGashtLocationItem getLocationItem() {
@@ -59,23 +59,27 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<RegisterT
 
     public void registerOrder() {
         showLoadingView.set(View.VISIBLE);
-        repository.registeredOrder(this, this);
+        repository.getRegisteredOrder(this, this);
     }
 
     @Override
-    public void onSuccess(RegisterTicketResponse data) {
+    public void onSuccess(purchaseResponse data) {
         showLoadingView.set(View.GONE);
-        Log.wtf(this.getClass().getName(), "status: " + data.getStatus());
-        switch (data.getStatus()) {
-            case "SUCCESS":
-                goHistoryPage.setValue(true);
-                break;
-            case "PROGRESS":
-                goPayment.setValue(data.getToken());
-                break;
-            default:
-                paymentError.setValue(true);
-        }
+        goPayment.setValue(data.getmToken());
+        //    goHistoryPage.setValue(true);
+    }
+
+    @Override
+    public void onError(String error) {
+        super.onError(error);
+        showMessage = false;
+    }
+
+    @Override
+    public void onFailed() {
+        super.onFailed();
+        showLoadingView.set(View.GONE);
+        paymentError.setValue(true);
     }
 
     @Override

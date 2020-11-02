@@ -2,6 +2,8 @@ package net.iGap.helper.upload;
 
 import androidx.annotation.NonNull;
 
+import net.iGap.helper.FileLog;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -60,6 +62,8 @@ public class UploadRequestBody extends RequestBody {
                 }
                 progressListener.onProgress(totalUploaded);
             }
+        } catch (Exception e) {
+            FileLog.e(e);
         } finally {
             Util.closeQuietly(source);
         }

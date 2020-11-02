@@ -113,7 +113,7 @@ public class RequestManager extends BaseController {
         final String randomId = HelperString.generateKey();
         networkQueue.postRunnable(() -> {
             prepareRequest(randomId, requestWrapper);
-            FileLog.e("RequestManager sendRequest: " + requestWrapper.actionId);
+            FileLog.e("RequestManager sendRequest with id -> " + randomId + " with action id -> " + requestWrapper.actionId + " protoObject -> " + (requestWrapper.protoObject != null ? requestWrapper.protoObject.getClass().getSimpleName() : "NULL"));
         });
         return randomId;
     }
@@ -226,7 +226,7 @@ public class RequestManager extends BaseController {
                 try {
                     object = c.getConstructor(int.class, Object.class, Object.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
                 } catch (NoSuchMethodException e) {
-                    object = c.getConstructor(int.class, Object.class, Object.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
+                    object = c.getConstructor(int.class, Object.class, String.class).newInstance(actionId, errorBuilder, requestWrapper.identity);
                 }
                 Method setTimeoutMethod = object.getClass().getMethod("timeOut");
                 setTimeoutMethod.invoke(object);
@@ -302,6 +302,8 @@ public class RequestManager extends BaseController {
         String protoClassName = HelperClassNamePreparation.preparationProtoClassName(className);
         Object protoObject = fillProtoClassData(protoClassName, payload);
         String responseId = getResponseId(protoObject);
+
+        FileLog.i("RequestManager unpack responseId -> " + responseId + " action id -> " + actionId + " class name -> " + className);
 
         if (responseId == null) {
             if (actionId == 0) {
@@ -430,16 +432,16 @@ public class RequestManager extends BaseController {
             }
         } catch (InstantiationException e) {
             HelperLog.getInstance().setErrorLog(e);
-            e.printStackTrace();
+            FileLog.e(e);
         } catch (IllegalAccessException e) {
             HelperLog.getInstance().setErrorLog(e);
-            e.printStackTrace();
+            FileLog.e(e);
         } catch (ClassNotFoundException e) {
             HelperLog.getInstance().setErrorLog(e);
-            e.printStackTrace();
+            FileLog.e(e);
         } catch (NoSuchMethodException e) {
             HelperLog.getInstance().setErrorLog(e);
-            e.printStackTrace();
+            FileLog.e(e);
         } catch (InvocationTargetException e) {
             FileLog.e(e);
         }

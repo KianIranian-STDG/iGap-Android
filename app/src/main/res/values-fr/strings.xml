@@ -1364,10 +1364,10 @@
     <string name="insert_amount_in_rial">veuillez entrer le somme en Rial</string>
     <string name="enter_16_digit_card_number">veuillez entrer le numéro de carte en 16 chiffre</string>
     <string name="buy_internet_package_volume_type_title">quantité</string>
-    <string name="buy_internet_package_daily_filter_title">jour %of</string>
-    <string name="buy_internet_package_weekly_filter_title">semaine %of</string>
-    <string name="buy_internet_package_month_filter_title">mois %of</string>
-    <string name="buy_internet_package_year_filter_title">année %of</string>
+    <string name="buy_internet_package_daily_filter_title">jour %.0f</string>
+    <string name="buy_internet_package_weekly_filter_title">semaine %.0f</string>
+    <string name="buy_internet_package_month_filter_title">mois %.0f</string>
+    <string name="buy_internet_package_year_filter_title">année %.0f</string>
     <string name="buy_internet_package_volume_filter_gb_title">%.0f GB</string>
     <string name="buy_internet_package_volume_filter_mb_title">%.0f MB</string>
     <string name="buy_internet_package_choose_title">sélectionnez</string>
@@ -1811,4 +1811,5 @@
     <string name="payment_userScore">Ton score</string>
     <string name="Increase_score">Augmentez votre score \n dès maintenant!</string>
     <string name="Submitـomment">Pour voir les résultats du sondage, veuillez d\'abord enregistrer votre vote!</string>
+    <string name="location_list_tile">Rechercher des centres de divertissement</string>
 </resources>

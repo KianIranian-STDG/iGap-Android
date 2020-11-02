@@ -82,6 +82,9 @@ public class UploadHttpRequest {
 
         isResume = preferences.getLong("offset_" + md5Key, 0) != 0;
         String token = preferences.getString("token_" + md5Key, null);
+
+        FileLog.i("UploadHttpRequest md5Key " + md5Key + " isResume " + isResume + " token " + token);
+
         initFile(token);
     }
 
@@ -137,11 +140,12 @@ public class UploadHttpRequest {
                             }
                         } else {
                             if (delegate != null) {
-                                delegate.onUploadFail(fileObject, null);
+                                delegate.onUploadFail(fileObject, new Exception("resumeRetryCount max limited"));
                             }
                         }
                     } else if (resCode == 406) {
                         preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+                        fileObject.fileToken = token;
                         if (delegate != null) {
                             delegate.onUploadFinish(fileObject);
                         }
@@ -179,7 +183,7 @@ public class UploadHttpRequest {
                 } else if (res.body() != null) {
                     if (res.code() == 451) {
                         if (delegate != null) {
-                            delegate.onUploadFail(fileObject, null);
+                            delegate.onUploadFail(fileObject, new Exception("451 error for -> " + req.toString()));
                         }
                     }
                     String resString = res.body().string();
@@ -187,9 +191,9 @@ public class UploadHttpRequest {
                 }
             }
         } catch (IOException e) {
-            error(e);
+            error(e, true);
         } catch (JSONException e) {
-            error(e);
+            error(e, true);
         }
     }
 
@@ -217,7 +221,7 @@ public class UploadHttpRequest {
                 RequestBody requestBody = new UploadRequestBody(null, fileObject.offset, inputStream, totalByte -> {
                     if (cancelDownload.get() && isUploading) {
                         isUploading = false;
-                        error(new Exception("Download Canceled"));
+                        error(new Exception("Download Canceled"), false);
                         return;
                     }
 
@@ -268,10 +272,10 @@ public class UploadHttpRequest {
                     if (response.code() >= 500 && response.code() < 600) {
                         preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
                     }
-                    error(new Exception(response.body().string()));
+                    error(new Exception(response.body().string()), false);
                 }
             } catch (Exception e) {
-                error(e);
+                error(e, true);
             }
         } catch (FileNotFoundException e) {
             FileLog.e(e);
@@ -280,15 +284,24 @@ public class UploadHttpRequest {
         }
     }
 
-    private void error(Object error) {
+    private void error(Exception exception, boolean needReset) {
+        if (exception == null) {
+            return;
+        }
+
         isUploading = false;
         HelperSetAction.sendCancel(fileObject.messageId);
 
-        if (error instanceof Exception) {
-            Exception exception = (Exception) error;
-            if (delegate != null) {
-                delegate.onUploadFail(fileObject, exception);
-            }
+        FileLog.e("UploadHttpRequest CustomException ", exception);
+
+        if (!exception.getMessage().equals("Canceled") && needReset) {
+            preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
+        }
+
+        FileLog.e("UploadHttpRequest Exception ", exception);
+
+        if (delegate != null) {
+            delegate.onUploadFail(fileObject, exception);
         }
     }
 
@@ -309,7 +322,7 @@ public class UploadHttpRequest {
             cipher.init(Cipher.ENCRYPT_MODE, key2, ivSpec);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            FileLog.e(e);
             return null;
         }
         return cipher;

@@ -14,10 +14,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtLocationDetailBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.igasht.IGashtLocationDetailViewModel;
 
@@ -43,7 +45,6 @@ public class IGashtLocationDetailFragment extends IGashtBaseView<IGashtLocationD
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
@@ -71,6 +72,10 @@ public class IGashtLocationDetailFragment extends IGashtBaseView<IGashtLocationD
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment fragment;
+
+                binding.buyTicket.setTextColor(G.themeColor == Theme.DARK ? getResources().getColor(R.color.white) : (loadBuyTicketView ? getResources().getColor(R.color.white) : getResources().getColor(R.color.black)));
+                binding.detail.setTextColor(G.themeColor == Theme.DARK ? getResources().getColor(R.color.white) : (loadBuyTicketView ? getResources().getColor(R.color.black) : getResources().getColor(R.color.white)));
+
                 if (loadBuyTicketView) {
                     fragment = fragmentManager.findFragmentByTag(IGashtBuyTicketFragment.class.getName());
                     if (fragment == null) {
@@ -109,6 +114,7 @@ public class IGashtLocationDetailFragment extends IGashtBaseView<IGashtLocationD
                 Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     public void registerVouchers() {

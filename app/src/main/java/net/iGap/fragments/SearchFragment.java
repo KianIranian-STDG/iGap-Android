@@ -63,8 +63,6 @@ import java.util.TimerTask;
 import io.realm.Case;
 import io.realm.RealmResults;
 
-import static net.iGap.fragments.FragmentChat.messageId;
-
 public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     private FastAdapter fastAdapter;
@@ -654,14 +652,14 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     private void goToRoom(final long id, SearchType type, long messageId, String userName) {
         DbManager.getInstance().doRealmTask(realm -> {
-            RealmRoom realmRoom = null;
+            RealmRoom realmRoom;
 
             if (type == SearchType.message) {
                 realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
-                goToRoomWithRealm(realmRoom, type, id);
+                goToRoomWithRealm(realmRoom, type, id, messageId);
             } else if (type == SearchType.contact) {
                 realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).findFirst();
-                goToRoomWithRealm(realmRoom, type, id);
+                goToRoomWithRealm(realmRoom, type, id, messageId);
             } else if (type == SearchType.room) {
                 if (userName != null && userName.length() > 1) {
                     HelperUrl.checkUsernameAndGoToRoom(getActivity(), userName, HelperUrl.ChatEntry.profile);
@@ -669,25 +667,21 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     popBackStackFragment();*/
                 } else {
                     realmRoom = realm.where(RealmRoom.class).equalTo("id", id).findFirst();
-                    goToRoomWithRealm(realmRoom, type, id);
+                    goToRoomWithRealm(realmRoom, type, id, messageId);
                 }
             }
         });
     }
 
 
-    public void goToRoomWithRealm(RealmRoom realmRoom, SearchType type, long id) {
-
+    public void goToRoomWithRealm(RealmRoom realmRoom, SearchType type, long id, long messageId) {
         if (realmRoom != null) {
             G.refreshRealmUi();
-            /*Log.wtf(this.getClass().getName(),"goTo chat");
-            removeFromBaseFragment(SearchFragment.this);*/
             if (type == SearchType.message) {
                 new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity(getActivity());
             } else {
                 new GoToChatActivity(realmRoom.getId()).startActivity(getActivity());
             }
-
         } else {
             new RequestChatGetRoom().chatGetRoom(id, new RequestChatGetRoom.OnChatRoomReady() {
                 @Override
@@ -700,11 +694,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                         @Override
                         public void run() {
                             G.refreshRealmUi();
-                            /*if (G.fragmentActivity != null) {
-                                Log.wtf(this.getClass().getName(),"goTo chat");
-                                removeFromBaseFragment(SearchFragment.this);
-                            }*/
-                            new GoToChatActivity(room.getId()).setPeerID(id).startActivity(getActivity());
+                            new GoToChatActivity(room.getId()).setPeerID(id).setMessageID(messageId).startActivity(getActivity());
                         }
                     });
                 }

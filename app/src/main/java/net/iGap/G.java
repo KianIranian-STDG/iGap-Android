@@ -41,6 +41,7 @@ import net.iGap.api.webservice.JobServiceReconnect;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
@@ -69,7 +70,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.realm.Realm;
-import ir.metrix.sdk.Metrix;
 import ir.radsense.raadcore.web.WebBase;
 import ir.tapsell.plus.TapsellPlus;
 
@@ -402,7 +402,9 @@ public class G extends ApplicationContext {
         AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
-        Metrix.initialize(this, "YOUR_API_KEY");
+
+        HelperTracker.getInstance().initMetrix(this);
+
         Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
         // dont remove below line please

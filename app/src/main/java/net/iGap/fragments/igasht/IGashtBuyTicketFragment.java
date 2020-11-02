@@ -64,5 +64,10 @@ public class IGashtBuyTicketFragment extends IGashtBaseView<IGashtBuyTicketViewM
                 }
             }
         });
+
+        viewModel.getShowPriceNull().observe(getViewLifecycleOwner(), showToast -> {
+            Toast.makeText(getContext(), R.string.igasht_add_ticket_error, Toast.LENGTH_SHORT).show();
+
+        });
     }
 }

@@ -13,8 +13,21 @@ public class IGashtOrder {
     private int provinceId;
     @SerializedName("location_id")
     private int locationId;
+
+    public List<IGashtVouchers> getVouchers() {
+        return vouchers;
+    }
+
+    public void setVouchers(List<IGashtVouchers> vouchers) {
+        this.vouchers = vouchers;
+    }
+
     @SerializedName("vouchers")
     private List<IGashtVouchers> vouchers;
+    @SerializedName("domain")
+    private String mDomain;
+    @SerializedName("user_cellphone")
+    private String mUserCellphone;
 
     public IGashtOrder(String phoneNumber, int countryId, int provinceId, int locationId, List<IGashtVouchers> vouchers) {
         this.phoneNumber = phoneNumber;

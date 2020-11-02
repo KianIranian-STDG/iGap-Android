@@ -335,7 +335,7 @@ public class PaymentChargeFragment extends BaseFragment {
                             }
                             dialog.show();
                         } else {
-                            showError((getContext().getResources().getString(R.string.list_empty)));
+                            HelperError.showSnackMessage(getResources().getString(R.string.error), false);
                         }
                     }
                 }

@@ -133,6 +133,7 @@ import net.iGap.fragments.emoji.add.StickerDialogFragment;
 import net.iGap.fragments.emoji.remove.StickerSettingFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -1234,6 +1235,7 @@ public class FragmentChat extends BaseFragment
         G.onSetAction = null;
         G.onUpdateUserStatusInChangePage = null;
         G.onUserUpdateStatus = null;
+        G.onChannelAddMessageReaction = null;
 
         removeRoomAccessChangeListener();
     }
@@ -2186,10 +2188,10 @@ public class FragmentChat extends BaseFragment
                         if (channelRole == ChannelChatRole.MEMBER || groupRole == GroupChatRole.MEMBER || isNotJoin) {
                             RealmRoom.updatePinedMessageDeleted(mRoomId, false);
                             pinedMessageLayout.setVisibility(View.GONE);
+                            isPinAvailable = false;
                         } else {
                             sendRequestPinMessage(0);
                         }
-                        isPinAvailable = false;
                     }
                 });
 
@@ -2260,6 +2262,7 @@ public class FragmentChat extends BaseFragment
                                 pinedMessageLayout.setVisibility(View.GONE);
                             }
                             RealmRoom.updatePinedMessageDeleted(mRoomId, false);
+                            isPinAvailable = false;
                         }
                     }).negativeText(R.string.cancel);
 
@@ -2271,6 +2274,7 @@ public class FragmentChat extends BaseFragment
                             } else {
                                 new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
                             }
+                            isPinAvailable = false;
                         });
             }
 
@@ -4976,7 +4980,7 @@ public class FragmentChat extends BaseFragment
         }
 
         if (new File(filepath).exists()) {
-            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
+            getStoragePermission(filepath, filename);
         } else {
             final ProtoGlobal.RoomMessageType _messageType = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getMessageType() : message.realmRoomMessage.getMessageType();
             String cacheId = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getCacheId() : message.getAttachment().getCacheId();
@@ -4996,7 +5000,9 @@ public class FragmentChat extends BaseFragment
                 getDownloader().download(fileObject, arg -> {
                     if (arg.data != null && arg.data.getProgress() == 100) {
                         if (canUpdateAfterDownload) {
-                            G.handler.post(() -> HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder));
+                            G.handler.post(() -> {
+                                getStoragePermission(_path, name);
+                            });
                         }
                     }
                 });
@@ -5004,6 +5010,49 @@ public class FragmentChat extends BaseFragment
 
             onDownloadAllEqualCashId(cacheId, message.realmRoomMessage.getMessageId() + "");
             mAdapter.notifyItemChanged(pos);
+        }
+    }
+
+    private void getStoragePermission(final String filePath, final String fileName) {
+        if (!HelperPermission.grantedUseStorage()) {
+            try {
+                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        copyFileToDownload(filePath, fileName);
+                    }
+
+                    @Override
+                    public void deny() {
+                    }
+                });
+            } catch (IOException e) {
+                FileLog.e(e);
+            }
+        } else {
+            copyFileToDownload(filePath, fileName);
+        }
+    }
+
+    private void copyFileToDownload(final String filePath, final String fileName) {
+        try {
+            if (filePath == null || fileName == null) {
+                return;
+            }
+            File src = new File(filePath);
+            if (!src.exists()) {
+                return;
+            }
+            String destinationPath = " ";
+            if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).exists()) {
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir();
+            }
+            destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/" + fileName;
+            File file = new File(destinationPath);
+            AndroidUtils.copyFileToDownload(src, file, () -> Toast.makeText(G.currentActivity, R.string.file_save_to_download_folder, Toast.LENGTH_SHORT).show());
+        } catch (Exception e) {
+            Toast.makeText(G.currentActivity, R.string.file_can_not_save_to_selected_folder, Toast.LENGTH_SHORT).show();
+            FileLog.e(e);
         }
     }
 
@@ -5522,9 +5571,8 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction, final long forwardedMessageId) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+        G.handler.post(() -> {
+            if (mAdapter != null) {
                 mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction, forwardedMessageId);
             }
         });
