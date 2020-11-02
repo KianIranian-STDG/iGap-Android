@@ -258,6 +258,11 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
             return "" + R.string.kuknos_send_errorServer;
         }
 
+        //sandbox inflation
+        //GBEZWGMWPUT7SOBE7FMLNSEJ4QTIDBYKOE3CLJ2WOVLYUQY6DUI3P2HU
+
+        //live inflation
+        //GAG75QOJLNDST4G7TDGHX6RVJAZJ2IOMRS4BJK4EVKYQYCKILXB5JVJ6
         Transaction transaction = new Transaction.Builder(Objects.requireNonNull(sourceAccount), network)
                 .addOperation(new SetOptionsOperation.Builder()
                         .setHomeDomain("https://pdpco.ir")
