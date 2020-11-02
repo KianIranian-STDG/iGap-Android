@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -257,17 +258,21 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
 
         public boolean isWebViewVisible = true;
 
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
-//            if (url.equals(FragmentWebView.this.url) && isWebViewVisible) {
-            if (isWebViewVisible) {
-                isWebViewVisible = false;
-                delayHandler.removeCallbacks(taskMakeVisibleWebViewWithDelay);
-                webViewError.setVisibility(View.VISIBLE);
-                webView.setVisibility(View.GONE);
-                mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
-                HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
+            String errorDescription = (error.getDescription() == null) ? "" : error.getDescription().toString();
+            if (!errorDescription.equals("net::ERR_CONNECTION_REFUSED")) {
+                //if (url.equals(FragmentWebView.this.url) && isWebViewVisible)
+                if (isWebViewVisible) {
+                    isWebViewVisible = false;
+                    delayHandler.removeCallbacks(taskMakeVisibleWebViewWithDelay);
+                    webViewError.setVisibility(View.VISIBLE);
+                    webView.setVisibility(View.GONE);
+                    mHelperToolbar.setDefaultTitle(G.context.getString(R.string.igap));
+                    HelperError.showSnackMessage(G.context.getString(R.string.error), false);
+                }
             }
         }
 
