@@ -44,7 +44,9 @@ public class KuknosBuyAgainFrag extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kuknos_buy_again, container, false);
         if (getArguments() != null) {
-            assetType = getArguments().getString("assetType").equals("native") ? "PMN" : getArguments().getString("assetType");
+
+            assetType = getArguments().getString("assetCode");
+
         }
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())

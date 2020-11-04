@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,6 +40,7 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
+import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
@@ -57,6 +59,8 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
     private FragmentKuknosPanelBinding binding;
     private Spinner walletSpinner;
+    private ProgressBar panelRefundProgress;
+
 
     public static KuknosPanelFrag newInstance() {
         return new KuknosPanelFrag();
@@ -83,6 +87,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
+        panelRefundProgress = view.findViewById(R.id.panelRefundProgress);
 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
@@ -133,44 +138,24 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
 
             }
         });
-        binding.fragKuknosBuyAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KuknosBalance.Balance balance = null;
-                if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
-                    balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
-                }
-                if (balance != null && balance.getAssetType() != null) {
 
-                    String iban = DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
+        binding.fragKuknosBuyAgain.setOnClickListener(v -> {
+            KuknosBalance.Balance balance = null;
 
-                        @Override
-                        public String doTask(Realm realm) {
-                            RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
-                            if (realmKuknos != null && realmKuknos.getIban() != null) {
-                                return realmKuknos.getIban();
-                            } else {
-                                return null;
-                            }
-                        }
-                    });
-                    if (iban == null) {
-                        viewModel.getInFoFromServerToCheckUserProfile();
-                    } else {
-                        KuknosBuyAgainFrag buyAgainFrag = KuknosBuyAgainFrag.newInstance();
-                        String assetCode = balance.getAssetType();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("assetType", assetCode);
-                        buyAgainFrag.setArguments(bundle);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
+            if (walletSpinner.getSelectedItem() instanceof KuknosBalance.Balance) {
+                balance = (KuknosBalance.Balance) walletSpinner.getSelectedItem();
+            }
 
-                    }
-
-                } else {
-                    Toast.makeText(_mActivity, R.string.token_not_selected, Toast.LENGTH_SHORT).show();
-                }
+            if (balance != null && balance.getAssetType() != null) {
+                final String assetCode = balance.getAssetType().equals("native") ? "PMN" : balance.getAssetCode();
+                viewModel.getRefundInfoFromServer(assetCode);
+            } else {
+                Toast.makeText(_mActivity, R.string.token_not_selected, Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        onRefundDataObserver();
 
         onUserInfoObserver();
 
@@ -183,6 +168,55 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         onProgress();
 
         onTermsDownload();
+
+        onRefundButtonProgress();
+    }
+
+    private void onRefundDataObserver() {
+
+        viewModel.getRefundData().observe(getViewLifecycleOwner(), kuknosRefundModel -> {
+            if (kuknosRefundModel != null) {
+
+                String iban = getIBan();
+
+                if (iban == null) {
+                    viewModel.getInFoFromServerToCheckUserProfile();
+                } else {
+                    KuknosBuyAgainFrag buyAgainFrag = KuknosBuyAgainFrag.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("assetCode", kuknosRefundModel.getAssetCode());
+                    buyAgainFrag.setArguments(bundle);
+                    new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
+                }
+            }
+
+        });
+    }
+
+    private void onRefundButtonProgress() {
+        viewModel.getRefundProgress().observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                panelRefundProgress.setVisibility(View.VISIBLE);
+                binding.fragKuknosBuyAgain.setEnabled(false);
+            } else {
+                panelRefundProgress.setVisibility(View.INVISIBLE);
+                binding.fragKuknosBuyAgain.setEnabled(true);
+            }
+        });
+    }
+
+    private String getIBan() {
+        return DbManager.getInstance().doRealmTask(new DbManager.RealmTaskWithReturn<String>() {
+            @Override
+            public String doTask(Realm realm) {
+                RealmKuknos realmKuknos = realm.where(RealmKuknos.class).findFirst();
+                if (realmKuknos != null && realmKuknos.getIban() != null) {
+                    return realmKuknos.getIban();
+                } else {
+                    return null;
+                }
+            }
+        });
     }
 
     @Override
@@ -338,6 +372,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(errorM.getResID()), Snackbar.LENGTH_LONG);
                     snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), v -> snackbar.dismiss());
                     snackbar.show();
+                }
+                if (errorM.getMessage().equals("2")) {
+                    Toast.makeText(_mActivity, errorM.getTitle(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

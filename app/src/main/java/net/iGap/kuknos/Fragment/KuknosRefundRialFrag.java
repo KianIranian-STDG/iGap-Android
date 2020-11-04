@@ -232,7 +232,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         viewModel.getRefundData().observe(getViewLifecycleOwner(), kuknosRefundModel -> {
             if (kuknosRefundModel != null) {
 
-
                 maxRefund = kuknosRefundModel.getMaxRefund();
                 minRefund = kuknosRefundModel.getMinRefund();
 

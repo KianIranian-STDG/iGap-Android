@@ -227,6 +227,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosPSend" />
 
+                <ProgressBar
+                    android:id="@+id/panelRefundProgress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:elevation="@dimen/dp2"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@id/fragKuknosBuyAgain"
+                    app:layout_constraintTop_toTopOf="@id/fragKuknosBuyAgain"
+                    app:layout_constraintBottom_toBottomOf="@id/fragKuknosBuyAgain"
+                    app:layout_constraintHeight_percent="0.08"
+                    app:layout_constraintHorizontal_bias="0.08"
+                    android:indeterminateTint="@color/kuknos_WH_itembg"/>
+
                 <LinearLayout
                     android:id="@+id/fragKuknosPSetting"
                     android:layout_width="0dp"

@@ -68,6 +68,7 @@ public class KuknosRefundVM extends BaseAPIViewModel {
             }
         });
     }
+
     public void requestForVirtualRefund(String assetCount, int amount, float fee) {
         refundProgress.setValue(true);
         sendModel.setAmount(assetCount);

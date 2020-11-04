@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
+import net.iGap.R;
+import net.iGap.adapter.items.cells.TextCell;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.Model.KuknosError;
 import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosOptionStatus;
+import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.Model.Parsian.KuknosResponseModel;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
 import net.iGap.kuknos.Repository.PanelRepo;
@@ -24,16 +27,20 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+
 public class KuknosPanelVM extends BaseAPIViewModel {
 
     private MutableLiveData<KuknosBalance> kuknosWalletsM;
     private KuknosAsset asset = null;
-    private MutableLiveData<KuknosError> error;
+    private SingleLiveEvent<KuknosError> error;
     private MutableLiveData<Boolean> progressState;
-    private MutableLiveData<Boolean> userInfo;
+    private SingleLiveEvent<Boolean> userInfo;
     private MutableLiveData<Integer> openPage;
     private PanelRepo panelRepo = new PanelRepo();
     private MutableLiveData<String> TandCAgree;
+    private MutableLiveData<Boolean> refundProgress;
 
     private ObservableField<String> balance = new ObservableField<>();
     private ObservableField<String> currency = new ObservableField<>();
@@ -43,17 +50,20 @@ public class KuknosPanelVM extends BaseAPIViewModel {
     private MutableLiveData<Integer> BAndCState = new MutableLiveData<>();
     private int position = 0;
     private boolean inRialMode = false;
+    private SingleLiveEvent<KuknosRefundModel> refundData = new SingleLiveEvent<>();;
 
     public KuknosPanelVM() {
         BAndCState.postValue(0);
         kuknosWalletsM = new MutableLiveData<>();
         //kuknosWalletsM.setValue(new AccountResponse("", Long.getLong("0")));
-        error = new MutableLiveData<>();
+        error = new SingleLiveEvent<>();
         progressState = new MutableLiveData<>();
-        userInfo = new MutableLiveData<>();
+        userInfo = new SingleLiveEvent<>();
         openPage = new SingleLiveEvent<>();
         openPage.setValue(-1);
         TandCAgree = new MutableLiveData<>(null);
+        refundProgress = new MutableLiveData<>();
+
     }
 
     public void initApis() {
@@ -174,6 +184,34 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         });
     }
 
+    public void getRefundInfoFromServer(String assetCode) {
+        refundProgress.setValue(true);
+        panelRepo.getRefundData(assetCode, this, new ResponseCallback<KuknosResponseModel<KuknosRefundModel>>() {
+            @Override
+            public void onSuccess(KuknosResponseModel<KuknosRefundModel> data) {
+
+                refundData.setValue(data.getData());
+                refundProgress.setValue(false);
+            }
+
+            @Override
+            public void onError(String errorM) {
+                error.setValue(new KuknosError(true, errorM, "2", 0));
+                refundProgress.setValue(false);
+            }
+
+            @Override
+            public void onFailed() {
+                error.setValue(new KuknosError(true, "error" , "2", 0));
+                refundProgress.setValue(false);
+            }
+        });
+    }
+
+    public SingleLiveEvent<KuknosRefundModel> getRefundData() {
+        return refundData;
+    }
+
     public String convertToJSON(int position) {
         Gson gson = new Gson();
         if (kuknosWalletsM.getValue() == null) {
@@ -261,11 +299,11 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     // getter and setter
 
-    public MutableLiveData<KuknosError> getError() {
+    public SingleLiveEvent<KuknosError> getError() {
         return error;
     }
 
-    public void setError(MutableLiveData<KuknosError> error) {
+    public void setError(SingleLiveEvent<KuknosError> error) {
         this.error = error;
     }
 
@@ -313,11 +351,11 @@ public class KuknosPanelVM extends BaseAPIViewModel {
         return TandCAgree;
     }
 
-    public MutableLiveData<Boolean> getUserInfo() {
+    public SingleLiveEvent<Boolean> getUserInfo() {
         return userInfo;
     }
 
-    public void setUserInfo(MutableLiveData<Boolean> userInfo) {
+    public void setUserInfo(SingleLiveEvent<Boolean> userInfo) {
         this.userInfo = userInfo;
     }
 
@@ -331,5 +369,9 @@ public class KuknosPanelVM extends BaseAPIViewModel {
 
     public void setOpenPage(Integer openPage) {
         this.openPage.setValue(openPage);
+    }
+
+    public MutableLiveData<Boolean> getRefundProgress() {
+        return refundProgress;
     }
 }

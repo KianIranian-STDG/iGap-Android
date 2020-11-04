@@ -2224,4 +2224,5 @@
     <string name="refund_done">بازخرید با موفقیت انجام شد</string>
     <string name="refund_error">خطا در عملیات بازخرید</string>
     <string name="token_not_selected">هیچ توکنی انتخاب نشده است</string>
+    <string name="refund_is_not_available">امکان بازخرید برای این توکن وجود ندارد</string>
 </resources>
