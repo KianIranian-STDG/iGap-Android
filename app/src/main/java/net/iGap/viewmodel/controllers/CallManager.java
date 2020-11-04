@@ -370,8 +370,11 @@ public class CallManager {
                         break;
                 }
                 break;
-            case 921://                RINGING_FORBIDDEN
             case 918://                ACCEPT_FORBIDDEN
+                forceLeaveCall();
+                messageID = R.string.call_error_forbidden;
+                break;
+            case 921://                RINGING_FORBIDDEN
             case 915://                CANDIDATE_FORBIDDEN
             case 912://                LEAVE_FORBIDDEN
             case 909://                SESSION_HOLD_FORBIDDEN
@@ -412,6 +415,12 @@ public class CallManager {
         }
         if (onCallStateChanged != null)
             onCallStateChanged.onError(messageID, major, minor);
+    }
+
+    private void forceLeaveCall() {
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().onDestroy();
+        }
     }
 
     public void toggleMic() {
