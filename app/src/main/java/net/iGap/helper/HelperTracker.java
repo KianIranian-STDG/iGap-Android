@@ -20,6 +20,8 @@ import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.enums.CallState;
+import net.iGap.proto.ProtoSignalingOffer;
 
 import ir.metrix.sdk.Metrix;
 import ir.metrix.sdk.MetrixConfig;
@@ -203,6 +205,26 @@ public class HelperTracker {
             }
         } catch (Exception e) {
             FileLog.e(e);
+        }
+    }
+
+    public void sendCallEvent(ProtoSignalingOffer.SignalingOffer.Type callType, CallState callState) {
+        if (callType == null || callState == null) {
+            return;
+        }
+
+        if (callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING)) {
+            if (callState.equals(CallState.CONNECTED)) {
+                sendTracker(TRACKER_VIDEO_CALL_CONNECTED);
+            } else if (callState.equals(CallState.CONNECTING)) {
+                sendTracker(TRACKER_VIDEO_CALL_CONNECTING);
+            }
+        } else if (callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING)) {
+            if (callState.equals(CallState.CONNECTED)) {
+                sendTracker(TRACKER_VOICE_CALL_CONNECTED);
+            } else if (callState.equals(CallState.CONNECTING)) {
+                sendTracker(TRACKER_VOICE_CALL_CONNECTING);
+            }
         }
     }
 }

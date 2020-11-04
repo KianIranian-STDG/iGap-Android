@@ -10,6 +10,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
@@ -571,8 +572,11 @@ public class CallManager {
             iHoldCall = true;
         }
 
-        if (onCallStateChanged != null)
+        HelperTracker.getInstance().sendCallEvent(callType, callState);
+
+        if (onCallStateChanged != null) {
             onCallStateChanged.onCallStateChanged(callState);
+        }
     }
 
 
