@@ -246,7 +246,9 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     }
 
     public void onChannelTypeClick() {
-        showConvertChannelDialog.setValue(isPrivate);
+        if (role == ChannelChatRole.OWNER) {
+            showConvertChannelDialog.setValue(isPrivate);
+        }
     }
 
     public void onSingedMessageCheckedChange(boolean state) {
