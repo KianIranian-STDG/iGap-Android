@@ -13,7 +13,7 @@ class ApiStatic {
     private static final String VERSION = "v1.0/";
     static final String BEEP_TUNES_URL = BASE_URL + SERVICES + VERSION + "beep-tunes/";
     static final String CHANNEL_URL = BASE_URL + SERVICES + VERSION + "channel/";
-    static final String KUKNOS_URL = KUKNOS_TEST_URL;
+    static final String KUKNOS_URL = BASE_URL + "kuknos/" + VERSION;
     static final String PAYMENT_URL = BASE_URL + SERVICES + VERSION + "payment/";
     static final String ATI_URL = BASE_URL + SERVICES + VERSION + "ati/";
     static final String CHARGE_URL = BASE_URL + "operator-services/" + VERSION;

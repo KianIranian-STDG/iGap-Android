@@ -28,8 +28,8 @@ public class KuknosSDKRepo extends AsyncTask<String, Boolean, String> {
         PAYMENT_SEND, CHANGE_TRUST, MANAGE_OFFER, SET_OPTION
     }
 
-    private static final String KUKNOS_Horizon_Server = "https://hz1-test.kuknos.org" /*"https://horizon.kuknous.ir:8001"*/;
-    private static final String PASS_PHRASE = "Kuknos-NET" /*"Kuknos Foundation, Feb 2019"*/;
+    private static final String KUKNOS_Horizon_Server = "https://horizon.kuknous.ir:8001" /*""*/;
+    private static final String PASS_PHRASE = "Kuknos Foundation, Feb 2019" /*""*/;
     private API apiEnum;
     private callBack response;
 
