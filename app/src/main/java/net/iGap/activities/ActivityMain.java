@@ -96,7 +96,6 @@ import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
@@ -175,7 +174,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private SharedPreferences sharedPreferences;
     private TextView iconLock;
     private int retryConnectToWallet = 0;
-    private MyPhonStateService myPhonStateService;
     public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
 
@@ -267,10 +265,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (G.ISRealmOK) {
-            if (myPhonStateService != null) {
-                unregisterReceiver(myPhonStateService);
-            }
-
             if (audioManagerReciver != null) {
                 unregisterReceiver(audioManagerReciver);
             }
@@ -449,14 +443,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             initTabStrip(getIntent());
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction("android.intent.action.PHONE_STATE");
-            myPhonStateService = new MyPhonStateService();
-
             //add it for handle ssl handshake error
             checkGoogleUpdate();
-
-            registerReceiver(myPhonStateService, intentFilter);
             G.refreshWalletBalance = this;
 
             BroadcastReceiver receiver = new BroadcastReceiver() {

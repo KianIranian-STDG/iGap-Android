@@ -1,10 +1,13 @@
 package net.iGap.viewmodel.controllers;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.SystemClock;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -77,6 +80,9 @@ public class CallManager {
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
     private CallState currentSate;
+
+    public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
+    public static boolean isBlutoothOn = false;
 
     public static CallManager getInstance() {
         CallManager localInstance = instance;
@@ -621,5 +627,81 @@ public class CallManager {
 
     public void setUserInCall(boolean userInCall) {
         isUserInCall = userInCall;
+    }
+
+    public static class MyPhoneStateListener extends PhoneStateListener {
+
+        /**
+         * in this function we observe phone's state changes. and we manage two things:
+         * 1- manage music player state when phone state changes
+         * 2- manage call state (video or voice) when phone state changes
+         *
+         * @param state
+         * @param incomingNumber
+         */
+        public void onCallStateChanged(int state, String incomingNumber) {
+
+            // managing music player state
+            if (lastPhoneState != state && MusicPlayer.isMusicPlyerEnable) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    pauseSoundIfPlay();
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    if (MusicPlayer.pauseSoundFromCall) {
+                        MusicPlayer.pauseSoundFromCall = false;
+                        MusicPlayer.playSound();
+                    }
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    pauseSoundIfPlay();
+                }
+            }
+            // if last phone state does not change so there is nothing to do: preventing from multiple calls to proto and server
+            if (lastPhoneState == state)
+                return;
+            else
+                lastPhoneState = state;
+
+            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                CallManager.getInstance().holdCall(true);
+                WebRTC.getInstance().toggleSound(false);
+                WebRTC.getInstance().pauseVideoCapture();
+                CallManager.getInstance().setUserInCall(true);
+            } else if (state == TelephonyManager.CALL_STATE_RINGING) {
+                CallManager.getInstance().setUserInCall(false);
+            } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                CallManager.getInstance().holdCall(false);
+                WebRTC.getInstance().toggleSound(true);
+                WebRTC.getInstance().startVideoCapture();
+                CallManager.getInstance().setUserInCall(false);
+            }
+        }
+
+        private void pauseSoundIfPlay() {
+
+            if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+
+                MusicPlayer.pauseSound();
+                MusicPlayer.pauseSoundFromCall = true;
+
+            }
+        }
+    }
+
+    public static class MyPhoneStateService extends BroadcastReceiver {
+        TelephonyManager telephony;
+        private MyPhoneStateListener phoneListener;
+
+        /**
+         * use when start or finish ringing
+         */
+
+        public void onReceive(Context context, Intent intent) {
+            phoneListener = new MyPhoneStateListener();
+            telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            telephony.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
+        public void onDestroy() {
+            telephony.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
+        }
     }
 }

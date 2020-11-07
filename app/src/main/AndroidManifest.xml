@@ -74,7 +74,8 @@
         <receiver
             android:name=".helper.HelperNotification$RemoteActionReceiver"
             android:exported="false" />
-        <receiver android:name=".module.MyPhonStateService">
+
+        <receiver android:name=".viewmodel.controllers.CallManager$MyPhoneStateService">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -274,10 +275,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-<!--        <meta-data-->
-<!--            android:name="io.fabric.ApiKey"-->
-<!--            android:value="a8bb9474c4f59357347dbd3fd5707ca541e2a740"-->
-<!--            tools:replace="android:value" />-->
+        <!--        <meta-data-->
+        <!--            android:name="io.fabric.ApiKey"-->
+        <!--            android:value="a8bb9474c4f59357347dbd3fd5707ca541e2a740"-->
+        <!--            tools:replace="android:value" />-->
         <!--
           The API key for Google Maps-based APIs is defined as a string resource.
           (See the file "res/values/google_maps_api.xml").
