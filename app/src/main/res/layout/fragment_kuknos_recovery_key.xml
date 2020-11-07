@@ -195,6 +195,6 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.viewmodel.kuknos.KuknosShowRecoveryKeyVM" />
+            type="net.iGap.kuknos.viewmodel.KuknosShowRecoveryKeyVM" />
     </data>
 </layout>

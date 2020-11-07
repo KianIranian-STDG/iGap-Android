@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/kuknos_wh_list_item_style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.9">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kuknos_refund_assetCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:minHeight="38dp"
+            android:text="PMN"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp12" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kuknos_refund_hash"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="hbsaowbosasdfda3582"
+            android:maxLines="1"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp8"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kuknos_refund_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:minHeight="38dp"
+            android:text="2018/06/15"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp12" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kuknos_refund_fee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:minHeight="38dp"
+            android:text="2120"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp12" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/kuknos_refund_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:minHeight="38dp"
+            android:text="20.012"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/dp12" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

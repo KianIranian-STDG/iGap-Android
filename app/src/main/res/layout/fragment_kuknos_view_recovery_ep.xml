@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="net.iGap.viewmodel.kuknos.KuknosViewRecoveryEPVM" />
+            type="net.iGap.kuknos.viewmodel.KuknosViewRecoveryEPVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

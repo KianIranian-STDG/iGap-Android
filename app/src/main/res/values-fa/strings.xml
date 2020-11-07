@@ -167,6 +167,7 @@
     <string name="st_messagePreview">"پیش نمایش پیام"</string>
     <string name="st_led_color">"رنگ چراغ صفحه نمایش"</string>
     <string name="st_vibrate">"لرزش"</string>
+    <string name="kunos_receipt_hash">"هش"</string>
     <string name="st_popupNotification">"پنجره اعلان پیام"</string>
     <string name="st_sound">"صدا"</string>
     <string name="st_title_groupNotification">"اعلانات گروهی"</string>
@@ -256,7 +257,6 @@
     <string name="New_Chanel">"کانال جدید"</string>
 
     <!-- tarjome nashavad -->
-
     <string name="of">"از"</string>
     <string name="save_to_music_folder">"با موفقیت ذخیره کردن در پوشهٔ موسیقی"</string>
     <string name="choose_picture">"انتخاب تصویر از"</string>
@@ -495,6 +495,7 @@
     <string name="terminate_all">لغو تمامی جلسات فعال</string>
     <string name="forwarded_from">ارسال شده از</string>
     <string name="photo">عکس</string>
+    <string name="kunos_receipt_date_apply">"تاریخ درخواست"</string>
     <string name="music_name">عنوان موسیقی</string>
     <string name="info">اطلاعات</string>
     <string name="description">توضیحات</string>
@@ -795,6 +796,7 @@
 
     <string name="iGap_has_crashed">آیگپ با خطای پیش بینی نشده برخورد کرده است!</string>
     <string name="iGap_has_crashed_reload">شروع مجدد</string>
+    <string name="kuknos_receipt_Return_to_digital_token_bag">"بازگشت به کیف توکن دیجیتال"</string>
     <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
     <string name="are_you_sure_clear_call_logs">آیا از حذف  تمامی تماس ها اطمینان دارید؟</string>
@@ -1289,7 +1291,7 @@
     <string name="sheba_20_digits">شماره ۲۴ رقمی شبا</string>
 
     <string name="no_camera_found">دوربین دستگاه یافت نشد</string>
-
+    <string name="IBAN">"شبا"</string>
     <string name="paygear_balance">موجودی کیف پول</string>
     <string name="paygear_card_balance">موجودی کیف پول</string>
     <string name="paygear_account_balance">موجودی حساب کیف پول</string>
@@ -1600,6 +1602,23 @@
     <string name="igasht_count_title">تعداد</string>
     <string name="igasht_service_title">سرویس</string>
 
+    <string name="kuknos_rial_max_buy">"حداکثر مجاز"</string>
+    <string name="kuknos_rial_price_of_day">"قیمت روز"</string>
+    <string name="kuknos_rial_percentage_of_commission">"درصد کارمزد"</string>
+    <string name="kuknos_rial_Deposit_sheba_number">"شماره شبای واریزی"</string>
+    <string name="kuknos_rial_Maximum_redeemable_token">"حداکثر توکن قابل بازخرید"</string>
+    <string name="kuknos_rial_Number_of_contracts">"تعداد پیمان"</string>
+    <string name="kuknos_rial_Redemption_fee">"کارمزد بازخرید PMN"</string>
+    <string name="kuknos_rial_Redemption_feee">"کارمزد بازخرید"</string>
+    <string name="kuknos_rial_Total_number_of_contracts">"تعداد کل پیمان"</string>
+    <string name="kuknos_rial_Deposit_amount">"مبلغ واریزی (ریال)"</string>
+    <string name="kuknos_rial_Deposit_amount2">"مبلغ واریزی"</string>
+    <string name="kuknos_receipt_token">"توکن"</string>
+    <string name="kuknos_rial_min_buy">"حداقل مجاز"</string>
+    <string name="kuknos_rial_dialog_Repurchase_tokens">"توکن بازخرید"</string>
+    <string name="kuknos_panel_buy_again_profile_dialog">"با مراجعه به بخش تنظیمات \n نسبت به تکمیل اطلاعات خود \n اقدام نمایید"</string>
+    <string name="kuknos_edit_info_birthday">"تاریخ تولد"</string>
+    <string name="kuknos_panel_Edit_and_change_account_information">"ویرایش و تغییر اطلاعات حساب کاربری"</string>
     <string name="kuknos_login_id_str">کد ملی *</string>
     <string name="kuknos_login_tel_str">تلفن *</string>
     <string name="kuknos_login_progress_str">بررسی...</string>
@@ -1612,6 +1631,8 @@
     <string name="kuknos_Restore_Hint">برای مثال: دریا، میز، کابل...</string>
     <string name="kuknos_Restore_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_Restore_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
+    <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"دریافت پشتوانه \n فیزیکی %1$s"</string>
+    <string name="kuknos_buy_again_tab_Rial_equivalent">"معادل ریالی  \n پرداخت %1$s"</string>
     <string name="kuknos_Restore_Error_Snack">باشه</string>
     <string name="kuknos_RestoreSeed_Title">لطفا کلید خصوصی خود را وارد کنید.</string>
     <string name="kuknos_RestoreSeed_Message">با استفاده از این کلید، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
@@ -1651,6 +1672,7 @@
     <string name="kuknos_panelStr_trading">مبادله</string>
     <string name="kuknos_panelStr_kyc">احراز هویت</string>
     <string name="kuknos_panelStr_buyPeyman">خرید دارایی</string>
+    <string name="kuknos_panelStr_buyAgain">بازخرید</string>
     <string name="kuknos_panelStr_setting">تنظیمات</string>
     <string name="kuknos_recieve_title">جهت دریافت اعتبار از افراد دیگر، شناسه کیف پول خود را برای آنها ارسال نمایید.</string>
     <string name="kuknos_recieve_walletID">شناسه کیف پول شما: </string>
@@ -1676,6 +1698,7 @@
     <string name="kuknos_wHistory_error">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_setting_title">تنظیمات</string>
     <string name="kuknos_setting_viewRecoveryP">نمایش اطلاعات حساب کاربری</string>
+    <string name="kuknos_setting_dialog">تاییدیه بازخرید توکن</string>
     <string name="kuknos_setting_logout">خروج از کیف پول</string>
     <string name="kuknos_changePIN_successTitle">موفقیت</string>
     <string name="kuknos_changePIN_failTitle">خطا</string>
@@ -1737,6 +1760,7 @@
     <string name="kuknos_setting_copySKeyBtn">ذخیره</string>
     <string name="kuknos_setting_copySFailTitle">خطا</string>
     <string name="kuknos_setting_copySFailBtn">باشه</string>
+    <string name="kuknos_receipt_Refund_address">"آدرس بازپرداخت"</string>
     <string name="kuknos_setting_copySFailReadM">آیگپ اجازه خواندن فایل ها را ندارد.</string>
     <string name="kuknos_setting_copySFailWriteM">آیگپ اجازه نوشتن فایل را ندارد.</string>
     <string name="kuknos_setting_copySFailDir">آیگپ اجازه ایجاد مسیر مناسب را ندارد.</string>
@@ -1767,6 +1791,7 @@
     <string name="kuknos_AddAsset_AddBTN">افزودن دارایی جدید</string>
     <string name="kuknos_AddAsset_title">دارایی های فعلی</string>
     <string name="kuknos_trade_noItem">هیچ موردی یافت نشد.</string>
+    <string name="kuknos_edit_info_saved_successfully">"اطلاعات با موفقیت ذخیره شد"</string>
     <string name="kuknos_Restore_CheckPIN">من در هنگام ساخت حساب رمز ورود ایجاد کرده ام.</string>
     <string name="kuknos_RestorePass_title">رمز 4 رقمی خود را وارد کنید.</string>
     <string name="kuknos_RestorePass_message">این رمز 4 رقمی برای تولید کلید عمومی و خصوصی شما مورد استفاده قرار میگیرد.</string>
@@ -1781,9 +1806,13 @@
     <string name="kuknos_enterPin_btnNormal">تایید</string>
     <string name="kuknos_enterPin_btnProgress">بررسی رمز…</string>
     <string name="kuknos_payment_title">رسید تراکنش</string>
+    <string name="kuknos_edit_info_sending_info">"در حال ارسال اطلاعات..."</string>
     <string name="kuknos_payment_assetCode">دارایی: </string>
+    <string name="kuknos_edit_info_empty_sheba">"فیلد شبا نمی تواند خالی باشد"</string>
     <string name="kuknos_payment_assetCount">تعداد دارایی: </string>
     <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
+    <string name="kuknos_edit_info_empty_sheba_and_birthdate">"فیلد تاریخ تولد و شبا تغییری نکرده اند!"</string>
+    <string name="kuknos_edit_info_empty_birthdate">"فیلد تاریخ تولد نمی تواند خالی باشد"</string>
     <string name="kuknos_payment_totalAmount">قیمت کل: </string>
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="kuknos_Currency">نام توکن</string>
@@ -1920,6 +1949,7 @@
     <string name="elecBill_success_pay">پرداخت با موفقیت انجام شد.</string>
     <string name="elecBill_main_serviceMode">قبوض خدماتی</string>
     <string name="elecBill_main_PhoneMode">قبوض موبایل و تلفن</string>
+    <string name="kunos_receipt_type_refund">"نوع بازپرداخت"</string>
     <string name="elecBill_main_billTypeTitle">نوع قبض: </string>
     <string name="elecBill_main_billPhoneTitle">لطفا شماره تلفن ثابت یا موبایل مورد نظر خود را وارد کنید.\nنمونه شماره تلفن: ********۰۲۱\nنمونه شماره موبایل: *********۰۹</string>
     <string name="elecBill_cell_billPayLastTerm">پایان دوره</string>
@@ -1947,6 +1977,7 @@
     <string name="kuknos_SignupInfo_errorNIDFormatInvalid">ساختار کد ملی اشتباه است.</string>
     <string name="kuknos_SignupInfo_errorNameEmptyInvalid">نام نمیتواند خالی باشد.</string>
     <string name="kuknos_SignupInfo_errorNameLengthInvalid">طول نام کوتاه است.</string>
+    <string name="kuknos_receipt_bill">"رسید بازپرداخت"</string>
     <string name="kuknos_buyAsset">خرید دارایی</string>
     <string name="kuknos_buyP_MaxAmount">شما از حداکثر تعداد خرید این دارایی فراتر رفته اید.</string>
     <string name="kuknos_buyP_btn_server3">دریافت داده...</string>
@@ -2107,6 +2138,7 @@
     <string name="kuknos_accountInfo_recoveryKey_title">1- رشته کلید بازگردانی حساب</string>
     <string name="kuknos_accountInfo_publicKey_title">3- کلید عمومی</string>
     <string name="kuknos_accountInfo_privateKey_title">2- کلید خصوصی</string>
+    <string name="koknos_account_infp_tab_User_information">"اطلاعات کاربری"</string>
     <string name="kuknos_accountInfo_publicKey_desc">با ارسال این کلید به دیگران، شما میتوانید درخواست ارسال توکن کنید.</string>
     <string name="kuknos_accountInfo_privateKey_desc">این کلید خصوصی شماست. با استفاده از این کلید امکان دسترسی مستقیم به حساب شما وجود دارد. لطفا به هیچ وجه این کلید را با بقیه افراد به اشتراک نگذارید.</string>
     <string name="kuknos_Restore_ErrorNoAccount_Snack">اکانت مورد نظر یافت نشد.</string>
@@ -2169,6 +2201,13 @@
     <string name="hold">نگه‌داشتن</string>
     <string name="Increase_score">همین حالا امتیازت\n رو افزایش بده!</string>
     <string name="error_term_not_accepted">شرایط و مقررات تایید نشده است!</string>
+    <string name="refund_token">توکن بازخرید</string>
+    <string name="kuknos_submit_count">مقدار</string>
+    <string name="kuknos_dialog_refund_fixed_fee">کارمزد بازخرید</string>
+    <string name="refund_amount">مبلغ واریزی</string>
+    <string name="submit">قبول</string>
+    <string name="refund_history">سابقه بازخرید</string>
+    <string name="history">سابقه تراکنش</string>
     <string name="error_resume_file_expired">فایل منقضی شده است. لطفا دوباره تلاش کنید</string>
     <string name="Submitـomment">برای مشاهده نتیجه نظرسنجی لطفا ابتدا رای خود را ثبت نمایید !</string>
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
@@ -2176,4 +2215,17 @@
         <item>برق</item>
         <item>گاز</item>
     </string-array>
+    <string name="refund_button">بازخرید</string>
+    <string name="history_asset_type">نوع توکن</string>
+    <string name="history_hash">هش</string>
+    <string name="history_amount">مبلغ</string>
+    <string name="histroy_fee">کارمزد</string>
+    <string name="history_count">مقدار</string>
+    <string name="payman_token_not_enough">تعداد توکن شما کافی نیست</string>
+    <string name="payman_refund_limitation_error">محدودیت توکن برای انجام بازخرید را رعایت نکرده اید</string>
+    <string name="enter_pmn_count">لطفا تعداد توکن بازخرید را وارد کنید</string>
+    <string name="refund_done">بازخرید با موفقیت انجام شد</string>
+    <string name="refund_error">خطا در عملیات بازخرید</string>
+    <string name="token_not_selected">هیچ توکنی انتخاب نشده است</string>
+    <string name="refund_is_not_available">امکان بازخرید برای این توکن وجود ندارد</string>
 </resources>

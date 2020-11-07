@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperError;
-import net.iGap.model.kuknos.Parsian.KuknosAsset;
+import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 
 import java.util.ArrayList;
 import java.util.List;

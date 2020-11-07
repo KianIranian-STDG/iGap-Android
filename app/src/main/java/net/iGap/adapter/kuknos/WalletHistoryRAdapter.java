@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.model.kuknos.Parsian.KuknosCreateAccountOpResponse;
-import net.iGap.model.kuknos.Parsian.KuknosOperationResponse;
-import net.iGap.model.kuknos.Parsian.KuknosPaymentOpResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosCreateAccountOpResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosOperationResponse;
+import net.iGap.kuknos.Model.Parsian.KuknosPaymentOpResponse;
 import net.iGap.module.mobileBank.JalaliCalendar;
-import net.iGap.repository.kuknos.UserRepo;
+import net.iGap.kuknos.Repository.UserRepo;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
