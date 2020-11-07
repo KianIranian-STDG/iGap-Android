@@ -896,6 +896,15 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 49) {
+            RealmObjectSchema realmMbCards = schema.get(RealmKuknos.class.getSimpleName());
+            if (realmMbCards != null) {
+                realmMbCards.addField("iban", String.class);
+            }
+
+            oldVersion++;
+        }
     }
 
     @Override

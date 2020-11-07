@@ -11,18 +11,16 @@ public class RealmKuknos extends RealmObject {
     private String kuknosPIN;
     private String kuknosMnemonic;
     private String iban;
-    private String birthDate;
 
     public RealmKuknos() {
     }
 
-    public RealmKuknos(String kuknosSeedKey, String kuknosPublicKey, String kuknosPIN, String kuknosMnemonic, String iban,String birthDate) {
+    public RealmKuknos(String kuknosSeedKey, String kuknosPublicKey, String kuknosPIN, String kuknosMnemonic, String iban) {
         this.kuknosSeedKey = kuknosSeedKey;
         this.kuknosPublicKey = kuknosPublicKey;
         this.kuknosPIN = kuknosPIN;
         this.kuknosMnemonic = kuknosMnemonic;
         this.iban = iban;
-        this.birthDate=birthDate;
     }
 
     public String getKuknosSeedKey() {
@@ -120,6 +118,7 @@ public class RealmKuknos extends RealmObject {
             });
         }).start();
     }
+
     public static void updateKuknos(String seed, String publicKey, String mNemonic, String pin) {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
