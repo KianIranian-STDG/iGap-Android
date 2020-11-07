@@ -27,17 +27,7 @@
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp12" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/kuknos_refund_hash"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:text="hbsaowbosasdfda3582"
-            android:maxLines="1"
-            android:textColor="?iGapTitleTextColor"
-            android:textSize="@dimen/dp8"/>
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/kuknos_refund_amount"
