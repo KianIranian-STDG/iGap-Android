@@ -15,12 +15,14 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.CallAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoSignalingAccept;
 import net.iGap.proto.ProtoSignalingCandidate;
@@ -100,7 +102,7 @@ public class CallManager {
     private CallManager() {
         DbManager.getInstance().doRealmTask(realm -> {
             currentCallConfig = realm.where(RealmCallConfig.class).findFirst();
-            if (currentCallConfig == null) {
+            if (currentCallConfig == null && RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });
