@@ -150,7 +150,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 answerCall();
         } else {
             // should be managed with call manager
-            CallManager.getInstance().leaveCall();
+            CallManager.getInstance().endCall();
             finish();
         }
     }
@@ -506,13 +506,11 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void endCall() {
-        CallManager.getInstance().setWaitForEndCall(true);
         fadeButtonsGridView();
         CallManager.getInstance().endCall();
     }
 
     private void declineCall() {
-        CallManager.getInstance().setWaitForEndCall(true);
         fadeButtonsGridView();
         CallManager.getInstance().endCall();
     }

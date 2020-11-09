@@ -80,7 +80,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CallManager.getInstance().leaveCall();
+                        CallManager.getInstance().endCall();
                         binding.accountDialogProgressbar.setVisibility(View.VISIBLE);
                         dialog.dismiss();
                     }

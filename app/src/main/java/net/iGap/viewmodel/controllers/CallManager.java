@@ -275,7 +275,7 @@ public class CallManager {
      * @param builder from server
      */
     public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Builder builder) {
-        setWaitForEndCall(false);
+        waitForEndCall = false;
         G.handler.post(() -> {
             // TODO: 5/6/2020 this part needs to change based on new design
             try {
@@ -305,12 +305,6 @@ public class CallManager {
                     break;
             }
         });
-    }
-
-    public void leaveCall() {
-        if (isRinging || isCallActive) {
-            new RequestSignalingLeave().signalingLeave();
-        }
     }
 
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
@@ -444,7 +438,10 @@ public class CallManager {
     }
 
     public void endCall() {
-        leaveCall();
+        if (isRinging || isCallActive) {
+            waitForEndCall = true;
+            new RequestSignalingLeave().signalingLeave();
+        }
     }
 
     public void directMessage() {
@@ -635,10 +632,6 @@ public class CallManager {
 
     public boolean isWaitForEndCall() {
         return waitForEndCall;
-    }
-
-    public void setWaitForEndCall(boolean waitForEndCall) {
-        this.waitForEndCall = waitForEndCall;
     }
 
     public static class MyPhoneStateListener extends PhoneStateListener {
