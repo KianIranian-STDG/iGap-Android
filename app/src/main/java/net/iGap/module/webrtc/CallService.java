@@ -51,7 +51,7 @@ import static android.app.Notification.DEFAULT_VIBRATE;
 
 public class CallService extends Service implements CallManager.CallStateChange {
     private final int ID_SERVICE_NOTIFICATION = 2213;
-    private final int ID_INCOMING_NOTIFICATION = 2214;
+    private final int ID_INCOMING_NOTIFICATION = 202;
     private final String CALL_CHANNEL = "iGapCall";
 
     private final String ACTION_END_CALL = "net.igap.call.end";
