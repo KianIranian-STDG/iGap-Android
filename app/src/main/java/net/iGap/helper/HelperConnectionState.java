@@ -33,7 +33,7 @@ public class HelperConnectionState {
     public static void connectionState(final ConnectionState connectionState) {
 
         if (connectionState != ConnectionState.IGAP) {
-            CallManager.getInstance().leaveCall();
+            CallManager.getInstance().endCall();
         }
 
 

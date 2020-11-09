@@ -64,6 +64,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private TextImageView micView;
     private TextImageView bluetoothView;
     private TextImageView holdView;
+    private TextImageView cameraView;
+    private TextImageView directView;
     private CallRippleView answerRippleView;
     private CallRippleView declineRippleView;
 
@@ -114,6 +116,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         init();
+
         setContentView(createRootView());
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
@@ -147,7 +150,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 answerCall();
         } else {
             // should be managed with call manager
-            CallManager.getInstance().leaveCall();
+            CallManager.getInstance().endCall();
             finish();
         }
     }
@@ -306,7 +309,9 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             declineRippleView.setImageResource(R.drawable.ic_call_decline);
             declineRippleView.startAnimation();
             declineRippleView.setDelegate(this::declineCall);
-            declineRippleView.setOnClickListener(v -> declineCall());
+            declineRippleView.setOnClickListener(v -> {
+                declineCall();
+            });
             rootView.addView(declineRippleView, LayoutCreator.createFrame(150, 150, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, 0, 36));
 
             quickDeclineView = new LinearLayout(this);
@@ -343,14 +348,19 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         buttonsGridView = new LinearLayout(this);
         buttonsGridView.setOrientation(LinearLayout.VERTICAL);
-        buttonsGridView.setVisibility(isIncoming && isIncomingCallAndNotAnswered ? View.GONE : View.VISIBLE);
+        if (isIncoming && isIncomingCallAndNotAnswered)
+            hideButtonsGridView();
+        else if (CallManager.getInstance().isWaitForEndCall())
+            fadeButtonsGridView();
+        else
+            showButtonsGridView();
 
         LinearLayout row1 = new LinearLayout(this);
         row1.setOrientation(LinearLayout.HORIZONTAL);
         buttonsGridView.addView(row1, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 0));
 
         if (isVideoCall()) {
-            TextImageView cameraView = new TextImageView(this);
+            cameraView = new TextImageView(this);
             cameraView.setText(R.string.camera);
             cameraView.setTextColor(getResources().getColor(R.color.white));
             cameraView.setOnClickListener(v -> toggleCamera());
@@ -376,7 +386,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             holdView.setViewColor(getResources().getColor(R.color.gray_4c));
         }
 
-        TextImageView directView = new TextImageView(this);
+        directView = new TextImageView(this);
         directView.setText(R.string.message);
         directView.setTextColor(getResources().getColor(R.color.white));
         directView.setOnClickListener(v -> toggleCamera());
@@ -418,7 +428,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
         rootView.addView(buttonsGridView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM, 32, 0, 32, 62));
 
-
         if (caller != null) {
             nameTextView.setText(caller.getName());
             try {
@@ -430,7 +439,6 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 e.printStackTrace();
             }
         }
-
         return rootView;
     }
 
@@ -471,13 +479,13 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     private void hideIcons() {
         if (isVideoCall()) {
             if (buttonsGridView.getVisibility() == View.VISIBLE) {
-                buttonsGridView.setVisibility(View.GONE);
+                hideButtonsGridView();
                 nameTextView.setVisibility(View.GONE);
                 callTypeTextView.setVisibility(View.GONE);
                 statusTextView.setVisibility(View.GONE);
                 durationTextView.setVisibility(View.GONE);
             } else {
-                buttonsGridView.setVisibility(View.VISIBLE);
+                showButtonsGridView();
                 nameTextView.setVisibility(View.VISIBLE);
                 callTypeTextView.setVisibility(View.VISIBLE);
                 statusTextView.setVisibility(View.VISIBLE);
@@ -498,10 +506,12 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void endCall() {
+        fadeButtonsGridView();
         CallManager.getInstance().endCall();
     }
 
     private void declineCall() {
+        fadeButtonsGridView();
         CallManager.getInstance().endCall();
     }
 
@@ -529,8 +539,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         answerRippleView.setVisibility(View.GONE);
         declineRippleView.setVisibility(View.GONE);
         quickDeclineView.setVisibility(View.GONE);
-        declineImageView.setVisibility(View.VISIBLE);
-        buttonsGridView.setVisibility(View.VISIBLE);
+        showButtonsGridView();
         CallManager.getInstance().acceptCall();
     }
 
@@ -547,7 +556,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
     }
 
     private void notAnswered() {
-//        buttonsGridView.setVisibility(View.GONE);
+        fadeButtonsGridView();
 //        durationTextView.setVisibility(View.GONE);
         finish();
 
@@ -598,8 +607,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                     answerRippleView.setVisibility(View.GONE);
                     declineRippleView.setVisibility(View.GONE);
                     quickDeclineView.setVisibility(View.GONE);
-                    declineImageView.setVisibility(View.VISIBLE);
-                    buttonsGridView.setVisibility(View.VISIBLE);
+                    showButtonsGridView();
                 }
             }
 
@@ -722,5 +730,17 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
                 surfaceLocal = null;
             }
         }
+    }
+
+    private void showButtonsGridView() {
+        buttonsGridView.animate().alpha(1f).setDuration(200).start();
+    }
+
+    private void hideButtonsGridView() {
+        buttonsGridView.animate().alpha(0f).setDuration(200).start();
+    }
+
+    private void fadeButtonsGridView() {
+        buttonsGridView.animate().alpha(0.5f).setDuration(200).start();
     }
 }
