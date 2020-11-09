@@ -67,6 +67,7 @@ public class CallManager {
     private boolean isCallHold;
     private boolean iHoldCall = true;
     private boolean isMicEnable = true;
+    private boolean waitForEndCall = false;
 
     @Nullable
     private CallerInfo currentCallerInfo;
@@ -274,6 +275,7 @@ public class CallManager {
      * @param builder from server
      */
     public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Builder builder) {
+        setWaitForEndCall(false);
         G.handler.post(() -> {
             // TODO: 5/6/2020 this part needs to change based on new design
             try {
@@ -629,6 +631,14 @@ public class CallManager {
 
     public void setUserInCall(boolean userInCall) {
         isUserInCall = userInCall;
+    }
+
+    public boolean isWaitForEndCall() {
+        return waitForEndCall;
+    }
+
+    public void setWaitForEndCall(boolean waitForEndCall) {
+        this.waitForEndCall = waitForEndCall;
     }
 
     public static class MyPhoneStateListener extends PhoneStateListener {
