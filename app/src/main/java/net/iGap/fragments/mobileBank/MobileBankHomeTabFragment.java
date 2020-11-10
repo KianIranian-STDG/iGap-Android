@@ -20,6 +20,7 @@ import net.iGap.adapter.mobileBank.BankAccountsAdapter;
 import net.iGap.adapter.mobileBank.BankCardsAdapter;
 import net.iGap.adapter.mobileBank.BankHomeItemAdapter;
 import net.iGap.databinding.MobileBankHomeTabFragmentBinding;
+import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.HelperFragment;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankCardModel;
@@ -108,7 +109,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         switch (title) {
             case R.string.transfer_mony:
             case R.string.cardToCardBtnText:
-                showComingSoon();
+                CardToCardHelper.CallCardToCard(getActivity());
                 //onTransferMoneyClicked();
                 break;
 
