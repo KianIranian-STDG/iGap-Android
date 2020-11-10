@@ -320,106 +320,108 @@ public class CallManager {
     }
 
     public void onError(int actionId, int major, int minor) {
-        HelperLog.getInstance().setErrorLog(new Exception("CallManagerError/" + "majorCode : " + major + " * minorCode : " + minor));
-        int messageID = R.string.e_call_permision;
-        switch (major) {
-            case 900://                RINGING_BAD_PAYLOAD
-            case 916://                LEAVE_BAD_PAYLOAD
-            case 907://                GET_CONFIGURATION_BAD_PAYLOAD
-                messageID = R.string.call_error_badPayload;
-                break;
-            case 901://                OFFER_INTERNAL_SERVER_ERROR
-            case 920://                RINGING_INTERNAL_SERVER_ERROR
-            case 917://                ACCEPT_INTERNAL_SERVER_ERROR
-            case 914://                CANDIDATE_INTERNAL_SERVER_ERROR
-            case 911://                LEAVE_INTERNAL_SERVER_ERROR
-            case 908://                SESSION_HOLD_INTERNAL_SERVER_ERROR
-            case 903://                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
-                messageID = R.string.call_error_internalServer;
-                break;
-            case 902://                OFFER_BAD_PAYLOAD
-                switch (minor) {
-                    case 1://                        Caller_SDP is invalid
-                    case 2://                        Type is invalid
-                    case 3://                        CalledUser_ID is invalid
-                        messageID = R.string.call_error_offer;
-                        break;
-                    default:
-                        messageID = R.string.call_error_badPayload;
-                        break;
-                }
-                break;
-            case 904:
-                switch (minor) {
-                    case 6:
-                        messageID = R.string.e_904_6;
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                    case 7:
-                        messageID = R.string.e_904_7;
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                    case 8:
-                        messageID = R.string.e_904_8;
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                    case 9:
-                        messageID = R.string.e_904_9;
-                        changeState(CallState.BUSY);
-                        if (CallService.getInstance() != null) {
-                            CallService.getInstance().playSoundWithRes(R.raw.igap_busy, false);
-                        }
-                        break;
-                    default:
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                }
-                break;
-            case 918://                ACCEPT_FORBIDDEN
-                forceLeaveCall();
-                messageID = R.string.call_error_forbidden;
-                break;
-            case 921://                RINGING_FORBIDDEN
-            case 915://                CANDIDATE_FORBIDDEN
-            case 912://                LEAVE_FORBIDDEN
-            case 909://                SESSION_HOLD_FORBIDDEN
-                messageID = R.string.call_error_forbidden;
-                break;
-            case 905://                OFFER_PRIVACY_PROTECTION
-            case 906://                OFFER_BLOCKED_BY_PEER
-                messageID = R.string.e_906_1;
-                break;
-            case 910://                ACCEPT_BAD_PAYLOAD
+        G.runOnUiThread(() -> {
+            HelperLog.getInstance().setErrorLog(new Exception("CallManagerError/" + "majorCode : " + major + " * minorCode : " + minor));
+            int messageID = R.string.e_call_permision;
+            switch (major) {
+                case 900://                RINGING_BAD_PAYLOAD
+                case 916://                LEAVE_BAD_PAYLOAD
+                case 907://                GET_CONFIGURATION_BAD_PAYLOAD
+                    messageID = R.string.call_error_badPayload;
+                    break;
+                case 901://                OFFER_INTERNAL_SERVER_ERROR
+                case 920://                RINGING_INTERNAL_SERVER_ERROR
+                case 917://                ACCEPT_INTERNAL_SERVER_ERROR
+                case 914://                CANDIDATE_INTERNAL_SERVER_ERROR
+                case 911://                LEAVE_INTERNAL_SERVER_ERROR
+                case 908://                SESSION_HOLD_INTERNAL_SERVER_ERROR
+                case 903://                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
+                    messageID = R.string.call_error_internalServer;
+                    break;
+                case 902://                OFFER_BAD_PAYLOAD
+                    switch (minor) {
+                        case 1://                        Caller_SDP is invalid
+                        case 2://                        Type is invalid
+                        case 3://                        CalledUser_ID is invalid
+                            messageID = R.string.call_error_offer;
+                            break;
+                        default:
+                            messageID = R.string.call_error_badPayload;
+                            break;
+                    }
+                    break;
+                case 904:
+                    switch (minor) {
+                        case 6:
+                            messageID = R.string.e_904_6;
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                        case 7:
+                            messageID = R.string.e_904_7;
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                        case 8:
+                            messageID = R.string.e_904_8;
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                        case 9:
+                            messageID = R.string.e_904_9;
+                            changeState(CallState.BUSY);
+                            if (CallService.getInstance() != null) {
+                                CallService.getInstance().playSoundWithRes(R.raw.igap_busy, false);
+                            }
+                            break;
+                        default:
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                    }
+                    break;
+                case 918://                ACCEPT_FORBIDDEN
+                    forceLeaveCall();
+                    messageID = R.string.call_error_forbidden;
+                    break;
+                case 921://                RINGING_FORBIDDEN
+                case 915://                CANDIDATE_FORBIDDEN
+                case 912://                LEAVE_FORBIDDEN
+                case 909://                SESSION_HOLD_FORBIDDEN
+                    messageID = R.string.call_error_forbidden;
+                    break;
+                case 905://                OFFER_PRIVACY_PROTECTION
+                case 906://                OFFER_BLOCKED_BY_PEER
+                    messageID = R.string.e_906_1;
+                    break;
+                case 910://                ACCEPT_BAD_PAYLOAD
 
-                if (minor == 1) {
-                    //                    Called_SDP is invalid
-                    messageID = R.string.call_error_accept;
-                } else {
-                    messageID = R.string.call_error_badPayload;
-                }
-                break;
-            case 913://                CANDIDATE_BAD_PAYLOAD
-                switch (minor) {
-                    case 1://                        SDP_M_Line_Index is invalid
-                    case 2://                        SDP_MID is invalid
-                    case 3://                        Candidate is invalid
-                        messageID = R.string.call_error_candidate;
-                        break;
-                    default:
+                    if (minor == 1) {
+                        //                    Called_SDP is invalid
+                        messageID = R.string.call_error_accept;
+                    } else {
                         messageID = R.string.call_error_badPayload;
-                        break;
-                }
-                break;
-            case 919://                SESSION_HOLD_BAD_PAYLOAD
-                if (minor == 1) {//                    Hold is invalid
-                    messageID = R.string.call_error_hold;
-                } else {
-                    messageID = R.string.call_error_badPayload;
-                }
-                break;
-        }
-        if (onCallStateChanged != null)
-            onCallStateChanged.onError(messageID, major, minor);
+                    }
+                    break;
+                case 913://                CANDIDATE_BAD_PAYLOAD
+                    switch (minor) {
+                        case 1://                        SDP_M_Line_Index is invalid
+                        case 2://                        SDP_MID is invalid
+                        case 3://                        Candidate is invalid
+                            messageID = R.string.call_error_candidate;
+                            break;
+                        default:
+                            messageID = R.string.call_error_badPayload;
+                            break;
+                    }
+                    break;
+                case 919://                SESSION_HOLD_BAD_PAYLOAD
+                    if (minor == 1) {//                    Hold is invalid
+                        messageID = R.string.call_error_hold;
+                    } else {
+                        messageID = R.string.call_error_badPayload;
+                    }
+                    break;
+            }
+            if (onCallStateChanged != null)
+                onCallStateChanged.onError(messageID, major, minor);
+        });
     }
 
     private void forceLeaveCall() {
