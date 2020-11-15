@@ -142,7 +142,7 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     userInfo.setBirthDate(miladiDate);
                     RealmKuknos.updateIban(IBN.getText().toString().trim());
                     viewModel.sendUserInfo(userInfo);
-                }  else {
+                } else {
                     if (birthDate.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_birthdate), Toast.LENGTH_SHORT).show();
                     } else if (IBN.getText().toString().isEmpty()) {
@@ -193,11 +193,10 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             if (state.equals("true")) {
                 Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_saved_successfully), Toast.LENGTH_SHORT).show();
                 if (iban != null && !iban.equals(IBN.getText().toString().trim())) {
-                    iban = IBN.getText().toString().trim();
                     viewModel.getIbanInfo(IBN.getText().toString().trim());
-                } else if (iban == null) {
-                    iban = IBN.getText().toString().trim();
                 }
+                iban = IBN.getText().toString().trim();
+                ibanOldValue = IBN.getText().toString().trim();
             } else {
                 Toast.makeText(getContext(), state, Toast.LENGTH_SHORT).show();
             }
