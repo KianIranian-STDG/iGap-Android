@@ -38,7 +38,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
+            android:background="@drawable/background_edittext_money_action"
             android:paddingStart="@dimen/dp10"
             android:paddingLeft="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"
@@ -71,7 +71,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
+            android:background="@drawable/background_edittext_money_action"
             android:paddingStart="@dimen/dp10"
             android:paddingLeft="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"
@@ -92,7 +92,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/kuknos_editInfo_name"
             app:layout_constraintStart_toStartOf="@+id/kuknos_editInfo_name"
-            app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_birthDate" />
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_editInfo_birthDate_editText" />
 
         <EditText
             android:id="@+id/kuknos_editInfo_name"
@@ -104,7 +104,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
+            android:background="@drawable/background_edittext_money_action"
             android:paddingStart="@dimen/dp10"
             android:paddingLeft="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"
@@ -137,7 +137,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
+            android:background="@drawable/background_edittext_money_action"
             android:paddingStart="@dimen/dp10"
             android:paddingLeft="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"
@@ -170,7 +170,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/button_round_shape_black"
+            android:background="@drawable/background_edittext_money_action"
             android:paddingStart="@dimen/dp10"
             android:paddingLeft="@dimen/dp10"
             android:textColor="?iGapSubtitleTextColor"

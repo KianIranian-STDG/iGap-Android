@@ -18,6 +18,7 @@
     <string name="kuknos_edit_info_sending_info">"Envoi d'informations ..."</string>
     <string name="kuknos_edit_info_empty_sheba">"Le champ de nuit ne peut pas être vide"</string>
     <string name="kuknos_edit_info_empty_birthdate">"Le champ de la date de naissance ne peut pas être vide"</string>
+    <string name="kuknos_edit_info_empty_first_or_last">"Les champs du prénom et du nom ne peuvent pas être vides"</string>
     <string name="kuknos_edit_info_saved_successfully">"Informations enregistrées avec succès"</string>
     <string name="kuknos_receipt_bill">"Reçu de remboursement"</string>
     <string name="kuknos_panelStr_buyAgain">Rachat</string>

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperCalander;
@@ -127,6 +128,11 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     submit.setEnabled(true);
                     birthDate.setEnabled(true);
                     IBN.setEnabled(true);
+                } else if (firstName.getText().toString().isEmpty() || lastName.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_first_or_last), Toast.LENGTH_SHORT).show();
+                    submit.setEnabled(true);
+                    birthDate.setEnabled(true);
+                    IBN.setEnabled(true);
                 } else if (!IBN.getText().toString().isEmpty() && !birthDate.getText().toString().isEmpty()) {
                     progressBar.setVisibility(View.VISIBLE);
                     submit.setText(getText(R.string.kuknos_edit_info_sending_info));
@@ -136,12 +142,15 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     userInfo.setBirthDate(miladiDate);
                     RealmKuknos.updateIban(IBN.getText().toString().trim());
                     viewModel.sendUserInfo(userInfo);
-                } else {
+                }  else {
                     if (birthDate.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_birthdate), Toast.LENGTH_SHORT).show();
                     } else if (IBN.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_sheba), Toast.LENGTH_SHORT).show();
                     }
+                    submit.setEnabled(true);
+                    birthDate.setEnabled(true);
+                    IBN.setEnabled(true);
                 }
             }
         });
@@ -183,9 +192,11 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             progressBar.setVisibility(View.GONE);
             if (state.equals("true")) {
                 Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_saved_successfully), Toast.LENGTH_SHORT).show();
-                if (!iban.equals(IBN.getText().toString().trim())) {
+                if (iban != null && !iban.equals(IBN.getText().toString().trim())) {
                     iban = IBN.getText().toString().trim();
                     viewModel.getIbanInfo(IBN.getText().toString().trim());
+                } else if (iban == null) {
+                    iban = IBN.getText().toString().trim();
                 }
             } else {
                 Toast.makeText(getContext(), state, Toast.LENGTH_SHORT).show();
@@ -214,18 +225,24 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                         IBN.setText(userInfo.getIban());
                     }
                 }
-
                 if (userInfo.getBirthDate() != 0) {
+                    String zeroNumber;
+                    if (G.selectedLanguage.equals("en")) {
+                        zeroNumber = "-0";
+                    } else {
+                        zeroNumber = "-" + HelperCalander.convertToUnicodeFarsiNumber("0");
+
+                    }
                     String birthDateTime;
                     miladiDate = userInfo.getBirthDate();
-                    String[] finalResult = HelperCalander.getPersianCalander(userInfo.getBirthDate()).replace("/", "-").split("-");
+                    String[] finalResult = G.selectedLanguage.equals("en") ? HelperCalander.getPersianCalander(userInfo.getBirthDate()).replace("/", "-").split("-") : HelperCalander.convertToUnicodeFarsiNumber(HelperCalander.getPersianCalander(userInfo.getBirthDate())).replace("/", "-").split("-");
                     if (Integer.valueOf(finalResult[1]) < 10 && Integer.valueOf(finalResult[2]) < 10) {
-                        birthDateTime = finalResult[0] + "-0" + finalResult[1] + "-0" + finalResult[2];
+                        birthDateTime = finalResult[0] + zeroNumber + finalResult[1] + zeroNumber + finalResult[2];
                     } else {
                         if (Integer.valueOf(finalResult[1]) < 10) {
-                            birthDateTime = finalResult[0] + "-0" + finalResult[1] + "-" + finalResult[2];
+                            birthDateTime = finalResult[0] + zeroNumber + finalResult[1] + "-" + finalResult[2];
                         } else {
-                            birthDateTime = finalResult[0] + "-" + finalResult[1] + "-0" + finalResult[2];
+                            birthDateTime = finalResult[0] + "-" + finalResult[1] + zeroNumber + finalResult[2];
                         }
                     }
                     birthDate.setText(birthDateTime);

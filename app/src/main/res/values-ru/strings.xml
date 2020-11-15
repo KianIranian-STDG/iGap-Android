@@ -19,6 +19,7 @@
     <string name="kuknos_edit_info_saved_successfully">"Информация успешно сохранена"</string>
     <string name="kuknos_edit_info_empty_sheba">"Ночное поле не может быть пустым"</string>
     <string name="kuknos_edit_info_empty_birthdate">"Поле даты рождения не может быть пустым"</string>
+    <string name="kuknos_edit_info_empty_first_or_last">"Поля имени и фамилии не могут быть пустыми."</string>
     <string name="kuknos_panelStr_buyAgain">Выкуп</string>
     <string name="kuknos_receipt_token">"Токен"</string>
     <string name="kuknos_receipt_Refund_address">"Адрес возврата"</string>

@@ -20,6 +20,7 @@
     <string name="kuknos_edit_info_sending_info">"Informationandina agahiyan ..."</string>
     <string name="kuknos_edit_info_empty_sheba">"Qada şevê vala nabe"</string>
     <string name="kuknos_edit_info_empty_birthdate">"Dîroka zayînê nikare vala bibe"</string>
+    <string name="kuknos_edit_info_empty_first_or_last">"Zeviyên nav û paşnav nikarin vala bibin"</string>
     <string name="kuknos_edit_info_saved_successfully">"Agahdarî bi serfirazî hate hilanîn"</string>
     <string name="kuknos_rial_price_of_day">"Bihayê rojê"</string>
     <string name="kuknos_receipt_token">"Token"</string>
