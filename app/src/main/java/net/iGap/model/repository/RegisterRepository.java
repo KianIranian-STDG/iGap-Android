@@ -9,7 +9,6 @@ import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTracker;
-import net.iGap.model.AccountUser;
 import net.iGap.model.GoToMainFromRegister;
 import net.iGap.model.LocationModel;
 import net.iGap.model.UserPasswordDetail;
@@ -293,13 +292,7 @@ public class RegisterRepository {
                 G.onUserLogin = null;
                 DbManager.getInstance().doRealmTask(realm -> {
 
-                    AccountManager.getInstance().addAccount(new AccountUser(
-                            userId,
-                            null,
-                            "",
-                            phoneNumber,
-                            0,
-                            true));
+                    AccountManager.getInstance().addNewUser(userId, phoneNumber);
 
                     realm.executeTransaction(realm1 -> RealmUserInfo.putOrUpdate(realm1, userId, userName, phoneNumber, token, authorHash));
                     BotInit.setCheckDrIgap(true);

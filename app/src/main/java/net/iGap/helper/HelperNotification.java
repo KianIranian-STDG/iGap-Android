@@ -232,7 +232,7 @@ public class HelperNotification {
                     .setStyle(getBigStyle())
                     .setContentIntent(pi);
 
-            if (AccountManager.getInstance().getUserAccountList().size() > 2) {
+            if (AccountManager.getInstance().getActiveAccountCount() > 1) {
                 builder.setSubText(accountUser.getName());
             }
 

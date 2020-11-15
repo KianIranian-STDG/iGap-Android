@@ -399,7 +399,6 @@ public class G extends ApplicationContext {
         } catch (Error e) {
             G.ISRealmOK = false;
         }
-        AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
 

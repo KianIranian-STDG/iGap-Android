@@ -22,6 +22,8 @@ import static net.iGap.Config.REALM_SCHEMA_VERSION;
 public class AccountUser {
     //ToDo: should be review and change and remove not use item
 
+    // TODO: 11/14/20 toString
+
     @SerializedName("id")
     private long id;
 
@@ -29,16 +31,19 @@ public class AccountUser {
     private String dbName;
 
     @SerializedName("name")
-    private String name;
+    private String name = "";
 
     @SerializedName("phoneNumber")
-    private String phoneNumber;
+    private String phoneNumber = "";
 
     @SerializedName("unReadMessageCount")
     private int unReadMessageCount;
 
     @SerializedName("isAssigned")
     private boolean isAssigned; // flag for show add new or not
+
+    @SerializedName("loginTime")
+    private long loginTime;
 
     private transient RealmConfiguration realmConfiguration;
 
@@ -60,6 +65,14 @@ public class AccountUser {
     public AccountUser(String name) {
         this.name = name;
         this.isAssigned = false;
+    }
+
+    public long getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(long loginTime) {
+        this.loginTime = loginTime;
     }
 
     public String getDbName() {
@@ -140,6 +153,7 @@ public class AccountUser {
                 "phoneNumber: " + phoneNumber + "\n" +
                 "unReadMessageCount: " + unReadMessageCount + "\n" +
                 "isAssigned: " + isAssigned + "\n" +
+                "loginTime: " + loginTime + "\n" +
                 "db configuration: " + realmConfiguration.getRealmFileName();
     }
 
@@ -192,5 +206,14 @@ public class AccountUser {
         }
 
         return newConfig;
+    }
+
+    public void clearData() {
+        id = 0;
+        name = "";
+        phoneNumber = "";
+        unReadMessageCount = 0;
+        isAssigned = false;
+        loginTime = 0;
     }
 }

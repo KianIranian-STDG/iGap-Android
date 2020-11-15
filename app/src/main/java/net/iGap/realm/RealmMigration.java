@@ -11,7 +11,6 @@
 package net.iGap.realm;
 
 import net.iGap.G;
-import net.iGap.model.AccountUser;
 import net.iGap.model.PassCode;
 import net.iGap.module.accountManager.AccountManager;
 
@@ -652,13 +651,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                 DynamicRealmObject userInfo = realmUserInfo.getObject("userInfo");
                 if (userInfo != null) {
                     long userId = userInfo.getLong("id");
-                    AccountManager.getInstance().addAccount(new AccountUser(
-                            userId,
-                            null,
-                            userInfo.getString("displayName"),
-                            userInfo.getString("phoneNumber"),
-                            0,
-                            true));
+                    AccountManager.getInstance().addNewUser(userId, userInfo.getString("phoneNumber"), userInfo.getString("displayName"));
                 }
             }
 
