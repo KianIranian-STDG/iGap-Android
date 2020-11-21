@@ -1813,6 +1813,7 @@
     <string name="kuknos_payment_assetPrice">قیمت دارایی: </string>
     <string name="kuknos_edit_info_empty_sheba_and_birthdate">"فیلد تاریخ تولد و شبا تغییری نکرده اند!"</string>
     <string name="kuknos_edit_info_empty_birthdate">"فیلد تاریخ تولد نمی تواند خالی باشد"</string>
+    <string name="kuknos_edit_info_empty_first_or_last">"فیلد نام یا نام خانوداگی نمی تواند خالی باشد"</string>
     <string name="kuknos_payment_totalAmount">قیمت کل: </string>
     <string name="kuknos_payment_hash">رسید ققنوس: </string>
     <string name="kuknos_Currency">نام توکن</string>

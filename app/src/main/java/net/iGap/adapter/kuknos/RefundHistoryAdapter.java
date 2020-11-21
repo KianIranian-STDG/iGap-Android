@@ -44,12 +44,11 @@ public class RefundHistoryAdapter extends RecyclerView.Adapter<RefundHistoryAdap
 
     public class RefundViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView refundAssetCode, refundHash, refundAmount, refundFee, refundCount;
+        private TextView refundAssetCode, refundAmount, refundFee, refundCount;
         public RefundViewHolder(@NonNull View view) {
             super(view);
 
             refundAssetCode = view.findViewById(R.id.kuknos_refund_assetCode);
-            refundHash = view.findViewById(R.id.kuknos_refund_hash);
             refundAmount = view.findViewById(R.id.kuknos_refund_amount);
             refundFee = view.findViewById(R.id.kuknos_refund_fee);
             refundCount = view.findViewById(R.id.kuknos_refund_count);
@@ -58,7 +57,6 @@ public class RefundHistoryAdapter extends RecyclerView.Adapter<RefundHistoryAdap
         public void initViews(KuknosRefundHistory.Refund refund) {
 
             refundAssetCode.setText(refund.getAssetCode());
-            refundHash.setText(refund.getHash());
             DecimalFormat df = new DecimalFormat("#,##0.00");
 
             refundAmount.setText(

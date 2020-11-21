@@ -146,7 +146,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
                         txtTotalPrice.setText(
                                 HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(totalPrice)))
-                                        : df.format(Integer.valueOf(assetCode)));
+                                        : df.format(Integer.valueOf(totalPrice)));
 
                     } else {
                         txtPeymanCount.setTextColor(Color.RED);

@@ -28,16 +28,21 @@
         <!-- TODO: Update blank fragment layout -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/kuknos_buy_again_tabs"
+            style="@style/IGapTabLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
+                android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:text="دریافت پشتوانه" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
+                android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:text="معادل ریالی" />
 

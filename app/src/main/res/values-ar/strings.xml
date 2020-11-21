@@ -2076,6 +2076,7 @@
     <string name="kuknos_receipt_bill">"إيصال الاسترداد"</string>
     <string name="kuknos_edit_info_empty_sheba">"لا يمكن أن يكون الحقل الليلي فارغًا"</string>
     <string name="kuknos_edit_info_empty_birthdate">"لا يمكن ترك حقل تاريخ الميلاد فارغًا"</string>
+    <string name="kuknos_edit_info_empty_first_or_last">"لا يمكن ترك حقلي الاسم الأول والأخير فارغين"</string>
     <string name="kuknos_edit_info_saved_successfully">"تم حفظ المعلومات بنجاح"</string>
     <string name="kuknos_edit_info_birthday">"تاريخ الولادة"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"تحرير وتغيير معلومات الحساب"</string>

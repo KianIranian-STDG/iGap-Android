@@ -186,7 +186,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     Bundle bundle = new Bundle();
                     bundle.putString("assetCode", kuknosRefundModel.getAssetCode());
                     buyAgainFrag.setArguments(bundle);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(true).load();
+                    new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(false).load();
                 }
             }
 

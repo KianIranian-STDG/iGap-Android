@@ -11,6 +11,7 @@
         android:id="@+id/fragKuknosBuyAgainToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/IGapTabLayoutStyle"
         android:minHeight="48dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
