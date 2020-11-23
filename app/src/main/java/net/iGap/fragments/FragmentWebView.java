@@ -263,7 +263,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
             String errorDescription = (error.getDescription() == null) ? "" : error.getDescription().toString();
-            if (!errorDescription.equals("net::ERR_CONNECTION_REFUSED")) {
+            if (!errorDescription.equals("net::ERR_CONNECTION_REFUSED") && !errorDescription.equals("net::ERR_ADDRESS_UNREACHABLE")) {
                 //if (url.equals(FragmentWebView.this.url) && isWebViewVisible)
                 if (isWebViewVisible) {
                     isWebViewVisible = false;
