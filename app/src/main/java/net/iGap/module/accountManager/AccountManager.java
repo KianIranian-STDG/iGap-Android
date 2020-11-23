@@ -3,12 +3,14 @@ package net.iGap.module.accountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.SparseArray;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.iGap.G;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.helper.FileLog;
 import net.iGap.model.AccountUser;
 import net.iGap.network.RequestManager;
 import net.iGap.request.RequestClientGetRoomList;
@@ -16,7 +18,6 @@ import net.iGap.response.ClientGetRoomListResponse;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AccountManager {
@@ -28,8 +29,7 @@ public class AccountManager {
     private String dbEncryptionKey;
 
     private List<AccountUser> userAccountList;
-    private List<String> DbNameList = Arrays.asList("iGapLocalDatabaseEncrypted3.realm", "iGapLocalDatabaseEncrypted2.realm", defaultDBName);
-    private int currentUser;
+    private SparseArray<String> databaseNames = new SparseArray<>(3);
     public static int selectedAccount;
     public static final int MAX_ACCOUNT_COUNT = 3;
 
@@ -41,6 +41,10 @@ public class AccountManager {
     }
 
     private AccountManager() {
+        databaseNames.put(0, "iGapLocalDatabaseEncrypted.realm");
+        databaseNames.put(1, "iGapLocalDatabaseEncrypted2.realm");
+        databaseNames.put(2, "iGapLocalDatabaseEncrypted3.realm");
+
         sharedPreferences = G.context.getSharedPreferences("iGapUserAccount", Context.MODE_PRIVATE);
         getUserAccountListFromSharedPreferences();
         if (userAccountList == null) {
@@ -53,15 +57,17 @@ public class AccountManager {
             selectedAccount = 0;
         }
         getCurrentUserFromSharedPreferences();
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
-        dbEncryptionKey = sharedPreferences.getString("myByteArray", null);
+
+        SharedPreferences realmPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
+        dbEncryptionKey = realmPreferences.getString("myByteArray", null);
         if (dbEncryptionKey == null) {
             byte[] key = new byte[64];
             new SecureRandom().nextBytes(key);
             String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
-            sharedPreferences.edit().putString("myByteArray", saveThis).apply();
+            realmPreferences.edit().putString("myByteArray", saveThis).apply();
             dbEncryptionKey = saveThis;
         }
+
         for (int i = 0; i < userAccountList.size(); i++) {
             userAccountList.get(i).setRealmConfiguration(dbEncryptionKey);
         }
@@ -94,12 +100,38 @@ public class AccountManager {
         userAccountList = new Gson().fromJson(sharedPreferences.getString("userList", ""), new TypeToken<List<AccountUser>>() {
         }.getType());
 
-        if (userAccountList != null && userAccountList.size() > MAX_ACCOUNT_COUNT && userAccountList.get(0).getName().equalsIgnoreCase("test")) {
-            getCurrentUserFromSharedPreferences();
-            userAccountList.remove(0);
-            selectedAccount = selectedAccount - 1;
-            setCurrentUserInSharedPreferences();
-            setUserAccountListInSharedPreferences();
+        if (userAccountList != null && userAccountList.get(0).getName().equalsIgnoreCase("test")) {
+            try {
+                getCurrentUserFromSharedPreferences();
+
+                FileLog.i("AccountManager", "Start migration with account size " + userAccountList.size() + " and selected account " + selectedAccount);
+
+                for (int i = 0; i < userAccountList.size(); i++) {
+                    FileLog.i("AccountManager", "user " + i + " dbname -> " + userAccountList.get(i).getDbName());
+                }
+
+                userAccountList.remove(0);
+                selectedAccount = selectedAccount - 1;
+
+                for (int i = userAccountList.size(); i < MAX_ACCOUNT_COUNT; i++) {
+                    AccountUser accountUser = new AccountUser("Account_" + (i));
+                    String dbName = getDbName(i);
+                    accountUser.setDbName(dbName);
+                    accountUser.setRealmConfiguration(userAccountList.get(0).getRealmConfiguration()); // in all account realm config just once construct and use for other account
+                    userAccountList.add(accountUser);
+                }
+
+                setCurrentUserInSharedPreferences();
+                setUserAccountListInSharedPreferences();
+
+                FileLog.i("AccountManager", "Migration done current account size " + userAccountList.size() + " and selected account " + selectedAccount
+                        + "\n account 0 db name is -> " + userAccountList.get(0).getDbName()
+                        + "\n account 1 db name is -> " + userAccountList.get(1).getDbName()
+                        + "\n account 2 db name is -> " + userAccountList.get(2).getDbName());
+
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
     }
 
@@ -149,7 +181,10 @@ public class AccountManager {
     }
 
     public boolean isExistThisAccount(long userId) {
-        return indexOfUser(userId) != -1;
+        for (int i = 0; i < userAccountList.size(); i++) {
+            return userAccountList.get(i).getId() == userId;
+        }
+        return false;
     }
 
     public boolean isExistThisAccount(String phoneNumber) {
@@ -221,7 +256,7 @@ public class AccountManager {
     }
 
     private String getDbName(int i) {
-        return DbNameList.get(i);
+        return databaseNames.get(i);
     }
 
     public void clearSomeStaticValue() {

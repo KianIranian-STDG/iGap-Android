@@ -20,10 +20,6 @@ import io.realm.rx.RealmObservableFactory;
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
 
 public class AccountUser {
-    //ToDo: should be review and change and remove not use item
-
-    // TODO: 11/14/20 toString
-
     @SerializedName("id")
     private long id;
 
@@ -47,21 +43,6 @@ public class AccountUser {
 
     private transient RealmConfiguration realmConfiguration;
 
-    /**
-     * create real account
-     **/
-    public AccountUser(long id, String dbName, String name, String phoneNumber, int unReadMessageCount, boolean isAssigned) {
-        this.id = id;
-        this.dbName = dbName;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.unReadMessageCount = unReadMessageCount;
-        this.isAssigned = isAssigned;
-    }
-
-    /**
-     * create test account
-     **/
     public AccountUser(String name) {
         this.name = name;
         this.isAssigned = false;
