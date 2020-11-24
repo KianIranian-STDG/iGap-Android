@@ -1,12 +1,19 @@
 package net.iGap.kuknos.Fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -16,6 +23,7 @@ import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperCalander;
 import net.iGap.kuknos.Model.Parsian.KuknosUserInfoResponse;
+import net.iGap.kuknos.Model.Parsian.Owners;
 import net.iGap.kuknos.viewmodel.KuknosEditInfoVM;
 import net.iGap.libs.persianDatePicker.Listener;
 import net.iGap.libs.persianDatePicker.PersianDatePickerDialog;
@@ -23,6 +31,7 @@ import net.iGap.libs.persianDatePicker.util.PersianCalendar;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmKuknos;
 
+import java.security.acl.Owner;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,10 +48,12 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
     private EditText birthDate;
     private EditText firstName;
     private EditText lastName;
+    private Owners ibanInfoResponse;
     private KuknosUserInfoResponse userInfo;
     private PersianDatePickerDialog datePickerDialog;
     private String iban;
     private long miladiDate;
+    private ScrollView myScrollView;
     private String ibanOldValue;
     private long birthDateOldValue;
     private boolean ibanInfo = true;
@@ -87,6 +98,7 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         nationalId.setEnabled(false);
         birthDate.setEnabled(false);
         IBN.setEnabled(false);
+        IBN.setText("IR");
         submit.setEnabled(false);
         birthDate.setFocusable(false);
         progressBar.setVisibility(View.VISIBLE);
@@ -114,8 +126,45 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     }
 
                 });
+        IBN.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_DEL && IBN.getText().length() == 2) {
+                IBN.setSelection(IBN.getText().length());
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                closeKeyboard(v);
+            }
+            return false;
+        });
 
+        IBN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View lastChild = myScrollView.getChildAt(myScrollView.getChildCount() - 1);
+                int bottom = lastChild.getBottom() + myScrollView.getPaddingBottom() + 10;
+                int sy = myScrollView.getScrollY();
+                int sh = myScrollView.getHeight();
+                int delta = bottom - (sy + sh);
+                myScrollView.smoothScrollBy(0, delta);
+            }
+        });
+        IBN.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 1 && s.toString().equalsIgnoreCase("i") || s.toString().equals("r")) {
+                    IBN.setText("IR");
+                    IBN.setSelection(IBN.getText().length());
+                    return;
+                }
+            }
+        });
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,18 +179,10 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     IBN.setEnabled(true);
                 } else if (firstName.getText().toString().isEmpty() || lastName.getText().toString().isEmpty()) {
                     Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_first_or_last), Toast.LENGTH_SHORT).show();
-                    submit.setEnabled(true);
-                    birthDate.setEnabled(true);
-                    IBN.setEnabled(true);
                 } else if (!IBN.getText().toString().isEmpty() && !birthDate.getText().toString().isEmpty()) {
                     progressBar.setVisibility(View.VISIBLE);
                     submit.setText(getText(R.string.kuknos_edit_info_sending_info));
-                    userInfo.setIban(IBN.getText().toString().trim());
-                    userInfo.setFirstName(firstName.getText().toString().trim());
-                    userInfo.setLastName(lastName.getText().toString().trim());
-                    userInfo.setBirthDate(miladiDate);
-                    RealmKuknos.updateIban(IBN.getText().toString().trim());
-                    viewModel.sendUserInfo(userInfo);
+                    viewModel.getIbanInfo(IBN.getText().toString().trim());
                 } else {
                     if (birthDate.getText().toString().isEmpty()) {
                         Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_empty_birthdate), Toast.LENGTH_SHORT).show();
@@ -166,10 +207,24 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             progressBar.setVisibility(View.GONE);
             if (infoResponse != null) {
                 ibanInfo = true;
-                firstName.setText(infoResponse.getOwners().get(0).getFirst_name());
-                lastName.setText(infoResponse.getOwners().get(0).getLast_name());
+                ibanInfoResponse = infoResponse;
                 ibanOldValue = iban;
-                IBN.setText(iban);
+                if (firstName.getText().toString().isEmpty() || lastName.getText().toString().isEmpty()) {
+                    firstName.setText(ibanInfoResponse.getOwners().get(0).getFirst_name());
+                    lastName.setText(ibanInfoResponse.getOwners().get(0).getLast_name());
+                    IBN.setText(IBN.getText().toString().concat(iban.substring(2)));
+                } else {
+                    userInfo.setIban(IBN.getText().toString().trim());
+                    userInfo.setFirstName(firstName.getText().toString().trim());
+                    userInfo.setLastName(lastName.getText().toString().trim());
+                    userInfo.setBirthDate(miladiDate);
+                    RealmKuknos.updateIban(IBN.getText().toString().trim());
+                    viewModel.sendUserInfo(userInfo);
+                }
+            } else {
+                if (firstName.getText().toString().isEmpty() || lastName.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), getString(R.string.kuknos_editinfo_error_getinfo), Toast.LENGTH_SHORT).show();
+                }
             }
             if (userInfoR && ibanInfo) {
                 birthDate.setEnabled(true);
@@ -182,7 +237,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
     private void setMiladiDate(PersianCalendar persianCalendar) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyy/MM/dd", Locale.ENGLISH);
-        String birthdate = simpleDateFormat.format(new Date(persianCalendar.getTimeInMillis())).replace("/", "-").trim();
         Timestamp timestamp = new Timestamp(new Date(persianCalendar.getTimeInMillis()).getTime());
         miladiDate = timestamp.getTime();
     }
@@ -192,16 +246,21 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             progressBar.setVisibility(View.GONE);
             if (state.equals("true")) {
                 Toast.makeText(getContext(), getText(R.string.kuknos_edit_info_saved_successfully), Toast.LENGTH_SHORT).show();
-                if (iban != null && !iban.equals(IBN.getText().toString().trim())) {
-                    viewModel.getIbanInfo(IBN.getText().toString().trim());
+                if (ibanInfo) {
+                    firstName.setText(ibanInfoResponse.getOwners().get(0).getFirst_name());
+                    lastName.setText(ibanInfoResponse.getOwners().get(0).getLast_name());
                 }
                 iban = IBN.getText().toString().trim();
                 ibanOldValue = IBN.getText().toString().trim();
             } else {
-                Toast.makeText(getContext(), state, Toast.LENGTH_SHORT).show();
+                if (state.equals("onFailed")) {
+                    Toast.makeText(getContext(), getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+                } else if (!firstName.getText().toString().isEmpty() || !lastName.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), state, Toast.LENGTH_SHORT).show();
+                }
             }
+            submit.setText(getText(R.string.save));
             if (ibanInfo && userInfoR) {
-                submit.setText(getText(R.string.save));
                 submit.setEnabled(true);
                 birthDate.setEnabled(true);
                 IBN.setEnabled(true);
@@ -265,6 +324,7 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         lastName = view.findViewById(R.id.kuknos_editInfo_lastName);
         birthDate = view.findViewById(R.id.kuknos_editInfo_birthDate_editText);
         IBN = view.findViewById(R.id.kuknos_editInfo_shaba);
+        myScrollView = view.findViewById(R.id.edit_info_root);
     }
 
 }

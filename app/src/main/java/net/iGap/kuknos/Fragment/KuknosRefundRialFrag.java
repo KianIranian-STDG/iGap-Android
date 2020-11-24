@@ -1,15 +1,19 @@
 package net.iGap.kuknos.Fragment;
 
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +52,8 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private ProgressBar refundProgress, mainProgress;
     private ConstraintLayout fragKRRConstrain;
     private String assetCode;
+    private ScrollView myScrollView;
+    private ConstraintLayout scrollChildViews;
     private DecimalFormat df;
     float finalFee;
     float totalPeyman;
@@ -71,6 +77,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         viewModel = ViewModelProviders.of(this).get(KuknosRefundVM.class);
         refundModel = new KuknosRefundModel();
         balance = new KuknosBalance();
@@ -110,12 +117,16 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         txtPeymanCount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                View lastChild = scrollChildViews.getChildAt(18);
+                int bottom = lastChild.getBottom() + myScrollView.getPaddingBottom() + 10;
+                int sy = myScrollView.getScrollY();
+                int sh = myScrollView.getHeight();
+                int delta = bottom - (sy + sh);
+                myScrollView.smoothScrollBy(0, delta);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -125,7 +136,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
                     float peymanCount = Float.parseFloat(s.toString());
                     if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
-                        txtPeymanCount.setTextColor(Color.BLACK);
+
 
                         if (isPercentMode) {
                             finalFee = peymanCount * fee;
@@ -138,7 +149,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
                         txtFinalFeeFixed.setText(
                                 HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(finalFee)))
-                                : df.format(Float.valueOf(finalFee)));
+                                        : df.format(Float.valueOf(finalFee)));
 
                         txtTotalPeyman.setText(
                                 HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(totalPeyman)))
@@ -147,9 +158,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                         txtTotalPrice.setText(
                                 HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(totalPrice)))
                                         : df.format(Integer.valueOf(totalPrice)));
-
-                    } else {
-                        txtPeymanCount.setTextColor(Color.RED);
                     }
                 } else {
                     txtFinalFeeFixed.setText("");
@@ -171,11 +179,11 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                         showRefundDialog(assetCode, peymanCount, finalFee, totalPrice);
 
                     } else {
-                        Toast.makeText(_mActivity, R.string.payman_token_not_enough , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(_mActivity, R.string.payman_token_not_enough, Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Toast.makeText(_mActivity, R.string.payman_refund_limitation_error , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(_mActivity, R.string.payman_refund_limitation_error, Toast.LENGTH_SHORT).show();
                 }
 
             } else {
@@ -248,7 +256,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     isPercentMode = true;
                 }
 
-                String max =  HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(maxRefund))
+                String max = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(maxRefund))
                         : String.valueOf(maxRefund);
 
                 String min = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(minRefund))
@@ -281,7 +289,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             if (aBoolean) {
                 Toast.makeText(_mActivity, R.string.refund_done, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(_mActivity, R.string.refund_error , Toast.LENGTH_SHORT).show();
+                Toast.makeText(_mActivity, R.string.refund_error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -371,5 +379,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         refundProgress = view.findViewById(R.id.progressRefund);
         fragKRRConstrain = view.findViewById(R.id.fragKRRConstrain);
         mainProgress = view.findViewById(R.id.mainProgress);
+        myScrollView = view.findViewById(R.id.kuknos_rial_rootview);
+        scrollChildViews = view.findViewById(R.id.fragKRRConstrain);
     }
 }

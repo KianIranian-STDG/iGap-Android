@@ -103,6 +103,7 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kuknos_receipt, container, false);
         initView(view);
+
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setDefaultTitle(getString(R.string.kuknos_receipt_bill))
@@ -134,7 +135,6 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     private void initView(View view) {
@@ -198,8 +198,8 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
     private void onUserRefundInfoObserver() {
         DecimalFormat df = new DecimalFormat("#,##0.00");
         viewModel.getRefundInfo().observe(getViewLifecycleOwner(), refundResponse -> {
-            progressBar.setVisibility(View.GONE);
             if (refundResponse != null) {
+                progressBar.setVisibility(View.GONE);
                 rootView.setVisibility(View.VISIBLE);
                 vidisbleViews();
                 returnTokenDigital.setEnabled(true);
@@ -211,23 +211,25 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
                 dateApply.setText(HelperCalander.getPersianCalander(Long.valueOf(refundResponse.getInsertDate())));
                 shebaNumber.setText(iban);
                 refundAddress.setText(viewModel.getPanelRepo().getUserRepo().getAccountID());
-            } else {
-                error.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void onResponseState() {
         viewModel.getResponseMessage().observe(getViewLifecycleOwner(), infoResponse -> {
-            progressBar.setVisibility(View.GONE);
+
 
             if (infoResponse.equals("true")) {
+                progressBar.setVisibility(View.GONE);
                 rootView.setVisibility(View.VISIBLE);
                 vidisbleViews();
                 returnTokenDigital.setEnabled(true);
             } else {
-                error.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), infoResponse, Toast.LENGTH_SHORT).show();
+                if (infoResponse.equals("onFailed")) {
+                    Toast.makeText(getContext(), getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), infoResponse, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

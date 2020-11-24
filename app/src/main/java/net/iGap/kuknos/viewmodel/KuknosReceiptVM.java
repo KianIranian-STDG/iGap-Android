@@ -29,21 +29,18 @@ public class KuknosReceiptVM extends BaseAPIViewModel {
         panelRepo.getUserRefundDetail(refundNo,this, new ResponseCallback<KuknosResponseModel<KuknosUserRefundResponse>>() {
             @Override
             public void onSuccess(KuknosResponseModel<KuknosUserRefundResponse> data) {
-                Log.e("vckijdshf", "onSuccess: " );
                 refundInfo.setValue(data.getData());
                 responseMessage.setValue("true");
             }
 
             @Override
             public void onError(String errorM) {
-                Log.e("vckijdshf", "onError: " +errorM);
                 refundInfo.setValue(null);
                 responseMessage.setValue(errorM);
             }
 
             @Override
             public void onFailed() {
-                Log.e("vckijdshf", "onFailed: " );
                 refundInfo.setValue(null);
                 responseMessage.setValue("onFailed");
             }

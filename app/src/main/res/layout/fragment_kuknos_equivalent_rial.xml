@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
+    android:id="@+id/kuknos_rial_rootview"
     android:layoutDirection="locale"
     android:layout_height="match_parent"
     tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
@@ -16,7 +17,7 @@
             android:id="@+id/fragKRRConstrain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/textView15"
@@ -239,7 +240,7 @@
                 android:layout_marginTop="@dimen/dp20"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:src="#000"
+                android:src="?iGapSubtitleTextColor"
                 app:layout_constraintBottom_toTopOf="@+id/editText5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -262,6 +263,7 @@
 
             <EditText
                 android:id="@+id/editText5"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginStart="16dp"
@@ -297,6 +299,7 @@
 
             <EditText
                 android:id="@+id/editText2"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginStart="16dp"
@@ -330,6 +333,7 @@
 
             <EditText
                 android:id="@+id/editText3"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginStart="16dp"
@@ -363,6 +367,7 @@
 
             <EditText
                 android:id="@+id/editText4"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp40"
                 android:layout_marginStart="16dp"
