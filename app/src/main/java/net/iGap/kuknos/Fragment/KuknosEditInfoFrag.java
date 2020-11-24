@@ -54,7 +54,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
     private PersianDatePickerDialog datePickerDialog;
     private String iban;
     private long miladiDate;
-    private ScrollView myScrollView;
     private String ibanOldValue;
     private long birthDateOldValue;
     private boolean ibanInfo = true;
@@ -148,11 +147,7 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             }
             return false;
         });
-        IBN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
         IBN.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -336,7 +331,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         lastName = view.findViewById(R.id.kuknos_editInfo_lastName);
         birthDate = view.findViewById(R.id.kuknos_editInfo_birthDate_editText);
         IBN = view.findViewById(R.id.kuknos_editInfo_shaba);
-        myScrollView = view.findViewById(R.id.edit_info_root);
     }
 
 }

@@ -53,8 +53,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private ProgressBar refundProgress, mainProgress;
     private ConstraintLayout fragKRRConstrain;
     private String assetCode;
-    private ScrollView myScrollView;
-    private ConstraintLayout scrollChildViews;
     private DecimalFormat df;
     float finalFee;
     float totalPeyman;
@@ -170,6 +168,16 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                     txtTotalPeyman.setText("");
                     txtTotalPrice.setTag("");
                 }
+
+//                if (!s.toString().isEmpty() && HelperCalander.isPersianUnicode) {
+//
+//                    String temp = HelperCalander.convertToUnicodeFarsiNumber(s.toString());
+//
+//                    if (!s.toString().equals(temp)) {
+//                        txtPeymanCount.setText(temp);
+//                    }
+//
+//                }
             }
         });
 
@@ -385,7 +393,5 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         refundProgress = view.findViewById(R.id.progressRefund);
         fragKRRConstrain = view.findViewById(R.id.fragKRRConstrain);
         mainProgress = view.findViewById(R.id.mainProgress);
-        myScrollView = view.findViewById(R.id.kuknos_rial_rootview);
-        scrollChildViews = view.findViewById(R.id.fragKRRConstrain);
     }
 }
