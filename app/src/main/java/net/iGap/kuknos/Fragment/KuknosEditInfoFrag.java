@@ -28,6 +28,7 @@ import net.iGap.kuknos.viewmodel.KuknosEditInfoVM;
 import net.iGap.libs.persianDatePicker.Listener;
 import net.iGap.libs.persianDatePicker.PersianDatePickerDialog;
 import net.iGap.libs.persianDatePicker.util.PersianCalendar;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmKuknos;
 
@@ -64,6 +65,18 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
     }
 
     @Override
@@ -138,12 +151,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
         IBN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View lastChild = myScrollView.getChildAt(myScrollView.getChildCount() - 1);
-                int bottom = lastChild.getBottom() + myScrollView.getPaddingBottom() + 10;
-                int sy = myScrollView.getScrollY();
-                int sh = myScrollView.getHeight();
-                int delta = bottom - (sy + sh);
-                myScrollView.smoothScrollBy(0, delta);
             }
         });
         IBN.addTextChangedListener(new TextWatcher() {
@@ -161,9 +168,12 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     IBN.setText("IR");
                     IBN.setSelection(IBN.getText().length());
                     return;
-                } else if (s.toString().length() < 26) {
+                } else if (s.toString().length() != 0 && s.toString().length() < 26) {
                     if (IBN.getText().toString().charAt(0) != 'I' || IBN.getText().toString().charAt(1) != 'R')
                         IBN.setText("IR" + IBN.getText().toString());
+                } else if (s.toString().length() == 0) {
+                    IBN.setText("IR");
+                    IBN.setSelection(IBN.getText().length());
                 }
             }
         });

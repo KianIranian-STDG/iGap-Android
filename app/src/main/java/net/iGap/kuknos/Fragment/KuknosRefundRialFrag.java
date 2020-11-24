@@ -33,6 +33,7 @@ import net.iGap.kuknos.Model.Parsian.KuknosAsset;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
 import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosRefundVM;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmKuknos;
@@ -75,9 +76,20 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         viewModel = ViewModelProviders.of(this).get(KuknosRefundVM.class);
         refundModel = new KuknosRefundModel();
         balance = new KuknosBalance();
@@ -117,12 +129,6 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         txtPeymanCount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                View lastChild = scrollChildViews.getChildAt(18);
-                int bottom = lastChild.getBottom() + myScrollView.getPaddingBottom() + 10;
-                int sy = myScrollView.getScrollY();
-                int sh = myScrollView.getHeight();
-                int delta = bottom - (sy + sh);
-                myScrollView.smoothScrollBy(0, delta);
             }
 
             @Override
