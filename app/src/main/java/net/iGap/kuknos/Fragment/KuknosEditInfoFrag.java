@@ -135,7 +135,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
             }
             return false;
         });
-
         IBN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,6 +161,9 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
                     IBN.setText("IR");
                     IBN.setSelection(IBN.getText().length());
                     return;
+                } else if (s.toString().length() < 26) {
+                    if (IBN.getText().toString().charAt(0) != 'I' || IBN.getText().toString().charAt(1) != 'R')
+                        IBN.setText("IR" + IBN.getText().toString());
                 }
             }
         });
