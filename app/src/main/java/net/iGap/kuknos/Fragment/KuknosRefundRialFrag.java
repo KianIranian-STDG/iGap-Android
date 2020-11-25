@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -47,7 +48,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private static final String TAG = "KuknosEquivalentRialFra";
     private Button submit;
     private TextView txtMaxAmount, txtMinAmount, txtFeeFixed, txtSellRate, txtMaxSell, txtIBAN;
-    private TextView txtPeymanCount, txtFinalFeeFixed, txtTotalPeyman, txtTotalPrice;
+    private EditText txtPeymanCount, txtFinalFeeFixed, txtTotalPeyman, txtTotalPrice;
     private KuknosRefundModel refundModel;
     private KuknosBalance balance;
     private ProgressBar refundProgress, mainProgress;
@@ -61,6 +62,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     int minRefund;
     float fee;
     int sellRate;
+    String tempValue = "";
     float maxPeymanRefund;
     float refundRequestCount;
     private float minBalance;
@@ -124,68 +126,13 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
             ResourcesCompat.getFont(getActivity(), R.font.main_font);
         }
 
-        txtPeymanCount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()) {
-                    refundRequestCount = Float.parseFloat(s.toString());
-
-                    float peymanCount = Float.parseFloat(s.toString());
-                    if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
-
-
-                        if (isPercentMode) {
-                            finalFee = peymanCount * fee;
-                        } else {
-                            finalFee = fee;
-                        }
-
-                        totalPeyman = finalFee + peymanCount;
-                        totalPrice = (int) (peymanCount * sellRate);
-
-                        txtFinalFeeFixed.setText(
-                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(finalFee)))
-                                        : df.format(Float.valueOf(finalFee)));
-
-                        txtTotalPeyman.setText(
-                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(totalPeyman)))
-                                        : df.format(Float.valueOf(totalPeyman)));
-
-                        txtTotalPrice.setText(
-                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(totalPrice)))
-                                        : df.format(Integer.valueOf(totalPrice)));
-                    }
-                } else {
-                    txtFinalFeeFixed.setText("");
-                    txtTotalPeyman.setText("");
-                    txtTotalPrice.setTag("");
-                }
-
-//                if (!s.toString().isEmpty() && HelperCalander.isPersianUnicode) {
-//
-//                    String temp = HelperCalander.convertToUnicodeFarsiNumber(s.toString());
-//
-//                    if (!s.toString().equals(temp)) {
-//                        txtPeymanCount.setText(temp);
-//                    }
-//
-//                }
-            }
-        });
+        txtPeymanCount.addTextChangedListener(new MyCustomTextWatcher());
 
         submit.setOnClickListener(v -> {
 
             float peymanCount;
 
-            if (!txtPeymanCount.getText().toString().isEmpty() && txtPeymanCount.getText() != null) {
+            if (tempValue != null && tempValue.isEmpty()) {
                 peymanCount = refundRequestCount;
                 if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
@@ -216,6 +163,74 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         onNetworkCallError();
         onRefNoReceive();
         return view;
+    }
+
+    class MyCustomTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            try {
+                if (!s.toString().isEmpty()) {
+                    tempValue = HelperCalander.convertToUnicodeEnglishNumber(s.toString());
+                    txtPeymanCount.removeTextChangedListener(this);
+                    refundRequestCount = Float.parseFloat(tempValue);
+                    float peymanCount = Float.parseFloat(tempValue);
+                    if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
+
+
+                        if (isPercentMode) {
+                            finalFee = peymanCount * fee;
+                        } else {
+                            finalFee = fee;
+                        }
+
+                        totalPeyman = finalFee + peymanCount;
+                        totalPrice = (int) (peymanCount * sellRate);
+
+                        txtFinalFeeFixed.setText(
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(finalFee)))
+                                        : df.format(Float.valueOf(finalFee)));
+
+                        txtTotalPeyman.setText(
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(totalPeyman)))
+                                        : df.format(Float.valueOf(totalPeyman)));
+
+                        txtTotalPrice.setText(
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(totalPrice)))
+                                        : df.format(Integer.valueOf(totalPrice)));
+                    }
+                } else {
+                    txtFinalFeeFixed.setText("");
+                    txtTotalPeyman.setText("");
+                    txtTotalPrice.setTag("");
+                }
+
+                if (!s.toString().isEmpty() && HelperCalander.isPersianUnicode) {
+
+                    String temp = HelperCalander.convertToUnicodeFarsiNumber(tempValue);
+
+                    if (!s.toString().equals(temp)) {
+                        txtPeymanCount.setText(temp);
+                    }
+
+                }
+                txtPeymanCount.setSelection(txtPeymanCount.getText().toString().length());
+
+                txtPeymanCount.addTextChangedListener(this);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                txtPeymanCount.addTextChangedListener(this);
+            }
+        }
     }
 
     private void showRefundDialog(String assetCode, float assetCount, float feeFixed, long amount) {
