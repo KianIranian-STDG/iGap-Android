@@ -105,7 +105,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         if (isAdded() && isVisible() && getContext() != null) {
             FrameLayout dialogView = new FrameLayout(getContext());
             dialogView.setId(R.id.add_container);
-            AdHolder adHolder = TapsellPlus.createAdHolder(getActivity(), dialogView, R.layout.native_banner);
+            AdHolder adHolder = TapsellPlus.createAdHolder(getActivity(), dialogView, R.layout.custom_native_banner);
             materialDialog = new MaterialDialog.Builder(getContext())
                     .customView(dialogView, true)
                     .show();

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.gms.ads.formats.UnifiedNativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/rvHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tapsell_nativead_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingRight="4dp"
+                android:text="Title"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toStartOf="@+id/tapsell_nativead_logo"
+                app:layout_constraintStart_toEndOf="@+id/tapsell_nativead_sponsored"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/tapsell_nativead_logo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="Logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UnknownId" />
+
+            <TextView
+                android:id="@+id/tapsell_nativead_sponsored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:padding="3dp"
+                android:text="تبلیغات"
+                android:textColor="#aaaaaa"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/tapsell_nativead_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="توضیحات این تبلیغ"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tapsell_nativead_logo"
+                app:layout_constraintStart_toEndOf="@+id/tapsell_nativead_cta"
+                app:layout_constraintTop_toBottomOf="@+id/tapsell_nativead_title" />
+
+            <Button
+                android:id="@+id/tapsell_nativead_cta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tapsell_nativead_sponsored" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </RelativeLayout>
+
+</com.google.android.gms.ads.formats.UnifiedNativeAdView>
