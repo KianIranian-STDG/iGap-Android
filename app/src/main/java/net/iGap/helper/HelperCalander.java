@@ -305,8 +305,8 @@ public class HelperCalander {
                 d = d.replace("۹", "9");
                 int number = Integer.parseInt(d);
                 out += englishNumber[number];
-            } else if (c == '٫') {
-                out += '،';
+            } else if (c =='،') {
+                out += '٫';
             } else {
                 out += c;
             }

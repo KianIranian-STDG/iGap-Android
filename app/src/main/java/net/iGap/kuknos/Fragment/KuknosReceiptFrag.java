@@ -196,7 +196,7 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
     }
 
     private void onUserRefundInfoObserver() {
-        DecimalFormat df = new DecimalFormat("#,##0.00");
+        DecimalFormat df = new DecimalFormat("###,###,###");
         viewModel.getRefundInfo().observe(getViewLifecycleOwner(), refundResponse -> {
             if (refundResponse != null) {
                 progressBar.setVisibility(View.GONE);

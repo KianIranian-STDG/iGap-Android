@@ -55,6 +55,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
     private ConstraintLayout fragKRRConstrain;
     private String assetCode;
     private DecimalFormat df;
+    private DecimalFormat integerFormat;
     float finalFee;
     float totalPeyman;
     int totalPrice;
@@ -102,6 +103,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         View view = inflater.inflate(R.layout.fragment_kuknos_equivalent_rial, container, false);
         initViews(view);
         df = new DecimalFormat("#,##0.00");
+        integerFormat = new DecimalFormat("###,###,###");
         if (getArguments() != null) {
             assetCode = getArguments().getString("assetType");
         }
@@ -132,7 +134,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
 
             float peymanCount;
 
-            if (tempValue != null && tempValue.isEmpty()) {
+            if (tempValue != null && !tempValue.isEmpty()) {
                 peymanCount = refundRequestCount;
                 if (peymanCount >= refundModel.getMinRefund() && peymanCount <= refundModel.getMaxRefund()) {
 
@@ -179,7 +181,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         public void afterTextChanged(Editable s) {
             try {
                 if (!s.toString().isEmpty()) {
-                    tempValue = HelperCalander.convertToUnicodeEnglishNumber(s.toString());
+                    tempValue = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeEnglishNumber(s.toString()) : s.toString();
                     txtPeymanCount.removeTextChangedListener(this);
                     refundRequestCount = Float.parseFloat(tempValue);
                     float peymanCount = Float.parseFloat(tempValue);
@@ -204,13 +206,13 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                                         : df.format(Float.valueOf(totalPeyman)));
 
                         txtTotalPrice.setText(
-                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(totalPrice)))
-                                        : df.format(Integer.valueOf(totalPrice)));
+                                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(integerFormat.format(Integer.valueOf(totalPrice)))
+                                        : integerFormat.format(Integer.valueOf(totalPrice)));
                     }
                 } else {
                     txtFinalFeeFixed.setText("");
                     txtTotalPeyman.setText("");
-                    txtTotalPrice.setTag("");
+                    txtTotalPrice.setText("");
                 }
 
                 if (!s.toString().isEmpty() && HelperCalander.isPersianUnicode) {
@@ -260,8 +262,8 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                 HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Float.valueOf(feeFixed)))
                         : df.format(Float.valueOf(feeFixed)));
         edtAmount.setText(
-                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Long.valueOf(amount)))
-                        : df.format(Long.valueOf(amount)));
+                HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(integerFormat.format(Long.valueOf(amount)))
+                        : integerFormat.format(Long.valueOf(amount)));
         dialog.show();
     }
 
@@ -273,8 +275,8 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
                 minRefund = kuknosRefundModel.getMinRefund();
 
                 sellRate = kuknosRefundModel.getSellRate();
-                String strSellRate = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.valueOf(sellRate)))
-                        : df.format(Integer.valueOf(sellRate));
+                String strSellRate = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(integerFormat.format(Integer.valueOf(sellRate)))
+                        : integerFormat.format(Integer.valueOf(sellRate));
 
 
                 if (kuknosRefundModel.getFeeFixed() != 0) {
@@ -347,7 +349,7 @@ public class KuknosRefundRialFrag extends BaseAPIViewFrag<KuknosRefundVM> {
         viewModel.getBalanceData().observe(getViewLifecycleOwner(), (Observer<KuknosBalance>) kuknosBalance -> {
             if (kuknosBalance != null) {
 
-                maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(0).getBalance()) - minBalance);
+                maxPeymanRefund = (float) (Float.parseFloat(kuknosBalance.getAssets().get(kuknosBalance.getAssets().size() - 1).getBalance()) - minBalance);
 
                 if (maxPeymanRefund < 0) {
                     maxPeymanRefund = 0;
