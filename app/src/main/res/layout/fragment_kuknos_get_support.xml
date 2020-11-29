@@ -1,82 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:autofit="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="locale"
-    tools:context=".kuknos.Fragment.KuknosGetSupportFrag">
+    tools:context=".kuknos.Fragment.KuknosEditInfoFrag">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="match_parent"
-        android:layout_height="109dp"
-        android:layout_marginLeft="@dimen/dp20"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="@dimen/dp20"
-        android:autoSizeTextType="uniform"
-        android:text="در صورتی که 10.000 پیمان یا بیشتر در حساب خود موجودی دارید، درخواست بازخرید را از این قسمت ثبت نمایید و به ازای هر 10.000 پیمان، یک بسته طلای پشتوانه که یک شمش گرمی 24 عیار میباشد، دریافت کنید. کارمزد هر بسته 1.50 پیمان بوده که در زمان ثبت از حساب کاربر برداشته می شود."
-        android:textColor="?iGapSubtitleTextColor"
-        android:textSize="@dimen/standardTextSize"
-        android:textStyle="bold"
-        autofit:layout_constraintEnd_toEndOf="parent"
-        autofit:layout_constraintHorizontal_bias="0.0"
-        autofit:layout_constraintStart_toStartOf="parent"
-        autofit:layout_constraintTop_toTopOf="parent" />
-
-
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        autofit:layout_constraintBottom_toTopOf="@+id/materialButton3"
-        autofit:layout_constraintEnd_toEndOf="parent"
-        autofit:layout_constraintHorizontal_bias="0.0"
-        autofit:layout_constraintStart_toStartOf="parent"
-        autofit:layout_constraintTop_toBottomOf="@+id/textView9"
-        autofit:layout_constraintVertical_bias="0.147">
-
-        <EditText
-            android:layout_width="@dimen/dp220"
-            android:layout_height="@dimen/dp40"
-            android:layout_marginStart="@dimen/dp15"
-            android:layout_marginLeft="@dimen/dp15"
-            android:background="@drawable/button_round_shape_black"
-            android:textColor="?iGapSubtitleTextColor"
-            android:textStyle="bold" />
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/kuknos_getsupport_dcp"
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:layout_marginLeft="@dimen/dp20"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="@dimen/dp20"
+            android:autoSizeTextType="uniform"
+            android:text="@string/kuknos_getSupport_dcp"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/standardTextSize"
+            android:textStyle="bold"
+            autofit:layout_constraintEnd_toEndOf="parent"
+            autofit:layout_constraintHorizontal_bias="0.0"
+            autofit:layout_constraintStart_toStartOf="parent"
+            autofit:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp10"
+            android:src="?iGapSubtitleTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_getsupport_dcp" />
+
+        <TextView
+            android:id="@+id/kuknos_getsupport_numberpackages_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/dp15"
-            android:layout_marginRight="@dimen/dp15"
-            android:text="تعداد بسته"
+            android:layout_marginTop="16dp"
+            android:text="@string/kuknos_getSupport_Number_of_packages"
             android:textColor="?iGapSubtitleTextColor"
-            android:textStyle="bold" />
+            android:textSize="@dimen/standardTextSize"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/kuknos_getSupport_count"
+            app:layout_constraintStart_toStartOf="@+id/kuknos_getSupport_count"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    </FrameLayout>
+        <EditText
+            android:id="@+id/kuknos_getSupport_count"
+            style="@style/iGapEditTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp40"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/background_edittext_money_action"
+            android:paddingStart="@dimen/dp10"
+            android:paddingLeft="@dimen/dp10"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/fragKuknosgetSupportSubmit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_getsupport_numberpackages_txt" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton3"
-        style="@style/iGapButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="88dp"
-        android:minHeight="48dp"
-        android:text="ذخیره"
-        android:textSize="@dimen/standardTextSize"
-        autofit:layout_constraintBottom_toBottomOf="parent"
-        autofit:layout_constraintEnd_toEndOf="parent"
-        autofit:layout_constraintHorizontal_bias="1.0"
-        autofit:layout_constraintStart_toStartOf="parent" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/fragKuknosgetSupportSubmit"
+            style="@style/iGapButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:minHeight="48dp"
+            android:text="@string/save"
+            android:textSize="@dimen/standardTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/kuknos_getSupport_count" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:id="@+id/fragKuknosEditInfoProgressV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:elevation="2dp"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/fragKuknosgetSupportSubmit"
+            app:layout_constraintEnd_toEndOf="@+id/fragKuknosgetSupportSubmit"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintStart_toStartOf="@+id/fragKuknosgetSupportSubmit"
+            app:layout_constraintTop_toTopOf="@+id/fragKuknosgetSupportSubmit" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

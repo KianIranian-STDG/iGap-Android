@@ -1758,6 +1758,10 @@
     <string name="kuknos_setting_copySKeyTitel">ذخیره کلید مخفی</string>
     <string name="kuknos_setting_copySKeyMessage">جهت آگاهی: \n - این کلید تنها راه ورود مجدد و مدیریت حساب شما میباشد. \n - در نگهداری از این کلید کوشا باشید. \n - از به اشتراک گذاری این کلید با دیگران پرهیز کنید. \n این کلید در فولدر دانلود های شما ذخیره خواهد شد.</string>
     <string name="kuknos_setting_copySKeyBtn">ذخیره</string>
+    <string name="kuknos_getSupport_dcp">در صورتی که 10.000 پیمان یا بیشتر در حساب شما موجود است ، درخواست بازخرید را از این قسمت ثبت کنید و به ازای هر 10.000 پیمان ، یک بسته طلای پشتوانه را که یک شمش گرمی 24 عیار نیست ، ادامه دهید. کارمزد هر بسته 1.50 پیمان بوده است که در زمان ثبت نام حساب کاربر بر روی شما می شود.</string>
+    <string name="kuknos_getSupport_Number_of_packages">تعداد بسته</string>
+    <string name="kuknos_getsupport_toast">هنوز این سرویس در آیگپ فعال نشده است!</string>
+    <string name="kuknos_editinfo_error_getinfo">دریافت اطلاعات با خطا مواجه شده است!</string>
     <string name="kuknos_setting_copySFailTitle">خطا</string>
     <string name="kuknos_setting_copySFailBtn">باشه</string>
     <string name="kuknos_receipt_Refund_address">"آدرس بازپرداخت"</string>

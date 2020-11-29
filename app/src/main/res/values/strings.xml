@@ -1654,6 +1654,8 @@ Want to get it?</string>
     <string name="kuknos_receipt_bill">"Refund receipt"</string>
     <string name="kuknos_edit_info_saved_successfully">"Information saved successfully"</string>
     <string name="kuknos_edit_info_empty_birthdate">"The date of birth field cannot be empty"</string>
+    <string name="kuknos_getsupport_toast">This service is not activated in IGap yet!</string>
+    <string name="kuknos_editinfo_error_getinfo">Received information error!</string>
     <string name="kuknos_edit_info_empty_first_or_last">"The firstName or LastName field cannot be empty"</string>
     <string name="kuknos_edit_info_empty_sheba">"The IBAN field cannot be empty"</string>
     <string name="kuknos_edit_info_sending_info">"Sending information ..."</string>
@@ -1798,6 +1800,8 @@ Want to get it?</string>
     <string name="kuknos_buyP_MinAmount">Your order is less than the minimum buyable value of this token.</string>
     <string name="kuknos_trade_origin">Selling*</string>
     <string name="kuknos_trade_dest">Buying*</string>
+    <string name="kuknos_getSupport_dcp">If you have 10,000 contracts or more in your account, submit a redemption request from this section and for every 10,000 contracts, continue with a gold backing pack that is not a 24 carat gram bar. The fee for each package is 1.50 contracts, which will be charged to you at the time of user account registration.</string>
+    <string name="kuknos_getSupport_Number_of_packages">Number of packages</string>
     <string name="kuknos_trade_btn">Submit</string>
     <string name="kuknos_trade_server">Sending</string>
     <string name="kuknos_trade_emptyOriginAmount">Selling Amount can NOT be empty.</string>

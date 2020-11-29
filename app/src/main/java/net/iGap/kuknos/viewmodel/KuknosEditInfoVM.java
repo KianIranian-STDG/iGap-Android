@@ -31,11 +31,13 @@ public class KuknosEditInfoVM extends BaseAPIViewModel {
 
             @Override
             public void onError(String errorM) {
+                responseState.setValue(errorM);
                 ibanInfo.setValue(null);
             }
 
             @Override
             public void onFailed() {
+                responseState.setValue("onFailed");
                 ibanInfo.setValue(null);
             }
         });

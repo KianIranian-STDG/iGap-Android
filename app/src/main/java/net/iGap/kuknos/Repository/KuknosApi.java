@@ -67,6 +67,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-account-assets")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosBalance>> getUserAsset(@Field("public_key") String publicKey);
 
     /**
@@ -77,6 +80,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("update-account")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosUserInfoResponse>> updateAccount(@Field("public_key") String publicKey,
                                                                     @Field("iban") String iban,
                                                                     @Field("first_name") String firstName,
@@ -91,6 +97,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-iban-info")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<Owners>> getIbanInfo(@Field("iban") String iban);
 
     /**
@@ -101,6 +110,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-account")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosUserInfoResponse>> getUserInfo(@Field("public_key") String publicKey);
 
     /**
@@ -111,6 +123,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-refund-details")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosUserRefundResponse>> getUserRefundDetail(@Field("public_key") String publicKey,
                                                                             @Field("ref_no") int refundNo);
 
@@ -123,6 +138,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-account-assets")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosBalance>> getUserAsset(@Field("public_key") String publicKey,
                                                           @Field("asset_code") String assetCode);
 
@@ -132,6 +150,9 @@ public interface KuknosApi {
      * @return
      */
     @POST("get-assets")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosAsset>> getAllAssets();
 
     /**
@@ -142,6 +163,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-assets")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosAsset>> getAllAssets(@Field("asset_code") String assetCode);
 
     /**
@@ -152,6 +176,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("change-trust")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosTransactionResult>> changeTrust(@Field("xdr") String XDR);
 
     /**
@@ -162,6 +189,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("transfer")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosHash>> payment(@Field("xdr") String XDR);
 
     /**
@@ -174,6 +204,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("wallet-history")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosOperationResponse>> getWalletHistory(@Field("public_key") String publicKey,
                                                                         @Field("limit") int limit,
                                                                         @Field("order") String order);
@@ -189,6 +222,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("open-offers")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosOfferResponse>> getOpenOffers(@Field("public_key") String publicKey,
                                                                  @Field("limit") int limit,
                                                                  @Field("cursor") int cursor,
@@ -205,6 +241,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("account-trades")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosTradeResponse>> getTradesHistory(@Field("public_key") String publicKey,
                                                                     @Field("limit") int limit,
                                                                     @Field("cursor") int cursor,
@@ -218,6 +257,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-public-key")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosFederation>> convertFederation(@Field("federation_name") String username,
                                                                   @Field("domain") String domain);
 
@@ -229,6 +271,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("account-status")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosUserInfo>> accountStatus(@Field("public_key") String publicKey);
 
     /**
@@ -239,6 +284,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("is-member")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosOptionStatus>> accountOptionsStatus(@Field("public_key") String publicKey);
 
     /**
@@ -249,6 +297,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("set-options")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<SubmitTransactionResponse>> setOption(@Field("xdr") String XDR);
 
     /**
@@ -259,6 +310,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("manage-offer")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<SubmitTransactionResponse>> buyOffer(@Field("xdr") String XDR);
 
     /**
@@ -273,6 +327,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("payment-request")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosBankPayment>> buyAsset(@Field("public_key") String publicKey,
                                                           @Field("asset_code") String assetCode,
                                                           @Field("asset_count") String assetAmount,
@@ -287,10 +344,16 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("account-existent")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosUsernameStatus>> checkUsername(@Field("federation_name") String federationName);
 
     @FormUrlEncoded
     @POST("get-payment")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosPaymentResponse>> getPaymentData(@Field("rrn") String RRN);
 
     /**
@@ -299,6 +362,9 @@ public interface KuknosApi {
      * @return
      */
     @GET("get-fees")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosFeeModel>> getFee();
 
     /**
@@ -308,6 +374,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("get-refund-info")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosRefundModel>> getRefundInfo(@Field("asset_code") String assetCode);
 
     /**
@@ -323,6 +392,9 @@ public interface KuknosApi {
      */
     @FormUrlEncoded
     @POST("virtual-refund")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosVirtualRefund>> getVirtualRefund(@Field("public_key") String publicKey,
                                                                     @Field("asset_code") String assetCode,
                                                                     @Field("asset_count") float assetCount,
@@ -332,10 +404,16 @@ public interface KuknosApi {
 
     @FormUrlEncoded
     @POST("get-user-refunds")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosRefundHistory>> getUserRefunds(@Field("public_key") String publicKey);
 
     @FormUrlEncoded
     @POST("account-min-balance")
+    @Headers({IgapRetrofitInterceptor.CONNECT_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.READ_TIMEOUT + ":60000",
+            IgapRetrofitInterceptor.WRITE_TIMEOUT + ":60000"})
     Call<KuknosResponseModel<KuknosMinBalance>> getMinBalance(@Field("public_key") String publicKey);
 
     /*@FormUrlEncoded

@@ -120,7 +120,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                         fragment = KuknosAssetsPagerFrag.newInstance();
                         fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
-                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    }
                     /*Snackbar snackbar = Snackbar.make(binding.fragKuknosPContainer, getString(R.string.kuknos_develop), Snackbar.LENGTH_SHORT);
                     snackbar.setAction(getText(R.string.kuknos_Restore_Error_Snack), new View.OnClickListener() {
                         @Override
@@ -186,7 +188,9 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
                     Bundle bundle = new Bundle();
                     bundle.putString("assetCode", kuknosRefundModel.getAssetCode());
                     buyAgainFrag.setArguments(bundle);
-                    new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(false).load();
+                    if (getActivity() != null) {
+                        new HelperFragment(getActivity().getSupportFragmentManager(), buyAgainFrag).setReplace(false).load();
+                    }
                 }
             }
 
