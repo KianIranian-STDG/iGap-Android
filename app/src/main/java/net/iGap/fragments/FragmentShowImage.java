@@ -44,6 +44,8 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.MessageObject;
+import net.iGap.helper.RoomObject;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
@@ -60,6 +62,7 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
 
@@ -98,6 +101,7 @@ public class FragmentShowImage extends BaseFragment {
     public static FocusAudioListener focusAudioListener;
     private ProtoGlobal.RoomMessageType messageType;
     private ArrayList<TextureView> mTextureViewTmp = new ArrayList<>();
+    private RealmRoom room;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -252,6 +256,11 @@ public class FragmentShowImage extends BaseFragment {
         txtImageDesc = view.findViewById(R.id.asi_txt_image_desc);
         toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
 
+
+        room = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo("id", mFList.get(selectedFile).getRoomId()).findFirst();
+        });
+
         initViewPager();
 
 
@@ -362,9 +371,17 @@ public class FragmentShowImage extends BaseFragment {
             items.add(getString(R.string.share_image_2));
         }
 
+        if (RoomObject.isRoomPublic(room)) {
+            if (MessageObject.canSharePublic(mFList.get(selectedFile))) {
+                items.add(getString(R.string.share_file_link));
+            }
+        }
+
         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.save_to_gallery))) {
                 saveToGallery();
+            } else if (items.get(position).equals(getString(R.string.share_file_link))) {
+                shareMediaLink();
             } else {
                 shareImage();
             }
@@ -401,6 +418,19 @@ public class FragmentShowImage extends BaseFragment {
         }
     }
 
+    private void shareMediaLink() {
+        RealmRoomMessage roomMessage = null;
+
+        if (mFList.size() > viewPager.getCurrentItem())
+            roomMessage = mFList.get(viewPager.getCurrentItem());
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        if (roomMessage != null) {
+            intent.putExtra(Intent.EXTRA_TEXT, roomMessage.attachment.url);
+        }
+        startActivity(Intent.createChooser(intent, G.context.getString(R.string.share_link_item_dialog)));
+    }
 
     /**
      * share Image and video

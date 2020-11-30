@@ -21,22 +21,22 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class RealmChannelRoom extends RealmObject {
-    private String role;
-    private int participants_count;
-    private String participants_count_label;
-    private String participants_count_limit_label;
-    private String description;
-    private String inviteLink;
-    private int avatarCount;
-    private RealmNotificationSetting realmNotificationSetting;
-    private RealmList<RealmMember> members;
-    private String invite_token;
-    private String username;
-    private boolean isPrivate;
-    private boolean isSignature = false;
-    private long seenId;
-    private boolean reactionStatus;
-    private boolean verified;
+    public String role;
+    public int participants_count;
+    public String participants_count_label;
+    public String participants_count_limit_label;
+    public String description;
+    public String inviteLink;
+    public int avatarCount;
+    public RealmNotificationSetting realmNotificationSetting;
+    public RealmList<RealmMember> members;
+    public String invite_token;
+    public String username;
+    public boolean isPrivate;
+    public boolean isSignature = false;
+    public long seenId;
+    public boolean reactionStatus;
+    public boolean verified;
 
     /**
      * convert ProtoGlobal.ChannelRoom to RealmChannelRoom
