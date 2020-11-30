@@ -2662,4 +2662,5 @@
     <string name="history_count">العد</string>
     <string name="Submitـomment">لعرض نتائج الاستطلاع ، يرجى تسجيل تصويتك أولاً!</string>
     <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
+    <string name="share_file_link">مشاركة رابط الملف</string>
 </resources>
