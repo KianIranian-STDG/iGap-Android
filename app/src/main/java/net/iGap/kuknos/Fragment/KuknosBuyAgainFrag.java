@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.module.AndroidUtils;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 
@@ -32,6 +33,11 @@ public class KuknosBuyAgainFrag extends BaseFragment {
         return fragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,4 +104,9 @@ public class KuknosBuyAgainFrag extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
+    }
 }
