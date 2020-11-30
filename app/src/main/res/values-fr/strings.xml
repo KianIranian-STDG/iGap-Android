@@ -1861,5 +1861,5 @@
     <string name="history_count">compter</string>
     <string name="Submitـomment">Pour voir les résultats du sondage, veuillez d\'abord enregistrer votre vote!</string>
     <string name="location_list_tile">Rechercher des centres de divertissement</string>
-    <string name="share_file_link">Partager le lien du fichier</string>
+    <string name="share_file_link">Partager le lien public</string>
 </resources>

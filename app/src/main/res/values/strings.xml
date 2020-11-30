@@ -2264,7 +2264,7 @@ Want to get it?</string>
     <string name="error_resume_file_expired">Resuming file is expired! please try again.</string>
     <string name="Submitـomment">To view the poll results, please register your vote first!</string>
     <string name="location_list_tile">Search entertainment centers</string>
-    <string name="share_file_link">Share File Link</string>
+    <string name="share_file_link">Share public Link</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>
