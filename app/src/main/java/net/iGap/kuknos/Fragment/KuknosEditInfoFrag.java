@@ -67,18 +67,6 @@ public class KuknosEditInfoFrag extends BaseAPIViewFrag<KuknosEditInfoVM> {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(KuknosEditInfoVM.class);
