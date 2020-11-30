@@ -20,19 +20,19 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 
 public class RealmGroupRoom extends RealmObject {
-    private String role;
-    private int participants_count;
-    private String participants_count_label;
-    private String participants_count_limit_label;
-    private String description;
-    private int avatarCount;
-    private RealmNotificationSetting realmNotificationSetting;
-    private RealmList<RealmMember> members;
-    private String invite_link;
-    private String invite_token;
-    private boolean isPrivate;
-    private String username;
-    private int startFrom;
+    public String role;
+    public int participants_count;
+    public String participants_count_label;
+    public String participants_count_limit_label;
+    public String description;
+    public int avatarCount;
+    public RealmNotificationSetting realmNotificationSetting;
+    public RealmList<RealmMember> members;
+    public String invite_link;
+    public String invite_token;
+    public boolean isPrivate;
+    public String username;
+    public int startFrom;
 
 
     public static RealmGroupRoom putIncomplete(Realm realm, ProtoGlobal.GroupRoom.Role role, String description, String participantsCountLabel) {
