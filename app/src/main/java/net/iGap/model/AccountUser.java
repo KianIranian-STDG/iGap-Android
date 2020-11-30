@@ -149,7 +149,7 @@ public class AccountUser {
         newConfig = new RealmConfiguration.Builder()
                 .name(dbName)
                 .encryptionKey(mKey)
-                .rxFactory(new RealmObservableFactory(false)) //for rx java change listener
+                .rxFactory(new RealmObservableFactory()) //rx java for change listener
                 .compactOnLaunch(new CompactOnLaunchCallback() {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {
