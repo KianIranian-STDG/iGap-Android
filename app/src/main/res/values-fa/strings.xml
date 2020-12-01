@@ -1842,6 +1842,8 @@
     <string name="igasht_selected_location_title">نقاط تفریحی استان %s</string>
     <string name="igasht_location_found_count">%d مورد یافت شد</string>
     <string name="igasht_success_payment">پرداخت شما با موفقیت انجام شد</string>
+    <string name="tapsell_advertisement">تبلیغات</string>
+    <string name="tapsell_click">کلیک کن!</string>
     <string name="noDetail_textView">فاقد توضیحات</string>
     <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
     <string name="Restaurant_textView">رستوران</string>
