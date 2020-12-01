@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     private static final int NEWS_FRAGMENT = 6;
 
     public static final int START_TAB = AppConfig.defaultTab;
-    public boolean isShowedAdd = false;
+    public static boolean isShowedAdd = false;
     public static final String DEEP_LINK_DISCOVERY = "discovery";
     public static final String DEEP_LINK_CONTACT = "contact";
     public static final String DEEP_LINK_CHAT = "chat";
@@ -99,6 +100,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         bottomNavigation.setOnItemChangeListener(new OnItemChangeListener() {
             @Override
             public void onSelectedItemChanged(int i) {
+                if (i == 3) {
+                    isShowedAdd = false;
+                }
                 loadFragment(i);
             }
 
