@@ -6,6 +6,6 @@ import net.iGap.realm.RealmRoomMessage;
 public class MessageObject {
 
     public static boolean canSharePublic(RealmRoomMessage message) {
-        return message != null && message.attachment != null && !message.messageType.equals(ProtoGlobal.RoomMessageType.VOICE.toString());
+        return message != null && message.attachment != null && (!message.messageType.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || !message.messageType.equals(ProtoGlobal.RoomMessageType.STICKER.toString()));
     }
 }
