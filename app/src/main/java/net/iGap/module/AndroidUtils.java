@@ -539,15 +539,11 @@ public final class AndroidUtils {
             }
         }
 
-        try {
-            if (cashId != null && cashId.length() > 0) {
-                _hash = makeSHA1Hash(cashId);
-            }
-        } catch (Exception e) {
-
+        if (cashId != null && cashId.length() > 0) {
+            _hash = cashId;
         }
 
-        return suitableAppFilePath(messageType) + "/" + _hash + _mimeType;
+        return suitableAppFilePath(messageType) + "/" + _hash + "_" + _mimeType;
     }
 
     public static String getFilePathWithCashId(String cashId, String name, String selectDir, boolean isThumbNail) {
@@ -567,12 +563,8 @@ public final class AndroidUtils {
 
         String _result = "";
 
-        try {
-            if (cashId != null && cashId.length() > 0) {
-                _hash = makeSHA1Hash(cashId);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (cashId != null && cashId.length() > 0) {
+            _hash = cashId;
         }
 
         if (isThumbNail) {
