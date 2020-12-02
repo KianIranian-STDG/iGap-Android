@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,11 +37,6 @@ import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import ir.tapsell.plus.AdHolder;
-import ir.tapsell.plus.AdRequestCallback;
-import ir.tapsell.plus.TapsellPlus;
-import ir.tapsell.sdk.nativeads.TapsellNativeBannerManager;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -387,6 +379,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         super.onDestroyView();
         needToCrawl = false;
         needToReload = false;
+        BottomNavigationFragment.isShowedAdd = false;
         if (materialDialog != null) {
             materialDialog.dismiss();
         }

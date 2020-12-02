@@ -1,7 +1,6 @@
 package net.iGap.adapter.items.discovery.holder;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -11,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.helper.FileLog;
 
 import ir.tapsell.plus.AdHolder;
 import ir.tapsell.plus.AdRequestCallback;
@@ -55,6 +55,7 @@ public class Type9ViewHolder extends BaseViewHolder {
                 new AdShowListener() {
                     @Override
                     public void onOpened() {
+                        adContainer.setVisibility(View.VISIBLE);
                         BottomNavigationFragment.isShowedAdd = true;
                     }
 
@@ -68,6 +69,7 @@ public class Type9ViewHolder extends BaseViewHolder {
 
                     @Override
                     public void onError(String s) {
+                        FileLog.e(s);
                     }
                 });
     }

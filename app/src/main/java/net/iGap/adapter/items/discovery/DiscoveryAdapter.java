@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.discovery;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -17,6 +18,7 @@ import net.iGap.adapter.items.discovery.holder.Type5ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type6ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type7ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type8ViewHolder;
+import net.iGap.adapter.items.discovery.holder.Type9ViewHolder;
 import net.iGap.adapter.items.discovery.holder.TypeUnknownViewHolder;
 import net.iGap.proto.ProtoGlobal;
 
@@ -47,6 +49,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
+        Log.i("abbasiAd", "onCreateViewHolder: " + i);
         switch (i) {
             case 0:
                 return new Type8ViewHolder(layoutInflater.inflate(R.layout.item_discovery_8, viewGroup, false), activity);
@@ -64,15 +67,20 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_discovery_6, viewGroup, false), activity);
             case 7:
                 return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false), activity);
+            case 9:
+                return new Type9ViewHolder(layoutInflater.inflate(R.layout.item_discovery_9, viewGroup, false), activity);
         }
         return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false), activity);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder viewHolder, int i) {
-        String[] scales = discoveryList.get(i).scale.split(":");
-        float height = width * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
-        viewHolder.itemView.getLayoutParams().height = Math.round(height);
+        Log.i("abbasiAd", "onBindViewHolder: " + i);
+        if (viewHolder.getItemViewType() != 9) {
+            String[] scales = discoveryList.get(i).scale.split(":");
+            float height = width * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+            viewHolder.itemView.getLayoutParams().height = Math.round(height);
+        }
         viewHolder.bindView(discoveryList.get(i));
     }
 

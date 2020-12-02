@@ -13,10 +13,10 @@
         android:layout_margin="@dimen/discovery_margin"
         android:layout_weight="1"
         android:foreground="?android:attr/selectableItemBackground"
+        android:visibility="gone"
         app:cardBackgroundColor="?attr/iGapCardViewColor"
         app:cardCornerRadius="@dimen/discovery_radius"
-        app:cardPreventCornerOverlap="false"/>
-
+        app:cardPreventCornerOverlap="false" />
 
 
 </FrameLayout>
