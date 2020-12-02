@@ -21,6 +21,7 @@ import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;
 import net.iGap.fragments.populaChannel.PopularMoreChannelFragment;
+import net.iGap.helper.DeepLinkHelper;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
@@ -274,21 +275,19 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 } else
                     discoveryUri = address;
 
-                for (int i = 0; i < discoveryUri.length; i++) {
-                    if (HelperString.isInteger(discoveryUri[i])) {
-                        if (i == 0)
-                            onDeepLinkValid.linkValid(address[i]);
-                        setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
-                    } else {
-                        if (discoveryUri[0].equals(DEEP_LINK_DISCOVERY)) {
-                            onDeepLinkValid.linkValid(address[i]);
-                            setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
-                        } else {
-                            onDeepLinkValid.linkInvalid(discoveryUri[i]);
-                            return;
-                        }
-                    }
 
+                if (address.length > 1) {
+                    int lastIndexOfDiscovery = discoveryUri.length - 1;
+
+                    if (HelperString.isInteger(discoveryUri[lastIndexOfDiscovery])) {
+                        onDeepLinkValid.linkValid(discoveryUri[lastIndexOfDiscovery]);
+                        DeepLinkHelper.HandleDiscoveryDeepLink(this, discoveryUri[lastIndexOfDiscovery]);
+                    } else
+                        onDeepLinkValid.linkInvalid(discoveryUri[lastIndexOfDiscovery]);
+
+                } else {
+                    onDeepLinkValid.linkValid(discoveryUri[0]);
+                    setCrawlerMap(DISCOVERY_FRAGMENT, discoveryUri);
                 }
 
                 break;

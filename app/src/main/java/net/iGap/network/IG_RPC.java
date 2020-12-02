@@ -1,14 +1,17 @@
 package net.iGap.network;
 
+import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoChannelDelete;
+import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
 import net.iGap.proto.ProtoInfoConfig;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class IG_RPC {
@@ -341,6 +344,63 @@ public class IG_RPC {
             if (file != null) {
                 fileGateway = file;
             }
+        }
+    }
+
+    public static class Client_Get_Discovery extends AbstractObject {
+        public static final int actionId = 620;
+
+        public int itemId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Client_Get_Discovery().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoClientGetDiscovery.ClientGetDiscovery.Builder builder = ProtoClientGetDiscovery.ClientGetDiscovery.newBuilder();
+            builder.setItemId(itemId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Client_Get_Discovery extends AbstractObject {
+        public static final int actionId = 30620;
+
+        public ArrayList<DiscoveryItem> items = new ArrayList<>();
+
+
+        public Res_Client_Get_Discovery deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Client_Get_Discovery object = null;
+            try {
+                object = new Res_Client_Get_Discovery();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoClientGetDiscovery.ClientGetDiscoveryResponse response = ProtoClientGetDiscovery.ClientGetDiscoveryResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            for (ProtoGlobal.Discovery discovery : response.getDiscoveriesList()) {
+                items.add(new DiscoveryItem(discovery));
+            }
+
         }
     }
 

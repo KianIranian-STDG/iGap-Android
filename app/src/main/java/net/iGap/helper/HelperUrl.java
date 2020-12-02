@@ -510,7 +510,9 @@ public class HelperUrl {
                             @Override
                             public void linkValid(String link) {
                                 if (!G.twoPaneMode)
-                                    activity.onBackPressed();
+                                    if (!HelperString.isInteger(link)) {
+                                        activity.onBackPressed();
+                                    }
                             }
 
                             @Override
