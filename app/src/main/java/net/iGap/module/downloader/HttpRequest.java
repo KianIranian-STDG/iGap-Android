@@ -53,7 +53,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         this.fileObject = fileObject;
         selector = fileObject.selector;
         fileExecutors = FileIOExecutor.getInstance();
-        isDownloaded = fileObject.destFile.exists();
+        isDownloaded = fileObject.destFile.exists() && fileObject.destFile.length() == fileObject.fileSize;
         isDownloading = false;
 
         onProgress(1);
