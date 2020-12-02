@@ -48,6 +48,7 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Channel_Avatar.actionId, IG_RPC.Res_Channel_Avatar.class);
 
         classes.put(IG_RPC.Res_Info_Config.actionId, IG_RPC.Res_Info_Config.class);
+        classes.put(IG_RPC.Res_Client_Get_Discovery.actionId, IG_RPC.Res_Client_Get_Discovery.class);
     }
 
     public boolean validObject(int actionId) {
