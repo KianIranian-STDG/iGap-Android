@@ -58,11 +58,12 @@ public class RegisterRepository {
     private String authorHash;
     private long userId;
     private boolean newUser;
-    private String regex = "^\\d{10}$";
+    private String regex = "^9\\d{9}$";
     private int callingCode;
     private String isoCode = "IR";
     private String countryName = "";
     private String pattern = "";
+    private int infoRetryCount;
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
     private ProtoUserRegister.UserRegisterResponse.Method method;
@@ -74,7 +75,7 @@ public class RegisterRepository {
 
     //if need sharePreference pass it in constructor
     private RegisterRepository() {
-
+        getInfoLocation();
     }
 
     public synchronized static RegisterRepository getInstance() {
@@ -202,7 +203,7 @@ public class RegisterRepository {
         });
     }
 
-    public void getInfoLocation(RepositoryCallback<LocationModel> callback) {
+    public void getInfoLocation() {
         new RequestInfoLocation().infoLocation(new OnReceiveInfoLocation() {
             @Override
             public void onReceive(String isoCodeR, int callingCodeR, String countryNameR, String patternR, String regexR) {
@@ -211,12 +212,14 @@ public class RegisterRepository {
                 countryName = countryNameR;
                 pattern = patternR;
                 regex = regexR;
-                callback.onSuccess(new LocationModel(callingCode, countryName, pattern));
             }
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                callback.onError();
+                if (infoRetryCount < 3) {
+                    infoRetryCount++;
+                    getInfoLocation();
+                }
             }
         });
     }
