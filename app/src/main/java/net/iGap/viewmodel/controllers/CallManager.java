@@ -4,10 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -570,7 +573,6 @@ public class CallManager {
     }
 
     public void changeState(CallState callState) {
-
         currentSate = callState;
         EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, false);
         if (callState == CallState.CONNECTED) {
@@ -649,6 +651,11 @@ public class CallManager {
         public void onCallStateChanged(int state, String incomingNumber) {
 
             // managing music player state
+            ConnectivityManager connMgr = (ConnectivityManager)
+                    G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+
             if (lastPhoneState != state && MusicPlayer.isMusicPlyerEnable) {
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     pauseSoundIfPlay();
@@ -672,12 +679,22 @@ public class CallManager {
                 WebRTC.getInstance().toggleSound(false);
                 WebRTC.getInstance().pauseVideoCapture();
                 CallManager.getInstance().setUserInCall(true);
+                CallManager.getInstance().endCall();
             } else if (state == TelephonyManager.CALL_STATE_RINGING) {
+                if (activeInfo != null && activeInfo.isConnected()) {
+                    if (activeInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                        CallManager.getInstance().endCall();
+                    }
+                }
                 CallManager.getInstance().setUserInCall(false);
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                CallManager.getInstance().holdCall(false);
-                WebRTC.getInstance().toggleSound(true);
-                WebRTC.getInstance().startVideoCapture();
+                if (activeInfo != null && activeInfo.isConnected()) {
+                    if (activeInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                        CallManager.getInstance().holdCall(false);
+                        WebRTC.getInstance().toggleSound(true);
+                        WebRTC.getInstance().startVideoCapture();
+                    }
+                }
                 CallManager.getInstance().setUserInCall(false);
             }
         }
