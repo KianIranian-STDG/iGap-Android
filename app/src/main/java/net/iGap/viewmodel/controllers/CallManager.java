@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -64,6 +63,7 @@ public class CallManager {
     private RealmCallConfig currentCallConfig;
 
     private boolean isUserInCall;
+    private boolean isUserInSimCall;
     private boolean isCallActive;
     private boolean isRinging;
     private boolean isIncoming;
@@ -443,6 +443,7 @@ public class CallManager {
     }
 
     public void endCall() {
+        isUserInCall = false;
         if (isRinging || isCallActive) {
             waitForEndCall = true;
             new RequestSignalingLeave().signalingLeave();
@@ -523,6 +524,7 @@ public class CallManager {
         isCallHold = false;
         isIncoming = false;
         isMicEnable = false;
+        isUserInCall = false;
         WebRTC.getInstance().close();
         if (timer != null)
             timer.cancel();
@@ -630,6 +632,14 @@ public class CallManager {
         return isUserInCall;
     }
 
+    public boolean isUserInSimCall() {
+        return isUserInSimCall;
+    }
+
+    public void setUserInSimCall(boolean userInSimCall) {
+        isUserInSimCall = userInSimCall;
+    }
+
     public void setUserInCall(boolean userInCall) {
         isUserInCall = userInCall;
     }
@@ -651,10 +661,9 @@ public class CallManager {
         public void onCallStateChanged(int state, String incomingNumber) {
 
             // managing music player state
-            ConnectivityManager connMgr = (ConnectivityManager)
-                    G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager connectivityManager = (ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+            NetworkInfo activeInfo = connectivityManager.getActiveNetworkInfo();
 
             if (lastPhoneState != state && MusicPlayer.isMusicPlyerEnable) {
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
@@ -678,24 +687,20 @@ public class CallManager {
                 CallManager.getInstance().holdCall(true);
                 WebRTC.getInstance().toggleSound(false);
                 WebRTC.getInstance().pauseVideoCapture();
-                CallManager.getInstance().setUserInCall(true);
+                CallManager.getInstance().setUserInSimCall(true);
                 CallManager.getInstance().endCall();
             } else if (state == TelephonyManager.CALL_STATE_RINGING) {
-                if (activeInfo != null && activeInfo.isConnected()) {
-                    if (activeInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                        CallManager.getInstance().endCall();
-                    }
+                if (activeInfo != null && activeInfo.isConnected() && activeInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    CallManager.getInstance().endCall();
                 }
-                CallManager.getInstance().setUserInCall(false);
+                CallManager.getInstance().setUserInSimCall(false);
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                if (activeInfo != null && activeInfo.isConnected()) {
-                    if (activeInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                        CallManager.getInstance().holdCall(false);
-                        WebRTC.getInstance().toggleSound(true);
-                        WebRTC.getInstance().startVideoCapture();
-                    }
+                if (activeInfo != null && activeInfo.isConnected() && activeInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    CallManager.getInstance().holdCall(false);
+                    WebRTC.getInstance().toggleSound(true);
+                    WebRTC.getInstance().startVideoCapture();
                 }
-                CallManager.getInstance().setUserInCall(false);
+                CallManager.getInstance().setUserInSimCall(false);
             }
         }
 
