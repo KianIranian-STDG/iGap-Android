@@ -478,7 +478,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void hideIcons() {
         if (isVideoCall()) {
-            if (buttonsGridView.getVisibility() == View.VISIBLE) {
+            if (buttonsGridView.getAlpha() == 1f) {
                 hideButtonsGridView();
                 nameTextView.setVisibility(View.GONE);
                 callTypeTextView.setVisibility(View.GONE);
