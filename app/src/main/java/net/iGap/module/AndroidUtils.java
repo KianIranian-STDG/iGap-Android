@@ -671,7 +671,7 @@ public final class AndroidUtils {
 
 
     public static int getViewInset(View view) {
-        if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
+        if (view == null || Build.VERSION.SDK_INT < 21 || Build.VERSION.SDK_INT > 28 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
             return 0;
         }
         try {
