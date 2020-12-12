@@ -103,7 +103,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
     private void handleProgress(DownloadObject message, Progress progress) {
         int percent = (int) ((progress.currentBytes * 100) / progress.totalBytes);
         if (percent > message.progress) {
-            message.notifyObservers(Resource.loading(new HttpRequest.Progress(percent, message.destFile.getAbsolutePath())));
+            message.notifyObservers(Resource.loading(new HttpRequest.Progress(percent, message.destFile.getAbsolutePath(), message.fileToken)));
         }
     }
 
@@ -122,7 +122,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
                 storage.setAttachmentFilePath(file.mainCacheId, path = file.tempFile.getAbsolutePath(), true);
             }
 
-            file.notifyObservers(Resource.success(new HttpRequest.Progress(100, path)));
+            file.notifyObservers(Resource.success(new HttpRequest.Progress(100, path, file.fileToken)));
             requestedDownload.remove(file.key);
             Downloader.getInstance(currentAccount).onCdnDownloadComplete(file.mainCacheId);//must be change!
         } catch (IOException e) {
