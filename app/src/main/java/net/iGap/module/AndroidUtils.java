@@ -29,6 +29,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -671,8 +672,10 @@ public final class AndroidUtils {
 
 
     public static int getViewInset(View view) {
-        if (view == null || Build.VERSION.SDK_INT < 21 || Build.VERSION.SDK_INT > 28 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
+        if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
             return 0;
+        } else if (Build.VERSION.SDK_INT > 28) {
+            return view.getRootWindowInsets().getStableInsetBottom();
         }
         try {
             if (mAttachInfoField == null) {
