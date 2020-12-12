@@ -105,11 +105,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
             }
         });
 
-        if (igRef) {
-            pullToRefresh.setEnabled(true);
-        } else {
-            pullToRefresh.setEnabled(false);
-        }
+        pullToRefresh.setEnabled(igRef);
 
         if (webView == null) {
             try {
@@ -263,7 +259,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             super.onReceivedError(view, request, error);
             String errorDescription = (error.getDescription() == null) ? "" : error.getDescription().toString();
-            if (!errorDescription.equals("net::ERR_CONNECTION_REFUSED") && !errorDescription.equals("net::ERR_ADDRESS_UNREACHABLE")) {
+            if (!errorDescription.equals("net::ERR_CONNECTION_REFUSED") && !errorDescription.equals("net::ERR_ADDRESS_UNREACHABLE") && !errorDescription.equals("net::ERR_FAILED")) {
                 //if (url.equals(FragmentWebView.this.url) && isWebViewVisible)
                 if (isWebViewVisible) {
                     isWebViewVisible = false;
@@ -351,11 +347,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
 
         @Override
         public void onProgressChanged(WebView view, int progress) {
-            if (progress == 100) {
-                pullToRefresh.setRefreshing(false);
-            } else {
-                pullToRefresh.setRefreshing(true);
-            }
+            pullToRefresh.setRefreshing(progress != 100);
         }
 
         @Override
