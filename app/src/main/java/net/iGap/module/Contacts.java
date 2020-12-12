@@ -456,39 +456,6 @@ public class Contacts {
         }
     }
 
-    private List<ContactNumber> getContactNumbers() {
-        List<ContactNumber> result = new ArrayList<>();
-
-        ContentResolver cr = G.context.getContentResolver();
-        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-        try (Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, sortOrder)) {
-            if (cur != null && cur.getCount() > 0) {
-                while (cur.moveToNext()) {
-                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                    String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                new String[]{id}, null);
-                        while (pCur != null && pCur.moveToNext()) {
-                            String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                            ContactNumber contactNumber = normalizeContact(name, phoneNo);
-                            if (contactNumber != null)
-                                result.add(contactNumber);
-                        }
-                        if (pCur != null)
-                            pCur.close();
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return normalizeList(result);
-    }
-
     private List<ContactNumber> normalizeList(List<ContactNumber> contactNumbers) {
         List<ContactNumber> result = new ArrayList<>();
         Collections.sort(contactNumbers);
@@ -537,19 +504,6 @@ public class Contacts {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void getAllPhoneContactForPayment(Delegate delegate) {
-        if (!HelperPermission.grantedContactPermission()) {
-            return;
-        }
-
-        if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_NUMBER)) {
-            showLimitDialog();
-            return;
-        }
-
-        delegate.onResult(getContactNumbers());
     }
 
     public interface Delegate {

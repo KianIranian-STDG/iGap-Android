@@ -37,6 +37,7 @@ import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.controllers.PhoneContactProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -46,7 +47,6 @@ import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
-import net.iGap.module.Contacts;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -234,15 +234,23 @@ public class PaymentChargeFragment extends BaseFragment {
 
         frameContact.setOnClickListener(v -> {
             hideKeyboard();
+            progressBar.setVisibility(View.VISIBLE);
             try {
                 HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
                     @Override
                     public void Allow() {
                         ChargeContactNumberAdapter adapter = new ChargeContactNumberAdapter();
-                        new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
+                        frameContact.setEnabled(false);
+                        PhoneContactProvider.getInstance().getAllPhoneContactForPayment(contactNumbers -> {
+                            if (getContext() == null) {
+                                return;
+                            }
+
+                            frameContact.setEnabled(true);
+                            progressBar.setVisibility(View.GONE);
+
                             if (contactNumbers.size() == 0) {
                                 HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
-                                progressBar.setVisibility(View.GONE);
                             } else {
                                 adapter.setContactNumbers(contactNumbers);
                                 MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
@@ -294,7 +302,7 @@ public class PaymentChargeFragment extends BaseFragment {
 
                     @Override
                     public void deny() {
-
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
             } catch (IOException e) {

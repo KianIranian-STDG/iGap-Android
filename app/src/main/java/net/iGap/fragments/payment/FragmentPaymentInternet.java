@@ -28,6 +28,7 @@ import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.InternetHistoryPackageAdapter;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.controllers.PhoneContactProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -36,7 +37,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
-import net.iGap.module.Contacts;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
@@ -58,6 +58,7 @@ import static net.iGap.helper.HelperString.isNumeric;
 import static net.iGap.model.OperatorType.Type.HAMRAH_AVAL;
 import static net.iGap.model.OperatorType.Type.IRANCELL;
 import static net.iGap.model.OperatorType.Type.RITEL;
+
 public class FragmentPaymentInternet extends BaseFragment implements HandShakeCallback {
 
     public static final String MCI = "mci";
@@ -329,15 +330,24 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     private void onContactNumberButtonClick() {
+        progressBar.setVisibility(View.VISIBLE);
+        frameContact.setEnabled(false);
+
         try {
             HelperPermission.getContactPermision(getActivity(), new OnGetPermission() {
                 @Override
                 public void Allow() {
                     ChargeContactNumberAdapter adapterContact = new ChargeContactNumberAdapter();
-                    new Contacts().getAllPhoneContactForPayment(contactNumbers -> {
+                    PhoneContactProvider.getInstance().getAllPhoneContactForPayment(contactNumbers -> {
+                        if (getContext() == null) {
+                            return;
+                        }
+
+                        frameContact.setEnabled(true);
+                        progressBar.setVisibility(View.GONE);
+
                         if (contactNumbers.size() == 0) {
                             HelperError.showSnackMessage(getResources().getString(R.string.no_number_found), false);
-                            progressBar.setVisibility(View.GONE);
                         } else {
                             adapterContact.setContactNumbers(contactNumbers);
                             MaterialDialog dialog = new MaterialDialog.Builder(getContext()).customView(R.layout.popup_paymet_contact, false).build();
@@ -380,7 +390,6 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                                     }
                                 };
                                 editText.addTextChangedListener(watcher);
-
 
 
                                 contactDialogView.findViewById(R.id.closeView).setOnClickListener(v12 -> dialog.dismiss());
@@ -524,7 +533,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     public void setDialogBackground(View view) {
-        if (G.themeColor==Theme.DARK) {
+        if (G.themeColor == Theme.DARK) {
             view.setBackground(getContext().getResources().getDrawable(R.drawable.search_contact_background));
         }
     }
