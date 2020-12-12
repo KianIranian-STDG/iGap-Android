@@ -429,13 +429,22 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
                         if (request.getOrigin().toString().equals("file:///")) {
                             request.grant(request.getResources());
                         } else {
-                            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                @Override
-                                public void Allow() throws IOException {
-                                    HelperPermission.getMicroPhonePermission(G.fragmentActivity, new OnGetPermission() {
+                            final String[] requestedResources = request.getResources();
+                            for (String requestResources : requestedResources) {
+                                if (requestResources.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
+                                    HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                         @Override
                                         public void Allow() throws IOException {
-                                            request.grant(request.getResources());
+                                            HelperPermission.getMicroPhonePermission(G.fragmentActivity, new OnGetPermission() {
+                                                @Override
+                                                public void Allow() throws IOException {
+                                                    request.grant(request.getResources());
+                                                }
+
+                                                @Override
+                                                public void deny() {
+                                                }
+                                            });
                                         }
 
                                         @Override
@@ -443,11 +452,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
                                         }
                                     });
                                 }
-
-                                @Override
-                                public void deny() {
-                                }
-                            });
+                            }
                         }
                     } catch (IOException e) {
                         FileLog.e(e);
