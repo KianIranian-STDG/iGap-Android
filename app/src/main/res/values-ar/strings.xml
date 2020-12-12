@@ -1155,6 +1155,7 @@
 
     <string name="permission_phone">اذن الهاتف </string>
 
+
     <string name="channel_public_hint_revoke">الرابط العام للقناة </string>
 
     <string name="self_destructs">التدمير الذاتي </string>

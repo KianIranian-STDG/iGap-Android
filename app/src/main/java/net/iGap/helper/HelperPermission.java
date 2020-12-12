@@ -52,7 +52,7 @@ public class HelperPermission {
     private static OnGetPermission ResultLocation;
     private static OnGetPermission ResultRecordAudio;
     private static OnGetPermission ResultPhone;
-//    private static OnGetPermission ResultSms;
+    //    private static OnGetPermission ResultSms;
 
     //************************************************************************************************************
     public static void getCameraPermission(Context context, OnGetPermission onGetPermission) throws IOException {
