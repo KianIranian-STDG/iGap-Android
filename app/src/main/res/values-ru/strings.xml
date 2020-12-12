@@ -581,8 +581,6 @@
     <string name="permission_location">Дайте диспетчер устройств позиционирования</string>
     <string name="permission_record_audio">Дайте микрофон</string>
     <string name="permission_phone">Дайте телефон</string>
-    <string name="permission_video_capture">Захват видео</string>
-    <string name="permission_Audio_capture">Аудио захват</string>
     <string name="channel_public_hint_revoke">Общедоступная ссылка на канал</string>
     <string name="self_destructs">Самоликвидироваться</string>
     <string name="save_ok">Сохранено</string>

@@ -1155,9 +1155,6 @@
 
     <string name="permission_phone">اذن الهاتف </string>
 
-    <string name="permission_video_capture">التقاط الفيديو</string>
-
-    <string name="permission_Audio_capture">التقاط الصوت</string>
 
     <string name="channel_public_hint_revoke">الرابط العام للقناة </string>
 

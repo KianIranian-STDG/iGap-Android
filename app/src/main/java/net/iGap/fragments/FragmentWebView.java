@@ -93,7 +93,6 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
         return inflater.inflate(R.layout.fragment_my_web_view, container, false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -171,7 +170,6 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
         webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         webView.getSettings().setGeolocationDatabasePath(getActivity().getFilesDir().getPath());
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         webView.addJavascriptInterface(new WebAppInterface(getActivity()), "Android");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -428,22 +426,34 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed, Too
                 @Override
                 public void run() {
                     try {
-                        request.grant(request.getResources());
-                        final String[] requestedResources = request.getResources();
-                        for (String request : requestedResources) {
-                            if (request.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
-                                HelperPermission.getVideoCapturePermission(getContext(), null);
-                            }
-                            if (request.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
-                                HelperPermission.getVideoCapturePermission(getContext(), null);
-                            }
+                        if (request.getOrigin().toString().equals("file:///")) {
+                            request.grant(request.getResources());
+                        } else {
+                            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                @Override
+                                public void Allow() throws IOException {
+                                    HelperPermission.getMicroPhonePermission(G.fragmentActivity, new OnGetPermission() {
+                                        @Override
+                                        public void Allow() throws IOException {
+                                            request.grant(request.getResources());
+                                        }
+
+                                        @Override
+                                        public void deny() {
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void deny() {
+                                }
+                            });
                         }
                     } catch (IOException e) {
                         FileLog.e(e);
                     }
                 }
             });
-
         }
 
         //For Android 3.0+

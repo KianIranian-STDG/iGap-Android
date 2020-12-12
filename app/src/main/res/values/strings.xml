@@ -657,8 +657,6 @@ Want to get it?</string>
     <string name="permission_location">Location</string>
     <string name="permission_record_audio">Record Audio</string>
     <string name="permission_phone">Call Phone</string>
-    <string name="permission_video_capture">Video Capture</string>
-    <string name="permission_Audio_capture">Audio Capture</string>
 
     <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
     <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
