@@ -640,7 +640,8 @@
     <string name="permission_location">موقعیت یاب گوشی را بدهید</string>
     <string name="permission_record_audio">میکروفن را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
-
+    <string name="permission_video_capture">ضبظ دوربین را بدهید</string>
+    <string name="permission_Audio_capture">ضبظ صدا را بدهید</string>
 
     <string name="channel_public_hint_revoke">لینک عمومی کانال</string>
     <string name="self_destructs">خود تخریبی</string>

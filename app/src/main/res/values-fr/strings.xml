@@ -582,6 +582,8 @@
     <string name="permission_location">Donner au téléphone un positionneur</string>
     <string name="permission_record_audio">Donne le micro</string>
     <string name="permission_phone">Donne le téléphone portable</string>
+    <string name="permission_video_capture">Capture vidéo</string>
+    <string name="permission_Audio_capture">Capture audio</string>
     <string name="channel_public_hint_revoke">lien publique de canal</string>
     <string name="self_destructs">autodestruction</string>
     <string name="save_ok">a été enregistré</string>

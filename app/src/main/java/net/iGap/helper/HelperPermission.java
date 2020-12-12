@@ -44,6 +44,8 @@ public class HelperPermission {
     private static final int MY_PERMISSIONS_RECORD_AUDIO = 206;
     private static final int MY_PERMISSIONS_Phone = 207;
     private static final int MY_PERMISSIONS_Sms = 208;
+    private static final int MY_PERMISSIONS_VIDEO_CAPTURE = 209;
+    private static final int MY_PERMISSIONS_AUDIO_CAPTURE = 300;
 
     private static OnGetPermission ResultCamera;
     private static OnGetPermission ResultStorage;
@@ -52,7 +54,9 @@ public class HelperPermission {
     private static OnGetPermission ResultLocation;
     private static OnGetPermission ResultRecordAudio;
     private static OnGetPermission ResultPhone;
-//    private static OnGetPermission ResultSms;
+    //    private static OnGetPermission ResultSms;
+    private static OnGetPermission ResultVideoCapture;
+    private static OnGetPermission ResultAudioCapture;
 
     //************************************************************************************************************
     public static void getCameraPermission(Context context, OnGetPermission onGetPermission) throws IOException {
@@ -319,6 +323,44 @@ public class HelperPermission {
 //    }
 
     //************************************************************************************************************
+    public static void getVideoCapturePermission(Context context, OnGetPermission onGetPermission) throws IOException {
+
+        if (checkApi()) {
+            if (onGetPermission != null) onGetPermission.Allow();
+            return;
+        }
+
+        ResultVideoCapture = onGetPermission;
+
+        int permissionCheck = ContextCompat.checkSelfPermission(context, "android.webkit.resource.VIDEO_CAPTURE");
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            getPermission(context, new String[]{"android.webkit.resource.VIDEO_CAPTURE"}, MY_PERMISSIONS_VIDEO_CAPTURE, context.getResources().getString(R.string.permission_video_capture), ResultVideoCapture);
+        } else {
+            if (onGetPermission != null) onGetPermission.Allow();
+        }
+    }
+
+    //************************************************************************************************************
+    public static void getAudioCapturePermission(Context context, OnGetPermission onGetPermission) throws IOException {
+
+        if (checkApi()) {
+            if (onGetPermission != null) onGetPermission.Allow();
+            return;
+        }
+
+        ResultAudioCapture = onGetPermission;
+
+        int permissionCheck = ContextCompat.checkSelfPermission(context, "android.webkit.resource.AUDIO_CAPTURE");
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            getPermission(context, new String[]{"android.webkit.resource.AUDIO_CAPTURE"}, MY_PERMISSIONS_AUDIO_CAPTURE, context.getResources().getString(R.string.permission_Audio_capture), ResultAudioCapture);
+        } else {
+            if (onGetPermission != null) onGetPermission.Allow();
+        }
+    }
+
+    //************************************************************************************************************
     private static boolean checkApi() {
         return Build.VERSION.SDK_INT < 23;
     }
@@ -398,6 +440,12 @@ public class HelperPermission {
 //            case MY_PERMISSIONS_Sms:
 //                actionResultBack(grantResults, ResultSms);
 //                break;
+            case MY_PERMISSIONS_VIDEO_CAPTURE:
+                actionResultBack(grantResults, ResultVideoCapture);
+                break;
+            case MY_PERMISSIONS_AUDIO_CAPTURE:
+                actionResultBack(grantResults, ResultAudioCapture);
+                break;
         }
     }
 

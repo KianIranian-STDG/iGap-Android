@@ -583,6 +583,8 @@
     <string name="permission_location">شوێن­هەڵگری مۆبایلەکە بدە</string>
     <string name="permission_record_audio">میکرۆفۆنەکە بدە</string>
     <string name="permission_phone">مۆبایلەکە بدە</string>
+    <string name="permission_video_capture">Տեսագրում</string>
+    <string name="permission_Audio_capture">Աուդիո սևեռում</string>
     <string name="channel_public_hint_revoke">لینکی هەموانیی کەناڵ</string>
     <string name="self_destructs">خۆڕووخاندن</string>
     <string name="save_ok">خەزن کرا</string>

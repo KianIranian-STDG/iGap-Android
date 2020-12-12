@@ -1265,6 +1265,8 @@
     <string name="permission_record_audio">میکروفونو وئرین</string>
     <string name="permission_storage">ذخیره سازی یئیرینی وئرین </string>
     <string name="permissions_title">مجوزلر </string>
+    <string name="permission_video_capture">Video çəkmə</string>
+    <string name="permission_Audio_capture">Səs çəkmə</string>
     <string name="person">نفر</string>
     <string name="personalAccountType">شخصی</string>
     <string name="phone">تلفن نمره سی </string>
