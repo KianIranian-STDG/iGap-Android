@@ -49,6 +49,7 @@ public class LookUpClass {
 
         classes.put(IG_RPC.Res_Info_Config.actionId, IG_RPC.Res_Info_Config.class);
         classes.put(IG_RPC.Res_Client_Get_Discovery.actionId, IG_RPC.Res_Client_Get_Discovery.class);
+        classes.put(IG_RPC.Res_Chat_Edit_Message.actionId, IG_RPC.Res_Chat_Edit_Message.class);
     }
 
     public boolean validObject(int actionId) {
