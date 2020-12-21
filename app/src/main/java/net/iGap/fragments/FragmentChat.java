@@ -9458,8 +9458,8 @@ public class FragmentChat extends BaseFragment
                     removeEditedMessage();
                 }
             });
-        } else if (id == EventManager.ON_PINNED_MESSAGE) {
-            G.runOnUiThread(() -> initPinedMessage());
+        } else if ((long) message[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
+            G.runOnUiThread(this::initPinedMessage);
         }
     }
 

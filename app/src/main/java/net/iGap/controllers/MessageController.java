@@ -66,6 +66,8 @@ public class MessageController extends BaseController implements EventListener {
             getMessageDataStorage().deleteRoomFromStorage(res.roomId);
         } else if (object instanceof IG_RPC.Res_Group_Edit_Message || object instanceof IG_RPC.Res_Chat_Edit_Message || object instanceof IG_RPC.Res_Channel_Edit_Message) {
             onMessageEditResponse(object, true);
+        } else if (object instanceof IG_RPC.Group_pin_message_response || object instanceof IG_RPC.Channel_pin_message_response) {
+            onPinMessageResponse(object);
         }
     }
 
