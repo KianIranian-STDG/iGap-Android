@@ -345,4 +345,23 @@ public class MessageDataStorage extends BaseController {
             }
         }));
     }
+
+    public void updatePinnedMessage(long roomId, long messageId) {
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                database.beginTransaction();
+                final RealmRoom room = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                if (room != null) {
+                    room.setPinMessageId(messageId);
+                }
+
+                database.commitTransaction();
+
+                getEventManager().postEvent(EventManager.ON_PINNED_MESSAGE, roomId, messageId);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }));
+    }
 }

@@ -7,6 +7,7 @@ import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoChannelDelete;
 import net.iGap.proto.ProtoChannelDeleteMessage;
 import net.iGap.proto.ProtoChannelEditMessage;
+import net.iGap.proto.ProtoChannelPinMessage;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
 import net.iGap.proto.ProtoClientGetDiscovery;
@@ -15,6 +16,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
 import net.iGap.proto.ProtoGroupDeleteMessage;
 import net.iGap.proto.ProtoGroupEditMessage;
+import net.iGap.proto.ProtoGroupPinMessage;
 import net.iGap.proto.ProtoInfoConfig;
 
 import java.util.ArrayList;
@@ -569,7 +571,7 @@ public class IG_RPC {
     }
 
     public static class Res_Channel_Edit_Message extends AbstractObject {
-        public static int actionId = 30425;
+        public static final int actionId = 30425;
 
         public String newMessage;
         public long messageId;
@@ -602,6 +604,121 @@ public class IG_RPC {
             messageId = response.getMessageId();
             messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
+            roomId = response.getRoomId();
+        }
+    }
+
+    public static class Group_pin_message extends AbstractObject {
+        public static final int actionId = 326;
+
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Group_pin_message_response().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupPinMessage.GroupPinMessage.Builder builder = ProtoGroupPinMessage.GroupPinMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Group_pin_message_response extends AbstractObject {
+        public static final int actionId = 30326;
+
+        public ProtoGlobal.RoomMessage pinnedMessage;
+        public long roomId;
+
+        public Group_pin_message_response deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Group_pin_message_response object = null;
+            try {
+                object = new Group_pin_message_response();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupPinMessage.GroupPinMessageResponse response = ProtoGroupPinMessage.GroupPinMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            pinnedMessage = response.getPinnedMessage();
+            roomId = response.getRoomId();
+        }
+
+    }
+
+    public static class Channel_pin_message extends AbstractObject {
+        public static final int actionId = 427;
+
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Channel_pin_message_response().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelPinMessage.ChannelPinMessage.Builder builder = ProtoChannelPinMessage.ChannelPinMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Channel_pin_message_response extends AbstractObject {
+        public static final int actionId = 30427;
+
+        public ProtoGlobal.RoomMessage pinnedMessage;
+        public long roomId;
+
+        public Channel_pin_message_response deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Channel_pin_message_response object = null;
+            try {
+                object = new Channel_pin_message_response();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelPinMessage.ChannelPinMessageResponse response = ProtoChannelPinMessage.ChannelPinMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            pinnedMessage = response.getPinnedMessage();
             roomId = response.getRoomId();
         }
     }

@@ -69,6 +69,7 @@ public class EventManager {
     public static final int APP_CONFIG_CHANGED = eventId++;
 
     public static final int ON_EDIT_MESSAGE = eventId++;
+    public static final int ON_PINNED_MESSAGE = eventId++;
 
     private static EventManager eventListenerInstance;
 

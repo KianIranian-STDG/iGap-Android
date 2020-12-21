@@ -158,7 +158,8 @@ public class MessageController extends BaseController implements EventListener {
             if (response != null) {
                 onMessageEditResponse(response, false);
             } else {
-
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                FileLog.e("Edit message -> Major: " + err.minor + " Minor: " + err.minor);
             }
         });
 
@@ -205,5 +206,50 @@ public class MessageController extends BaseController implements EventListener {
         getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
         getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage);
 
+    }
+
+    public void pinMessage(long roomId, long messageId, int chatType) {
+        AbstractObject req = null;
+
+        if (chatType == ProtoGlobal.Room.Type.GROUP_VALUE) {
+            IG_RPC.Group_pin_message group_pin_message = new IG_RPC.Group_pin_message();
+            group_pin_message.roomId = roomId;
+            group_pin_message.messageId = messageId;
+            req = group_pin_message;
+        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL_VALUE) {
+            IG_RPC.Channel_pin_message channel_pin_message = new IG_RPC.Channel_pin_message();
+            channel_pin_message.messageId = messageId;
+            channel_pin_message.roomId = roomId;
+            req = channel_pin_message;
+        }
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                MessageController.this.onPinMessageResponse(response);
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                FileLog.e("Pin message -> Major: " + err.minor + " Minor: " + err.minor);
+            }
+        });
+    }
+
+    private void onPinMessageResponse(AbstractObject response) {
+        if (response == null) {
+            return;
+        }
+        long roomId = 0;
+        long messageId = 0;
+
+        if (response instanceof IG_RPC.Group_pin_message_response) {
+            IG_RPC.Group_pin_message_response res = (IG_RPC.Group_pin_message_response) response;
+            roomId = res.roomId;
+            messageId = res.pinnedMessage.getMessageId();
+        } else if (response instanceof IG_RPC.Channel_pin_message_response) {
+            IG_RPC.Channel_pin_message_response res = (IG_RPC.Channel_pin_message_response) response;
+            roomId = res.roomId;
+            messageId = res.pinnedMessage.getMessageId();
+        }
+
+        getMessageDataStorage().updatePinnedMessage(roomId, messageId);
     }
 }
