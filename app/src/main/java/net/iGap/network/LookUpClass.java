@@ -52,6 +52,9 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Chat_Edit_Message.actionId, IG_RPC.Res_Chat_Edit_Message.class);
         classes.put(IG_RPC.Res_Group_Edit_Message.actionId, IG_RPC.Res_Group_Edit_Message.class);
         classes.put(IG_RPC.Res_Channel_Edit_Message.actionId, IG_RPC.Res_Channel_Edit_Message.class);
+        classes.put(IG_RPC.Res_Channel_Delete_Message.actionId, IG_RPC.Res_Channel_Delete_Message.class);
+        classes.put(IG_RPC.Res_Chat_Delete_Message.actionId, IG_RPC.Res_Chat_Delete_Message.class);
+        classes.put(IG_RPC.Res_Group_Delete_Message.actionId, IG_RPC.Res_Group_Delete_Message.class);
     }
 
     public boolean validObject(int actionId) {
