@@ -407,7 +407,7 @@ public class IG_RPC {
         }
     }
 
-    public class Chat_Edit_Message extends AbstractObject {
+    public static class Chat_edit_message extends AbstractObject {
         public static final int actionId = 203;
 
         public long roomId;
@@ -434,12 +434,12 @@ public class IG_RPC {
         }
     }
 
-    public class Res_Chat_Edit_Message extends AbstractObject {
+    public static class Res_Chat_Edit_Message extends AbstractObject {
         public static final int actionId = 30203;
 
-        public String responseMessage;
+        public String newMessage;
         public long messageId;
-        public ProtoGlobal.RoomMessageType messageType;
+        public int messageType;
         public long messageVersion;
         public long roomId;
 
@@ -464,17 +464,17 @@ public class IG_RPC {
             ProtoChatEditMessage.ChatEditMessageResponse response = ProtoChatEditMessage.ChatEditMessageResponse.parseFrom(message);
             resId = response.getResponse().getId();
 
-            responseMessage = response.getMessage();
+            newMessage = response.getMessage();
             messageId = response.getMessageId();
-            messageType = response.getMessageType();
+            messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
             roomId = response.getRoomId();
         }
     }
 
 
-    public class Group_Edit_Message extends AbstractObject {
-        public static final int actionId = 203;
+    public static class Group_edit_message extends AbstractObject {
+        public static final int actionId = 325;
 
         public long roomId;
         public long messageId;
@@ -500,12 +500,12 @@ public class IG_RPC {
         }
     }
 
-    public class Res_Group_Edit_Message extends AbstractObject {
-        public static final int actionId = 30203;
+    public static class Res_Group_Edit_Message extends AbstractObject {
+        public static final int actionId = 30325;
 
-        public String responseMessage;
+        public String newMessage;
         public long messageId;
-        public ProtoGlobal.RoomMessageType messageType;
+        public int messageType;
         public long messageVersion;
         public long roomId;
 
@@ -530,16 +530,16 @@ public class IG_RPC {
             ProtoGroupEditMessage.GroupEditMessageResponse response = ProtoGroupEditMessage.GroupEditMessageResponse.parseFrom(message);
             resId = response.getResponse().getId();
 
-            responseMessage = response.getMessage();
+            newMessage = response.getMessage();
             messageId = response.getMessageId();
-            messageType = response.getMessageType();
+            messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
             roomId = response.getRoomId();
         }
     }
 
-    public class Channel_Edit_Message extends AbstractObject {
-        public static final int actionId = 203;
+    public static class Channel_edit_message extends AbstractObject {
+        public static final int actionId = 425;
 
         public long roomId;
         public long messageId;
@@ -565,12 +565,12 @@ public class IG_RPC {
         }
     }
 
-    public class Res_Channel_Edit_Message extends AbstractObject {
-        public static final int actionId = 30203;
+    public static class Res_Channel_Edit_Message extends AbstractObject {
+        public static final int actionId = 30425;
 
-        public String responseMessage;
+        public String newMessage;
         public long messageId;
-        public ProtoGlobal.RoomMessageType messageType;
+        public int messageType;
         public long messageVersion;
         public long roomId;
 
@@ -595,9 +595,9 @@ public class IG_RPC {
             ProtoChannelEditMessage.ChannelEditMessageResponse response = ProtoChannelEditMessage.ChannelEditMessageResponse.parseFrom(message);
             resId = response.getResponse().getId();
 
-            responseMessage = response.getMessage();
+            newMessage = response.getMessage();
             messageId = response.getMessageId();
-            messageType = response.getMessageType();
+            messageType = response.getMessageTypeValue();
             messageVersion = response.getMessageVersion();
             roomId = response.getRoomId();
         }

@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoGroupAddAdmin;
 
 public class RequestGroupAddAdmin {
@@ -29,7 +29,7 @@ public class RequestGroupAddAdmin {
         }
     }
 
-    public void groupAddAdmin(long roomId, long memberId, ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, OnResponse onResponse) {
+    public void groupAddAdmin(long roomId, long memberId, ProtoGroupAddAdmin.GroupAddAdmin.AdminRights adminRights, RequestDelegate onResponse) {
 
         ProtoGroupAddAdmin.GroupAddAdmin.Builder builder = ProtoGroupAddAdmin.GroupAddAdmin.newBuilder();
         builder.setRoomId(roomId);

@@ -12,7 +12,7 @@ package net.iGap.response;
 
 import net.iGap.helper.HelperMember;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoChannelKickAdmin;
 import net.iGap.realm.RealmRoomAccess;
 
@@ -39,15 +39,15 @@ public class ChannelKickAdminResponse extends MessageHandler {
 
         RealmRoomAccess.getAccess(builder.getMemberId(), builder.getRoomId());
 
-        if (identity instanceof OnResponse)
-            ((OnResponse) identity).onReceived(message, null);
+        if (identity instanceof RequestDelegate)
+            ((RequestDelegate) identity).onReceived(message, null);
     }
 
     @Override
     public void error() {
         super.error();
-        if (identity instanceof OnResponse)
-            ((OnResponse) identity).onReceived(null, message);
+        if (identity instanceof RequestDelegate)
+            ((RequestDelegate) identity).onReceived(null, message);
     }
 }
 

@@ -1,6 +1,5 @@
 package net.iGap.viewmodel.sticker;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
@@ -9,7 +8,7 @@ import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.FileUtils;
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
@@ -20,9 +19,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
-import io.reactivex.android.MainThreadDisposable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -72,7 +69,7 @@ public class RemoveStickerViewModel extends ObserverViewModel {
         }
     }
 
-    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup, OnResponse onResponse) {
+    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup, RequestDelegate onResponse) {
         repository.removeStickerGroupFromMyStickers(stickerGroup)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {

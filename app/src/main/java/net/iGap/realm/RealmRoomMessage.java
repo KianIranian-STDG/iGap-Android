@@ -677,39 +677,9 @@ public class RealmRoomMessage extends RealmObject {
             @Override
             public void run() {
                 DbManager.getInstance().doRealmTransaction(realm -> {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
-                    if (roomMessage != null) {
-                        RealmRoom.updateTime(realm, roomId, TimeUtils.currentLocalTime());
-
-                        roomMessage.setMessage(message);
-                        roomMessage.setEdited(true);
-                        RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
-                        RealmRoomMessage.isEmojiInText(roomMessage, message);
-
-                        switch (roomMessage.getMessageType()) {
-                            case IMAGE:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.IMAGE_TEXT);
-                                break;
-                            case VIDEO:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VIDEO_TEXT);
-                                break;
-                            case AUDIO:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.AUDIO_TEXT);
-                                break;
-                            case GIF:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.GIF_TEXT);
-                                break;
-                            case FILE:
-                                roomMessage.setMessageType(ProtoGlobal.RoomMessageType.FILE_TEXT);
-                                break;
-                        }
-
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
-
-                        if (realmClientCondition != null) {
-                            realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
-                        }
-
+                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+                    if (realmClientCondition != null) {
+                        realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, messageId, message));
                     }
                 });
             }

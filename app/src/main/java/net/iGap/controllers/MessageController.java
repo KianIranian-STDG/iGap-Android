@@ -64,6 +64,8 @@ public class MessageController extends BaseController implements EventListener {
         } else if (object instanceof IG_RPC.Res_Channel_Delete) {
             IG_RPC.Res_Channel_Delete res = (IG_RPC.Res_Channel_Delete) object;
             getMessageDataStorage().deleteRoomFromStorage(res.roomId);
+        } else if (object instanceof IG_RPC.Res_Group_Edit_Message || object instanceof IG_RPC.Res_Chat_Edit_Message || object instanceof IG_RPC.Res_Channel_Edit_Message) {
+            onMessageEditResponse(object, true);
         }
     }
 
@@ -127,5 +129,81 @@ public class MessageController extends BaseController implements EventListener {
         }
 
         getMessageDataStorage().resetRoomLastMessage(roomId, message.messageId);
+    }
+
+    public void editMessage(long messageId, long roomId, String newMessage, int chatType) {
+        AbstractObject req = null;
+
+        if (chatType == ProtoGlobal.Room.Type.CHAT_VALUE) {
+            IG_RPC.Chat_edit_message req_chat_edit = new IG_RPC.Chat_edit_message();
+            req_chat_edit.message = newMessage;
+            req_chat_edit.messageId = messageId;
+            req_chat_edit.roomId = roomId;
+            req = req_chat_edit;
+        } else if (chatType == ProtoGlobal.Room.Type.GROUP_VALUE) {
+            IG_RPC.Group_edit_message req_group_edit = new IG_RPC.Group_edit_message();
+            req_group_edit.message = newMessage;
+            req_group_edit.messageId = messageId;
+            req_group_edit.roomId = roomId;
+            req = req_group_edit;
+        } else if (chatType == ProtoGlobal.Room.Type.CHANNEL_VALUE) {
+            IG_RPC.Channel_edit_message req_channel_edit = new IG_RPC.Channel_edit_message();
+            req_channel_edit.message = newMessage;
+            req_channel_edit.messageId = messageId;
+            req_channel_edit.roomId = roomId;
+            req = req_channel_edit;
+        }
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                onMessageEditResponse(response, false);
+            } else {
+
+            }
+        });
+
+    }
+
+    private void onMessageEditResponse(AbstractObject response, boolean isUpdate) {
+        if (response == null) {
+            return;
+        }
+
+        long roomId = 0;
+        long messageId = 0;
+        int messageType = 0;
+        long messageVersion = 0;
+        String newMessage = null;
+
+        if (response instanceof IG_RPC.Res_Chat_Edit_Message) {
+            IG_RPC.Res_Chat_Edit_Message res = (IG_RPC.Res_Chat_Edit_Message) response;
+
+            newMessage = res.newMessage;
+            roomId = res.roomId;
+            messageId = res.messageId;
+            messageVersion = res.messageVersion;
+            messageType = res.messageType;
+        } else if (response instanceof IG_RPC.Res_Group_Edit_Message) {
+            IG_RPC.Res_Group_Edit_Message res = (IG_RPC.Res_Group_Edit_Message) response;
+
+            newMessage = res.newMessage;
+            roomId = res.roomId;
+            messageId = res.messageId;
+            messageVersion = res.messageVersion;
+            messageType = res.messageType;
+        } else {
+
+            IG_RPC.Res_Channel_Edit_Message res = (IG_RPC.Res_Channel_Edit_Message) response;
+
+            newMessage = res.newMessage;
+            roomId = res.roomId;
+            messageId = res.messageId;
+            messageVersion = res.messageVersion;
+            messageType = res.messageType;
+        }
+
+        getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
+        getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage);
+
     }
 }

@@ -2,15 +2,18 @@ package net.iGap.controllers;
 
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
+import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
+import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmOfflineDelete;
+import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
@@ -21,7 +24,7 @@ public class MessageDataStorage extends BaseController {
 
     private static volatile MessageDataStorage[] instance = new MessageDataStorage[AccountManager.MAX_ACCOUNT_COUNT];
     private DispatchQueue storageQueue = new DispatchQueue("MessageStorage");
-//    private Realm database;
+    //    private Realm database;
     private String TAG = getClass().getSimpleName();
 
     public MessageDataStorage(int currentAccount) {
@@ -278,6 +281,62 @@ public class MessageDataStorage extends BaseController {
 
                 if (attachment != null) {
                     attachment.token = token;
+                }
+
+                database.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }));
+    }
+
+    public void updateEditedMessage(final long roomId, final long messageId, final long messageVersion, final int messageType, final String message, boolean isUpdate) {
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                database.beginTransaction();
+
+                RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null) {
+                    realmRoom.updatedTime = TimeUtils.currentLocalTime();
+                }
+
+                RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.setVersion(messageVersion, ClientConditionVersion.EDIT);
+                }
+
+                if (isUpdate) {
+                    RealmOfflineEdited offlineEdited = database.where(RealmOfflineEdited.class).equalTo("messageId", messageId).findFirst();
+                    if (offlineEdited != null) {
+                        offlineEdited.deleteFromRealm();
+                    }
+                }
+
+                RealmRoomMessage roomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
+                if (roomMessage != null) {
+                    roomMessage.setMessage(message);
+                    roomMessage.messageVersion = messageVersion;
+                    roomMessage.edited = true;
+                    roomMessage.messageType = ProtoGlobal.RoomMessageType.forNumber(messageType).toString();
+                    RealmRoomMessage.addTimeIfNeed(roomMessage, database);
+
+                    switch (roomMessage.getMessageType()) {
+                        case IMAGE:
+                            roomMessage.messageType = ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString();
+                            break;
+                        case VIDEO:
+                            roomMessage.messageType = ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString();
+                            break;
+                        case AUDIO:
+                            roomMessage.messageType = ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString();
+                            break;
+                        case GIF:
+                            roomMessage.messageType = ProtoGlobal.RoomMessageType.GIF_TEXT.toString();
+                            break;
+                        case FILE:
+                            roomMessage.messageType = ProtoGlobal.RoomMessageType.FILE_TEXT.toString();
+                            break;
+                    }
                 }
 
                 database.commitTransaction();
