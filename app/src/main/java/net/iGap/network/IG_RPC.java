@@ -5,12 +5,15 @@ import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoChannelDelete;
+import net.iGap.proto.ProtoChannelDeleteMessage;
 import net.iGap.proto.ProtoChannelEditMessage;
+import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupCreate;
+import net.iGap.proto.ProtoGroupDeleteMessage;
 import net.iGap.proto.ProtoGroupEditMessage;
 import net.iGap.proto.ProtoInfoConfig;
 
@@ -566,7 +569,7 @@ public class IG_RPC {
     }
 
     public static class Res_Channel_Edit_Message extends AbstractObject {
-        public static final int actionId = 30425;
+        public static int actionId = 30425;
 
         public String newMessage;
         public long messageId;
@@ -603,4 +606,182 @@ public class IG_RPC {
         }
     }
 
+    public static class Channel_Delete_Message extends AbstractObject {
+
+        public static int actionId = 411;
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Delete_Message().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelDeleteMessage.ChannelDeleteMessage.Builder builder = ProtoChannelDeleteMessage.ChannelDeleteMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Delete_Message extends AbstractObject {
+
+        public static int actionId = 30411;
+        public long roomId;
+        public long messageId;
+        public long deleteVersion;
+
+        @Override
+
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Channel_Delete_Message object = null;
+            try {
+                object = new Res_Channel_Delete_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelDeleteMessage.ChannelDeleteMessageResponse response = ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.parseFrom(message);
+
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            deleteVersion = response.getDeleteVersion();
+        }
+    }
+
+    public static class Chat_Delete_Message extends AbstractObject {
+
+        public static final int actionId = 204;
+        public long roomId;
+        public long messageId;
+        public boolean both;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Chat_Delete_Message().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatDeleteMessage.ChatDeleteMessage.Builder builder = ProtoChatDeleteMessage.ChatDeleteMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setBoth(both);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Chat_Delete_Message extends AbstractObject {
+        public static int actionId = 30204;
+        public long roomId;
+        public long messageId;
+        public long deleteVersion;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Delete_Message object = null;
+            try {
+                object = new Res_Chat_Delete_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatDeleteMessage.ChatDeleteMessageResponse response = ProtoChatDeleteMessage.ChatDeleteMessageResponse.parseFrom(message);
+
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            deleteVersion = response.getDeleteVersion();
+        }
+    }
+
+    public static class Group_Delete_Message extends AbstractObject {
+
+        public static int actionId = 320;
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Group_Delete_Message().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupDeleteMessage.GroupDeleteMessage.Builder builder = ProtoGroupDeleteMessage.GroupDeleteMessage.newBuilder();
+            roomId = builder.getRoomId();
+            messageId = builder.getMessageId();
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Group_Delete_Message extends AbstractObject {
+
+        public static int actionId = 30320;
+        public long roomId;
+        public long messageId;
+        public long deleteVersion;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Delete_Message object = null;
+            try {
+                object = new Res_Group_Delete_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupDeleteMessage.GroupDeleteMessageResponse response = ProtoGroupDeleteMessage.GroupDeleteMessageResponse.parseFrom(message);
+
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            deleteVersion = response.getDeleteVersion();
+        }
+    }
 }
