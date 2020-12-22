@@ -7,10 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import androidx.core.view.ViewCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -29,10 +25,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -546,13 +546,11 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
             }
 
             if (mOrder == null) {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);
             }
@@ -580,13 +578,11 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
 //                mCreditSwitch.setEnabled(mOrder.amount <= RaadApp.paygearCard.balance);
             }
             if (mOrder == null) {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);
             }

@@ -21,14 +21,14 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
+import net.iGap.adapter.kuknos.TabAdapter;
 import net.iGap.databinding.NewsGrouptabFragBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.adapter.kuknos.TabAdapter;
 import net.iGap.model.news.NewsApiArg;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.util.Objects;
 
@@ -84,9 +84,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
         binding.Toolbar.addView(mHelperToolbar.getView());
 
         if (!arg.getString("GroupPic").equals(""))
-            Picasso.with(G.context)
-                    //                .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(arg.getString("GroupPic"))
+            Picasso.get().load(arg.getString("GroupPic"))
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(binding.groupImage);
 
@@ -97,8 +95,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
         frag.setHandler(news -> {
-            Picasso.with(G.context)
-                    .load(news.getImage())
+            Picasso.get().load(news.getImage())
                     .into(binding.groupImage);
             binding.groupTitle.setText(news.getTitle());
             binding.headerNews.setOnClickListener(v -> {

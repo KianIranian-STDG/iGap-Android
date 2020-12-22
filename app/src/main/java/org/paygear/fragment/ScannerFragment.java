@@ -46,7 +46,6 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.CongratulationsDialogBinding;
 import net.iGap.databinding.QrVoucherDialogBinding;
@@ -503,7 +502,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             return;
         Account myAccount = RaadApp.me;
         appBarTitle.setText(getString(R.string.scanner));
-        Picasso.with(G.context)
+        Picasso.get()
                 .load(RaadCommonUtils.getImageUrl(myAccount.profilePicture))
                 .transform(new CircleImageTransform())
                 .error(R.drawable.ic_person_outline_black_24dp)

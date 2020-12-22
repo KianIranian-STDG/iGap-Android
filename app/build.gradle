@@ -246,7 +246,7 @@ dependencies {
     // don't upgrade this lib
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.squareup.picasso:picasso:2.5.2' // mpl lib uses 2.5.2 don't upgrade it
+    implementation 'com.squareup.picasso:picasso:2.71828' // mpl lib uses 2.5.2 don't upgrade it
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'

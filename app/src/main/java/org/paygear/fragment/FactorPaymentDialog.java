@@ -6,10 +6,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +14,13 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentDialogFactorPaymentBinding;
 
@@ -164,8 +163,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
 
         factorPaymentBinding.title.setText(R.string.pay_to);
         if (mOrder == null) {
-            Picasso.with(G.context)
-                    .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
+            Picasso.get().load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                     .fit()
                     .into(factorPaymentBinding.image);
             factorPaymentBinding.subtitle.setText(mAccount.getName());
@@ -174,8 +172,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             factorPaymentBinding.amountToPay.setText(RaadCommonUtils.formatPrice(amountToPay, false));
 
         } else {
-            Picasso.with(G.context)
-                    .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
+            Picasso.get().load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                     .fit()
                     .into(factorPaymentBinding.image);
             factorPaymentBinding.subtitle.setText(mOrder.receiver.getName());

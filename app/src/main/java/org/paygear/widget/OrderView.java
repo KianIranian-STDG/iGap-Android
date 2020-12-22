@@ -2,10 +2,6 @@ package org.paygear.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -16,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.WalletActivity;
@@ -236,14 +235,12 @@ public class OrderView extends LinearLayout {
         price.setText(RaadCommonUtils.formatPrice(order.amount, true, "\n"));
 
         if (imgRes > 0) {
-            Picasso.with(G.context)
-                    .load(imgRes)
+            Picasso.get().load(imgRes)
                     .fit()
                     .centerCrop()
                     .into(image);
         } else {
-            Picasso.with(G.context)
-                    .load(RaadCommonUtils.getImageUrl(img))
+            Picasso.get().load(RaadCommonUtils.getImageUrl(img))
                     .error(R.drawable.ic_person_outline2_white_24dp)
                     .placeholder(R.drawable.ic_person_outline2_white_24dp)
                     .fit()

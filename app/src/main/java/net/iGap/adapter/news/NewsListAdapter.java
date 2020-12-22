@@ -15,9 +15,9 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.helper.HelperCalander;
 import net.iGap.model.news.NewsList;
+import net.iGap.module.Theme;
 
 import java.util.ArrayList;
 
@@ -176,9 +176,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 rootTitle.setVisibility(View.GONE);
             else
                 rootTitle.setText(tempRoot);
-            Picasso.with(G.context)
-//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getNews().get(position).getImage())
+            Picasso.get().load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));
@@ -215,9 +213,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void initVH(int position) {
-            Picasso.with(G.context)
-//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getNews().get(position).getImage())
+            Picasso.get().load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));

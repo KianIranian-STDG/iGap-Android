@@ -129,7 +129,7 @@ public class MakeButtons {
         AppCompatImageView img1 = new AppCompatImageView(mainLayout.getContext());
 
         if (!entity.getImageUrl().equals("")) {
-            Picasso.with(G.context).load(entity.getImageUrl()).resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32)).into(img1);
+            Picasso.get().load(entity.getImageUrl()).resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32)).into(img1);
 
             LinearLayout.LayoutParams layout_738 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
