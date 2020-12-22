@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.R;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.RequestManager;
+import net.iGap.proto.ProtoMplGetBillToken;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.text.DecimalFormat;
@@ -81,7 +82,7 @@ public class ShowBillInquiryViewModel extends ViewModel {
 
     public void onLastTermPayment() {
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
-            new RequestMplGetBillToken().mplGetBillToken(response.getLastTerm().getBillId(), response.getLastTerm().getPayId());
+            new RequestMplGetBillToken().mplGetBillToken(response.getLastTerm().getBillId(), response.getLastTerm().getPayId(), ProtoMplGetBillToken.MplGetBillToken.Type.LAST_TERM_VALUE);
             goBack.setValue(true);
         } else {
             showErrorMessage.setValue(R.string.there_is_no_connection_to_server);
@@ -90,7 +91,7 @@ public class ShowBillInquiryViewModel extends ViewModel {
 
     public void onMidTermPayment() {
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
-            new RequestMplGetBillToken().mplGetBillToken(response.getMidTerm().getBillId(), response.getMidTerm().getPayId());
+            new RequestMplGetBillToken().mplGetBillToken(response.getMidTerm().getBillId(), response.getMidTerm().getPayId(), ProtoMplGetBillToken.MplGetBillToken.Type.MID_TERM_VALUE);
             goBack.setValue(true);
         } else {
             showErrorMessage.setValue(R.string.there_is_no_connection_to_server);

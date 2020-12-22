@@ -1664,11 +1664,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime, String message) {
+    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount) {
         if (status == 0) {
             Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
             intent.putExtra("Type", "2");
             intent.putExtra("Token", token);
+
+            if (originalAmount > 0 && discountedAmount > 0) {
+                intent.putExtra("OriginalAmount", originalAmount);
+                intent.putExtra("DiscountedAmount", discountedAmount);
+            }
+
             startActivityForResult(intent, requestCodePaymentBill);
         } else {
             if (G.onMplResult != null) {

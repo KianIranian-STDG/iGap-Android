@@ -276,7 +276,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
         });
     }*/
 
-    public void payServiceBill(String billID, String payID, String price) {
+    public void payServiceBill(String billID, String payID, String price, int type) {
         if (payID == null || payID.equals("") || payID.equals("null")) {
             errorM.setValue(new ErrorModel("", "003"));
             return;
@@ -296,7 +296,7 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
             }
         };
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID));
+        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID), type);
     }
 
     public void deleteItem(BillList.Bill item) {

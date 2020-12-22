@@ -20,6 +20,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperNumerical;
+import net.iGap.proto.ProtoMplGetBillToken;
 import net.iGap.request.RequestMplGetBillToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -174,7 +175,7 @@ public class FragmentPaymentBillViewModel extends BaseViewModel {
             showLoadingView.set(View.VISIBLE);
 
             RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
+            requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId), ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
 
             enabledPaymentButton.set(false);
         } else {
