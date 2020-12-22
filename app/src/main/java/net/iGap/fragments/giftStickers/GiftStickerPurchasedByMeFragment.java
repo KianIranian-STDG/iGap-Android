@@ -5,12 +5,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperError;
+import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.observers.rx.ObserverFragment;
 
 public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftStickerBuyViewModel> {
@@ -92,6 +94,14 @@ public class GiftStickerPurchasedByMeFragment extends ObserverFragment<MyGiftSti
         viewModel.getShowEmptyListMessage().observe(getViewLifecycleOwner(), visibility -> emptyTv.setVisibility(visibility));
         viewModel.getShowLoading().observe(getViewLifecycleOwner(), visibility -> loadingProgressView.setVisibility(visibility));
         viewModel.getShowRetryView().observe(getViewLifecycleOwner(), visibility -> retryTv.setVisibility(visibility));
+
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int iPage, int totalItemsCount, RecyclerView view) {
+                viewModel.onPageEnded();
+            }
+        });
     }
 
     @Override

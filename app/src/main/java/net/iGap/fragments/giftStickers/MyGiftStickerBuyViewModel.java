@@ -12,9 +12,12 @@ import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
 import net.iGap.repository.StickerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.processors.PublishProcessor;
 
 public class MyGiftStickerBuyViewModel extends ObserverViewModel {
 
@@ -25,38 +28,63 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
     private MutableLiveData<Integer> showRetryView = new MutableLiveData<>();
     private MutableLiveData<Integer> showEmptyListMessage = new MutableLiveData<>();
 
+    private PublishProcessor<Integer> pagination = PublishProcessor.create();
+
     private String mode;
+    private int pages = 0;
 
     @Override
     public void subscribe() {
         EventManager.getInstance().addEventListener(EventManager.STICKER_CHANGED, this);
-    }
 
-    private void getData() {
         showLoading.postValue(View.VISIBLE);
         showEmptyListMessage.postValue(View.GONE);
-        StickerRepository.getInstance().getMyGiftStickerBuy(mode)
-                .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
-                    @Override
-                    public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
-                        loadStickerList.postValue(structIGGiftStickers);
-                        showLoading.postValue(View.GONE);
 
-                        if (structIGGiftStickers.size() == 0) {
-                            showEmptyListMessage.postValue(View.VISIBLE);
-                        }
-
-                        showRetryView.postValue(View.GONE);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        showLoading.postValue(View.GONE);
-                        showRetryView.postValue(View.VISIBLE);
-                    }
+        Disposable disposable = pagination
+                .onBackpressureDrop()
+                .doOnNext(integer -> showLoading.postValue(View.VISIBLE))
+                .concatMapSingle(page -> StickerRepository.getInstance().getMyGiftStickerBuy(mode, pages * 10, 10))
+                .doOnError(throwable -> {
+                    showRetryView.postValue(View.VISIBLE);
+                    showLoading.postValue(View.GONE);
+                    showLoading.postValue(View.GONE);
+                })
+                .onErrorReturn(throwable -> new ArrayList<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(structIGStickerGroups -> {
+                    loadStickerList.postValue(structIGStickerGroups);
+                    showLoading.postValue(View.GONE);
                 });
+
+        backgroundDisposable.add(disposable);
+        pagination.onNext(pages);
     }
+
+//    private void getData() {
+//        showLoading.postValue(View.VISIBLE);
+//        showEmptyListMessage.postValue(View.GONE);
+//        StickerRepository.getInstance().getMyGiftStickerBuy(mode)
+//                .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
+//                    @Override
+//                    public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
+//                        loadStickerList.postValue(structIGGiftStickers);
+//                        showLoading.postValue(View.GONE);
+//
+//                        if (structIGGiftStickers.size() == 0) {
+//                            showEmptyListMessage.postValue(View.VISIBLE);
+//                        }
+//
+//                        showRetryView.postValue(View.GONE);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        super.onError(e);
+//                        showLoading.postValue(View.GONE);
+//                        showRetryView.postValue(View.VISIBLE);
+//                    }
+//                });
+//    }
 
     public void onRetryButtonClick() {
         showRetryView.postValue(View.GONE);
@@ -87,7 +115,7 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
         } else {
             this.mode = "forwarded";
         }
-        getData();
+        pagination.onNext(pages);
     }
 
     public SingleLiveEvent<StructIGGiftSticker> getGoNext() {
@@ -129,6 +157,12 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
     @Override
     public void receivedMessage(int id, Object... message) {
         super.receivedMessage(id, message);
-        G.handler.post(this::getData);
+//        G.handler.post(this::getData);
+        G.handler.post(() -> pagination.onNext(pages));
+    }
+
+    public void onPageEnded() {
+        pages++;
+        pagination.onNext(pages);
     }
 }

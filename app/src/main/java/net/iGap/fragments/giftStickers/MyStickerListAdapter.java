@@ -41,7 +41,7 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
     }
 
     public void setItems(List<StructIGGiftSticker> items) {
-        this.items = items;
+        this.items.addAll(items);
         notifyDataSetChanged();
     }
 
