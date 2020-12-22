@@ -8,47 +8,51 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.repository.StickerRepository;
-import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
+import net.iGap.repository.StickerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.processors.PublishProcessor;
 
+public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
     private MutableLiveData<List<StructIGGiftSticker>> loadStickerList = new MutableLiveData<>();
+    private MutableLiveData<Integer> loadMoreProgressLiveData = new MutableLiveData<>();
+
+    private PublishProcessor<Integer> pagination = PublishProcessor.create();
+    private int pages = 0;
+
+
     private SingleLiveEvent<String> showRequestErrorMessage = new SingleLiveEvent<>();
     private ObservableInt showLoading = new ObservableInt(View.VISIBLE);
     private ObservableInt showRetryView = new ObservableInt(View.GONE);
     private ObservableInt showEmptyListMessage = new ObservableInt(View.GONE);
     private SingleLiveEvent<CardDetailDataModel> cardDetailLiveEvent = new SingleLiveEvent<>();
 
+
     @Override
     public void subscribe() {
-        showLoading.set(View.VISIBLE);
-        showEmptyListMessage.set(View.GONE);
-        StickerRepository.getInstance().getMyActivatedGiftSticker()
-                .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
-                    @Override
-                    public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
-                        loadStickerList.postValue(structIGGiftStickers);
-
-                        showLoading.set(View.GONE);
-
-                        if (structIGGiftStickers.size() == 0)
-                            showEmptyListMessage.set(View.VISIBLE);
-
-                        showRetryView.set(View.GONE);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-
-                        showRetryView.set(View.VISIBLE);
-                        showLoading.set(View.GONE);
-                    }
+        Disposable disposable = pagination
+                .onBackpressureDrop()
+                .doOnNext(integer -> loadMoreProgressLiveData.postValue(View.VISIBLE))
+                .concatMapSingle(page -> StickerRepository.getInstance().getMyActivatedGiftSticker(pages * 10, 10))
+                .doOnError(throwable -> {
+                    showRetryView.set(View.VISIBLE);
+                    showLoading.set(View.GONE);
+                    loadMoreProgressLiveData.postValue(View.GONE);
+                })
+                .onErrorReturn(throwable -> new ArrayList<>())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(structIGStickerGroups -> {
+                    loadStickerList.postValue(structIGStickerGroups);
+                    loadMoreProgressLiveData.postValue(View.GONE);
                 });
+
+        backgroundDisposable.add(disposable);
+        pagination.onNext(pages);
     }
 
     public void onRetryButtonClick() {
@@ -74,6 +78,16 @@ public class MyGiftStickerReceivedViewModel extends ObserverViewModel {
 
     public SingleLiveEvent<String> getShowRequestErrorMessage() {
         return showRequestErrorMessage;
+    }
+
+
+    public MutableLiveData<Integer> getLoadMoreProgressLiveData() {
+        return loadMoreProgressLiveData;
+    }
+
+    public void onPageEnded() {
+        pages++;
+        pagination.onNext(pages);
     }
 
 

@@ -57,10 +57,13 @@ public interface StickerApi {
     Single<StickersDataModel> getFavoriteSticker();
 
     @GET("gift/user-list")
-    Single<UserGiftStickersDataModel> getUserGiftSticker(@Query("status") String status);
+    Single<UserGiftStickersDataModel> getUserGiftSticker(@Query("status") String status, @Query("skip") int skip, @Query("limit") int limit);
 
     @GET("gift/activated-list")
-    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
+    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker(@Query("skip") int skip, @Query("limit") int limit);
+
+//    @GET("gift/activated-list")
+//    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
 
     @GET("gift/giftable-list")
     Single<StickerCategoryGroupDataModel> getGiftableStickers();
