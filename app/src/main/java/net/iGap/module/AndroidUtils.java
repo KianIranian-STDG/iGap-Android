@@ -29,7 +29,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -540,11 +539,15 @@ public final class AndroidUtils {
             }
         }
 
-        if (cashId != null && cashId.length() > 0) {
-            _hash = cashId;
+        try {
+            if (cashId != null && cashId.length() > 0) {
+                _hash = makeSHA1Hash(cashId);
+            }
+        } catch (Exception e) {
+
         }
 
-        return suitableAppFilePath(messageType) + "/" + _hash + "_" + _mimeType;
+        return suitableAppFilePath(messageType) + "/" + _hash + _mimeType;
     }
 
     public static String getFilePathWithCashId(String cashId, String name, String selectDir, boolean isThumbNail) {
@@ -564,8 +567,12 @@ public final class AndroidUtils {
 
         String _result = "";
 
-        if (cashId != null && cashId.length() > 0) {
-            _hash = cashId;
+        try {
+            if (cashId != null && cashId.length() > 0) {
+                _hash = makeSHA1Hash(cashId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (isThumbNail) {
