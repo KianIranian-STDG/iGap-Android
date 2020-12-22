@@ -47,7 +47,6 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
                 .doOnError(throwable -> {
                     showRetryView.postValue(View.VISIBLE);
                     showLoading.postValue(View.GONE);
-                    showLoading.postValue(View.GONE);
                 })
                 .onErrorReturn(throwable -> new ArrayList<>())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -60,34 +59,9 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
         pagination.onNext(pages);
     }
 
-//    private void getData() {
-//        showLoading.postValue(View.VISIBLE);
-//        showEmptyListMessage.postValue(View.GONE);
-//        StickerRepository.getInstance().getMyGiftStickerBuy(mode)
-//                .subscribe(new IGSingleObserver<List<StructIGGiftSticker>>(mainThreadDisposable) {
-//                    @Override
-//                    public void onSuccess(List<StructIGGiftSticker> structIGGiftStickers) {
-//                        loadStickerList.postValue(structIGGiftStickers);
-//                        showLoading.postValue(View.GONE);
-//
-//                        if (structIGGiftStickers.size() == 0) {
-//                            showEmptyListMessage.postValue(View.VISIBLE);
-//                        }
-//
-//                        showRetryView.postValue(View.GONE);
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        super.onError(e);
-//                        showLoading.postValue(View.GONE);
-//                        showRetryView.postValue(View.VISIBLE);
-//                    }
-//                });
-//    }
-
     public void onRetryButtonClick() {
         showRetryView.postValue(View.GONE);
+        pagination.onNext(0);
         subscribe();
     }
 
@@ -157,8 +131,7 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
     @Override
     public void receivedMessage(int id, Object... message) {
         super.receivedMessage(id, message);
-//        G.handler.post(this::getData);
-        G.handler.post(() -> pagination.onNext(pages));
+        G.handler.post(() -> pagination.onNext(0));
     }
 
     public void onPageEnded() {
