@@ -69,7 +69,6 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;
@@ -86,6 +85,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
+import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.model.PassCode;
 import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
@@ -1689,7 +1689,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     /*public void getUserCredit() {
 
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
                 @Override

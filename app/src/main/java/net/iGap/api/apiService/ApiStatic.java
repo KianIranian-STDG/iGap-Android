@@ -4,8 +4,6 @@ import net.iGap.module.accountManager.AppConfig;
 
 public class ApiStatic {
     static final String SHAHKAR_URL = "https://api.igap.net/external/v1.0/shahkar/";
-    static final String WEATHER_URL = "http://192.168.8.66:7000/v1.0/";
-    static final String KUKNOS_TEST_URL = "http://192.168.8.109:3002/v1.0/";
     static final String VERSION1_1 = "v1.1/";
     static final String STICKER_URL = "https://api.igap.net/sticker/" + VERSION1_1;
     private static final String BASE_URL = "https://api.igap.net/";

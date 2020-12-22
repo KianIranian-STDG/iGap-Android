@@ -691,7 +691,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void getUserCredit() {
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
+        WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCards(null, false, true).enqueue(new Callback<ArrayList<Card>>() {
                 @Override
