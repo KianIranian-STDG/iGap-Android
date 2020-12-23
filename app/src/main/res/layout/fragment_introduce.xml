@@ -53,18 +53,16 @@
             android:id="@+id/changeLanguage"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginTop="624dp"
             android:layout_marginBottom="16dp"
             android:onClick="@{()->viewModel.onLanguageChangeClick()}"
-            app:textAllCaps="false"
-            android:paddingRight="@dimen/dp15"
             android:paddingLeft="@dimen/dp15"
+            android:paddingRight="@dimen/dp15"
             android:textColor="?attr/iGapButtonTextColor"
             app:layout_constraintBottom_toTopOf="@+id/conditionText"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:textAllCaps="false" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/conditionText"
