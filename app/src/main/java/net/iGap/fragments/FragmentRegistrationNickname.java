@@ -26,7 +26,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +39,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
@@ -49,12 +47,13 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.PermissionHelper;
-import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -128,17 +127,17 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             }
         });
 
-        viewModel.showReagentPhoneNumberError.observe(getViewLifecycleOwner(), isError -> {
-            if (isError != null && isError) {
-                Toast.makeText(getContext(), R.string.reagent_error_message, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        viewModel.showReagentPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), showError -> {
-            if (showError != null && showError) {
-                Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        viewModel.showReagentPhoneNumberError.observe(getViewLifecycleOwner(), isError -> {
+//            if (isError != null && isError) {
+//                Toast.makeText(getContext(), R.string.reagent_error_message, Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
+//        viewModel.showReagentPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), showError -> {
+//            if (showError != null && showError) {
+//                Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     @Override

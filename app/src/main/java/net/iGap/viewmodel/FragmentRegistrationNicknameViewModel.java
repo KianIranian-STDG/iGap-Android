@@ -57,16 +57,16 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     public MutableLiveData<Boolean> hideKeyboard = new MutableLiveData<>();
     public MutableLiveData<Integer> progressValue = new MutableLiveData<>();
     public ObservableField<BindingAdapter.AvatarImage> avatarImagePath = new ObservableField<>();
-    public MutableLiveData<Boolean> showReagentPhoneNumberError = new MutableLiveData<>();
+    //    public MutableLiveData<Boolean> showReagentPhoneNumberError = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> showDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showDialogSelectCountry = new SingleLiveEvent<>();
-    public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
+    //    public MutableLiveData<Boolean> showReagentPhoneNumberStartWithZeroError = new MutableLiveData<>();
     public ObservableInt prgVisibility = new ObservableInt(View.GONE);
     public ObservableInt showCameraImage = new ObservableInt(View.VISIBLE);
-    public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
-    public ObservableInt reagentPhoneNumberMaskMaxCount = new ObservableInt(11);
-    public ObservableField<String> reagentPhoneNumberMask = new ObservableField<>("###-###-####");
-    public ObservableField<String> reagentPhoneNumber = new ObservableField<>("");
+    //    public ObservableField<String> reagentCountryCode = new ObservableField<>("+98");
+    //    public ObservableInt reagentPhoneNumberMaskMaxCount = new ObservableInt(11);
+//    public ObservableField<String> reagentPhoneNumberMask = new ObservableField<>("###-###-####");
+//    public ObservableField<String> reagentPhoneNumber = new ObservableField<>("");
     public ObservableInt showErrorName = new ObservableInt();
     public ObservableInt showErrorLastName = new ObservableInt();
 
@@ -98,10 +98,10 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
 
         Collections.sort(structCountryArrayList, new CountryListComparator());
 
-        if (repository.getCallingCode() != 0)
-            reagentCountryCode.set("+" + repository.getCallingCode());
-        if (repository.getPattern() != "")
-            reagentPhoneNumberMask.set(repository.getPattern().replace("X", "#").replace(" ", "-"));
+//        if (repository.getCallingCode() != 0)
+//            reagentCountryCode.set("+" + repository.getCallingCode());
+//        if (repository.getPattern() != "")
+//            reagentPhoneNumberMask.set(repository.getPattern().replace("X", "#").replace(" ", "-"));
     }
 
     public ArrayList<StructCountry> getStructCountryArrayList() {
@@ -126,12 +126,12 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
             @Override
             public void onSuccess(LocationModel data) {
                 prgVisibility.set(View.GONE);
-                reagentCountryCode.set("+" + data.getCountryCode());
-                if (data.getPhoneMask().equals("")) {
-                    reagentPhoneNumberMask.set("##################");
-                } else {
-                    reagentPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
-                }
+//                reagentCountryCode.set("+" + data.getCountryCode());
+//                if (data.getPhoneMask().equals("")) {
+//                    reagentPhoneNumberMask.set("##################");
+//                } else {
+//                    reagentPhoneNumberMask.set(data.getPhoneMask().replace("X", "#").replace(" ", "-"));
+//                }
             }
 
             @Override
@@ -139,14 +139,14 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                 prgVisibility.set(View.GONE);
             }
         });
-        reagentPhoneNumber.set("");
+//        reagentPhoneNumber.set("");
     }
 
     public void onTextChanged(String reagentPhoneNumber) {
-        if (reagentPhoneNumber.startsWith("0")) {
-            this.reagentPhoneNumber.set("");
-            showReagentPhoneNumberStartWithZeroError.setValue(true);
-        }
+//        if (reagentPhoneNumber.startsWith("0")) {
+//            this.reagentPhoneNumber.set("");
+//            showReagentPhoneNumberStartWithZeroError.setValue(true);
+//        }
     }
 
     public void OnClickBtnLetsGo(@NotNull String name, String lastName) {
@@ -154,15 +154,15 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
             showErrorName.set(0);
             if (lastName.length() > 0) {
                 showErrorLastName.set(0);
-                if (reagentPhoneNumber.get().isEmpty() || reagentPhoneNumber.get().length() > 0 && repository.getRegex().equals("") || (!repository.getRegex().equals("") && reagentPhoneNumber.get().replace("-", "").matches(repository.getRegex()))) {
-                    showReagentPhoneNumberError.setValue(false);
+                if (/*reagentPhoneNumber.get().isEmpty() || reagentPhoneNumber.get().length() > 0 &&*/ repository.getRegex().equals("") || (!repository.getRegex().equals("") /*&& reagentPhoneNumber.get().replace("-", "").matches(repository.getRegex())*/)) {
+//                    showReagentPhoneNumberError.setValue(false);
                     hideKeyboard.setValue(true);
                     prgVisibility.set(View.VISIBLE);
                     repository.setNickName(
                             name,
                             lastName,
-                            reagentCountryCode.get().replace("+", ""),
-                            reagentPhoneNumber.get().replace("-", ""),
+                            /*reagentCountryCode.get().replace("+", "")*/null,
+                            /*reagentPhoneNumber.get().replace("-", "")*/ null,
                             new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
                                 @Override
                                 public void onSuccess() {
@@ -184,7 +184,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
                                 }
                             });
                 } else {
-                    showReagentPhoneNumberError.setValue(true);
+//                    showReagentPhoneNumberError.setValue(true);
                 }
             } else {
                 showErrorLastName.set(R.string.Toast_Write_NickName);
