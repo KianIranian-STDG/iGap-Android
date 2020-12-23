@@ -1457,7 +1457,7 @@ Want to get it?</string>
     <string name="auto_play_media">Auto-play Media</string>
     <string name="auto_download_media">Auto-download Media</string>
     <string name="chat_setting">Chat Settings</string>
-    <string name="terms_and_condition">By pressing start the button you will accept %s</string>
+    <string name="terms_and_condition">By pressing the start button you will accept %s</string>
     <string name="terms_and_condition_clickable">rules and regulations</string>
     <string name="add_bank_card">Add Your Card Here!</string>
     <string name="chat_setting_title">Chat Setting</string>
