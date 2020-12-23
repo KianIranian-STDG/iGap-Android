@@ -18,11 +18,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,25 +89,7 @@ public class FragmentRegister extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String t = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
-        SpannableString ss = new SpannableString(t);
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(@NotNull View textView) {
-                fragmentRegisterViewModel.onTermsAndConditionClick();
-            }
 
-            @Override
-            public void updateDrawState(@NotNull TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false);
-            }
-        };
-        ss.setSpan(clickableSpan, t.indexOf(getString(R.string.terms_and_condition_clickable)), t.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        fragmentRegisterBinding.conditionText.setText(ss);
-        fragmentRegisterBinding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());
-        fragmentRegisterBinding.conditionText.setHighlightColor(Color.TRANSPARENT);
 
         fragmentRegisterViewModel.showConditionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {
@@ -226,11 +203,6 @@ public class FragmentRegister extends BaseFragment {
             }
         });
 
-        fragmentRegisterViewModel.showTermsAndConditionDialog.observe(getViewLifecycleOwner(), termsAndConditionText -> {
-            if (termsAndConditionText != null) {
-                showDialogTermAndCondition(termsAndConditionText);
-            }
-        });
     }
 
     private void showMessageDialog(int title, int msg) {
@@ -349,17 +321,6 @@ public class FragmentRegister extends BaseFragment {
         }
     }
 
-    private void showDialogTermAndCondition(String message) {
-        if (getActivity() != null) {
-            Dialog dialogTermsAndCondition = new Dialog(getActivity());
-            dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
-            AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
-            termsText.setText(message);
-            dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
-            dialogTermsAndCondition.show();
-        }
-    }
 
     private void showDialogConditionError() {
         if (getContext() != null) {

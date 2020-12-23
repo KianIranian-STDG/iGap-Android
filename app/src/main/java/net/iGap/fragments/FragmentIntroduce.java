@@ -10,13 +10,23 @@
 
 package net.iGap.fragments;
 
+import android.app.Dialog;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -61,6 +71,22 @@ public class FragmentIntroduce extends BaseFragment {
 
         HelperTracker.sendTracker(HelperTracker.TRACKER_INSTALL_USER);
 
+        String condition = String.format(getString(R.string.terms_and_condition), getString(R.string.terms_and_condition_clickable));
+        String language = getString(R.string.change_language_title);
+
+        SpannableString conditionSpan = new SpannableString(condition);
+        SpannableString languageSpan = new SpannableString(language);
+
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View view) {
+                viewModel.onTermsAndConditionClick();
+            }
+        };
+
+        conditionSpan.setSpan(clickableSpan, condition.indexOf(getString(R.string.terms_and_condition_clickable)), condition.indexOf(getString(R.string.terms_and_condition_clickable)) + getString(R.string.terms_and_condition_clickable).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        languageSpan.setSpan(new UnderlineSpan(), language.indexOf(getString(R.string.change_language_title)), getString(R.string.change_language_title).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         viewModel.getShowErrorMessage().observe(getViewLifecycleOwner(), errorMessageId -> {
             if (errorMessageId != null) {
                 HelperError.showSnackMessage(getString(errorMessageId), false);
@@ -80,6 +106,18 @@ public class FragmentIntroduce extends BaseFragment {
         });
 
         binding.viewPagerIndicator.circleButtonCount(INTRODUCE_SLIDE_COUNT);
+
+        binding.conditionText.setText(conditionSpan);
+        binding.conditionText.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.conditionText.setHighlightColor(Color.TRANSPARENT);
+
+        binding.changeLanguage.setText(languageSpan);
+
+        viewModel.showTermsAndConditionDialog.observe(getViewLifecycleOwner(), conditionText -> {
+            if (conditionText != null) {
+                showDialogTermAndCondition(conditionText);
+            }
+        });
 
         ViewPager viewPager = view.findViewById(R.id.int_viewPager_introduce);
         viewPager.setPageTransformer(true, new ParallaxPageTransformer());
@@ -130,5 +168,17 @@ public class FragmentIntroduce extends BaseFragment {
             e.printStackTrace();
         }*/
         super.onConfigurationChanged(newConfig);
+    }
+
+    private void showDialogTermAndCondition(String message) {
+        if (getActivity() != null) {
+            Dialog dialogTermsAndCondition = new Dialog(getActivity());
+            dialogTermsAndCondition.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogTermsAndCondition.setContentView(R.layout.terms_condition_dialog);
+            AppCompatTextView termsText = dialogTermsAndCondition.findViewById(R.id.termAndConditionTextView);
+            termsText.setText(message);
+            dialogTermsAndCondition.findViewById(R.id.okButton).setOnClickListener(v -> dialogTermsAndCondition.dismiss());
+            dialogTermsAndCondition.show();
+        }
     }
 }

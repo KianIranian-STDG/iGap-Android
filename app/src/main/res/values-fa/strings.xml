@@ -1435,7 +1435,7 @@
     <string name="Favorite_Sticker">استیکر های من</string>
     <string name="item_selected"> مورد انتخاب شده</string>
 
-    <string name="terms_and_condition">%s را می پذیرم</string>
+    <string name="terms_and_condition">فشردن دکمه شروع به منزله پذیرش %s می باشد.</string>
     <string name="terms_and_condition_clickable">قوانین و مقررات</string>
     <string name="new_channel_hint">شما می توانید توضیحات اختیاری برای کانال خود را ارائه دهید.</string>
     <string name="new_group_hint">شما می توانید یک توضیح اختیاری برای گروه خود ارائه دهید.</string>
