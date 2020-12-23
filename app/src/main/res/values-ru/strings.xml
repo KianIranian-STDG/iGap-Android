@@ -1267,7 +1267,7 @@
     <string name="refound">Документ, исправляющий сумму депозита на кошелек</string>
     <string name="Favorite_Sticker">Мои наклейки</string>
     <string name="item_selected">Выбранный элемент</string>
-    <string name="terms_and_condition">Я принимаю%s</string>
+    <string name="terms_and_condition">Нажав кнопку пуска, вы принимаете %s</string>
     <string name="terms_and_condition_clickable">Условия использования</string>
     <string name="new_channel_hint">Вы можете предоставить дополнительные описания для вашего канала.</string>
     <string name="new_group_hint">Вы можете предоставить дополнительное описание для вашей группы.</string>

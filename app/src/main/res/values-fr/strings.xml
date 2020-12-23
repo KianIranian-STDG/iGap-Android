@@ -1270,7 +1270,7 @@
     <string name="refound">Document corrigeant le montant du dépôt dans le portefeuille</string>
     <string name="Favorite_Sticker">Mes autocollants</string>
     <string name="item_selected">sélectionné</string>
-    <string name="terms_and_condition">j\'accepte %s</string>
+    <string name="terms_and_condition">En appuyant sur le bouton de démarrage, vous acceptez %s</string>
     <string name="terms_and_condition_clickable">les règlements</string>
     <string name="new_channel_hint">vous pouvez  rédiger des explications facultatives pour votre canal</string>
     <string name="new_group_hint">vous pouvez rédiger une explications facultatives pour votre group</string>
