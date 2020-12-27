@@ -8,6 +8,7 @@ import androidx.collection.ArrayMap;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.upload.CompressTask;
 import net.iGap.module.ChatSendMessageUtil;
@@ -199,8 +200,13 @@ public class HttpUploader implements IUpload {
         UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
         if (existedRequest == null) {
             existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
+
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
+                    long bytes = fileObject.fileSize / 100 * fileObject.progress;
+                    long lastBytes = fileObject.fileSize / 100 * fileObject.getFileUploadingLastProgress();
+                    HelperDataUsage.progressUpload(bytes - lastBytes, fileObject.messageType);
+                    fileObject.setFileUploadingLastProgress(fileObject.progress);
                     FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress);
                     if (fileObject.onUploadListener != null) {
@@ -210,6 +216,7 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFinish(UploadObject fileObject) {
+                    HelperDataUsage.increaseUploadFiles(fileObject.messageType);
                     FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {
@@ -248,6 +255,8 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
+                    long uploadedBytes = ((fileObject.fileSize / 100 ) * fileObject.progress);
+                    HelperDataUsage.progressUpload(uploadedBytes,fileObject.messageType);
                     FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {

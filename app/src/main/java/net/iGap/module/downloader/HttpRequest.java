@@ -9,9 +9,11 @@ import net.iGap.api.apiService.ApiStatic;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
+import net.iGap.proto.ProtoGlobal;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -147,7 +149,10 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             fileObject.destFile.delete();
         isDownloading = false;
         notifyDownloadStatus(HttpDownloader.DownloadStatus.NOT_DOWNLOADED);
+        long downloadedBytes = (fileObject.fileSize / 100) * fileObject.progress;
+        HelperDataUsage.progressDownload(downloadedBytes, fileObject.messageType);
     }
+
 
     public String getRequestKey() {
         return fileObject.key;
@@ -155,10 +160,19 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onDownloadCompleted() {
         try {
+            HelperDataUsage.progressDownload(fileObject.fileSize, fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
             notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
+
+            if (fileObject.messageType == null)
+                fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+
+            if (fileObject.thumbCacheId == null) {
+                HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
+            }
+
         } catch (Exception e) {
             onError(e);
         }
