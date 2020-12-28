@@ -48,6 +48,11 @@ android {
         buildConfigField("Integer", "METRIX_SECOND_SECRET", METRIX_SECOND_SECRET)
         buildConfigField("Integer", "METRIX_THEIRD_SECRET", METRIX_THEIRD_SECRET)
         buildConfigField("Integer", "METRIX_FOURTH_SECRET", METRIX_FOURTH_SECRET)
+
+        buildConfigField("String", "TOS", TOS)
+        buildConfigField("String", "WALLET_AGREEMENT", WALLET_AGREEMENT)
+        buildConfigField("Integer", "APP_ID", APP_ID)
+        buildConfigField("String", "APP_NAME",APP_NAME)
     }
 
 
