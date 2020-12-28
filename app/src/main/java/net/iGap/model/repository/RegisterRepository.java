@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperString;
@@ -190,7 +191,7 @@ public class RegisterRepository {
     }
 
     public void getTermsOfServiceBody(RepositoryCallback<String> callback) {
-        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery(BuildConfig.TOS, new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 callback.onSuccess(body);
