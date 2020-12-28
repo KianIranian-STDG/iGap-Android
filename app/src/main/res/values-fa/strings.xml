@@ -567,6 +567,11 @@
     <string name="payment_spentScore">امتیاز مصرفی: </string>
     <string name="payment_price">تخفیف: </string>
     <string name="payment_discount_plans_title">بسته های تخفیف</string>
+    <string name="discount_code">کد تخفیف</string>
+    <string name="enter_discount_code">کد تخفیف را وارد کنید.</string>
+    <string name="save_discount_code">ثبت کد</string>
+    <string name="enter_your_discount_code">کد تخفیف خود را وارد کنید.</string>
+    <string name="discount_code_not_valid">متاسفانه کد تخفیف شما صحیح نمی باشد.</string>
     <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>
     <string name="two_day">دو روز قبل</string>
     <string name="three_day">سه روز قبل</string>

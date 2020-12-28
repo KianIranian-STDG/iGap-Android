@@ -230,7 +230,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/cancelButton" />
+            app:layout_constraintBottom_toTopOf="@id/discountDividerLeft" />
 
         <!--<android.support.v7.widget.AppCompatTextView
             android:id="@+id/paymentOrderId"
@@ -244,6 +244,126 @@
             app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintEnd_toEndOf="@id/paymentType"
             app:layout_constraintStart_toStartOf="@id/paymentType" />-->
+
+        <View
+            android:id="@+id/discountDividerLeft"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:background="?iGapDividerLine"
+            app:layout_constraintBottom_toBottomOf="@+id/discount"
+            app:layout_constraintEnd_toStartOf="@+id/discount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/discount" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:text="@string/discount_code"
+            android:textColor="?iGapSubtitleTextColor"
+            android:textSize="@dimen/smallTextSize"
+            app:layout_constraintBottom_toTopOf="@+id/discountCardHolder"
+            app:layout_constraintEnd_toStartOf="@+id/discountDividerRight"
+            app:layout_constraintStart_toEndOf="@+id/discountDividerLeft" />
+
+        <View
+            android:id="@+id/discountDividerRight"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp1"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:background="?iGapDividerLine"
+            app:layout_constraintBottom_toBottomOf="@+id/discount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/discount"
+            app:layout_constraintTop_toTopOf="@+id/discount" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/discountCardHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginTop="@dimen/dp8"
+            android:layout_marginEnd="@dimen/dp8"
+            android:layout_marginBottom="@dimen/dp8"
+            app:cardBackgroundColor="?attr/iGapCardViewColor"
+            app:cardCornerRadius="@dimen/dp8"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toTopOf="@id/cancelButton"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/discountDividerRight">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                style="@style/IGapRootViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16">
+
+                <EditText
+                    android:id="@+id/discountCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="@{viewModel.discountCodeEnable}"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="start"
+                    android:hint="@string/enter_discount_code"
+                    android:textAlignment="gravity"
+                    android:textColor="?iGapTitleTextColor"
+                    android:textSize="@dimen/smallTextSize"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/saveDiscountCode"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="@{viewModel.saveDiscountCodeEnable}"
+                    android:text="@string/save_discount_code"
+                    android:textColor="@{context.getResources().getColor(viewModel.saveDiscountCodeColor)}"
+                    android:textSize="@dimen/text_size_button"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/showDiscountError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp16"
+                    android:text="@{context.getResources().getString(viewModel.discountErrorText)}"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/text_size_button"
+                    android:textStyle="bold"
+                    android:visibility="@{viewModel.discountErrorVisibility}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/saveDiscountCode" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!--<androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/paymentFeatureRC"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+             />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/closeButton"

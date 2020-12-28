@@ -2168,6 +2168,11 @@ Want to get it?</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
+    <string name="discount_code">Discount Code</string>
+    <string name="enter_discount_code">Enter the discount code.</string>
+    <string name="save_discount_code">Save Code</string>
+    <string name="enter_your_discount_code">Enter Your discount code.</string>
+    <string name="discount_code_not_valid">Sorry, your discount code is incorrect.</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
     <string name="mobile_bank_activeNotification">Activate Notification</string>
