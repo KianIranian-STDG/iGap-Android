@@ -26,6 +26,10 @@ import ir.radsense.raadcore.socket.RaadWebSocket;
 import ir.radsense.raadcore.web.WebBase;
 import retrofit2.Response;
 
+/**
+ * Created by Software1 on 8/29/2017.
+ */
+
 public class RaadApp {
 
     public static final int NOTIFICATION_TYPE_LIKE = 1;

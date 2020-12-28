@@ -26,7 +26,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -128,17 +127,17 @@ public class FragmentRegistrationNickname extends BaseFragment implements Fragme
             }
         });
 
-        viewModel.showReagentPhoneNumberError.observe(getViewLifecycleOwner(), isError -> {
-            if (isError != null && isError) {
-                Toast.makeText(getContext(), R.string.reagent_error_message, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        viewModel.showReagentPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), showError -> {
-            if (showError != null && showError) {
-                Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        viewModel.showReagentPhoneNumberError.observe(getViewLifecycleOwner(), isError -> {
+//            if (isError != null && isError) {
+//                Toast.makeText(getContext(), R.string.reagent_error_message, Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
+//        viewModel.showReagentPhoneNumberStartWithZeroError.observe(getViewLifecycleOwner(), showError -> {
+//            if (showError != null && showError) {
+//                Toast.makeText(getContext(), R.string.Toast_First_0, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     @Override

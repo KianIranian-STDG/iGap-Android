@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.HelperWallet;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
@@ -108,10 +109,14 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
+    public void loadGiftSticker() {
+        //    private code
+    }
 
     public void finishedCardToCard(String cardNum, String amountNum, String descriptionTv) {
         dismiss();
         delegate.cardToCardClicked(cardNum, amountNum, descriptionTv);
+//                       cardToCardCallBack.onClick("6221-0612-1741-0739","10,000","سلام من ابوالفضلم بهممممممم پول بزن :)");
     }
 
     public void showPasswordFragment(ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse, Card selectedCard) {
@@ -160,6 +165,18 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
                 .replace(R.id.transferMoneyContainer, confirmPasswordFragment, "confirmPasswordFragment")
                 .addToBackStack(confirmPasswordFragment.getClass().getName())
                 .commit();
+    }
+
+    public void loadStickerPackagePage() {
+//    private code
+    }
+
+    public void loadStickerPackageItemPage(StructIGStickerGroup stickerGroup) {
+//    private code
+    }
+
+    public void loadStickerPackageItemDetailPage(StructIGSticker sticker) {
+//    private code
     }
 
     public void dismissDialog() {

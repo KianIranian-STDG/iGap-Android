@@ -20,6 +20,7 @@ import net.iGap.model.bill.ServiceDebit;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.model.electricity_bill.LastBillData;
 import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.proto.ProtoMplGetBillToken;
 import net.iGap.repository.BillsAPIRepository;
 import net.iGap.request.RequestMplGetBillToken;
 
@@ -212,7 +213,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID));
+        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID), ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
     }
 
     public void showBillImage() {

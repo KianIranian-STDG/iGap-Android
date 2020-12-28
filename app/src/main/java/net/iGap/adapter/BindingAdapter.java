@@ -8,7 +8,6 @@ import androidx.annotation.StringRes;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.ImageLoadingService;
 import net.iGap.module.AndroidUtils;
@@ -23,7 +22,7 @@ public class BindingAdapter {
             if (avatarImage.showCharacterImage) {
                 imageView.setImageBitmap(drawAlphabetOnPicture((int) imageView.getContext().getResources().getDimension(R.dimen.dp60), avatarImage.imagePath, avatarImage.backgroundColor));
             } else {
-                Picasso.with(G.context).load(AndroidUtils.suitablePath(avatarImage.imagePath)).into(imageView);
+                Picasso.get().load(AndroidUtils.suitablePath(avatarImage.imagePath)).into(imageView);
             }
         }
     }
@@ -31,11 +30,11 @@ public class BindingAdapter {
     @androidx.databinding.BindingAdapter(value = {"imageUrl"})
     public static void setAddedAvatarImage(ImageView imageView, String url) {
         if (url != null && url.length() > 0) {
-            Picasso.with(G.context).load(url)
+            Picasso.get().load(url)
                     .error(R.drawable.ic_error)
                     .into(imageView);
         } else {
-            Picasso.with(G.context).load(R.mipmap.logo).into(imageView);
+            Picasso.get().load(R.mipmap.logo).into(imageView);
         }
     }
 
@@ -44,7 +43,7 @@ public class BindingAdapter {
         if (imageUrl != null) {
             ImageLoadingService.load(imageUrl, imageView);
         } else {
-            Picasso.with(G.context).load(R.drawable.logo_igap).fit().centerInside().into(imageView);
+            Picasso.get().load(R.drawable.logo_igap).fit().centerInside().into(imageView);
         }
     }
 

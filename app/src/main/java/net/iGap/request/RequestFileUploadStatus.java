@@ -18,7 +18,6 @@ public class RequestFileUploadStatus {
 
     public interface OnFileUploadStatus {
         void onFileUploadStatus(ProtoFileUploadStatus.FileUploadStatusResponse.Status status, double progress, int recheckDelayMS);
-
         void onFileUploadStatusError(int major, int minor);
     }
 

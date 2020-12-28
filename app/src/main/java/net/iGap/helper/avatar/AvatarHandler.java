@@ -23,18 +23,16 @@ import net.iGap.helper.LooperThreadHelper;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Status;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.interfaces.OnAvatarAdd;
 import net.iGap.observers.interfaces.OnComplete;
-import net.iGap.observers.interfaces.OnDownload;
-import net.iGap.observers.interfaces.OnFileDownloaded;
-import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestUserInfo;
 
 import java.io.File;
@@ -395,38 +393,38 @@ public class AvatarHandler {
                 final String path = realmAvatar.getFile().getLocalThumbnailPath();
                 notifyAll(path, baseParam.avatarOwnerId, false, realmAvatar.getFile().getId(), realmAvatar.getId());
             } else {
+                DownloadObject object = DownloadObject.createForAvatar(realmAvatar.getFile());
+                if (object != null) {
+                    Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
+                        if (arg.status == Status.SUCCESS && arg.data != null) {
+                            String filepath = arg.data.getFilePath();
+                            String fileToken = arg.data.getToken();
 
-                new AvatarDownload().avatarDownload(realmAvatar.getFile(), ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL, new OnDownload() {
-                    @Override
-                    public void onDownload(final String filepath, final String token) {
-                        if (!(new File(filepath).exists())) {
-                            HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
-                        }
-
-                        final ArrayList<Long> ownerIdList = new ArrayList<>();
-                        final ArrayList<Long> fileIdList = new ArrayList<>();
-                        final ArrayList<Long> avatarIdList = new ArrayList<>();
-                        DbManager.getInstance().doRealmTransaction(realm -> {
-                            for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", token).findAll()) {
-                                realmAvatar1.getFile().setLocalThumbnailPath(filepath);
-                                ownerIdList.add(realmAvatar1.getOwnerId());
-                                fileIdList.add(realmAvatar1.getFile().getId());
-                                avatarIdList.add(realmAvatar1.getId());
+                            if (!(new File(filepath).exists())) {
+                                HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                             }
-                        });
-                        for (int i = 0; i < ownerIdList.size(); i++) {
-                            AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i), avatarIdList.get(i));
+
+                            final ArrayList<Long> ownerIdList = new ArrayList<>();
+                            final ArrayList<Long> fileIdList = new ArrayList<>();
+                            final ArrayList<Long> avatarIdList = new ArrayList<>();
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                for (RealmAvatar realmAvatar1 : realm.where(RealmAvatar.class).equalTo("file.token", fileToken).findAll()) {
+                                    realmAvatar1.getFile().setLocalThumbnailPath(filepath);
+                                    ownerIdList.add(realmAvatar1.getOwnerId());
+                                    fileIdList.add(realmAvatar1.getFile().getId());
+                                    avatarIdList.add(realmAvatar1.getId());
+                                }
+                            });
+                            for (int i = 0; i < ownerIdList.size(); i++) {
+                                AvatarHandler.this.notifyAll(filepath, ownerIdList.get(i), false, fileIdList.get(i), avatarIdList.get(i));
+                            }
+                            ownerIdList.clear();
+                            fileIdList.clear();
+                            avatarIdList.clear();
                         }
-                        ownerIdList.clear();
-                        fileIdList.clear();
-                        avatarIdList.clear();
-                    }
 
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+                    });
+                }
             }
         } else if (baseParam instanceof ParamWithAvatarType) {
             String[] initials = showInitials(baseParam.avatarOwnerId, ((ParamWithAvatarType) baseParam).avatarType);
@@ -534,71 +532,5 @@ public class AvatarHandler {
 
     public enum AvatarType {
         USER, ROOM
-    }
-
-    private class AvatarDownload implements OnFileDownloaded {
-
-        private OnDownload onDownload;
-
-        private void avatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
-
-            try {
-                this.onDownload = onDownload;
-                long fileSize = 0;
-                String filePath = "";
-
-                G.onFileDownloaded = this;
-                if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-                    filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, false);
-                    fileSize = realmAttachment.getSize();
-                } else if (selector == ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL) {
-                    filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
-                    fileSize = realmAttachment.getLargeThumbnail().getSize();
-                } else if (selector == ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL) {
-                    filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
-                    fileSize = realmAttachment.getSmallThumbnail().getSize();
-                }
-                long offset = 0;
-                if (new File(filePath).exists()) {
-                    offset = new File(filePath).length();
-                }
-                new RequestFileDownload().download(realmAttachment.getToken(), offset, (int) fileSize, selector,
-                        new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, realmAttachment.getToken(), filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR), true);
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onFileDownload(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
-            if (progress >= 100) {
-                if (!(new File(filePath).exists())) {
-                    HelperLog.getInstance().setErrorLog(new Exception("After Download File Not Exist Bug. Please check" + filePath));
-                }
-
-                String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_IMAGE_USER);
-                try {
-                    AndroidUtils.cutFromTemp(filePath, _newPath);
-                } catch (IOException e) {
-                    HelperLog.getInstance().setErrorLog(e);
-                    e.printStackTrace();
-                }
-
-                onDownload.onDownload(_newPath, token);
-            } else {
-                /**
-                 * don't use offset in getting thumbnail
-                 */
-                try {
-                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, fileSize, offset, RequestFileDownload.TypeDownload.AVATAR), true);
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onError(int major, Object identity) {
-        }
     }
 }

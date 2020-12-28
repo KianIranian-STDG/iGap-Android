@@ -281,9 +281,9 @@ public class CashOutRequestFragment extends Fragment {
             }
 
             if (RaadApp.selectedMerchant.getAccount_type() != 4) {
-                if (RaadApp.selectedMerchant.getBusiness_type()==2){
+                if (RaadApp.selectedMerchant.getBusiness_type() == 2) {
                     first = getString(R.string.taxi_balance);
-                }else {
+                } else {
                     first = getString(R.string.shop_balance);
                 }
             } else {
@@ -839,25 +839,30 @@ public class CashOutRequestFragment extends Fragment {
         Web.getInstance().getWebService().requestCashOut(RaadApp.selectedMerchant == null ? Auth.getCurrentAuth().getId() : RaadApp.selectedMerchant.get_id(), mCard.token, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
-                if (success == null)
-                    return;
+                if (response.body() != null) {
+                    Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
+                    if (success == null)
+                        return;
 
-                if (success) {
-                    Toast.makeText(getContext(), R.string.cash_out_request_done, Toast.LENGTH_SHORT).show();
-                    if (getActivity() instanceof NavigationBarActivity) {
-                        ((NavigationBarActivity) getActivity()).broadcastMessage(
-                                CashOutRequestFragment.this, null, CardsFragment.class);
+                    if (success) {
+                        Toast.makeText(getContext(), R.string.cash_out_request_done, Toast.LENGTH_SHORT).show();
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            ((NavigationBarActivity) getActivity()).broadcastMessage(
+                                    CashOutRequestFragment.this, null, CardsFragment.class);
+                        }
+
+
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        if (WalletActivity.refreshLayout != null)
+                            WalletActivity.refreshLayout.setRefreshLayout(true);
+
+
+                    } else {
+                        setLoading(false);
                     }
-
-
-                    getActivity().getSupportFragmentManager().popBackStack();
-                    if (WalletActivity.refreshLayout != null)
-                        WalletActivity.refreshLayout.setRefreshLayout(true);
-
-
                 } else {
                     setLoading(false);
+                    Toast.makeText(getContext(), getResources().getString(R.string.server_do_not_response), Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -22,6 +22,7 @@ public class RequestWrapper {
     public String randomId;
     public OnResponse onResponse;
     public AbstractObject req;
+    public boolean canceled;
 
     public RequestWrapper(int actionId, Object protoObject, Object identity) {
         this(actionId, protoObject, identity, null, null);

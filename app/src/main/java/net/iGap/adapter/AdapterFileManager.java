@@ -97,7 +97,11 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
                 if (new File(item.path).isDirectory()) {
                     onItemClickListener.onFolderClicked(item.path, holder.getAdapterPosition());
                 } else {
-                    items.get(holder.getAdapterPosition()).isSelected = !items.get(holder.getAdapterPosition()).isSelected;
+                    if (items.get(holder.getAdapterPosition()).isSelected) {
+                        items.get(holder.getAdapterPosition()).isSelected = false;
+                    } else {
+                        items.get(holder.getAdapterPosition()).isSelected = true;
+                    }
                     onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition(), items.get(holder.getAdapterPosition()).isSelected);
                 }
             } else {

@@ -87,12 +87,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColorHint="?attr/iGapHintTextColor"
+            app:errorText="@{viewModel.showErrorName}"
             app:layout_constraintBottom_toTopOf="@id/lastName"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/pu_profile_circle_image"
             app:layout_constraintTop_toTopOf="@id/pu_profile_circle_image"
-            app:layout_constraintWidth_percent=".5"
-            app:errorText="@{viewModel.showErrorName}">
+            app:layout_constraintWidth_percent=".5">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameEditText"
@@ -114,12 +114,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColorHint="?attr/iGapHintTextColor"
+            app:errorText="@{viewModel.showErrorLastName}"
             app:layout_constraintBottom_toBottomOf="@id/pu_profile_circle_image"
             app:layout_constraintLeft_toLeftOf="@id/name"
             app:layout_constraintRight_toRightOf="@id/name"
             app:layout_constraintTop_toBottomOf="@id/name"
-            app:layout_constraintWidth_percent=".5"
-            app:errorText="@{viewModel.showErrorLastName}">
+            app:layout_constraintWidth_percent=".5">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lastNameEditText"
@@ -140,26 +140,23 @@
             android:id="@+id/reagentPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:afterTextChanged="@{(phoneNumber)->viewModel.onTextChanged(phoneNumber.toString())}"
             android:gravity="left|center_vertical"
             android:hint="@string/ra_enter_reagent_code"
             android:imeOptions="flagNoExtractUi"
             android:inputType="phone"
             android:maxLength="18"
-            android:maxLines="@{viewModel.reagentPhoneNumberMaskMaxCount}"
             android:padding="@dimen/dp8"
-            android:text="@={viewModel.reagentPhoneNumber}"
             android:textAlignment="gravity"
             android:textColor="?attr/iGapTitleTextColor"
             android:textColorHint="?attr/iGapHintTextColor"
             android:textSize="@dimen/dp14"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/pu_btn_letsGo"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toRightOf="@id/reagentCountryCode"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pu_profile_circle_image"
-            app:layout_constraintWidth_percent=".6"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:mask="@{viewModel.reagentPhoneNumberMask}" />
+            app:layout_constraintWidth_percent=".6" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/reagentCountryCode"
@@ -167,8 +164,8 @@
             android:layout_height="wrap_content"
             android:onClick="@{()->viewModel.onCountryCodeClick()}"
             android:padding="@dimen/dp8"
-            android:text="@{viewModel.reagentCountryCode}"
             android:textColor="?attr/iGapTitleTextColor"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/reagentPhoneNumber"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"

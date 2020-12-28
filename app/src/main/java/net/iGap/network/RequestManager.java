@@ -28,7 +28,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -37,14 +40,16 @@ public class RequestManager extends BaseController {
     private static volatile RequestManager instance;
     private DispatchQueue networkQueue = new DispatchQueue("networkQueue");
 
-    private String TAG = getClass().getSimpleName();
+    private String TAG = "RequestManager";
 
-    public ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
-    public AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
+    private ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
+    private HashMap<Integer, List<RequestWrapper>> requestsByUId = new HashMap<>();
+    private AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);
 
     private boolean isSecure;
     private boolean userLogin;
     private boolean configLoaded;
+    private static int lastClassUniqueId;
 
     public static RequestManager getInstance(int account) {
         RequestManager localInstance = instance;
@@ -95,6 +100,10 @@ public class RequestManager extends BaseController {
                 configLoaded = false;
             }
         });
+    }
+
+    public static int getLastClassUniqueId() {
+        return lastClassUniqueId++;
     }
 
     public String sendRequest(AbstractObject request, OnResponse onResponse) {
@@ -349,8 +358,7 @@ public class RequestManager extends BaseController {
         return responseId;
     }
 
-    public int getId(byte[] byteArray) {
-
+    private int getId(byte[] byteArray) {
         byteArray = Arrays.copyOfRange(byteArray, 0, 2);
         byteArray = HelperNumerical.orderBytesToLittleEndian(byteArray);
 
@@ -485,5 +493,30 @@ public class RequestManager extends BaseController {
             requestWrapper.setTime(System.currentTimeMillis());
             requestQueueMap.put(requestWrapper.getRandomId(), requestWrapper);
         }
+    }
+
+    public void bindRequestToUniqueId(final String reqId, final int uid) {
+        networkQueue.postRunnable(() -> {
+            RequestWrapper request = requestQueueMap.get(reqId);
+            if (request != null) {
+                List<RequestWrapper> list = new ArrayList<>();
+                list.add(request);
+                requestsByUId.put(uid, list);
+            }
+        });
+    }
+
+    public void cancelRequestByUniqueId(int fragmentUniqueId) {
+        networkQueue.postRunnable(() -> {
+            List<RequestWrapper> requests = requestsByUId.get(fragmentUniqueId);
+            if (requests != null) {
+                for (int i = 0; i < requests.size(); i++) {
+                    RequestWrapper req = requests.get(i);
+                    req.canceled = true;
+                    cancelRequest(req.randomId);
+                    requestsByUId.remove(fragmentUniqueId);
+                }
+            }
+        });
     }
 }

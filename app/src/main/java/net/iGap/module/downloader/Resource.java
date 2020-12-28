@@ -25,7 +25,6 @@ import static net.iGap.module.downloader.Status.SUCCESS;
 
 /**
  * A generic class that holds a value with its loading status.
- *
  * @param <T>
  */
 public class Resource<T> {

@@ -21,7 +21,7 @@ public class MessageDataStorage extends BaseController {
 
     private static volatile MessageDataStorage[] instance = new MessageDataStorage[AccountManager.MAX_ACCOUNT_COUNT];
     private DispatchQueue storageQueue = new DispatchQueue("MessageStorage");
-    //    private Realm database;
+//    private Realm database;
     private String TAG = getClass().getSimpleName();
 
     public MessageDataStorage(int currentAccount) {

@@ -408,11 +408,11 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 super(itemView);
 
                 layoutMap = itemView.findViewById(R.id.lyt_map_user);
-                avatar = itemView.findViewById(R.id.img_user_avatar_map);
+                avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
                 username = itemView.findViewById(R.id.txt_user_name_map);
                 comment = itemView.findViewById(R.id.txt_user_comment_map);
-                arrow = itemView.findViewById(R.id.txt_arrow_list_map);
-                distance = itemView.findViewById(R.id.txt_user_distance_map);
+                arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
+                distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
             }
         }
     }

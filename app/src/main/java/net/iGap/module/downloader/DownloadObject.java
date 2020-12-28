@@ -1,7 +1,9 @@
 package net.iGap.module.downloader;
 
 import net.iGap.G;
+import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmThumbnail;
 
@@ -98,6 +100,38 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.destFile = new File(path + "/" + struct.mainCacheId + "_" + struct.mimeType);
         struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.valueOf(finalMessage.messageType);
+
+        if (struct.tempFile.exists()) {
+            struct.offset = struct.tempFile.length();
+
+            if (struct.offset > 0 && struct.fileSize > 0) {
+                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            }
+        }
+
+        return struct;
+    }
+
+    public static DownloadObject createForAvatar(RealmAttachment attachment) {
+
+        if (attachment == null) {
+            return null;
+        }
+
+        DownloadObject struct = new DownloadObject();
+        struct.selector = LARGE_THUMBNAIL_VALUE;
+        struct.key = createKey(attachment.cacheId, struct.selector);
+        struct.mainCacheId = attachment.cacheId;
+        struct.fileToken = attachment.token;
+        struct.fileName = attachment.name;
+        struct.fileSize = attachment.largeThumbnail.size;
+        struct.mimeType = struct.extractMime(struct.fileName);
+        struct.publicUrl = struct.getPublicUrl(attachment.url);
+        struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+
+        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_TEMP, true);
+        struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
+        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
 
         if (struct.tempFile.exists()) {
             struct.offset = struct.tempFile.length();

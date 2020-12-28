@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.igasht.IGashtLocationItem;
 
@@ -61,9 +60,9 @@ public class IGashtLocationListAdapter extends RecyclerView.Adapter<RecyclerView
             ((ViewHolderLocationItem) viewHolder).itemAddressTextView.setText(items.get(i - 1).getAddressWithLanguage());
             ((ViewHolderLocationItem) viewHolder).itemLocationTextView.setText(items.get(i - 1).getLocation());
             if (items.get(i - 1).getmExtraDetail() != null) {
-                Picasso.with(G.context).load(items.get(i - 1).getmExtraDetail().getmCoverImage()).placeholder(R.drawable.logo_igap_small).error(R.drawable.ic_error_igap).fit().centerInside().into(((ViewHolderLocationItem) viewHolder).itemImageView);
+                Picasso.get().load(items.get(i - 1).getmExtraDetail().getmCoverImage()).placeholder(R.drawable.logo_igap_small).error(R.drawable.ic_error_igap).fit().centerInside().into(((ViewHolderLocationItem) viewHolder).itemImageView);
             } else {
-                Picasso.with(G.context).load(R.drawable.logo_igap_small).into(((ViewHolderLocationItem) viewHolder).itemImageView);
+                Picasso.get().load(R.drawable.logo_igap_small).into(((ViewHolderLocationItem) viewHolder).itemImageView);
             }
             ((ViewHolderLocationItem) viewHolder).buyTicketButton.setOnClickListener(v -> locationItemClickListener.buyTicket(viewHolder.getAdapterPosition() - 1));
             viewHolder.itemView.setOnClickListener(v -> locationItemClickListener.onItem(viewHolder.getAdapterPosition() - 1));

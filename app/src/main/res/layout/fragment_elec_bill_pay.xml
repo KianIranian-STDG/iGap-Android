@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewmodel"
             type="net.iGap.viewmodel.electricity_bill.ElectricityBillPayVM" />

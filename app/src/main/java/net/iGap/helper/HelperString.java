@@ -18,7 +18,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -100,7 +100,7 @@ public class HelperString {
 
     public static PublicKey getPublicKeyFromPemFormat(String PEMString) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         BufferedReader pemReader = null;
-        pemReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(PEMString.getBytes(StandardCharsets.UTF_8))));
+        pemReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(PEMString.getBytes("UTF-8"))));
         StringBuffer content = new StringBuffer();
         String line = null;
         while ((line = pemReader.readLine()) != null) {
@@ -258,8 +258,16 @@ public class HelperString {
     public static String getUtf8String(String text) {
         String result = "";
         byte[] utf8 = new byte[0];
-        utf8 = text.getBytes(StandardCharsets.UTF_8);
-        result = new String(utf8, StandardCharsets.UTF_8);
+        try {
+            utf8 = text.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
+            result = new String(utf8, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         return result;
     }

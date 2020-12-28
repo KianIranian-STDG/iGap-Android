@@ -804,7 +804,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             getMusicArtist();
 
             updateFastAdapter(MusicPlayer.messageId);
-            musicTime = milliSecondsToTimer(mp.getDuration());
+            musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
             btnPlayMusic.setText(context.getString(R.string.pause_icon));
             txt_music_name.setText(musicName);

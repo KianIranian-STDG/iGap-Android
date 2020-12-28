@@ -221,6 +221,39 @@ public class HelperFragment {
         } else {
             fragmentManager.popBackStack(BottomNavigationFragment.class.getName(), 0);
         }
+        /*for (int i = fragmentManager.getBackStackEntryCount() - 1; i > -1; i--) {
+
+        }*/
+        /*for (Fragment fragment : fragmentManager.getFragments()) {
+            if (fragment != null) {
+
+                if (keepMain) {
+                    if (fragment.getClass().getName().equals(FragmentMain.class.getName())) {
+                        continue;
+                    }
+                    if (fragment.getClass().getName().equals(DiscoveryFragment.class.getName())) {
+                        if (fragment.getArguments().getInt("page") == 0) {
+                            continue;
+                        }
+                    }
+                    if (fragment instanceof FragmentCall) {
+                        if (fragment.getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN)) {
+                            continue;
+                        }
+                    }
+
+                    fragmentManager.beginTransaction().remove(fragment).commit();
+                } else {
+                    fragmentManager.beginTransaction().remove(fragment).commit();
+                }
+            }
+        }
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);*/
+        /*}*/
+
+        /*if (G.iTowPanModDesinLayout != null) {
+            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+        }*/
     }
 
     public void popBackStack() {
@@ -298,15 +331,15 @@ public class HelperFragment {
     }
 
     public void loadPayment(String title, String token, PaymentCallBack callBack) {
-//    private resource
+//    private code
     }
 
     public void loadPayment(String title, boolean valueAdded, String token, PaymentCallBack callBack) {
-//    private resource
+//    private code
     }
 
     public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, int mode) {
-//    private resource
+//    private code
     }
 
     private boolean isRelatedToChat(String fragmentName) {

@@ -3,26 +3,22 @@ package net.iGap.module.accountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.SparseArray;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.iGap.G;
-import net.iGap.WebSocketClient;
 import net.iGap.fragments.FragmentMain;
+import net.iGap.helper.FileLog;
 import net.iGap.model.AccountUser;
 import net.iGap.network.RequestManager;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static org.paygear.utils.Utils.signOutWallet;
 
 public class AccountManager {
 
@@ -32,48 +28,46 @@ public class AccountManager {
     private SharedPreferences sharedPreferences;
     private String dbEncryptionKey;
 
-    //first item is fake user for handel add new user
     private List<AccountUser> userAccountList;
-    private List<String> DbNameList = Arrays.asList("iGapLocalDatabaseEncrypted3.realm", "iGapLocalDatabaseEncrypted2.realm", defaultDBName);
-    private int currentUser;
+    private SparseArray<String> databaseNames = new SparseArray<>(3);
     public static int selectedAccount;
     public static final int MAX_ACCOUNT_COUNT = 3;
 
     public static AccountManager getInstance() {
-        if (ourInstance != null) {
-            return ourInstance;
-        } else {
-            throw new RuntimeException("first call AccountManager.initial(Context context)");
-        }
-    }
-
-    public static void initial(Context context) {
         if (ourInstance == null) {
-            ourInstance = new AccountManager(context);
+            ourInstance = new AccountManager();
         }
+        return ourInstance;
     }
 
-    private AccountManager(@NotNull Context context) {
-        sharedPreferences = context.getSharedPreferences("iGapUserAccount", Context.MODE_PRIVATE);
+    private AccountManager() {
+        databaseNames.put(0, "iGapLocalDatabaseEncrypted.realm");
+        databaseNames.put(1, "iGapLocalDatabaseEncrypted2.realm");
+        databaseNames.put(2, "iGapLocalDatabaseEncrypted3.realm");
+
+        sharedPreferences = G.context.getSharedPreferences("iGapUserAccount", Context.MODE_PRIVATE);
         getUserAccountListFromSharedPreferences();
         if (userAccountList == null) {
             userAccountList = new ArrayList<>();
-            AccountUser accountUser = new AccountUser("test");
-            accountUser.setDbName(getDbName());
-            userAccountList.add(accountUser);
-            currentUser = 0;
-            internalChange(currentUser);
+            for (int i = 0; i < MAX_ACCOUNT_COUNT; i++) {
+                AccountUser accountUser = new AccountUser("Account" + i);
+                accountUser.setDbName(getDbName(i));
+                userAccountList.add(accountUser);
+            }
+            selectedAccount = 0;
         }
         getCurrentUserFromSharedPreferences();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
-        dbEncryptionKey = sharedPreferences.getString("myByteArray", null);
+
+        SharedPreferences realmPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
+        dbEncryptionKey = realmPreferences.getString("myByteArray", null);
         if (dbEncryptionKey == null) {
             byte[] key = new byte[64];
             new SecureRandom().nextBytes(key);
             String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
-            sharedPreferences.edit().putString("myByteArray", saveThis).apply();
+            realmPreferences.edit().putString("myByteArray", saveThis).apply();
             dbEncryptionKey = saveThis;
         }
+
         for (int i = 0; i < userAccountList.size(); i++) {
             userAccountList.get(i).setRealmConfiguration(dbEncryptionKey);
         }
@@ -84,7 +78,7 @@ public class AccountManager {
     }
 
     public AccountUser getCurrentUser() {
-        return userAccountList.get(currentUser);
+        return userAccountList.get(selectedAccount);
     }
 
     public AccountUser getUser(long userId) {
@@ -95,17 +89,60 @@ public class AccountManager {
     }
 
     private void setCurrentUserInSharedPreferences() {
-        sharedPreferences.edit().putInt("currentUser", this.currentUser).apply();
+        sharedPreferences.edit().putInt("currentUser", selectedAccount).apply();
     }
 
     private void getCurrentUserFromSharedPreferences() {
-        this.currentUser = sharedPreferences.getInt("currentUser", 0);
-        internalChange(currentUser);
+        selectedAccount = sharedPreferences.getInt("currentUser", 0);
     }
 
     private void getUserAccountListFromSharedPreferences() {
         userAccountList = new Gson().fromJson(sharedPreferences.getString("userList", ""), new TypeToken<List<AccountUser>>() {
         }.getType());
+
+        if (userAccountList != null && userAccountList.get(0).getName().equalsIgnoreCase("test")) {
+            try {
+                getCurrentUserFromSharedPreferences();
+
+                FileLog.i("AccountManager", "Start migration with account size " + userAccountList.size() + " and selected account " + selectedAccount);
+
+                for (int i = 0; i < userAccountList.size(); i++) {
+                    FileLog.i("AccountManager", "user " + i + " dbname -> " + userAccountList.get(i).getDbName());
+                }
+
+                userAccountList.remove(0);
+                selectedAccount = selectedAccount - 1;
+
+                for (int i = userAccountList.size(); i < MAX_ACCOUNT_COUNT; i++) {
+                    AccountUser accountUser = new AccountUser("Account_" + (i));
+                    String dbName = getDbName(i);
+                    accountUser.setDbName(dbName);
+                    accountUser.setRealmConfiguration(userAccountList.get(0).getRealmConfiguration()); // in all account realm config just once construct and use for other account
+                    userAccountList.add(accountUser);
+                }
+
+                setCurrentUserInSharedPreferences();
+                setUserAccountListInSharedPreferences();
+
+                FileLog.i("AccountManager", "Migration done current account size " + userAccountList.size() + " and selected account " + selectedAccount
+                        + "\n account 0 db name is -> " + userAccountList.get(0).getDbName()
+                        + "\n account 1 db name is -> " + userAccountList.get(1).getDbName()
+                        + "\n account 2 db name is -> " + userAccountList.get(2).getDbName());
+
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
+    }
+
+    public int getActiveAccountCount() {
+        int count = 0;
+        for (int i = 0; i < MAX_ACCOUNT_COUNT; i++) {
+            if (userAccountList.get(i).isAssigned()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void setUserAccountListInSharedPreferences() {
@@ -114,12 +151,12 @@ public class AccountManager {
     }
 
     public void updateCurrentUserName(String name) {
-        userAccountList.get(currentUser).setName(name);
+        userAccountList.get(selectedAccount).setName(name);
         setUserAccountListInSharedPreferences();
     }
 
     public void updatePhoneNumber(String phoneNumber) {
-        userAccountList.get(currentUser).setPhoneNumber(phoneNumber);
+        userAccountList.get(selectedAccount).setPhoneNumber(phoneNumber);
         setUserAccountListInSharedPreferences();
     }
 
@@ -127,22 +164,27 @@ public class AccountManager {
         getCurrentUserFromSharedPreferences();
     }
 
-    public void addAccount(AccountUser accountUser) {
-        if (accountUser.getDbName() == null) {
-            accountUser.setDbName(getDbName());
-            accountUser.setRealmConfiguration(userAccountList.get(0).getRealmConfiguration());
-        }
-        userAccountList.add(userAccountList.size(), accountUser);
-        userAccountList.get(0).setDbName(getDbName());
-        userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
-        setUserAccountListInSharedPreferences();
-        this.currentUser = userAccountList.size() - 1;
-        internalChange(currentUser);
+    public void addNewUser(long userId, String phoneNumber) {
+        addNewUser(userId, phoneNumber, null);
+    }
+
+    public void addNewUser(long userId, String phoneNumber, String name) {
+        AccountUser newUser = userAccountList.get(selectedAccount);
+        newUser.setAssigned(true);
+        newUser.setName(name == null ? "" : name);
+        newUser.setPhoneNumber(phoneNumber);
+        newUser.setId(userId);
+        newUser.setDbName(getDbName(selectedAccount));
+        newUser.setName("Account " + selectedAccount);
+        newUser.setLoginTime(System.currentTimeMillis());
         setCurrentUserInSharedPreferences();
     }
 
     public boolean isExistThisAccount(long userId) {
-        return indexOfUser(userId) != -1;
+        for (int i = 0; i < userAccountList.size(); i++) {
+            return userAccountList.get(i).getId() == userId;
+        }
+        return false;
     }
 
     public boolean isExistThisAccount(String phoneNumber) {
@@ -156,16 +198,20 @@ public class AccountManager {
 
     public void changeCurrentUserForAddAccount() {
         clearSomeStaticValue();
-        currentUser = 0;
-        internalChange(currentUser);
+
+        for (int i = 0; i < MAX_ACCOUNT_COUNT; i++) {
+            if (!userAccountList.get(i).isAssigned()) {
+                selectedAccount = i;
+                break;
+            }
+        }
     }
 
     public void changeCurrentUserAccount(long userId) {
         clearSomeStaticValue();
         int t = indexOfUser(userId);
         if (t != -1) {
-            currentUser = t;
-            internalChange(currentUser);
+            selectedAccount = t;
             setCurrentUserInSharedPreferences();
         } else {
             throw new IllegalArgumentException("not exist this user");
@@ -178,23 +224,29 @@ public class AccountManager {
                 return i;
             }
         }
-
-        return -1;
+        return 0;
     }
 
-    // return true if have current user after remove accountUser
     public boolean removeUser(AccountUser accountUser) {
         if (accountUser.isAssigned()) {
             if (userAccountList.contains(accountUser)) {
-                userAccountList.remove(accountUser);
+                AccountUser removedUser = userAccountList.get(selectedAccount);
+                removedUser.clearData();
                 clearSomeStaticValue();
-                currentUser = userAccountList.size() - 1;
-                internalChange(currentUser);
-                userAccountList.get(0).setDbName(getDbName());
-                userAccountList.get(0).setRealmConfiguration(dbEncryptionKey);
+
+                int account = 0;
+                for (int i = 0; i < MAX_ACCOUNT_COUNT; i++) {
+                    if (userAccountList.get(i).isAssigned()) {
+                        account = i;
+                        break;
+                    }
+                }
+
+                selectedAccount = account;
+
                 setCurrentUserInSharedPreferences();
                 setUserAccountListInSharedPreferences();
-                return userAccountList.get(currentUser).isAssigned();
+                return userAccountList.get(selectedAccount).isAssigned();
             } else {
                 return false;
             }
@@ -203,20 +255,8 @@ public class AccountManager {
         }
     }
 
-    private String getDbName() {
-        for (int i = DbNameList.size() - 1; i > -1; i--) {
-            boolean isExist = false;
-            for (int j = 0; j < userAccountList.size(); j++) {
-                if (userAccountList.get(j).isAssigned() && userAccountList.get(j).getDbName().equals(DbNameList.get(i))) {
-                    isExist = true;
-                    break;
-                }
-            }
-            if (!isExist) {
-                return DbNameList.get(i);
-            }
-        }
-        return defaultDBName;
+    private String getDbName(int i) {
+        return databaseNames.get(i);
     }
 
     public void clearSomeStaticValue() {
@@ -230,31 +270,16 @@ public class AccountManager {
     }
 
     public boolean haveAccount() {
-        if (userAccountList.get(currentUser).isAssigned()) {
+        if (userAccountList.get(selectedAccount).isAssigned()) {
             return true;
         } else {
             if (userAccountList.size() > 1) {
-                currentUser = userAccountList.size() - 1;
-                internalChange(currentUser);
+                selectedAccount = userAccountList.size() - 1;
                 setCurrentUser();
                 return userAccountList.get(userAccountList.size() - 1).isAssigned();
             } else {
                 return false;
             }
         }
-    }
-
-    public void firstStepOfChangeAccount() {
-        WebSocketClient.getInstance().disconnectSocket(false);
-        G.handler.removeCallbacksAndMessages(null);
-
-        signOutWallet();
-    }
-
-    private static void internalChange(int num) {
-        if (num > 0)
-            selectedAccount = num - 1;
-        else
-            selectedAccount = num;
     }
 }

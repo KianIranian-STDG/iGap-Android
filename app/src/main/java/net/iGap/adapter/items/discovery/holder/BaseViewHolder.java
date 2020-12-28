@@ -153,6 +153,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
             case TOPUP_MENU:/** tested **/
                 new HelperFragment(activity.getSupportFragmentManager(), PaymentChargeFragment.newInstance()).setReplace(false).load();
                 break;
+
             case BILL_MENU:/** tested **/
 
                 try {
@@ -175,9 +176,23 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case ELECTRIC_BILL_MENU:
                 new HelperFragment(activity.getSupportFragmentManager(), new ElectricityBillMainFrag()).setReplace(false).load();
+//                new HelperFragment(activity.getSupportFragmentManager(), new MobileBankLoginFragment()).setReplace(false).load();
+                break;
+            case PARSLAND:
+//    private code
                 break;
             case FUN_SERVICE:
                 new HelperFragment(activity.getSupportFragmentManager(), new IGashtProvinceFragment()).setReplace(false).load();
+                break;
+            case BLOCKCHAIN:
+//                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+
+//                } else {
+//                    HelperError.showSnackMessage("", true);
+//                }
+                break;
+            case VIRTUAL_GIFT_CARD:
+//                  private code
                 break;
             case NEWS:
                 NewsMainFrag frag = new NewsMainFrag();

@@ -133,7 +133,7 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                     itemView.performLongClick();
                 } else if (structIGSticker != null) {
                     progressButton.changeProgressTo(View.VISIBLE);
-//    private resource
+//                  private code
                 }
             });
 

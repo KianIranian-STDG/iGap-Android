@@ -30,6 +30,7 @@ import net.iGap.model.bill.ServiceDebit;
 import net.iGap.module.Theme;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.proto.ProtoMplGetBillToken;
 import net.iGap.viewmodel.electricity_bill.ElectricityBillListVM;
 
 import java.util.ArrayList;
@@ -162,8 +163,7 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
             switch (btnAction) {
                 case PAY:
                     ServiceDebit tempService = (ServiceDebit) bills.get(item).getData();
-                    viewModel.payServiceBill(tempService.getBillID(), tempService.getPaymentID(),
-                            tempService.getTotalElectricityBillDebt() != null ? tempService.getTotalElectricityBillDebt() : tempService.getTotalGasBillDebt());
+                    viewModel.payServiceBill(tempService.getBillID(), tempService.getPaymentID(), tempService.getTotalElectricityBillDebt() != null ? tempService.getTotalElectricityBillDebt() : tempService.getTotalGasBillDebt(), ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
                     break;
                 case EDIT:
                     if (item.getBillTitle() == null) {
@@ -206,13 +206,11 @@ public class ElectricityBillListFrag extends BaseAPIViewFrag<ElectricityBillList
                     break;
                 case MID_PAY:
                     MobileDebit tempMid = (MobileDebit) bills.get(item).getData();
-                    viewModel.payServiceBill(tempMid.getMidTerm().getBillID(), tempMid.getMidTerm().getPayID(),
-                            tempMid.getMidTerm().getAmount());
+                    viewModel.payServiceBill(tempMid.getMidTerm().getBillID(), tempMid.getMidTerm().getPayID(), tempMid.getMidTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.MID_TERM_VALUE);
                     break;
                 case LAST_PAY:
                     MobileDebit tempLast = (MobileDebit) bills.get(item).getData();
-                    viewModel.payServiceBill(tempLast.getLastTerm().getBillID(), tempLast.getLastTerm().getPayID(),
-                            tempLast.getLastTerm().getAmount());
+                    viewModel.payServiceBill(tempLast.getLastTerm().getBillID(), tempLast.getLastTerm().getPayID(), tempLast.getLastTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.LAST_TERM_VALUE);
                     break;
                 case RELOAD:
                     viewModel.reloadData(item);

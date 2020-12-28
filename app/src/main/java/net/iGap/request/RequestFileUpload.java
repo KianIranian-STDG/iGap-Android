@@ -20,7 +20,6 @@ public class RequestFileUpload {
 
     public interface OnFileUpload {
         void onFileUpload(double progress, long nextOffset, int nextLimit);
-
         void onFileUploadError(int major, int minor);
     }
 

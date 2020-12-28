@@ -255,7 +255,6 @@ public class PhotoEditor implements BrushViewChangeListener {
         /**
          * Building a PhotoEditor which requires a Context and PhotoEditorView
          * which we have setup in our xml layout
-         *
          * @param photoEditorView {@link PhotoEditorView}
          */
         public Builder(PhotoEditorView photoEditorView) {

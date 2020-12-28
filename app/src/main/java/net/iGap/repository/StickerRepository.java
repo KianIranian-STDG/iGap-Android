@@ -1,29 +1,13 @@
 package net.iGap.repository;
 
-import android.util.Base64;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.StickerApi;
 import net.iGap.api.apiService.RetrofitFactory;
-import net.iGap.fragments.emoji.apiModels.CardDetailDataModel;
-import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
-import net.iGap.fragments.emoji.apiModels.IssueDataModel;
-import net.iGap.fragments.emoji.apiModels.RsaDataModel;
-import net.iGap.fragments.emoji.apiModels.SliderDataModel;
-import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
-import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
-import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerCategory;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
-import net.iGap.helper.FileLog;
-import net.iGap.helper.HelperNumerical;
-import net.iGap.module.AESCrypt;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.rx.IGSingleObserver;
@@ -42,9 +26,7 @@ import io.reactivex.CompletableObserver;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -173,52 +155,6 @@ public class StickerRepository {
         return stickerApi.getFavoriteSticker()
                 .subscribeOn(Schedulers.newThread())
                 .flatMapCompletable(stickersDataModel -> CompletableObserver::onComplete);
-    }
-
-    private Single<UserGiftStickersDataModel> getMyGiftStickerBuyApiService(String status) {
-        return stickerApi.getUserGiftSticker(status).subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<UserGiftStickersDataModel> getMyActivatedGiftStickerApiService() {
-        return stickerApi.getMyActivatedGiftSticker().subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<StickerCategoryGroupDataModel> getGiftableStickersApi() {
-        return stickerApi.getGiftableStickers().subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<IssueDataModel> addIssueApiService(String stickerId, String phoneNumber, String nationalCode) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("national_code", nationalCode);
-        jsonObject.addProperty("tel_num", phoneNumber);
-        jsonObject.addProperty("count", 1);
-        return stickerApi.addIssue(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<CardStatusDataModel> getGiftCardStatusApiService(String giftStickerId) {
-        return stickerApi.giftCardStatus(giftStickerId).subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<RsaDataModel> getActiveGiftCardApiService(String mobileNumber, String nationalCode, String stickerId) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("national_code", nationalCode);
-        jsonObject.addProperty("tel_num", mobileNumber);
-        return stickerApi.activeGiftCard(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<RsaDataModel> getCardInfoApiService(String mobileNumber, String nationalCode, String stickerId) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("national_code", nationalCode);
-        jsonObject.addProperty("tel_num", mobileNumber);
-        return stickerApi.getCardInfo(stickerId, jsonObject).subscribeOn(Schedulers.newThread());
-    }
-
-    private Completable forwardStickerApiService(String stickerId, String toUserId) {
-        return stickerApi.forwardToUser(stickerId, toUserId).subscribeOn(Schedulers.newThread());
-    }
-
-    private Single<SliderDataModel> giftStickerHomePageApiService() {
-        return stickerApi.getGiftStickerHomePage().subscribeOn(Schedulers.newThread());
     }
 
     private void updateStickers(List<StructIGStickerGroup> stickerGroup) {
@@ -451,115 +387,5 @@ public class StickerRepository {
                         }
                     }
                 })).andThen((SingleSource<StructIGStickerGroup>) observer -> observer.onSuccess(stickerGroup));
-    }
-
-    public Single<List<StructIGGiftSticker>> getMyGiftStickerBuy(String status) {
-        return getMyGiftStickerBuyApiService(status)
-                .map(userGiftStickersDataModel -> {
-                    List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
-                    for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
-                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
-                        structIGGiftStickers.add(giftSticker);
-                    }
-                    return structIGGiftStickers;
-                });
-
-    }
-
-    public Single<List<StructIGGiftSticker>> getMyActivatedGiftSticker() {
-        return getMyActivatedGiftStickerApiService()
-                .map(userGiftStickersDataModel -> {
-                    List<StructIGGiftSticker> structIGGiftStickers = new ArrayList<>();
-                    for (int i = 0; i < userGiftStickersDataModel.getData().size(); i++) {
-                        StructIGGiftSticker giftSticker = new StructIGGiftSticker(userGiftStickersDataModel.getData().get(i));
-                        structIGGiftStickers.add(giftSticker);
-                    }
-                    return structIGGiftStickers;
-                });
-
-    }
-
-    public Single<List<StructIGStickerGroup>> getGiftableStickers() {
-        return getGiftableStickersApi()
-                .map(dataModel -> {
-                    List<StructIGStickerGroup> groups = new ArrayList<>();
-                    for (int i = 0; i < dataModel.getData().size(); i++) {
-                        StructIGStickerGroup stickerGroup = new StructIGStickerGroup(dataModel.getData().get(i));
-                        groups.add(stickerGroup);
-                    }
-                    return groups;
-                });
-    }
-
-    public Single<IssueDataModel> addIssue(String stickerId, String phoneNumber, String nationalCode) {
-        return addIssueApiService(stickerId, phoneNumber, nationalCode);
-    }
-
-    public Single<StructIGGiftSticker> getCardStatus(String giftCardId) {
-        return getGiftCardStatusApiService(giftCardId).map(StructIGGiftSticker::new);
-    }
-
-    public Single<CardDetailDataModel> getActiveGiftCard(String stickerId, String nationalCode, String mobileNumber) {
-        return getActiveGiftCardApiService(mobileNumber, nationalCode, stickerId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(rsaDataModel -> {
-                    CardDetailDataModel cardDetailDataModel = null;
-                    try {
-                        byte[] binary = Base64.decode(rsaDataModel.getData(), Base64.DEFAULT);
-                        byte[] message = HelperNumerical.getMessage(binary);
-                        byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
-                        byte[] encryptedBytes = AESCrypt.decrypt(G.symmetricKey, iv, message);
-
-                        String str = new String(encryptedBytes);
-                        cardDetailDataModel = new Gson().fromJson(str, CardDetailDataModel.class);
-
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                    return cardDetailDataModel;
-                });
-    }
-
-    public Single<CardDetailDataModel> getGiftCardInfo(String mobileNumber, String nationalCode, String stickerId) {
-        return getCardInfoApiService(mobileNumber, nationalCode, stickerId)
-                .map(rsaDataModel -> {
-                    CardDetailDataModel cardDetailDataMode = null;
-                    try {
-                        byte[] binary = Base64.decode(rsaDataModel.getData(), Base64.DEFAULT);
-                        byte[] message = HelperNumerical.getMessage(binary);
-                        byte[] iv = HelperNumerical.getIv(binary, G.ivSize);
-                        byte[] encryptedBytes = AESCrypt.decrypt(G.symmetricKey, iv, message);
-
-                        String str = new String(encryptedBytes);
-                        cardDetailDataMode = new Gson().fromJson(str, CardDetailDataModel.class);
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-
-                    return cardDetailDataMode;
-                });
-    }
-
-    public void forwardSticker(String stickerId, String userId) {
-        forwardStickerApiService(stickerId, userId).subscribe(new CompletableObserver() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-        });
-    }
-
-    public Single<SliderDataModel> getGiftStickerHomePageImageUrl() {
-        return giftStickerHomePageApiService();
     }
 }

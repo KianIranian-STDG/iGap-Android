@@ -20,7 +20,7 @@ import net.iGap.observers.interfaces.OnQueueSendContact;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsGetList;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -173,7 +173,7 @@ public class RealmPhoneContacts extends RealmObject {
     private static String checkString(StructListOfContact item) {
         String phoneText = item.getPhone() + "_" + item.firstName + item.lastName;
 
-        phoneText.getBytes(StandardCharsets.UTF_8);
+        phoneText.getBytes(Charset.forName("UTF-8"));
         return phoneText;
     }
 

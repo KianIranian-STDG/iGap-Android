@@ -23,10 +23,8 @@ constructor(context: Context,
         // Highlight only the areas already touched on the canvas
         xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
     }
-
     // gradient colors
     private val green = Color.GREEN
-
     // solid green in the center, transparent green at the edges
     private var gradientColors: IntArray
 
@@ -108,7 +106,7 @@ constructor(context: Context,
         return color and 0x00ffffff or ((alpha * 255).toInt() shl 24)
     }
 
-    fun stopAnimation() {
+    public fun stopAnimation() {
         waveAnimator?.repeatCount = 0
     }
 }

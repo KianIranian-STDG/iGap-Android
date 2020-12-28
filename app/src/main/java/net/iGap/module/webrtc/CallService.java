@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,7 +51,7 @@ import static android.app.Notification.DEFAULT_VIBRATE;
 
 public class CallService extends Service implements CallManager.CallStateChange {
     private final int ID_SERVICE_NOTIFICATION = 2213;
-    private final int ID_INCOMING_NOTIFICATION = 2214;
+    private final int ID_INCOMING_NOTIFICATION = 202;
     private final String CALL_CHANNEL = "iGapCall";
 
     private final String ACTION_END_CALL = "net.igap.call.end";
@@ -81,6 +82,8 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
     private String TAG = "iGapCall " + "CallService";
 
+    private CallManager.MyPhoneStateService myPhoneStateService;
+
     public static CallService getInstance() {
         return instance;
     }
@@ -105,6 +108,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
     }
 
     @Override
@@ -128,6 +132,11 @@ public class CallService extends Service implements CallManager.CallStateChange 
         instance = this;
         CallManager.getInstance().setOnCallStateChanged(this);
         initialAudioManager();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.PHONE_STATE");
+        myPhoneStateService = new CallManager.MyPhoneStateService();
+        registerReceiver(myPhoneStateService, intentFilter);
 
         if (isIncoming) {
             playSoundAndVibration();
@@ -454,6 +463,8 @@ public class CallService extends Service implements CallManager.CallStateChange 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        unregisterReceiver(myPhoneStateService);
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(CallState.LEAVE_CALL);

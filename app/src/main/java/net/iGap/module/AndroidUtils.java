@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -53,9 +54,11 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -508,7 +511,7 @@ public final class AndroidUtils {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             buffer = input.getBytes(StandardCharsets.UTF_8);
         } else {
-            buffer = input.getBytes(StandardCharsets.UTF_8);
+            buffer = input.getBytes(Charset.forName("UTF-8"));
         }
         md.update(buffer);
         byte[] digest = md.digest();
@@ -678,6 +681,8 @@ public final class AndroidUtils {
     public static int getViewInset(View view) {
         if (view == null || Build.VERSION.SDK_INT < 21 || view.getHeight() == AndroidUtils.displaySize.y || view.getHeight() == AndroidUtils.displaySize.y - statusBarHeight) {
             return 0;
+        } else if (Build.VERSION.SDK_INT > 28) {
+            return view.getRootWindowInsets().getStableInsetBottom();
         }
         try {
             if (mAttachInfoField == null) {
@@ -853,7 +858,7 @@ public final class AndroidUtils {
 
     public static byte[] getStringBytes(String src) {
         try {
-            return src.getBytes(StandardCharsets.UTF_8);
+            return src.getBytes("UTF-8");
         } catch (Exception ignore) {
 
         }
@@ -884,5 +889,20 @@ public final class AndroidUtils {
 
     public interface CopyFileCompleted {
         void onCompleted();
+    }
+
+    public static boolean isAppOnForeground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
+        if (appProcesses == null) {
+            return false;
+        }
+        final String packageName = context.getPackageName();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

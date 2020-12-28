@@ -42,7 +42,6 @@
                     android:layout_height="wrap_content"
                     android:visibility="@{viewmodel.pageVisibility}"
                     app:constraint_referenced_ids="blueScreen" />
-
                 <View
                     android:id="@+id/title_back"
                     android:layout_width="match_parent"

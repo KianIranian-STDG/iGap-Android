@@ -53,7 +53,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         this.fileObject = fileObject;
         selector = fileObject.selector;
         fileExecutors = FileIOExecutor.getInstance();
-        isDownloaded = fileObject.destFile.exists();
+        isDownloaded = fileObject.destFile.exists() && fileObject.destFile.length() == fileObject.fileSize;
         isDownloading = false;
 
         onProgress(1);
@@ -157,7 +157,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         try {
             moveTempToDownloadedDir();
             fileObject.progress = 100;
-            notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath())));
+            notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
         } catch (Exception e) {
             onError(e);
@@ -166,9 +166,9 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onProgress(int progress) {
         if (selector == Selector.FILE_VALUE)
-            notifyObservers(Resource.loading(new Progress(progress, fileObject.destFile.getAbsolutePath())));
+            notifyObservers(Resource.loading(new Progress(progress, fileObject.destFile.getAbsolutePath(), fileObject.fileToken)));
         else
-            notifyObservers(Resource.loading(new Progress(progress, fileObject.tempFile.getAbsolutePath())));
+            notifyObservers(Resource.loading(new Progress(progress, fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
     }
 
     public void onError(@NotNull Throwable throwable) {
@@ -217,10 +217,12 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     public static class Progress {
         int progress;
         String filePath;
+        String token;
 
-        public Progress(int progress, String filePath) {
+        public Progress(int progress, String filePath, String fileToken) {
             this.progress = progress;
             this.filePath = filePath;
+            this.token = fileToken;
         }
 
         public int getProgress() {
@@ -229,6 +231,10 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
         public String getFilePath() {
             return filePath;
+        }
+
+        public String getToken() {
+            return token;
         }
     }
 

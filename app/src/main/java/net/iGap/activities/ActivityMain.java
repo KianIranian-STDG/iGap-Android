@@ -56,7 +56,6 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
@@ -90,9 +89,9 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.FileUtils;
+import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
@@ -171,7 +170,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private SharedPreferences sharedPreferences;
     private TextView iconLock;
     private int retryConnectToWallet = 0;
-    private MyPhonStateService myPhonStateService;
     public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
 
@@ -263,10 +261,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (G.ISRealmOK) {
-            if (myPhonStateService != null) {
-                unregisterReceiver(myPhonStateService);
-            }
-
             if (audioManagerReciver != null) {
                 unregisterReceiver(audioManagerReciver);
             }
@@ -431,14 +425,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             initTabStrip(getIntent());
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction("android.intent.action.PHONE_STATE");
-            myPhonStateService = new MyPhonStateService();
-
             //add it for handle ssl handshake error
             checkGoogleUpdate();
-
-            registerReceiver(myPhonStateService, intentFilter);
             G.refreshWalletBalance = this;
 
             BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -647,6 +635,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 Log.wtf(this.getClass().getName(), "------------------------------------------------");
             }
         });
+
+        GPSTracker.getGpsTrackerInstance().checkLocation();
+
         Log.wtf(this.getClass().getName(), "onCreate");
     }
 
@@ -871,6 +862,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (result.getContents() != null) {
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
                 }
+                break;
+            case kuknosRequestCodeQrCode:
+//              private code
                 break;
             case WALLET_REQUEST_CODE:
                 /*try {
@@ -1336,22 +1330,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                    getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-//                        List fragmentList = getSupportFragmentManager().getFragments();
-                    boolean handled = false;
-                    try {
-                        // because some of our fragments are NOT extended from BaseFragment
-//                            Log.wtf("amini", "onBackPressed: " + fragmentList.get(fragmentList.size() - 1).getClass().getName());
-                        Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
-//                            Log.wtf("amini", "on back frag H " + frag.getClass().getName());
-                        handled = ((BaseFragment) frag).onBackPressed();
-//                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (!handled) {
-                        super.onBackPressed();
-                    }
+//                  private code
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
@@ -1645,11 +1624,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime, String message) {
+    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount) {
         if (status == 0) {
             Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
             intent.putExtra("Type", "2");
             intent.putExtra("Token", token);
+
+            if (originalAmount > 0 && discountedAmount > 0) {
+                intent.putExtra("OriginalAmount", originalAmount);
+                intent.putExtra("DiscountedAmount", discountedAmount);
+            }
+
             startActivityForResult(intent, requestCodePaymentBill);
         } else {
             if (G.onMplResult != null) {
@@ -1670,7 +1655,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     /*public void getUserCredit() {
 
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
                 @Override

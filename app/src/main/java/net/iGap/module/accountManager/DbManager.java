@@ -1,6 +1,7 @@
 package net.iGap.module.accountManager;
 
 import android.os.Looper;
+import android.os.Process;
 
 import net.iGap.helper.FileLog;
 
@@ -22,6 +23,8 @@ public class DbManager {
         return ourInstance;
     }
 
+    private int lastProcessId;
+
     private DbManager() {
         realmLowPriorityPoolExecutor = new ThreadPoolExecutor(
                 1,
@@ -29,6 +32,10 @@ public class DbManager {
                 3,
                 TimeUnit.SECONDS,
                 new LinkedBlockingDeque<>());
+
+        lastProcessId = Process.myPid();
+
+        FileLog.e("DbManager PId -> " + lastProcessId);
     }
 
     private Realm getUiRealm() {
@@ -36,6 +43,7 @@ public class DbManager {
     }
 
     public void openUiRealm() {
+        printProcessId();
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must open realm in ui thread.");
         }
@@ -44,6 +52,7 @@ public class DbManager {
     }
 
     public void closeUiRealm() {
+        printProcessId();
         if (Looper.myLooper() != Looper.getMainLooper()) {
             throw new IllegalStateException("You must close realm in ui thread.");
         }
@@ -56,6 +65,7 @@ public class DbManager {
     }
 
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask) {
+        printProcessId();
         if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             return realmTask.doTask(getUiRealm());
         } else {
@@ -66,6 +76,7 @@ public class DbManager {
     }
 
     public void doRealmTask(RealmTask realmTask) {
+        printProcessId();
         if (Looper.myLooper() == Looper.getMainLooper() && getUiRealm() != null && !getUiRealm().isClosed()) {
             realmTask.doTask(getUiRealm());
         } else {
@@ -86,24 +97,28 @@ public class DbManager {
      **/
     public void doRealmTransactionLowPriorityAsync(RealmTransaction realmTransaction) {
         realmLowPriorityPoolExecutor.execute(new Thread(() -> DbManager.getInstance().doRealmTask(realm -> {
+            printProcessId();
             realm.executeTransaction(realmTransaction::doTransaction);
         })));
     }
 
     public void doRealmTransaction(RealmTransaction realmTransaction) {
         DbManager.getInstance().doRealmTask(realm -> {
+            printProcessId();
             realm.executeTransaction(realmTransaction::doTransaction);
         });
     }
 
     public void doRealmTask(RealmTask realmTask, long userId) {
         try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
+            printProcessId();
             realmTask.doTask(realm);
         }
     }
 
     public <T> T doRealmTask(RealmTaskWithReturn<T> realmTask, long userId) {
         try (Realm realm = Realm.getInstance(AccountManager.getInstance().getUser(userId).getRealmConfiguration())) {
+            printProcessId();
             return realmTask.doTask(realm);
         }
     }
@@ -121,6 +136,7 @@ public class DbManager {
 
     public void doRealmTransaction(RealmTransaction realmTransaction, long userId) {
         DbManager.getInstance().doRealmTask(realm -> {
+            printProcessId();
             realm.executeTransaction(realmTransaction::doTransaction);
         }, userId);
     }
@@ -140,4 +156,12 @@ public class DbManager {
         void doTransaction(Realm realm);
     }
 
+    private void printProcessId() {
+        int temp = Process.myPid();
+
+        if (lastProcessId != temp) {
+            lastProcessId = temp;
+            FileLog.i("DbManager ", "PId -> " + lastProcessId);
+        }
+    }
 }

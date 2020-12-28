@@ -193,7 +193,7 @@ public class FragmentIgapSearch extends BaseFragment {
         });
         */
 
-        btnClose = view.findViewById(R.id.sfl_btn_close);
+        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -252,7 +252,7 @@ public class FragmentMediaPlayerViewModel {
         }
 
         if (HelperCalander.isPersianUnicode) {
-            callBackTxtMusicTime.set(HelperCalander.convertToUnicodeFarsiNumber(callBackTxtMusicTime.get()));
+            callBackTxtMusicTime.set(HelperCalander.convertToUnicodeFarsiNumber(callBackTxtMusicTime.get().toString()));
         }
 
 

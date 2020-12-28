@@ -277,6 +277,44 @@ public class HelperCalander {
     }
 
 
+    public static String convertToUnicodeEnglishNumber(String text) {
+        String[] englishNumber = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
+        if (text == null) return "";
+
+        if (text.length() == 0) {
+            return "";
+        }
+
+        String out = "";
+
+        int length = text.length();
+        for (int i = 0; i < length; i++) {
+            char c = text.charAt(i);
+            if ('۰' <= c && c <= '۹') {
+                String d = String.valueOf(c);
+                d = d.replace("۰", "0");
+                d = d.replace("۱", "1");
+                d = d.replace("۲", "2");
+                d = d.replace("٣", "3");
+                d = d.replace("٤", "4");
+                d = d.replace("۵", "5");
+                d = d.replace("٦", "6");
+                d = d.replace("٧", "7");
+                d = d.replace("۸", "8");
+                d = d.replace("۹", "9");
+                int number = Integer.parseInt(d);
+                out += englishNumber[number];
+            } else if (c == '،') {
+                out += '٫';
+            } else {
+                out += c;
+            }
+        }
+        return out;
+
+    }
+
     public static String convertToUnicodeFarsiNumber(String text) {
 
         String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
@@ -301,7 +339,6 @@ public class HelperCalander {
                 out += c;
             }
         }
-
         return out;
     }
 

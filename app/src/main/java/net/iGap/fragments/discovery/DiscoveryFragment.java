@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,16 +32,11 @@ import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.accountManager.AppConfig;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import ir.tapsell.plus.AdHolder;
-import ir.tapsell.plus.AdRequestCallback;
-import ir.tapsell.plus.TapsellPlus;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -88,34 +82,6 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
     }
 
-    private void requestAdd() {
-        TapsellPlus.requestNativeBanner(getActivity(), "5f7b3016b32aee00019b7900", new AdRequestCallback() {
-            @Override
-            public void response() {
-                showMsgDialog();
-            }
-
-            @Override
-            public void error(@NonNull String message) {
-            }
-        });
-    }
-
-    public void showMsgDialog() {
-        if (isAdded() && isVisible() && getContext() != null) {
-            FrameLayout dialogView = new FrameLayout(getContext());
-            dialogView.setId(R.id.add_container);
-            AdHolder adHolder = TapsellPlus.createAdHolder(getActivity(), dialogView, R.layout.native_banner);
-            materialDialog = new MaterialDialog.Builder(getContext())
-                    .customView(dialogView, true)
-                    .show();
-            TapsellPlus.showAd(getActivity(), adHolder, "5f7b3016b32aee00019b7900");
-            BottomNavigationFragment bottomNavigationFragment = (BottomNavigationFragment) getParentFragment();
-            if (bottomNavigationFragment != null) {
-                bottomNavigationFragment.isShowedAdd = true;
-            }
-        }
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -224,12 +190,6 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         rcDiscovery.setAdapter(new DiscoveryAdapter(getActivity(), rcDiscovery.getWidth(), discoveryArrayList));
         if (discoveryArrayList == null) {
             tryToUpdateOrFetchRecycleViewData(0);
-        } else {
-            if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement && isAdded()) {
-                if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
-                    requestAdd();
-                }
-            }
         }
 
         if (needToReload) {
@@ -293,16 +253,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                 }
 
                 listLoaded = true;
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getParentFragment() != null && getParentFragment() instanceof BottomNavigationFragment && AppConfig.showAdvertisement && isAdded()) {
-                            if (!((BottomNavigationFragment) getParentFragment()).isShowedAdd) {
-                                requestAdd();
-                            }
-                        }
-                    }
-                }, 2000);
+
                 G.handler.post(() -> {
                     setAdapterData(discoveryArrayList, title);
                     setRefreshing(false);
@@ -428,6 +379,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         super.onDestroyView();
         needToCrawl = false;
         needToReload = false;
+        BottomNavigationFragment.isShowedAdd = false;
         if (materialDialog != null) {
             materialDialog.dismiss();
         }

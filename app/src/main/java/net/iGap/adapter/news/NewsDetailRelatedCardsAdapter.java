@@ -101,9 +101,7 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
             source.setText(mData.getNews().get(position * 2).getSource());
             rootTitle.setText(mData.getNews().get(position * 2).getRootTitle());
             title.setText(mData.getNews().get(position * 2).getTitle());
-            Picasso.with(G.context)
-//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getNews().get(position * 2).getImage())
+            Picasso.get().load(mData.getNews().get(position * 2).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position * 2)));
@@ -115,9 +113,7 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
             source1.setText(mData.getNews().get(position * 2 + 1).getSource());
             rootTitle1.setText(mData.getNews().get(position * 2 + 1).getRootTitle());
             title1.setText(mData.getNews().get(position * 2 + 1).getTitle());
-            Picasso.with(G.context)
-//                    .load("https://images.vexels.com/media/users/3/144598/preview2/96a2d7aa32ed86c5e4bd089bdfbd341c-breaking-news-banner-header.jpg")
-                    .load(mData.getNews().get(position * 2 + 1).getImage())
+            Picasso.get().load(mData.getNews().get(position * 2 + 1).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position * 2 + 1)));

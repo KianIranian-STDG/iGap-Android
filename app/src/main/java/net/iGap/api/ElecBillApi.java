@@ -66,12 +66,10 @@ public interface ElecBillApi {
     @POST("get-sale-bills")
     Call<ElectricityResponseList<SaleBill>> getSaleBills(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum,
                                                          @Field("from_year") String fromYear);
-
     @FormUrlEncoded
     @POST("get-paid-bills")
     Call<ElectricityResponseList<PaidBill>> getPaiedBills(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum,
                                                           @Field("from_year") String fromYear);
-
     @FormUrlEncoded
     @POST("get-last-bill")
     Call<ElectricityResponseModel<LastBillData>> getLastBill(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum);

@@ -1,17 +1,10 @@
 package net.iGap.api;
 
-import com.google.gson.JsonObject;
-
-import net.iGap.fragments.emoji.apiModels.CardStatusDataModel;
 import net.iGap.fragments.emoji.apiModels.Ids;
-import net.iGap.fragments.emoji.apiModels.IssueDataModel;
-import net.iGap.fragments.emoji.apiModels.RsaDataModel;
-import net.iGap.fragments.emoji.apiModels.SliderDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategorisDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerCategoryGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickerGroupDataModel;
 import net.iGap.fragments.emoji.apiModels.StickersDataModel;
-import net.iGap.fragments.emoji.apiModels.UserGiftStickersDataModel;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -55,31 +48,4 @@ public interface StickerApi {
 
     @GET("favorite/list")
     Single<StickersDataModel> getFavoriteSticker();
-
-    @GET("gift/user-list")
-    Single<UserGiftStickersDataModel> getUserGiftSticker(@Query("status") String status);
-
-    @GET("gift/activated-list")
-    Single<UserGiftStickersDataModel> getMyActivatedGiftSticker();
-
-    @GET("gift/giftable-list")
-    Single<StickerCategoryGroupDataModel> getGiftableStickers();
-
-    @POST("gift/issue/{stickerId}")
-    Single<IssueDataModel> addIssue(@Path("stickerId") String stickerId, @Body JsonObject jsonObject);
-
-    @POST("gift/activate/{giftStickerId}")
-    Single<RsaDataModel> activeGiftCard(@Path("giftStickerId") String giftStickerId, @Body JsonObject jsonObject);
-
-    @GET("gift/activation-status/{giftStickerId}")
-    Single<CardStatusDataModel> giftCardStatus(@Path("giftStickerId") String giftStickerId);
-
-    @POST("gift/card-info/{giftStickerId}")
-    Single<RsaDataModel> getCardInfo(@Path("giftStickerId") String giftStickerId, @Body JsonObject jsonObject);
-
-    @GET("gift/forward/{stickerId}/{toUserId}")
-    Completable forwardToUser(@Path("stickerId") String stickerId, @Path("toUserId") String toUserId);
-
-    @GET("gift/first-page")
-    Single<SliderDataModel> getGiftStickerHomePage();
 }

@@ -1,6 +1,7 @@
 package net.iGap.api.apiService;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,6 +19,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class IgapRetrofitInterceptor implements Interceptor {
+    private static final String TAG = "IgapRetrofitInterceptor";
     private static final int PERSIAN = 0;
     private static final int ENGLISH = 1;
     private static final int RUSSIAN = 2;
@@ -77,6 +79,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
         builder.method(request.method(), request.body());
 
         String token = tokenContainer.getToken();
+        Log.e(TAG, "intercept: " + token);
 
         request = builder.build();
         Response response = chain

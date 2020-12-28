@@ -1,22 +1,30 @@
 package net.iGap.viewmodel.controllers;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.SystemClock;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.CallState;
 import net.iGap.module.webrtc.CallAudioManager;
 import net.iGap.module.webrtc.CallService;
 import net.iGap.module.webrtc.CallerInfo;
 import net.iGap.module.webrtc.WebRTC;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoSignalingAccept;
 import net.iGap.proto.ProtoSignalingCandidate;
@@ -55,12 +63,14 @@ public class CallManager {
     private RealmCallConfig currentCallConfig;
 
     private boolean isUserInCall;
+    private boolean isUserInSimCall;
     private boolean isCallActive;
     private boolean isRinging;
     private boolean isIncoming;
     private boolean isCallHold;
     private boolean iHoldCall = true;
     private boolean isMicEnable = true;
+    private boolean waitForEndCall = false;
 
     @Nullable
     private CallerInfo currentCallerInfo;
@@ -76,6 +86,9 @@ public class CallManager {
 
     private String TAG = "iGapCall " + getClass().getSimpleName();
     private CallState currentSate;
+
+    public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
+    public static boolean isBlutoothOn = false;
 
     public static CallManager getInstance() {
         CallManager localInstance = instance;
@@ -93,7 +106,7 @@ public class CallManager {
     private CallManager() {
         DbManager.getInstance().doRealmTask(realm -> {
             currentCallConfig = realm.where(RealmCallConfig.class).findFirst();
-            if (currentCallConfig == null) {
+            if (currentCallConfig == null && RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         });
@@ -265,6 +278,7 @@ public class CallManager {
      * @param builder from server
      */
     public void onLeave(ProtoSignalingLeave.SignalingLeaveResponse.Builder builder) {
+        waitForEndCall = false;
         G.handler.post(() -> {
             // TODO: 5/6/2020 this part needs to change based on new design
             try {
@@ -296,12 +310,6 @@ public class CallManager {
         });
     }
 
-    public void leaveCall() {
-        if (isRinging || isCallActive) {
-            new RequestSignalingLeave().signalingLeave();
-        }
-    }
-
     public void onHold(ProtoSignalingSessionHold.SignalingSessionHoldResponse.Builder builder) {
         isCallHold = builder.getHold();
         iHoldCall = !builder.getResponse().getId().isEmpty();
@@ -315,103 +323,114 @@ public class CallManager {
     }
 
     public void onError(int actionId, int major, int minor) {
-        HelperLog.getInstance().setErrorLog(new Exception("CallManagerError/" + "majorCode : " + major + " * minorCode : " + minor));
-        int messageID = R.string.e_call_permision;
-        switch (major) {
-            case 900://                RINGING_BAD_PAYLOAD
-            case 916://                LEAVE_BAD_PAYLOAD
-            case 907://                GET_CONFIGURATION_BAD_PAYLOAD
-                messageID = R.string.call_error_badPayload;
-                break;
-            case 901://                OFFER_INTERNAL_SERVER_ERROR
-            case 920://                RINGING_INTERNAL_SERVER_ERROR
-            case 917://                ACCEPT_INTERNAL_SERVER_ERROR
-            case 914://                CANDIDATE_INTERNAL_SERVER_ERROR
-            case 911://                LEAVE_INTERNAL_SERVER_ERROR
-            case 908://                SESSION_HOLD_INTERNAL_SERVER_ERROR
-            case 903://                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
-                messageID = R.string.call_error_internalServer;
-                break;
-            case 902://                OFFER_BAD_PAYLOAD
-                switch (minor) {
-                    case 1://                        Caller_SDP is invalid
-                    case 2://                        Type is invalid
-                    case 3://                        CalledUser_ID is invalid
-                        messageID = R.string.call_error_offer;
-                        break;
-                    default:
-                        messageID = R.string.call_error_badPayload;
-                        break;
-                }
-                break;
-            case 904:
-                switch (minor) {
-                    case 6:
-                        messageID = R.string.e_904_6;
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                    case 7:
-                        messageID = R.string.e_904_7;
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                    case 8:
-                        messageID = R.string.e_904_8;
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                    case 9:
-                        messageID = R.string.e_904_9;
-                        changeState(CallState.BUSY);
-                        if (CallService.getInstance() != null) {
-                            CallService.getInstance().playSoundWithRes(R.raw.igap_busy, false);
-                        }
-                        break;
-                    default:
-                        changeState(CallState.UNAVAILABLE);
-                        break;
-                }
-                break;
-            case 921://                RINGING_FORBIDDEN
-            case 918://                ACCEPT_FORBIDDEN
-            case 915://                CANDIDATE_FORBIDDEN
-            case 912://                LEAVE_FORBIDDEN
-            case 909://                SESSION_HOLD_FORBIDDEN
-                messageID = R.string.call_error_forbidden;
-                break;
-            case 905://                OFFER_PRIVACY_PROTECTION
-            case 906://                OFFER_BLOCKED_BY_PEER
-                messageID = R.string.e_906_1;
-                break;
-            case 910://                ACCEPT_BAD_PAYLOAD
+        G.runOnUiThread(() -> {
+            HelperLog.getInstance().setErrorLog(new Exception("CallManagerError/" + "majorCode : " + major + " * minorCode : " + minor));
+            int messageID = R.string.e_call_permision;
+            switch (major) {
+                case 900://                RINGING_BAD_PAYLOAD
+                case 916://                LEAVE_BAD_PAYLOAD
+                case 907://                GET_CONFIGURATION_BAD_PAYLOAD
+                    messageID = R.string.call_error_badPayload;
+                    break;
+                case 901://                OFFER_INTERNAL_SERVER_ERROR
+                case 920://                RINGING_INTERNAL_SERVER_ERROR
+                case 917://                ACCEPT_INTERNAL_SERVER_ERROR
+                case 914://                CANDIDATE_INTERNAL_SERVER_ERROR
+                case 911://                LEAVE_INTERNAL_SERVER_ERROR
+                case 908://                SESSION_HOLD_INTERNAL_SERVER_ERROR
+                case 903://                GET_CONFIGURATION_INTERNAL_SERVER_ERROR
+                    messageID = R.string.call_error_internalServer;
+                    break;
+                case 902://                OFFER_BAD_PAYLOAD
+                    switch (minor) {
+                        case 1://                        Caller_SDP is invalid
+                        case 2://                        Type is invalid
+                        case 3://                        CalledUser_ID is invalid
+                            messageID = R.string.call_error_offer;
+                            break;
+                        default:
+                            messageID = R.string.call_error_badPayload;
+                            break;
+                    }
+                    break;
+                case 904:
+                    switch (minor) {
+                        case 6:
+                            messageID = R.string.e_904_6;
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                        case 7:
+                            messageID = R.string.e_904_7;
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                        case 8:
+                            messageID = R.string.e_904_8;
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                        case 9:
+                            messageID = R.string.e_904_9;
+                            changeState(CallState.BUSY);
+                            if (CallService.getInstance() != null) {
+                                CallService.getInstance().playSoundWithRes(R.raw.igap_busy, false);
+                            }
+                            break;
+                        default:
+                            changeState(CallState.UNAVAILABLE);
+                            break;
+                    }
+                    break;
+                case 918://                ACCEPT_FORBIDDEN
+                    forceLeaveCall();
+                    messageID = R.string.call_error_forbidden;
+                    break;
+                case 921://                RINGING_FORBIDDEN
+                case 915://                CANDIDATE_FORBIDDEN
+                case 912://                LEAVE_FORBIDDEN
+                case 909://                SESSION_HOLD_FORBIDDEN
+                    messageID = R.string.call_error_forbidden;
+                    break;
+                case 905://                OFFER_PRIVACY_PROTECTION
+                case 906://                OFFER_BLOCKED_BY_PEER
+                    messageID = R.string.e_906_1;
+                    break;
+                case 910://                ACCEPT_BAD_PAYLOAD
 
-                if (minor == 1) {
-                    //                    Called_SDP is invalid
-                    messageID = R.string.call_error_accept;
-                } else {
-                    messageID = R.string.call_error_badPayload;
-                }
-                break;
-            case 913://                CANDIDATE_BAD_PAYLOAD
-                switch (minor) {
-                    case 1://                        SDP_M_Line_Index is invalid
-                    case 2://                        SDP_MID is invalid
-                    case 3://                        Candidate is invalid
-                        messageID = R.string.call_error_candidate;
-                        break;
-                    default:
+                    if (minor == 1) {
+                        //                    Called_SDP is invalid
+                        messageID = R.string.call_error_accept;
+                    } else {
                         messageID = R.string.call_error_badPayload;
-                        break;
-                }
-                break;
-            case 919://                SESSION_HOLD_BAD_PAYLOAD
-                if (minor == 1) {//                    Hold is invalid
-                    messageID = R.string.call_error_hold;
-                } else {
-                    messageID = R.string.call_error_badPayload;
-                }
-                break;
+                    }
+                    break;
+                case 913://                CANDIDATE_BAD_PAYLOAD
+                    switch (minor) {
+                        case 1://                        SDP_M_Line_Index is invalid
+                        case 2://                        SDP_MID is invalid
+                        case 3://                        Candidate is invalid
+                            messageID = R.string.call_error_candidate;
+                            break;
+                        default:
+                            messageID = R.string.call_error_badPayload;
+                            break;
+                    }
+                    break;
+                case 919://                SESSION_HOLD_BAD_PAYLOAD
+                    if (minor == 1) {//                    Hold is invalid
+                        messageID = R.string.call_error_hold;
+                    } else {
+                        messageID = R.string.call_error_badPayload;
+                    }
+                    break;
+            }
+            if (onCallStateChanged != null)
+                onCallStateChanged.onError(messageID, major, minor);
+        });
+    }
+
+    private void forceLeaveCall() {
+        if (CallService.getInstance() != null) {
+            CallService.getInstance().onDestroy();
         }
-        if (onCallStateChanged != null)
-            onCallStateChanged.onError(messageID, major, minor);
     }
 
     public void toggleMic() {
@@ -424,7 +443,11 @@ public class CallManager {
     }
 
     public void endCall() {
-        leaveCall();
+        isUserInCall = false;
+        if (isRinging || isCallActive) {
+            waitForEndCall = true;
+            new RequestSignalingLeave().signalingLeave();
+        }
     }
 
     public void directMessage() {
@@ -501,6 +524,7 @@ public class CallManager {
         isCallHold = false;
         isIncoming = false;
         isMicEnable = false;
+        isUserInCall = false;
         WebRTC.getInstance().close();
         if (timer != null)
             timer.cancel();
@@ -551,7 +575,6 @@ public class CallManager {
     }
 
     public void changeState(CallState callState) {
-
         currentSate = callState;
         EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, false);
         if (callState == CallState.CONNECTED) {
@@ -562,8 +585,11 @@ public class CallManager {
             iHoldCall = true;
         }
 
-        if (onCallStateChanged != null)
+        HelperTracker.getInstance().sendCallEvent(callType, callState);
+
+        if (onCallStateChanged != null) {
             onCallStateChanged.onCallStateChanged(callState);
+        }
     }
 
 
@@ -606,7 +632,105 @@ public class CallManager {
         return isUserInCall;
     }
 
+    public boolean isUserInSimCall() {
+        return isUserInSimCall;
+    }
+
+    public void setUserInSimCall(boolean userInSimCall) {
+        isUserInSimCall = userInSimCall;
+    }
+
     public void setUserInCall(boolean userInCall) {
         isUserInCall = userInCall;
+    }
+
+    public boolean isWaitForEndCall() {
+        return waitForEndCall;
+    }
+
+    public static class MyPhoneStateListener extends PhoneStateListener {
+
+        /**
+         * in this function we observe phone's state changes. and we manage two things:
+         * 1- manage music player state when phone state changes
+         * 2- manage call state (video or voice) when phone state changes
+         *
+         * @param state
+         * @param incomingNumber
+         */
+        public void onCallStateChanged(int state, String incomingNumber) {
+
+            // managing music player state
+            ConnectivityManager connectivityManager = (ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeInfo = connectivityManager.getActiveNetworkInfo();
+
+            if (lastPhoneState != state && MusicPlayer.isMusicPlyerEnable) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    pauseSoundIfPlay();
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    if (MusicPlayer.pauseSoundFromCall) {
+                        MusicPlayer.pauseSoundFromCall = false;
+                        MusicPlayer.playSound();
+                    }
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    pauseSoundIfPlay();
+                }
+            }
+            // if last phone state does not change so there is nothing to do: preventing from multiple calls to proto and server
+            if (lastPhoneState == state)
+                return;
+            else
+                lastPhoneState = state;
+
+            if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                CallManager.getInstance().holdCall(true);
+                WebRTC.getInstance().toggleSound(false);
+                WebRTC.getInstance().pauseVideoCapture();
+                CallManager.getInstance().setUserInSimCall(true);
+                CallManager.getInstance().endCall();
+            } else if (state == TelephonyManager.CALL_STATE_RINGING) {
+                if (activeInfo != null && activeInfo.isConnected() && activeInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    CallManager.getInstance().endCall();
+                }
+                CallManager.getInstance().setUserInSimCall(false);
+            } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                if (activeInfo != null && activeInfo.isConnected() && activeInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    CallManager.getInstance().holdCall(false);
+                    WebRTC.getInstance().toggleSound(true);
+                    WebRTC.getInstance().startVideoCapture();
+                }
+                CallManager.getInstance().setUserInSimCall(false);
+            }
+        }
+
+        private void pauseSoundIfPlay() {
+
+            if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+
+                MusicPlayer.pauseSound();
+                MusicPlayer.pauseSoundFromCall = true;
+
+            }
+        }
+    }
+
+    public static class MyPhoneStateService extends BroadcastReceiver {
+        TelephonyManager telephony;
+        private MyPhoneStateListener phoneListener;
+
+        /**
+         * use when start or finish ringing
+         */
+
+        public void onReceive(Context context, Intent intent) {
+            phoneListener = new MyPhoneStateListener();
+            telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            telephony.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
+        public void onDestroy() {
+            telephony.listen(phoneListener, PhoneStateListener.LISTEN_NONE);
+        }
     }
 }

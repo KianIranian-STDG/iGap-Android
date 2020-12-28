@@ -399,7 +399,6 @@ public class G extends ApplicationContext {
         } catch (Error e) {
             G.ISRealmOK = false;
         }
-        AccountManager.initial(this);
 
         LooperThreadHelper.getInstance();
 
@@ -407,19 +406,14 @@ public class G extends ApplicationContext {
 
         Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
 
-        // dont remove below line please
-        if (!BuildConfig.DEBUG && BuildConfig.Store.length() > 1) {
-//            Metrix.getInstance().setStore(BuildConfig.Store);
-//            Metrix.getInstance().setAppSecret();
-        }
-
         handler = new Handler();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 RaadApp.onCreate(getApplicationContext());
-                WebBase.apiKey = "YOUR_API_KEY";
+                /*Raad.init(getApplicationContext());*/
+                WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
             }
         }).start();
 
@@ -451,7 +445,8 @@ public class G extends ApplicationContext {
             FileLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
             FileLog.i("---------------------------------------------------");
         }
-        TapsellPlus.initialize(this, "YOUR_API_KEY");
+
+        TapsellPlus.initialize(this, BuildConfig.TAPSELL_KEY);
     }
 
     @Override

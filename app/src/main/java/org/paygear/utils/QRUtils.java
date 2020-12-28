@@ -110,8 +110,6 @@ public class QRUtils {
 
 
     public static Bitmap getQR(Context context, String qrData, int pxSize) {
-        //Log.i("GH_QR_size", String.valueOf(RaadCommonUtils.getDp(pxSize, context)));
-
         Bitmap bitmap = null;
         BarcodeEncoder qrEncoder = new BarcodeEncoder();
         try {

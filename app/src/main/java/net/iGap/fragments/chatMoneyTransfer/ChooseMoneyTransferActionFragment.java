@@ -55,7 +55,9 @@ public class ChooseMoneyTransferActionFragment extends Fragment {
         });
 
         view.findViewById(R.id.stickerGift).setOnClickListener(v -> {
-//    private resource
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).loadGiftSticker();
+            }
         });
     }
 }

@@ -153,6 +153,8 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.MessageObject;
+import net.iGap.helper.RoomObject;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
@@ -523,6 +525,7 @@ public class FragmentChat extends BaseFragment
     private int latestRequestCode;
     private boolean isEmojiSHow = false;
     private boolean isPublicGroup = false;
+    private boolean roomIsPublic;
     private ArrayList<Long> bothDeleteMessageId;
     private ViewGroup layoutMute;
     private String report = "";
@@ -1681,14 +1684,14 @@ public class FragmentChat extends BaseFragment
                 title = realmRoom.getTitle();
                 if (chatType == GROUP) {
                     groupParticipantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
-                    isPublicGroup = !realmRoom.getGroupRoom().isPrivate();
+                    isPublicGroup = roomIsPublic = !realmRoom.getGroupRoom().isPrivate();
                 } else {
                     groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
                     showVoteChannel = realmRoom.getChannelRoom().isReactionStatus();
                     if (realmRoom.getChannelRoom().isVerified()) {
                         txtVerifyRoomIcon.setVisibility(View.VISIBLE);
                     }
-
+                    roomIsPublic = !realmRoom.getChannelRoom().isPrivate();
                 }
             }
 
@@ -3725,7 +3728,7 @@ public class FragmentChat extends BaseFragment
                         fragment.setDelegate(new ParentChatMoneyTransferFragment.Delegate() {
                             @Override
                             public void onGiftStickerGetStartPayment(StructIGSticker structIGSticker, String paymentToken) {
-
+                                // private code
                             }
 
                             @Override
@@ -4750,6 +4753,13 @@ public class FragmentChat extends BaseFragment
         if (shareLinkIsOn)
             items.add(R.string.share_link_item_dialog);
 
+        if (RoomObject.isRoomPublic(room)) {
+            if (MessageObject.canSharePublic(message.realmRoomMessage)) {
+                if (message.realmRoomMessage.attachment.url != null)
+                    items.add(R.string.share_file_link);
+            }
+        }
+
         items.add(R.string.forward_item_dialog);
         items.add(R.string.delete_item_dialog);
 
@@ -4813,6 +4823,7 @@ public class FragmentChat extends BaseFragment
             case LOG:
                 break;
         }
+
 
         if (message.realmRoomMessage.getForwardMessage() != null || (rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
             items.remove(Integer.valueOf(R.string.edit_item_dialog));
@@ -4919,6 +4930,9 @@ public class FragmentChat extends BaseFragment
                 shearedLinkDataToOtherProgram(message);
                 break;
 
+            case R.string.share_file_link:
+                shareMediaLink(message);
+                break;
             case R.string.forward_item_dialog:
                 forwardSelectedMessageToOutOfChat(message);
                 break;
@@ -6673,6 +6687,15 @@ public class FragmentChat extends BaseFragment
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, "https://igap.net/" + room.getChannelRoom().getUsername() + "/" + messageInfo.realmRoomMessage.getMessageId());
+        startActivity(Intent.createChooser(intent, G.context.getString(R.string.share_link_item_dialog)));
+    }
+
+    private void shareMediaLink(StructMessageInfo messageInfo) {
+        if (messageInfo == null) return;
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, messageInfo.realmRoomMessage.attachment.url);
         startActivity(Intent.createChooser(intent, G.context.getString(R.string.share_link_item_dialog)));
     }
 

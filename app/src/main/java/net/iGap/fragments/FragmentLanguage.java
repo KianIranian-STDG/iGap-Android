@@ -90,7 +90,7 @@ public class FragmentLanguage extends BaseFragment {
 
                 /*((ActivityEnhanced) getActivity()).onRefreshActivity(false, language);*/
                 /*if (getActivity() instanceof ActivityRegistration) {*/
-                getActivity().onBackPressed();
+                    getActivity().onBackPressed();
                 /*}*/
             }
         });

@@ -384,7 +384,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                 iconPlay = itemView.findViewById(R.id.ml_btn_play_music);
                 root = itemView.findViewById(R.id.rootViewMuciPlayer);
 
-                messageProgress = itemView.findViewById(R.id.progress);
+                messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
                 AppUtils.setProgresColor(messageProgress.progressBar);
             }
         }

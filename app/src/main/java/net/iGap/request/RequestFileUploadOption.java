@@ -16,7 +16,6 @@ public class RequestFileUploadOption {
 
     public interface OnFileUploadOption {
         void onFileUploadOption(int firstBytesLimit, int lastBytesLimit, int maxConnection);
-
         void onFileUploadOptionError(int major, int minor);
     }
 

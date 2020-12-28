@@ -13,6 +13,5 @@ package net.iGap.observers.interfaces;
 
 public interface OnContactsGetList {
     void onContactsGetList();
-
     void onContactsGetListTimeOut();
 }

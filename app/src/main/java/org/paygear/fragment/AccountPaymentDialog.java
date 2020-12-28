@@ -33,7 +33,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -547,13 +546,11 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
             }
 
             if (mOrder == null) {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);
             }
@@ -581,13 +578,11 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
 //                mCreditSwitch.setEnabled(mOrder.amount <= RaadApp.paygearCard.balance);
             }
             if (mOrder == null) {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
                         .fit()
                         .into(mImageView);
             } else {
-                Picasso.with(G.context)
-                        .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
+                Picasso.get().load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
                         .fit()
                         .into(mImageView);
             }

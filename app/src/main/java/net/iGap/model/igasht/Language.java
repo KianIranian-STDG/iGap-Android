@@ -1,3 +1,4 @@
+
 package net.iGap.model.igasht;
 
 import com.google.gson.annotations.SerializedName;

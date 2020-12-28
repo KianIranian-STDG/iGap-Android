@@ -22,7 +22,6 @@ import androidx.core.view.ViewCompat;
 
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.model.Card;
@@ -201,12 +200,12 @@ public class BankCardView extends CardView {
         BankUtils bankInfo = BankUtils.getBank(getContext(), card.bankCode);
 
         if (!TextUtils.isEmpty(mCard.backgroundImage)) {
-            Picasso.with(G.context)
+            Picasso.get()
                     .load(RaadCommonUtils.getImageUrl(mCard.backgroundImage))
                     .fit()
                     .into(mBackImage);
         } else {
-            Picasso.with(G.context)
+            Picasso.get()
                     .load(R.drawable.default_card_pattern)
                     .fit()
                     .into(mBackImage);

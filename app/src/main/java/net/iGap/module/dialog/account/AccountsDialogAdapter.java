@@ -25,15 +25,33 @@ import java.util.List;
 
 public class AccountsDialogAdapter extends RecyclerView.Adapter<AccountsDialogAdapter.AccountViewHolder> {
 
-    private List<AccountUser> mAccountsList;
+    private List<AccountUser> mAccountsList = new ArrayList<>();
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
     private int currentUserPosition;
 
     public AccountsDialogAdapter(AvatarHandler mAvatarHandler, AccountDialogListener listener) {
-        this.mAccountsList = new ArrayList<>();
-        this.mAccountsList.addAll(AccountManager.getInstance().getUserAccountList());
-        Collections.reverse(mAccountsList);
+        int freeAccount = 3;
+        for (int i = 0; i < AccountManager.getInstance().getUserAccountList().size(); i++) {
+            if (AccountManager.getInstance().getUserAccountList().get(i).isAssigned()) {
+                freeAccount--;
+                mAccountsList.add(AccountManager.getInstance().getUserAccountList().get(i));
+            }
+        }
+
+        Collections.sort(mAccountsList, (o1, o2) -> {
+            if (o1.getLoginTime() > o2.getLoginTime()) {
+                return 1;
+            } else if (o1.getLoginTime() < o2.getLoginTime()) {
+                return -1;
+            }
+            return 0;
+        });
+
+        if (freeAccount > 0) {
+            mAccountsList.add(new AccountUser("test"));
+        }
+
         this.mAvatarHandler = mAvatarHandler;
         this.currentUserPosition = mAccountsList.indexOf(AccountManager.getInstance().getCurrentUser());
         this.mListener = listener;

@@ -20,6 +20,8 @@ import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.enums.CallState;
+import net.iGap.proto.ProtoSignalingOffer;
 
 import ir.metrix.sdk.Metrix;
 import ir.metrix.sdk.MetrixConfig;
@@ -192,17 +194,37 @@ public class HelperTracker {
             canSendMetrixEvent = packageName != null && packageName.toLowerCase().equals("net.igap");
 
             if (canSendMetrixEvent) {
-                MetrixConfig metrixConfig = new MetrixConfig(context, "_");
-                metrixConfig.setFirebaseId("_", "_", "_");
+                MetrixConfig metrixConfig = new MetrixConfig(context, BuildConfig.METRIX_ID);
+                metrixConfig.setFirebaseId(BuildConfig.METRIX_FIREBASE_FIRST_ID, BuildConfig.METRIX_FIREBASE_SECOND_ID, BuildConfig.METRIX_FIREBASE_THEIRD_ID);
                 Metrix.onCreate(metrixConfig);
-                Metrix.initialize(context, "YOUR_API_KEY");
+                Metrix.initialize(context, BuildConfig.METRIX_ID);
                 if (!BuildConfig.DEBUG) {
                     Metrix.getInstance().setStore(BuildConfig.Store);
-                    Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
+                    Metrix.getInstance().setAppSecret(BuildConfig.METRIX_SECRET, BuildConfig.METRIX_FIRST_SECRET, BuildConfig.METRIX_SECOND_SECRET, BuildConfig.METRIX_THEIRD_SECRET, BuildConfig.METRIX_FOURTH_SECRET);
                 }
             }
         } catch (Exception e) {
             FileLog.e(e);
+        }
+    }
+
+    public void sendCallEvent(ProtoSignalingOffer.SignalingOffer.Type callType, CallState callState) {
+        if (callType == null || callState == null) {
+            return;
+        }
+
+        if (callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING)) {
+            if (callState.equals(CallState.CONNECTED)) {
+                sendTracker(TRACKER_VIDEO_CALL_CONNECTED);
+            } else if (callState.equals(CallState.CONNECTING)) {
+                sendTracker(TRACKER_VIDEO_CALL_CONNECTING);
+            }
+        } else if (callType.equals(ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING)) {
+            if (callState.equals(CallState.CONNECTED)) {
+                sendTracker(TRACKER_VOICE_CALL_CONNECTED);
+            } else if (callState.equals(CallState.CONNECTING)) {
+                sendTracker(TRACKER_VOICE_CALL_CONNECTING);
+            }
         }
     }
 }
