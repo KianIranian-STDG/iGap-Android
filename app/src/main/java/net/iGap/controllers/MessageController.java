@@ -14,6 +14,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoom;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class MessageController extends BaseController implements EventListener {
 
@@ -254,4 +255,70 @@ public class MessageController extends BaseController implements EventListener {
 
         getMessageDataStorage().updatePinnedMessage(roomId, messageId);
     }
+
+    public void deleteMessageInternal(long roomId, ArrayList<Long> messageIdArray, ArrayList<Boolean> bothList, int roomType) {
+        AbstractObject req = null;
+
+        for (long messageId : messageIdArray) {
+
+            if (roomType == ProtoGlobal.Room.Type.CHAT_VALUE) {
+                IG_RPC.Chat_Delete_Message chat_delete_message = new IG_RPC.Chat_Delete_Message();
+                chat_delete_message.roomId = roomId;
+                chat_delete_message.messageId = messageId;
+                chat_delete_message.both = bothList.contains(messageId);
+                req = chat_delete_message;
+
+            } else if (roomType == ProtoGlobal.Room.Type.GROUP_VALUE) {
+                IG_RPC.Group_Delete_Message group_delete_message = new IG_RPC.Group_Delete_Message();
+                group_delete_message.roomId = roomId;
+                group_delete_message.messageId = messageId;
+                req = group_delete_message;
+
+            } else if (roomType == ProtoGlobal.Room.Type.CHANNEL_VALUE) {
+                IG_RPC.Channel_Delete_Message channel_delete_message = new IG_RPC.Channel_Delete_Message();
+                channel_delete_message.roomId = roomId;
+                channel_delete_message.messageId = messageId;
+                req = channel_delete_message;
+
+            }
+        }
+
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                onDeleteMessageResponse(response);
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Delete Message -> Major:" + e.major + "Minor:" + e.minor);
+            }
+        });
+
+    }
+
+    public void onDeleteMessageResponse(AbstractObject response) {
+
+        long roomId = 0;
+        long messageId = 0;
+        long deleteVersion = 0;
+
+        if (response instanceof IG_RPC.Res_Chat_Delete_Message) {
+            IG_RPC.Res_Chat_Delete_Message res = new IG_RPC.Res_Chat_Delete_Message();
+            roomId = res.roomId;
+            messageId = res.messageId;
+            deleteVersion = res.deleteVersion;
+        } else if (response instanceof IG_RPC.Group_Delete_Message) {
+            IG_RPC.Res_Group_Delete_Message res = new IG_RPC.Res_Group_Delete_Message();
+            roomId = res.roomId;
+            messageId = res.messageId;
+            deleteVersion = res.deleteVersion;
+        } else if (response instanceof IG_RPC.Res_Channel_Delete_Message) {
+            IG_RPC.Res_Channel_Delete_Message res = new IG_RPC.Res_Channel_Delete_Message();
+            roomId = res.roomId;
+            messageId = res.messageId;
+            deleteVersion = res.deleteVersion;
+        }
+
+        getMessageDataStorage().processDeleteMessage(roomId, messageId, deleteVersion, true);
+    }
+
 }
