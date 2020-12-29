@@ -124,6 +124,7 @@ public class UserLoginResponse extends MessageHandler {
                 realmUserInfo.setWalletActive(builder.getWalletActive());
                 realmUserInfo.setMplActive(builder.getMplActive());
                 realmUserInfo.setWalletRegister(builder.getWalletAgreementAccepted());
+                realmUserInfo.setAccessToken(builder.getAccessToken());
             }
         });
     }
