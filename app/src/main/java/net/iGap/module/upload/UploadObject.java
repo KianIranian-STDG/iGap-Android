@@ -22,12 +22,6 @@ public class UploadObject {
     public RealmRoomMessage message;
     public ProtoGlobal.Room.Type roomType;
     public OnUploadListener onUploadListener;
-    /*
-     * the last progress of uploading
-     * uses for calculating file uploaded size while uploading*/
-    private int fileUploadingLastProgress = 0;
-
-
 
     private UploadObject() {
 
@@ -72,13 +66,5 @@ public class UploadObject {
         object.messageType = roomType;
         object.onUploadListener = onUploadListener;
         return object;
-    }
-
-    public int getFileUploadingLastProgress() {
-        return fileUploadingLastProgress;
-    }
-
-    public void setFileUploadingLastProgress(int fileUploadingLastProgress) {
-        this.fileUploadingLastProgress = fileUploadingLastProgress;
     }
 }
