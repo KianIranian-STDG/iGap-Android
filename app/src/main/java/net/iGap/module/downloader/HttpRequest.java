@@ -162,17 +162,15 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onDownloadCompleted() {
         try {
+            if (fileObject.messageType == null)
+                fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
             HelperDataUsage.progressDownload(fileObject.fileSize, fileObject.messageType);
             HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
             notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
-
-            if (fileObject.messageType == null)
-                fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
-
-
+            
         } catch (Exception e) {
             onError(e);
         }
