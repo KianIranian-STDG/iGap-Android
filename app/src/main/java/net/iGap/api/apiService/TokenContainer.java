@@ -13,8 +13,6 @@ import java.io.IOException;
 public class TokenContainer {
     private static TokenContainer instance;
     private String token;
-    private int updatedTokenCount;
-    private boolean isRefreshedToken;
 
     public static TokenContainer getInstance() {
         if (instance == null) {
@@ -48,17 +46,17 @@ public class TokenContainer {
         return result;
     }
 
-    public void updateToken(String token) {
+    public void updateToken(String token, boolean isRefreshed) {
         if (token == null)
             return;
-        if (isRefreshedToken) {
+        if (!isRefreshed) {
             this.token = token;
         } else {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null)
+                if (realmUserInfo != null) {
                     realmUserInfo.setAccessToken(token);
-                updatedTokenCount++;
+                }
             });
         }
     }
@@ -67,8 +65,7 @@ public class TokenContainer {
         new RequestUserRefreshToken().RefreshUserToken(new OnRefreshToken() {
             @Override
             public void onRefreshToken(String token) {
-                isRefreshedToken = true;
-                updateToken(token);
+                updateToken(token, true);
                 try {
                     delegate.onRefreshToken();
                 } catch (IOException e) {
@@ -78,7 +75,6 @@ public class TokenContainer {
 
             @Override
             public void onError(int majorCode, int minorCode) {
-                isRefreshedToken = false;
                 try {
                     delegate.onRefreshToken();
                 } catch (IOException e) {

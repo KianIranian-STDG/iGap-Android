@@ -93,7 +93,7 @@ public class UserLoginResponse extends MessageHandler {
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
 
-        TokenContainer.getInstance().updateToken(builder.getAccessToken());
+        TokenContainer.getInstance().updateToken(builder.getAccessToken(),false);
 
         /**
          * get Signaling Configuration
