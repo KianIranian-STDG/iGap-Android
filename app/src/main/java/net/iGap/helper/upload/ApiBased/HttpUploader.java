@@ -203,9 +203,6 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
-                    long bytes = fileObject.fileSize / 100 * fileObject.progress;
-                    long lastBytes = fileObject.fileSize / 100 * fileObject.getFileUploadingLastProgress();
-                    HelperDataUsage.progressUpload(bytes - lastBytes, fileObject.messageType);
                     fileObject.setFileUploadingLastProgress(fileObject.progress);
                     FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress);
@@ -217,6 +214,7 @@ public class HttpUploader implements IUpload {
                 @Override
                 public void onUploadFinish(UploadObject fileObject) {
                     HelperDataUsage.increaseUploadFiles(fileObject.messageType);
+                    HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
                     FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {
@@ -255,8 +253,9 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
-                    long uploadedBytes = ((fileObject.fileSize / 100 ) * fileObject.progress);
-                    HelperDataUsage.progressUpload(uploadedBytes,fileObject.messageType);
+                    long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
+                    HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
+                    Log.i(TAG, "onUploadFail: " + uploadedBytes);
                     FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {

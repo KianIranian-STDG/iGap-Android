@@ -145,12 +145,14 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     }
 
     private void safelyCancelDownload() {
+        if (fileObject.messageType == null)
+            fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+        long downloadedBytes = (fileObject.fileSize / 100) * fileObject.progress;
+        HelperDataUsage.progressDownload(downloadedBytes, fileObject.messageType);
         if (fileObject.destFile.exists())
             fileObject.destFile.delete();
         isDownloading = false;
         notifyDownloadStatus(HttpDownloader.DownloadStatus.NOT_DOWNLOADED);
-        long downloadedBytes = (fileObject.fileSize / 100) * fileObject.progress;
-        HelperDataUsage.progressDownload(downloadedBytes, fileObject.messageType);
     }
 
 
@@ -161,6 +163,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     public void onDownloadCompleted() {
         try {
             HelperDataUsage.progressDownload(fileObject.fileSize, fileObject.messageType);
+            HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
             notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
@@ -169,9 +172,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             if (fileObject.messageType == null)
                 fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
-            if (fileObject.thumbCacheId == null) {
-                HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
-            }
 
         } catch (Exception e) {
             onError(e);
