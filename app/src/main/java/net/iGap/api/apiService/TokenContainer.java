@@ -12,8 +12,7 @@ import java.io.IOException;
 
 public class TokenContainer {
     private static TokenContainer instance;
-
-    private int updatedTokenCount;
+    private String token;
 
     public static TokenContainer getInstance() {
         if (instance == null) {
@@ -24,8 +23,8 @@ public class TokenContainer {
 
     public String getToken() {
         String result = "Bearer ";
-        String tok;
-        result += tok = DbManager.getInstance().doRealmTask(realm -> {
+
+        String dbToken = DbManager.getInstance().doRealmTask(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
 
             if (realmUserInfo != null) {
@@ -35,29 +34,38 @@ public class TokenContainer {
             return null;
         });
 
+        if (dbToken != null) {
+            token = dbToken;
+        }
+
+        result += token;
+
         if (BuildConfig.DEBUG)
-            Log.i(getClass().getSimpleName(), "ApiToken: " + tok);
+            Log.i(getClass().getSimpleName(), "ApiToken: " + token);
 
         return result;
     }
 
-    public void updateToken(String token) {
+    public void updateToken(String token, boolean isRefreshed) {
         if (token == null)
             return;
+        this.token = token;
+        if (isRefreshed) {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                if (realmUserInfo != null) {
+                    realmUserInfo.setAccessToken(token);
+                }
+            });
+        }
 
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-            if (realmUserInfo != null)
-                realmUserInfo.setAccessToken(token);
-            updatedTokenCount++;
-        });
     }
 
     void getRefreshToken(Delegate delegate) {
         new RequestUserRefreshToken().RefreshUserToken(new OnRefreshToken() {
             @Override
             public void onRefreshToken(String token) {
-                updateToken(token);
+                updateToken(token, true);
                 try {
                     delegate.onRefreshToken();
                 } catch (IOException e) {
@@ -83,8 +91,6 @@ public class TokenContainer {
     }
 
     public void clearInstance() {
-        if (instance != null) {
-            instance = null;
-        }
+        token = null;
     }
 }

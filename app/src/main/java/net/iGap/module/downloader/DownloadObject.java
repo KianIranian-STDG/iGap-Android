@@ -120,7 +120,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         DownloadObject struct = new DownloadObject();
         struct.selector = LARGE_THUMBNAIL_VALUE;
-        struct.key = createKey(attachment.cacheId, struct.selector);
+        struct.key = createKey(String.valueOf(attachment.id), struct.selector);
         struct.mainCacheId = attachment.cacheId;
         struct.fileToken = attachment.token;
         struct.fileName = attachment.name;
