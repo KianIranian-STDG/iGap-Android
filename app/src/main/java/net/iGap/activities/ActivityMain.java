@@ -341,7 +341,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
+            Fragment fragment = fragmentManager.findFragmentByTag(PaymentFragment.class.getName());
             if (fragment instanceof PaymentFragment) {
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
