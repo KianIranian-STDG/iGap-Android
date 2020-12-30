@@ -49,9 +49,8 @@ public class TokenContainer {
     public void updateToken(String token, boolean isRefreshed) {
         if (token == null)
             return;
-        if (!isRefreshed) {
-            this.token = token;
-        } else {
+        this.token = token;
+        if (isRefreshed) {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
                 if (realmUserInfo != null) {
@@ -59,6 +58,7 @@ public class TokenContainer {
                 }
             });
         }
+
     }
 
     void getRefreshToken(Delegate delegate) {
