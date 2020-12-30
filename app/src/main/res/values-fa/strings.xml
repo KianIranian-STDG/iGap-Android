@@ -2198,6 +2198,7 @@
     <string name="suggested_packages">بسته های پیشنهادی</string>
     <string name="all_packages">همه بسته ها</string>
     <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
+    <string name="invalid_sim_type">لطفاً نوع سیم کارت را تغییر دهید ، بسته ای برای آن وجود ندارد.</string>
     <string name="credit_sim">سیمکارت اعتباری</string>
     <string name="permanent_sim">سیمکارت دائمی</string>
     <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>

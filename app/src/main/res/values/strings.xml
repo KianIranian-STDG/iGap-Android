@@ -2229,6 +2229,7 @@ Want to get it?</string>
     <string name="suggested_packages">Suggested packages</string>
     <string name="all_packages">All Packages</string>
     <string name="sim_type_not_choosed">SIM card not been chosen</string>
+    <string name="invalid_sim_type">Please change the SIM card type, There is no package for it. </string>
     <string name="credit_sim">Credit SIM</string>
     <string name="permanent_sim">Permanent SIM</string>
     <string name="credit_tdlte_sim">Credit TD-LTE SIM</string>

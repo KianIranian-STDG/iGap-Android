@@ -94,7 +94,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private MaterialDesignTextView btnRemoveSearch;
     private RadioGroup radioGroup;
     private OperatorType.Type currentOperator;
-    private String currentSimType = SIM_TYPE_CREDIT;
+    private String currentSimType = null;
     private ChargeApi chargeApi;
     private FavoriteNumber historyNumber;
     private View progressBar;
@@ -245,6 +245,10 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         goNextButton.setOnClickListener(v -> {
             RadioButton radioButton = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
             if (radioButton != null) {
+                if (currentSimType == null) {
+                    showError(getResources().getString(R.string.invalid_sim_type));
+                    return;
+                }
                 if (numberEditText.getText() == null) {
                     numberEditText.setError(getString(R.string.phone_number_is_not_valid));
                     return;
@@ -293,6 +297,8 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
             currentSimType = SIM_TYPE_TD_LTE_PERMANENT;
         else if (tag.equals("DATA"))
             currentSimType = SIM_TYPE_DATA;
+        else
+            currentSimType = null;
     }
 
     private void onPhoneNumberInput() {
