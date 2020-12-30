@@ -44,7 +44,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperSaveFile;
-import net.iGap.helper.MessageObject;
 import net.iGap.helper.RoomObject;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -65,6 +64,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.io.IOException;

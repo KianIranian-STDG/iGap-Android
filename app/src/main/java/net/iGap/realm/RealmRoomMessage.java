@@ -366,9 +366,9 @@ public class RealmRoomMessage extends RealmObject {
             message.channelExtra = RealmChannelExtra.putOrUpdate(realm, input.getMessageId(), input.getChannelExtra());
         }
 
-        addTimeIfNeed(message, realm);
-
-        isEmojiInText(message, input.getMessage());
+//        addTimeIfNeed(message, realm);
+//
+//        isEmojiInText(message, input.getMessage());
 
         return message;
     }

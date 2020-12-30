@@ -33,6 +33,7 @@ import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.structs.MessageObject;
 
 import java.util.List;
 
@@ -59,18 +60,18 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (!mMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-            if (mMessage.getForwardMessage() != null) {
-                if (mMessage.getForwardMessage().getAttachment() != null) {
-                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.getForwardMessage().getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.getForwardMessage().getAttachment().getSize(), true)));
+        if (messageObject.status != MessageObject.STATUS_SENDING) {
+            if (messageObject.forwardedMessage != null) {
+                if (messageObject.forwardedMessage.attachment != null) {
+                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (messageObject.forwardedMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(messageObject.forwardedMessage.attachment.size, true)));
                 }
             } else {
-                if (structMessage.getAttachment() != null) {
-                    if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
-                    } else {
-                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
-                    }
+                if (attachment != null) {// TODO: 12/29/20 MESSAGE_REFACTOR
+//                    if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+//                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+//                    } else {
+//                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
+//                    }
                 }
             }
         }

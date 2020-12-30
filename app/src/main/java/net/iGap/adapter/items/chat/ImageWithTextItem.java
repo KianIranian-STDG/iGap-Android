@@ -29,6 +29,7 @@ import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.structs.MessageObject;
 
 import java.util.List;
 
@@ -62,13 +63,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                 if (FragmentChat.isInSelectionMode) {
                     holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (messageObject.status == MessageObject.STATUS_SENDING) {
                         return;
                     }
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                    if (messageObject.status == MessageObject.STATUS_FAILED) {
+                        messageClickListener.onFailedMessageClick(v, messageObject, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, messageObject, holder.getAdapterPosition());
                     }
                 }
             }

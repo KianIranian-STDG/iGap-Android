@@ -57,7 +57,7 @@ public class CardToCardItem extends AbstractMessage<CardToCardItem, CardToCardIt
         super.bindView(holder, payloads);
         holder.getChatBloke().setBackgroundResource(0);
 
-        holder.payButton.setVisibility(structMessage.isSenderMe() ? View.GONE : View.VISIBLE);
+        holder.payButton.setVisibility(messageObject.isSenderMe() ? View.GONE : View.VISIBLE);
 
         setTextIfNeeded(holder.messageTv);
 

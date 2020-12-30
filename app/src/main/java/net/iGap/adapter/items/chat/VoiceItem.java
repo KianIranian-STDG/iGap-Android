@@ -40,6 +40,7 @@ import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.structs.MessageObject;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -88,12 +89,12 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.waveView.setTag(mMessage.getMessageId());
+        holder.waveView.setTag(messageObject.id);
 
-        holder.mMessageID = mMessage.getMessageId() + "";
+        holder.mMessageID = messageObject.id + "";
 
         holder.complete = (result, messageOne, MessageTow) -> {
-            if (holder.waveView.getTag().equals(mMessage.getMessageId()) && (mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
+            if (holder.waveView.getTag().equals(messageObject.id) && (messageObject.id + "").equals(MusicPlayer.messageId)) {
 
                 switch (messageOne) {
                     case PLAY:
@@ -107,7 +108,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                             G.handler.post(() -> {
                                 holder.waveView.setProgress(MusicPlayer.musicProgress);
-                                if ((mMessage.getMessageId() + "").equals(MusicPlayer.messageId)) {
+                                if ((messageObject.id + "").equals(MusicPlayer.messageId)) {
                                     holder.txt_Timer.setText(MessageTow + holder.getContext().getString(R.string.forward_slash) + holder.mTimeMusic);
                                     if (HelperCalander.isPersianUnicode) {
                                         holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
@@ -146,9 +147,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             if (holder.mFilePath.length() < 1)
                 return;
 
-            if (!structMessage.isSenderMe() && structMessage.realmRoomMessage.getStatus() != null &&
-                    !structMessage.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
-            ) {
+            if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
                 G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
                 RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
             }
@@ -172,7 +171,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 messageClickListener.onPlayMusic(holder.mMessageID);
                 holder.mTimeMusic = MusicPlayer.musicTime;
             }
-            MusicPlayer.messageId = mMessage.getMessageId() + "";
+            MusicPlayer.messageId = messageObject.id + "";
         });
 
         holder.waveView.setOnTouchListener((v, event) -> {
@@ -199,14 +198,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         super.bindView(holder, payloads);
 
-        ProtoGlobal.RoomMessageType _type = mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType();
+        int messageType = messageObject.isForwarded() ? messageObject.forwardedMessage.messageType : messageObject.messageType;
         holder.mType = type;
-        AppUtils.rightFileThumbnailIcon(holder.thumbnail, _type, null);
+        AppUtils.rightFileThumbnailIcon(holder.thumbnail, ProtoGlobal.RoomMessageType.forNumber(messageType), null);
 
-        holder.mRoomId = mMessage.getRoomId();
+        holder.mRoomId = messageObject.roomId;
 
         RealmRegisteredInfo registeredInfo = DbManager.getInstance().doRealmTask(realm -> {
-            return RealmRegisteredInfo.getRegistrationInfo(realm, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getUserId() : mMessage.getUserId());
+            return RealmRegisteredInfo.getRegistrationInfo(realm, messageObject.isForwarded() ? messageObject.forwardedMessage.userId : messageObject.userId);
         });
 
         if (registeredInfo != null) {
@@ -215,11 +214,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             holder.author.setText("");
         }
 
-        final long _st = (int) ((mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getAttachment().getDuration() : structMessage.getAttachment().getDuration()) * 1000);
+        final long _st = (int) ((messageObject.isForwarded() ? messageObject.forwardedMessage.attachment.duration : attachment.duration) * 1000);
 
         holder.txt_Timer.setText("00:00/" + MusicPlayer.milliSecondsToTimer(_st));
 
-        if (holder.waveView.getTag().equals(mMessage.getMessageId()) && MusicPlayer.messageId.equals(mMessage.getMessageId() + "")) {
+        if (holder.waveView.getTag().equals(messageObject.id) && MusicPlayer.messageId.equals(messageObject.id + "")) {
             MusicPlayer.onCompleteChat = holder.complete;
 
             holder.waveView.setProgress(MusicPlayer.musicProgress);
@@ -254,16 +253,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         holder.txt_Timer.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
         holder.author.setTextColor(theme.getSendMessageOtherTextColor(holder.getContext()));
 
-        ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
-        if (mMessage.getStatus() != null) {
-            try {
-                status = ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus());
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
+        if (messageObject.status == MessageObject.STATUS_LISTENED) {
             holder.listenView.setVisibility(View.GONE);
         } else {
             holder.listenView.setVisibility(View.VISIBLE);

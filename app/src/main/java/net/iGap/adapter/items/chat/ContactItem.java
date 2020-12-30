@@ -77,17 +77,17 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.getForwardMessage() != null) {
-            if (mMessage.getForwardMessage().getRoomMessageContact() != null) {
-                holder.contactName.setText(mMessage.getForwardMessage().getRoomMessageContact().getFirstName() + " " + mMessage.getForwardMessage().getRoomMessageContact().getLastName());
-                holder.contactNumberTv.setText(mMessage.getForwardMessage().getRoomMessageContact().getLastPhoneNumber());
-            }
-        } else {
-            if (mMessage.getRoomMessageContact() != null) {
-                holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
-                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getLastPhoneNumber());
-            }
-        }
+//        if (messageObject.forwardedMessage != null) {
+//            if (messageObject.forwardedMessage.contact != null) {
+//                holder.contactName.setText(mMessage.getForwardMessage().getRoomMessageContact().getFirstName() + " " + mMessage.getForwardMessage().getRoomMessageContact().getLastName());
+//                holder.contactNumberTv.setText(mMessage.getForwardMessage().getRoomMessageContact().getLastPhoneNumber());
+//            }
+//        } else {
+//            if (mMessage.getRoomMessageContact() != null) {
+//                holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
+//                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getLastPhoneNumber());
+//            }
+//        }
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             viewContactBtn.setTextSize(12);
             viewContactBtn.setTextColor(getColor(R.color.md_blue_500));
             viewContactBtn.setAllCaps(false);
-            viewContactBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext() , R.font.main_font));
+            viewContactBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext(), R.font.main_font));
 
 
             /**
@@ -156,7 +156,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             contactWithUserBtn.setTextSize(10);
             contactWithUserBtn.setTextColor(getColor(R.color.grayNew));
             contactWithUserBtn.setAllCaps(false);
-            contactWithUserBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext() , R.font.main_font));
+            contactWithUserBtn.setTypeface(ResourcesCompat.getFont(viewContactBtn.getContext(), R.font.main_font));
 
 
             /**

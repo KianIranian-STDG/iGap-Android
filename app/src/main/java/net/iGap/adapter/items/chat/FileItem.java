@@ -69,21 +69,21 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        if (mMessage.getForwardMessage() != null) {
-            if (mMessage.getForwardMessage().getAttachment() != null) {
-                holder.cslf_txt_file_name.setText(mMessage.getForwardMessage().getAttachment().getName());
-                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.getForwardMessage().getAttachment().getSize(), true));
+        if (messageObject.forwardedMessage != null) {
+            if (messageObject.forwardedMessage.attachment != null) {
+                holder.cslf_txt_file_name.setText(messageObject.forwardedMessage.attachment.name);
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(messageObject.forwardedMessage.attachment.size, true));
             }
         } else {
-            if (structMessage.getAttachment() != null) {
-                holder.cslf_txt_file_name.setText(structMessage.getAttachment().getName());
-                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true));
+            if (attachment != null) {
+                holder.cslf_txt_file_name.setText(attachment.name);
+                holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(attachment.size, true));
             }
         }
         holder.tempText = holder.cslf_txt_file_size.getText().toString();
         setTextIfNeeded(holder.messageView);
         RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
-            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", mMessage.getMessageId()).findFirst());
+            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", messageObject.id).findFirst());
         });
 
         if (roomMessage != null) {

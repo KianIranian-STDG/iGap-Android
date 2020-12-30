@@ -13,32 +13,28 @@ package net.iGap.observers.interfaces;
 import android.view.View;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
-import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 
 public interface IMessageItem {
-    /**
-     * open means open for files and play for videos
-     */
-    void onOpenClick(View view, StructMessageInfo message, int pos);
+    void onOpenClick(View view, MessageObject message, int pos);
 
-    void onContainerClick(View view, StructMessageInfo message, int pos);
+    void onContainerClick(View view, MessageObject message, int pos);
 
-    void onSenderAvatarClick(View view, StructMessageInfo message, int pos);
+    void onSenderAvatarClick(View view, MessageObject message, int pos);
 
-    void onUploadOrCompressCancel(View view, StructMessageInfo message, int pos);
+    void onUploadOrCompressCancel(View view, MessageObject message, int pos);
 
-    void onFailedMessageClick(View view, StructMessageInfo message, int pos);
+    void onFailedMessageClick(View view, MessageObject message, int pos);
 
-    void onReplyClick(RealmRoomMessage replyMessage);
+    void onReplyClick(MessageObject replyMessage);
 
-    void onForwardClick(StructMessageInfo message);
+    void onForwardClick(MessageObject message);
 
-    void onForwardFromCloudClick(StructMessageInfo message);
+    void onForwardFromCloudClick(MessageObject message);
 
     void onDownloadAllEqualCashId(String token, String messageId);
 
-    void onItemShowingMessageId(StructMessageInfo messageInfo);
+    void onItemShowingMessageId(MessageObject messageInfo);
 
     //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
 
@@ -50,5 +46,5 @@ public interface IMessageItem {
 
     void onOpenLinkDialog(String url);
 
-    void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, StructMessageInfo structMessage);
+    void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, MessageObject structMessage);
 }

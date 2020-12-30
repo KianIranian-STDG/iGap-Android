@@ -15,27 +15,15 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
-import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.FragmentMap;
-import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.observers.interfaces.IMessageItem;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessageLocation;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
@@ -62,65 +50,65 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.bindView(holder, payloads);
         holder.getChatBloke().setBackgroundResource(0);
         holder.mapPosition.setImageResource(R.drawable.map);
-        RealmRoomMessageLocation item = null;
-
-        if (mMessage.getForwardMessage() != null) {
-            if (mMessage.getForwardMessage().getLocation() != null) {
-                item = mMessage.getForwardMessage().getLocation();
-            }
-        } else {
-            if (mMessage.getLocation() != null) {
-                item = mMessage.getLocation();
-            }
-        }
-
-        if (item != null) {
-            String path = AppUtils.getLocationPath(item.getLocationLat(), item.getLocationLong());
-
-            if (new File(path).exists()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.mapPosition);
-            } else {
-                RealmRoomMessageLocation finalItem1 = item;
-                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), bitmap -> {
-                    if (bitmap == null) {
-                        holder.mapPosition.setImageResource(R.drawable.map);
-                    } else {
-                        holder.mapPosition.setImageBitmap(bitmap);
-                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
-                    }
-                });
-            }
-
-            final RealmRoomMessageLocation finalItem = item;
-            holder.mapPosition.setOnLongClickListener(getLongClickPerform(holder));
-
-            holder.mapPosition.setOnClickListener(v -> {
-                if (FragmentChat.isInSelectionMode) {
-                    holder.itemView.performLongClick();
-                    return;
-                }
-
-                try {
-                    HelperPermission.getLocationPermission(activity, new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            G.handler.post(() -> {
-                                FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
-                                        RealmRoom.detectType(mMessage.getRoomId()).getNumber(), mMessage.getRoomId(), mMessage.getUserId() + "");
-                                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
-                            });
-                        }
-
-                        @Override
-                        public void deny() {
-
-                        }
-                    });
-                } catch (IOException | IllegalStateException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+//        RealmRoomMessageLocation item = null;
+//
+//        if (messageObject.forwardedMessage != null) {
+//            if (messageObject.forwardedMessage.location != null) {
+//                item = mMessage.getForwardMessage().getLocation();
+//            }
+//        } else {
+//            if (mMessage.getLocation() != null) {
+//                item = mMessage.getLocation();
+//            }
+//        }
+//
+//        if (item != null) {
+//            String path = AppUtils.getLocationPath(item.getLocationLat(), item.getLocationLong());
+//
+//            if (new File(path).exists()) {
+//                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.mapPosition);
+//            } else {
+//                RealmRoomMessageLocation finalItem1 = item;
+//                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), bitmap -> {
+//                    if (bitmap == null) {
+//                        holder.mapPosition.setImageResource(R.drawable.map);
+//                    } else {
+//                        holder.mapPosition.setImageBitmap(bitmap);
+//                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
+//                    }
+//                });
+//            }
+//
+//            final RealmRoomMessageLocation finalItem = item;
+//            holder.mapPosition.setOnLongClickListener(getLongClickPerform(holder));
+//
+//            holder.mapPosition.setOnClickListener(v -> {
+//                if (FragmentChat.isInSelectionMode) {
+//                    holder.itemView.performLongClick();
+//                    return;
+//                }
+//
+//                try {
+//                    HelperPermission.getLocationPermission(activity, new OnGetPermission() {
+//                        @Override
+//                        public void Allow() {
+//                            G.handler.post(() -> {
+//                                FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
+//                                        RealmRoom.detectType(messageObject.roomId).getNumber(), messageObject.roomId, messageObject.userId + "");
+//                                new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
+//                            });
+//                        }
+//
+//                        @Override
+//                        public void deny() {
+//
+//                        }
+//                    });
+//                } catch (IOException | IllegalStateException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
     }
 
     @Override

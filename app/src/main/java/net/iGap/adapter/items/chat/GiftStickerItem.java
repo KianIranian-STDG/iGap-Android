@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -37,6 +36,7 @@ import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.repository.StickerRepository;
+import net.iGap.structs.MessageObject;
 
 import java.util.List;
 
@@ -68,28 +68,28 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
             if (FragmentChat.isInSelectionMode) {
                 holder.itemView.performLongClick();
             } else {
-                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                if (messageObject.status == MessageObject.STATUS_SENDING) {
                     return;
                 }
-                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                if (messageObject.status == MessageObject.STATUS_FAILED) {
+                    messageClickListener.onFailedMessageClick(v, messageObject, holder.getAdapterPosition());
                 }
             }
         });
 
         try {
-            StructIGSticker structIGSticker = holder.structIGSticker = new Gson().fromJson(structMessage.getAdditional().getAdditionalData(), StructIGSticker.class);
+            StructIGSticker structIGSticker = holder.structIGSticker = new Gson().fromJson(additional.data, StructIGSticker.class);
             if (structIGSticker != null && structIGSticker.getPath() != null) {
                 holder.stickerView.loadSticker(structIGSticker);
             } else {
-                String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
-                holder.stickerView.loadSticker(structMessage.getAttachment().getToken(), path, structMessage.getAttachment().getName(), String.valueOf(structMessage.getAttachment().getId()), structMessage.getAttachment().getSize());
+                String path = StickerRepository.getInstance().getStickerPath(attachment.token, attachment.name);
+                holder.stickerView.loadSticker(attachment.token, path, attachment.name, String.valueOf(messageObject.id), attachment.size);
             }
-        } catch (JsonSyntaxException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (structMessage.isSenderMe() && !mAdapter.roomIsMyCloud()) {
+        if (messageObject.isSenderMe() && !mAdapter.roomIsMyCloud()) {
             holder.progressButton.setVisibility(View.GONE);
         } else {
             holder.progressButton.setVisibility(View.VISIBLE);
@@ -146,13 +146,13 @@ public class GiftStickerItem extends AbstractMessage<GiftStickerItem, GiftSticke
                                 public void onSuccess(StructIGGiftSticker giftSticker) {
 
                                     if (giftSticker.isActive() && giftSticker.isCardOwner()) {
-                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, MainGiftStickerCardFragment.ACTIVE_BY_ME, structMessage);
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, MainGiftStickerCardFragment.ACTIVE_BY_ME, messageObject);
                                     } else if (giftSticker.isForward()) {
                                         Toast.makeText(getContext(), R.string.gift_carde_sended, Toast.LENGTH_SHORT).show();
                                     } else if (giftSticker.isActive()) {
                                         Toast.makeText(getContext(), R.string.gift_card_already_in_use, Toast.LENGTH_SHORT).show();
                                     } else {
-                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward() ? MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_OUT_FORWARD : MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_FORWARD, structMessage);
+                                        messageClickListener.onActiveGiftStickerClick(structIGSticker, giftSticker.isForward() ? MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_OUT_FORWARD : MainGiftStickerCardFragment.ACTIVE_CARD_WHIT_FORWARD, messageObject);
                                     }
 
                                     progressButton.changeProgressTo(View.GONE);

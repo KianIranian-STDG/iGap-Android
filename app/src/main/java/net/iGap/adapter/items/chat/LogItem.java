@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperLogMessage;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
@@ -47,8 +46,8 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-        super.bindView(holder, payloads);
-        holder.text.setText(HelperLogMessage.deserializeLog(holder.text.getContext(), mMessage.getLogs(), true));
+        super.bindView(holder, payloads);// TODO: 12/29/20 MESSAGE_REFACTOR
+//        holder.text.setText(HelperLogMessage.deserializeLog(holder.text.getContext(), messageObject.log.data, true));
     }
 
     @Override
