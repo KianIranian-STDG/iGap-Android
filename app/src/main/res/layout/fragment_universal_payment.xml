@@ -324,12 +324,11 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/saveDiscountCode"
-                    style="?android:attr/borderlessButtonStyle"
+                    style="@style/iGapButtonStroke"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:enabled="@{viewModel.saveDiscountCodeEnable}"
                     android:text="@string/save_discount_code"
                     android:textColor="@{context.getResources().getColor(viewModel.saveDiscountCodeColor)}"
@@ -337,6 +336,8 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
+                    android:layout_marginTop="@dimen/dp4"
+                    android:layout_marginBottom="@dimen/dp4"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
