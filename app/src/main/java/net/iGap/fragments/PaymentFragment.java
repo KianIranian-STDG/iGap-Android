@@ -187,15 +187,8 @@ public class PaymentFragment extends BaseAPIViewFrag {
         binding.saveDiscountCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.showDiscountError.setVisibility(View.GONE);
                 String code = binding.discountCode.getText().toString();
-                if (code == null || code.isEmpty()) {
-                    binding.showDiscountError.setVisibility(View.VISIBLE);
-                } else {
-                    binding.discountCode.setEnabled(false);
-                    binding.saveDiscountCode.setEnabled(false);
-                    paymentViewModel.checkOrderTokenForDiscount(code);
-                }
+                paymentViewModel.checkOrderTokenForDiscount(code);
             }
         });
     }

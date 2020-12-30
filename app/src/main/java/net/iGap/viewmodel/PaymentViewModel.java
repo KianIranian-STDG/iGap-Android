@@ -8,6 +8,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -57,7 +58,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private final ObservableBoolean discountCodeEnable = new ObservableBoolean(true);
     private final ObservableBoolean saveDiscountCodeEnable = new ObservableBoolean(true);
     private final ObservableInt discountErrorVisibility = new ObservableInt(View.GONE);
-    private final ObservableInt discountErrorText = new ObservableInt(R.string.enter_your_discount_code);
+    private final ObservableField<String> discountErrorText = new ObservableField<>();
     private final ObservableInt saveDiscountCodeColor = new ObservableInt(R.color.green);
 
     private int discountPlanPosition = -1;
@@ -93,7 +94,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         return discountErrorVisibility;
     }
 
-    public ObservableInt getDiscountErrorText() {
+    public ObservableField<String> getDiscountErrorText() {
         return discountErrorText;
     }
 
@@ -269,41 +270,45 @@ public class PaymentViewModel extends BaseAPIViewModel {
     }
 
     public void checkOrderTokenForDiscount(String strCoupon) {
-        HashMap<String, String> coupon = new HashMap<>();
-        ///////correct it!!!!!////////
-        coupon.put("coupon", "rewhjvaegh");
-
-        repository.checkOrderForDiscount(token, coupon, this, new ResponseCallback<CheckOrderResponse>() {
-            @Override
-            public void onSuccess(CheckOrderResponse data) {
-                ///////////////
-                discountCodeEnable.set(false);
-                saveDiscountCodeEnable.set(false);
-                saveDiscountCodeColor.set(R.color.gray);
-                discountErrorVisibility.set(View.VISIBLE);
-                discountErrorText.set(R.string.discount_code_not_valid);
-                ///////////////
-                description.set(data.getInfo().getProduct().getDescription());
-                originalPrice = data.getInfo().getPrice();
-                price.setValue(originalPrice);
-                title.set(data.getInfo().getProduct().getTitle());
-                orderDetail = data;
-                discountOption.setValue(data.getDiscountOption());
-                if (data.getDiscountOption() != null && data.getDiscountOption().size() > 0) {
-                    discountVisibility.set(View.VISIBLE);
+        if (strCoupon == null || strCoupon.isEmpty()) {
+            discountErrorVisibility.set(View.VISIBLE);
+            discountErrorText.set(G.context.getString(R.string.enter_your_discount_code));
+        } else {
+            HashMap<String, String> coupon = new HashMap<>();
+            coupon.put("coupon", strCoupon);
+            repository.checkOrderForDiscount(token, coupon, this, new ResponseCallback<CheckOrderResponse>() {
+                @Override
+                public void onSuccess(CheckOrderResponse data) {
+                    discountCodeEnable.set(false);
+                    saveDiscountCodeEnable.set(false);
+                    saveDiscountCodeColor.set(R.color.gray);
+                    discountErrorVisibility.set(View.GONE);
+                    description.set(data.getInfo().getProduct().getDescription());
+                    originalPrice = data.getInfo().getPrice();
+                    price.setValue(originalPrice);
+                    title.set(data.getInfo().getProduct().getTitle());
+                    orderDetail = data;
+                    discountOption.setValue(data.getDiscountOption());
+                    if (data.getDiscountOption() != null && data.getDiscountOption().size() > 0) {
+                        discountVisibility.set(View.VISIBLE);
+                    }
                 }
-            }
 
-            @Override
-            public void onError(String error) {
-                onErrorHandler(error);
-            }
+                @Override
+                public void onError(String error) {
+                    discountCodeEnable.set(true);
+                    saveDiscountCodeEnable.set(true);
+                    saveDiscountCodeColor.set(R.color.green);
+                    discountErrorVisibility.set(View.VISIBLE);
+                    discountErrorText.set(error);
+                }
 
-            @Override
-            public void onFailed() {
-                onFailedHandler();
-            }
-        });
+                @Override
+                public void onFailed() {
+                    onFailedHandler();
+                }
+            });
+        }
     }
 
     private void checkOrderStatus() {

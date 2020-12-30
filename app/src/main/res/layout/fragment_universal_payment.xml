@@ -345,7 +345,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp16"
-                    android:text="@{context.getResources().getString(viewModel.discountErrorText)}"
+                    android:text="@{viewModel.discountErrorText}"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text_size_button"
                     android:textStyle="bold"
