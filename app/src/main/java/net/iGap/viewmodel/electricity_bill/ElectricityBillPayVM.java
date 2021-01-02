@@ -172,7 +172,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
                 case MOBILE:
                 case PHONE:
                     MobileDebit temp2 = (MobileDebit) debit.getData();
-                    payBill(temp2.getLastTerm().getBillID(), temp2.getLastTerm().getPayID(), temp2.getLastTerm().getAmount());
+                    payBill(temp2.getLastTerm().getBillID(), temp2.getLastTerm().getPayID(), temp2.getLastTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.LAST_TERM_VALUE);
                     break;
             }
         } else {
@@ -180,11 +180,15 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             progressVisibilityPay.set(View.VISIBLE);
             pay2BtnEnable.set(false);
             MobileDebit temp2 = (MobileDebit) debit.getData();
-            payBill(temp2.getMidTerm().getBillID(), temp2.getMidTerm().getPayID(), temp2.getMidTerm().getAmount());
+            payBill(temp2.getMidTerm().getBillID(), temp2.getMidTerm().getPayID(), temp2.getMidTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.MID_TERM_VALUE);
         }
     }
 
     private void payBill(String billID, String payID, String price) {
+        payBill(billID, payID, price, ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
+    }
+
+    private void payBill(String billID, String payID, String price, int billType) {
 
         if (payID == null || payID.equals("") || payID.equals("null")) {
             errorM.setValue(new ErrorModel("", "001"));
@@ -213,7 +217,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID), ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
+        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID), billType);
     }
 
     public void showBillImage() {
