@@ -12,7 +12,6 @@ package net.iGap.response;
 
 import net.iGap.proto.ProtoChannelPinMessage;
 import net.iGap.proto.ProtoError;
-import net.iGap.realm.RealmRoom;
 
 public class ChannelPinMessageResponse extends MessageHandler {
 
@@ -37,7 +36,7 @@ public class ChannelPinMessageResponse extends MessageHandler {
         if (builder.getPinnedMessage() != null) {
             pinedMessageId = builder.getPinnedMessage().getMessageId();
         }
-        RealmRoom.updatePinedMessage(builder.getRoomId(), pinedMessageId);
+//        RealmRoom.updatePinedMessage(builder.getRoomId(), pinedMessageId);
     }
 
     @Override

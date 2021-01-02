@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoGroupKickAdmin;
 
 public class RequestGroupKickAdmin {
@@ -29,7 +29,7 @@ public class RequestGroupKickAdmin {
         }
     }
 
-    public void groupKickAdmin(long roomId, long memberId, OnResponse onResponse) {
+    public void groupKickAdmin(long roomId, long memberId, RequestDelegate onResponse) {
 
         ProtoGroupKickAdmin.GroupKickAdmin.Builder builder = ProtoGroupKickAdmin.GroupKickAdmin.newBuilder();
         builder.setRoomId(roomId);

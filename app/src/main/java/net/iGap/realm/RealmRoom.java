@@ -1165,23 +1165,6 @@ public class RealmRoom extends RealmObject {
         });
     }
 
-    public static void updatePinedMessage(long roomId, final long messageId) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
-            if (room != null) {
-                room.setPinMessageId(messageId);
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (G.onPinedMessage != null) {
-                            G.onPinedMessage.onPinMessage();
-                        }
-                    }
-                }, 200);
-            }
-        });
-    }
-
     public static void updatePinedMessageDeleted(long roomId, final boolean reset) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);

@@ -48,14 +48,33 @@
         android:text="@string/md_bot"
         android:visibility="gone" />
 
-    <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/btn_chatRoom_send"
-        style="@style/primaryIconTextViewStyle"
+    <FrameLayout
+        android:id="@+id/chatRoom_send_container"
         android:layout_width="@dimen/dp44"
         android:layout_height="@dimen/dp44"
         android:padding="@dimen/dp8"
-        android:text="@string/md_send_button"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_gravity="center">
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/btn_chatRoom_send"
+            style="@style/primaryIconTextViewStyle"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:padding="@dimen/dp8"
+            android:text="@string/md_send_button"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/editTextProgress"
+            android:layout_width="@dimen/dp44"
+            android:layout_height="@dimen/dp44"
+            android:padding="@dimen/dp8"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_chatRoom_send"

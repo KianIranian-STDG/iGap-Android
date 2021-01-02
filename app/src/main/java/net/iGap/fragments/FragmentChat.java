@@ -237,7 +237,6 @@ import net.iGap.observers.interfaces.OnGroupAvatarResponse;
 import net.iGap.observers.interfaces.OnHelperSetAction;
 import net.iGap.observers.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.observers.interfaces.OnMessageReceive;
-import net.iGap.observers.interfaces.OnPinedMessage;
 import net.iGap.observers.interfaces.OnSetAction;
 import net.iGap.observers.interfaces.OnUpdateUserOrRoomInfo;
 import net.iGap.observers.interfaces.OnUserContactsBlock;
@@ -271,11 +270,8 @@ import net.iGap.realm.RealmStickerItem;
 import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
-import net.iGap.request.RequestChannelEditMessage;
-import net.iGap.request.RequestChannelPinMessage;
 import net.iGap.request.RequestChannelUpdateDraft;
 import net.iGap.request.RequestChatDelete;
-import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
@@ -285,8 +281,6 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
-import net.iGap.request.RequestGroupEditMessage;
-import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestSignalingGetConfiguration;
@@ -362,7 +356,7 @@ import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
@@ -421,6 +415,8 @@ public class FragmentChat extends BaseFragment
     private SharedPreferences sharedPreferences;
     private SharedPreferences emojiSharedPreferences;
     private EventEditText edtChat;
+    private ProgressBar editTextProgress;
+    private FrameLayout chatRoom_send_container;
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
@@ -718,12 +714,16 @@ public class FragmentChat extends BaseFragment
         edtChat.setGravity(Gravity.CENTER_VERTICAL);
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
+        editTextProgress = rootView.findViewById(R.id.editTextProgress);
+        chatRoom_send_container = rootView.findViewById(R.id.chatRoom_send_container);
 
         edtChat.setListener(this::chatMotionEvent);
 
         EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().addEventListener(EventManager.ON_MESSAGE_DELETE, this);
+        EventManager.getInstance().addEventListener(EventManager.ON_EDIT_MESSAGE, this);
+        EventManager.getInstance().addEventListener(EventManager.ON_PINNED_MESSAGE, this);
         if (twoPaneMode)
             EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
@@ -1086,7 +1086,6 @@ public class FragmentChat extends BaseFragment
         G.onConnectionChangeStateChat = this;
         HelperNotification.getInstance().cancelNotification();
         G.onChannelUpdateReactionStatusChat = this;
-        G.onPinedMessage = this;
         G.onBotClick = this;
 
         /*finishActivity = new FinishActivity() {
@@ -1219,6 +1218,8 @@ public class FragmentChat extends BaseFragment
         EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().removeEventListener(EventManager.ON_MESSAGE_DELETE, this);
+        EventManager.getInstance().removeEventListener(EventManager.ON_EDIT_MESSAGE, this);
+        EventManager.getInstance().removeEventListener(EventManager.ON_PINNED_MESSAGE, this);
         if (twoPaneMode)
             EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -2275,11 +2276,7 @@ public class FragmentChat extends BaseFragment
             if (currentRoomAccess != null && currentRoomAccess.isCanPinMessage()) {
                 builder.neutralText(R.string.all_member)
                         .onNeutral((dialog, which) -> {
-                            if (chatType == CHANNEL) {
-                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
-                            } else {
-                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
-                            }
+                            getMessageController().pinMessage(mRoomId, id, chatType.getNumber());
                             isPinAvailable = false;
                         });
             }
@@ -2293,11 +2290,7 @@ public class FragmentChat extends BaseFragment
                     onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (chatType == CHANNEL) {
-                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
-                            } else {
-                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
-                            }
+                            getMessageController().pinMessage(mRoomId, id, chatType.getNumber());
                         }
                     }).negativeText(R.string.cancel).show();
         }
@@ -3145,33 +3138,34 @@ public class FragmentChat extends BaseFragment
                     final String message = getWrittenMessage();
                     if (!message.equals(messageInfo.realmRoomMessage.getMessage()) && edtChat.getText().length() > 0) {
 
-                        RealmRoomMessage.editMessageClient(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
+                        if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                            Toast.makeText(getContext(), getResources().getString(R.string.please_check_your_connenction), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                        /**
-                         * update message text in adapter
-                         */
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.updateMessageText(messageInfo.realmRoomMessage.getMessageId(), message);
-                            }
-                        });
 
+                        chatRoom_send_container.setVisibility(View.VISIBLE);
+                        imvSendButton.setVisibility(View.GONE);
+                        editTextProgress.setVisibility(View.VISIBLE);
+
+                        //RealmRoomMessage.editMessageClient(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message); // FIXME: 12/19/20 CHAT_REFACTOR
                         /**
                          * should be null after requesting
                          */
-                        removeEditedMessage();
+//                        removeEditedMessage();
 
                         /**
                          * send edit message request
                          */
-                        if (chatType == CHAT) {
-                            new RequestChatEditMessage().chatEditMessage(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
-                        } else if (chatType == GROUP) {
-                            new RequestGroupEditMessage().groupEditMessage(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
-                        } else if (chatType == CHANNEL) {
-                            new RequestChannelEditMessage().channelEditMessage(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
-                        }
+//                        if (chatType == CHAT) {
+//                            new RequestChatEditMessage().chatEditMessage(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
+//                        } else if (chatType == GROUP) {
+//                            new RequestGroupEditMessage().groupEditMessage(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
+//                        } else if (chatType == CHANNEL) {
+//                            new RequestChannelEditMessage().channelEditMessage(mRoomId, messageInfo.realmRoomMessage.getMessageId(), message);
+//                        }
+
+                        getMessageController().editMessage(messageInfo.realmRoomMessage.messageId, mRoomId, message, chatType.getNumber());
                     } else {
                         removeEditedMessage();
                     }
@@ -3696,6 +3690,7 @@ public class FragmentChat extends BaseFragment
 
     private void removeEditedMessage() {
         imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+        editTextProgress.setVisibility(View.GONE);
         edtChat.setTag(null);
         clearReplyView();
         isEditMessage = false;
@@ -6421,6 +6416,7 @@ public class FragmentChat extends BaseFragment
         layoutAttachBottom.clearAnimation();
         imvSendButton.clearAnimation();
         imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        chatRoom_send_container.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
 
@@ -6455,6 +6451,7 @@ public class FragmentChat extends BaseFragment
             layoutAttachBottom.clearAnimation();
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
+            chatRoom_send_container.setVisibility(View.GONE);
             imvSendButton.setVisibility(View.GONE);
         }
 
@@ -6489,6 +6486,7 @@ public class FragmentChat extends BaseFragment
                 layoutAttachBottom.setVisibility(View.GONE);
                 imvSendButton.startAnimation(animVisible);
                 imvSendButton.setVisibility(View.VISIBLE);
+                chatRoom_send_container.setVisibility(View.VISIBLE);
 
             }
 
@@ -6529,6 +6527,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationStart(Animation animation) {
                 imvSendButton.setVisibility(View.VISIBLE);
+                chatRoom_send_container.setVisibility(View.VISIBLE);
                 isSendVisibilityAnimInProcess = false;
                 isAttachVisibilityAnimInProcess = true;
             }
@@ -6536,6 +6535,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationEnd(Animation animation) {
                 imvSendButton.setVisibility(View.GONE);
+                chatRoom_send_container.setVisibility(View.GONE);
                 layoutAttachBottom.startAnimation(animVisible);
             }
 
@@ -9046,13 +9046,6 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onPinMessage() {
-
-        initPinedMessage();
-
-    }
-
-    @Override
     public void onBotCommandText(Object message, int botAction) {
 
         if (message instanceof String) {
@@ -9457,6 +9450,19 @@ public class FragmentChat extends BaseFragment
                     }
                 });
             }
+        } else if (id == EventManager.ON_EDIT_MESSAGE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) message[0];
+                long messageId = (long) message[1];
+                String newMessage = (String) message[2];
+
+                if (mRoomId == roomId && mAdapter != null) {
+                    mAdapter.updateMessageText(messageId, newMessage);
+                    removeEditedMessage();
+                }
+            });
+        } else if ((long) message[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
+            G.runOnUiThread(this::initPinedMessage);
         }
     }
 
