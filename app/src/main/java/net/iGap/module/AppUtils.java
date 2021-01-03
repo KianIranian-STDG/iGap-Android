@@ -50,6 +50,7 @@ import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,6 +66,13 @@ import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static net.iGap.G.context;
 import static net.iGap.module.AndroidUtils.suitablePath;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_TEXT_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOCATION_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 
 public final class AppUtils {
     private AppUtils() throws InstantiationException {
@@ -111,36 +119,32 @@ public final class AppUtils {
         return userStatus;
     }
 
-    public static void rightFileThumbnailIcon(final ImageView view, ProtoGlobal.RoomMessageType messageType, @Nullable final RealmRoomMessage message) {
+    public static void rightFileThumbnailIcon(final ImageView view, int messageType, @Nullable final MessageObject message) {
 
-        RealmAttachment attachment = null;
-
-        if (message != null) attachment = message.getAttachment();
-
-        if (messageType != null) {
+        if (message != null && message.attachment != null) {
             switch (messageType) {
-                case VOICE:
+                case VOICE_VALUE:
                     setImageDrawable(view, R.drawable.microphone_icon);
                     break;
-                case AUDIO:
-                case AUDIO_TEXT:
+                case AUDIO_VALUE:
+                case AUDIO_TEXT_VALUE:
                     setImageDrawable(view, R.drawable.green_music_note);
                     break;
-                case STICKER:
-                    if (attachment != null && attachment.getLocalFilePath() != null) {
-                        G.imageLoader.displayImage(suitablePath(attachment.getLocalFilePath()), view);
+                case STICKER_VALUE:
+                    if (message.attachment.filePath != null) {
+                        G.imageLoader.displayImage(suitablePath(message.attachment.filePath), view);
                     }
                     break;
-                case FILE:
-                case FILE_TEXT:
-                    if (attachment != null) {
-                        if (attachment.getName().toLowerCase().endsWith(".pdf")) {
+                case FILE_VALUE:
+                case FILE_TEXT_VALUE:
+                    if (message.attachment != null) {
+                        if (message.attachment.name.toLowerCase().endsWith(".pdf")) {
                             setImageDrawable(view, R.drawable.pdf_icon);
-                        } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
+                        } else if (message.attachment.name.toLowerCase().endsWith(".txt")) {
                             setImageDrawable(view, R.drawable.txt_icon);
-                        } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
+                        } else if (message.attachment.name.toLowerCase().endsWith(".exe")) {
                             setImageDrawable(view, R.drawable.exe_icon);
-                        } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
+                        } else if (message.attachment.name.toLowerCase().endsWith(".docs")) {
                             setImageDrawable(view, R.drawable.docx_icon);
                         } else {
                             setImageDrawable(view, R.drawable.file_icon);
@@ -150,16 +154,16 @@ public final class AppUtils {
                     }
 
                     break;
-                case LOCATION:
+                case LOCATION_VALUE:
                     getAndSetPositionPicture(message, view);
 
                     break;
                 default:
-                    if (attachment != null) {
-                        if (attachment.isFileExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(attachment.getLocalFilePath()), view);
-                        } else if (attachment.isThumbnailExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(attachment.getLocalThumbnailPath()), view);
+                    if (message.attachment != null) {
+                        if (message.attachment.isFileExistsOnLocal()) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
+                        } else if (message.attachment.isThumbnailExistsOnLocal()) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
                         } else {
                             view.setVisibility(View.GONE);
                         }
@@ -176,6 +180,10 @@ public final class AppUtils {
      */
     public static String conversionMessageType(ProtoGlobal.RoomMessageType type) {
         return conversionMessageType(type, null, 0);
+    }
+
+    public static String conversionMessageType(int type) {
+        return conversionMessageType(ProtoGlobal.RoomMessageType.forNumber(type), null, 0);
     }
 
     /**
@@ -246,23 +254,23 @@ public final class AppUtils {
     }
 
 
-    private static void getAndSetPositionPicture(final RealmRoomMessage message, final ImageView view) {
+    private static void getAndSetPositionPicture(final MessageObject message, final ImageView view) {
 
-        String path = AppUtils.getLocationPath(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
+        String path = AppUtils.getLocationPath(message.location.lat, message.location.lan);
 
         if (new File(path).exists()) {
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(AppUtils.getLocationPath(message.getLocation().getLocationLat(), message.getLocation().getLocationLong())), view);
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(AppUtils.getLocationPath(message.location.lat, message.location.lan)), view);
         } else {
 
-            FragmentMap.loadImageFromPosition(message.getLocation().getLocationLat(), message.getLocation().getLocationLong(), new FragmentMap.OnGetPicture() {
+            FragmentMap.loadImageFromPosition(message.location.lat, message.location.lan, new FragmentMap.OnGetPicture() {
                 @Override
                 public void getBitmap(Bitmap bitmap) {
 
                     view.setImageBitmap(bitmap);
-                    final String savedPath = AppUtils.saveMapToFile(bitmap, message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
+                    final String savedPath = AppUtils.saveMapToFile(bitmap, message.location.lat, message.location.lan);
                     DbManager.getInstance().doRealmTask(realm -> {
-                        if (message.getLocation() != null) {
-                            message.getLocation().setImagePath(savedPath);
+                        if (message.location != null) {
+//                            message.location.setImagePath(savedPath); // TODO: 1/2/21  MESSAGE_REFACTOR
                         }
                     });
                 }

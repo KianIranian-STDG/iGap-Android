@@ -70,6 +70,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -117,6 +118,7 @@ import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.LogWalletBill;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.LogWalletTopup;
+import net.iGap.adapter.items.chat.NewChatItemHolder;
 import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.StickerItem;
 import net.iGap.adapter.items.chat.TextItem;
@@ -408,7 +410,7 @@ public class FragmentChat extends BaseFragment
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
     private boolean isShareOk = true;
-    private boolean isRepley = false;
+    private boolean isReply = false;
     private boolean swipeBack = false;
     private AttachFile attachFile;
     private EventEditText edtSearchMessage;
@@ -2786,14 +2788,15 @@ public class FragmentChat extends BaseFragment
                 public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                     super.clearView(recyclerView, viewHolder);
                     try {// TODO: 12/28/20  MESSAGE_REFACTOR
-//                        RealmRoomMessage message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage;
-//                        if (message_ != null && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) && !message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-//                            if (isRepley)
-//                                replay((mAdapter.getItem(viewHolder.getAdapterPosition())).structMessage, false);
-//                        }
+                        MessageObject message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).messageObject;
+                        if (message_ != null && message_.status != ProtoGlobal.RoomMessageStatus.SENDING_VALUE && message_.status != ProtoGlobal.RoomMessageStatus.FAILED_VALUE) {
+                            if (isReply)
+                                reply((mAdapter.getItem(viewHolder.getAdapterPosition())).messageObject, false);
+                        }
                     } catch (Exception ignored) {
+                        ignored.printStackTrace();
                     }
-                    isRepley = false;
+                    isReply = false;
                 }
 
                 @Override
@@ -2824,22 +2827,22 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) { // TODO: 12/28/20 MESSAGE_REFACTOR
-//                    RealmRoomMessage message_ = null;
-//                    try {
-//                        message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage;
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    if (message_ != null && message_.getStatus() != null && (message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString()) || message_.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-//                        return 0;
-//                    } else if (viewHolder instanceof VoiceItem.ViewHolder) {
-//                        return 0;
-//                    } else if (viewHolder instanceof AudioItem.ViewHolder) {
-//                        return 0;
-//                    } else if (viewHolder instanceof NewChatItemHolder) {
-//                        return super.getSwipeDirs(recyclerView, viewHolder);
-//                    }
+                    MessageObject message_ = null;
+                    try {
+                        message_ = (mAdapter.getItem(viewHolder.getAdapterPosition())).messageObject;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (message_ != null && (message_.status == ProtoGlobal.RoomMessageStatus.SENDING_VALUE || message_.status == ProtoGlobal.RoomMessageStatus.FAILED_VALUE)) {
+                        return 0;
+                    } else if (viewHolder instanceof VoiceItem.ViewHolder) {
+                        return 0;
+                    } else if (viewHolder instanceof AudioItem.ViewHolder) {
+                        return 0;
+                    } else if (viewHolder instanceof NewChatItemHolder) {
+                        return super.getSwipeDirs(recyclerView, viewHolder);
+                    }
 
                     // we disable swipe with returning Zero
                     return 0;
@@ -3994,7 +3997,7 @@ public class FragmentChat extends BaseFragment
 
     private void setTouchListener(RecyclerView recyclerView, float dX) {
         if (dX < -ViewMaker.dpToPixel(140)) {
-            if (!isRepley && getActivity() != null) {
+            if (!isReply && getActivity() != null) {
                 Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -4004,9 +4007,9 @@ public class FragmentChat extends BaseFragment
                     v.vibrate(50);
                 }
             }
-            isRepley = true;
+            isReply = true;
         } else {
-            isRepley = false;
+            isReply = false;
         }
 
         recyclerView.setOnTouchListener((v, event) -> {
@@ -5851,26 +5854,26 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void replay(MessageObject message, boolean isEdit) {// TODO: 12/28/20 refactor message
+    private void reply(MessageObject message, boolean isEdit) {// TODO: 12/28/20 refactor message
         if (mAdapter != null) {
-//            Set<AbstractMessage> messages = mAdapter.getSelectedItems();
-//            // replay works if only one message selected
-//            inflateReplayLayoutIntoStub(item == null ? messages.iterator().next().structMessage : item, isEdit);
-//
-//            ll_AppBarSelected.setVisibility(View.GONE);
-//            if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-//
-//
-//            mAdapter.deselect();
-//
-//            edtChat.requestFocus();
-//
-//            showPopup(KeyboardView.MODE_KEYBOARD);
-//            openKeyboardInternal();
-//
-//            //disable chat search when reply a message
-//            if (ll_Search != null && ll_Search.isShown()) goneSearchBox(edtSearchMessage);
+            Set<AbstractMessage> messages = mAdapter.getSelectedItems();
+            // replay works if only one message selected
+            inflateReplayLayoutIntoStub(message == null ? messages.iterator().next().messageObject : message, isEdit);
 
+            ll_AppBarSelected.setVisibility(View.GONE);
+            if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
+
+
+            mAdapter.deselect();
+
+            edtChat.requestFocus();
+
+            showPopup(KeyboardView.MODE_KEYBOARD);
+            openKeyboardInternal();
+
+            //disable chat search when reply a message
+            if (ll_Search != null && ll_Search.isShown()) goneSearchBox(edtSearchMessage);
+//
         }
     }
 
@@ -7137,86 +7140,83 @@ public class FragmentChat extends BaseFragment
 
     @SuppressLint("RestrictedApi")
     private void inflateReplayLayoutIntoStub(MessageObject messageObject, boolean isEdit) {// TODO: 12/28/20  refactor message
-//        if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
-//            ViewStubCompat stubView = rootView.findViewById(R.id.replayLayoutStub);
-//            stubView.setInflatedId(R.id.replayLayoutAboveEditText);
-//            stubView.setLayoutResource(R.layout.layout_chat_reply);
-//            stubView.inflate();
-//
-//            inflateReplayLayoutIntoStub(messageObject, isEdit);
-//        } else {
-//            mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
-//            mReplayLayout.setVisibility(View.VISIBLE);
-//            TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
-//            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
-//            TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
-//            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
-//
-//            FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
-//            if (isEdit)
-//                replayIcon.setText(getString(R.string.edit_icon));
-//            else
-//                replayIcon.setText(getString(R.string.reply_icon));
-//
-//            ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
-//            TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
-//            closeReplay.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //clearReplyView();
-//
-//                    if (isEdit)
-//                        removeEditedMessage();
-//                    else
-//                        clearReplyView();
-//
-//                }
-//            });
-//            thumbnail.setVisibility(View.VISIBLE);
-//            if (chatItem.realmRoomMessage.getForwardMessage() != null) {
-//                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.realmRoomMessage.getForwardMessage().getMessageType(), chatItem.realmRoomMessage.getForwardMessage());
-//                String _text = AppUtils.conversionMessageType(chatItem.realmRoomMessage.getForwardMessage().getMessageType());
-//                if (_text != null && _text.length() > 0) {
-//                    ReplySetText(replayTo, _text);
-//                } else {
-//                    ReplySetText(replayTo, chatItem.realmRoomMessage.getForwardMessage().getMessage());
-//                }
-//            } else {
-//                RealmRoomMessage message = DbManager.getInstance().doRealmTask(realm -> {
-//                    return realm.where(RealmRoomMessage.class).equalTo("messageId", chatItem.realmRoomMessage.getMessageId()).findFirst();
-//                });
-//                AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.realmRoomMessage.getMessageType(), message);
-//                String _text = AppUtils.conversionMessageType(chatItem.realmRoomMessage.getMessageType());
-//                if (_text != null && _text.length() > 0) {
-//                    ReplySetText(replayTo, _text);
-//                } else {
-//                    ReplySetText(replayTo, chatItem.realmRoomMessage.getMessage());
-//                }
-//            }
-//
-//            if (!isEdit) {
-//                if (chatType == CHANNEL) {
-//                    RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-//                        return realm.where(RealmRoom.class).equalTo("id", chatItem.realmRoomMessage.getRoomId()).findFirst();
-//                    });
-//                    if (realmRoom != null) {
-//                        replayFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), replayFrom.getPaint().getFontMetricsInt()));
-//                    }
-//                } else {
-//                    RealmRegisteredInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
-//                        return RealmRegisteredInfo.getRegistrationInfo(realm, chatItem.realmRoomMessage.getUserId());
-//                    });
-//                    if (userInfo != null) {
-//                        replayFrom.setText(EmojiManager.getInstance().replaceEmoji(userInfo.getDisplayName(), replayFrom.getPaint().getFontMetricsInt()));
-//                    }
-//                }
-//            } else {
-//                replayFrom.setText(getString(R.string.edit));
-//            }
-//
-//            // I set tag to retrieve it later when sending message
-//            mReplayLayout.setTag(chatItem.realmRoomMessage);
-//        }
+        if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
+            ViewStubCompat stubView = rootView.findViewById(R.id.replayLayoutStub);
+            stubView.setInflatedId(R.id.replayLayoutAboveEditText);
+            stubView.setLayoutResource(R.layout.layout_chat_reply);
+            stubView.inflate();
+
+            inflateReplayLayoutIntoStub(messageObject, isEdit);
+        } else {
+            mReplayLayout = rootView.findViewById(R.id.replayLayoutAboveEditText);
+            mReplayLayout.setVisibility(View.VISIBLE);
+            TextView replayTo = mReplayLayout.findViewById(R.id.replayTo);
+            replayTo.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
+            TextView replayFrom = mReplayLayout.findViewById(R.id.replyFrom);
+            replayFrom.setTypeface(ResourcesCompat.getFont(mReplayLayout.getContext(), R.font.main_font));
+
+            FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
+            if (isEdit)
+                replayIcon.setText(getString(R.string.edit_icon));
+            else
+                replayIcon.setText(getString(R.string.reply_icon));
+
+            ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
+            TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
+            closeReplay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //clearReplyView();
+
+                    if (isEdit)
+                        removeEditedMessage();
+                    else
+                        clearReplyView();
+
+                }
+            });
+            thumbnail.setVisibility(View.VISIBLE);
+            if (messageObject.isForwarded()) {
+                AppUtils.rightFileThumbnailIcon(thumbnail, messageObject.forwardedMessage.messageType, messageObject.forwardedMessage);
+                String _text = AppUtils.conversionMessageType(messageObject.forwardedMessage.messageType);
+                if (_text != null && _text.length() > 0) {
+                    ReplySetText(replayTo, _text);
+                } else {
+                    ReplySetText(replayTo, messageObject.forwardedMessage.message);
+                }
+            } else {
+                AppUtils.rightFileThumbnailIcon(thumbnail, messageObject.messageType, messageObject);
+                String _text = AppUtils.conversionMessageType(messageObject.messageType);
+                if (_text != null && _text.length() > 0) {
+                    ReplySetText(replayTo, _text);
+                } else {
+                    ReplySetText(replayTo, messageObject.message);
+                }
+            }
+
+            if (!isEdit) {
+                if (chatType == CHANNEL) {
+                    RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                        return realm.where(RealmRoom.class).equalTo("id", messageObject.roomId).findFirst();
+                    });
+                    if (realmRoom != null) {
+                        replayFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), replayFrom.getPaint().getFontMetricsInt()));
+                    }
+                } else {
+                    RealmRegisteredInfo userInfo = DbManager.getInstance().doRealmTask(realm -> {
+                        return RealmRegisteredInfo.getRegistrationInfo(realm, messageObject.userId);
+                    });
+                    if (userInfo != null) {
+                        replayFrom.setText(EmojiManager.getInstance().replaceEmoji(userInfo.getDisplayName(), replayFrom.getPaint().getFontMetricsInt()));
+                    }
+                }
+            } else {
+                replayFrom.setText(getString(R.string.edit));
+            }
+
+            // I set tag to retrieve it later when sending message
+            mReplayLayout.setTag(messageObject);
+        }
     }
 
     private void ReplySetText(TextView replayTo, String text) {
@@ -7291,7 +7291,7 @@ public class FragmentChat extends BaseFragment
         });
 
         mBtnDeleteSelected.setOnClickListener(v -> {// TODO: 12/28/20 MESSAGE_REFACTOR
-//
+
 //            final ArrayList<Long> list = new ArrayList<Long>();
 //            bothDeleteMessageId = new ArrayList<Long>();
 //

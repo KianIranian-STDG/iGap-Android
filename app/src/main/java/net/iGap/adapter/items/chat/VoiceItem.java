@@ -200,7 +200,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         int messageType = messageObject.isForwarded() ? messageObject.forwardedMessage.messageType : messageObject.messageType;
         holder.mType = type;
-        AppUtils.rightFileThumbnailIcon(holder.thumbnail, ProtoGlobal.RoomMessageType.forNumber(messageType), null);
+        AppUtils.rightFileThumbnailIcon(holder.thumbnail, messageObject.messageType, null);
 
         holder.mRoomId = messageObject.roomId;
 
