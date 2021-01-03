@@ -3,6 +3,7 @@ package net.iGap.api;
 import com.google.gson.JsonObject;
 
 import net.iGap.model.igasht.BaseIGashtResponse;
+import net.iGap.model.paymentPackage.Config;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.InternetPackage;
 import net.iGap.model.paymentPackage.InternetPackageFilter;
@@ -18,6 +19,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -58,4 +60,7 @@ public interface ChargeApi {
     Call<MciPurchaseResponse> internetPackagePurchase(@Path("operator") String operator,
                                                       @Field("tel_num") String phoneNumber,
                                                       @Field("type") String internetPackageType);
+
+    @GET("configs")
+    Call<Config> getConfigs(@Header("Authorization") String userToken);
 }

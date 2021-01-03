@@ -311,6 +311,7 @@
                         android:clickable="false"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:checked="true"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatImageView
@@ -386,48 +387,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line">
-
-                    <RadioButton
-                        android:id="@+id/rbCredit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:checked="true"
-                        android:text="@string/credit_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbPermanent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/permanent_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbTdLteCredit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/credit_tdlte_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbTdLtePermanent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/tdlte_permanent_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbData"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/data_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
                 </RadioGroup>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,7 @@ import net.iGap.adapter.payment.ChargeType;
 import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.controllers.PhoneContactProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
@@ -44,21 +45,25 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
+import net.iGap.model.paymentPackage.Config;
+import net.iGap.model.paymentPackage.ConfigData;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
+import net.iGap.model.paymentPackage.TopupChargeType;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -97,8 +102,7 @@ public class PaymentChargeFragment extends BaseFragment {
     private ChargeType typeList;
     private FrameLayout progressBar;
     private LinearLayout linearWarning;
-    private List<Amount> amountList = new ArrayList<>();
-    private List<ChargeType> chargeTypeList = new ArrayList<>();
+    private final List<ChargeType> chargeTypeList = new ArrayList<>();
     private ChargeApi chargeApi;
     private OperatorType.Type currentOperator;
     private int selectedChargeTypeIndex;
@@ -109,24 +113,20 @@ public class PaymentChargeFragment extends BaseFragment {
     private CompositeDisposable compositeDisposable;
     private TextWatcher textWatcher;
 
-    private int amountDefaultIndex = 2; //50,000 rials index in array for default value
+    private final int amountDefaultIndex = 2; //50,000 rials index in array for default value
     private int contactPositionClicked = -1;
     private int historyItemClicked = -1;
     private boolean isSelectedFromHistory = false;
+    private final List<Amount> mciFaceValues = new ArrayList<>();
+    private final List<Amount> mtnFaceValues = new ArrayList<>();
+    private final List<Amount> rightelFaceValues = new ArrayList<>();
+    private PaymentRepository paymentRepository;
+    private List<TopupChargeType> mciTopupChargeTypes = new ArrayList<>();
+    private List<TopupChargeType> mtnTopupChargeTypes = new ArrayList<>();
+    private List<TopupChargeType> rightelTopupChargeTypes = new ArrayList<>();
 
     public static PaymentChargeFragment newInstance() {
         return new PaymentChargeFragment();
-    }
-
-    public PaymentChargeFragment() {
-
-        amountList.add(new Amount(10000));
-        amountList.add(new Amount(20000));
-        amountList.add(new Amount(50000));
-        amountList.add(new Amount(100000));
-        amountList.add(new Amount(200000));
-
-        currentAmount = amountList.get(amountDefaultIndex);
     }
 
     @Nullable
@@ -144,7 +144,6 @@ public class PaymentChargeFragment extends BaseFragment {
 
         compositeDisposable = new CompositeDisposable();
         chargeApi = new RetrofitFactory().getChargeRetrofit();
-
         toolbar = view.findViewById(R.id.payment_toolbar);
         radioButtonHamrah = view.findViewById(R.id.radio_hamrahAval);
         radioButtonIrancell = view.findViewById(R.id.radio_irancell);
@@ -164,21 +163,6 @@ public class PaymentChargeFragment extends BaseFragment {
         linearWarning = view.findViewById(R.id.llWarning);
         removeNumber = view.findViewById(R.id.btnRemoveSearch);
         editTextNumber.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
-        chosePriceTextView.setText(currentAmount.getTextAmount());
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
-            if (userInfo != null && editTextNumber.getText() != null) {
-                setPhoneNumberEditText(userInfo.getPhoneNumber());
-                if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
-                    String number = editTextNumber.getText().toString().substring(0, 4);
-                    OperatorType.Type operator = new OperatorType().getOperation(number);
-                    if (operator != null) {
-                        changeOperator(operator);
-                    }
-                }
-            }
-        });
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -200,6 +184,75 @@ public class PaymentChargeFragment extends BaseFragment {
         setViewBackground(frameIrancel);
         setViewBackground(frameRightel);
 
+        String userToken = TokenContainer.getInstance().getToken();
+        paymentRepository = PaymentRepository.getInstance();
+        progressBar.setVisibility(View.VISIBLE);
+        paymentRepository.getConfigs(userToken, null, new ResponseCallback<Config>() {
+
+            @Override
+            public void onSuccess(Config data) {
+                for (ConfigData configData : data.getData()) {
+                    if (configData.getOperator().getKey().contentEquals("mci")) {
+                        for (Long aLong : configData.getFaceValues()) {
+                            mciFaceValues.add(new Amount(aLong));
+                        }
+                        mciTopupChargeTypes = configData.getTopupChargeTypes();
+                    }
+                    if (configData.getOperator().getKey().contentEquals("mtn")) {
+                        for (Long aLong : configData.getFaceValues()) {
+                            mtnFaceValues.add(new Amount(aLong));
+                        }
+                        mtnTopupChargeTypes = configData.getTopupChargeTypes();
+                    }
+                    if (configData.getOperator().getKey().contentEquals("rightel")) {
+                        for (Long aLong : configData.getFaceValues()) {
+                            rightelFaceValues.add(new Amount(aLong));
+                        }
+                        rightelTopupChargeTypes = configData.getTopupChargeTypes();
+                    }
+                }
+                changeOperator(OperatorType.Type.HAMRAH_AVAL);
+                initForm();
+            }
+
+            @Override
+            public void onError(String error) {
+            }
+
+            @Override
+            public void onFailed() {
+            }
+        });
+    }
+
+    private void initForm() {
+
+        if (radioButtonHamrah.isChecked()) {
+            currentAmount = mciFaceValues.get(amountDefaultIndex);
+            currentOperator = OperatorType.Type.HAMRAH_AVAL;
+        } else if (radioButtonIrancell.isChecked()) {
+            currentAmount = mtnFaceValues.get(amountDefaultIndex);
+            currentOperator = IRANCELL;
+        } else {
+            currentAmount = rightelFaceValues.get(amountDefaultIndex);
+            currentOperator = RITEL;
+        }
+
+        chosePriceTextView.setText(currentAmount.getTextAmount());
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
+            if (userInfo != null && editTextNumber.getText() != null) {
+                setPhoneNumberEditText(userInfo.getPhoneNumber());
+                if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
+                    String number = editTextNumber.getText().toString().substring(0, 4);
+                    OperatorType.Type operator = new OperatorType().getOperation(number);
+                    if (operator != null) {
+                        changeOperator(operator);
+                    }
+                }
+            }
+        });
 
         chargeTypeButton.setOnClickListener(v -> {
             if (currentOperator != null) {
@@ -428,6 +481,7 @@ public class PaymentChargeFragment extends BaseFragment {
                 historyNumber = null;
             }
         });
+
     }
 
 
@@ -562,7 +616,12 @@ public class PaymentChargeFragment extends BaseFragment {
             if (amountDialogView != null) {
                 amountRecyclerView = amountDialogView.findViewById(R.id.rv_amount);
                 amountRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-                amountRecyclerView.setAdapter(new AdapterChargeAmount(amountList, amountDefaultIndex));
+                if (radioButtonHamrah.isChecked())
+                    amountRecyclerView.setAdapter(new AdapterChargeAmount(mciFaceValues, amountDefaultIndex));
+                else if (radioButtonIrancell.isChecked())
+                    amountRecyclerView.setAdapter(new AdapterChargeAmount(mtnFaceValues, amountDefaultIndex));
+                else
+                    amountRecyclerView.setAdapter(new AdapterChargeAmount(rightelFaceValues, amountDefaultIndex));
                 amountDialogView.findViewById(R.id.close_view3).setOnClickListener(v12 -> dialog.dismiss());
 
                 amountDialogView.findViewById(R.id.btn_dialog3).setOnClickListener(v1 -> {
@@ -573,7 +632,12 @@ public class PaymentChargeFragment extends BaseFragment {
                             return;
                         }
 
-                        currentAmount = amountList.get(adapterAmount.getSelectedPosition());
+                        if (radioButtonHamrah.isChecked())
+                            currentAmount = mciFaceValues.get(adapterAmount.getSelectedPosition());
+                        else if (radioButtonIrancell.isChecked())
+                            currentAmount = mtnFaceValues.get(adapterAmount.getSelectedPosition());
+                        else
+                            currentAmount = rightelFaceValues.get(adapterAmount.getSelectedPosition());
                         chosePriceTextView.setText(currentAmount.getTextAmount());
                         dialog.dismiss();
                     }
@@ -610,34 +674,27 @@ public class PaymentChargeFragment extends BaseFragment {
     }
 
     private void setAdapterValue(@NotNull OperatorType.Type operator) {
-        List<String> chargeType;
+        chargeTypeList.clear();
         switch (operator) {
             case HAMRAH_AVAL:
-                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_hamrahe_aval));
-                chargeTypeList.clear();
-                for (int i = 0; i < chargeType.size(); i++) {
-                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                for (TopupChargeType topupChargeType : mciTopupChargeTypes) {
+                    chargeTypeList.add(new ChargeType(topupChargeType.getTitle()));
                 }
-
                 break;
             case IRANCELL:
-                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_irancell));
-                chargeTypeList.clear();
-                for (int i = 0; i < chargeType.size(); i++) {
-                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                for (TopupChargeType topupChargeType : mtnTopupChargeTypes) {
+                    chargeTypeList.add(new ChargeType(topupChargeType.getTitle()));
                 }
                 break;
             case RITEL:
-                chargeType = Arrays.asList(getResources().getStringArray(R.array.charge_type_ritel));
-                chargeTypeList.clear();
-                for (int i = 0; i < chargeType.size(); i++) {
-                    chargeTypeList.add(new ChargeType(chargeType.get(i)));
+                for (TopupChargeType topupChargeType : rightelTopupChargeTypes) {
+                    chargeTypeList.add(new ChargeType(topupChargeType.getTitle()));
                 }
                 break;
         }
-
         typeList = chargeTypeList.get(0);
         chargeTypeButton.setText(typeList.getChargeType());
+        progressBar.setVisibility(View.GONE);
     }
 
     private void

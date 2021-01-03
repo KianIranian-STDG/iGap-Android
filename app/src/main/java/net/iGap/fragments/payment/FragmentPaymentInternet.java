@@ -1,5 +1,6 @@
 package net.iGap.fragments.payment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +30,7 @@ import net.iGap.adapter.payment.ContactNumber;
 import net.iGap.adapter.payment.InternetHistoryPackageAdapter;
 import net.iGap.api.ChargeApi;
 import net.iGap.api.apiService.RetrofitFactory;
+import net.iGap.api.apiService.TokenContainer;
 import net.iGap.controllers.PhoneContactProvider;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
@@ -35,19 +38,25 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.model.OperatorType;
+import net.iGap.model.paymentPackage.Config;
+import net.iGap.model.paymentPackage.ConfigData;
 import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
+import net.iGap.model.paymentPackage.PackageChargeType;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.HandShakeCallback;
 import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -85,18 +94,18 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private MaterialDesignTextView btnRemoveSearch;
     private RadioGroup radioGroup;
     private OperatorType.Type currentOperator;
-    private RadioButton rbCredit;
-    private RadioButton rbPermanent;
-    private RadioButton rbTdLteCredit;
-    private RadioButton rbTdLtePermanent;
-    private RadioButton rbData;
-    private String currentSimType = SIM_TYPE_CREDIT;
+    private String currentSimType = null;
     private ChargeApi chargeApi;
     private FavoriteNumber historyNumber;
     private View progressBar;
     private TextWatcher watcher;
     private int clickedPosition = -1;
     private int selectedHistoryPosition = -1;
+
+    private PaymentRepository paymentRepository;
+    private List<PackageChargeType> mciPackageChargeTypes = new ArrayList<>();
+    private List<PackageChargeType> mtnPackageChargeTypes = new ArrayList<>();
+    private List<PackageChargeType> rightelPackageChargeTypes = new ArrayList<>();
 
     public static FragmentPaymentInternet newInstance() {
         return new FragmentPaymentInternet();
@@ -123,32 +132,13 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         frameHamrah = view.findViewById(R.id.view12);
         frameIrancel = view.findViewById(R.id.view13);
         frameRightel = view.findViewById(R.id.view14);
-        rbCredit = view.findViewById(R.id.rbCredit);
         radioGroup = view.findViewById(R.id.rdGroup);
-        rbPermanent = view.findViewById(R.id.rbPermanent);
-        rbTdLteCredit = view.findViewById(R.id.rbTdLteCredit);
-        rbTdLtePermanent = view.findViewById(R.id.rbTdLtePermanent);
-        rbData = view.findViewById(R.id.rbData);
         progressBar = view.findViewById(R.id.loadingView);
         btnRemoveSearch = view.findViewById(R.id.btnRemoveSearch);
-
-        chargeApi = new RetrofitFactory().getChargeRetrofit();
-        numberEditText.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
-
 
         setViewBackground(frameHamrah);
         setViewBackground(frameIrancel);
         setViewBackground(frameRightel);
-
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
-            if (userInfo != null) {
-                String number = userInfo.getPhoneNumber();
-                setPhoneNumberEditText(number);
-                onPhoneNumberInput();
-                numberEditText.setSelection(numberEditText.getText() == null ? 0 : numberEditText.getText().length());
-            }
-        });
 
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -164,6 +154,53 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                         }
                     }
                 }).getView());
+
+        String userToken = TokenContainer.getInstance().getToken();
+        paymentRepository = PaymentRepository.getInstance();
+        progressBar.setVisibility(View.VISIBLE);
+        paymentRepository.getConfigs(userToken, null, new ResponseCallback<Config>() {
+
+            @Override
+            public void onSuccess(Config data) {
+                for (ConfigData configData : data.getData()) {
+                    if (configData.getOperator().getKey().contentEquals("mci")) {
+                        mciPackageChargeTypes = configData.getPackageChargeTypes();
+                    }
+                    if (configData.getOperator().getKey().contentEquals("mtn")) {
+                        mtnPackageChargeTypes = configData.getPackageChargeTypes();
+                    }
+                    if (configData.getOperator().getKey().contentEquals("rightel")) {
+                        rightelPackageChargeTypes = configData.getPackageChargeTypes();
+                    }
+                }
+                initForm();
+            }
+
+            @Override
+            public void onError(String error) {
+            }
+
+            @Override
+            public void onFailed() {
+            }
+        });
+    }
+
+    private void initForm() {
+        chargeApi = new RetrofitFactory().getChargeRetrofit();
+        numberEditText.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
+
+        changeOperator(OperatorType.Type.HAMRAH_AVAL);
+
+        DbManager.getInstance().doRealmTask(realm -> {
+            RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
+            if (userInfo != null) {
+                String number = userInfo.getPhoneNumber();
+                setPhoneNumberEditText(number);
+                onPhoneNumberInput();
+                numberEditText.setSelection(numberEditText.getText() == null ? 0 : numberEditText.getText().length());
+            }
+        });
 
         btnRemoveSearch.setOnClickListener(v -> {
             numberEditText.setText(null);
@@ -206,7 +243,12 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         frameIrancel.setOnClickListener(v -> changeOperator(IRANCELL));
 
         goNextButton.setOnClickListener(v -> {
-            if (currentOperator != null) {
+            RadioButton radioButton = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+            if (radioButton != null) {
+                if (currentSimType == null) {
+                    showError(getResources().getString(R.string.invalid_sim_type));
+                    return;
+                }
                 if (numberEditText.getText() == null) {
                     numberEditText.setError(getString(R.string.phone_number_is_not_valid));
                     return;
@@ -226,10 +268,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
                 showError(getResources().getString(R.string.sim_type_not_choosed));
             }
         });
-
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> changeSimType());
-
-
     }
 
     private boolean isNumberFromIran(String phoneNumber) {
@@ -245,17 +284,21 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     }
 
     private void changeSimType() {
-        if (rbCredit.isChecked()) {
+        RadioButton radioButton = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+        String tag = radioButton.getTag().toString();
+
+        if (tag.equals("CREDIT"))
             currentSimType = SIM_TYPE_CREDIT;
-        } else if (rbPermanent.isChecked()) {
+        else if (tag.equals("PERMANENT"))
             currentSimType = SIM_TYPE_PERMANENT;
-        } else if (rbTdLteCredit.isChecked()) {
+        else if (tag.equals("CREDIT_TD_LTE"))
             currentSimType = SIM_TYPE_TD_LTE_CREDIT;
-        } else if (rbTdLtePermanent.isChecked()) {
+        else if (tag.equals("PERMANENT_TD_LTE"))
             currentSimType = SIM_TYPE_TD_LTE_PERMANENT;
-        } else if (rbData.isChecked()) {
+        else if (tag.equals("DATA"))
             currentSimType = SIM_TYPE_DATA;
-        }
+        else
+            currentSimType = null;
     }
 
     private void onPhoneNumberInput() {
@@ -288,25 +331,42 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         radioButtonRightel.setChecked(currentOperator == OperatorType.Type.RITEL);
         frameRightel.setSelected(currentOperator == OperatorType.Type.RITEL);
 
-        rbCredit.setVisibility(View.VISIBLE);
-        rbPermanent.setVisibility(View.VISIBLE);
-
-        rbCredit.setChecked(true);
-        currentSimType = SIM_TYPE_CREDIT;
-
-        if (currentOperator == RITEL) {
-            rbTdLteCredit.setVisibility(View.GONE);
-            rbTdLtePermanent.setVisibility(View.GONE);
-            rbData.setVisibility(View.VISIBLE);
-        } else if (currentOperator == IRANCELL) {
-            rbData.setVisibility(View.GONE);
-            rbTdLtePermanent.setVisibility(View.VISIBLE);
-            rbTdLteCredit.setVisibility(View.VISIBLE);
-        } else if (currentOperator == HAMRAH_AVAL) {
-            rbData.setVisibility(View.GONE);
-            rbTdLtePermanent.setVisibility(View.GONE);
-            rbTdLteCredit.setVisibility(View.GONE);
+        radioGroup.removeAllViewsInLayout();
+        int index = 0;
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.main_font);
+        int textColor = Theme.getInstance().getTitleTextColor(getContext());
+        if (radioButtonHamrah.isChecked()) {
+            for (PackageChargeType packageChargeType : mciPackageChargeTypes) {
+                RadioButton radioButton = new RadioButton(getContext());
+                radioButton.setId(index++);
+                radioButton.setTextColor(textColor);
+                radioButton.setTag(packageChargeType.getKey());
+                radioButton.setText(packageChargeType.getTitle());
+                radioButton.setTypeface(typeface);
+                radioGroup.addView(radioButton);
+            }
+        } else if (radioButtonIrancell.isChecked()) {
+            for (PackageChargeType packageChargeType : mtnPackageChargeTypes) {
+                RadioButton radioButton = new RadioButton(getContext());
+                radioButton.setId(index++);
+                radioButton.setTextColor(textColor);
+                radioButton.setTag(packageChargeType.getKey());
+                radioButton.setText(packageChargeType.getTitle());
+                radioButton.setTypeface(typeface);
+                radioGroup.addView(radioButton);
+            }
+        } else {
+            for (PackageChargeType packageChargeType : rightelPackageChargeTypes) {
+                RadioButton radioButton = new RadioButton(getContext());
+                radioButton.setId(index++);
+                radioButton.setTextColor(textColor);
+                radioButton.setTag(packageChargeType.getKey());
+                radioButton.setText(packageChargeType.getTitle());
+                radioButton.setTypeface(typeface);
+                radioGroup.addView(radioButton);
+            }
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     private String convertOperatorToString(OperatorType.Type opt) {
