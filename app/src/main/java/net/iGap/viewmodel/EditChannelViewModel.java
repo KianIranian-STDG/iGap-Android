@@ -193,7 +193,10 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        isShowLoading.set(View.GONE);
+                        if (roomId == EditChannelViewModel.this.roomId) {
+                            isShowLoading.set(View.GONE);
+                            isSignedMessage.set(signature);
+                        }
                     }
                 });
             }
@@ -355,6 +358,8 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
         G.handler.post(() -> {
             if (roomId == EditChannelViewModel.this.roomId) {
                 isShowLoading.set(View.GONE);
+
+                isReactionMessage.set(status);
             }
         });
     }
