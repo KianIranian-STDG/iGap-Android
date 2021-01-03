@@ -1,12 +1,16 @@
 package net.iGap.controllers;
 
+import android.text.format.DateUtils;
+
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
@@ -46,6 +50,7 @@ public class MessageController extends BaseController implements EventListener {
         });
     }
 
+
     public void onUpdate(AbstractObject object) {
         if (object == null) {
             return;
@@ -70,6 +75,17 @@ public class MessageController extends BaseController implements EventListener {
         } else if (object instanceof IG_RPC.Group_pin_message_response || object instanceof IG_RPC.Channel_pin_message_response) {
             onPinMessageResponse(object);
         }
+    }
+
+    public static boolean isBothDelete(long messageTime) {
+        long currentTime;
+        if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
+            currentTime = G.currentServerTime * DateUtils.SECOND_IN_MILLIS;
+        } else {
+            currentTime = System.currentTimeMillis();
+        }
+
+        return !HelperTimeOut.timeoutChecking(currentTime, messageTime, G.bothChatDeleteTime);
     }
 
     public String saveChannelAvatar(String path, long roomId) {

@@ -1,5 +1,6 @@
 package net.iGap.controllers;
 
+import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.TimeUtils;
@@ -16,6 +17,7 @@ import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -363,5 +365,29 @@ public class MessageDataStorage extends BaseController {
                 FileLog.e(e);
             }
         }));
+    }
+
+    public void deleteFileFromStorage(MessageObject message, DatabaseDelegate delegate) {
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+
+            try {
+                database.beginTransaction();
+                RealmAttachment attachment = database.where(RealmAttachment.class).equalTo("token", message.attachment.token).findFirst();
+
+                if (attachment != null) {
+                    attachment.setLocalFilePath("");
+                }
+
+                database.commitTransaction();
+                G.runOnUiThread(() -> delegate.run(null));
+
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }));
+    }
+
+    public interface DatabaseDelegate {
+        void run(Object object);
     }
 }
