@@ -68,6 +68,7 @@ public class AttachmentObject {
         attachmentObject.publicUrl = attachment.getUrl();
         attachmentObject.size = attachment.getSize();
         attachmentObject.token = attachment.getToken();
+        attachmentObject.filePath = attachment.getLocalFilePath();
         attachmentObject.smallThumbnail = createThumb(attachment.getSmallThumbnail(), attachment.getToken());
         attachmentObject.largeThumbnail = createThumb(attachment.getLargeThumbnail(), attachment.getToken());
 
