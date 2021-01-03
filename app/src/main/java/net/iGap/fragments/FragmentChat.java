@@ -127,6 +127,7 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -5255,31 +5256,18 @@ public class FragmentChat extends BaseFragment
                 .content(R.string.are_you_sure)
                 .positiveText(R.string.yes)
                 .negativeText(R.string.cancel)
-                .onPositive((dialog, which) -> DbManager.getInstance().doRealmTask(realm -> {
-
-                    realm.executeTransactionAsync(realm1 -> {
-
-                        deleteFileFromStorageIfExist(message);
-                        RealmAttachment attachment = realm1.where(RealmAttachment.class)
-                                .equalTo("token", message.attachment.token)
-                                .findFirst();
-
-                        if (attachment != null) {
-                            attachment.setLocalFilePath("");
-                        }
-                    }, () -> {
-                        // do ui task
+                .onPositive((dialog, which) -> {
+                    deleteFileFromStorageIfExist(message);
+                    getMessageDataStorage().deleteFileFromStorage(message, object -> {
                         mAdapter.notifyAdapterItemChanged(pos);
                     });
-
-                }))
-                .show();
+                }).show();
     }
 
     private void confirmAndDeleteMessage(MessageObject message, boolean isFromMultiSelect) {
         if (getContext() == null || message == null) return;
 
-        boolean bothDelete = RealmRoomMessage.isBothDelete(message.getUpdateOrCreateTime());
+        boolean bothDelete = MessageController.isBothDelete(message.getUpdateOrCreateTime());
         bothDeleteMessageId = new ArrayList<>();
         if (bothDelete) {
             bothDeleteMessageId.add(message.id);
