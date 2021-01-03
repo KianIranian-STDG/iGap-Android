@@ -29,7 +29,6 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -522,6 +521,10 @@ public final class AndroidUtils {
             hexStr.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
         }
         return hexStr.toString();
+    }
+
+    public static String getFilePathWithCashId(String cashId, String name, int messageType) {
+        return getFilePathWithCashId(cashId, name, ProtoGlobal.RoomMessageType.valueOf(messageType));
     }
 
     public static String getFilePathWithCashId(String cashId, String name, ProtoGlobal.RoomMessageType messageType) {

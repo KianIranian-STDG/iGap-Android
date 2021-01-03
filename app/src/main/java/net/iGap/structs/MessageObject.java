@@ -201,6 +201,10 @@ public class MessageObject {
         return userId == AccountManager.getInstance().getCurrentUser().getId();
     }
 
+    public static boolean canSharePublic(MessageObject message) {
+        return message != null && message.attachment != null && (message.messageType != ProtoGlobal.RoomMessageType.VOICE_VALUE || message.messageType != ProtoGlobal.RoomMessageType.STICKER_VALUE);
+    }
+
     public static boolean canSharePublic(RealmRoomMessage message) {
         return message != null && message.attachment != null && (!message.messageType.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || !message.messageType.equals(ProtoGlobal.RoomMessageType.STICKER.toString()));
     }
