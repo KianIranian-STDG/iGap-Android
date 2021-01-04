@@ -142,6 +142,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
@@ -348,6 +349,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
@@ -4524,34 +4526,34 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onOpenClick(View view, MessageObject messageObject, int pos) {
 
-        if (messageObject.messageType == ProtoGlobal.RoomMessageType.STICKER_VALUE) {
+        int messageType = messageObject.isForwarded() ? messageObject.forwardedMessage.messageType : messageObject.messageType;
+
+        if (messageType == STICKER_VALUE) {
             checkSticker(messageObject);
-        } else {
-            int messageType = messageObject.isForwarded() ? messageObject.forwardedMessage.messageType : messageObject.messageType;
-            if (messageType == IMAGE_VALUE || messageType == IMAGE_TEXT_VALUE) {
-                showImage(messageObject, view);
-            } else if (messageType == VIDEO_VALUE || messageType == VIDEO_TEXT_VALUE) {
-                if (messageObject.status != MessageObject.STATUS_SENDING && messageObject.status != MessageObject.STATUS_FAILED) {
-                    if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
-                        openMessage(messageObject);
-                    } else {
-                        showImage(messageObject, view);
-                    }
+        } else if (messageType == IMAGE_VALUE || messageType == IMAGE_TEXT_VALUE) {
+            showImage(messageObject, view);
+        } else if (messageType == VIDEO_VALUE || messageType == VIDEO_TEXT_VALUE) {
+            if (messageObject.status != MessageObject.STATUS_SENDING && messageObject.status != MessageObject.STATUS_FAILED) {
+                if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
+                    openMessage(messageObject);
+                } else {
+                    showImage(messageObject, view);
                 }
-            } else if (messageType == FILE_VALUE || messageType == FILE_TEXT_VALUE) {
-                openMessage(messageObject);
             }
+        } else if (messageType == FILE_VALUE || messageType == FILE_TEXT_VALUE) {
+            openMessage(messageObject);
         }
+
     }
 
-    private void checkSticker(MessageObject message) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        try {
-//            StructIGSticker structIGSticker = new Gson().fromJson(message.getAdditional().getAdditionalData(), StructIGSticker.class);
-//            if (!structIGSticker.isGiftSticker())
-//                openFragmentAddStickerToFavorite(structIGSticker.getGroupId());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    private void checkSticker(MessageObject message) {
+        try {
+            StructIGSticker structIGSticker = new Gson().fromJson(message.additionalData, StructIGSticker.class);
+            if (!structIGSticker.isGiftSticker())
+                openFragmentAddStickerToFavorite(structIGSticker.getGroupId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void openFragmentAddStickerToFavorite(String groupId) {
@@ -4561,41 +4563,40 @@ public class FragmentChat extends BaseFragment
         StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, mustCheckPermission() ? !canSendSticker || isChatReadOnly : isChatReadOnly);
         dialogFragment.setListener(this::sendStickerAsMessage);
 
-        if (getFragmentManager() != null) {
+        if (getActivity()!= null) {
             showPopup(-1);
-            dialogFragment.show(getFragmentManager(), "dialogFragment");
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "dialogFragment");
         }
 
     }
 
-    private void openMessage(MessageObject messageObject) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        String _filePath = null;
-//        String _token = message.realmRoomMessage.getForwardMessage() != null ? message.realmRoomMessage.getForwardMessage().getAttachment().getToken() : message.getAttachment().getToken();
-//        RealmAttachment _Attachment = DbManager.getInstance().doRealmTask(realm -> {
-//            return realm.where(RealmAttachment.class).equalTo("token", _token).findFirst();
-//        });
-//
-//        if (_Attachment != null) {
-//            _filePath = _Attachment.getLocalFilePath();
-//        } else if (message.getAttachment() != null) {
-//            _filePath = message.getAttachment().getLocalFilePath();
-//        }
-//
-//        if (_filePath == null || _filePath.length() == 0) {
-//            return;
-//        }
-//
-//        Intent intent = HelperMimeType.appropriateProgram(_filePath);
-//        if (intent != null) {
-//            try {
-//                startActivity(intent);
-//            } catch (Exception e) {
-//                // to prevent from 'No Activity found to handle Intent'
-//                e.printStackTrace();
-//            }
-//        } else {
-//            Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
-//        }
+    private void openMessage(MessageObject messageObject) {
+        String filePath = null;
+        String token = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.getAttachment().token : messageObject.getAttachment().token;
+        RealmAttachment realmAttachment = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmAttachment.class).equalTo("token", token).findFirst();
+        });
+
+        if (realmAttachment != null) {
+            filePath = realmAttachment.getLocalFilePath();
+        } else if (messageObject.getAttachment() != null) {
+            filePath = messageObject.getAttachment().filePath;
+        }
+
+        if (filePath == null || filePath.length() == 0) {
+            return;
+        }
+
+        Intent intent = HelperMimeType.appropriateProgram(filePath);
+        if (intent != null) {
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -6100,26 +6101,24 @@ public class FragmentChat extends BaseFragment
     /**
      * open fragment show image and show all image for this room
      */
-    private void showImage(final MessageObject messageObject, View view) {// TODO: 12/28/20 refactor message
+    private void showImage(final MessageObject messageObject, View view) {
+
         if (getActivity() != null) {
-//            if (!isAdded() || getActivity().isFinishing()) {
-//                return;
-//            }
-//
-//            // for gone app bar
-//            InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//
-//            long selectedFileToken = messageInfo.realmRoomMessage.getMessageId();
-//
-//            FragmentShowImage fragment = FragmentShowImage.newInstance();
-//            Bundle bundle = new Bundle();
-//            bundle.putLong("RoomId", mRoomId);
-//            bundle.putString("TYPE", messageInfo.realmRoomMessage.getMessageType().toString());
-//            bundle.putLong("SelectedImage", selectedFileToken);
-//            fragment.setArguments(bundle);
-//
-//            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            if (!isAdded() || getActivity().isFinishing()) {
+                return;
+            }
+
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            FragmentShowImage fragment = FragmentShowImage.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putLong("RoomId", mRoomId);
+            bundle.putInt("TYPE", messageObject.messageType);
+            bundle.putLong("SelectedImage", messageObject.id);
+            fragment.setArguments(bundle);
+
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }
 

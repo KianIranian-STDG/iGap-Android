@@ -154,10 +154,12 @@ public class MessageObject {
 //        messageObject.log = LogObject.create(roomMessage.getLog());
 //        messageObject.contact = ContactObject.create(roomMessage.getRoomMessageContact());
 //        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
-//        messageObject.additionalData = roomMessage.getAdditionalData();
+        if (roomMessage.getRealmAdditional()!=null){
+            messageObject.additionalData = roomMessage.getRealmAdditional().getAdditionalData();
+        }
 //        messageObject.additionalType = roomMessage.getAdditionalType();
 //        messageObject.channelExtra = roomMessage.getChannelExtra();
-//        messageObject.messageType = roomMessage.getMessageTypeValue();
+        messageObject.messageType = roomMessage.getMessageType().getNumber();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
         messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS : roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
