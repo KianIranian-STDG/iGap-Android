@@ -4214,82 +4214,82 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) { // TODO: 12/28/20  MESSAGE_REFACTOR
-        //   Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
-//        if (selectedCount > 0) {
-//            FragmentChat.isInSelectionMode = true;
-//            //toolbar.setVisibility(View.GONE);
-//            mBtnReplySelected.setVisibility(View.VISIBLE);
-//            mBtnDeleteSelected.setVisibility(View.VISIBLE);
-//
-//            mTxtSelectedCounter.setText(selectedCount + " " + context.getResources().getString(R.string.item_selected));
-//
-//            if (HelperCalander.isPersianUnicode) {
-//                mTxtSelectedCounter.setText(convertToUnicodeFarsiNumber(mTxtSelectedCounter.getText().toString()));
-//            }
-//
-//            if (selectedCount > 1 || isNotJoin) {
-//                mBtnReplySelected.setVisibility(View.INVISIBLE);
-//            } else {
-//
-//                if (chatType == CHANNEL) {
-//                    if (channelRole == ChannelChatRole.MEMBER) {
-//                        mBtnReplySelected.setVisibility(View.INVISIBLE);
-//                    }
-//                }
-//            }
-//
-//            isAllSenderId = true;
-//
-//            for (AbstractMessage message : selectedItems) {
-//
-//                RealmRoom realmRoom = getRoom();
-//                if (realmRoom != null) {
-//                    if (chatType == CHANNEL) {
-//                        if (channelRole == ChannelChatRole.MEMBER) {
-//                            mBtnReplySelected.setVisibility(View.INVISIBLE);
-//                            mBtnDeleteSelected.setVisibility(View.GONE);
-//                            isAllSenderId = false;
-//                        }
-//
-//                        if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
-//                            if (currentRoomAccess != null && currentRoomAccess.isCanDeleteMessage()) {
-//                                mBtnDeleteSelected.setVisibility(View.VISIBLE);
-//                            } else {
-//                                mBtnDeleteSelected.setVisibility(View.GONE);
-//                            }
-//                        } else {
-//                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
-//                        }
-//                    } else if (chatType == GROUP) {
-//
-//                        if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.mMessage.getAuthorHash())) {  // if message dose'nt belong to owner
-//                            if (currentRoomAccess != null && currentRoomAccess.isCanDeleteMessage()) {
-//                                mBtnDeleteSelected.setVisibility(View.VISIBLE);
-//                            } else {
-//                                mBtnDeleteSelected.setVisibility(View.GONE);
-//                            }
-//                        } else {
-//                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
-//                        }
-//                    } else if (realmRoom.getReadOnly()) {
-//                        mBtnReplySelected.setVisibility(View.INVISIBLE);
-//                    }
-//                }
-//            }
-//
-//            if (!isAllSenderId) {
-//                mBtnDeleteSelected.setVisibility(View.GONE);
-//            }
-//
-//
-//            if (isPinAvailable) pinedMessageLayout.setVisibility(View.GONE);
-//            ll_AppBarSelected.setVisibility(View.VISIBLE);
-//            showPopup(-1);
-//        } else {
-//            FragmentChat.isInSelectionMode = false;
-//            if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-//            ll_AppBarSelected.setVisibility(View.GONE);
-//        }
+//           Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
+        if (selectedCount > 0) {
+            FragmentChat.isInSelectionMode = true;
+            //toolbar.setVisibility(View.GONE);
+            mBtnReplySelected.setVisibility(View.VISIBLE);
+            mBtnDeleteSelected.setVisibility(View.VISIBLE);
+
+            mTxtSelectedCounter.setText(selectedCount + " " + context.getResources().getString(R.string.item_selected));
+
+            if (HelperCalander.isPersianUnicode) {
+                mTxtSelectedCounter.setText(convertToUnicodeFarsiNumber(mTxtSelectedCounter.getText().toString()));
+            }
+
+            if (selectedCount > 1 || isNotJoin) {
+                mBtnReplySelected.setVisibility(View.INVISIBLE);
+            } else {
+
+                if (chatType == CHANNEL) {
+                    if (channelRole == ChannelChatRole.MEMBER) {
+                        mBtnReplySelected.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            isAllSenderId = true;
+
+            for (AbstractMessage message : selectedItems) {
+
+                RealmRoom realmRoom = getRoom();
+                if (realmRoom != null) {
+                    if (chatType == CHANNEL) {
+                        if (channelRole == ChannelChatRole.MEMBER) {
+                            mBtnReplySelected.setVisibility(View.INVISIBLE);
+                            mBtnDeleteSelected.setVisibility(View.GONE);
+                            isAllSenderId = false;
+                        }
+
+                        if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.messageObject.authorHash)) {  // if message dose'nt belong to owner
+                            if (currentRoomAccess != null && currentRoomAccess.isCanDeleteMessage()) {
+                                mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                            } else {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                            }
+                        } else {
+                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                        }
+                    } else if (chatType == GROUP) {
+
+                        if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.messageObject.authorHash)) {  // if message dose'nt belong to owner
+                            if (currentRoomAccess != null && currentRoomAccess.isCanDeleteMessage()) {
+                                mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                            } else {
+                                mBtnDeleteSelected.setVisibility(View.GONE);
+                            }
+                        } else {
+                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                        }
+                    } else if (realmRoom.getReadOnly()) {
+                        mBtnReplySelected.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            if (!isAllSenderId) {
+                mBtnDeleteSelected.setVisibility(View.GONE);
+            }
+
+
+            if (isPinAvailable) pinedMessageLayout.setVisibility(View.GONE);
+            ll_AppBarSelected.setVisibility(View.VISIBLE);
+            showPopup(-1);
+        } else {
+            FragmentChat.isInSelectionMode = false;
+            if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
+            ll_AppBarSelected.setVisibility(View.GONE);
+        }
     }
 
     @Override
