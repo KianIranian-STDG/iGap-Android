@@ -911,19 +911,12 @@ final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_
         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(message).positiveText(positive).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                getMessageController().clearHistoryMessage(viewModel.shearedId);
                 dialog.dismiss();
-                clearHistory();
-                if (FragmentChat.onComplete != null) {
-                    FragmentChat.onComplete.complete(false, viewModel.roomId + "", "");
-                }
             }
         }).negativeText(negative)
                 .dismissListener(dialog -> checkViewsState())
                 .showListener(dialog -> checkViewsState()).show();
-    }
-
-    private void clearHistory() {
-        RealmRoomMessage.clearHistoryMessage(viewModel.shearedId);
     }
 
     private void error(String error) {

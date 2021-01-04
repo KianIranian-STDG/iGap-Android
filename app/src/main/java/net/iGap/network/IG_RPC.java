@@ -8,11 +8,13 @@ import net.iGap.proto.ProtoChannelDelete;
 import net.iGap.proto.ProtoChannelDeleteMessage;
 import net.iGap.proto.ProtoChannelEditMessage;
 import net.iGap.proto.ProtoChannelPinMessage;
+import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoGroupClearMessage;
 import net.iGap.proto.ProtoGroupCreate;
 import net.iGap.proto.ProtoGroupDeleteMessage;
 import net.iGap.proto.ProtoGroupEditMessage;
@@ -35,6 +37,118 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             minor = response.getMinorCode();
             major = response.getMajorCode();
+        }
+    }
+
+    public static class Group_Clear_History extends AbstractObject {
+        public static int actionId = 304;
+        public long roomId;
+        public long lastMessageId;
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Group_Clear_History.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupClearMessage.GroupClearMessage.Builder builder = ProtoGroupClearMessage.GroupClearMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setClearId(lastMessageId);
+
+            return builder;
+        }
+    }
+
+    public static class Res_Group_Clear_History extends AbstractObject {
+        public static int actionId = 30304;
+        public long roomId;
+        public long clearId;
+
+
+        public static Res_Group_Clear_History deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Clear_History object = null;
+            try {
+                object = new Res_Group_Clear_History();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupClearMessage.GroupClearMessageResponse response = ProtoGroupClearMessage.GroupClearMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            clearId = response.getClearId();
+        }
+    }
+
+    public static class Chat_Clear_History extends AbstractObject {
+        public static int actionId = 205;
+        public long roomId;
+        public long lastMessageId;
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Chat_Clear_History.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatClearMessage.ChatClearMessage.Builder builder = ProtoChatClearMessage.ChatClearMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setClearId(lastMessageId);
+
+            return builder;
+        }
+    }
+
+    public static class Res_Chat_Clear_History extends AbstractObject {
+        public static int actionId = 30205;
+        public long roomId;
+        public long clearId;
+
+
+        public static Res_Chat_Clear_History deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Clear_History object = null;
+            try {
+                object = new Res_Chat_Clear_History();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatClearMessage.ChatClearMessageResponse response = ProtoChatClearMessage.ChatClearMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            clearId = response.getClearId();
         }
     }
 

@@ -1,5 +1,8 @@
 package net.iGap.controllers;
 
+import android.util.Log;
+
+import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.TimeUtils;
@@ -16,6 +19,9 @@ import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -346,6 +352,40 @@ public class MessageDataStorage extends BaseController {
         }));
     }
 
+    public void clearRoomHistory(final long roomId, final long clearId) {
+        FileLog.i(TAG, "clearRoomHistory: ");
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                database.beginTransaction();
+
+                final RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+                if (realmClientCondition != null) {
+                    realmClientCondition.setClearId(clearId);
+                }
+
+                final RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= clearId))) {
+                    realmRoom.setUnreadCount(0);
+                    realmRoom.setLastMessage(null);
+                    realmRoom.setFirstUnreadMessage(null);
+                    realmRoom.setUpdatedTime(0);
+                    realmRoom.setLastScrollPositionMessageId(0);
+                }
+
+                final RealmResults<RealmRoomMessage> roomMessages = database.where(RealmRoomMessage.class).equalTo("roomId", roomId).lessThanOrEqualTo("messageId", clearId).findAll();
+
+                if (roomMessages != null) {
+                    roomMessages.deleteAllFromRealm();
+                }
+
+                database.commitTransaction();
+                getEventManager().postEvent(EventManager.CHAT_CLEAR_MESSAGE, roomId, clearId);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }));
+    }
+
     public void updatePinnedMessage(long roomId, long messageId) {
         storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
             try {
@@ -363,5 +403,100 @@ public class MessageDataStorage extends BaseController {
                 FileLog.e(e);
             }
         }));
+    }
+
+    public void setRoomClearId(long roomId, long clearMessageId, boolean useQueue) {
+        FileLog.i(TAG, "setRoomClearId: ");
+        if (useQueue) {
+            storageQueue.postRunnable(() -> setRoomClearIdInternal(roomId, clearMessageId));
+        } else {
+            setRoomClearIdInternal(roomId, clearMessageId);
+        }
+    }
+
+    private void setRoomClearIdInternal(long roomId, long clearMessageId) {
+        FileLog.i(TAG, "setRoomClearIdInternal: ");
+        DbManager.getInstance().doRealmTask(database -> {
+            try {
+                database.beginTransaction();
+                final RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+
+                if (realmClientCondition != null) {
+                    realmClientCondition.setClearId(clearMessageId);
+                }
+
+                database.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
+    public RealmRoom getRoom(final long roomId) {
+        FileLog.i(TAG, "getRoom: ");
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final RealmRoom[] result = new RealmRoom[1];
+
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                if (realmRoom != null) {
+                    result[0] = database.copyFromRealm(realmRoom);
+                }
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        }));
+
+        try {
+            countDownLatch.await();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        Log.e("checkgetRoom", "getRoom: " + (result[0] != null ? result[0].getTitle() : "NULL"));
+
+        return result[0];
+    }
+
+    public long getRoomClearId(final long roomId) {
+        FileLog.i(TAG, "getRoomClearId: ");
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final long[] result = new long[1];
+
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                long clearMessageId = 0;
+
+                RealmResults<RealmRoomMessage> results = database.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().sort("messageId", Sort.DESCENDING);
+                if (results != null && results.size() > 0) {
+                    RealmRoomMessage message = results.first();
+
+                    if (message != null) {
+                        clearMessageId = message.getMessageId();
+                    }
+                }
+
+                result[0] = clearMessageId;
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        }));
+
+        try {
+            countDownLatch.await();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        return result[0];
     }
 }

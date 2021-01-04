@@ -127,6 +127,7 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -219,7 +220,6 @@ import net.iGap.observers.interfaces.OnBotClick;
 import net.iGap.observers.interfaces.OnChannelAddMessageReaction;
 import net.iGap.observers.interfaces.OnChannelGetMessagesStats;
 import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
-import net.iGap.observers.interfaces.OnChatClearMessageResponse;
 import net.iGap.observers.interfaces.OnChatDelete;
 import net.iGap.observers.interfaces.OnChatEditMessageResponse;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
@@ -227,7 +227,6 @@ import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.observers.interfaces.OnChatSendMessage;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.observers.interfaces.OnClearChatHistory;
 import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnConnectionChangeStateChat;
@@ -358,7 +357,7 @@ import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+        implements IMessageItem, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
@@ -726,6 +725,7 @@ public class FragmentChat extends BaseFragment
         EventManager.getInstance().addEventListener(EventManager.ON_MESSAGE_DELETE, this);
         EventManager.getInstance().addEventListener(EventManager.ON_EDIT_MESSAGE, this);
         EventManager.getInstance().addEventListener(EventManager.ON_PINNED_MESSAGE, this);
+        EventManager.getInstance().addEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
         if (twoPaneMode)
             EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
@@ -1077,7 +1077,7 @@ public class FragmentChat extends BaseFragment
         lastChatRoomId = mRoomId;
         titleStatic = title;
 
-        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
         G.onUserInfoResponse = this;
         G.onChannelAddMessageReaction = this;
         G.onChannelGetMessagesStats = this;
@@ -1222,6 +1222,7 @@ public class FragmentChat extends BaseFragment
         EventManager.getInstance().removeEventListener(EventManager.ON_MESSAGE_DELETE, this);
         EventManager.getInstance().removeEventListener(EventManager.ON_EDIT_MESSAGE, this);
         EventManager.getInstance().removeEventListener(EventManager.ON_PINNED_MESSAGE, this);
+        EventManager.getInstance().removeEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
         if (twoPaneMode)
             EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -2542,16 +2543,6 @@ public class FragmentChat extends BaseFragment
             }
         };
 
-        /**
-         * call from ActivityGroupProfile for update group member number or clear history
-         */
-        onComplete = new OnComplete() {
-            @Override
-            public void complete(boolean result, String messageOne, String MessageTow) {
-                clearHistory(parseLong(messageOne));
-            }
-        };
-
         onMusicListener = new OnComplete() {
             @Override
             public void complete(boolean result, String messageID, String beforeMessageID) {
@@ -2621,31 +2612,6 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAction(ProtoGlobal.ClientAction ClientAction) {
                 HelperSetAction.setActionFiles(mRoomId, messageId, ClientAction, chatType);
-            }
-        };
-
-        G.onClearChatHistory = new OnClearChatHistory() {
-            @Override
-            public void onClearChatHistory() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.clear();
-                        recyclerView.removeAllViews();
-
-                        /**
-                         * remove tag from edtChat if the message has deleted
-                         */
-                        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                            edtChat.setTag(null);
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
             }
         };
 
@@ -4129,10 +4095,9 @@ public class FragmentChat extends BaseFragment
         /**
          * set null for avoid from clear group room message adapter if user try for clearChatHistory
          */
-//        G.onClearChatHistory = null;
-//        if (getActivity() != null) {
-//            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, messageInfo.realmRoomMessage.getUserId(), GROUP.toString())).setReplace(false).load();
-//        }
+        if (getActivity() != null) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), FragmentContactsProfile.newInstance(mRoomId, messageObject.userId, GROUP.toString())).setReplace(false).load();
+        }
     }
 
     @Override
@@ -4155,52 +4120,59 @@ public class FragmentChat extends BaseFragment
 //        }
     }
 
-    @Override
-    public void onChatClearMessage(final long roomId, final long clearId) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        G.handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (mAdapter != null) {
-//                    boolean cleared = false;
-//                    if (mAdapter.getAdapterItemCount() > 1) {
-//                        try {
-//                            if (mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1).mMessage.getMessageId() == clearId) {
-//                                cleared = true;
-//                                mAdapter.clear();
-//                            }
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    if (!cleared) {
-//                        int selectedPosition = -1;
-//                        for (int i = (mAdapter.getAdapterItemCount() - 1); i >= 0; i--) {
-//                            try {
-//                                StructMessageInfo structMessageInfo = mAdapter.getAdapterItem(i).structMessage;
-//                                if (structMessageInfo != null && structMessageInfo.realmRoomMessage.getMessageId() == clearId) {
-//                                    selectedPosition = i;
-//                                    break;
-//                                }
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                        if (selectedPosition != -1) {
-//                            for (int i = selectedPosition; i >= 0; i--) {
-//                                mAdapter.remove(i);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                /**
-//                 * remove tag from edtChat if the message has deleted
-//                 */
-//                if (edtChat != null && edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-//                    edtChat.setTag(null);
-//                }
-//            }
-//        });
+
+    public void onChatClearMessage(final long roomId, final long clearId) {// TODO: 12/28/20 MESSAGE_REFACTOR_NEED_TEST
+        setDownBtnGone();
+        saveMessageIdPositionState(0);
+        addToView = true;
+        if (botInit != null)
+            botInit.updateCommandList(false, "clear", getActivity(), false, null, 0, false);
+        mAdapter.clear();
+        recyclerView.removeAllViews();
+
+        if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+            edtChat.setTag(null);
+        }
+        if (mAdapter != null) {
+            boolean cleared = false;
+            if (mAdapter.getAdapterItemCount() > 1) {
+                try {
+                    if (mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1).messageObject.id == clearId) {
+                        cleared = true;
+                        mAdapter.clear();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!cleared) {
+                int selectedPosition = -1;
+                for (int i = (mAdapter.getAdapterItemCount() - 1); i >= 0; i--) {
+                    try {
+                        MessageObject messageObject = mAdapter.getAdapterItem(i).messageObject;
+                        if (messageObject != null && messageObject.id == clearId) {
+                            selectedPosition = i;
+                            break;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (selectedPosition != -1) {
+                    for (int i = selectedPosition; i >= 0; i--) {
+                        mAdapter.remove(i);
+                    }
+                }
+            }
+        }
+
+        /**
+         * remove tag from edtChat if the message has deleted
+         */
+        if (edtChat != null && edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+            edtChat.setTag(null);
+        }
+
     }
 
     @Override
@@ -5693,13 +5665,7 @@ public class FragmentChat extends BaseFragment
      * clear history for this room
      */
     public void clearHistory(long roomId) {
-        setDownBtnGone();
-        saveMessageIdPositionState(0);
-        RealmRoomMessage.clearHistoryMessage(roomId);
-        addToView = true;
-
-        if (botInit != null)
-            botInit.updateCommandList(false, "clear", getActivity(), false, null, 0, false);
+        getMessageController().clearHistoryMessage(roomId);
     }
 
     /**
@@ -9463,6 +9429,15 @@ public class FragmentChat extends BaseFragment
             });
         } else if ((long) message[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
             G.runOnUiThread(this::initPinedMessage);
+        } else if (id == EventManager.CHAT_CLEAR_MESSAGE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) message[0];
+                if (roomId == mRoomId) {
+                    long clearID = (long) message[1];
+                    onChatClearMessage(roomId, clearID);
+                }
+
+            });
         }
     }
 

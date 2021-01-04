@@ -109,7 +109,6 @@ import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.observers.interfaces.DataTransformerListener;
 import net.iGap.observers.interfaces.FinishActivity;
 import net.iGap.observers.interfaces.ITowPanModDesinLayout;
-import net.iGap.observers.interfaces.OnChatClearMessageResponse;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnGroupAvatarResponse;
 import net.iGap.observers.interfaces.OnMapRegisterState;
@@ -141,7 +140,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
 
     public static final String openChat = "openChat";
     public static final String userId = "userId";
@@ -593,7 +592,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
             connectionState();
             new Thread(this::checkKeepMedia).start();
 
@@ -1404,7 +1403,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         designLayout(chatLayoutMode.none);
 
-        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
 //        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).setOnChatSendMessageResponseRoomList(this);
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
@@ -1487,10 +1486,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-    @Override
-    public void onChatClearMessage(final long roomId, long clearId) {
-        //empty
-    }
 
     @Override
     public void onUserInfoTimeOut() {
