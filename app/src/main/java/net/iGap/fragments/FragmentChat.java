@@ -4091,7 +4091,7 @@ public class FragmentChat extends BaseFragment
      */
 
     @Override
-    public void onSenderAvatarClick(View view, MessageObject messageObject, int position) { // TODO: 12/28/20 MESSAGE_REFACTOR
+    public void onSenderAvatarClick(View view, MessageObject messageObject, int position) { // TODO: 12/28/20 MESSAGE_REFACTOR_NEED_TEST
         /**
          * set null for avoid from clear group room message adapter if user try for clearChatHistory
          */
