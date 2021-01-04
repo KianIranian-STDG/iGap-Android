@@ -14,6 +14,7 @@ import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoom;
 
@@ -86,6 +87,58 @@ public class MessageController extends BaseController implements EventListener {
         }
 
         return !HelperTimeOut.timeoutChecking(currentTime, messageTime, G.bothChatDeleteTime);
+    }
+
+    public void clearHistoryMessage(final long roomId) {
+        if (roomId > 0) {
+            RealmRoom realmRoom = getMessageDataStorage().getRoom(roomId);
+            long clearMessageId;
+
+            if (realmRoom == null || !realmRoom.isLoaded() || !realmRoom.isValid()) {
+                return;
+            }
+
+            if (realmRoom.getLastMessage() != null) {
+                clearMessageId = realmRoom.getLastMessage().getMessageId();
+            } else {
+                clearMessageId = getMessageDataStorage().getRoomClearId(roomId);
+            }
+
+            if (clearMessageId == 0) {
+                return;
+            }
+
+            getMessageDataStorage().setRoomClearId(roomId, clearMessageId, true);
+
+            AbstractObject req = null;
+
+            if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT) {
+                IG_RPC.Chat_Clear_History historyReq = new IG_RPC.Chat_Clear_History();
+                historyReq.roomId = roomId;
+                historyReq.lastMessageId = clearMessageId;
+                req = historyReq;
+            } else if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
+                IG_RPC.Group_Clear_History historyReq = new IG_RPC.Group_Clear_History();
+                historyReq.roomId = roomId;
+                historyReq.lastMessageId = clearMessageId;
+                req = historyReq;
+            }
+
+            getRequestManager().sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    long clearId = 0;
+                    if (response instanceof IG_RPC.Res_Chat_Clear_History) {
+                        IG_RPC.Res_Chat_Clear_History resClearMessage = (IG_RPC.Res_Chat_Clear_History) response;
+                        clearId = resClearMessage.clearId;
+                    } else if (response instanceof IG_RPC.Res_Group_Clear_History) {
+                        IG_RPC.Res_Group_Clear_History resClearMessage = (IG_RPC.Res_Group_Clear_History) response;
+                        clearId = resClearMessage.clearId;
+                    }
+
+                    getMessageDataStorage().clearRoomHistory(roomId, clearId);
+                }
+            });
+        }
     }
 
     public String saveChannelAvatar(String path, long roomId) {

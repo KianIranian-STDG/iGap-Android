@@ -617,7 +617,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void clearHistory(final long roomId, boolean exit) {
-        RealmRoomMessage.clearHistoryMessage(roomId);
+        getMessageController().clearHistoryMessage(roomId);
         if (exit)
             disableMultiSelect();
     }

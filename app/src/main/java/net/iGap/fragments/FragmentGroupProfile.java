@@ -200,9 +200,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                         new MaterialDialog.Builder(getActivity()).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (FragmentChat.onComplete != null) {
-                                    FragmentChat.onComplete.complete(false, viewModel.roomId + "", "");
-                                }
+                                getMessageController().clearHistoryMessage(viewModel.roomId);
                             }
                         }).negativeText(R.string.no).show();
                     } else if (menuList.get(position) == R.string.group_title_convert_to_public || menuList.get(position) == R.string.group_title_convert_to_private) {

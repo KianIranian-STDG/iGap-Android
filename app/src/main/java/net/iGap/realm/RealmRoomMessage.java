@@ -546,45 +546,6 @@ public class RealmRoomMessage extends RealmObject {
         });
     }
 
-    public static void clearHistoryMessage(final long roomId) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
-            if (realmClientCondition != null && realmClientCondition.isLoaded() && realmClientCondition.isValid()) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-
-                if (realmRoom == null || !realmRoom.isLoaded() || !realmRoom.isValid()) {
-                    return;
-                }
-
-                long clearMessageId = 0;
-                if (realmRoom.getLastMessage() != null) {
-                    clearMessageId = realmRoom.getLastMessage().getMessageId();
-                } else {
-                    RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().sort("messageId", Sort.DESCENDING);
-                    if (results.size() > 0) {
-                        if (results.first() != null) {
-                            clearMessageId = results.first().getMessageId();
-                        }
-                    }
-                }
-                realmClientCondition.setClearId(clearMessageId);
-                G.clearMessagesUtil.clearMessages(realmRoom.getType(), roomId, clearMessageId);
-
-                realmRoom.setUnreadCount(0);
-                realmRoom.setLastMessage(null);
-                realmRoom.setFirstUnreadMessage(null);
-                realmRoom.setUpdatedTime(0);
-                realmRoom.setLastScrollPositionMessageId(0);
-
-                RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll();
-                realmRoomMessages.deleteAllFromRealm();
-
-                if (G.onClearChatHistory != null) {
-                    G.onClearChatHistory.onClearChatHistory();
-                }
-            }
-        });
-    }
 
     public static RealmRoomMessage deleteMessage(Realm realm, long messageId, long roomId) {
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo("messageId", messageId)
