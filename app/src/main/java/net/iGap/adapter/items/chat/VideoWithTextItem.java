@@ -66,12 +66,12 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (messageObject.forwardedMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(messageObject.forwardedMessage.attachment.size, true)));
                 }
             } else {
-                if (attachment != null) {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                    if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
-//                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
-//                    } else {
-//                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + "", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
-//                    }
+                if (attachment != null) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
+                    if (messageObject.status == MessageObject.STATUS_SENDING) {
+                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(messageObject.getAttachment().size, true) + " " + G.context.getResources().getString(R.string.Uploading), AndroidUtils.formatDuration((int) (messageObject.getAttachment().duration * 1000L))));
+                    } else {
+                        holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(messageObject.getAttachment().size, true) + "", AndroidUtils.formatDuration((int) (messageObject.getAttachment().duration * 1000L))));
+                    }
                 }
             }
         }
