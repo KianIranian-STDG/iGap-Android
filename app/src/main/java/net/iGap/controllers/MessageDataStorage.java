@@ -2,7 +2,6 @@ package net.iGap.controllers;
 
 import android.util.Log;
 
-import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.TimeUtils;
@@ -20,7 +19,6 @@ import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
-import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import io.realm.RealmResults;
@@ -353,7 +351,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void clearRoomHistory(final long roomId, final long clearId) {
-        FileLog.i(TAG, "clearRoomHistory: ");
+        FileLog.i(TAG, "clearRoomHistory: roomId " + roomId + " clearId " + clearId);
         storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
             try {
                 database.beginTransaction();
@@ -387,6 +385,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void updatePinnedMessage(long roomId, long messageId) {
+        FileLog.i(TAG, "updatePinnedMessage roomId " + roomId + " messageId " + messageId);
         storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
             try {
                 database.beginTransaction();
@@ -406,7 +405,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void setRoomClearId(long roomId, long clearMessageId, boolean useQueue) {
-        FileLog.i(TAG, "setRoomClearId: ");
+        FileLog.i(TAG, "setRoomClearId: roomId " + roomId + " clearMessageId " + clearMessageId + " useQueue " + useQueue);
         if (useQueue) {
             storageQueue.postRunnable(() -> setRoomClearIdInternal(roomId, clearMessageId));
         } else {
@@ -415,7 +414,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void setRoomClearIdInternal(long roomId, long clearMessageId) {
-        FileLog.i(TAG, "setRoomClearIdInternal: ");
+        FileLog.i(TAG, "setRoomClearIdInternal: " + roomId + " " + clearMessageId);
         DbManager.getInstance().doRealmTask(database -> {
             try {
                 database.beginTransaction();
@@ -433,7 +432,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     public RealmRoom getRoom(final long roomId) {
-        FileLog.i(TAG, "getRoom: ");
+        FileLog.i(TAG, "getRoom: " + roomId);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final RealmRoom[] result = new RealmRoom[1];
 
@@ -459,13 +458,13 @@ public class MessageDataStorage extends BaseController {
             FileLog.e(e);
         }
 
-        Log.e("checkgetRoom", "getRoom: " + (result[0] != null ? result[0].getTitle() : "NULL"));
+        Log.e(TAG, "getRoom: " + (result[0] != null ? result[0].getTitle() : "NULL"));
 
         return result[0];
     }
 
     public long getRoomClearId(final long roomId) {
-        FileLog.i(TAG, "getRoomClearId: ");
+        FileLog.i(TAG, "getRoomClearId: " + roomId);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final long[] result = new long[1];
 

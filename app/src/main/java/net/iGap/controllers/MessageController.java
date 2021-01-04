@@ -5,22 +5,17 @@ import net.iGap.helper.FileLog;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoom;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 public class MessageController extends BaseController implements EventListener {
 
@@ -99,27 +94,34 @@ public class MessageController extends BaseController implements EventListener {
 
             getMessageDataStorage().setRoomClearId(roomId, clearMessageId, true);
 
+            AbstractObject req = null;
+
             if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT) {
-                IG_RPC.Chat_Clear_History req = new IG_RPC.Chat_Clear_History();
-                req.roomId = roomId;
-                req.lastMessageId = clearMessageId;
-                getRequestManager().sendRequest(req, (response, error) -> {
-                    if (error == null) {
-                        IG_RPC.Res_Chat_Clear_History resClearMessage = (IG_RPC.Res_Chat_Clear_History) response;
-                        getMessageDataStorage().clearRoomHistory(resClearMessage.roomId, resClearMessage.clearId);
-                    }
-                });
+                IG_RPC.Chat_Clear_History historyReq = new IG_RPC.Chat_Clear_History();
+                historyReq.roomId = roomId;
+                historyReq.lastMessageId = clearMessageId;
+                req = historyReq;
             } else if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
-                IG_RPC.Group_Clear_History req = new IG_RPC.Group_Clear_History();
-                req.roomId = roomId;
-                req.lastMessageId = clearMessageId;
-                getRequestManager().sendRequest(req, (response, error) -> {
-                    if (error == null) {
-                        IG_RPC.Res_Group_Clear_History resClearMessage = (IG_RPC.Res_Group_Clear_History) response;
-                        getMessageDataStorage().clearRoomHistory(resClearMessage.roomId, resClearMessage.clearId);
-                    }
-                });
+                IG_RPC.Group_Clear_History historyReq = new IG_RPC.Group_Clear_History();
+                historyReq.roomId = roomId;
+                historyReq.lastMessageId = clearMessageId;
+                req = historyReq;
             }
+
+            getRequestManager().sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    long clearId = 0;
+                    if (response instanceof IG_RPC.Res_Chat_Clear_History) {
+                        IG_RPC.Res_Chat_Clear_History resClearMessage = (IG_RPC.Res_Chat_Clear_History) response;
+                        clearId = resClearMessage.clearId;
+                    } else if (response instanceof IG_RPC.Res_Group_Clear_History) {
+                        IG_RPC.Res_Group_Clear_History resClearMessage = (IG_RPC.Res_Group_Clear_History) response;
+                        clearId = resClearMessage.clearId;
+                    }
+
+                    getMessageDataStorage().clearRoomHistory(roomId, clearId);
+                }
+            });
         }
     }
 
