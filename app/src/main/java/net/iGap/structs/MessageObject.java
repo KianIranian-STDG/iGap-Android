@@ -21,7 +21,7 @@ public class MessageObject {
     public MessageObject forwardedMessage;
     public MessageObject replayToMessage;
     public LocationObject location;
-    public ContactObject contact;
+    public RoomContactObject contact;
     public LogObject log;
     public WalletObject wallet;
     public AttachmentObject attachment;
@@ -90,7 +90,7 @@ public class MessageObject {
         messageObject.attachment = AttachmentObject.create(roomMessage.getAttachment());
         messageObject.location = LocationObject.create(roomMessage.getLocation());
         messageObject.log = LogObject.create(roomMessage.getLog());
-        messageObject.contact = ContactObject.create(roomMessage.getContact());
+        messageObject.contact = RoomContactObject.create(roomMessage.getContact());
         messageObject.wallet = WalletObject.create(roomMessage.getWallet());
         messageObject.additionalData = roomMessage.getAdditionalData();
         messageObject.additionalType = roomMessage.getAdditionalType();
@@ -152,7 +152,9 @@ public class MessageObject {
         }
 //        messageObject.location = LocationObject.create(roomMessage.getLocation());
 //        messageObject.log = LogObject.create(roomMessage.getLog());
-//        messageObject.contact = ContactObject.create(roomMessage.getRoomMessageContact());
+        if (roomMessage.getRoomMessageContact() != null) {
+            messageObject.contact = RoomContactObject.create(roomMessage.getRoomMessageContact());
+        }
 //        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
         if (roomMessage.getRealmAdditional()!=null){
             messageObject.additionalData = roomMessage.getRealmAdditional().getAdditionalData();
@@ -205,6 +207,10 @@ public class MessageObject {
 
     public static boolean canSharePublic(RealmRoomMessage message) {
         return message != null && message.attachment != null && (!message.messageType.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || !message.messageType.equals(ProtoGlobal.RoomMessageType.STICKER.toString()));
+    }
+
+    public static boolean canSharePublic(MessageObject message) {
+        return message != null && message.attachment != null && (message.messageType != ProtoGlobal.RoomMessageType.VOICE_VALUE || message.messageType != ProtoGlobal.RoomMessageType.STICKER_VALUE);
     }
 
     public boolean allowToForward() {
