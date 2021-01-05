@@ -196,10 +196,15 @@ public class HelperTracker {
             if (canSendMetrixEvent) {
                 MetrixConfig metrixConfig = new MetrixConfig(context, BuildConfig.METRIX_ID);
                 metrixConfig.setFirebaseId(BuildConfig.METRIX_FIREBASE_FIRST_ID, BuildConfig.METRIX_FIREBASE_SECOND_ID, BuildConfig.METRIX_FIREBASE_THEIRD_ID);
+                if (!BuildConfig.isStore) {
+                    metrixConfig.setDefaultTrackerToken(BuildConfig.TrackCode);
+                }
                 Metrix.onCreate(metrixConfig);
                 Metrix.initialize(context, BuildConfig.METRIX_ID);
                 if (!BuildConfig.DEBUG) {
-                    Metrix.getInstance().setStore(BuildConfig.Store);
+                    if (BuildConfig.isStore) {
+                        Metrix.getInstance().setStore(BuildConfig.Store);
+                    }
                     Metrix.getInstance().setAppSecret(BuildConfig.METRIX_SECRET, BuildConfig.METRIX_FIRST_SECRET, BuildConfig.METRIX_SECOND_SECRET, BuildConfig.METRIX_THEIRD_SECRET, BuildConfig.METRIX_FOURTH_SECRET);
                 }
             }
