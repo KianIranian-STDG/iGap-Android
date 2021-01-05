@@ -50,6 +50,7 @@ import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -664,18 +665,18 @@ public final class AppUtils {
         return outputUri;
     }
 
-    public static void shareItem(Intent intent, StructMessageInfo messageInfo) {
+    public static void shareItem(Intent intent, MessageObject messageObject) {
 
         try {
-            String message = messageInfo.realmRoomMessage.getForwardMessage() != null ? messageInfo.realmRoomMessage.getForwardMessage().getMessage() : messageInfo.realmRoomMessage.getMessage();
+            String message = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.message : messageObject.message;
             if (message != null) {
                 intent.putExtra(Intent.EXTRA_TEXT, message);
             }
             String filePath;
-            if (messageInfo.realmRoomMessage.getForwardMessage() != null) {
-                filePath = messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() != null ? messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getCacheId(), messageInfo.realmRoomMessage.getForwardMessage().getAttachment().getName(), messageInfo.realmRoomMessage.getMessageType());
+            if (messageObject.forwardedMessage != null) {
+                filePath = messageObject.forwardedMessage.getAttachment().filePath != null ? messageObject.forwardedMessage.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.forwardedMessage.getAttachment().cacheId, messageObject.forwardedMessage.getAttachment().name, messageObject.messageType);
             } else {
-                filePath = messageInfo.getAttachment().getLocalFilePath() != null ? messageInfo.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(messageInfo.getAttachment().getCacheId(), messageInfo.getAttachment().getCacheId(), messageInfo.realmRoomMessage.getMessageType());
+                filePath = messageObject.getAttachment().filePath != null ? messageObject.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.getAttachment().cacheId, messageObject.getAttachment().cacheId, messageObject.messageType);
             }
 
             if (filePath != null) {
