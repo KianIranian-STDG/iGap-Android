@@ -20,6 +20,8 @@ public class PaymentRepository {
 
     private final ChargeApi chargeApi;
 
+    private Config config = new Config();
+
     public static PaymentRepository getInstance() {
         if (instance == null) {
             instance = new PaymentRepository();
@@ -52,9 +54,38 @@ public class PaymentRepository {
 
     }
 
-    public void getConfigs(String userToken, HandShakeCallback handShakeCallback, ResponseCallback<Config> callBack) {
+    public void getConfigs(String userToken, ReceiveData receiveData) {
+        if (getConfig().getData() == null) {
+            new ApiInitializer<Config>().initAPI(chargeApi.getConfigs(userToken), null, new ResponseCallback<Config>() {
+                @Override
+                public void onSuccess(Config data) {
+                    setConfig(data);
+                    receiveData.onReceiveData(data);
+                }
 
-        new ApiInitializer<Config>().initAPI(chargeApi.getConfigs(userToken), handShakeCallback, callBack);
+                @Override
+                public void onError(String error) {
+                }
 
+                @Override
+                public void onFailed() {
+                }
+            });
+        } else {
+            receiveData.onReceiveData(getConfig());
+        }
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
+    }
+
+
+    public interface ReceiveData {
+        void onReceiveData(Config config);
     }
 }
