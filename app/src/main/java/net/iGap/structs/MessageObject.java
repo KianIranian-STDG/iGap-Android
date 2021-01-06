@@ -156,7 +156,7 @@ public class MessageObject {
             messageObject.contact = RoomContactObject.create(roomMessage.getRoomMessageContact());
         }
 //        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
-        if (roomMessage.getRealmAdditional()!=null){
+        if (roomMessage.getRealmAdditional() != null) {
             messageObject.additionalData = roomMessage.getRealmAdditional().getAdditionalData();
         }
 //        messageObject.additionalType = roomMessage.getAdditionalType();
@@ -221,7 +221,20 @@ public class MessageObject {
         return messageType == ProtoGlobal.RoomMessageType.STICKER_VALUE && additionalData != null && additionalType == AdditionalType.GIFT_STICKER;
     }
 
+    public boolean isTimeOrLogMessage() {
+        return userId == -1L;
+    }
+
     public long getUpdateOrCreateTime() {
         return Math.max(updateTime, createTime);
+    }
+
+    public AdditionalObject getAdditional() {
+        if (additional != null) {
+            return additional;
+        } else if (forwardedMessage != null && forwardedMessage.getAdditional() != null) {
+            return forwardedMessage.additional;
+        }
+        return null;
     }
 }

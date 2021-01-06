@@ -84,7 +84,6 @@ import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
@@ -199,39 +198,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             view.setVisibility(View.GONE);
         }
-    }
-
-    public AbstractMessage setMessage(StructMessageInfo message) {// TODO: 12/29/20 MESSAGE_REFACTOR
-        return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<AbstractMessage>) realm -> {
-//            structMessage = message;
-//
-//            AbstractMessage.this.mMessage = message.realmRoomMessage;
-//
-//            if ((mMessage.getForwardMessage() != null)) {
-//                long messageId = mMessage.getForwardMessage().getMessageId();
-//                if (mMessage.getForwardMessage().getMessageId() < 0) {
-//                    messageId = messageId * (-1);
-//                }
-//
-//                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
-//                if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
-//                    AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
-//            } else {
-//                realmRoomForwardedFrom = null;
-//            }
-//
-//            if (mMessage.getForwardMessage() != null) {
-//                myText = new SpannableString(mMessage.getForwardMessage().getMessage());
-//            } else if (mMessage.getMessage() != null) {
-//                myText = new SpannableString(mMessage.getMessage());
-//            } else {
-//                myText = new SpannableString("");
-//            }
-//
-            updateMessageText();
-
-            return AbstractMessage.this;
-        });
     }
 
     public AbstractMessage setMessage(MessageObject message) {// TODO: 12/29/20 MESSAGE_REFACTOR
@@ -428,6 +394,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @CallSuper
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
+
+        if (messageObject == null) {
+            return;
+        }
 
         NewChatItemHolder mHolder;
         if (holder instanceof NewChatItemHolder) {
