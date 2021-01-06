@@ -307,13 +307,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.2.0'
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
-    releaseImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_IranImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_MyketImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_WebImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_CharImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_GooglePlayImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_BazaarImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
+    implementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
     debugImplementation "com.github.KianIranian-STDG:Proto:$project.protoBetaVersion"
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
