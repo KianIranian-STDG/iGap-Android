@@ -56,7 +56,6 @@ import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -403,7 +402,7 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                AppUtils.shareItem(intent, new StructMessageInfo(roomMessage));
+                AppUtils.shareItem(intent, MessageObject.create(roomMessage));
                 if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                     intent.setType("video/*");
                     startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));
