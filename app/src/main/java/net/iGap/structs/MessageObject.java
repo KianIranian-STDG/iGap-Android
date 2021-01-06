@@ -1,6 +1,7 @@
 package net.iGap.structs;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.accountManager.AccountManager;
@@ -109,13 +110,15 @@ public class MessageObject {
     }
 
     public static MessageObject create(RealmRoomMessage roomMessage) {
-        return create(roomMessage, false, false);
+        return create(roomMessage, false, false, false);
     }
 
-    public static MessageObject create(RealmRoomMessage roomMessage, boolean fromShareMedia, boolean isGap) {
+    public static MessageObject create(RealmRoomMessage roomMessage, boolean fromShareMedia, boolean isGap, boolean createForForward) {
         if (roomMessage == null) {
             return null;
         }
+
+        Log.i("mmdCreate", "create: messageId " + roomMessage.getMessageId() + " userId=" + roomMessage.getUserId() + " roomId " + roomMessage.getRoomId());
 
         MessageObject messageObject = new MessageObject();
         boolean isForwardOrReplay = roomMessage.replyTo != null || roomMessage.forwardMessage != null;
@@ -125,12 +128,15 @@ public class MessageObject {
             messageObject.futureMessageId = roomMessage.getMessageId();
         }
 
-        if (roomMessage.userId != 0) {
-            messageObject.userId = roomMessage.userId;
+        if (roomMessage.getUserId() != 0) {
+            if (isForwardOrReplay) {
+                messageObject.roomId = roomMessage.getRoomId();
+            }
+            messageObject.userId = roomMessage.getUserId();
         } else {
-            messageObject.roomId = roomMessage.roomId;
+            messageObject.roomId = roomMessage.getRoomId();
             if (isForwardOrReplay) {// FIXME: 12/15/20
-                RealmRoom.needGetRoom(roomMessage.roomId);
+                RealmRoom.needGetRoom(roomMessage.getRoomId());
             }
         }
 
@@ -140,8 +146,8 @@ public class MessageObject {
 
         messageObject.setMessageText(roomMessage.getMessage());
 
-        messageObject.id = isForwardOrReplay ? roomMessage.getMessageId() * (-1) : roomMessage.getMessageId();
-        messageObject.forwardedMessage = create(roomMessage.forwardMessage);
+        messageObject.id = createForForward ? roomMessage.getMessageId() * (-1) : roomMessage.getMessageId();
+        messageObject.forwardedMessage = create(roomMessage.getForwardMessage(), false, false, true);
         messageObject.replayToMessage = create(roomMessage.getReplyTo());
         messageObject.status = readStatus(roomMessage.getStatus());
         messageObject.authorHash = roomMessage.getAuthorHash();
@@ -171,6 +177,8 @@ public class MessageObject {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
         }
 
+        Log.i("mmdCreate", "created successfully: " + messageObject.toString());
+
         return messageObject;
     }
 
@@ -186,14 +194,16 @@ public class MessageObject {
     }
 
     public void setMessageText(String messageText) {
-        message = messageText.replaceAll("[\\u2063]", "");
+        if (messageText != null) {
+            message = messageText.replaceAll("[\\u2063]", "");
 
-        String messageLink = HelperUrl.getLinkInfo(message);
-        if (messageLink.length() > 0) {
-            hasLink = true;
-            linkInfo = messageLink;
-        } else {
-            hasLink = false;
+            String messageLink = HelperUrl.getLinkInfo(message);
+            if (messageLink.length() > 0) {
+                hasLink = true;
+                linkInfo = messageLink;
+            } else {
+                hasLink = false;
+            }
         }
     }
 
@@ -227,6 +237,42 @@ public class MessageObject {
 
     public long getUpdateOrCreateTime() {
         return Math.max(updateTime, createTime);
+    }
+
+    @Override
+    public String toString() {
+        return "MessageObject{" +
+                "forwardedMessage=" + forwardedMessage +
+                ", replayToMessage=" + replayToMessage +
+                ", location=" + location +
+                ", contact=" + contact +
+                ", log=" + log +
+                ", wallet=" + wallet +
+                ", attachment=" + attachment +
+                ", additional=" + additional +
+                ", additionalData='" + additionalData + '\'' +
+                ", additionalType=" + additionalType +
+                ", id=" + id +
+                ", message='" + message + '\'' +
+                ", needToShow=" + needToShow +
+                ", hasLink=" + hasLink +
+                ", linkInfo='" + linkInfo + '\'' +
+                ", status=" + status +
+                ", userId=" + userId +
+                ", roomId=" + roomId +
+                ", authorHash='" + authorHash + '\'' +
+                ", deleted=" + deleted +
+                ", edited=" + edited +
+                ", messageType=" + messageType +
+                ", messageVersion=" + messageVersion +
+                ", statusVersion=" + statusVersion +
+                ", previousMessageId=" + previousMessageId +
+                ", channelExtra=" + channelExtra +
+                ", updateTime=" + updateTime +
+                ", createTime=" + createTime +
+                ", futureMessageId=" + futureMessageId +
+                ", isSelected=" + isSelected +
+                '}';
     }
 
     public AdditionalObject getAdditional() {

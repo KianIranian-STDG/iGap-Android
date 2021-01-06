@@ -30,6 +30,7 @@ import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
+import net.iGap.structs.MessageObject;
 
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
 
@@ -63,6 +64,10 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
 
     private ChatSendMessageUtil(int currentAccount) {
         super(currentAccount);
+    }
+
+    public ChatSendMessageUtil newBuilder(int roomType, int messageType, long roomId) {
+        return newBuilder(ProtoGlobal.Room.Type.forNumber(roomType), ProtoGlobal.RoomMessageType.forNumber(messageType), roomId);
     }
 
     public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
@@ -140,29 +145,29 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
-    public ChatSendMessageUtil buildForward(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message, long forwardRoomId, long forwardMessageId) {
-        ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
-        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
-            builder.message(message.getMessage());
+    public ChatSendMessageUtil buildForward(int roomType, long roomId, MessageObject message, long forwardRoomId, long forwardMessageId) {
+        ChatSendMessageUtil builder = newBuilder(roomType, message.messageType, roomId);
+        if (message.message != null && !message.message.isEmpty()) {
+            builder.message(message.message);
         }
-        if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
-            builder.attachment(message.getAttachment().getToken());
+        if (message.getAttachment() != null && message.getAttachment().token != null && !message.getAttachment().token.isEmpty()) {
+            builder.attachment(message.getAttachment().token);
         }
-        if (message.getRoomMessageContact() != null) {
-            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
-        }
-        if (message.getLocation() != null) {
-            builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
+        /*if (message.contact != null) {
+            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString()); // TODO: 1/5/21 MESSAGE_REFACTOR
+        }*/
+        if (message.location != null) {
+            builder.location(message.location.lat, message.location.lan);
         }
 
-        if (message.getForwardMessage() != null) {
+        if (message.forwardedMessage != null) {
             builder.forwardMessage(forwardRoomId, forwardMessageId);
         }
-        if (message.getReplyTo() != null) {
-            builder.replyMessage(message.getReplyTo().getMessageId());
+        if (message.replayToMessage != null) {
+            builder.replyMessage(message.replayToMessage.id);
         }
 
-        builder.sendMessage(Long.toString(message.getMessageId()));
+        builder.sendMessage(Long.toString(message.id));
         return this;
     }
 
