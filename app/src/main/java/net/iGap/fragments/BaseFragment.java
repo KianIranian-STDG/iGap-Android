@@ -29,6 +29,8 @@ import net.iGap.G;
 import net.iGap.activities.ActivityMain;
 import net.iGap.controllers.MessageController;
 import net.iGap.controllers.MessageDataStorage;
+import net.iGap.controllers.RoomController;
+import net.iGap.controllers.UserController;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -286,6 +288,14 @@ public class BaseFragment extends SwipeBackFragment {
 
     public MessageController getMessageController() {
         return MessageController.getInstance(currentAccount);
+    }
+
+    public RoomController getRoomController() {
+        return RoomController.getInstance(currentAccount);
+    }
+
+    public UserController getUserController() {
+        return UserController.getInstance(currentAccount);
     }
 
     public MessageDataStorage getMessageDataStorage() {

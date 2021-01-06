@@ -24,6 +24,14 @@ public class BaseController {
         return MessageController.getInstance(currentAccount);
     }
 
+    public RoomController getRoomController() {
+        return RoomController.getInstance(currentAccount);
+    }
+
+    public UserController getUserController() {
+        return UserController.getInstance(currentAccount);
+    }
+
     public MessageDataStorage getMessageDataStorage() {
         return MessageDataStorage.getInstance(currentAccount);
     }
