@@ -294,11 +294,11 @@ public class UploadHttpRequest {
 
         FileLog.e("UploadHttpRequest CustomException ", exception);
 
-        if (!exception.getMessage().equals("Canceled") && needReset) {
+        if (exception.getMessage() != null && !exception.getMessage().equals("Canceled") && needReset) {
             preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
         }
 
-        FileLog.e("UploadHttpRequest Exception ", exception);
+        FileLog.e("UploadHttpRequest md5 Reset " + needReset + " Exception ", exception);
 
         if (delegate != null) {
             delegate.onUploadFail(fileObject, exception);
