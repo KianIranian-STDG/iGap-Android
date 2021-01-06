@@ -75,6 +75,15 @@ public class MessageController extends BaseController implements EventListener {
             onMessageEditResponse(object, true);
         } else if (object instanceof IG_RPC.Group_pin_message_response || object instanceof IG_RPC.Channel_pin_message_response) {
             onPinMessageResponse(object);
+        } else if (object instanceof IG_RPC.Res_Chat_Delete_Message) {
+            IG_RPC.Res_Chat_Delete_Message res = (IG_RPC.Res_Chat_Delete_Message) object;
+            onDeleteMessageResponse(res, true);
+        } else if (object instanceof IG_RPC.Res_Group_Delete_Message) {
+            IG_RPC.Res_Group_Delete_Message res = (IG_RPC.Res_Group_Delete_Message) object;
+            onDeleteMessageResponse(res, true);
+        } else if (object instanceof IG_RPC.Res_Channel_Delete_Message) {
+            IG_RPC.Res_Channel_Delete_Message res = (IG_RPC.Res_Channel_Delete_Message) object;
+            onDeleteMessageResponse(res, true);
         }
     }
 
@@ -297,7 +306,7 @@ public class MessageController extends BaseController implements EventListener {
 
         getRequestManager().sendRequest(req, (response, error) -> {
             if (response != null) {
-                MessageController.this.onPinMessageResponse(response);
+                onPinMessageResponse(response);
             } else {
                 IG_RPC.Error err = (IG_RPC.Error) error;
                 FileLog.e("Pin message -> Major: " + err.minor + " Minor: " + err.minor);
@@ -325,16 +334,21 @@ public class MessageController extends BaseController implements EventListener {
         getMessageDataStorage().updatePinnedMessage(roomId, messageId);
     }
 
-    public void deleteMessageInternal(long roomId, ArrayList<Long> messageIdArray, ArrayList<Boolean> bothList, int roomType) {
+    public void deleteMessageInternal(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> bothMessageIds) {
         AbstractObject req = null;
+        boolean bothDelete = false;
 
-        for (long messageId : messageIdArray) {
+        for (long messageId : messageIds) {
+
+            if (bothMessageIds != null && bothMessageIds.contains(messageId)) {
+                bothDelete = true;
+            }
 
             if (roomType == ProtoGlobal.Room.Type.CHAT_VALUE) {
                 IG_RPC.Chat_Delete_Message chat_delete_message = new IG_RPC.Chat_Delete_Message();
                 chat_delete_message.roomId = roomId;
                 chat_delete_message.messageId = messageId;
-                chat_delete_message.both = bothList.contains(messageId);
+                chat_delete_message.both =bothDelete;
                 req = chat_delete_message;
 
             } else if (roomType == ProtoGlobal.Room.Type.GROUP_VALUE) {
@@ -350,21 +364,19 @@ public class MessageController extends BaseController implements EventListener {
                 req = channel_delete_message;
 
             }
+
+            getRequestManager().sendRequest(req, (response, error) -> {
+                if (response != null) {
+                    onDeleteMessageResponse(response, false);
+                } else {
+                    IG_RPC.Error e = new IG_RPC.Error();
+                    FileLog.e("Delete Message -> Major:" + e.major + "Minor:" + e.minor);
+                }
+            });
         }
-
-
-        getRequestManager().sendRequest(req, (response, error) -> {
-            if (response != null) {
-                onDeleteMessageResponse(response);
-            } else {
-                IG_RPC.Error e = new IG_RPC.Error();
-                FileLog.e("Delete Message -> Major:" + e.major + "Minor:" + e.minor);
-            }
-        });
-
     }
 
-    public void onDeleteMessageResponse(AbstractObject response) {
+    public void onDeleteMessageResponse(AbstractObject response, boolean update) {
 
         long roomId = 0;
         long messageId = 0;
@@ -375,11 +387,13 @@ public class MessageController extends BaseController implements EventListener {
             roomId = res.roomId;
             messageId = res.messageId;
             deleteVersion = res.deleteVersion;
+
         } else if (response instanceof IG_RPC.Group_Delete_Message) {
             IG_RPC.Res_Group_Delete_Message res = new IG_RPC.Res_Group_Delete_Message();
             roomId = res.roomId;
             messageId = res.messageId;
             deleteVersion = res.deleteVersion;
+
         } else if (response instanceof IG_RPC.Res_Channel_Delete_Message) {
             IG_RPC.Res_Channel_Delete_Message res = new IG_RPC.Res_Channel_Delete_Message();
             roomId = res.roomId;
@@ -387,7 +401,7 @@ public class MessageController extends BaseController implements EventListener {
             deleteVersion = res.deleteVersion;
         }
 
-        getMessageDataStorage().processDeleteMessage(roomId, messageId, deleteVersion, true);
+        getMessageDataStorage().processDeleteMessage(roomId, messageId, deleteVersion, update);
     }
 
 }

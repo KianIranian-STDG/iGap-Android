@@ -524,7 +524,7 @@ public final class AndroidUtils {
     }
 
     public static String getFilePathWithCashId(String cashId, String name, int messageType) {
-        return getFilePathWithCashId(cashId, name, ProtoGlobal.RoomMessageType.valueOf(messageType));
+        return getFilePathWithCashId(cashId, name, ProtoGlobal.RoomMessageType.forNumber(messageType));
     }
 
     public static String getFilePathWithCashId(String cashId, String name, ProtoGlobal.RoomMessageType messageType) {

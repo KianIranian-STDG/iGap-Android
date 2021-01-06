@@ -159,7 +159,7 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
 
         StickerDialogFragment dialogFragment = StickerDialogFragment.getInstance(stickerGroup, true);
 
-        if (getFragmentManager() != null)
-            dialogFragment.show(getFragmentManager(), "dialogFragment");
+        if (getActivity()!= null)
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "dialogFragment");
     }
 }
