@@ -5034,6 +5034,7 @@ public class FragmentChat extends BaseFragment
             }
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
+            // TODO: 1/6/21 MESSAGE_REFACTOR
 //            DownloadObject fileObject = DownloadObject.createForRoomMessage(message.realmRoomMessage);
 //
 //            if (fileObject != null) {
@@ -5122,6 +5123,7 @@ public class FragmentChat extends BaseFragment
             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
+            // TODO: 1/6/21 MESSAGE_REFACTOR
             // DownloadObject fileObject = DownloadObject.createForRoomMessage(message.realmRoomMessage);
 //
 //            if (fileObject != null) {
@@ -5178,6 +5180,7 @@ public class FragmentChat extends BaseFragment
             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
+            // TODO: 1/6/21 MESSAGE_REFACTOR
 //            DownloadObject fileObject = DownloadObject.createForRoomMessage(message.realmRoomMessage);
 //
 //            if (fileObject != null) {
@@ -5350,7 +5353,7 @@ public class FragmentChat extends BaseFragment
                 deleteFileFromStorageIfExist(messageObject);
             }
 
-            deleteMassage(messageObject,messageIds,bothDeleteMessageId,chatType);
+            deleteMassage(messageObject, messageIds, bothDeleteMessageId, chatType);
             if (isFromMultiSelect)
                 deleteSelectedMessageFromAdapter(messageIds);
             dialog.dismiss();
@@ -6771,7 +6774,7 @@ public class FragmentChat extends BaseFragment
                 case IMAGE_TEXT_VALUE:
                     AppUtils.shareItem(intent, messageObject);
                     intent.setType("image/*");
-                    chooserDialogText =getActivity().getResources().getString(R.string.share_image);
+                    chooserDialogText = getActivity().getResources().getString(R.string.share_image);
                     break;
                 case VIDEO_VALUE:
                 case VIDEO_TEXT_VALUE:
@@ -6796,7 +6799,7 @@ public class FragmentChat extends BaseFragment
                         }
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
                         intent.setType(mimeType);
-                        chooserDialogText =getActivity().getResources().getString(R.string.share_file);
+                        chooserDialogText = getActivity().getResources().getString(R.string.share_file);
                     } else {
 
                         isShareOk = false;
