@@ -127,7 +127,6 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
-import net.iGap.controllers.MessageController;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -320,7 +319,6 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
-import static java.lang.Long.parseLong;
 import static net.iGap.G.context;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
@@ -4893,42 +4891,40 @@ public class FragmentChat extends BaseFragment
     }
 
     private void handleContainerBottomSheetClick(MessageObject message, int adapterPosition, int item) {
-
         switch (item) {
-
             case R.string.PIN:
-//                pinSelectedMessage(message);
+                pinSelectedMessage(message);
                 break;
 
-            case R.string.replay_item_dialog:// TODO: 12/28/20 MESSAGE_REFACTOR
-//                G.handler.postDelayed(() -> replay(message, false), 200);
+            case R.string.replay_item_dialog:
+                G.handler.postDelayed(() -> reply(message, false), 200);
                 break;
 
             case R.string.copy_item_dialog:
-//                copyMessageToClipboard(message, true);
+                copyMessageToClipboard(message, true);
                 break;
 
             case R.string.share_item_dialog:
-//                shearedDataToOtherProgram(message);
+                shearedDataToOtherProgram(message);
                 break;
 
             case R.string.share_link_item_dialog:
-//                shearedLinkDataToOtherProgram(message);
+                shearedLinkDataToOtherProgram(message);
                 break;
 
             case R.string.share_file_link:
-//                shareMediaLink(message);
+                shareMediaLink(message);
                 break;
             case R.string.forward_item_dialog:
-//                forwardSelectedMessageToOutOfChat(message);
+                forwardSelectedMessageToOutOfChat(message);
                 break;
 
             case R.string.delete_item_dialog:
-//                confirmAndDeleteMessage(message, false);
+                confirmAndDeleteMessage(message, false);
                 break;
 
             case R.string.delete_from_storage:
-//                confirmAndDeleteFromStorage(message, adapterPosition);
+                confirmAndDeleteFromStorage(message, adapterPosition);
                 break;
 
             case R.string.edit_item_dialog:
@@ -4936,21 +4932,20 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-//                saveSelectedMessageToGallery(message, adapterPosition);
+                saveSelectedMessageToGallery(message, adapterPosition);
                 break;
 
             case R.string.save_to_Music:
-//                saveSelectedMessageToMusic(message, adapterPosition);
+                saveSelectedMessageToMusic(message, adapterPosition);
                 break;
 
             case R.string.saveToDownload_item_dialog:
-//                saveSelectedMessageToDownload(message, adapterPosition);
+                saveSelectedMessageToDownload(message, adapterPosition);
                 break;
 
             case R.string.report:
-//                reportSelectedMessage(message);
+                reportSelectedMessage(message);
                 break;
-
         }
     }
 

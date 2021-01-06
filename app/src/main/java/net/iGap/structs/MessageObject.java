@@ -213,10 +213,6 @@ public class MessageObject {
         return message != null && message.attachment != null && (!message.messageType.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || !message.messageType.equals(ProtoGlobal.RoomMessageType.STICKER.toString()));
     }
 
-    public static boolean canSharePublic(MessageObject message) {
-        return message != null && message.attachment != null && (message.messageType != ProtoGlobal.RoomMessageType.VOICE_VALUE || message.messageType != ProtoGlobal.RoomMessageType.STICKER_VALUE);
-    }
-
     public boolean allowToForward() {
         return status != MessageObject.STATUS_SENDING && status != MessageObject.STATUS_FAILED;
     }
