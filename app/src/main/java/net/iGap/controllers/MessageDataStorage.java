@@ -91,7 +91,7 @@ public class MessageDataStorage extends BaseController {
                     }
                 }
 
-                if (update && message != null) {
+                if (message != null) {
                     message.deleted = true;
                 }
 

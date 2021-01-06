@@ -5309,7 +5309,7 @@ public class FragmentChat extends BaseFragment
             list1.add(messageObject.id);
             deleteSelectedMessageFromAdapter(list1);
         });
-        getMessageController().deleteMessageInternal(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+        getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
     }
 
     private void doForwardDialogMessage(StructMessageInfo message, boolean isMessage) {
@@ -7214,83 +7214,83 @@ public class FragmentChat extends BaseFragment
 
         mBtnDeleteSelected.setOnClickListener(v -> {// TODO: 12/28/20 MESSAGE_REFACTOR
 
-//            final ArrayList<Long> list = new ArrayList<Long>();
-//            bothDeleteMessageId = new ArrayList<Long>();
-//
-//            G.handler.post(() -> {
-//
-//                for (final AbstractMessage item : mAdapter.getSelectedItems()) {
-//
-//                    //delete one message with multiple are different , when list size one do job in another method that able to remove from storage
-//                    //todo:// do multiple delete in single method
-//                    if (mAdapter.getSelectedItems().size() == 1) {
-//                        confirmAndDeleteMessage(item.structMessage, true);
-//                        return;
-//                    }
-//
-//                    try {
-//                        if (item != null && item.mMessage != null) {
-//                            Long messageId = item.mMessage.getMessageId();
-//                            list.add(messageId);
-//                            if (RealmRoomMessage.isBothDelete(item.mMessage.getUpdateOrCreateTime())) {
-//                                bothDeleteMessageId.add(messageId);
-//                            }
-//                        }
-//                    } catch (NullPointerException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                final String count = list.size() + "";
-//
-//                if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
-//                    // show both Delete check box
-//
-//                    String delete;
-//                    String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
-//                    if (HelperCalander.isPersianUnicode) {
-//                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
-//
-//                    } else {
-//                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
-//                    }
-//                    new MaterialDialog.Builder(G.fragmentActivity)
-//                            .limitIconToDefaultSize()
-//                            .content(delete)
-//                            .title(R.string.message)
-//                            .positiveText(R.string.ok)
-//                            .negativeText(R.string.cancel)
-//                            .onPositive((dialog, which) -> {
-//                                if (!dialog.isPromptCheckBoxChecked()) {
-//                                    bothDeleteMessageId = null;
-//                                }
-//                                DbManager.getInstance().doRealmTask(realm -> {
-//                                    RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
-//                                });
-//
-//                                deleteSelectedMessageFromAdapter(list);
-//                            })
-//                            .checkBoxPrompt(textCheckBox, false, null)
-//                            .show();
-//
-//                } else {
-//                    if (!G.fragmentActivity.isFinishing()) {
-//                        new MaterialDialog.Builder(G.fragmentActivity)
-//                                .title(R.string.message)
-//                                .content(G.context.getResources().getString(R.string.st_desc_delete, count))
-//                                .positiveText(R.string.ok)
-//                                .negativeText(R.string.cancel)
-//                                .onPositive((dialog, which) -> {
-//                                    bothDeleteMessageId = null;
-//                                    DbManager.getInstance().doRealmTask(realm -> {
-//                                        RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
-//                                    });
-//
-//                                    deleteSelectedMessageFromAdapter(list);
-//                                }).show();
-//                    }
-//                }
-//            });
+            final ArrayList<Long> list = new ArrayList<Long>();
+            bothDeleteMessageId = new ArrayList<Long>();
+
+            G.handler.post(() -> {
+
+                for (final AbstractMessage item : mAdapter.getSelectedItems()) {
+
+                    //delete one message with multiple are different , when list size one do job in another method that able to remove from storage
+                    //todo:// do multiple delete in single method
+                    if (mAdapter.getSelectedItems().size() == 1) {
+                        confirmAndDeleteMessage(item.messageObject, true);
+                        return;
+                    }
+
+                    try {
+                        if (item != null && item.messageObject != null) {
+                            Long messageId = item.messageObject.id;
+                            list.add(messageId);
+                            if (RealmRoomMessage.isBothDelete(item.messageObject.getUpdateOrCreateTime())) {
+                                bothDeleteMessageId.add(messageId);
+                            }
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                final String count = list.size() + "";
+
+                if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().messageObject.userId == AccountManager.getInstance().getCurrentUser().getId()) {
+                    // show both Delete check box
+
+                    String delete;
+                    String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
+                    if (HelperCalander.isPersianUnicode) {
+                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
+
+                    } else {
+                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
+                    }
+                    new MaterialDialog.Builder(G.fragmentActivity)
+                            .limitIconToDefaultSize()
+                            .content(delete)
+                            .title(R.string.message)
+                            .positiveText(R.string.ok)
+                            .negativeText(R.string.cancel)
+                            .onPositive((dialog, which) -> {
+                                if (!dialog.isPromptCheckBoxChecked()) {
+                                    bothDeleteMessageId = null;
+                                }
+                                DbManager.getInstance().doRealmTask(realm -> {
+                                    RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
+                                });
+
+                                deleteSelectedMessageFromAdapter(list);
+                            })
+                            .checkBoxPrompt(textCheckBox, false, null)
+                            .show();
+
+                } else {
+                    if (!G.fragmentActivity.isFinishing()) {
+                        new MaterialDialog.Builder(G.fragmentActivity)
+                                .title(R.string.message)
+                                .content(G.context.getResources().getString(R.string.st_desc_delete, count))
+                                .positiveText(R.string.ok)
+                                .negativeText(R.string.cancel)
+                                .onPositive((dialog, which) -> {
+                                    bothDeleteMessageId = null;
+                                    DbManager.getInstance().doRealmTask(realm -> {
+                                        RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
+                                    });
+
+                                    deleteSelectedMessageFromAdapter(list);
+                                }).show();
+                    }
+                }
+            });
         });
 
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {

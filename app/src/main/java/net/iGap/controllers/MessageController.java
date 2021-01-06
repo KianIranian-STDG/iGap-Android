@@ -334,7 +334,7 @@ public class MessageController extends BaseController implements EventListener {
         getMessageDataStorage().updatePinnedMessage(roomId, messageId);
     }
 
-    public void deleteMessageInternal(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> bothMessageIds) {
+    public void deleteSelectedMessage(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> bothMessageIds) {
         AbstractObject req = null;
         boolean bothDelete = false;
 
