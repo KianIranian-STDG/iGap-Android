@@ -557,18 +557,19 @@ public class MessageDataStorage extends BaseController {
                         forwardedMessage[0].setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                         forwardedMessage[0].setUserId(AccountManager.getInstance().getCurrentUser().getId());
 
-                        if (forwardedMessage != null) {
-                            copyMessage = database.copyFromRealm(forwardedMessage[0]);
-                            messageObject = MessageObject.create(copyMessage);
-                        }
+                        copyMessage = database.copyFromRealm(forwardedMessage[0]);
+                        messageObject = MessageObject.create(copyMessage);
                     }
                 }
+                RealmRoomMessage realmSourceMessage = database.where(RealmRoomMessage.class).equalTo("messageId", sourceMessage.id).findFirst();
+                assert realmSourceMessage != null;
+                RealmRoomMessage copyOfSource = database.copyFromRealm(realmSourceMessage);
                 database.commitTransaction();
 
                 MessageObject finalMessageObject = messageObject;
                 RealmRoomMessage finalCopyMessage = copyMessage;
                 G.runOnUiThread(() -> {
-                    databaseDelegate.run(finalMessageObject, finalCopyMessage);
+                    databaseDelegate.run(finalMessageObject, finalCopyMessage, copyOfSource.getRoomId(), copyOfSource.getMessageId());
                 });
 
             } catch (Exception e) {

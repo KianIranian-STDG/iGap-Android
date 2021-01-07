@@ -7941,13 +7941,13 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void sendForwardedMessage(final MessageObject sourceMessage, final long mRoomId, final boolean isSingleForward, int k, boolean isMessage) {
+    private void sendForwardedMessage(final MessageObject sourceMessage, final long destinationRoomId, final boolean isSingleForward, int k, boolean isMessage) {
         final long messageId = AppUtils.makeRandomId();
 
         Log.i("mmdCreate", "sendForwardedMessage: new message " + sourceMessage.toString());
 
         RealmRoom destinationRoom = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", destinationRoomId).findFirst();
         });
 
         if (destinationRoom == null || destinationRoom.getReadOnly()) {
@@ -7959,24 +7959,22 @@ public class FragmentChat extends BaseFragment
         final int type = destinationRoom.getType().getNumber();
 
 
-        getMessageDataStorage().createForwardMessage(mRoomId, messageId, sourceMessage, isMessage, object -> {
+        getMessageDataStorage().createForwardMessage(destinationRoomId, messageId, sourceMessage, isMessage, object -> {
+
             MessageObject createdForwardMessage = (MessageObject) object[0];
             RealmRoomMessage forwardedRealm = (RealmRoomMessage) object[1];
+            Long sourceRoomId = (Long) object[2];
+            Long sourceMessageId = (Long) object[3];
 
             Log.i("mmdCreate", "sendForwardedMessage commit to db successfully createdForwardMessage: " + createdForwardMessage.toString());
 
-            if (createdForwardMessage != null && forwardedRealm.isValid() && !createdForwardMessage.deleted) {
+            if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
                 if (isSingleForward) {
                     switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
                     scrollToEnd();
                 }
-
-                DbManager.getInstance().doRealmTask(realm -> {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", sourceMessage.id).findFirst();
-                    getSendMessageUtil().buildForward(type, createdForwardMessage.roomId, createdForwardMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
-
-                });
-
+                Log.i("mmdCreate", "final process for sending message to a room with Type: " + type + " destinationRoomId: " + createdForwardMessage.roomId + " sourceRoomId: " + sourceRoomId + " sourceMessageId: " + sourceMessageId);
+                getSendMessageUtil().buildForward(type, createdForwardMessage.roomId, createdForwardMessage, sourceRoomId, sourceMessageId);
             }
         });
 
