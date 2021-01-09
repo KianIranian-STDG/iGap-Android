@@ -5,10 +5,11 @@ import net.iGap.realm.RealmRoomMessageWallet;
 
 public class WalletObject {
     public String type;
-    public MoneyTransfer moneyTransfer;
+    public MoneyTransferObject moneyTransferObject;
     public CardToCardObject cardToCard;
-    public Topup topup;
-    public Bill bill;
+    public TopupObject topupObject;
+    public BillObject billObject;
+    public PaymentObject paymentObject;
 
     public static WalletObject create(ProtoGlobal.RoomMessageWallet wallet) {
         WalletObject walletObject = new WalletObject();
@@ -17,18 +18,17 @@ public class WalletObject {
             case "CARD_TO_CARD":
                 walletObject.cardToCard = CardToCardObject.create(wallet.getCardToCard());
                 break;
-
+            case "BILL":
+                walletObject.billObject = BillObject.create(wallet.getBill());
+                break;
+            case "TOPUP":
+                walletObject.topupObject = TopupObject.create(wallet.getTopup());
+                break;
+            case "MONEY_TRANSFER":
+            case "PAYMENT":
+                walletObject.moneyTransferObject = MoneyTransferObject.create(wallet.getMoneyTransfer());
+                break;
         }
-        if (wallet.getBill() != null) {
-            walletObject.bill = Bill.create(wallet.getBill());
-        }
-        if (wallet.getMoneyTransfer() != null) {
-            walletObject.moneyTransfer = MoneyTransfer.create(wallet.getMoneyTransfer());
-        }
-        if (wallet.getTopup() != null) {
-            walletObject.topup = Topup.create(wallet.getTopup());
-        }
-
 
         return walletObject;
     }
@@ -42,19 +42,19 @@ public class WalletObject {
             case "CARD_TO_CARD":
                 walletObject.cardToCard = CardToCardObject.create(wallet.getRealmRoomMessageWalletCardToCard());
                 break;
-
+            case "BILL":
+                walletObject.billObject = BillObject.create(wallet.getRealmRoomMessageWalletBill());
+                break;
+            case "TOPUP":
+                walletObject.topupObject = TopupObject.create(wallet.getRealmRoomMessageWalletTopup());
+                break;
+            case "PAYMENT":
+                walletObject.paymentObject = PaymentObject.create(wallet.getRealmRoomMessageWalletPayment());
+                break;
+            case "MONEY_TRANSFER":
+                walletObject.moneyTransferObject = MoneyTransferObject.create(wallet.getRealmRoomMessageWalletMoneyTransfer());
+                break;
         }
-        if (wallet.getRealmRoomMessageWalletBill() != null) {
-            walletObject.bill = Bill.create(wallet.getRealmRoomMessageWalletBill());
-        }
-
-        if (wallet.getRealmRoomMessageWalletMoneyTransfer() != null) {
-            walletObject.moneyTransfer = MoneyTransfer.create(wallet.getRealmRoomMessageWalletMoneyTransfer());
-        }
-        if (wallet.getRealmRoomMessageWalletTopup() != null) {
-            walletObject.topup = Topup.create(wallet.getRealmRoomMessageWalletTopup());
-        }
-
 
         return walletObject;
     }
