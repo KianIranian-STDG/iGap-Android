@@ -15,9 +15,12 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmOfflineEdited;
+import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.structs.MessageObject;
+
+import java.util.concurrent.CountDownLatch;
 
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -273,6 +276,35 @@ public class MessageDataStorage extends BaseController {
             }
         });
 
+    }
+
+    public String getDisplayNameWithUserId(long userId) {
+        FileLog.i(TAG, "getRoomClearId: ");
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final String[] result = new String[1];
+
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(database, userId);
+                if (realmRegisteredInfo != null) {
+                    result[0] = realmRegisteredInfo.getDisplayName();
+                }
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        }));
+
+        try {
+            countDownLatch.await();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        return result[0];
     }
 
     public void putAttachmentToken(final long messageId, final String token) {

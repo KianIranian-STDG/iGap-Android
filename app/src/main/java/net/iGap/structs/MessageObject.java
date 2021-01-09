@@ -91,7 +91,9 @@ public class MessageObject {
         messageObject.location = LocationObject.create(roomMessage.getLocation());
         messageObject.log = LogObject.create(roomMessage.getLog());
         messageObject.contact = ContactObject.create(roomMessage.getContact());
-        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
+        if (roomMessage.getWallet() != null) {
+            messageObject.wallet = WalletObject.create(roomMessage.getWallet());
+        }
         messageObject.additionalData = roomMessage.getAdditionalData();
         messageObject.additionalType = roomMessage.getAdditionalType();
         messageObject.channelExtra = roomMessage.getChannelExtra();
@@ -153,7 +155,8 @@ public class MessageObject {
 //        messageObject.location = LocationObject.create(roomMessage.getLocation());
 //        messageObject.log = LogObject.create(roomMessage.getLog());
 //        messageObject.contact = ContactObject.create(roomMessage.getRoomMessageContact());
-//        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
+        if (roomMessage.getRoomMessageWallet() != null)
+            messageObject.wallet = WalletObject.create(roomMessage.getRoomMessageWallet());
 //        messageObject.additionalData = roomMessage.getAdditionalData();
 //        messageObject.additionalType = roomMessage.getAdditionalType();
 //        messageObject.channelExtra = roomMessage.getChannelExtra();
