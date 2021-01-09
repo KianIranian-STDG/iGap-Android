@@ -1065,8 +1065,8 @@ Want to get it?</string>
     <string name="amount_2">amount:</string>
     <string name="payment_canceled">payment is canceled</string>
     <string name="PayGear_unavailable">PayGear is unavailable</string>
-    <string name="bills_inquiry_mci">MCI subscribers billObject inquiry </string>
-    <string name="bills_inquiry_telecom">Home phones billObject inquiry</string>
+    <string name="bills_inquiry_mci">MCI subscribers bill inquiry </string>
+    <string name="bills_inquiry_telecom">Home phones bill inquiry</string>
     <string name="bills_inquiry">Bills inquiry mci and telecom</string>
     <string name="bill_type">Bill type</string>
     <string name="phone">Phone number</string>
@@ -1941,7 +1941,7 @@ Want to get it?</string>
     <string name="elecBill_pay_billPay">Pay</string>
     <string name="elecBill_pay_billBranchInfo">Branch Info</string>
     <string name="elecBill_pay_billAddBillList">Add to my Bill\'s list</string>
-    <string name="elecBill_pay_billImage">Show billObject\'s image</string>
+    <string name="elecBill_pay_billImage">Show bill\'s image</string>
     <string name="elecBill_Entry_nameError">Bill\'s name can NOT be empty. for example: Home</string>
     <string name="elecBill_Entry_billIDError">Bill\'s ID can NOT be empty.</string>
     <string name="elecBill_Entry_userIDError">Your national ID can NOT be empty.</string>
@@ -1949,12 +1949,12 @@ Want to get it?</string>
     <string name="elecBill_add_form">Bill Info</string>
     <string name="elecBill_add_name">Bill\'s name *</string>
     <string name="elecBill_add_billID">Bill\'s ID *</string>
-    <string name="elecBill_add_addBtn">Add billObject</string>
+    <string name="elecBill_add_addBtn">Add bill</string>
     <string name="elecBill_cell_showDetail">Detail</string>
-    <string name="elecBill_cell_addNewBill">Add new billObject</string>
+    <string name="elecBill_cell_addNewBill">Add new bill</string>
     <string name="elecBill_cell_deleteAccount">Delete Account</string>
     <string name="elecBill_deleteBill_title">Delete Bill</string>
-    <string name="elecBill_deleteBill_desc">Are you sure to delete this billObject?</string>
+    <string name="elecBill_deleteBill_desc">Are you sure to delete this bill?</string>
     <string name="elecBill_deleteBill_pos">Delete</string>
     <string name="elecBill_deleteBill_neg">No, don\'t delete.</string>
     <string name="elecBill_deleteAccount_title">Delete Account</string>
@@ -1971,7 +1971,7 @@ Want to get it?</string>
     <string name="elecBill_search_billCompany">Electricity Provider Company</string>
     <string name="elecBill_search_billSearch">Find my Bill</string>
     <string name="elecBill_search_billSpinner">choose</string>
-    <string name="elecBill_error_billMissing">Not enough data to pay the billObject.</string>
+    <string name="elecBill_error_billMissing">Not enough data to pay the bill.</string>
     <string name="elecBill_error_bellowMin">Can\'t pay bills under 10,000 Rial.</string>
     <string name="elecBill_error_MPLError">Can\'t connect to payment service.</string>
     <string name="elecBill_error_title">Error</string>
