@@ -7,7 +7,6 @@ import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.observers.eventbus.EventManager;
@@ -24,6 +23,7 @@ import net.iGap.structs.MessageObject;
 
 import java.util.concurrent.CountDownLatch;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -31,8 +31,8 @@ public class MessageDataStorage extends BaseController {
 
     private static volatile MessageDataStorage[] instance = new MessageDataStorage[AccountManager.MAX_ACCOUNT_COUNT];
     private DispatchQueue storageQueue = new DispatchQueue("MessageStorage");
-    //    private Realm database;
-    private String TAG = getClass().getSimpleName();
+    private Realm database;
+    private String TAG = getClass().getSimpleName() + " " + currentAccount + " ";
 
     public MessageDataStorage(int currentAccount) {
         super(currentAccount);
@@ -53,15 +53,30 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void openDatabase() {
-//        storageQueue.postRunnable(() -> {
-//            if (database == null || database.isClosed()) {
-//                database = DbManager.getInstance().getRealm();
-//            }
-//        });
+        storageQueue.postRunnable(() -> {
+            try {
+                FileLog.i(TAG, "openDatabase: " + AccountManager.getInstance().getCurrentUser().getId() + " path-> " + AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
+
+                if (database == null || database.isClosed()) {
+                    database = Realm.getInstance(AccountManager.getInstance().getCurrentUser().getRealmConfiguration());
+                }
+            } catch (Exception e) {
+                FileLog.e(TAG, e);
+            }
+        });
+    }
+
+    public Realm getDatabase() {
+        return database;
+    }
+
+    public DispatchQueue getStorageQueue() {
+        return storageQueue;
     }
 
     public void processDeleteMessage(long roomId, long messageId, long deleteVersion, boolean update) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            Log.i(TAG, "processDeleteMessage: roomId " + roomId + " messageId " + messageId + " deleteVersion " + deleteVersion + " update " + update);
             try {
                 database.beginTransaction();
 
@@ -131,11 +146,12 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void putUserAvatar(long roomId, ProtoGlobal.Avatar avatar) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "putUserAvatar: " + roomId);
             try {
                 database.beginTransaction();
                 RealmAvatar realmAvatar = database.where(RealmAvatar.class).equalTo("id", avatar.getId()).findFirst();
@@ -151,28 +167,26 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
-    }
-
-    private void cleanUpInternal() {
-//        try {
-//            database.close();
-//            database = null;
-//        } catch (Exception e) {
-//            FileLog.e(e);
-//        }
+        });
     }
 
     public void cleanUp() {
-//        storageQueue.postRunnable(() -> {
-//            cleanUpInternal();
-//            openDatabase();
-//        });
-        storageQueue.cleanupQueue();
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "cleanUp: ");
+            try {
+                database.close();
+                database = null;
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            openDatabase();
+        });
     }
 
     public void deleteRoomFromStorage(long roomId) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteRoomFromStorage: " + roomId);
             try {
                 database.beginTransaction();
 
@@ -189,11 +203,12 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void setAttachmentFilePath(String cacheId, String absolutePath, boolean isThumb) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "setAttachmentFilePath: " + cacheId + " " + absolutePath);
             try {
                 database.beginTransaction();
                 RealmResults<RealmAttachment> attachments = database.where(RealmAttachment.class).equalTo("cacheId", cacheId).findAll();
@@ -210,27 +225,26 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
-    }
-
-    private void putLastMessageInternal(final long roomId, RealmRoomMessage lastMessage) {
-        DbManager.getInstance().doRealmTask(database -> {
-            try {
-                database.beginTransaction();
-                RealmRoom room = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-                if (room != null) {
-                    room.updatedTime = Math.max(lastMessage.updateTime, lastMessage.createTime);
-                    room.lastMessage = lastMessage;
-                }
-                database.commitTransaction();
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
         });
     }
 
+    private void putLastMessageInternal(final long roomId, RealmRoomMessage lastMessage) {
+        try {
+            database.beginTransaction();
+            RealmRoom room = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+            if (room != null) {
+                room.updatedTime = Math.max(lastMessage.updateTime, lastMessage.createTime);
+                room.lastMessage = lastMessage;
+            }
+            database.commitTransaction();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
     public void resetRoomLastMessage(final long roomId, final long messageId) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "resetRoomLastMessage: " + roomId + " " + messageId);
             try {
                 if (messageId != 0) {
                     deleteMessage(roomId, messageId, false);
@@ -247,7 +261,7 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void deleteMessage(final long roomId, final long messageId, final boolean useQueue) {
@@ -259,33 +273,31 @@ public class MessageDataStorage extends BaseController {
     }
 
     private void deleteMessageInternal(long roomId, long messageId) {
-        DbManager.getInstance().doRealmTask(database -> {
-            try {
-                if (roomId == 0 || messageId == 0) {
-                    return;
-                }
-
-                database.beginTransaction();
-
-                RealmRoomMessage message = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).equalTo("roomId", roomId).findFirst();
-                if (message != null) {
-                    message.deleteFromRealm();
-                }
-
-                database.commitTransaction();
-            } catch (Exception e) {
-                FileLog.e(e);
+        FileLog.i(TAG, "deleteMessageInternal: " + roomId + " messageId " + messageId);
+        try {
+            if (roomId == 0 || messageId == 0) {
+                return;
             }
-        });
 
+            database.beginTransaction();
+
+            RealmRoomMessage message = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).equalTo("roomId", roomId).findFirst();
+            if (message != null) {
+                message.deleteFromRealm();
+            }
+
+            database.commitTransaction();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     public String getDisplayNameWithUserId(long userId) {
-        FileLog.i(TAG, "getRoomClearId: ");
+        FileLog.i(TAG, "getDisplayNameWithUserId: " + userId);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final String[] result = new String[1];
 
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
             try {
                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(database, userId);
                 if (realmRegisteredInfo != null) {
@@ -298,7 +310,7 @@ public class MessageDataStorage extends BaseController {
             } finally {
                 countDownLatch.countDown();
             }
-        }));
+        });
 
         try {
             countDownLatch.await();
@@ -310,7 +322,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void putAttachmentToken(final long messageId, final String token) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
             try {
                 database.beginTransaction();
                 RealmAttachment attachment = database.where(RealmAttachment.class).equalTo("id", messageId).findFirst();
@@ -323,11 +335,12 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void updateEditedMessage(final long roomId, final long messageId, final long messageVersion, final int messageType, final String message, boolean isUpdate) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "updateEditedMessage: " + roomId + " " + messageId + " " + message);
             try {
                 database.beginTransaction();
 
@@ -379,12 +392,12 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void clearRoomHistory(final long roomId, final long clearId) {
-        FileLog.i(TAG, "clearRoomHistory: roomId " + roomId + " clearId " + clearId);
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "clearRoomHistory: roomId " + roomId + " clearId " + clearId);
             try {
                 database.beginTransaction();
 
@@ -413,12 +426,12 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void updatePinnedMessage(long roomId, long messageId) {
-        FileLog.i(TAG, "updatePinnedMessage roomId " + roomId + " messageId " + messageId);
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "updatePinnedMessage roomId " + roomId + " messageId " + messageId);
             try {
                 database.beginTransaction();
                 final RealmRoom room = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
@@ -433,7 +446,7 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void setRoomClearId(long roomId, long clearMessageId, boolean useQueue) {
@@ -447,20 +460,18 @@ public class MessageDataStorage extends BaseController {
 
     private void setRoomClearIdInternal(long roomId, long clearMessageId) {
         FileLog.i(TAG, "setRoomClearIdInternal: " + roomId + " " + clearMessageId);
-        DbManager.getInstance().doRealmTask(database -> {
-            try {
-                database.beginTransaction();
-                final RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+        try {
+            database.beginTransaction();
+            final RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
 
-                if (realmClientCondition != null) {
-                    realmClientCondition.setClearId(clearMessageId);
-                }
-
-                database.commitTransaction();
-            } catch (Exception e) {
-                FileLog.e(e);
+            if (realmClientCondition != null) {
+                realmClientCondition.setClearId(clearMessageId);
             }
-        });
+
+            database.commitTransaction();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
     }
 
     public RealmRoom getRoom(final long roomId) {
@@ -468,7 +479,7 @@ public class MessageDataStorage extends BaseController {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final RealmRoom[] result = new RealmRoom[1];
 
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
             try {
                 RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
 
@@ -482,7 +493,7 @@ public class MessageDataStorage extends BaseController {
             } finally {
                 countDownLatch.countDown();
             }
-        }));
+        });
 
         try {
             countDownLatch.await();
@@ -500,7 +511,7 @@ public class MessageDataStorage extends BaseController {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final long[] result = new long[1];
 
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
             try {
                 long clearMessageId = 0;
 
@@ -520,7 +531,7 @@ public class MessageDataStorage extends BaseController {
             } finally {
                 countDownLatch.countDown();
             }
-        }));
+        });
 
         try {
             countDownLatch.await();
@@ -532,8 +543,8 @@ public class MessageDataStorage extends BaseController {
     }
 
     public void deleteFileFromStorage(MessageObject message, DatabaseDelegate delegate) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
-
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteFileFromStorage: " + message.id);
             try {
                 database.beginTransaction();
                 RealmAttachment attachment = database.where(RealmAttachment.class).equalTo("token", message.attachment.token).findFirst();
@@ -548,11 +559,12 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
+        });
     }
 
     public void createForwardMessage(final long destinationRoomId, final long newMessageId, MessageObject sourceMessage, boolean isMessage, DatabaseDelegate databaseDelegate) {
-        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "createForwardMessage: " + destinationRoomId + " " + newMessageId);
             try {
                 final RealmRoomMessage[] forwardedMessage = new RealmRoomMessage[1];
                 MessageObject messageObject = null;
@@ -605,8 +617,7 @@ public class MessageDataStorage extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-        }));
-
+        });
     }
 
     public interface DatabaseDelegate {

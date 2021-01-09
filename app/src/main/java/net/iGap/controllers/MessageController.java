@@ -27,7 +27,7 @@ public class MessageController extends BaseController implements EventListener {
     private long lastUploadedAvatarRoomId;
 
     private static volatile MessageController[] instance = new MessageController[AccountManager.MAX_ACCOUNT_COUNT];
-    private String TAG = getClass().getSimpleName();
+    private String TAG = getClass().getSimpleName() + " " + currentAccount + " ";
 
     public static MessageController getInstance(int account) {
         MessageController localInstance = instance[account];
@@ -57,7 +57,7 @@ public class MessageController extends BaseController implements EventListener {
             return;
         }
 
-        FileLog.e("MessageController onUpdate " + object);
+        FileLog.i(TAG, "onUpdate " + object);
 
         if (object instanceof IG_RPC.Res_Channel_Avatar) {
             IG_RPC.Res_Channel_Avatar channelAvatar = (IG_RPC.Res_Channel_Avatar) object;
@@ -348,7 +348,7 @@ public class MessageController extends BaseController implements EventListener {
                 IG_RPC.Chat_Delete_Message chat_delete_message = new IG_RPC.Chat_Delete_Message();
                 chat_delete_message.roomId = roomId;
                 chat_delete_message.messageId = messageId;
-                chat_delete_message.both =bothDelete;
+                chat_delete_message.both = bothDelete;
                 req = chat_delete_message;
 
             } else if (roomType == ProtoGlobal.Room.Type.GROUP_VALUE) {

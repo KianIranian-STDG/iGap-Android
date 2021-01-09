@@ -7,7 +7,6 @@ import android.webkit.CookieSyncManager;
 
 import net.iGap.G;
 import net.iGap.WebSocketClient;
-import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLogout;
@@ -54,7 +53,6 @@ public class AccountHelper {
 
     private void baseAfter() {
         DbManager.getInstance().openUiRealm();
-        MessageDataStorage.getInstance(AccountManager.selectedAccount).cleanUp();
         WebSocketClient.getInstance().connect(true);
     }
 
