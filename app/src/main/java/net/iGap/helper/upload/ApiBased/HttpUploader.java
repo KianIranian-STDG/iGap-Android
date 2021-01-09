@@ -172,6 +172,7 @@ public class HttpUploader implements IUpload {
                         if (compress && compressFile.exists() && compressFile.length() < (new File(fileObject.message.attachment.localFilePath)).length()) {
                             compressFile.renameTo(completedCompressFile);
                             fileObject.file = completedCompressFile;
+                            fileObject.fileSize = completedCompressFile.length();
                         } else {
                             if (compressFile.exists()) {
                                 compressFile.delete();
