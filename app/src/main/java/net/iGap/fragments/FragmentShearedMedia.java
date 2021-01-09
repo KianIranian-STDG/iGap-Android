@@ -21,7 +21,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.Gravity;
@@ -76,7 +75,6 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
 import net.iGap.observers.interfaces.OnComplete;
@@ -90,9 +88,9 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientCountRoomHistory;
 import net.iGap.request.RequestClientSearchRoomHistory;
+import net.iGap.structs.MessageObject;
 
 import org.jetbrains.annotations.NotNull;
-import org.parceler.Parcels;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -404,9 +402,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
+                ArrayList<MessageObject> messageInfos = new ArrayList<>(SelectedList.size());
                 for (StructShearedMedia media : SelectedList) {
-                    messageInfos.add(Parcels.wrap(new StructMessageInfo(media.item)));
+                    messageInfos.add(MessageObject.create(media.item));
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();

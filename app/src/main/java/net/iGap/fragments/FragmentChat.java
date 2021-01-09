@@ -28,7 +28,6 @@ import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
@@ -38,6 +37,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -284,7 +284,6 @@ import net.iGap.structs.MessageObject;
 import net.iGap.viewmodel.controllers.CallManager;
 
 import org.jetbrains.annotations.NotNull;
-import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -371,7 +370,7 @@ public class FragmentChat extends BaseFragment
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
     public static ArrayList<Long> resentedMessageId = new ArrayList<>();
     public static int forwardMessageCount = 0;
-    public static ArrayList<Parcelable> mForwardMessages;
+    public static ArrayList<MessageObject> mForwardMessages;
     public static boolean canClearForwardList = true;
     public static boolean isInSelectionMode = false;
     public static boolean canUpdateAfterDownload = false;
@@ -5174,8 +5173,8 @@ public class FragmentChat extends BaseFragment
         G.runOnUiThread(() -> editTextRequestFocus(edtChat));
     }
 
-    private void forwardSelectedMessageToOutOfChat(MessageObject messageObject) {
-        mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(messageObject)));
+    private void forwardSelectedMessageToOutOfChat(MessageObject message) {
+        mForwardMessages = new ArrayList<>(Arrays.asList(message));
         if (getActivity() instanceof ActivityMain) {
             ((ActivityMain) getActivity()).setForwardMessage(true);
         }
@@ -5312,12 +5311,12 @@ public class FragmentChat extends BaseFragment
         getMessageController().deleteMessageInternal(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
     }
 
-    private void doForwardDialogMessage(StructMessageInfo message, boolean isMessage) {
+    private void doForwardDialogMessage(MessageObject message, boolean isMessage) {
         if (message == null) {
             mForwardMessages = getMessageStructFromSelectedItems();
             deselectMessageAndShowPinIfNeeded();
         } else {
-            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+            mForwardMessages = new ArrayList<>(Arrays.asList(message));
         }
 
         initAttachForward(isMessage);
@@ -5447,7 +5446,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardClick(MessageObject messageObject) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        doForwardDialogMessage(message, false);
+        doForwardDialogMessage(messageObject, false);
     }
 
     @Override
@@ -5725,12 +5724,12 @@ public class FragmentChat extends BaseFragment
         getMessages();
     }
 
-    private ArrayList<Parcelable> getMessageStructFromSelectedItems() {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
-//        for (int item : mAdapter.getSelections()) {
-//            messageInfos.add(Parcels.wrap(mAdapter.getAdapterItem(item).structMessage));
-//        }
-        return null;
+    private ArrayList<MessageObject> getMessageStructFromSelectedItems() {// TODO: 12/28/20 MESSAGE_REFACTOR
+        ArrayList<MessageObject> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
+        for (int item : mAdapter.getSelections()) {
+            messageInfos.add(mAdapter.getAdapterItem(item).messageObject);
+        }
+        return messageInfos;
     }
 
     /**
@@ -7880,10 +7879,10 @@ public class FragmentChat extends BaseFragment
 
                 for (int i = 0; i < mForwardMessages.size(); i++) {
                     if (hasForward) {
-                        sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true, i, false);
+                        sendForwardedMessage(mForwardMessages.get(i), mRoomId, true, i, false);
                     } else {
                         for (int k = 0; k < multiForwardSize; k++) {
-                            sendForwardedMessage(Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false, (i + k), isMessage);
+                            sendForwardedMessage(mForwardMessages.get(i), multiForwardList.get(k), false, (i + k), isMessage);
                         }
                     }
                 }
@@ -7942,53 +7941,43 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward, int k, boolean isMessage) {
+    private void sendForwardedMessage(final MessageObject sourceMessage, final long destinationRoomId, final boolean isSingleForward, int k, boolean isMessage) {
+        final long messageId = AppUtils.makeRandomId();
+
+        Log.i("mmdCreate", "sendForwardedMessage: new message " + sourceMessage.toString());
+
+        RealmRoom destinationRoom = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo("id", destinationRoomId).findFirst();
+        });
+
+        if (destinationRoom == null || destinationRoom.getReadOnly()) {
+            return;
+        }
+
+        Log.i("mmdCreate", "sendForwardedMessage: new messageId " + messageId + " source message id " + sourceMessage.id + " destinationRoom room id" + destinationRoom.getId());
+
+        final int type = destinationRoom.getType().getNumber();
 
 
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        getMessageDataStorage().createForwardMessage(destinationRoomId, messageId, sourceMessage, isMessage, object -> {
 
-                final long messageId = AppUtils.makeRandomId();
-                RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-                    return realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
-                });
+            MessageObject createdForwardMessage = (MessageObject) object[0];
+            RealmRoomMessage forwardedRealm = (RealmRoomMessage) object[1];
+            Long sourceRoomId = (Long) object[2];
+            Long sourceMessageId = (Long) object[3];
 
-                if (realmRoom == null || realmRoom.getReadOnly()) {
-                    return;
+            Log.i("mmdCreate", "sendForwardedMessage commit to db successfully createdForwardMessage: " + createdForwardMessage.toString());
+
+            if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
+                if (isSingleForward) {
+                    switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
+                    scrollToEnd();
                 }
-
-                final ProtoGlobal.Room.Type type = realmRoom.getType();
-
-                DbManager.getInstance().doRealmTask(realm -> {
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRoomMessage.makeForwardMessage(realm, mRoomId, messageId, messageInfo.realmRoomMessage, isMessage);
-                        }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            DbManager.getInstance().doRealmTask(realm1 -> {
-                                RealmRoomMessage forwardedMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
-
-                                if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
-                                    if (isSingleForward) {
-                                        switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedMessage))), false);
-                                        scrollToEnd();
-                                    }
-                                    RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", messageInfo.realmRoomMessage.getMessageId()).findFirst();
-                                    if (roomMessage != null) {
-                                        getSendMessageUtil().buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
-                                    }
-                                }
-                            });
-
-                        }
-                    });
-                });
+                Log.i("mmdCreate", "final process for sending message to a room with Type: " + type + " destinationRoomId: " + createdForwardMessage.roomId + " sourceRoomId: " + sourceRoomId + " sourceMessageId: " + sourceMessageId);
+                getSendMessageUtil().buildForward(type, createdForwardMessage.roomId, createdForwardMessage, sourceRoomId, sourceMessageId);
             }
-        }, (50 * k));
+        });
+
     }
 
     private MessageObject makeLayoutTime(long time) {

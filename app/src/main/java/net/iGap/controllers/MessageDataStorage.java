@@ -1,8 +1,8 @@
 package net.iGap.controllers;
 
-import net.iGap.G;
 import android.util.Log;
 
+import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.module.TimeUtils;
@@ -521,7 +521,65 @@ public class MessageDataStorage extends BaseController {
         }));
     }
 
+    public void createForwardMessage(final long destinationRoomId, final long newMessageId, MessageObject sourceMessage, boolean isMessage, DatabaseDelegate databaseDelegate) {
+        storageQueue.postRunnable(() -> DbManager.getInstance().doRealmTask(database -> {
+            try {
+                final RealmRoomMessage[] forwardedMessage = new RealmRoomMessage[1];
+                MessageObject messageObject = null;
+                RealmRoomMessage copyMessage = null;
+                database.beginTransaction();
+
+                if (isMessage && sourceMessage.forwardedMessage == null) {
+
+                    forwardedMessage[0] = new RealmRoomMessage();
+                    forwardedMessage[0].setMessageId(newMessageId);
+                    forwardedMessage[0].setCreateTime(TimeUtils.currentLocalTime());
+                    forwardedMessage[0].setRoomId(destinationRoomId);
+                    forwardedMessage[0].setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                    forwardedMessage[0].setUserId(AccountManager.getInstance().getCurrentUser().getId());
+                    database.copyToRealmOrUpdate(forwardedMessage[0]);
+                } else {
+                    RealmRoomMessage roomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", sourceMessage.id).findFirst();
+
+                    if (roomMessage != null) {
+                        forwardedMessage[0] = database.createObject(RealmRoomMessage.class, newMessageId);
+                        if (roomMessage.getForwardMessage() != null) {
+                            forwardedMessage[0].setForwardMessage(roomMessage.getForwardMessage());
+                            forwardedMessage[0].setHasMessageLink(roomMessage.getForwardMessage().getHasMessageLink());
+                        } else {
+                            forwardedMessage[0].setForwardMessage(roomMessage);
+                            forwardedMessage[0].setHasMessageLink(roomMessage.getHasMessageLink());
+                        }
+
+                        forwardedMessage[0].setCreateTime(TimeUtils.currentLocalTime());
+                        forwardedMessage[0].setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+                        forwardedMessage[0].setRoomId(destinationRoomId);
+                        forwardedMessage[0].setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+                        forwardedMessage[0].setUserId(AccountManager.getInstance().getCurrentUser().getId());
+
+                        copyMessage = database.copyFromRealm(forwardedMessage[0]);
+                        messageObject = MessageObject.create(copyMessage);
+                    }
+                }
+                RealmRoomMessage realmSourceMessage = database.where(RealmRoomMessage.class).equalTo("messageId", sourceMessage.id).findFirst();
+                assert realmSourceMessage != null;
+                RealmRoomMessage copyOfSource = database.copyFromRealm(realmSourceMessage);
+                database.commitTransaction();
+
+                MessageObject finalMessageObject = messageObject;
+                RealmRoomMessage finalCopyMessage = copyMessage;
+                G.runOnUiThread(() -> {
+                    databaseDelegate.run(finalMessageObject, finalCopyMessage, copyOfSource.getRoomId(), copyOfSource.getMessageId());
+                });
+
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }));
+
+    }
+
     public interface DatabaseDelegate {
-        void run(Object object);
+        void run(Object... object);
     }
 }
