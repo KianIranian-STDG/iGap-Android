@@ -34,6 +34,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentActivationBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentActivationViewModel;
 import net.iGap.viewmodel.WaitTimeModel;

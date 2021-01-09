@@ -1,5 +1,7 @@
 package net.iGap.viewmodel;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -34,7 +36,7 @@ public class FragmentActivationViewModel extends ViewModel {
     public MutableLiveData<WaitTimeModel> showWaitDialog = new MutableLiveData<>();
     public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
     public ObservableInt showLoading = new ObservableInt(View.GONE);
-    public ObservableInt sendActivationStatus = new ObservableInt(R.string.empty_error_message);
+    public ObservableField<String> sendActivationStatus = new ObservableField<>();
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
@@ -47,19 +49,20 @@ public class FragmentActivationViewModel extends ViewModel {
     private CountDownTimer countDownTimer;
     private int sendRequestRegister = 0;
 
+    @SuppressLint("StringFormatInvalid")
     public FragmentActivationViewModel() {
         repository = RegisterRepository.getInstance();
         timerValue.set("60");
         counterTimer();
-        if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS) {
-            sendActivationStatus.set(R.string.verify_sms_message);
-        } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
-            sendActivationStatus.set(R.string.verify_socket_message);
-        } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET) {
-            sendActivationStatus.set(R.string.verify_sms_socket_message);
-        } else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL) {
-            sendActivationStatus.set(R.string.verify_call_message);
-        }
+        if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS)
+            sendActivationStatus.set(G.context.getString(R.string.verify_sms_message, repository.getPhoneNumber()));
+        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET)
+            sendActivationStatus.set(G.context.getString(R.string.verify_socket_message, repository.getPhoneNumber()));
+        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET)
+            sendActivationStatus.set(G.context.getString(R.string.verify_sms_socket_message, repository.getPhoneNumber()));
+        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL)
+            sendActivationStatus.set(G.context.getString(R.string.verify_call_message, repository.getPhoneNumber()));
+
     }
 
     @Override
