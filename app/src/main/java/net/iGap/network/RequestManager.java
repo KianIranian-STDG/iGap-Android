@@ -10,6 +10,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.controllers.BaseController;
+import net.iGap.controllers.MessageController;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperClassNamePreparation;
@@ -17,6 +18,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AESCrypt;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.AppConfig;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoError;
@@ -298,7 +300,7 @@ public class RequestManager extends BaseController {
                     }
                 } else {
                     if (actionId != 0) {
-                        getMessageController().onUpdate(object);
+                        MessageController.getInstance(AccountManager.selectedAccount).onUpdate(object);
                     }
                 }
             }
