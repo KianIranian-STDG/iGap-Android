@@ -92,7 +92,11 @@ public class MessageObject {
         messageObject.location = LocationObject.create(roomMessage.getLocation());
         messageObject.log = LogObject.create(roomMessage.getLog());
         messageObject.contact = RoomContactObject.create(roomMessage.getContact());
-        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
+
+        if (roomMessage.getWallet() != null) {
+            messageObject.wallet = WalletObject.create(roomMessage.getWallet());
+        }
+
         messageObject.additionalData = roomMessage.getAdditionalData();
         messageObject.additionalType = roomMessage.getAdditionalType();
         messageObject.channelExtra = roomMessage.getChannelExtra();
@@ -117,8 +121,6 @@ public class MessageObject {
         if (roomMessage == null) {
             return null;
         }
-
-        Log.i("mmdCreate", "create: messageId " + roomMessage.getMessageId() + " userId=" + roomMessage.getUserId() + " roomId " + roomMessage.getRoomId());
 
         MessageObject messageObject = new MessageObject();
         boolean isForwardOrReplay = roomMessage.replyTo != null || roomMessage.forwardMessage != null;
@@ -158,10 +160,16 @@ public class MessageObject {
         }
 //        messageObject.location = LocationObject.create(roomMessage.getLocation());
 //        messageObject.log = LogObject.create(roomMessage.getLog());
+//        messageObject.contact = ContactObject.create(roomMessage.getRoomMessageContact());
+        if (roomMessage.getRoomMessageWallet() != null) {
+            messageObject.wallet = WalletObject.create(roomMessage.getRoomMessageWallet());
+        }
+//        messageObject.additionalData = roomMessage.getAdditionalData();
+
         if (roomMessage.getRoomMessageContact() != null) {
             messageObject.contact = RoomContactObject.create(roomMessage.getRoomMessageContact());
         }
-//        messageObject.wallet = WalletObject.create(roomMessage.getWallet());
+
         if (roomMessage.getRealmAdditional() != null) {
             messageObject.additionalData = roomMessage.getRealmAdditional().getAdditionalData();
         }
