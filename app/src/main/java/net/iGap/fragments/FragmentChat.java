@@ -1266,6 +1266,10 @@ public class FragmentChat extends BaseFragment
         //MusicPlayer.chatLayout = null;
         //ActivityCall.stripLayoutChat = null;
 
+        if (isNotJoin) {
+            getMessageDataStorage().deleteRoomAllMessage(mRoomId);
+        }
+
         try {
             MusicPlayer.chatLayout = null;
             MusicPlayer.shearedMediaLayout = null;
@@ -1303,6 +1307,7 @@ public class FragmentChat extends BaseFragment
 
         if (notifyFrameLayout != null)
             notifyFrameLayout.setListener(null);
+
     }
 
     @Override
