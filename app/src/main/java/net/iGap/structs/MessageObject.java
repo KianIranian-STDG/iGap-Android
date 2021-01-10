@@ -45,6 +45,8 @@ public class MessageObject {
     public long statusVersion;
     public long previousMessageId;
     public RoomMessage.ChannelExtra channelExtra;
+    public ChannelExtraObject channelExtraObject;
+    public ProtoGlobal.Room.Type roomType;
     public long updateTime;
     public long createTime;
     public long futureMessageId;
@@ -99,7 +101,9 @@ public class MessageObject {
 
         messageObject.additionalData = roomMessage.getAdditionalData();
         messageObject.additionalType = roomMessage.getAdditionalType();
-        messageObject.channelExtra = roomMessage.getChannelExtra();
+        if (roomMessage.getChannelExtra() != null) {
+            messageObject.channelExtraObject = ChannelExtraObject.create(roomMessage.getChannelExtra(), messageObject.id);
+        }
         messageObject.messageType = roomMessage.getMessageTypeValue();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
@@ -174,7 +178,10 @@ public class MessageObject {
             messageObject.additionalData = roomMessage.getRealmAdditional().getAdditionalData();
         }
 //        messageObject.additionalType = roomMessage.getAdditionalType();
-//        messageObject.channelExtra = roomMessage.getChannelExtra();
+        // messageObject.channelExtra = roomMessage.getChannelExtra();
+        if (roomMessage.getChannelExtra() != null) {
+            messageObject.channelExtraObject = ChannelExtraObject.create(roomMessage.getChannelExtra());
+        }
         messageObject.messageType = roomMessage.getMessageType().getNumber();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
@@ -275,7 +282,7 @@ public class MessageObject {
                 ", messageVersion=" + messageVersion +
                 ", statusVersion=" + statusVersion +
                 ", previousMessageId=" + previousMessageId +
-                ", channelExtra=" + channelExtra +
+                ", channelExtra=" + channelExtraObject +
                 ", updateTime=" + updateTime +
                 ", createTime=" + createTime +
                 ", futureMessageId=" + futureMessageId +
