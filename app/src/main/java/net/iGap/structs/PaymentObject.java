@@ -31,5 +31,18 @@ public class PaymentObject {
 
     }
 
+    public static PaymentObject create(ProtoGlobal.RoomMessageWallet.MoneyTransfer protoMoneyTransfer) {
+        PaymentObject paymentObject = new PaymentObject();
+        paymentObject.fromUserId = protoMoneyTransfer.getFromUserId();
+        paymentObject.toUserId = protoMoneyTransfer.getToUserId();
+        paymentObject.amount = protoMoneyTransfer.getAmount();
+        paymentObject.traceNumber = protoMoneyTransfer.getTraceNumber();
+        paymentObject.invoiceNumber = protoMoneyTransfer.getInvoiceNumber();
+        paymentObject.payTime = protoMoneyTransfer.getPayTime();
+        paymentObject.description = protoMoneyTransfer.getDescription();
+        paymentObject.cardNumber = protoMoneyTransfer.getCardNumber();
+        paymentObject.rrn = protoMoneyTransfer.getRrn();
+        return paymentObject;
+    }
 
 }
