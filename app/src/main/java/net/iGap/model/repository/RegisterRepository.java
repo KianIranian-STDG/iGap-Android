@@ -68,6 +68,7 @@ public class RegisterRepository {
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
     private ProtoUserRegister.UserRegisterResponse.Method method;
+    private String countryCode;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToSyncContactPageForNewUser = new SingleLiveEvent<>();
@@ -145,6 +146,14 @@ public class RegisterRepository {
 
     public ProtoUserRegister.UserRegisterResponse.Method getMethod() {
         return method;
+    }
+
+        public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     public void setForgetTwoStepVerification(boolean forgetTwoStepVerification) {
