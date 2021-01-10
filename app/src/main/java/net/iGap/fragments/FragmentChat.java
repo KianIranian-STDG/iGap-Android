@@ -5451,7 +5451,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardFromCloudClick(MessageObject messageObject) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        doForwardDialogMessage(message, true);
+        doForwardDialogMessage(messageObject, true);
     }
 
     @Override
