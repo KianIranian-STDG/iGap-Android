@@ -401,7 +401,10 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
         micView = new TextImageView(this);
         micView.setImageResource(R.drawable.ic_call_mic);
         micView.setText(R.string.mic);
-        micView.setViewColor(CallManager.getInstance().isMicMute() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
+        if (!CallManager.getInstance().isMicEnable()) {
+            toggleMic();
+        }
+        micView.setViewColor(CallManager.getInstance().isMicEnable() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
         micView.setOnClickListener(v -> toggleMic());
         row2.addView(micView, LayoutCreator.createLinear(52, LayoutCreator.WRAP_CONTENT, 1f));
 
@@ -545,7 +548,7 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
 
     private void toggleMic() {
         CallManager.getInstance().toggleMic();
-        micView.setViewColor(CallManager.getInstance().isMicMute() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
+        micView.setViewColor(CallManager.getInstance().isMicEnable() ? getResources().getColor(R.color.white) : Theme.getInstance().getPrimaryDarkColor(this));
     }
 
     private void toggleSpeaker() {
