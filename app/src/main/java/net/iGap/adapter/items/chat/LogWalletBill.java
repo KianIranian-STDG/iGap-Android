@@ -47,7 +47,7 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
 
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
             String amount = String.valueOf(messageObject.wallet.billObject.amount);
             String billId = messageObject.wallet.billObject.billId;

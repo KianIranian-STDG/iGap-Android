@@ -46,7 +46,7 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
     }
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
 
 

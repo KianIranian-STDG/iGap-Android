@@ -52,7 +52,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
 
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
 
         if (messageObject.wallet.type.equals(ProtoGlobal.RoomMessageWallet.Type.UNRECOGNIZED.toString())) {
@@ -96,8 +96,8 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.payTime.setBackgroundColor(Color.parseColor(iGapYellowWallet));
             holder.titleTxt.setBackgroundColor(Color.parseColor(iGapYellowWallet));
 
-            fromDisplayName = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(messageObject.wallet.moneyTransferObject.fromUserId);
-            toDisplayName = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(messageObject.wallet.moneyTransferObject.toUserId);
+            fromDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.moneyTransferObject.fromUserId);
+            toDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.moneyTransferObject.toUserId);
 
             persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.moneyTransferObject.payTime) + " " + "-" + " " +
                     TimeUtils.toLocal(messageObject.wallet.moneyTransferObject.payTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
@@ -123,8 +123,8 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.titleTxt.setText(R.string.PAYMENT_TRANSFER_MONEY);
             holder.payTime.setBackgroundColor(theme.getPrimaryColor(holder.payTime.getContext()));
             holder.titleTxt.setBackgroundColor(theme.getPrimaryColor(holder.titleTxt.getContext()));
-            fromDisplayName = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.fromUserId);
-            toDisplayName = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.toUserId);
+            fromDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.fromUserId);
+            toDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.toUserId);
 
             persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.paymentObject.payTime) + " " + "-" + " " +
                     TimeUtils.toLocal(messageObject.wallet.paymentObject.payTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);

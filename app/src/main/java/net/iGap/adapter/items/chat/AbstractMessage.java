@@ -149,7 +149,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
     protected Theme theme;
     private VH holder;
-    private int currentAccount;
+    public int currentAccount;
 
     public AbstractMessage(MessagesAdapter<AbstractMessage> mAdapter, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         this.directionalBased = directionalBased;
