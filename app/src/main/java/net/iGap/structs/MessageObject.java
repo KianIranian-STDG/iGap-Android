@@ -103,8 +103,8 @@ public class MessageObject {
         messageObject.messageType = roomMessage.getMessageTypeValue();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
-        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS : roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
-        messageObject.createTime = roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS;
+        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime()  : roomMessage.getUpdateTime();
+        messageObject.createTime = roomMessage.getCreateTime() ;
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
@@ -174,8 +174,8 @@ public class MessageObject {
         messageObject.messageType = roomMessage.getMessageType().getNumber();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
-        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS : roomMessage.getUpdateTime() * DateUtils.SECOND_IN_MILLIS;
-        messageObject.createTime = roomMessage.getCreateTime() * DateUtils.SECOND_IN_MILLIS;
+        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
+        messageObject.createTime = roomMessage.getCreateTime() ;
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();

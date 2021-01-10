@@ -938,7 +938,8 @@
     <string name="st_Abuse">محتوای توهین آمیز و آزاردهنده</string>
     <string name="st_FakeAccount">حساب کاربری جعلی</string>
     <string name="st_checkbox_delete">حذف برای</string>
-    <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
+    <string name="st_desc_delete">آیا از حذف این پیام مطمئن هستید؟</string>
+    <string name="st_desc_deletes">آیا از حذف این پیام ها مطمئن هستید؟</string>
     <string name="st_send_report">گزارش تخلف با موفقیت ارسال شد.</string>
     <string name="set_position">عدم توانایی تنظیم موقعیت مکانی</string>
     <string name="date">تاریخ</string>

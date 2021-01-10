@@ -839,7 +839,8 @@
     <string name="st_Abuse">оскорбительный контент</string>
     <string name="st_FakeAccount">Поддельная учетная запись пользователя</string>
     <string name="st_checkbox_delete">Удалить из-за</string>
-    <string name="st_desc_delete">Вы уверены, что хотите удалить это сообщение %1$s ?</string>
+    <string name="st_desc_delete">Вы уверены, что хотите удалить это сообщение?</string>
+    <string name="st_desc_deletes">Вы уверены, что хотите удалить эти сообщения?</string>
     <string name="st_send_report">Сообщение о нарушении успешно отправлено.</string>
     <string name="set_position">Невозможно настроить местоположение</string>
     <string name="date">дата</string>

@@ -1,6 +1,7 @@
 package net.iGap.controllers;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
@@ -334,7 +335,7 @@ public class MessageController extends BaseController implements EventListener {
         getMessageDataStorage().updatePinnedMessage(roomId, messageId);
     }
 
-    public void deleteMessageInternal(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> bothMessageIds) {
+    public void deleteSelectedMessage(int roomType, long roomId, ArrayList<Long> messageIds, ArrayList<Long> bothMessageIds) {
         AbstractObject req = null;
         boolean bothDelete = false;
 
@@ -383,19 +384,19 @@ public class MessageController extends BaseController implements EventListener {
         long deleteVersion = 0;
 
         if (response instanceof IG_RPC.Res_Chat_Delete_Message) {
-            IG_RPC.Res_Chat_Delete_Message res = new IG_RPC.Res_Chat_Delete_Message();
+            IG_RPC.Res_Chat_Delete_Message res = (IG_RPC.Res_Chat_Delete_Message) response;
             roomId = res.roomId;
             messageId = res.messageId;
             deleteVersion = res.deleteVersion;
 
-        } else if (response instanceof IG_RPC.Group_Delete_Message) {
-            IG_RPC.Res_Group_Delete_Message res = new IG_RPC.Res_Group_Delete_Message();
+        } else if (response instanceof IG_RPC.Res_Group_Delete_Message) {
+            IG_RPC.Res_Group_Delete_Message res = (IG_RPC.Res_Group_Delete_Message) response;
             roomId = res.roomId;
             messageId = res.messageId;
             deleteVersion = res.deleteVersion;
 
         } else if (response instanceof IG_RPC.Res_Channel_Delete_Message) {
-            IG_RPC.Res_Channel_Delete_Message res = new IG_RPC.Res_Channel_Delete_Message();
+            IG_RPC.Res_Channel_Delete_Message res = (IG_RPC.Res_Channel_Delete_Message) response;
             roomId = res.roomId;
             messageId = res.messageId;
             deleteVersion = res.deleteVersion;

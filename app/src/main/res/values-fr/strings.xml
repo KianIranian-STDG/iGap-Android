@@ -841,7 +841,8 @@
     <string name="st_Abuse">contenu d\'harcèlement ou d\'insulte</string>
     <string name="st_FakeAccount">faux compte</string>
     <string name="st_checkbox_delete">supprimer pour</string>
-    <string name="st_desc_delete">Etes-vous sûr de supprimer ce %1$s  message?</string>
+    <string name="st_desc_delete">Etes-vous sur de vouloir supprimer ce message?</string>
+    <string name="st_desc_deletes">Voulez-vous vraiment supprimer ces messages?</string>
     <string name="st_send_report">la signalisation a été bien envoyée</string>
     <string name="set_position">impossible de régler le service de localisation</string>
     <string name="date">date</string>

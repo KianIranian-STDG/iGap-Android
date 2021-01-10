@@ -1671,7 +1671,8 @@
 
     <string name="st_checkbox_delete">الحذف لــ</string>
 
-    <string name="st_desc_delete">هل أنت متأكد من حذف هذه %1$s الرسالة؟</string>
+    <string name="st_desc_delete">هل أنت متأكد أنك تريد حذف هذه الرسالة؟</string>
+    <string name="st_desc_deletes">هل أنت متأكد أنك تريد حذف هذه الرسائل؟</string>
 
     <string name="st_send_report">تمّ تسجيل ابلاغ اساءة الاستخدام بنجاح</string>
 

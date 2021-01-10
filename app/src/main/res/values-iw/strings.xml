@@ -1510,7 +1510,8 @@
     <string name="st_compress">ویدئونو فشرده ائتمک</string>
     <string name="st_crop">تصویری کسمک و حجمینی آزالتماق </string>
     <string name="st_dark_theme">تیره زمینه لی </string>
-    <string name="st_desc_delete">بو %1$s پیغامی حذف ائتمکدن مطمئتسیز می؟ </string>
+    <string name="st_desc_delete">بو پیغامی حذف ائتمکدن مطمئتسیز می؟ </string>
+    <string name="st_desc_deletes">بو پیغاملری حذف ائتمکدن مطمئتسیز می؟ </string>
     <string name="st_dialog_reset_all_notification">پروگرامین اعلانلارینین بوتون تنظیم لرینی ایلکین وضعیته قایتارماق ایسته ییرسینیز می؟ </string>
     <string name="st_dialog_reset_all_notification_no">خیر</string>
     <string name="st_dialog_reset_all_notification_yes">بلی</string>
