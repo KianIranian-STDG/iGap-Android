@@ -972,8 +972,8 @@ public class IG_RPC {
         @Override
         public Object getProtoObject() {
             ProtoGroupDeleteMessage.GroupDeleteMessage.Builder builder = ProtoGroupDeleteMessage.GroupDeleteMessage.newBuilder();
-            roomId = builder.getRoomId();
-            messageId = builder.getMessageId();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
             return builder;
         }
 

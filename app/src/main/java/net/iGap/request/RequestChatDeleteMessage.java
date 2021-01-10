@@ -11,6 +11,7 @@
 package net.iGap.request;
 
 import net.iGap.proto.ProtoChatDeleteMessage;
+// TODO: 1/9/21 Delete this method after completing deleting messages MESSAGE_REFACTOR
 
 public class RequestChatDeleteMessage {
 

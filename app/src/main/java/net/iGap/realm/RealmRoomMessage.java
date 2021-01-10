@@ -31,19 +31,14 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.request.RequestChannelDeleteMessage;
-import net.iGap.request.RequestChatDeleteMessage;
-import net.iGap.request.RequestGroupDeleteMessage;
 
 import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.realm.Realm;
@@ -56,8 +51,6 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmRoomMessageRealmProxy;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
-import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
-import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 @Parcel(implementations = {net_iGap_realm_RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class})
 public class RealmRoomMessage extends RealmObject {
@@ -572,7 +565,9 @@ public class RealmRoomMessage extends RealmObject {
         });
     }
 
-    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type roomType) {
+
+    // TODO: 1/9/21 Delete this method after completing deleting messages (MESSAGE_REFACTOR)
+/*    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type roomType) {
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -614,8 +609,7 @@ public class RealmRoomMessage extends RealmObject {
                 }
             }
         });
-    }
-
+    }*/
     public static boolean isBothDelete(long messageTime) {
         long currentTime;
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {

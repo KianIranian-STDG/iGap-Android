@@ -121,6 +121,7 @@ import net.iGap.adapter.items.chat.UnreadMessage;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -524,6 +525,7 @@ public class FragmentChat extends BaseFragment
     private boolean isPublicGroup = false;
     private boolean roomIsPublic;
     private ArrayList<Long> bothDeleteMessageId;
+    private ArrayList<Long> messageIds;
     private ViewGroup layoutMute;
     private String report = "";
     private FrameLayout rootView;
@@ -5217,39 +5219,21 @@ public class FragmentChat extends BaseFragment
                 }).show();
     }
 
+    @SuppressLint("SetTextI18n")
     private void confirmAndDeleteMessage(MessageObject messageObject, boolean isFromMultiSelect) {
+
         if (getContext() == null || messageObject == null) return;
 
-        boolean bothDelete = RealmRoomMessage.isBothDelete(messageObject.getUpdateOrCreateTime());
+        boolean bothDelete = MessageController.isBothDelete(messageObject.getUpdateOrCreateTime());
         bothDeleteMessageId = new ArrayList<>();
         if (bothDelete) {
             bothDeleteMessageId.add(messageObject.id);
         }
 
-        final ArrayList<Long> messageIds = new ArrayList<>();
+        messageIds = new ArrayList<>();
         messageIds.add(messageObject.id);
 
-        String dialogContent = "";
-        String textDeleteForBoth = null;
-        String count = "1";
         boolean isCanDeleteAttachFromDevice = isFileExistInLocalStorage(messageObject);
-
-        if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && messageObject.userId == AccountManager.getInstance().getCurrentUser().getId()) {
-            // show both Delete check box
-            textDeleteForBoth = getString(R.string.st_checkbox_delete) + " " + title;
-
-            if (HelperCalander.isPersianUnicode) {
-                dialogContent = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, count));
-            } else {
-                dialogContent = HelperCalander.convertToUnicodeFarsiNumber(getString(R.string.st_desc_delete, "the"));
-            }
-            if (!AndroidUtils.canOpenDialog()) return;
-
-        } else {
-
-            dialogContent = getString(R.string.st_desc_delete, "1");
-
-        }
 
         MaterialDialog dialog = new MaterialDialog.Builder(getContext())
                 .limitIconToDefaultSize()
@@ -5264,18 +5248,20 @@ public class FragmentChat extends BaseFragment
         AppCompatCheckBox checkBoxDelBoth = dialogView.findViewById(R.id.del_for);
         TextView txtContent = dialogView.findViewById(R.id.content);
 
-
-        txtContent.setText(dialogContent);
+        txtContent.setText(getString(R.string.st_desc_delete));
+        checkBoxDelBoth.setText(getString(R.string.st_checkbox_delete) + " " + title);
 
         if (!isCanDeleteAttachFromDevice) {
             checkBoxDelDevice.setVisibility(View.GONE);
         }
 
-        if (textDeleteForBoth == null) {
+        if (!bothDelete || isCloudRoom || messageObject.userId != AccountManager.getInstance().getCurrentUser().getId()) {
             checkBoxDelBoth.setVisibility(View.GONE);
             bothDeleteMessageId = null;
-        } else {
-            checkBoxDelBoth.setText(textDeleteForBoth);
+        }
+
+        if (chatType != CHAT) {
+            checkBoxDelBoth.setVisibility(View.GONE);
         }
 
         dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(v -> {
@@ -5287,9 +5273,11 @@ public class FragmentChat extends BaseFragment
                 deleteFileFromStorageIfExist(messageObject);
             }
 
-            deleteMassage(messageObject, messageIds, bothDeleteMessageId, chatType);
+            getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+
             if (isFromMultiSelect)
                 deleteSelectedMessageFromAdapter(messageIds);
+
             dialog.dismiss();
         });
     }
@@ -5302,15 +5290,6 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void deleteMassage(final MessageObject messageObject, final ArrayList<Long> messageIds, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
-
-        G.handler.post(() -> {
-            ArrayList list1 = new ArrayList();
-            list1.add(messageObject.id);
-            deleteSelectedMessageFromAdapter(list1);
-        });
-        getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-    }
 
     private void doForwardDialogMessage(StructMessageInfo message, boolean isMessage) {
         if (message == null) {
@@ -5911,29 +5890,29 @@ public class FragmentChat extends BaseFragment
     /**
      * copy text
      */
-    private void copySelectedItemTextToClipboard() {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        String copyText = "";
-//        for (AbstractMessage _message : mAdapter.getSelectedItems()) {
-//            String text = _message.mMessage.getForwardMessage() != null ? _message.mMessage.getForwardMessage().getMessage() : _message.mMessage.getMessage();
-//            if (text == null || text.length() == 0) {
-//                continue;
-//            }
-//
-//            if (copyText.length() > 0) {
-//                copyText = copyText + "\n" + text;
-//            } else {
-//                copyText = text;
-//            }
-//        }
-//
-//        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-//        clipboard.setPrimaryClip(ClipData.newPlainText("Copied Text", copyText));
-//        Toast.makeText(ll_AppBarSelected.getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
-//
-//        mAdapter.deselect();
-//        ll_AppBarSelected.setVisibility(View.GONE);
-//        if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
-//        clearReplyView();
+    private void copySelectedItemTextToClipboard() {
+        String copyText = "";
+        for (AbstractMessage abstractMessage : mAdapter.getSelectedItems()) {
+            String message = abstractMessage.messageObject.forwardedMessage != null ? abstractMessage.messageObject.forwardedMessage.message : abstractMessage.messageObject.message;
+            if (message == null || message.length() == 0) {
+                continue;
+            }
+
+            if (copyText.length() > 0) {
+                copyText = copyText + "\n" + message;
+            } else {
+                copyText = message;
+            }
+        }
+
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newPlainText("Copied Text", copyText));
+        Toast.makeText(ll_AppBarSelected.getContext(), R.string.copied, Toast.LENGTH_SHORT).show();
+
+        mAdapter.deselect();
+        ll_AppBarSelected.setVisibility(View.GONE);
+        if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
+        clearReplyView();
     }
 
     private void onSelectRoomMenu(String message, long item) {
@@ -7198,9 +7177,7 @@ public class FragmentChat extends BaseFragment
 //            }
 //        });
         mBtnCopySelected.setOnClickListener(v -> {
-
             copySelectedItemTextToClipboard();
-
         });
 
         mBtnForwardSelected.setOnClickListener(v -> {
@@ -7212,17 +7189,14 @@ public class FragmentChat extends BaseFragment
 
         });
 
-        mBtnDeleteSelected.setOnClickListener(v -> {// TODO: 12/28/20 MESSAGE_REFACTOR
+        mBtnDeleteSelected.setOnClickListener(v -> {
 
-            final ArrayList<Long> list = new ArrayList<Long>();
-            bothDeleteMessageId = new ArrayList<Long>();
+            messageIds = new ArrayList<>();
+            bothDeleteMessageId = new ArrayList<>();
 
             G.handler.post(() -> {
-
                 for (final AbstractMessage item : mAdapter.getSelectedItems()) {
 
-                    //delete one message with multiple are different , when list size one do job in another method that able to remove from storage
-                    //todo:// do multiple delete in single method
                     if (mAdapter.getSelectedItems().size() == 1) {
                         confirmAndDeleteMessage(item.messageObject, true);
                         return;
@@ -7231,31 +7205,23 @@ public class FragmentChat extends BaseFragment
                     try {
                         if (item != null && item.messageObject != null) {
                             Long messageId = item.messageObject.id;
-                            list.add(messageId);
-                            if (RealmRoomMessage.isBothDelete(item.messageObject.getUpdateOrCreateTime())) {
+                            messageIds.add(messageId);
+                            boolean bothDelete = RealmRoomMessage.isBothDelete(item.messageObject.getUpdateOrCreateTime());
+                            if (bothDelete)
                                 bothDeleteMessageId.add(messageId);
-                            }
                         }
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
                 }
 
-                final String count = list.size() + "";
-
-                if (chatType == ProtoGlobal.Room.Type.CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().messageObject.userId == AccountManager.getInstance().getCurrentUser().getId()) {
-                    // show both Delete check box
+                if (chatType == CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().messageObject.userId == AccountManager.getInstance().getCurrentUser().getId()) {
 
                     String delete;
-                    String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
-                    if (HelperCalander.isPersianUnicode) {
-                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
+                    String textCheckBox = getContext().getResources().getString(R.string.st_checkbox_delete) + " " + title;
+                    delete = getContext().getResources().getString(R.string.st_desc_deletes);
 
-                    } else {
-                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
-                    }
-                    new MaterialDialog.Builder(G.fragmentActivity)
-                            .limitIconToDefaultSize()
+                    new MaterialDialog.Builder(getContext())
                             .content(delete)
                             .title(R.string.message)
                             .positiveText(R.string.ok)
@@ -7264,31 +7230,27 @@ public class FragmentChat extends BaseFragment
                                 if (!dialog.isPromptCheckBoxChecked()) {
                                     bothDeleteMessageId = null;
                                 }
-                                DbManager.getInstance().doRealmTask(realm -> {
-                                    RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
-                                });
 
-                                deleteSelectedMessageFromAdapter(list);
+                                getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+                                deleteSelectedMessageFromAdapter(messageIds);
+
                             })
                             .checkBoxPrompt(textCheckBox, false, null)
                             .show();
 
                 } else {
-                    if (!G.fragmentActivity.isFinishing()) {
-                        new MaterialDialog.Builder(G.fragmentActivity)
+                        new MaterialDialog.Builder(getActivity())
                                 .title(R.string.message)
-                                .content(G.context.getResources().getString(R.string.st_desc_delete, count))
+                                .content(getActivity().getResources().getString(R.string.st_desc_deletes))
                                 .positiveText(R.string.ok)
                                 .negativeText(R.string.cancel)
                                 .onPositive((dialog, which) -> {
-                                    bothDeleteMessageId = null;
-                                    DbManager.getInstance().doRealmTask(realm -> {
-                                        RealmRoomMessage.deleteSelectedMessages(realm, mRoomId, list, bothDeleteMessageId, chatType);
-                                    });
 
-                                    deleteSelectedMessageFromAdapter(list);
+                                    bothDeleteMessageId = null;
+                                    getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+                                    deleteSelectedMessageFromAdapter(messageIds);
+
                                 }).show();
-                    }
                 }
             });
         });
