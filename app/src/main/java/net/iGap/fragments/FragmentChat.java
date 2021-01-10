@@ -178,6 +178,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MessageLoader;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyLinearLayoutManager;
+import net.iGap.module.ResendMessage;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.Theme;
@@ -200,11 +201,14 @@ import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructWebView;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IDispatchTochEvent;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.IOnBackPressed;
+import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.observers.interfaces.ISendPosition;
 import net.iGap.observers.interfaces.IUpdateLogItem;
 import net.iGap.observers.interfaces.LocationListener;
@@ -5333,66 +5337,66 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onFailedMessageClick(View view, final MessageObject messageObject, final int pos) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        final List<MessageObject> failedMessages = mAdapter.getFailedMessages();
-//        hideKeyboard();
-//        new ResendMessage(G.fragmentActivity, new IResendMessage() {
-//            @Override
-//            public void deleteMessage() {
-//                if (pos >= 0 && mAdapter.getAdapterItemCount() > pos) {
-//                    mAdapter.remove(pos);
-//                    removeLayoutTimeIfNeed();
-//                }
-//            }
-//
-//            @Override
-//            public void resendMessage() {
-//
-//                for (int i = 0; i < failedMessages.size(); i++) {
-//                    if (failedMessages.get(i).realmRoomMessage.getMessageId() == message.realmRoomMessage.getMessageId()) {
-//                        if (failedMessages.get(i).getAttachment() != null) {
-//                            if (!Uploader.getInstance().isCompressingOrUploading(message.realmRoomMessage.getMessageId() + "")) {
-//                                UploadObject fileObject = UploadObject.createForMessage(message.realmRoomMessage, chatType);
-//                                if (fileObject != null) {
-//                                    Uploader.getInstance().upload(fileObject);
-//                                }
-//                            }
-//                        }
-//                        break;
-//                    }
-//                }
-//
-//                mAdapter.updateMessageStatus(message.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SENDING);
-//
-//                G.handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(message.realmRoomMessage.getMessageId()));
-//                    }
-//                }, 300);
-//
-//
-//            }
-//
-//            @Override
-//            public void resendAllMessages() {
-//                for (int i = 0; i < failedMessages.size(); i++) {
-//                    final int j = i;
-//                    G.handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            mAdapter.updateMessageStatus(failedMessages.get(j).realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SENDING);
-//                        }
-//                    }, 1000 * i);
-//
-//                }
-//            }
-//
-//            @Override
-//            public void copyMessage() {
-//                copyMessageToClipboard(message, false);
-//            }
-//        }, message.realmRoomMessage.getMessageId(), failedMessages);
+    public void onFailedMessageClick(View view, final MessageObject messageObject, final int pos) {// TODO: 12/28/20 MESSAGE_REFACTOR_NEED_TEST
+        final List<MessageObject> failedMessages = mAdapter.getFailedMessages();
+        hideKeyboard();
+        new ResendMessage(G.fragmentActivity, new IResendMessage() {
+            @Override
+            public void deleteMessage() {
+                if (pos >= 0 && mAdapter.getAdapterItemCount() > pos) {
+                    mAdapter.remove(pos);
+                    removeLayoutTimeIfNeed();
+                }
+            }
+
+            @Override
+            public void resendMessage() {
+
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    if (failedMessages.get(i).id == messageObject.id) {
+                        if (failedMessages.get(i).getAttachment() != null) {
+                            if (!Uploader.getInstance().isCompressingOrUploading(messageObject.id + "")) {
+                                UploadObject fileObject = UploadObject.createForMessage(messageObject, chatType);
+                                if (fileObject != null) {
+                                    Uploader.getInstance().upload(fileObject);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                mAdapter.updateMessageStatus(messageObject.id, ProtoGlobal.RoomMessageStatus.SENDING);
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(messageObject.id));
+                    }
+                }, 300);
+
+
+            }
+
+            @Override
+            public void resendAllMessages() {
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    final int j = i;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.updateMessageStatus(failedMessages.get(j).id, ProtoGlobal.RoomMessageStatus.SENDING);
+                        }
+                    }, 1000 * i);
+
+                }
+            }
+
+            @Override
+            public void copyMessage() {
+                copyMessageToClipboard(messageObject, false);
+            }
+        }, messageObject.id, failedMessages);
     }
 
 
