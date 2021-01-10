@@ -13,11 +13,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import net.iGap.module.accountManager.AccountHelper;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentActivation;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegister;
@@ -26,6 +23,9 @@ import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.WelcomeFragment;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.module.accountManager.AccountHelper;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.dialog.DefaultRoundDialog;
 import net.iGap.viewmodel.RegistrationViewModel;
 
 public class ActivityRegistration extends ActivityEnhanced {
@@ -104,9 +104,7 @@ public class ActivityRegistration extends ActivityEnhanced {
 
         viewModel.getGrantPermission().observe(this, isGrantPermission -> {
             if (isGrantPermission != null && isGrantPermission) {
-                if (new PermissionHelper(ActivityRegistration.this).grantReadAndRightStoragePermission()) {
-                    viewModel.startApp(getSupportFragmentManager().getBackStackEntryCount());
-                }
+                viewModel.startApp(getSupportFragmentManager().getBackStackEntryCount());
             }
         });
 
