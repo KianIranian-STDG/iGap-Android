@@ -129,14 +129,10 @@ public class MessageObject {
             messageObject.previousMessageId = roomMessage.getMessageId();
             messageObject.futureMessageId = roomMessage.getMessageId();
         }
-
+        messageObject.roomId = roomMessage.getRoomId();
         if (roomMessage.getUserId() != 0) {
-            if (isForwardOrReplay) {
-                messageObject.roomId = roomMessage.getRoomId();
-            }
             messageObject.userId = roomMessage.getUserId();
         } else {
-            messageObject.roomId = roomMessage.getRoomId();
             if (isForwardOrReplay) {// FIXME: 12/15/20
                 RealmRoom.needGetRoom(roomMessage.getRoomId());
             }
