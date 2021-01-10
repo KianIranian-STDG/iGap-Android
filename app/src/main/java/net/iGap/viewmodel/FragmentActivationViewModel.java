@@ -56,23 +56,30 @@ public class FragmentActivationViewModel extends ViewModel {
         timerValue.set("60");
         counterTimer();
         String phoneNumber = repository.getPhoneNumber();
-        if (G.isAppRtl)
-            phoneNumber = HelperCalander.convertToUnicodeFarsiNumber(phoneNumber);
-
         String countryCode;
         if (repository.getCountryCode() == null)
-            countryCode = "+98";
-        else
+            countryCode = "98";
+        else {
             countryCode = repository.getCountryCode();
+            countryCode.replace("+", "");
+        }
+
+        if (G.isAppRtl) {
+            phoneNumber = HelperCalander.convertToUnicodeFarsiNumber(phoneNumber);
+            countryCode = HelperCalander.convertToUnicodeFarsiNumber(countryCode);
+        }
+
+        String number = String.format("%s%s", countryCode, phoneNumber);
+
 
         if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS)
-            sendActivationStatus.set(G.context.getString(R.string.verify_sms_message, countryCode, phoneNumber));
+            sendActivationStatus.set(G.context.getString(R.string.verify_sms_message, number));
         else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET)
-            sendActivationStatus.set(G.context.getString(R.string.verify_socket_message, countryCode, phoneNumber));
+            sendActivationStatus.set(G.context.getString(R.string.verify_socket_message, number));
         else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET)
-            sendActivationStatus.set(G.context.getString(R.string.verify_sms_socket_message, countryCode, phoneNumber));
+            sendActivationStatus.set(G.context.getString(R.string.verify_sms_socket_message, number));
         else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL)
-            sendActivationStatus.set(G.context.getString(R.string.verify_call_message, countryCode, phoneNumber));
+            sendActivationStatus.set(G.context.getString(R.string.verify_call_message, number));
 
     }
 
