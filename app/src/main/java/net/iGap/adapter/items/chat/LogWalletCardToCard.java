@@ -51,11 +51,11 @@ public class LogWalletCardToCard extends AbstractMessage<LogWalletCardToCard, Lo
     }
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
         holder.titleTxt.setText(R.string.CARD_TRANSFER_MONEY);
         String fromDisplayName = "";
-        fromDisplayName = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(messageObject.wallet.cardToCard.fromUserId);
+        fromDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.cardToCard.fromUserId);
 
         String persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.cardToCard.requestTime) + " " + "-" + " " +
                 TimeUtils.toLocal(messageObject.wallet.cardToCard.requestTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);

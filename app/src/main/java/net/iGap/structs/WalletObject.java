@@ -24,8 +24,10 @@ public class WalletObject {
             case "TOPUP":
                 walletObject.topupObject = TopupObject.create(wallet.getTopup());
                 break;
-            case "MONEY_TRANSFER":
             case "PAYMENT":
+                walletObject.paymentObject = PaymentObject.create(wallet.getMoneyTransfer());
+                break;
+            case "MONEY_TRANSFER":
                 walletObject.moneyTransferObject = MoneyTransferObject.create(wallet.getMoneyTransfer());
                 break;
         }
