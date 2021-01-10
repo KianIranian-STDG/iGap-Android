@@ -268,6 +268,7 @@ import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
+import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
@@ -5404,44 +5405,44 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onReplyClick(MessageObject replyMessage) {// TODO: 12/29/20 MESSAGE_REFACTOR
-//        if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
-//            long replayMessageId = Math.abs(replyMessage.getMessageId());
-//            if (!goToPositionWithAnimation(replayMessageId, 1000)) {
-//                if (RealmRoomMessage.existMessageInRoom(replayMessageId, mRoomId)) {
-//                    resetMessagingValue();
-//                    savedScrollMessageId = replayMessageId;
-//                    firstVisiblePositionOffset = 0;
-//                    getMessages();
-//                } else {
-//                    new RequestClientGetRoomHistory().getRoomHistory(mRoomId, replayMessageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
-//                        @Override
-//                        public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
-//                            G.handler.post(() -> {
-//                                DbManager.getInstance().doRealmTransaction(realm1 -> {
-//                                    for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-//                                        onReplyClick(RealmRoomMessage.putOrUpdate(realm1, mRoomId, roomMessage, new StructMessageOption().setGap()));
-//                                    }
-//                                });
-//
-//                            });
-//                        }
-//
-//                        @Override
-//                        public void onErrorHistory(int major, int minor) {
-//                            G.handler.post(() -> {
-//                                if (major == 626) {
-//                                    HelperError.showSnackMessage(getResources().getString(R.string.not_found_message), false);
-//                                } else if (minor == 624) {
-//                                    HelperError.showSnackMessage(getResources().getString(R.string.ivnalid_data_provided), false);
-//                                } else {
-//                                    HelperError.showSnackMessage(getResources().getString(R.string.there_is_no_connection_to_server), false);
-//                                }
-//                            });
-//                        }
-//                    });
-//                }
-//            }
-//        }
+        if (!goToPositionWithAnimation(replyMessage.id, 1000)) {
+            long replayMessageId = Math.abs(replyMessage.id);
+            if (!goToPositionWithAnimation(replayMessageId, 1000)) {
+                if (RealmRoomMessage.existMessageInRoom(replayMessageId, mRoomId)) {
+                    resetMessagingValue();
+                    savedScrollMessageId = replayMessageId;
+                    firstVisiblePositionOffset = 0;
+                    getMessages();
+                } else {
+                    new RequestClientGetRoomHistory().getRoomHistory(mRoomId, replayMessageId - 1, 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                        @Override
+                        public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
+                            G.handler.post(() -> {
+                                DbManager.getInstance().doRealmTransaction(realm1 -> {
+                                    for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                        onReplyClick(MessageObject.create(roomMessage, false, true));
+                                    }
+                                });
+
+                            });
+                        }
+
+                        @Override
+                        public void onErrorHistory(int major, int minor) {
+                            G.handler.post(() -> {
+                                if (major == 626) {
+                                    HelperError.showSnackMessage(getResources().getString(R.string.not_found_message), false);
+                                } else if (minor == 624) {
+                                    HelperError.showSnackMessage(getResources().getString(R.string.ivnalid_data_provided), false);
+                                } else {
+                                    HelperError.showSnackMessage(getResources().getString(R.string.there_is_no_connection_to_server), false);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Override
@@ -5631,12 +5632,12 @@ public class FragmentChat extends BaseFragment
      * message will be replied or no
      */
     private boolean isReply() {
-        return mReplayLayout != null && mReplayLayout.getTag() instanceof RealmRoomMessage;
+        return mReplayLayout != null && mReplayLayout.getTag() instanceof MessageObject;
     }
 
     private long replyMessageId() {
         if (isReply()) {
-            return ((RealmRoomMessage) mReplayLayout.getTag()).getMessageId();
+            return ((MessageObject) mReplayLayout.getTag()).id;
         }
         return 0;
     }
@@ -5645,7 +5646,7 @@ public class FragmentChat extends BaseFragment
      * if isReply() is true use from this method
      */
     private long getReplyMessageId() {
-        return ((RealmRoomMessage) mReplayLayout.getTag()).getMessageId();
+        return ((MessageObject) mReplayLayout.getTag()).id;
     }
 
     /**
@@ -7191,11 +7192,11 @@ public class FragmentChat extends BaseFragment
         } else {
             mBtnReplySelected.setVisibility(View.VISIBLE);
         }
-//        mBtnReplySelected.setOnClickListener(v -> {// TODO: 12/28/20 MESSAGE_REFACTOR
-//            if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
-//                replay(mAdapter.getSelectedItems().iterator().next().structMessage, false);
-//            }
-//        });
+        mBtnReplySelected.setOnClickListener(v -> {// TODO: 12/28/20 MESSAGE_REFACTOR
+            if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
+                reply(mAdapter.getSelectedItems().iterator().next().messageObject, false);
+            }
+        });
         mBtnCopySelected.setOnClickListener(v -> {
 
             copySelectedItemTextToClipboard();
