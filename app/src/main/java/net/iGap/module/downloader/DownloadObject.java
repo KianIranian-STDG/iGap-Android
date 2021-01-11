@@ -132,6 +132,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_TEMP, true);
         struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
         struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
         if (struct.tempFile.exists()) {
             struct.offset = struct.tempFile.length();

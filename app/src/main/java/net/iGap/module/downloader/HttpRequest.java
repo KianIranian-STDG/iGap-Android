@@ -1,5 +1,6 @@
 package net.iGap.module.downloader;
 
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.WorkerThread;
@@ -13,7 +14,6 @@ import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
-import net.iGap.proto.ProtoGlobal;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +36,8 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
 public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> implements Comparable<HttpRequest> {
     public static final String BASE_URL = ApiStatic.FILE + "download/";
@@ -85,6 +87,8 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     private void download(String jwtToken, DownloadObject fileStruct) {
         isDownloading = true;
         notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADING);
+
+        Log.i("abbasiDownload", "download: ");
 
         OkHttpClient client = OkHttpClientInstance.getInstance();
 
@@ -145,13 +149,21 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     }
 
     private void safelyCancelDownload() {
+        isDownloading = false;
+
         if (fileObject.messageType == null)
-            fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+            fileObject.messageType = UNRECOGNIZED;
+
         long downloadedBytes = (fileObject.fileSize / 100) * fileObject.progress;
         HelperDataUsage.progressDownload(downloadedBytes, fileObject.messageType);
+
         if (fileObject.destFile.exists())
             fileObject.destFile.delete();
-        isDownloading = false;
+
+        if (fileObject.tempFile != null && fileObject.tempFile.exists() && fileObject.messageType == UNRECOGNIZED) {
+            fileObject.tempFile.delete();
+        }
+
         notifyDownloadStatus(HttpDownloader.DownloadStatus.NOT_DOWNLOADED);
     }
 
@@ -162,8 +174,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onDownloadCompleted() {
         try {
-            if (fileObject.messageType == null)
-                fileObject.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
             HelperDataUsage.progressDownload(fileObject.fileSize, fileObject.messageType);
             HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
