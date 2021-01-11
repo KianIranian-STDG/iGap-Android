@@ -584,17 +584,17 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-//        if (!structMessage.isTimeOrLogMessage()) {// TODO: 12/29/20 MESSAGE_REFACTOR
-//            /**
-//             * check failed state ,because if is failed we want show to user even is in channel
-//             */
-//            if (mAdapter.getRealmRoom() != null && mAdapter.getRealmRoom().isValid() && mAdapter.getRealmRoom().getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus())) {
-//                mHolder.getMessageStatusTv().setVisibility(View.GONE);
-//            } else {
-//                mHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
-//                AppUtils.rightMessageStatus(mHolder.getMessageStatusTv(), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.getStatus()), mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType(), mMessage.isSenderMe());
-//            }
-//        }
+        if (!messageObject.isTimeOrLogMessage()) {// TODO: 12/29/20 MESSAGE_REFACTOR
+            /**
+             * check failed state ,because if is failed we want show to user even is in channel
+             */
+            if (mAdapter.getRealmRoom() != null && mAdapter.getRealmRoom().isValid() && mAdapter.getRealmRoom().getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(messageObject.status)) {
+                mHolder.getMessageStatusTv().setVisibility(View.GONE);
+            } else {
+                mHolder.getMessageStatusTv().setVisibility(View.VISIBLE);
+                AppUtils.rightMessageStatus(mHolder.getMessageStatusTv(), ProtoGlobal.RoomMessageStatus.forNumber(messageObject.status), ProtoGlobal.RoomMessageType.forNumber(messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType), messageObject.isSenderMe());
+            }
+        }
         /**
          * display 'edited' indicator beside message time if message was edited
          */
