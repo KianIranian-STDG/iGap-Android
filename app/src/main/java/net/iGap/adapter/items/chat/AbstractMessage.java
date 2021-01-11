@@ -380,7 +380,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                     } else {
-                        long fileSize = (long) message[2];
+                        long fileSize;
+                        if (message.length == 3) {
+                            fileSize = (long) message[2];
+                        } else {
+                            fileSize = structMessage.getAttachment().size;
+                        }
                         videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(fileSize, true) + " ", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
                     }
                 }
