@@ -331,11 +331,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             G.runOnUiThread(() -> {
                 String messageKey = (String) message[0];
                 String messageId = String.valueOf(mMessage.getMessageId());
-
+                long fileSize = 0;
+                if (message.length == 3) {
+                    fileSize = (long) message[2];
+                } else {
+                    fileSize = mMessage.getAttachment().getSize();
+                }
                 if (messageKey.equals(messageId)) {
                     int progress = (int) message[1];
                     String progressString = String.valueOf(progress);
-                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(mMessage.getAttachment().getSize(), true);
+                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(fileSize, true);
 
                     if (G.selectedLanguage.equals("fa")) {
                         progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
@@ -362,7 +367,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             G.runOnUiThread(() -> {
                 String messageKey = (String) message[0];
                 String messageId = String.valueOf(mMessage.getMessageId());
-
                 if (messageKey.equals(messageId) && holder instanceof VideoWithTextItem.ViewHolder) {
                     VideoWithTextItem.ViewHolder videoHolder = (VideoWithTextItem.ViewHolder) holder;
                     int progress = (int) message[1];
@@ -376,7 +380,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true), AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L))));
                     } else {
-                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(structMessage.getAttachment().getSize(), true) + " ", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
+                        long fileSize;
+                        if (message.length == 3) {
+                            fileSize = (long) message[2];
+                        } else {
+                            fileSize = structMessage.getAttachment().size;
+                        }
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(fileSize, true) + " ", AndroidUtils.formatDuration((int) (structMessage.getAttachment().getDuration() * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
                     }
                 }
             });
