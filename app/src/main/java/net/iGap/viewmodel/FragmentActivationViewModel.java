@@ -1,7 +1,6 @@
 package net.iGap.viewmodel;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -16,6 +15,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
@@ -37,6 +37,7 @@ public class FragmentActivationViewModel extends ViewModel {
     public SingleLiveEvent<Integer> showEnteredCodeErrorServer = new SingleLiveEvent<>();
     public ObservableInt showLoading = new ObservableInt(View.GONE);
     public ObservableField<String> sendActivationStatus = new ObservableField<>();
+    public ObservableField<String> sendActivationPhoneNumber = new ObservableField<>();
     public MutableLiveData<Boolean> closeKeyword = new MutableLiveData<>();
     public MutableLiveData<Boolean> clearActivationCode = new MutableLiveData<>();
     public MutableLiveData<Long> goToTwoStepVerificationPage = new MutableLiveData<>();
@@ -49,20 +50,34 @@ public class FragmentActivationViewModel extends ViewModel {
     private CountDownTimer countDownTimer;
     private int sendRequestRegister = 0;
 
-    @SuppressLint("StringFormatInvalid")
+
     public FragmentActivationViewModel() {
         repository = RegisterRepository.getInstance();
         timerValue.set("60");
         counterTimer();
-        if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS)
-            sendActivationStatus.set(G.context.getString(R.string.verify_sms_message, repository.getPhoneNumber()));
-        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET)
-            sendActivationStatus.set(G.context.getString(R.string.verify_socket_message, repository.getPhoneNumber()));
-        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET)
-            sendActivationStatus.set(G.context.getString(R.string.verify_sms_socket_message, repository.getPhoneNumber()));
-        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL)
-            sendActivationStatus.set(G.context.getString(R.string.verify_call_message, repository.getPhoneNumber()));
 
+        String phoneNumber = repository.getPhoneNumber();
+        String countryCode = repository.getCountryCode();
+
+        if (repository.getCountryCode() == null)
+            countryCode = "+98";
+
+        if (G.isAppRtl) {
+            countryCode = countryCode.replace("+", "");
+            phoneNumber = HelperCalander.convertToUnicodeFarsiNumber(phoneNumber);
+            countryCode = HelperCalander.convertToUnicodeFarsiNumber(countryCode);
+            sendActivationPhoneNumber.set(String.format("%s%s%s", countryCode, phoneNumber, "+"));
+        } else
+            sendActivationPhoneNumber.set(String.format("%s%s", countryCode, phoneNumber));
+
+        if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS)
+            sendActivationStatus.set(G.context.getString(R.string.verify_sms_message));
+        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET)
+            sendActivationStatus.set(G.context.getString(R.string.verify_socket_message));
+        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS_SOCKET)
+            sendActivationStatus.set(G.context.getString(R.string.verify_sms_socket_message));
+        else if (repository.getMethod() == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL)
+            sendActivationStatus.set(G.context.getString(R.string.verify_call_message));
     }
 
     @Override

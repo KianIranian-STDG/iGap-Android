@@ -130,6 +130,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
             public void onSuccess(LocationModel data) {
                 isShowLoading.set(View.GONE);
                 callbackEdtCodeNumber.set("+" + data.getCountryCode());
+                RegisterRepository.getInstance().setCountryCode("+" + data.getCountryCode());
                 if (data.getPhoneMask().equals("")) {
                     edtPhoneNumberMask.set("##################");
                 } else {
