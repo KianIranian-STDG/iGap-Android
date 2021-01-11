@@ -69,6 +69,8 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
+import net.iGap.observers.eventbus.EventListener;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnAvatarAdd;
 import net.iGap.observers.interfaces.OnChannelAvatarAdd;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -94,7 +96,7 @@ import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener, FragmentEditImage.OnImageEdited {
+public class FragmentNewGroup extends BaseFragment implements EventListener, OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener, FragmentEditImage.OnImageEdited {
 
     public static RemoveSelectedContact removeSelectedContact;
     public static long avatarId = 0;
@@ -122,6 +124,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getEventManager().addEventListener(EventManager.AVATAR_UPDATE, this);
     }
 
     @Nullable
@@ -501,8 +509,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         bundle.putString("INVITE_LINK", fragmentNewGroupViewModel.mInviteLink);
         bundle.putString("TOKEN", fragmentNewGroupViewModel.token);
         fragmentCreateChannel.setArguments(bundle);
-        popBackStackFragment();
-        popBackStackFragment();
+        getActivity().onBackPressed();
         if (getActivity() != null) {
             new HelperFragment(getActivity().getSupportFragmentManager(), fragmentCreateChannel).load();
         }
@@ -585,6 +592,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 fragmentNewGroupViewModel.hideProgressBar();
                 fragmentNewGroupViewModel.existAvatar = true;
                 fragmentNewGroupViewModel.token = token;
+                fragmentNewGroupViewModel.imagePath = pathSaveImage;
                 setImage(pathSaveImage);
             }
 
@@ -595,6 +603,23 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             }
 
         }));
+    }
+
+    @Override
+    public void receivedMessage(int id, Object... message) {
+        if (id == EventManager.AVATAR_UPDATE) {
+            G.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    long roomId = (long) message[0];
+                    ProtoGlobal.Avatar avatar = (ProtoGlobal.Avatar) message[1];
+                    if (G.onChannelAvatarAdd != null) {
+                        G.refreshRealmUi();
+                        G.onChannelAvatarAdd.onAvatarAdd(roomId, avatar);
+                    }
+                }
+            });
+        }
     }
 
     public interface OnRemoveFragmentNewGroup {
@@ -778,6 +803,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 });
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getEventManager().removeEventListener(EventManager.AVATAR_UPDATE, this);
     }
 
     public interface RemoveSelectedContact {
