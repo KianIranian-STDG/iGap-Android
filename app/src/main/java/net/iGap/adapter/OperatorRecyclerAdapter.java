@@ -40,17 +40,17 @@ public class OperatorRecyclerAdapter extends RecyclerView.Adapter<OperatorRecycl
     public void onBindViewHolder(ViewHolder holder, int position) {
         Operator operator = operators.get(position);
         setViewBackground(holder.root);
-        holder.radioButton.setTag(operator.getKey());
-
-        if (tagKey.equals(holder.radioButton.getTag().toString())) {
+        AppCompatRadioButton radioButton = holder.radioButton;
+        radioButton.setTag(operator.getKey());
+        if (tagKey.equals(radioButton.getTag().toString())) {
             if (lastCheckedRB != null) {
                 lastCheckedRB.setChecked(false);
             }
-            holder.radioButton.setChecked(true);
-            lastCheckedRB = holder.radioButton;
+            radioButton.setChecked(true);
+            lastCheckedRB = radioButton;
         }
 
-        holder.radioButton.setOnClickListener(new View.OnClickListener() {
+        radioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (lastCheckedRB != null) {
@@ -61,6 +61,17 @@ public class OperatorRecyclerAdapter extends RecyclerView.Adapter<OperatorRecycl
             }
         });
         ImageLoadingServiceInjector.inject().loadImage(holder.imageView, operator.getLogo(), 0);
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (lastCheckedRB != null) {
+                    lastCheckedRB.setChecked(false);
+                }
+                lastCheckedRB = radioButton;
+                lastCheckedRB.setChecked(true);
+                selectedRadioButton.onSelectedRadioButton(lastCheckedRB.getTag().toString());
+            }
+        });
     }
 
     @Override
