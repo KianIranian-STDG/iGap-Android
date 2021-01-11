@@ -34,6 +34,7 @@ import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.AppUtils;
 import net.iGap.observers.interfaces.IMessageItem;
@@ -41,6 +42,7 @@ import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomMessage;
 import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
@@ -179,16 +181,16 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             if (item.messageObject != null) {
                 if (item.messageObject.id == messageId) {
                     item.messageObject.message = updatedText;
-                    item.messageObject.edited = true;// TODO: 12/29/20 MESSAGE_REFACTOR
+                    item.messageObject.edited = true;// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
 
-//                    if (item.messageObject.isForwarded()) {
-//                        item.mMessage.getForwardMessage().setLinkInfo(HelperUrl.getLinkInfo(updatedText));
-//                    } else {
-//                        item.mMessage.setLinkInfo(HelperUrl.getLinkInfo(updatedText));
-//                    }
+                    if (item.messageObject.isForwarded()) {
+                        item.messageObject.forwardedMessage.linkInfo = HelperUrl.getLinkInfo(updatedText);
+                    } else {
+                        item.messageObject.linkInfo = HelperUrl.getLinkInfo(updatedText);
+                    }
 
-//                    item.mMessage.setHasMessageLink(item.mMessage.getLinkInfo() != null && item.mMessage.getLinkInfo().length() > 0);
-//                    RealmRoomMessage.isEmojiInText(item.mMessage, item.mMessage.getMessage());
+                    item.messageObject.hasLink = item.messageObject.linkInfo != null && item.messageObject.linkInfo.length() > 0;
+                    // RealmRoomMessage.isEmojiInText(item.messageObject, item.messageObject.message);
 
                     item.updateMessageText(updatedText);
                     set(i, item);
@@ -219,15 +221,15 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
                 // TODO: 5/16/20 must change vote structure
                 if (messageInfo.messageObject.id == messageId && (forwardedMessageId != 0 || messageInfo.messageObject.roomId == roomId)) {
-                    int pos = items.indexOf(messageInfo);// TODO: 12/29/20 MESSAGE_REFACTOR
-//                    if (messageInfo.structMessage.getChannelExtra() != null) {
-//                        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-//                            messageInfo.structMessage.getChannelExtra().setThumbsUp(vote);
-//                        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-//                            messageInfo.structMessage.getChannelExtra().setThumbsDown(vote);
-//                        }
-                    set(pos, messageInfo);
-//                    }
+                    int pos = items.indexOf(messageInfo);// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
+                    if (messageInfo.messageObject.channelExtraObject != null) {
+                        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                            messageInfo.messageObject.channelExtraObject.thumbsUp = vote;
+                        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
+                            messageInfo.messageObject.channelExtraObject.thumbsDown = vote;
+                        }
+                        set(pos, messageInfo);
+                    }
                 }
             }
         }
@@ -236,28 +238,29 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     /**
      * update message state
      */
-    public void updateMessageState(long messageId, String voteUp, String voteDown, String viewsLabel) {
+    public void updateMessageState(long messageId, String voteUp, String voteDown, String
+            viewsLabel) {
         List<Item> items = getAdapterItems();
-        for (Item messageInfo : items) {// TODO: 12/29/20 MESSAGE_REFACTOR
-//            if (messageInfo.mMessage != null) {
-//                /**
-//                 * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
-//                 * so i need to (replyMessageId * (-1)) again for use this messageId
-//                 */
-//                if (
-//                        (messageInfo.mMessage.getForwardMessage() == null && messageInfo.mMessage.getMessageId() == messageId)
-//                                || (messageInfo.mMessage.getForwardMessage() != null && (messageInfo.mMessage.getForwardMessage().getMessageId() * (-1)) == messageId)
-//                ) {
-//                    int pos = items.indexOf(messageInfo);
-//                    if (messageInfo.structMessage.getChannelExtra() != null) {
-//                        messageInfo.structMessage.getChannelExtra().setThumbsUp(voteUp);
-//                        messageInfo.structMessage.getChannelExtra().setThumbsDown(voteDown);
-//                        messageInfo.structMessage.getChannelExtra().setViewsLabel(viewsLabel);
-//                    }
-//                    set(pos, messageInfo);
-//                    break;
-//                }
-//            }
+        for (Item messageInfo : items) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
+            if (messageInfo.messageObject != null) {
+                /**
+                 * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
+                 * so i need to (replyMessageId * (-1)) again for use this messageId
+                 */
+                if (
+                        (messageInfo.messageObject.forwardedMessage == null && messageInfo.messageObject.id == messageId)
+                                || (messageInfo.messageObject.forwardedMessage != null && (messageInfo.messageObject.forwardedMessage.id * (-1)) == messageId)
+                ) {
+                    int pos = items.indexOf(messageInfo);
+                    if (messageInfo.messageObject.channelExtraObject != null) {
+                        messageInfo.messageObject.channelExtraObject.thumbsUp = voteUp;
+                        messageInfo.messageObject.channelExtraObject.thumbsDown = voteDown;
+                        messageInfo.messageObject.channelExtraObject.viewsLabel = viewsLabel;
+                    }
+                    set(pos, messageInfo);
+                    break;
+                }
+            }
         }
     }
 

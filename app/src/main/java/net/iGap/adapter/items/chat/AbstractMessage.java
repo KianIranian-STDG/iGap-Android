@@ -57,6 +57,7 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -750,30 +751,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * get channel message state, for clear unread message in channel client
      * need send request for getMessageState even show vote layout is hide
      */
-    private void getChannelMessageState() {// TODO: 12/29/20 MESSAGE_REFACTOR
-//        if ((messageObject.forwardedMessage != null)) {
-//            ProtoGlobal.Room.Type roomType = null;
-//            if (realmRoomForwardedFrom != null) {
-//                roomType = realmRoomForwardedFrom.getType();
-//            }
-//            if ((mMessage.getForwardMessage() != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
-//                /**
-//                 * if roomType is Channel don't consider forward
-//                 *
-//                 * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
-//                 * so i need to (replyMessageId * (-1)) again for use this messageId
-//                 */
-//                long messageId = mMessage.getForwardMessage().getMessageId();
-//                if (mMessage.getForwardMessage().getMessageId() < 0) {
-//                    messageId = messageId * (-1);
-//                }
-//                HelperGetMessageState.getMessageState(mMessage.getForwardMessage().getAuthorRoomId(), messageId);
-//            } else {
-//                HelperGetMessageState.getMessageState(messageObject.roomId, mMessage.getMessageId());
-//            }
-//        } else {
-//            HelperGetMessageState.getMessageState(messageObject.roomId, mMessage.getMessageId());
-//        }
+    private void getChannelMessageState() {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
+        if ((messageObject.forwardedMessage != null)) {
+            ProtoGlobal.Room.Type roomType = null;
+            if (messageObject.forwardedMessage != null) {
+
+                roomType = ProtoGlobal.Room.Type.valueOf(messageObject.forwardedMessage.messageType);
+            }
+            if ((messageObject.forwardedMessage != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
+                /**
+                 * if roomType is Channel don't consider forward
+                 *
+                 * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
+                 * so i need to (replyMessageId * (-1)) again for use this messageId
+                 */
+                long messageId = messageObject.forwardedMessage.id;
+                if (messageObject.forwardedMessage.id < 0) {
+                    messageId = messageId * (-1);
+                }
+                HelperGetMessageState.getMessageState(messageObject.forwardedMessage.roomId, messageId);
+            } else {
+                HelperGetMessageState.getMessageState(messageObject.roomId, messageObject.id);
+            }
+        } else {
+            HelperGetMessageState.getMessageState(messageObject.roomId, messageObject.id);
+        }
     }
 
     private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder) {
