@@ -203,6 +203,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public AbstractMessage setMessage(MessageObject message) {// TODO: 12/29/20 MESSAGE_REFACTOR
         messageObject = message;
         attachment = messageObject.getAttachment();
+        additional = messageObject.getAdditional();
 
 //        if ((mMessage.getForwardMessage() != null)) {
 //            long messageId = mMessage.getForwardMessage().getMessageId();
