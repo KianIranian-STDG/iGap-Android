@@ -106,7 +106,7 @@ public class MessageController extends BaseController implements EventListener {
 
     private void updateChannelAvatarInternal(IG_RPC.Res_Channel_Avatar avatar) {
         getMessageDataStorage().putUserAvatar(avatar.roomId, avatar.avatar);
-        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.AVATAR_UPDATE, avatar.roomId));
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.AVATAR_UPDATE, avatar.roomId, avatar.avatar));
     }
 
     public void deleteChannel(long roomId) {
