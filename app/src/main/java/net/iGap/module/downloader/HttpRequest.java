@@ -119,7 +119,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             }
             InputStream inputStream = response.body().byteStream();
             byte[] iv = new byte[16];
-            int i = inputStream.read(iv, 0, 16);
+            int i = inputStream.read(iv, 0, 16);// do not remove i :)
             InputStream cipherInputStream = new CipherInputStream(inputStream, getCipher(iv, G.symmetricKey));
             byte[] data = new byte[4096];
             int count;

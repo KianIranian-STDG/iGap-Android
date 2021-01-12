@@ -129,7 +129,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.publicUrl = struct.getPublicUrl(attachment.url);
         struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
 
-        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_TEMP, true);
+        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
         struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
         struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
