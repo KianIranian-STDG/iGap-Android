@@ -89,6 +89,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
+                view.setEnabled(false);
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
                         IG_RPC.Res_Channel_Create res = (IG_RPC.Res_Channel_Create) response;
@@ -96,12 +97,17 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
 
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_CHANNEL);
                     } else {
-                        IG_RPC.Error err = (IG_RPC.Error) error;
+                        G.runOnUiThread(() -> {
+                            IG_RPC.Error err = (IG_RPC.Error) error;
 
-                        hideProgressBar();
-                        if (err.major == 479) {
-                            G.runOnUiThread(this::ShowDialogLimitCreate);
-                        }
+                            view.setEnabled(true);
+                            hideProgressBar();
+
+                            if (err.major == 479) {
+                                ShowDialogLimitCreate();
+                            }
+                        });
+
                     }
                 });
 
@@ -115,6 +121,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
+                view.setEnabled(false);
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
                         IG_RPC.Res_Group_Create res = (IG_RPC.Res_Group_Create) response;
@@ -125,9 +132,11 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                         getRoom(res.roomId, ProtoGlobal.Room.Type.GROUP, true);
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
                     } else {
-                        IG_RPC.Error err = (IG_RPC.Error) error;
-
                         G.runOnUiThread(() -> {
+                            IG_RPC.Error err = (IG_RPC.Error) error;
+
+                            view.setEnabled(true);
+
                             hideProgressBar();
                             if (err.major == 380) {
                                 ShowDialogLimitCreate();
