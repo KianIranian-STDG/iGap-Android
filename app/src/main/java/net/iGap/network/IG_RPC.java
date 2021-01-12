@@ -2,6 +2,7 @@ package net.iGap.network;
 
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
+import net.iGap.proto.ProtoChannelAddMessageReaction;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoChannelDelete;
@@ -890,7 +891,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChannelDeleteMessage.ChannelDeleteMessageResponse response = ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.parseFrom(message);
-
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
             deleteVersion = response.getDeleteVersion();
@@ -951,7 +952,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChatDeleteMessage.ChatDeleteMessageResponse response = ProtoChatDeleteMessage.ChatDeleteMessageResponse.parseFrom(message);
-
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
             deleteVersion = response.getDeleteVersion();
@@ -1009,10 +1010,74 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoGroupDeleteMessage.GroupDeleteMessageResponse response = ProtoGroupDeleteMessage.GroupDeleteMessageResponse.parseFrom(message);
-
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
             deleteVersion = response.getDeleteVersion();
+        }
+    }
+
+    public static class Channel_AddMessage_Reaction extends AbstractObject {
+
+        public static int actionId = 424;
+        public long roomId;
+        public long messageId;
+        public ProtoGlobal.RoomMessageReaction reaction;
+
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelAddMessageReaction.ChannelAddMessageReaction.Builder builder = ProtoChannelAddMessageReaction.ChannelAddMessageReaction.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setReaction(reaction);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_AddMessage_Reaction().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_AddMessage_Reaction extends AbstractObject {
+
+        public static int actionId = 30424;
+        public String reactionCounter;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse response = ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            reactionCounter = response.getReactionCounterLabel();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Channel_AddMessage_Reaction object = null;
+            try {
+                object = new Res_Channel_AddMessage_Reaction();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
         }
     }
 }

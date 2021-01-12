@@ -11,6 +11,10 @@
 package net.iGap.observers.interfaces;
 
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.structs.MessageObject;
@@ -36,8 +40,6 @@ public interface IMessageItem {
 
     void onItemShowingMessageId(MessageObject messageInfo);
 
-    //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
-
     void onPlayMusic(String messageId);
 
     boolean getShowVoteChannel();
@@ -47,4 +49,6 @@ public interface IMessageItem {
     void onOpenLinkDialog(String url);
 
     void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, MessageObject structMessage);
+
+    void onVoteClick(MessageObject messageObject, int reactionValue);
 }

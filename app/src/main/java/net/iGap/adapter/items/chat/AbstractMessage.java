@@ -709,7 +709,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         mHolder.getViewContainer().setVisibility(View.GONE);
         if (!(holder instanceof StickerItem.ViewHolder /*|| mHolder instanceof AnimatedStickerItem.ViewHolder*/)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-                showVote(holder);
+                showSeenContainer(holder);
             } else {
                 if (messageObject.forwardedMessage != null) {
                     if (messageObject.forwardedMessage.roomId > 0) {// TODO: 12/29/20 MESSAGE_REFACTOR
@@ -740,8 +740,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     /**
      * show vote views
      */
-    private void showVote(VH holder) {
-        // add layout seen in channel
+    private void showSeenContainer(VH holder) {
         ((NewChatItemHolder) holder).getViewContainer().setVisibility(View.VISIBLE);
         voteAction(((NewChatItemHolder) holder));
         getChannelMessageState();
@@ -816,8 +815,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     protected void voteAction(NewChatItemHolder mHolder) {
-        boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
-        if (showThump) {
+        boolean showVote = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
+        if (showVote) {
             mHolder.getVoteContainer().setVisibility(View.VISIBLE);
         } else {
             mHolder.getVoteContainer().setVisibility(View.GONE);
@@ -827,14 +826,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * userId != 0 means that this message is from channel
          * because for chat and group userId will be set
          */
-        // TODO: 12/29/20 MESSAGE_REFACTOR
-//        mHolder.getVoteUpTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsUp());
-//        mHolder.getVoteDownTv().setText(structMessage.getChannelExtra() == null ? "0" : structMessage.getChannelExtra().getThumbsDown());
-//        mHolder.getViewsLabelTv().setText(structMessage.getChannelExtra() == null ? "1" : structMessage.getChannelExtra().getViewsLabel());
-//        if (mMessage.isEdited())
-//            mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + (structMessage.getChannelExtra() != null ? structMessage.getChannelExtra().getSignature() : ""));
-//        else
-//            mHolder.getSignatureTv().setText(structMessage.getChannelExtra() == null ? "" : structMessage.getChannelExtra().getSignature());
+        mHolder.getVoteUpTv().setText(messageObject.channelExtraObject == null ? "0" : messageObject.channelExtraObject.thumbsUp);
+        mHolder.getVoteDownTv().setText(messageObject.channelExtraObject == null ? "0" : messageObject.channelExtraObject.thumbsDown);
+        mHolder.getViewsLabelTv().setText(messageObject.channelExtraObject == null ? "1" : messageObject.channelExtraObject.viewsLabel);
+
+        if (messageObject.edited)
+            mHolder.getSignatureTv().setText(mHolder.itemView.getContext().getResources().getString(R.string.edited) + " " + (messageObject.channelExtraObject != null ? messageObject.channelExtraObject.signature : ""));
+        else
+            mHolder.getSignatureTv().setText(messageObject.channelExtraObject == null ? "" : messageObject.channelExtraObject.signature);
 
 
         if (mHolder.getSignatureTv().getText().length() > 0) {
@@ -847,53 +846,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getVoteUpTv().setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.getVoteUpTv().getText().toString()));
         }
 
-        mHolder.getVoteUpContainer().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (FragmentChat.isInSelectionMode) {
-                    mHolder.itemView.performLongClick();
-                } else {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                    voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_UP);
-                }
+        mHolder.getVoteUpContainer().setOnClickListener(view -> {
+            if (FragmentChat.isInSelectionMode) {
+                mHolder.itemView.performLongClick();
+            } else {
+                messageClickListener.onVoteClick(messageObject, ProtoGlobal.RoomMessageReaction.THUMBS_UP_VALUE);
             }
         });
 
-        mHolder.getVoteDownContainer().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (FragmentChat.isInSelectionMode) {
-                    mHolder.itemView.performLongClick();
-                } else {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                    voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
-                }
+        mHolder.getVoteDownContainer().setOnClickListener(view -> {
+            if (FragmentChat.isInSelectionMode) {
+                mHolder.itemView.performLongClick();
+            } else {
+                messageClickListener.onVoteClick(messageObject, ProtoGlobal.RoomMessageReaction.THUMBS_DOWN_VALUE);
             }
         });
     }
-    // TODO: 12/29/20 MESSAGE_REFACTOR
-//    /**
-//     * send vote action to RealmRoomMessage
-//     *
-//     * @param reaction Up or Down
-//     */
-//    private void voteSend(final ProtoGlobal.RoomMessageReaction reaction) {
-//        if ((mMessage.getForwardMessage() != null)) {
-//            long forwardMessageId = mMessage.getForwardMessage().getMessageId();
-//
-//            if (forwardMessageId < 0) {
-//                forwardMessageId = forwardMessageId * (-1);
-//            }
-//            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-//                return realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
-//            });
-//            if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-//                new RequestChannelAddMessageReaction().channelAddMessageReactionForward(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId(), reaction, forwardMessageId);
-//            } else {
-//                new RequestChannelAddMessageReaction().channelAddMessageReaction(messageObject.roomId, mMessage.getMessageId(), reaction);
-//            }
-//        } else {
-//            new RequestChannelAddMessageReaction().channelAddMessageReaction(messageObject.roomId, mMessage.getMessageId(), reaction);
-//        }
-//    }
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {

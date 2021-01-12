@@ -3738,6 +3738,15 @@ public class FragmentChat extends BaseFragment
 //        new HelperFragment(getFragmentManager()).loadActiveGiftStickerCard(structIGSticker, v -> forwardSelectedMessageToOutOfChat(structMessage), mode);
     }
 
+    @Override
+    public void onVoteClick(MessageObject messageObject, int reactionValue) {
+        if (messageObject.forwardedMessage != null) {
+            getMessageController().ChannelAddMessageVote(messageObject.forwardedMessage.roomId, messageObject.forwardedMessage.id, ProtoGlobal.RoomMessageReaction.forNumber(reactionValue));
+        } else {
+            getMessageController().ChannelAddMessageVote(messageObject.roomId, messageObject.id, ProtoGlobal.RoomMessageReaction.forNumber(reactionValue));
+        }
+    }
+
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
         String mplCardNumber = cardNumber.replace("-", "");
         int mplAmount = Integer.parseInt(amount.replace(",", ""));
@@ -4180,7 +4189,6 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) { // TODO: 12/28/20  MESSAGE_REFACTOR
-//           Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
             FragmentChat.isInSelectionMode = true;
             //toolbar.setVisibility(View.GONE);
@@ -7243,18 +7251,18 @@ public class FragmentChat extends BaseFragment
                             .show();
 
                 } else {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(R.string.message)
-                                .content(getActivity().getResources().getString(R.string.st_desc_deletes))
-                                .positiveText(R.string.ok)
-                                .negativeText(R.string.cancel)
-                                .onPositive((dialog, which) -> {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.message)
+                            .content(getActivity().getResources().getString(R.string.st_desc_deletes))
+                            .positiveText(R.string.ok)
+                            .negativeText(R.string.cancel)
+                            .onPositive((dialog, which) -> {
 
-                                    bothDeleteMessageId = null;
-                                    getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-                                    deleteSelectedMessageFromAdapter(messageIds);
+                                bothDeleteMessageId = null;
+                                getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+                                deleteSelectedMessageFromAdapter(messageIds);
 
-                                }).show();
+                            }).show();
                 }
             });
         });

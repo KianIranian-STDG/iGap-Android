@@ -13,6 +13,7 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
+import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmOfflineDelete;
 import net.iGap.realm.RealmOfflineEdited;
@@ -226,6 +227,30 @@ public class MessageDataStorage extends BaseController {
                 FileLog.e(e);
             }
         });
+    }
+
+    public void voteUpdate(ProtoGlobal.RoomMessageReaction messageReaction, long messageId, String voteCount) {
+        storageQueue.postRunnable(() -> {
+            try {
+                database.beginTransaction();
+
+                RealmChannelExtra realmChannelExtra = database.where(RealmChannelExtra.class).equalTo("messageId", messageId).findFirst();
+                if (realmChannelExtra != null) {
+                    if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                        realmChannelExtra.setThumbsUp(voteCount);
+                    } else {
+                        realmChannelExtra.setThumbsDown(voteCount);
+                    }
+                }
+
+                database.commitTransaction();
+
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+        });
+
     }
 
     private void putLastMessageInternal(final long roomId, RealmRoomMessage lastMessage) {

@@ -405,4 +405,22 @@ public class MessageController extends BaseController implements EventListener {
         getMessageDataStorage().processDeleteMessage(roomId, messageId, deleteVersion, update);
     }
 
+    public void ChannelAddMessageVote(long roomId, long messageId, ProtoGlobal.RoomMessageReaction messageReaction) {
+
+        final IG_RPC.Channel_AddMessage_Reaction req = new IG_RPC.Channel_AddMessage_Reaction();
+        req.roomId = roomId;
+        req.messageId = messageId;
+        req.reaction = messageReaction;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_AddMessage_Reaction res = (IG_RPC.Res_Channel_AddMessage_Reaction) response;
+                getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
 }
