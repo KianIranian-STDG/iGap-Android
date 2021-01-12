@@ -36,6 +36,7 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.network.RequestManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.structs.MessageObject;
 
 import org.parceler.Parcel;
 
@@ -92,6 +93,15 @@ public class RealmRoomMessage extends RealmObject {
     /**
      * if has forward return that otherwise return enter value
      */
+    public static MessageObject getFinalMessage(MessageObject messageObject) {
+        if (messageObject != null) {
+            if (messageObject.forwardedMessage != null) {
+                return messageObject.forwardedMessage;
+            }
+        }
+        return messageObject;
+    }
+
     public static RealmRoomMessage getFinalMessage(RealmRoomMessage realmRoomMessage) {
         if (realmRoomMessage != null && realmRoomMessage.isValid()) {
             if (realmRoomMessage.getForwardMessage() != null && realmRoomMessage.getForwardMessage().isValid()) {
@@ -752,6 +762,7 @@ public class RealmRoomMessage extends RealmObject {
         message.setUserId(-1); // -1 means time message or unread message
         message.setMessage(countNewMessage + " " + G.fragmentActivity.getResources().getString(R.string.unread_message));
         message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        message.setStatus("SENT");
         return message;
     }
 
@@ -761,6 +772,7 @@ public class RealmRoomMessage extends RealmObject {
         timeMessage.setUserId(-1); // -1 means time message or unread message
         timeMessage.setUpdateTime(time);
         timeMessage.setMessage(message);
+        timeMessage.setStatus("SENT");
         timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
         return timeMessage;
     }
