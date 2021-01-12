@@ -481,7 +481,7 @@ public class RequestManager extends BaseController {
 
     public void setUserLogin(boolean userLogin) {
         this.userLogin = userLogin;
-        getEventManager().postEvent(EventManager.USER_LOGIN_CHANGED, currentAccount, userLogin);
+        getEventManager().postEvent(EventManager.USER_LOGIN_CHANGED);
     }
 
     public void setPullRequestQueueRunned(boolean runned) {

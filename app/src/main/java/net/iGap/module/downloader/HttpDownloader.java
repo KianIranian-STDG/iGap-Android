@@ -179,9 +179,7 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
     @Override
     public void receivedMessage(int id, Object... message) {
         if (id == EventManager.USER_LOGIN_CHANGED) {
-            int account = (int) message[0];
-
-            if (account == currentAccount) {
+            if (AccountManager.selectedAccount == currentAccount) {
                 setCanStartDownload(getRequestManager().isUserLogin());
             }
         }
