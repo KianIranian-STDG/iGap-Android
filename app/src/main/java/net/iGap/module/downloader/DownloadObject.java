@@ -7,6 +7,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmThumbnail;
 import net.iGap.structs.AttachmentObject;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.Locale;
@@ -106,6 +107,41 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.destFile = new File(path + "/" + struct.thumbCacheId + "_" + struct.mimeType);
         struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.valueOf(messageType);
+
+        if (struct.tempFile.exists()) {
+            struct.offset = struct.tempFile.length();
+
+            if (struct.offset > 0 && struct.fileSize > 0) {
+                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            }
+        }
+
+        return struct;
+    }
+
+
+    public static DownloadObject createForRoomMessage(MessageObject messageObject) {
+        final MessageObject finalMessage = RealmRoomMessage.getFinalMessage(messageObject);
+
+        if (finalMessage == null || finalMessage.attachment == null) {
+            return null;
+        }
+
+        DownloadObject struct = new DownloadObject();
+        struct.selector = FILE_VALUE;
+        struct.key = createKey(finalMessage.attachment.cacheId, struct.selector);
+        struct.mainCacheId = finalMessage.attachment.cacheId;
+        struct.fileToken = finalMessage.attachment.token;
+        struct.fileName = finalMessage.attachment.name;
+        struct.fileSize = finalMessage.attachment.size;
+        struct.mimeType = struct.extractMime(struct.fileName);
+        struct.publicUrl = struct.getPublicUrl(finalMessage.attachment.publicUrl);
+        struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+
+        String path = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(finalMessage.messageType));
+        struct.destFile = new File(path + "/" + struct.mainCacheId + "_" + struct.mimeType);
+        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.valueOf(finalMessage.messageType);
 
         if (struct.tempFile.exists()) {
             struct.offset = struct.tempFile.length();

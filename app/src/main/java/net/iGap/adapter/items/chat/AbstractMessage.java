@@ -22,6 +22,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.MakeButtons;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
@@ -89,7 +91,6 @@ import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.IChatItemAttachment;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnProgressUpdate;
 import net.iGap.proto.ProtoFileDownload;
@@ -119,6 +120,8 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_TEXT_VALUE;
@@ -129,9 +132,10 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, EventListener {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements EventListener {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     //    @Deprecated
@@ -185,7 +189,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return type;
     }
 
-    @Override
     public void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException {
         // empty
     }
@@ -433,6 +436,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+        }
+
+        if (attachment != null) {
+            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+
         }
 
         // TODO: 12/29/20 MESSAGE_REFACTOR
@@ -726,11 +734,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         // TODO: 12/29/20 MESSAGE_REFACTOR
-//        if (structMessage.getChannelExtraWithoutForward() != null && structMessage.getChannelExtraWithoutForward().getSignature() != null && structMessage.getChannelExtraWithoutForward().getSignature().length() > 0) {
-//            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
-//        } else if (mMessage.isEdited()) {
-//            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
-//        }
+        if (messageObject.channelExtra != null && messageObject.channelExtra.getSignature() != null && messageObject.channelExtra.getSignature().length() > 0) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(200));
+        } else if (messageObject.edited) {
+            mHolder.getContentBloke().setMinimumWidth(LayoutCreator.dp(100));
+        }
     }
 
     private boolean isAllowToForward(MessageObject message) {
@@ -1577,7 +1585,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    @Override
     @CallSuper
     public void onLoadThumbnailFromLocal(VH holder, String tag, String localPath, LocalFileType fileType) {
 
@@ -1593,9 +1600,32 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        DownloadObject fileStruct = DownloadObject.createForThumb(attachment, messageObject.messageType, false);
+        final ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType);
+        DownloadObject fileStruct = DownloadObject.createForThumb(attachment, messageType.getNumber(), false);
         if (fileStruct != null) {
-            Downloader.getInstance(currentAccount).download(fileStruct, selector, null);
+            AttachmentObject attachment = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment : messageObject.attachment;
+
+            Downloader.getInstance(currentAccount).download(fileStruct, selector, arg -> {
+                switch (arg.status) {
+                    case SUCCESS:
+                        if (arg.data != null) {
+                            attachment.thumbnailPath = arg.data.getFilePath();
+                        }
+                        if (attachment.isFileExistsOnLocalAndIsImage()) {
+                            onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+                        } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
+                            onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+                        } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+                            if (attachment.isThumbnailExistsOnLocal()) {
+                                onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
+                            }
+                        }
+                        break;
+                    case ERROR:
+                        Log.e("TAG", "thumbnailDownloadMessage: " + arg.message);
+                        FileLog.e(arg.message);
+                }
+            });
         }
     }
 
@@ -1606,88 +1636,103 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-//        boolean _isDownloading = Downloader.getInstance(currentAccount).isDownloading(structMessage.getAttachment().getCacheId());
+        AttachmentObject attachment = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment : messageObject.attachment;
 
         final MessageProgress progressBar = ((IProgress) holder).getProgress();
         AppUtils.setProgresColor(progressBar.progressBar);
 
         final TextView textView = ((IProgress) holder).getProgressTextView();
         final String tempValue = ((IProgress) holder).getTempTextView();
+        long size = attachment.size;
 
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+        boolean _isDownloading = Downloader.getInstance(currentAccount).isDownloading(attachment.cacheId);
         final ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType);
         // TODO: 12/29/20 MESSAGE_REFACTOR
-//        if (attachmentObject.token != null && attachmentObject.token.length() > 0 && attachmentObject.size > 0) {
-//
-//            progressBar.setVisibility(View.VISIBLE);
-//            progressBar.withDrawable(R.drawable.ic_cancel, false);
-//
-//            DownloadObject struct = DownloadObject.createForRoomMessage(mMessage);
-//
-//            if (struct == null)
-//                return;
-//
-//            progressBar.withProgress(1);
-//
-//            Downloader.getInstance(currentAccount).download(struct, selector, priority, arg -> {
-//                if (FragmentChat.canUpdateAfterDownload) {
-//                    G.handler.post(() -> {
-//                        switch (arg.status) {
-//                            case SUCCESS:
-//                            case LOADING:
-//                                if (arg.data == null) {
-//                                    return;
-//                                }
-//                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
-//                                    if (structMessage.getAttachment() == null || !structMessage.getAttachment().isFileExistsOnLocal()) {
-//                                        if (arg.data.getProgress() != 100) {
-//                                            progressBar.withProgress(arg.data.getProgress());
-//                                            if (textView != null) {
-//                                                String percent;
-//                                                if (G.selectedLanguage.equals("fa")) {
-//                                                    percent = HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(arg.data.getProgress()));
-//                                                } else {
-//                                                    percent = String.valueOf(arg.data.getProgress());
-//                                                }
-//                                                textView.setText(String.format(Locale.US, "%s %s", percent, "%" + " " + "—" + " " + AndroidUtils.humanReadableByteCount(size, true)));
-//                                            }
-//                                        } else {
-//                                            progressBar.withProgress(99);
-//                                        }
-//
-//                                    }
-//
-//                                    if (arg.data.getProgress() == 100) {
-//                                        int position = mAdapter.getPosition(this);
-//                                        mAdapter.notifyItemChanged(position);
-//                                        if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
-//                                            if (messageObject.roomId == MusicPlayer.roomId) {
-//                                                MusicPlayer.downloadNewItem = true;
-//                                            }
-//                                        }
-//                                        if (textView != null) {
-//                                            textView.setText(AndroidUtils.humanReadableByteCount(size, true));
-//                                        }
-//                                    }
-//                                }
-//                                break;
-//                            case ERROR:
-//                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.getMessageId())) {
-//                                    progressBar.withProgress(1);
-//                                    progressBar.withDrawable(R.drawable.ic_download, true);
-//                                }
-//                                if (textView != null) {
-//                                    textView.setText(AndroidUtils.humanReadableByteCount(size, true));
-//                                }
-//                        }
-//                    });
-//                }
-//            });
-//
-//            if (!_isDownloading) {
-//                messageClickListener.onDownloadAllEqualCashId(structMessage.getAttachment().getCacheId(), mMessage.getMessageId() + "");
-//            }
-//        }
+        if (attachmentObject.token != null && attachmentObject.token.length() > 0 && attachmentObject.size > 0) {
+
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.withDrawable(R.drawable.ic_cancel, false);
+
+            DownloadObject struct = DownloadObject.createForRoomMessage(messageObject);
+
+            if (struct == null)
+                return;
+
+            progressBar.withProgress(1);
+
+            Downloader.getInstance(currentAccount).download(struct, selector, priority, arg -> {
+                if (FragmentChat.canUpdateAfterDownload) {
+                    G.handler.post(() -> {
+                        switch (arg.status) {
+                            case SUCCESS:
+                                attachment.filePath = arg.data.getFilePath();
+                                onProgressFinish(holder, attachment, messageType.getNumber());
+                                if (attachment.isFileExistsOnLocalAndIsImage()) {
+                                    onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+                                } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
+                                    onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+                                } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+                                    if (attachment.isThumbnailExistsOnLocal()) {
+                                        onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.THUMBNAIL);
+                                    }
+                                }
+                                break;
+                            case LOADING:
+                                if (arg.data == null) {
+                                    return;
+                                }
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(messageObject.id)) {
+                                    if (messageObject.attachment == null || !messageObject.attachment.isFileExistsOnLocal()) {
+                                        if (arg.data.getProgress() != 100) {
+                                            progressBar.withProgress(arg.data.getProgress());
+                                            if (textView != null) {
+                                                String percent;
+                                                if (G.selectedLanguage.equals("fa")) {
+                                                    percent = HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(arg.data.getProgress()));
+                                                } else {
+                                                    percent = String.valueOf(arg.data.getProgress());
+                                                }
+                                                textView.setText(String.format(Locale.US, "%s %s", percent, "%" + " " + "—" + " " + AndroidUtils.humanReadableByteCount(size, true)));
+                                            }
+                                        } else {
+                                            progressBar.withProgress(99);
+                                        }
+
+                                    }
+
+                                    if (arg.data.getProgress() == 100) {
+                                        int position = mAdapter.getPosition(this);
+                                        mAdapter.notifyItemChanged(position);
+                                        if (messageType == AUDIO || messageType == AUDIO_TEXT || messageType == VOICE) {
+                                            if (messageObject.roomId == MusicPlayer.roomId) {
+                                                MusicPlayer.downloadNewItem = true;
+                                            }
+                                        }
+                                        if (textView != null) {
+                                            textView.setText(AndroidUtils.humanReadableByteCount(size, true));
+                                        }
+                                    }
+                                }
+                                break;
+                            case ERROR:
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(messageObject.id)) {
+                                    progressBar.withProgress(1);
+                                    progressBar.withDrawable(R.drawable.ic_download, true);
+                                }
+                                if (textView != null) {
+                                    textView.setText(AndroidUtils.humanReadableByteCount(size, true));
+                                }
+                        }
+                    });
+                }
+            });
+
+            if (!_isDownloading) {
+                messageClickListener.onDownloadAllEqualCashId(attachment.cacheId, messageObject.id + "");
+            }
+        }
     }
 
     public void updateProgress(OnProgressUpdate onProgressUpdate) {
