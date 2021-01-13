@@ -87,6 +87,7 @@ import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
@@ -390,6 +391,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             });
+        } else if (id == EventManager.ON_UPLOAD_COMPLETED) {
+            G.runOnUiThread(() -> {
+                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
+                long messageId = (long) message[1];
+                if (messageId == messageObject.id) {
+                    String filePath = AndroidUtils.getFilePathWithCashId((String) message[2], messageObject.attachment.name, messageType.getNumber());
+                    messageObject.attachment.filePath = filePath;
+                    if (attachment.isFileExistsOnLocalAndIsImage()) {
+                        onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+                    } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
+                        onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+                    } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+                        if (attachment.isThumbnailExistsOnLocal()) {
+                            onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
+                        }
+                    }
+                }
+            });
         }
 
     }
@@ -423,15 +442,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
 
             if (!Uploader.getInstance().isCompressingOrUploading(messageObject.id + "")) {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                UploadObject fileObject = UploadObject.createForMessage(mMessage, type);
-//                if (fileObject != null) {
-//                    Uploader.getInstance().upload(fileObject);
-//                }
+                UploadObject fileObject = UploadObject.createForMessage(messageObject, type);
+                if (fileObject != null) {
+                    Uploader.getInstance().upload(fileObject);
+                }
             } else {
-//                MessageProgress messageProgress = ((IProgress) holder).getProgress();
-//                int progress = Uploader.getInstance().getUploadProgress(mMessage.getMessageId() + "");
-//                messageProgress.withProgress(progress);
-//                receivedMessage(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(mMessage.getMessageId()), progress);
+                MessageProgress messageProgress = ((IProgress) holder).getProgress();
+                int progress = Uploader.getInstance().getUploadProgress(messageObject.id + "");
+                messageProgress.withProgress(progress);
+                receivedMessage(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(messageObject.id), progress);
             }
         } else {
             EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -440,6 +459,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (attachment != null) {
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPLETED, this);
 
         }
 

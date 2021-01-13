@@ -15,7 +15,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by keyvan on 3/14/16.
  */
 public class EventManager {
-
     /**
      * READ ME :
      * this class used for notifying part of application to another part that not related to each other
@@ -71,6 +70,7 @@ public class EventManager {
     public static final int ON_EDIT_MESSAGE = eventId++;
     public static final int ON_PINNED_MESSAGE = eventId++;
     public static final int CHAT_CLEAR_MESSAGE = eventId++;
+    public static final int ON_UPLOAD_COMPLETED = eventId++;
 
     private static EventManager eventListenerInstance;
 

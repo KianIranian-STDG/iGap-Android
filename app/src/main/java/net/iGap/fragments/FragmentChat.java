@@ -4089,22 +4089,22 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onUploadOrCompressCancel(View view, final MessageObject messageObject, int pos) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        HelperSetAction.sendCancel(message.realmRoomMessage.getMessageId());
-//
-//        if (Uploader.getInstance().cancelCompressingAndUploading(message.realmRoomMessage.getMessageId() + "")) {
-//
-//            getMessageController().cancelUploadFile(mRoomId, message.realmRoomMessage);
-//
-//            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-//                if (messageId == ((StructMessageInfo) edtChat.getTag()).realmRoomMessage.getMessageId()) {
-//                    edtChat.setTag(null);
-//                }
-//            }
-//
-//            if (pos >= 0) {
-//                mAdapter.remove(pos);
-//            }
-//        }
+        HelperSetAction.sendCancel(messageObject.id);
+
+        if (Uploader.getInstance().cancelCompressingAndUploading(messageObject.id + "")) {
+
+            getMessageController().cancelUploadFile(mRoomId, messageObject);
+
+            if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                if (messageId == ((StructMessageInfo) edtChat.getTag()).realmRoomMessage.getMessageId()) {
+                    edtChat.setTag(null);
+                }
+            }
+
+            if (pos >= 0) {
+                mAdapter.remove(pos);
+            }
+        }
     }
 
 
@@ -7655,7 +7655,7 @@ public class FragmentChat extends BaseFragment
         roomMessage.setShowMessage(true);
         roomMessage.setCreateTime(updateTime);
         if (isReply()) {
-            roomMessage.setReplyTo((RealmRoomMessage) mReplayLayout.getTag());
+            roomMessage.setReplyTo((RealmRoomMessage) mReplayLayout.getTag()); // TODO: 1/13/21 MESSAGE_REFACTOR
         }
         long replyMessageId = 0;
         if (roomMessage.getReplyTo() != null) {

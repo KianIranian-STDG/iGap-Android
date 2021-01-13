@@ -1,7 +1,6 @@
 package net.iGap.controllers;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
@@ -16,8 +15,8 @@ import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoom;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -205,12 +204,12 @@ public class MessageController extends BaseController implements EventListener {
         });
     }
 
-    public void cancelUploadFile(long roomId, RealmRoomMessage message) {
+    public void cancelUploadFile(long roomId, MessageObject message) {
         if (message == null || roomId == 0) {
             return;
         }
 
-        getMessageDataStorage().resetRoomLastMessage(roomId, message.messageId);
+        getMessageDataStorage().resetRoomLastMessage(roomId, message.id);
     }
 
     public void editMessage(long messageId, long roomId, String newMessage, int chatType) {

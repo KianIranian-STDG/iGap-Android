@@ -216,7 +216,7 @@ public class HttpUploader implements IUpload {
                         inProgressUploads.remove(fileObject.key);
                         inProgressCount.decrementAndGet();
                     }
-                    if (fileObject.message != null) {
+                    if (fileObject.messageObject != null) {
                         if (completedCompressFile != null && completedCompressFile.exists()) {
                             completedCompressFile.delete();
                         }
@@ -226,18 +226,18 @@ public class HttpUploader implements IUpload {
                         DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
 
                         if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.message.roomId, fileObject.message);
-                        } else if (fileObject.message.replyTo == null) {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
+                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.messageObject.roomId, fileObject.messageObject);
+                        } else if (fileObject.messageObject.replayToMessage == null) {
+                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
                                     .attachment(fileObject.fileToken)
-                                    .message(fileObject.message.getMessage())
+                                    .message(fileObject.messageObject.message)
                                     .sendMessage(fileObject.messageId + "");
                         } else {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.message.getRoomId())
-                                    .replyMessage(fileObject.message.replyTo.messageId)
+                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
+                                    .replyMessage(fileObject.messageObject.replayToMessage.id)
                                     .attachment(fileObject.fileToken)
-                                    .message(fileObject.message.message)
-                                    .sendMessage(fileObject.message.messageId + "");
+                                    .message(fileObject.messageObject.message)
+                                    .sendMessage(fileObject.messageObject.id + "");
                         }
                     }
                     if (fileObject.onUploadListener != null) {
