@@ -126,8 +126,9 @@ public class ResendMessage implements IResendMessage {
                                                     if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                         ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                                     } else {
-                                                        UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+                                                        RealmRoomMessage message = realm.copyFromRealm(roomMessage);
 
+                                                        UploadObject fileObject = UploadObject.createForMessage(message, realmRoom.getType());
                                                         if (fileObject != null) {
                                                             Uploader.getInstance().upload(fileObject);
                                                         }
@@ -153,7 +154,9 @@ public class ResendMessage implements IResendMessage {
                                             if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
                                                 ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
                                             } else {
-                                                UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+                                                RealmRoomMessage message = realm.copyFromRealm(roomMessage);
+
+                                                UploadObject fileObject = UploadObject.createForMessage(message, realmRoom.getType());
 
                                                 if (fileObject != null) {
                                                     Uploader.getInstance().upload(fileObject);

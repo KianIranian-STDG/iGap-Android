@@ -265,7 +265,7 @@ public class UploadHttpRequest {
                     @Override
                     public void onError(Exception e) {
                         FileLog.i(TAG, "Error from stream " + e.getMessage());
-                        UploadHttpRequest.this.error(e, false);
+                        UploadHttpRequest.this.error(e, true);
                     }
                 });
 
