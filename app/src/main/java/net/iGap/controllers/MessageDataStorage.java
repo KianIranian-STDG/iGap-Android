@@ -511,7 +511,7 @@ public class MessageDataStorage extends BaseController {
     }
 
     public String getCurrentUserAuthorHash() {
-
+        FileLog.i(TAG, "getCurrentUserAuthorHash: ");
         final CountDownLatch countDownLatch = new CountDownLatch(1);
         final String[] result = new String[1];
 
@@ -615,7 +615,7 @@ public class MessageDataStorage extends BaseController {
 
     }
 
-    public void chatUpdateStatus(long roomId, long messageId, String updaterAuthorHash, ProtoGlobal.RoomMessageStatus messageStatus, long statusVersion, String id) {
+    public void updateStatus(long roomId, long messageId, String updaterAuthorHash, ProtoGlobal.RoomMessageStatus messageStatus, long statusVersion, String id) {
         FileLog.i(TAG, "chatUpdateStatus: " + roomId + " " + messageId + " " + updaterAuthorHash + " " + messageStatus.name() + " " + statusVersion + " " + id);
         storageQueue.postRunnable(() -> {
             try {

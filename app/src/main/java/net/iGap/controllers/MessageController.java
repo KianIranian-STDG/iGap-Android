@@ -110,27 +110,25 @@ public class MessageController extends BaseController implements EventListener {
             chatUpdateStatusReq.messageId = messageId;
             chatUpdateStatusReq.roomMessageStatus = roomMessageStatus;
             req = chatUpdateStatusReq;
-//            new RequestChatUpdateStatus().updateStatus(roomId, messageId, roomMessageStatus);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             IG_RPC.Group_Update_Status groupUpdateStatusReq = new IG_RPC.Group_Update_Status();
             groupUpdateStatusReq.roomId = roomId;
             groupUpdateStatusReq.messageId = messageId;
             groupUpdateStatusReq.roomMessageStatus = roomMessageStatus;
             req = groupUpdateStatusReq;
-            // new RequestGroupUpdateStatus().groupUpdateStatus(roomId, messageId, roomMessageStatus);
         }
 
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 if (response instanceof IG_RPC.Res_Chat_Update_Status) {
                     IG_RPC.Res_Chat_Update_Status resChatUpdateStatus = (IG_RPC.Res_Chat_Update_Status) response;
-                    getMessageDataStorage().chatUpdateStatus(resChatUpdateStatus.roomId, resChatUpdateStatus.messageId, resChatUpdateStatus.updaterAuthorHash, resChatUpdateStatus.statusValue, resChatUpdateStatus.statusVersion, resChatUpdateStatus.id);
+                    getMessageDataStorage().updateStatus(resChatUpdateStatus.roomId, resChatUpdateStatus.messageId, resChatUpdateStatus.updaterAuthorHash, resChatUpdateStatus.statusValue, resChatUpdateStatus.statusVersion, resChatUpdateStatus.resId);
                     if (resChatUpdateStatus.statusValue == ProtoGlobal.RoomMessageStatus.SEEN) {
                         HelperNotification.getInstance().cancelNotification(resChatUpdateStatus.roomId);
                     }
                 } else if (response instanceof IG_RPC.Res_Group_Update_Status) {
                     IG_RPC.Res_Group_Update_Status resGroupUpdateStatus = (IG_RPC.Res_Group_Update_Status) response;
-                    getMessageDataStorage().chatUpdateStatus(resGroupUpdateStatus.roomId, resGroupUpdateStatus.messageId, resGroupUpdateStatus.updaterAuthorHash, resGroupUpdateStatus.statusValue, resGroupUpdateStatus.statusVersion, resGroupUpdateStatus.id);
+                    getMessageDataStorage().updateStatus(resGroupUpdateStatus.roomId, resGroupUpdateStatus.messageId, resGroupUpdateStatus.updaterAuthorHash, resGroupUpdateStatus.statusValue, resGroupUpdateStatus.statusVersion, resGroupUpdateStatus.resId);
                 }
             }
         });

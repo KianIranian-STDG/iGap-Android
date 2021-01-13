@@ -231,7 +231,6 @@ public class RealmRoomMessage extends RealmObject {
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                     RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
                                     MessageController.getInstance(AccountManager.selectedAccount).sendUpdateStatus(room.getType(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-                                   // G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                                 }
                             }
                         }

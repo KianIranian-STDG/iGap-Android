@@ -41,6 +41,7 @@ public class IG_RPC {
             major = response.getMajorCode();
         }
     }
+
     public static class Group_Update_Status extends AbstractObject {
         public static int actionId = 311;
         public long roomId;
@@ -71,7 +72,6 @@ public class IG_RPC {
     public static class Res_Group_Update_Status extends AbstractObject {
         public static int actionId = 30311;
         public String updaterAuthorHash;
-        public String id;
         public long roomId;
         public long messageId;
         public long statusVersion;
@@ -96,14 +96,15 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoGroupUpdateStatus.GroupUpdateStatusResponse response = ProtoGroupUpdateStatus.GroupUpdateStatusResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
             updaterAuthorHash = response.getUpdaterAuthorHash();
             statusValue = response.getStatus();
             statusVersion = response.getStatusVersion();
-            id = response.getResponse().getId();
         }
     }
+
     public static class Chat_Update_Status extends AbstractObject {
         public static int actionId = 202;
         public long roomId;
@@ -134,7 +135,6 @@ public class IG_RPC {
     public static class Res_Chat_Update_Status extends AbstractObject {
         public static int actionId = 30202;
         public String updaterAuthorHash;
-        public String id;
         public long roomId;
         public long messageId;
         public long statusVersion;
@@ -159,12 +159,12 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChatUpdateStatus.ChatUpdateStatusResponse response = ProtoChatUpdateStatus.ChatUpdateStatusResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             messageId = response.getMessageId();
             updaterAuthorHash = response.getUpdaterAuthorHash();
             statusValue = response.getStatus();
             statusVersion = response.getStatusVersion();
-            id = response.getResponse().getId();
         }
     }
 

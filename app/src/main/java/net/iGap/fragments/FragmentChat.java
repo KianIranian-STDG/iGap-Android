@@ -4600,10 +4600,9 @@ public class FragmentChat extends BaseFragment
         ) {
             setCountNewMessageZero();
         }
-
         if (!isPaused && chatType != CHANNEL &&
                 (!messageObject.isSenderMe() &&
-                        messageObject.status != 0 &&
+                        ProtoGlobal.RoomMessageStatus.forNumber(messageObject.status) != null &&
                         messageObject.status != ProtoGlobal.RoomMessageStatus.SEEN.getNumber() &&
                         messageObject.status != ProtoGlobal.RoomMessageStatus.LISTENED.getNumber())
         ) {
@@ -4618,7 +4617,6 @@ public class FragmentChat extends BaseFragment
                     getMessageDataStorage().addOfflineSeen(mRoomId, messageObject.id);
                     getMessageDataStorage().setStatusSeenInChat(messageObject.id);
                     getMessageController().sendUpdateStatus(chatType, mRoomId, messageObject.id, ProtoGlobal.RoomMessageStatus.SEEN);
-                    // G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                 }
             }).start();
         }
