@@ -5,6 +5,7 @@ import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
@@ -17,7 +18,9 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.request.RequestChatUpdateStatus;
 import net.iGap.request.RequestClientGetRoom;
+import net.iGap.request.RequestGroupUpdateStatus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,6 +100,40 @@ public class MessageController extends BaseController implements EventListener {
         }
 
         return !HelperTimeOut.timeoutChecking(currentTime, messageTime, G.bothChatDeleteTime);
+    }
+
+    public void sendUpdateStatus(ProtoGlobal.Room.Type roomType, long roomId, long messageId, ProtoGlobal.RoomMessageStatus roomMessageStatus) {
+        AbstractObject req = null;
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            IG_RPC.Chat_Update_Status chatUpdateStatusReq = new IG_RPC.Chat_Update_Status();
+            chatUpdateStatusReq.roomId = roomId;
+            chatUpdateStatusReq.messageId = messageId;
+            chatUpdateStatusReq.roomMessageStatus = roomMessageStatus;
+            req = chatUpdateStatusReq;
+//            new RequestChatUpdateStatus().updateStatus(roomId, messageId, roomMessageStatus);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            IG_RPC.Group_Update_Status groupUpdateStatusReq = new IG_RPC.Group_Update_Status();
+            groupUpdateStatusReq.roomId = roomId;
+            groupUpdateStatusReq.messageId = messageId;
+            groupUpdateStatusReq.roomMessageStatus = roomMessageStatus;
+            req = groupUpdateStatusReq;
+            // new RequestGroupUpdateStatus().groupUpdateStatus(roomId, messageId, roomMessageStatus);
+        }
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                if (response instanceof IG_RPC.Res_Chat_Update_Status) {
+                    IG_RPC.Res_Chat_Update_Status resChatUpdateStatus = (IG_RPC.Res_Chat_Update_Status) response;
+                    getMessageDataStorage().chatUpdateStatus(resChatUpdateStatus.roomId, resChatUpdateStatus.messageId, resChatUpdateStatus.updaterAuthorHash, resChatUpdateStatus.statusValue, resChatUpdateStatus.statusVersion, resChatUpdateStatus.id);
+                    if (resChatUpdateStatus.statusValue == ProtoGlobal.RoomMessageStatus.SEEN) {
+                        HelperNotification.getInstance().cancelNotification(resChatUpdateStatus.roomId);
+                    }
+                } else if (response instanceof IG_RPC.Res_Group_Update_Status) {
+                    IG_RPC.Res_Group_Update_Status resGroupUpdateStatus = (IG_RPC.Res_Group_Update_Status) response;
+                    getMessageDataStorage().chatUpdateStatus(resGroupUpdateStatus.roomId, resGroupUpdateStatus.messageId, resGroupUpdateStatus.updaterAuthorHash, resGroupUpdateStatus.statusValue, resGroupUpdateStatus.statusVersion, resGroupUpdateStatus.id);
+                }
+            }
+        });
     }
 
     public void clearHistoryMessage(final long roomId) {

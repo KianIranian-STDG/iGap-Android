@@ -107,8 +107,8 @@ public class MessageObject {
         messageObject.messageType = roomMessage.getMessageTypeValue();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
-        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime()  : roomMessage.getUpdateTime();
-        messageObject.createTime = roomMessage.getCreateTime() ;
+        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
+        messageObject.createTime = roomMessage.getCreateTime();
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
@@ -159,7 +159,7 @@ public class MessageObject {
             messageObject.attachment = AttachmentObject.create(roomMessage.getAttachment());
         }
 //        messageObject.location = LocationObject.create(roomMessage.getLocation());
-//        messageObject.log = LogObject.create(roomMessage.getLog());
+        messageObject.log = LogObject.create(roomMessage.getLogs());
 //        messageObject.contact = ContactObject.create(roomMessage.getRoomMessageContact());
         if (roomMessage.getRoomMessageWallet() != null) {
             messageObject.wallet = WalletObject.create(roomMessage.getRoomMessageWallet());
@@ -182,7 +182,7 @@ public class MessageObject {
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
         messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
-        messageObject.createTime = roomMessage.getCreateTime() ;
+        messageObject.createTime = roomMessage.getCreateTime();
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();

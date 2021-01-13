@@ -11,6 +11,7 @@ import net.iGap.proto.ProtoChannelPinMessage;
 import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
+import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
@@ -19,6 +20,7 @@ import net.iGap.proto.ProtoGroupCreate;
 import net.iGap.proto.ProtoGroupDeleteMessage;
 import net.iGap.proto.ProtoGroupEditMessage;
 import net.iGap.proto.ProtoGroupPinMessage;
+import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoInfoConfig;
 
 import java.util.ArrayList;
@@ -37,6 +39,132 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             minor = response.getMinorCode();
             major = response.getMajorCode();
+        }
+    }
+    public static class Group_Update_Status extends AbstractObject {
+        public static int actionId = 311;
+        public long roomId;
+        public long messageId;
+        public ProtoGlobal.RoomMessageStatus roomMessageStatus;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Group_Update_Status.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupUpdateStatus.GroupUpdateStatus.Builder builder = ProtoGroupUpdateStatus.GroupUpdateStatus.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setStatus(roomMessageStatus);
+            return builder;
+        }
+    }
+
+    public static class Res_Group_Update_Status extends AbstractObject {
+        public static int actionId = 30311;
+        public String updaterAuthorHash;
+        public String id;
+        public long roomId;
+        public long messageId;
+        public long statusVersion;
+        public ProtoGlobal.RoomMessageStatus statusValue;
+
+        public static Res_Group_Update_Status deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Update_Status object = null;
+            try {
+                object = new Res_Group_Update_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupUpdateStatus.GroupUpdateStatusResponse response = ProtoGroupUpdateStatus.GroupUpdateStatusResponse.parseFrom(message);
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            updaterAuthorHash = response.getUpdaterAuthorHash();
+            statusValue = response.getStatus();
+            statusVersion = response.getStatusVersion();
+            id = response.getResponse().getId();
+        }
+    }
+    public static class Chat_Update_Status extends AbstractObject {
+        public static int actionId = 202;
+        public long roomId;
+        public long messageId;
+        public ProtoGlobal.RoomMessageStatus roomMessageStatus;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Chat_Update_Status.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatUpdateStatus.ChatUpdateStatus.Builder builder = ProtoChatUpdateStatus.ChatUpdateStatus.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setStatus(roomMessageStatus);
+            return builder;
+        }
+    }
+
+    public static class Res_Chat_Update_Status extends AbstractObject {
+        public static int actionId = 30202;
+        public String updaterAuthorHash;
+        public String id;
+        public long roomId;
+        public long messageId;
+        public long statusVersion;
+        public ProtoGlobal.RoomMessageStatus statusValue;
+
+        public static Res_Chat_Update_Status deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Update_Status object = null;
+            try {
+                object = new Res_Chat_Update_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatUpdateStatus.ChatUpdateStatusResponse response = ProtoChatUpdateStatus.ChatUpdateStatusResponse.parseFrom(message);
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            updaterAuthorHash = response.getUpdaterAuthorHash();
+            statusValue = response.getStatus();
+            statusVersion = response.getStatusVersion();
+            id = response.getResponse().getId();
         }
     }
 

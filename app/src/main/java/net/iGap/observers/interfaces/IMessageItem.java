@@ -13,6 +13,7 @@ package net.iGap.observers.interfaces;
 import android.view.View;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.structs.MessageObject;
 
 public interface IMessageItem {
@@ -36,6 +37,7 @@ public interface IMessageItem {
 
     void onItemShowingMessageId(MessageObject messageInfo);
 
+    void onVoiceListenedStatus(ProtoGlobal.Room.Type roomType, long roomId, long messageId, ProtoGlobal.RoomMessageStatus roomMessageStatus);
     //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
 
     void onPlayMusic(String messageId);

@@ -56,7 +56,6 @@ import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
-import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.observers.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.observers.interfaces.OnDateChanged;
 import net.iGap.observers.interfaces.OnGroupDeleteInRoomList;
@@ -94,7 +93,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -675,10 +674,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         removeFromBaseFragment(fragment);
     }
 
-    @Override
-    public void onChatUpdateStatus(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
 
-    }
 
     @Override
     public void onChatDelete(final long roomId) {

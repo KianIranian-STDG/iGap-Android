@@ -59,6 +59,8 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Group_Delete_Message.actionId, IG_RPC.Res_Group_Delete_Message.class);
         classes.put(IG_RPC.Res_Chat_Clear_History.actionId, IG_RPC.Res_Chat_Clear_History.class);
         classes.put(IG_RPC.Res_Group_Clear_History.actionId, IG_RPC.Res_Group_Clear_History.class);
+        classes.put(IG_RPC.Res_Chat_Update_Status.actionId, IG_RPC.Res_Chat_Update_Status.class);
+        classes.put(IG_RPC.Res_Group_Update_Status.actionId, IG_RPC.Res_Group_Update_Status.class);
     }
 
     public boolean validObject(int actionId) {
@@ -190,7 +192,7 @@ public class LookUpClass {
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
         lookupMap.put(30201, "ProtoChatSendMessage.ChatSendMessageResponse");
-        lookupMap.put(30202, "ProtoChatUpdateStatus.ChatUpdateStatusResponse");
+        //lookupMap.put(30202, "ProtoChatUpdateStatus.ChatUpdateStatusResponse");
 //        lookupMap.put(30203, "ProtoChatEditMessage.ChatEditMessageResponse");
         lookupMap.put(30204, "ProtoChatDeleteMessage.ChatDeleteMessageResponse");
         lookupMap.put(30205, "ProtoChatClearMessage.ChatClearMessageResponse");
@@ -211,7 +213,7 @@ public class LookUpClass {
         lookupMap.put(30308, "ProtoGroupKickModerator.GroupKickModeratorResponse");
         lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
         lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
-        lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
+       // lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
         lookupMap.put(30312, "ProtoGroupAvatarAdd.GroupAvatarAddResponse");
         lookupMap.put(30313, "ProtoGroupAvatarDelete.GroupAvatarDeleteResponse");
         lookupMap.put(30314, "ProtoGroupAvatarGetList.GroupAvatarGetListResponse");

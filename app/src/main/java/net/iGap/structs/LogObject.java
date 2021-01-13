@@ -19,4 +19,11 @@ public class LogObject {
         logObject.typeValue = log.getTypeValue();
         return logObject;
     }
+
+
+    public static LogObject create(byte[] logData) {
+        LogObject logObject = new LogObject();
+        logObject.data = logData;
+        return logObject;
+    }
 }

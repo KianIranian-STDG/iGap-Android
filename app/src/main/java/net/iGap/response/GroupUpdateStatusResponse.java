@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import net.iGap.helper.HelperUpdateMessageStatue;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoResponse;
 
@@ -34,7 +33,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
         ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
 
-        HelperUpdateMessageStatue.updateStatus(builder.getRoomId(), builder.getMessageId(), builder.getUpdaterAuthorHash(), builder.getStatus(), builder.getStatusVersion(), response);
+        //HelperUpdateMessageStatue.updateStatus(builder.getRoomId(), builder.getMessageId(), builder.getUpdaterAuthorHash(), builder.getStatus(), builder.getStatusVersion(), response);
     }
 
     @Override

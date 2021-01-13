@@ -112,6 +112,7 @@ import net.iGap.adapter.items.chat.GifWithTextItem;
 import net.iGap.adapter.items.chat.GiftStickerItem;
 import net.iGap.adapter.items.chat.ImageWithTextItem;
 import net.iGap.adapter.items.chat.LocationItem;
+import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.NewChatItemHolder;
 import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.StickerItem;
@@ -223,7 +224,6 @@ import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.observers.interfaces.OnChatSendMessage;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
-import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnConnectionChangeStateChat;
@@ -255,6 +255,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -360,7 +361,7 @@ import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+        implements IMessageItem, OnChatSendMessageResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
@@ -730,6 +731,7 @@ public class FragmentChat extends BaseFragment
         EventManager.getInstance().addEventListener(EventManager.ON_EDIT_MESSAGE, this);
         EventManager.getInstance().addEventListener(EventManager.ON_PINNED_MESSAGE, this);
         EventManager.getInstance().addEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
+        EventManager.getInstance().addEventListener(EventManager.CHAT_UPDATE_STATUS, this);
         if (twoPaneMode)
             EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
@@ -1227,6 +1229,7 @@ public class FragmentChat extends BaseFragment
         EventManager.getInstance().removeEventListener(EventManager.ON_EDIT_MESSAGE, this);
         EventManager.getInstance().removeEventListener(EventManager.ON_PINNED_MESSAGE, this);
         EventManager.getInstance().removeEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
+        EventManager.getInstance().removeEventListener(EventManager.CHAT_UPDATE_STATUS, this);
         if (twoPaneMode)
             EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
@@ -2494,7 +2497,7 @@ public class FragmentChat extends BaseFragment
      */
     public void initCallbacks() {
         getSendMessageUtil().setOnChatSendMessageResponseChatPage(this);
-        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        //  G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
 
         G.onChatSendMessage = new OnChatSendMessage() {
             @Override
@@ -2559,38 +2562,38 @@ public class FragmentChat extends BaseFragment
             }
         };
 
-//        iUpdateLogItem = new IUpdateLogItem() {// TODO: 12/29/20 MESSAGE_REFACTOR
-//            @Override
-//            public void onUpdate(byte[] log, long messageId) {
-//                if (getActivity() == null || getActivity().isFinishing())
-//                    return;
-//
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (mAdapter == null) {
-//                            return;
-//                        }
-//                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-//
-//                            try {
-//                                AbstractMessage item = mAdapter.getAdapterItem(i);
-//
-//                                if (item.mMessage != null && item.mMessage.getMessageId() == messageId) {
-//                                    // bagi May crash
-//                                    item.mMessage.setLogs(log);
-//                                    mAdapter.notifyAdapterItemChanged(i);
-//                                    break;
-//                                }
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                                HelperLog.getInstance().setErrorLog(e);
-//                            }
-//                        }
-//                    }
-//                });
-//            }
-//        };
+        iUpdateLogItem = new IUpdateLogItem() {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
+            @Override
+            public void onUpdate(byte[] log, long messageId) {
+                if (getActivity() == null || getActivity().isFinishing())
+                    return;
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter == null) {
+                            return;
+                        }
+                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+
+                            try {
+                                AbstractMessage item = mAdapter.getAdapterItem(i);
+
+                                if (item.messageObject != null && item.messageObject.id == messageId) {
+                                    // bagi May crash
+                                    item.messageObject.log.data = log;
+                                    mAdapter.notifyAdapterItemChanged(i);
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                HelperLog.getInstance().setErrorLog(e);
+                            }
+                        }
+                    }
+                });
+            }
+        };
 
         /**
          * after get position from gps
@@ -4163,22 +4166,6 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onChatUpdateStatus(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-
-        // I'm in the room
-        if (mRoomId == roomId) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mAdapter != null) {
-                        mAdapter.updateMessageStatus(messageId, status);
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) { // TODO: 12/28/20  MESSAGE_REFACTOR
 //           Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
@@ -4603,41 +4590,43 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onItemShowingMessageId(final MessageObject messageObject) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        /**
-//         * if in current room client have new message that not seen yet
-//         * after first new message come in the view change view for unread count
-//         */
-//        if (getFirstUnreadMessage() != null &&
-//                getFirstUnreadMessage().isValid() &&
-//                getFirstUnreadMessage().getMessageId() <= messageInfo.realmRoomMessage.getMessageId()
-//        ) {
-//            setCountNewMessageZero();
-//        }
-//
-//        if (!isPaused && chatType != CHANNEL &&
-//                (
-//                        !messageInfo.isSenderMe() &&
-//                                messageInfo.realmRoomMessage.getStatus() != null &&
-//                                !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.SEEN.toString()) &&
-//                                !messageInfo.realmRoomMessage.getStatus().equals(ProtoGlobal.RoomMessageStatus.LISTENED.toString())
-//                )
-//        ) {
-//            /**
-//             * set message status SEEN for avoid from run this block in each bindView
-//             */
-//
-//            messageInfo.realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    DbManager.getInstance().doRealmTransaction(realm -> {
-//                        RealmClientCondition.addOfflineSeen(realm, mRoomId, messageInfo.realmRoomMessage.getMessageId());
-//                        RealmRoomMessage.setStatusSeenInChat(realm, messageInfo.realmRoomMessage.getMessageId());
-//                        G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
-//                    });
-//                }
-//            }).start();
-//        }
+        /**
+         * if in current room client have new message that not seen yet
+         * after first new message come in the view change view for unread count
+         */
+        if (getFirstUnreadMessage() != null &&
+                getFirstUnreadMessage().isValid() &&
+                getFirstUnreadMessage().getMessageId() <= messageObject.id
+        ) {
+            setCountNewMessageZero();
+        }
+
+        if (!isPaused && chatType != CHANNEL &&
+                (!messageObject.isSenderMe() &&
+                        messageObject.status != 0 &&
+                        messageObject.status != ProtoGlobal.RoomMessageStatus.SEEN.getNumber() &&
+                        messageObject.status != ProtoGlobal.RoomMessageStatus.LISTENED.getNumber())
+        ) {
+            /**
+             * set message status SEEN for avoid from run this block in each bindView
+             */
+
+            messageObject.status = ProtoGlobal.RoomMessageStatus.SEEN.getNumber();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getMessageDataStorage().addOfflineSeen(mRoomId, messageObject.id);
+                    getMessageDataStorage().setStatusSeenInChat(messageObject.id);
+                    getMessageController().sendUpdateStatus(chatType, mRoomId, messageObject.id, ProtoGlobal.RoomMessageStatus.SEEN);
+                    // G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, messageInfo.realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                }
+            }).start();
+        }
+    }
+
+    @Override
+    public void onVoiceListenedStatus(ProtoGlobal.Room.Type roomType, long roomId, long messageId, ProtoGlobal.RoomMessageStatus roomMessageStatus) {
+        getMessageController().sendUpdateStatus(roomType, roomId, messageId, roomMessageStatus);
     }
 
     @Override
@@ -7243,18 +7232,18 @@ public class FragmentChat extends BaseFragment
                             .show();
 
                 } else {
-                        new MaterialDialog.Builder(getActivity())
-                                .title(R.string.message)
-                                .content(getActivity().getResources().getString(R.string.st_desc_deletes))
-                                .positiveText(R.string.ok)
-                                .negativeText(R.string.cancel)
-                                .onPositive((dialog, which) -> {
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.message)
+                            .content(getActivity().getResources().getString(R.string.st_desc_deletes))
+                            .positiveText(R.string.ok)
+                            .negativeText(R.string.cancel)
+                            .onPositive((dialog, which) -> {
 
-                                    bothDeleteMessageId = null;
-                                    getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-                                    deleteSelectedMessageFromAdapter(messageIds);
+                                bothDeleteMessageId = null;
+                                getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+                                deleteSelectedMessageFromAdapter(messageIds);
 
-                                }).show();
+                            }).show();
                 }
             });
         });
@@ -8147,13 +8136,13 @@ public class FragmentChat extends BaseFragment
                         break;
                     case LOG_VALUE:
                         // TODO: 1/6/21 MESSAGE_REFACTOR
-//                        if (messageObject.realmRoomMessage.isShowMessage()) {
-//                            if (!addTop) {
-//                                mAdapter.add(new LogItem(mAdapter, this).setMessage(messageObject).withIdentifier(identifier));
-//                            } else {
-//                                mAdapter.add(index, new LogItem(mAdapter, this).setMessage(messageObject).withIdentifier(identifier));
-//                            }
-//                        }
+                        if (messageObject.needToShow) {
+                            if (!addTop) {
+                                mAdapter.add(new LogItem(mAdapter, this).setMessage(messageObject).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogItem(mAdapter, this).setMessage(messageObject).withIdentifier(identifier));
+                            }
+                        }
                         break;
                 }
             }
@@ -9339,6 +9328,19 @@ public class FragmentChat extends BaseFragment
                 }
 
             });
+        } else if (id == EventManager.CHAT_UPDATE_STATUS) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) message[0];
+                long messageId = (long) message[1];
+                ProtoGlobal.RoomMessageStatus status = (ProtoGlobal.RoomMessageStatus) message[2];
+                if (roomId == mRoomId) {
+                    if (mAdapter != null) {
+                        mAdapter.updateMessageStatus(messageId, status);
+                    }
+                }
+
+            });
+
         }
     }
 

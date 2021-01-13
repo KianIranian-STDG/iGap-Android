@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
@@ -229,7 +230,8 @@ public class RealmRoomMessage extends RealmObject {
                                 if (roomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                     RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
-                                    G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                    MessageController.getInstance(AccountManager.selectedAccount).sendUpdateStatus(room.getType(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                   // G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                                 }
                             }
                         }
