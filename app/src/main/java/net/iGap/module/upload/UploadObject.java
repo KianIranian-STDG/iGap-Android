@@ -1,5 +1,7 @@
 package net.iGap.module.upload;
 
+import android.util.Log;
+
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
@@ -30,7 +32,7 @@ public class UploadObject {
     public static UploadObject createForMessage(RealmRoomMessage message, ProtoGlobal.Room.Type roomType) {
         UploadObject object = new UploadObject();
 
-        if (message == null || message.messageId == 0 || message.attachment == null) {
+        if (message == null || message.messageId == 0 || message.attachment == null || message.attachment.localFilePath == null) {
             return null;
         }
 
@@ -49,6 +51,8 @@ public class UploadObject {
         object.message = message;
         object.roomType = roomType;
 
+        Log.i("Upload", "createForMessage: " + object.toString());
+
         return object;
     }
 
@@ -66,5 +70,26 @@ public class UploadObject {
         object.messageType = roomType;
         object.onUploadListener = onUploadListener;
         return object;
+    }
+
+    @Override
+    public String toString() {
+        return "UploadObject{" +
+                "key='" + key + '\'' +
+                ", fileToken='" + fileToken + '\'' +
+                ", mimeType='" + mimeType + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", file=" + file +
+                ", messageId=" + messageId +
+                ", fileSize=" + fileSize +
+                ", offset=" + offset +
+                ", selector=" + selector +
+                ", progress=" + progress +
+                ", path='" + path + '\'' +
+                ", messageType=" + messageType +
+                ", message=" + message +
+                ", roomType=" + roomType +
+                ", onUploadListener=" + onUploadListener +
+                '}';
     }
 }

@@ -1,8 +1,8 @@
 package net.iGap.helper.upload;
 
-import androidx.annotation.NonNull;
+import android.util.Log;
 
-import net.iGap.helper.FileLog;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +28,8 @@ public class UploadRequestBody extends RequestBody {
         this.inputStream = inputStream;
         this.totalUploaded = offset;
         this.progressListener = progressListener;
+
+        Log.i("UploadHttpRequest", "UploadStreamRequest: " + offset + " ");
     }
 
 
@@ -63,7 +65,7 @@ public class UploadRequestBody extends RequestBody {
                 progressListener.onProgress(totalUploaded);
             }
         } catch (Exception e) {
-            FileLog.e(e);
+            progressListener.onError(e);
         } finally {
             Util.closeQuietly(source);
         }
@@ -71,5 +73,7 @@ public class UploadRequestBody extends RequestBody {
 
     public interface IOnProgressListener {
         void onProgress(final long totalByte);
+
+        void onError(Exception e);
     }
 }

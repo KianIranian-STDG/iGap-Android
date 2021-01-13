@@ -253,6 +253,7 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
+                    FileLog.i("UploadHttpRequest", "onUploadFail: " + fileObject.toString());
                     long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
                     HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
                     Log.i(TAG, "onUploadFail: " + uploadedBytes);
