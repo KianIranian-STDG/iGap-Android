@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Long.parseLong;
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED_VALUE;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
 
@@ -148,7 +149,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 return;
 
             if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
-                messageClickListener.onVoiceListenedStatus(holder.mType, holder.mRoomId, parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
+                messageClickListener.onVoiceListenedStatus(holder.mType.getNumber(), holder.mRoomId, parseLong(holder.mMessageID), LISTENED_VALUE);
                 RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
             }
 

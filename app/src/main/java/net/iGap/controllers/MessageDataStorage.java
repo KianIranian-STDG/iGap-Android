@@ -606,21 +606,18 @@ public class MessageDataStorage extends BaseController {
                 }
 
                 database.commitTransaction();
-
-
             } catch (Exception e) {
                 FileLog.e(e);
             }
         });
-
     }
 
-    public void updateStatus(long roomId, long messageId, String updaterAuthorHash, ProtoGlobal.RoomMessageStatus messageStatus, long statusVersion, String id) {
-        FileLog.i(TAG, "chatUpdateStatus: " + roomId + " " + messageId + " " + updaterAuthorHash + " " + messageStatus.name() + " " + statusVersion + " " + id);
+    public void updateMessageStatus(long roomId, long messageId, String updaterAuthorHash, ProtoGlobal.RoomMessageStatus messageStatus, long statusVersion, boolean update) {
         storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "updateRoomStatusStatus: " + roomId + " " + messageId + " " + updaterAuthorHash + " " + messageStatus.name() + " " + statusVersion + " " + update);
             try {
                 database.beginTransaction();
-                if (!id.isEmpty()) {
+                if (!update) {
                     if (messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
                         deleteOfflineAction(messageId, ClientConditionOffline.SEEN);
                     } else if (messageStatus == ProtoGlobal.RoomMessageStatus.LISTENED) {
@@ -666,30 +663,43 @@ public class MessageDataStorage extends BaseController {
 
     }
 
-    public void addOfflineSeen(final long roomId, final long messageId) {
-        FileLog.i(TAG, "addOfflineSeen: " + roomId + " " + messageId);
-        storageQueue.postRunnable(() -> {
-            try {
-                database.beginTransaction();
-                RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
-                if (realmClientCondition != null) {
-                    realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(database, messageId));
-                }
-
-                database.commitTransaction();
-
-
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        });
+    public void setOfflineSeen(final long roomId, final long messageId, boolean needTransaction, boolean needQueue) {
+        if (needQueue) {
+            storageQueue.postRunnable(() -> setOfflineSeenInternal(roomId, messageId, needTransaction));
+        } else {
+            setOfflineSeenInternal(roomId, messageId, needTransaction);
+        }
     }
 
-    public void setStatusSeenInChat(final long messageId) {
-        FileLog.i(TAG, "setStatusSeenInChat: " + messageId);
+    private void setOfflineSeenInternal(final long roomId, final long messageId, boolean needTransaction) {
+        FileLog.i(TAG, "addOfflineSeen: " + roomId + " " + messageId);
+        try {
+            if (needTransaction) {
+                database.beginTransaction();
+            }
+
+            RealmClientCondition realmClientCondition = database.where(RealmClientCondition.class).equalTo("roomId", roomId).findFirst();
+            if (realmClientCondition != null) {
+                realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(database, messageId));
+            }
+
+            if (needTransaction) {
+                database.commitTransaction();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
+
+    public void setStatusSeenInChat(final long roomId, final long messageId) {
         storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "setStatusSeenInChat: " + messageId);
             try {
                 database.beginTransaction();
+
+                setOfflineSeenInternal(roomId, messageId, false);
+
                 RealmRoomMessage realmRoomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
                 if (realmRoomMessage != null) {
                     if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
@@ -698,8 +708,6 @@ public class MessageDataStorage extends BaseController {
                 }
 
                 database.commitTransaction();
-
-
             } catch (Exception e) {
                 FileLog.e(e);
             }

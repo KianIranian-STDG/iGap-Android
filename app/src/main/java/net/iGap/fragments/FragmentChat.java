@@ -255,7 +255,6 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
-import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -335,6 +334,8 @@ import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Dire
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.SEEN_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.CONTACT;
@@ -4589,41 +4590,21 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onItemShowingMessageId(final MessageObject messageObject) {// TODO: 12/28/20 MESSAGE_REFACTOR
-        /**
-         * if in current room client have new message that not seen yet
-         * after first new message come in the view change view for unread count
-         */
-        if (getFirstUnreadMessage() != null &&
-                getFirstUnreadMessage().isValid() &&
-                getFirstUnreadMessage().getMessageId() <= messageObject.id
-        ) {
+    public void onItemShowingMessageId(final MessageObject messageObject) {// TODO: 12/28/20 MESSAGE_REFACTOR_NEED_TEST
+        if (getFirstUnreadMessage() != null && getFirstUnreadMessage().isValid() && getFirstUnreadMessage().getMessageId() <= messageObject.id) {
             setCountNewMessageZero();
         }
-        if (!isPaused && chatType != CHANNEL &&
-                (!messageObject.isSenderMe() &&
-                        ProtoGlobal.RoomMessageStatus.forNumber(messageObject.status) != null &&
-                        messageObject.status != ProtoGlobal.RoomMessageStatus.SEEN.getNumber() &&
-                        messageObject.status != ProtoGlobal.RoomMessageStatus.LISTENED.getNumber())
-        ) {
-            /**
-             * set message status SEEN for avoid from run this block in each bindView
-             */
 
-            messageObject.status = ProtoGlobal.RoomMessageStatus.SEEN.getNumber();
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    getMessageDataStorage().addOfflineSeen(mRoomId, messageObject.id);
-                    getMessageDataStorage().setStatusSeenInChat(messageObject.id);
-                    getMessageController().sendUpdateStatus(chatType, mRoomId, messageObject.id, ProtoGlobal.RoomMessageStatus.SEEN);
-                }
-            }).start();
+        if (!isPaused && chatType != CHANNEL && (!messageObject.isSenderMe() && messageObject.status != SEEN_VALUE && messageObject.status != LISTENED_VALUE)) {
+            messageObject.status = SEEN_VALUE;
+
+            getMessageDataStorage().setStatusSeenInChat(mRoomId, messageObject.id);
+            getMessageController().sendUpdateStatus(chatType.getNumber(), mRoomId, messageObject.id, SEEN_VALUE);
         }
     }
 
     @Override
-    public void onVoiceListenedStatus(ProtoGlobal.Room.Type roomType, long roomId, long messageId, ProtoGlobal.RoomMessageStatus roomMessageStatus) {
+    public void onVoiceListenedStatus(int roomType, long roomId, long messageId, int roomMessageStatus) {
         getMessageController().sendUpdateStatus(roomType, roomId, messageId, roomMessageStatus);
     }
 
