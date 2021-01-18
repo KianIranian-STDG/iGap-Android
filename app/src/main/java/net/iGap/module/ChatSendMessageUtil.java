@@ -12,7 +12,6 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
-import net.iGap.G;
 import net.iGap.controllers.BaseController;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.FileLog;
@@ -406,9 +405,9 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
             // todo:please check in group and channel that user is joined
 
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
             }
         }
     }

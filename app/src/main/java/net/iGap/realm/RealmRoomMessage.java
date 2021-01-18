@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
@@ -239,7 +240,7 @@ public class RealmRoomMessage extends RealmObject {
                                 if (roomMessage.getUserId() != AccountManager.getInstance().getCurrentUser().getId() && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                     roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                     RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
-                                    G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                    MessageController.getInstance(AccountManager.selectedAccount).sendUpdateStatus(room.getType().getNumber(), room.getId(), roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN_VALUE);
                                 }
                             }
                         }
@@ -762,7 +763,7 @@ public class RealmRoomMessage extends RealmObject {
         message.setUserId(-1); // -1 means time message or unread message
         message.setMessage(countNewMessage + " " + G.fragmentActivity.getResources().getString(R.string.unread_message));
         message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
-        message.setStatus("SENT");
+        message.setStatus(ProtoGlobal.RoomMessageStatus.DELIVERED.toString());
         return message;
     }
 
@@ -770,9 +771,9 @@ public class RealmRoomMessage extends RealmObject {
         RealmRoomMessage timeMessage = new RealmRoomMessage();
         timeMessage.setMessageId(SUID.id().get());
         timeMessage.setUserId(-1); // -1 means time message or unread message
+        timeMessage.setStatus(ProtoGlobal.RoomMessageStatus.DELIVERED.toString());
         timeMessage.setUpdateTime(time);
         timeMessage.setMessage(message);
-        timeMessage.setStatus("SENT");
         timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
         return timeMessage;
     }

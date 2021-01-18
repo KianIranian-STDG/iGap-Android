@@ -45,7 +45,6 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.accountManager.AccountManager;
@@ -164,7 +163,6 @@ public class G extends ApplicationContext {
     public static long currentServerTime;
     public static long latestResponse = System.currentTimeMillis();
     public static long serverHeartBeatTiming = 60 * 1000;
-    public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
     public static ConnectionState connectionState;
     public static ConnectionState latestConnectionState;
     public static OnConnectionChangeState onConnectionChangeState;

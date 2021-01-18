@@ -36,7 +36,7 @@ public interface IMessageItem {
 
     void onItemShowingMessageId(MessageObject messageInfo);
 
-    //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
+    void onVoiceListenedStatus(int roomType, long roomId, long messageId, int roomMessageStatus);
 
     void onPlayMusic(String messageId);
 

@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
@@ -20,6 +21,9 @@ import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT_VALUE;
+import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP_VALUE;
 
 public class MessageController extends BaseController implements EventListener {
 
@@ -84,6 +88,8 @@ public class MessageController extends BaseController implements EventListener {
         } else if (object instanceof IG_RPC.Res_Channel_Delete_Message) {
             IG_RPC.Res_Channel_Delete_Message res = (IG_RPC.Res_Channel_Delete_Message) object;
             onDeleteMessageResponse(res, true);
+        } else if (object instanceof IG_RPC.Res_Chat_Update_Status || object instanceof IG_RPC.Res_Group_Update_Status) {
+            onMessageStatusResponse(object, true);
         }
     }
 
@@ -96,6 +102,42 @@ public class MessageController extends BaseController implements EventListener {
         }
 
         return !HelperTimeOut.timeoutChecking(currentTime, messageTime, G.bothChatDeleteTime);
+    }
+
+    public void sendUpdateStatus(int roomType, long roomId, long messageId, int roomMessageStatus) {
+        AbstractObject req = null;
+        if (roomType == CHAT_VALUE) {
+            IG_RPC.Chat_Update_Status chatUpdateStatusReq = new IG_RPC.Chat_Update_Status();
+            chatUpdateStatusReq.roomId = roomId;
+            chatUpdateStatusReq.messageId = messageId;
+            chatUpdateStatusReq.roomMessageStatus = ProtoGlobal.RoomMessageStatus.forNumber(roomMessageStatus);
+            req = chatUpdateStatusReq;
+        } else if (roomType == GROUP_VALUE) {
+            IG_RPC.Group_Update_Status groupUpdateStatusReq = new IG_RPC.Group_Update_Status();
+            groupUpdateStatusReq.roomId = roomId;
+            groupUpdateStatusReq.messageId = messageId;
+            groupUpdateStatusReq.roomMessageStatus = ProtoGlobal.RoomMessageStatus.forNumber(roomMessageStatus);
+            req = groupUpdateStatusReq;
+        }
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                onMessageStatusResponse(response, false);
+            }
+        });
+    }
+
+    private void onMessageStatusResponse(AbstractObject response, boolean update) {
+        if (response instanceof IG_RPC.Res_Chat_Update_Status) {
+            IG_RPC.Res_Chat_Update_Status res = (IG_RPC.Res_Chat_Update_Status) response;
+            getMessageDataStorage().updateMessageStatus(res.roomId, res.messageId, res.updaterAuthorHash, res.statusValue, res.statusVersion, update);
+            if (res.statusValue == ProtoGlobal.RoomMessageStatus.SEEN) {
+                HelperNotification.getInstance().cancelNotification(res.roomId);
+            }
+        } else if (response instanceof IG_RPC.Res_Group_Update_Status) {
+            IG_RPC.Res_Group_Update_Status res = (IG_RPC.Res_Group_Update_Status) response;
+            getMessageDataStorage().updateMessageStatus(res.roomId, res.messageId, res.updaterAuthorHash, res.statusValue, res.statusVersion, update);
+        }
     }
 
     public void clearHistoryMessage(final long roomId) {
@@ -215,13 +257,13 @@ public class MessageController extends BaseController implements EventListener {
     public void editMessage(long messageId, long roomId, String newMessage, int chatType) {
         AbstractObject req = null;
 
-        if (chatType == ProtoGlobal.Room.Type.CHAT_VALUE) {
+        if (chatType == CHAT_VALUE) {
             IG_RPC.Chat_edit_message req_chat_edit = new IG_RPC.Chat_edit_message();
             req_chat_edit.message = newMessage;
             req_chat_edit.messageId = messageId;
             req_chat_edit.roomId = roomId;
             req = req_chat_edit;
-        } else if (chatType == ProtoGlobal.Room.Type.GROUP_VALUE) {
+        } else if (chatType == GROUP_VALUE) {
             IG_RPC.Group_edit_message req_group_edit = new IG_RPC.Group_edit_message();
             req_group_edit.message = newMessage;
             req_group_edit.messageId = messageId;
@@ -292,7 +334,7 @@ public class MessageController extends BaseController implements EventListener {
     public void pinMessage(long roomId, long messageId, int chatType) {
         AbstractObject req = null;
 
-        if (chatType == ProtoGlobal.Room.Type.GROUP_VALUE) {
+        if (chatType == GROUP_VALUE) {
             IG_RPC.Group_pin_message group_pin_message = new IG_RPC.Group_pin_message();
             group_pin_message.roomId = roomId;
             group_pin_message.messageId = messageId;
@@ -344,14 +386,14 @@ public class MessageController extends BaseController implements EventListener {
                 bothDelete = true;
             }
 
-            if (roomType == ProtoGlobal.Room.Type.CHAT_VALUE) {
+            if (roomType == CHAT_VALUE) {
                 IG_RPC.Chat_Delete_Message chat_delete_message = new IG_RPC.Chat_Delete_Message();
                 chat_delete_message.roomId = roomId;
                 chat_delete_message.messageId = messageId;
                 chat_delete_message.both = bothDelete;
                 req = chat_delete_message;
 
-            } else if (roomType == ProtoGlobal.Room.Type.GROUP_VALUE) {
+            } else if (roomType == GROUP_VALUE) {
                 IG_RPC.Group_Delete_Message group_delete_message = new IG_RPC.Group_Delete_Message();
                 group_delete_message.roomId = roomId;
                 group_delete_message.messageId = messageId;

@@ -11,7 +11,6 @@
 package net.iGap.response;
 
 import net.iGap.helper.HelperNotification;
-import net.iGap.helper.HelperUpdateMessageStatue;
 import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -34,9 +33,6 @@ public class ChatUpdateStatusResponse extends MessageHandler {
         super.handler();
         ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder builder = (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
         ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
-
-        HelperUpdateMessageStatue.updateStatus(builder.getRoomId(), builder.getMessageId(), builder.getUpdaterAuthorHash(), builder.getStatus(), builder.getStatusVersion(), response);
-
         if (builder.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
             HelperNotification.getInstance().cancelNotification(builder.getRoomId());
         }
