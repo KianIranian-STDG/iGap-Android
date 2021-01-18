@@ -510,38 +510,6 @@ public class MessageDataStorage extends BaseController {
         return result[0];
     }
 
-    public String getCurrentUserAuthorHash() {
-        FileLog.i(TAG, "getCurrentUserAuthorHash: ");
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
-        final String[] result = new String[1];
-
-        storageQueue.postRunnable(() -> {
-            try {
-                RealmUserInfo realmUser = database.where(RealmUserInfo.class).findFirst();
-                if (realmUser != null) {
-                    result[0] = realmUser.getAuthorHash();
-                } else {
-                    result[0] = "";
-                }
-
-                countDownLatch.countDown();
-            } catch (Exception e) {
-                FileLog.e(e);
-            } finally {
-                countDownLatch.countDown();
-            }
-        });
-
-        try {
-            countDownLatch.await();
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-
-        return result[0];
-
-    }
-
     public long getRoomClearId(final long roomId) {
         FileLog.i(TAG, "getRoomClearId: " + roomId);
         final CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -578,38 +546,49 @@ public class MessageDataStorage extends BaseController {
         return result[0];
     }
 
-    public void deleteOfflineAction(final long messageId, final ClientConditionOffline messageStatus) {
-        FileLog.i(TAG, "deleteOfflineAction: " + messageId + " " + messageStatus.name());
-        storageQueue.postRunnable(() -> {
-            try {
-                database.beginTransaction();
-                if (messageStatus == ClientConditionOffline.DELETE) {
-                    RealmOfflineDelete offlineDelete = database.where(RealmOfflineDelete.class).equalTo("offlineDelete", messageId).findFirst();
-                    if (offlineDelete != null) {
-                        offlineDelete.deleteFromRealm();
-                    }
-                } else if (messageStatus == ClientConditionOffline.EDIT) {
-                    RealmOfflineEdited offlineEdited = database.where(RealmOfflineEdited.class).equalTo("messageId", messageId).findFirst();
-                    if (offlineEdited != null) {
-                        offlineEdited.deleteFromRealm();
-                    }
-                } else if (messageStatus == ClientConditionOffline.SEEN) {
-                    RealmOfflineSeen offlineSeen = database.where(RealmOfflineSeen.class).equalTo("offlineSeen", messageId).findFirst();
-                    if (offlineSeen != null) {
-                        offlineSeen.deleteFromRealm();
-                    }
-                } else if (messageStatus == ClientConditionOffline.LISTEN) {
-                    RealmOfflineListen offlineListen = database.where(RealmOfflineListen.class).equalTo("offlineListen", messageId).findFirst();
-                    if (offlineListen != null) {
-                        offlineListen.deleteFromRealm();
-                    }
-                }
+    public void deleteOfflineAction(final long messageId, final ClientConditionOffline messageStatus, boolean needTransaction, boolean needQueue) {
+        if (needQueue) {
+            storageQueue.postRunnable(() -> deleteOfflineActionInternal(messageId, messageStatus, needTransaction));
+        } else {
+            deleteOfflineActionInternal(messageId, messageStatus, needTransaction);
+        }
+    }
 
-                database.commitTransaction();
-            } catch (Exception e) {
-                FileLog.e(e);
+    public void deleteOfflineActionInternal(final long messageId, final ClientConditionOffline messageStatus, boolean needTransaction) {
+        FileLog.i(TAG, "deleteOfflineActionInternal: " + messageId + " " + messageStatus.name());
+
+        try {
+            if (needTransaction) {
+                database.beginTransaction();
             }
-        });
+            if (messageStatus == ClientConditionOffline.DELETE) {
+                RealmOfflineDelete offlineDelete = database.where(RealmOfflineDelete.class).equalTo("offlineDelete", messageId).findFirst();
+                if (offlineDelete != null) {
+                    offlineDelete.deleteFromRealm();
+                }
+            } else if (messageStatus == ClientConditionOffline.EDIT) {
+                RealmOfflineEdited offlineEdited = database.where(RealmOfflineEdited.class).equalTo("messageId", messageId).findFirst();
+                if (offlineEdited != null) {
+                    offlineEdited.deleteFromRealm();
+                }
+            } else if (messageStatus == ClientConditionOffline.SEEN) {
+                RealmOfflineSeen offlineSeen = database.where(RealmOfflineSeen.class).equalTo("offlineSeen", messageId).findFirst();
+                if (offlineSeen != null) {
+                    offlineSeen.deleteFromRealm();
+                }
+            } else if (messageStatus == ClientConditionOffline.LISTEN) {
+                RealmOfflineListen offlineListen = database.where(RealmOfflineListen.class).equalTo("offlineListen", messageId).findFirst();
+                if (offlineListen != null) {
+                    offlineListen.deleteFromRealm();
+                }
+            }
+            if (needTransaction) {
+                database.commitTransaction();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
     }
 
     public void updateMessageStatus(long roomId, long messageId, String updaterAuthorHash, ProtoGlobal.RoomMessageStatus messageStatus, long statusVersion, boolean update) {
@@ -619,14 +598,26 @@ public class MessageDataStorage extends BaseController {
                 database.beginTransaction();
                 if (!update) {
                     if (messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
-                        deleteOfflineAction(messageId, ClientConditionOffline.SEEN);
+                        deleteOfflineAction(messageId, ClientConditionOffline.SEEN, false, false);
                     } else if (messageStatus == ProtoGlobal.RoomMessageStatus.LISTENED) {
-                        deleteOfflineAction(messageId, ClientConditionOffline.LISTEN);
+                        deleteOfflineAction(messageId, ClientConditionOffline.LISTEN, false, false);
                     }
                 } else {
+                    String currentUserAuthorHash = "";
+                    RealmUserInfo realmUser = database.where(RealmUserInfo.class).findFirst();
+                    if (realmUser != null) {
+                        currentUserAuthorHash = realmUser.getAuthorHash();
+                    } else {
+                        currentUserAuthorHash = "";
+                    }
+                    if (currentUserAuthorHash.equals(updaterAuthorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
 
-                    if (getCurrentUserAuthorHash().equals(updaterAuthorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
-                        RealmRoom realmRoom = getRoom(roomId);
+                        RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+
+                        if (realmRoom != null) {
+                            realmRoom = database.copyFromRealm(realmRoom);
+                        }
+
                         if (realmRoom != null && (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getMessageId() <= messageId)) {
                             realmRoom.setUnreadCount(0);
                         }
@@ -697,8 +688,8 @@ public class MessageDataStorage extends BaseController {
             FileLog.i(TAG, "setStatusSeenInChat: " + messageId);
             try {
                 database.beginTransaction();
-
-                setOfflineSeenInternal(roomId, messageId, false);
+                setOfflineSeen(roomId, messageId, false, false);
+                // setOfflineSeenInternal(roomId, messageId, false);
 
                 RealmRoomMessage realmRoomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
                 if (realmRoomMessage != null) {
