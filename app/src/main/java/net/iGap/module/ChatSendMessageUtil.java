@@ -116,6 +116,35 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
+    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId, MessageObject message) { // TODO: 1/13/21 MESSAGE_REFACTOR
+        ChatSendMessageUtil builder = newBuilder(roomType, ProtoGlobal.RoomMessageType.forNumber(message.messageType), roomId);
+        if (message.message != null && !message.message.isEmpty()) {
+            builder.message(message.message);
+        }
+        if (message.getAttachment() != null && message.getAttachment().token != null && !message.getAttachment().token.isEmpty()) {
+            builder.attachment(message.getAttachment().token);
+        }
+        /*if (message.getRoomMessageContact() != null) {
+            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
+        }*/
+        if (message.location != null) {
+            builder.location(message.location.lat, message.location.lan);
+        }
+
+        if (message.forwardedMessage != null) {
+            builder.forwardMessage(message.forwardedMessage.roomId, message.forwardedMessage.id);
+        }
+        if (message.replayToMessage != null) {
+            builder.replyMessage(message.replayToMessage.id);
+        }
+        /*if (message.additional!= null) {
+            builder.additional(message.additional);
+        }*/
+
+        builder.sendMessage(Long.toString(message.id));
+        return this;
+    }
+
     public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message) {
         ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
         if (message.getMessage() != null && !message.getMessage().isEmpty()) {
@@ -124,9 +153,9 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
             builder.attachment(message.getAttachment().getToken());
         }
-        if (message.getRoomMessageContact() != null) {
+        /*if (message.getRoomMessageContact() != null) {
             builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
-        }
+        }*/
         if (message.getLocation() != null) {
             builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
         }

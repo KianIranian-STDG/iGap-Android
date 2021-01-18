@@ -87,12 +87,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-        G.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-            }
-        });
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
     }
 
     @Override

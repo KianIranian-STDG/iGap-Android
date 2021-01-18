@@ -154,7 +154,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         return struct;
     }
 
-    public static DownloadObject createForRoomMessage(RealmRoomMessage message) {
+    public static DownloadObject createForRoomMessage(RealmRoomMessage message) { // TODO: 1/18/21 MESSAGE_REFACTOR
         final RealmRoomMessage finalMessage = RealmRoomMessage.getFinalMessage(message);
 
         if (finalMessage == null || finalMessage.attachment == null) {

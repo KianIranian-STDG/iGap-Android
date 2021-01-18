@@ -77,15 +77,18 @@ public class AttachmentObject {
     }
 
     private static AttachmentObject createThumb(RealmThumbnail thumbnail, String token) {
-        AttachmentObject attachmentObject = new AttachmentObject();
-        attachmentObject.cacheId = thumbnail.getCacheId();
-        attachmentObject.token = token;
-        attachmentObject.height = thumbnail.getHeight();
-        attachmentObject.width = thumbnail.getWidth();
+        if (thumbnail != null) {
+            AttachmentObject attachmentObject = new AttachmentObject();
+            attachmentObject.cacheId = thumbnail.getCacheId();
+            attachmentObject.token = token;
+            attachmentObject.height = thumbnail.getHeight();
+            attachmentObject.width = thumbnail.getWidth();
 //        attachmentObject.mime = thumbnail.getMime();
 //        attachmentObject.name = thumbnail.getName();
-        attachmentObject.size = thumbnail.getSize();
-        return attachmentObject;
+            attachmentObject.size = thumbnail.getSize();
+            return attachmentObject;
+        }
+        return null;
     }
 
     public boolean isFileExistsOnLocal() {

@@ -85,12 +85,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
         if (fileType == LocalFileType.THUMBNAIL) {
-            G.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-                }
-            });
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
         } else {
             AppUtils.setProgresColor(holder.progress.progressBar);
             holder.progress.setVisibility(View.VISIBLE);

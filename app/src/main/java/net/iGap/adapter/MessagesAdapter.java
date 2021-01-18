@@ -42,7 +42,6 @@ import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
 import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
