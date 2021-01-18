@@ -393,11 +393,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
         } else if (id == EventManager.ON_UPLOAD_COMPLETED) {
             G.runOnUiThread(() -> {
-                ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
                 long messageId = (long) message[1];
                 if (messageId == messageObject.id) {
-                    String filePath = AndroidUtils.getFilePathWithCashId((String) message[2], messageObject.attachment.name, messageType.getNumber());
-                    messageObject.attachment.filePath = filePath;
+                    ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
+                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], messageObject.attachment.name, messageType.getNumber());
+                    onProgressFinish(holder, attachment, messageType.getNumber());
                     if (attachment.isFileExistsOnLocalAndIsImage()) {
                         onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
                     } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
@@ -407,6 +407,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
                         }
                     }
+
                 }
             });
         }
