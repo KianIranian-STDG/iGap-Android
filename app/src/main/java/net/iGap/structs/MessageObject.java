@@ -107,8 +107,8 @@ public class MessageObject {
         messageObject.messageType = roomMessage.getMessageTypeValue();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
-        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime()  : roomMessage.getUpdateTime();
-        messageObject.createTime = roomMessage.getCreateTime() ;
+        messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
+        messageObject.createTime = roomMessage.getCreateTime();
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
@@ -164,7 +164,6 @@ public class MessageObject {
         if (roomMessage.getRoomMessageWallet() != null) {
             messageObject.wallet = WalletObject.create(roomMessage.getRoomMessageWallet());
         }
-//        messageObject.additionalData = roomMessage.getAdditionalData();
 
         if (roomMessage.getRoomMessageContact() != null) {
             messageObject.contact = RoomContactObject.create(roomMessage.getRoomMessageContact());
@@ -172,17 +171,19 @@ public class MessageObject {
 
         if (roomMessage.getRealmAdditional() != null) {
             messageObject.additionalData = roomMessage.getRealmAdditional().getAdditionalData();
+            messageObject.additionalType = roomMessage.getRealmAdditional().getAdditionalType();
+            messageObject.additional = AdditionalObject.create(roomMessage);
         }
-//        messageObject.additionalType = roomMessage.getAdditionalType();
-        // messageObject.channelExtra = roomMessage.getChannelExtra();
+
         if (roomMessage.getChannelExtra() != null) {
             messageObject.channelExtraObject = ChannelExtraObject.create(roomMessage.getChannelExtra());
         }
+
         messageObject.messageType = roomMessage.getMessageType().getNumber();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();
         messageObject.updateTime = roomMessage.getUpdateTime() == 0 ? roomMessage.getCreateTime() : roomMessage.getUpdateTime();
-        messageObject.createTime = roomMessage.getCreateTime() ;
+        messageObject.createTime = roomMessage.getCreateTime();
 
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
