@@ -43,7 +43,6 @@ import net.iGap.helper.HelperMimeType;
 import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.CircleProgress.CircularProgressView;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.observers.interfaces.IResendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
@@ -68,10 +67,18 @@ import static net.iGap.G.context;
 import static net.iGap.module.AndroidUtils.suitablePath;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.AUDIO_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.CONTACT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.FILE_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOCATION_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.TEXT_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 
 public final class AppUtils {
@@ -491,64 +498,64 @@ public final class AppUtils {
     /**
      * fetch type of message for show in reply view
      *
-     * @param realmRoomMessage for detect message type
+     * @param messageObject for detect message type
      * @return final message text
      */
-    public static String replyTextMessage(RealmRoomMessage realmRoomMessage, Resources resources) {
-        RealmRoomMessage message = RealmRoomMessage.getFinalMessage(realmRoomMessage);
+    public static String replyTextMessage(MessageObject messageObject, Resources resources) {
+        MessageObject message = RealmRoomMessage.getFinalMessage(messageObject);
         String messageText = "";
         if (message != null) {
-            switch (message.getMessageType()) {
-                case TEXT:
-                    if (message.getMessage() != null) {
-                        messageText = message.getMessage();
+            switch (message.messageType) {
+                case TEXT_VALUE:
+                    if (message.message != null) {
+                        messageText = message.message;
                     }
                     break;
-                case AUDIO_TEXT:
-                case AUDIO:
+                case AUDIO_TEXT_VALUE:
+                case AUDIO_VALUE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.audio_message);
                     break;
-                case CONTACT:
-                    messageText = message.getRoomMessageContact().getFirstName() + "\n" + message.getRoomMessageContact().getLastPhoneNumber();
+                case CONTACT_VALUE:
+                    messageText = message.contact.firstName + "\n" + message.contact.phones.get(message.contact.phones.size() - 1);
                     break;
-                case FILE_TEXT:
-                case FILE:
+                case FILE_TEXT_VALUE:
+                case FILE_VALUE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.file_message);
                     break;
-                case STICKER:
+                case STICKER_VALUE:
                     messageText = resources.getString(R.string.sticker);
                     break;
-                case GIF_TEXT:
-                case GIF:
+                case GIF_TEXT_VALUE:
+                case GIF_VALUE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.gif_message);
                     break;
-                case IMAGE_TEXT:
-                case IMAGE:
+                case IMAGE_TEXT_VALUE:
+                case IMAGE_VALUE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.image_message);
                     break;
-                case LOCATION:
+                case LOCATION_VALUE:
                     messageText = resources.getString(R.string.location_message);
                     break;
-                case VIDEO_TEXT:
-                case VIDEO:
+                case VIDEO_TEXT_VALUE:
+                case VIDEO_VALUE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
                     messageText = resources.getString(R.string.video_message);
                     break;
-                case VOICE:
+                case VOICE_VALUE:
                     if (message.getAttachment() == null) {
                         return null;
                     }
