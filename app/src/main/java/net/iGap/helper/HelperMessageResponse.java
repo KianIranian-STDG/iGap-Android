@@ -128,7 +128,7 @@ public class HelperMessageResponse {
         }
 
         if ((roomMessage.getAuthor().getUser().getUserId() == AccountManager.getInstance().getCurrentUser().getId()) && roomMessage.getAttachment() != null) {
-            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId());
+            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken());
         }
     }
 }

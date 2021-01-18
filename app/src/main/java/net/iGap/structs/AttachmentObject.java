@@ -79,7 +79,7 @@ public class AttachmentObject {
     private static AttachmentObject createThumb(RealmThumbnail thumbnail, String token) {
         if (thumbnail != null) {
             AttachmentObject attachmentObject = new AttachmentObject();
-            attachmentObject.cacheId = thumbnail.getCacheId() == null ? "" : thumbnail.getCacheId();
+            attachmentObject.cacheId = thumbnail.getCacheId();
             attachmentObject.token = token;
             attachmentObject.height = thumbnail.getHeight();
             attachmentObject.width = thumbnail.getWidth();
