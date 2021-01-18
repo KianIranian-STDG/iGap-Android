@@ -7623,7 +7623,23 @@ public class FragmentChat extends BaseFragment
         roomMessage.setShowMessage(true);
         roomMessage.setCreateTime(updateTime);
         if (isReply()) {
-            roomMessage.setReplyTo((RealmRoomMessage) mReplayLayout.getTag()); // TODO: 1/13/21 MESSAGE_REFACTOR
+            MessageObject replyLayoutObject = (MessageObject) mReplayLayout.getTag();
+            RealmRoomMessage replyMessage = new RealmRoomMessage();
+            replyMessage.setUserId(replyLayoutObject.userId);
+            replyMessage.setUpdateTime(replyLayoutObject.updateTime);
+            replyMessage.setStatusVersion(replyLayoutObject.statusVersion);
+            replyMessage.setShowTime(replyLayoutObject.needToShow);
+            replyMessage.setRoomId(replyLayoutObject.roomId);
+            replyMessage.setPreviousMessageId(replyLayoutObject.previousMessageId);
+            replyMessage.setMessageId(replyLayoutObject.id);
+            replyMessage.setEdited(replyLayoutObject.edited);
+            replyMessage.setDeleted(replyLayoutObject.deleted);
+            replyMessage.setCreateTime(replyLayoutObject.createTime);
+            replyMessage.setMessage(replyLayoutObject.message);
+            replyMessage.setMessageType(ProtoGlobal.RoomMessageType.forNumber(replyLayoutObject.messageType));
+            replyMessage.setStatus(ProtoGlobal.RoomMessageStatus.forNumber(replyLayoutObject.status).toString());
+
+            roomMessage.setReplyTo(replyMessage); // TODO: 1/13/21 MESSAGE_REFACTOR
         }
         long replyMessageId = 0;
         if (roomMessage.getReplyTo() != null) {
