@@ -149,7 +149,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
     private SpannableString myText;
-    //    private RealmRoom realmRoomForwardedFrom;
+    private RealmRoom realmRoomForwardedFrom;
     public MessagesAdapter<AbstractMessage> mAdapter;
     private final Drawable SEND_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_sent_bg_light);
     private final Drawable RECEIVED_ITEM_BACKGROUND = G.context.getResources().getDrawable(R.drawable.chat_item_receive_bg_light);
@@ -210,18 +210,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         attachment = messageObject.getAttachment();
         additional = messageObject.getAdditional();
 
-//        if ((mMessage.getForwardMessage() != null)) {
-//            long messageId = mMessage.getForwardMessage().getMessageId();
-//            if (mMessage.getForwardMessage().getMessageId() < 0) {
-//                messageId = messageId * (-1);
-//            }
-//
-//            RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getAuthorRoomId()).findFirst();
-//            if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
-//                AbstractMessage.this.realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
-//        } else {
-//            realmRoomForwardedFrom = null;
-//        }
+        if ((messageObject.forwardedMessage != null)) {
+            long messageId = messageObject.forwardedMessage.id;
+            if (messageObject.forwardedMessage.id < 0) {
+                messageId = messageId * (-1);
+            }
+
+            DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoomForwardedFrom22 = realm.where(RealmRoom.class).equalTo("id", messageObject.forwardedMessage.roomId).findFirst();
+                if (realmRoomForwardedFrom22 != null && realmRoomForwardedFrom22.isValid())
+                    realmRoomForwardedFrom = realm.copyFromRealm(realmRoomForwardedFrom22);
+            });
+        } else {
+            realmRoomForwardedFrom = null;
+        }
 
         if (messageObject.forwardedMessage != null) {
             myText = new SpannableString(messageObject.forwardedMessage.message);
@@ -397,6 +399,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 long messageId = (long) message[1];
                 if (messageId == messageObject.id) {
                     ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
+                    if (message[2] == null || message[3] == null) {
+                        return;
+                    }
                     attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], messageObject.attachment.name, messageType.getNumber());
                     attachment.token = (String) message[3];
                     onProgressFinish(holder, attachment, messageType.getNumber());
@@ -1101,10 +1106,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();
                     } else {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                        if (messageObject.username.length() > 0) {
-//                            //TODO: fixed this and do not use G.currentActivity
-//                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, structMessage.username, HelperUrl.ChatEntry.profile, (mMessage.getForwardMessage().getMessageId() * (-1)));
-//                        }
+                        if (messageObject.username.length() > 0) {
+                            //TODO: fixed this and do not use G.currentActivity
+                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(G.currentActivity, messageObject.username, HelperUrl.ChatEntry.profile, (messageObject.forwardedMessage.id * (-1)));
+                        }
                     }
                 }
             });
@@ -1121,74 +1126,74 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             RealmRegisteredInfo info = DbManager.getInstance().doRealmTask(realm -> {
                 return RealmRegisteredInfo.getRegistrationInfo(realm, messageObject.forwardedMessage.userId);
             });// TODO: 12/29/20 MESSAGE_REFACTOR
-//            if (info != null) {
-//
-//                if (RealmRegisteredInfo.needUpdateUser(info.getId(), info.getCacheId())) {
-//                    if (!updateForwardInfo.containsKey(info.getId())) {
-//                        updateForwardInfo.put(info.getId(), messageObject.messageId + "");
-//                    }
-//                }
-//
-//                txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(info.getDisplayName(), txtForwardFrom.getPaint().getFontMetricsInt()));
-//                structMessage.username = info.getUsername();
-//                txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
-//            } else if (mMessage.getForwardMessage().getUserId() != 0) {
-//
-//                if (RealmRegisteredInfo.needUpdateUser(mMessage.getForwardMessage().getUserId(), null)) {
-//                    if (!updateForwardInfo.containsKey(mMessage.getForwardMessage().getUserId())) {
-//                        updateForwardInfo.put(mMessage.getForwardMessage().getUserId(), mMessage.getMessageId() + "");
-//                    }
-//                }
-//            } else {
-//                RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
-//                    return realm.where(RealmRoom.class).equalTo("id", mMessage.getForwardMessage().getRoomId()).findFirst();
-//                });
-//                if (realmRoom != null) {
-//                    txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
-//                    txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
-//
-//                    switch (realmRoom.getType()) {
-//                        case CHANNEL:
-//                            structMessage.username = realmRoom.getChannelRoom().getUsername();
-//                            break;
-//                        case GROUP:
-//                            structMessage.username = realmRoom.getGroupRoom().getUsername();
-//                            break;
-//                    }
-//                } else {
-//                    if (realmRoomForwardedFrom != null) {
-//
-//                        switch (realmRoomForwardedFrom.getType()) {
-//                            case CHANNEL:
-//                                if (realmRoomForwardedFrom.getChannelRoom() != null && realmRoomForwardedFrom.getChannelRoom().getUsername() != null) {
-//                                    structMessage.username = realmRoomForwardedFrom.getChannelRoom().getUsername();
-//                                } else {
-//                                    structMessage.username = holder.itemView.getResources().getString(R.string.private_channel);
-//                                }
-//
-//                                break;
-//                            case GROUP:
-//                                structMessage.username = realmRoomForwardedFrom.getGroupRoom().getUsername();
-//                                break;
-//                        }
-//
-//                        if (RealmRoom.needUpdateRoomInfo(realmRoomForwardedFrom.getId())) {
-//                            if (!updateForwardInfo.containsKey(realmRoomForwardedFrom.getId())) {
-//                                updateForwardInfo.put(realmRoomForwardedFrom.getId(), mMessage.getMessageId() + "");
-//                            }
-//                        }
-//
-//                        txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoomForwardedFrom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
-//                        txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
-//                    } else {
-//                        if (RealmRoom.needUpdateRoomInfo(mMessage.getForwardMessage().getAuthorRoomId())) {
-//                            if (!updateForwardInfo.containsKey(mMessage.getForwardMessage().getAuthorRoomId())) {
-//                                updateForwardInfo.put(mMessage.getForwardMessage().getAuthorRoomId(), mMessage.getMessageId() + "");
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+            if (info != null) {
+
+                if (RealmRegisteredInfo.needUpdateUser(info.getId(), info.getCacheId())) {
+                    if (!updateForwardInfo.containsKey(info.getId())) {
+                        updateForwardInfo.put(info.getId(), messageObject.id + "");
+                    }
+                }
+
+                txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(info.getDisplayName(), txtForwardFrom.getPaint().getFontMetricsInt()));
+                messageObject.username = info.getUsername();
+                txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+            } else if (messageObject.forwardedMessage.userId != 0) {
+
+                if (RealmRegisteredInfo.needUpdateUser(messageObject.forwardedMessage.userId, null)) {
+                    if (!updateForwardInfo.containsKey(messageObject.forwardedMessage.userId)) {
+                        updateForwardInfo.put(messageObject.forwardedMessage.userId, messageObject.id + "");
+                    }
+                }
+            } else {
+                RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                    return realm.where(RealmRoom.class).equalTo("id", messageObject.forwardedMessage.roomId).findFirst();
+                });
+                if (realmRoom != null) {
+                    txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
+                    txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+
+                    switch (realmRoom.getType()) {
+                        case CHANNEL:
+                            messageObject.username = realmRoom.getChannelRoom().getUsername();
+                            break;
+                        case GROUP:
+                            messageObject.username = realmRoom.getGroupRoom().getUsername();
+                            break;
+                    }
+                } else {
+                    if (realmRoomForwardedFrom != null) {
+
+                        switch (realmRoomForwardedFrom.getType()) {
+                            case CHANNEL:
+                                if (realmRoomForwardedFrom.getChannelRoom() != null && realmRoomForwardedFrom.getChannelRoom().getUsername() != null) {
+                                    messageObject.username = realmRoomForwardedFrom.getChannelRoom().getUsername();
+                                } else {
+                                    messageObject.username = holder.itemView.getResources().getString(R.string.private_channel);
+                                }
+
+                                break;
+                            case GROUP:
+                                messageObject.username = realmRoomForwardedFrom.getGroupRoom().getUsername();
+                                break;
+                        }
+
+                        if (RealmRoom.needUpdateRoomInfo(realmRoomForwardedFrom.getId())) {
+                            if (!updateForwardInfo.containsKey(realmRoomForwardedFrom.getId())) {
+                                updateForwardInfo.put(realmRoomForwardedFrom.getId(), messageObject.id + "");
+                            }
+                        }
+
+                        txtForwardFrom.setText(EmojiManager.getInstance().replaceEmoji(realmRoomForwardedFrom.getTitle(), txtForwardFrom.getPaint().getFontMetricsInt()));
+                        txtForwardFrom.setTextColor(theme.getForwardFromTextColor(txtForwardFrom.getContext()));
+                    } else {
+                        if (RealmRoom.needUpdateRoomInfo(messageObject.forwardedMessage.roomId)) {
+                            if (!updateForwardInfo.containsKey(messageObject.forwardedMessage.roomId)) {
+                                updateForwardInfo.put(messageObject.forwardedMessage.roomId, messageObject.id + "");
+                            }
+                        }
+                    }
+                }
+            }
 
             txtPrefixForwardFrom.measure(0, 0);       //must call measure!
             txtForwardFrom.measure(0, 0);
