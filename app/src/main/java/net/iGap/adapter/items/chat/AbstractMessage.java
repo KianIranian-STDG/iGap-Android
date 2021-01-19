@@ -1885,9 +1885,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             realm12.copyToRealmOrUpdate(roomMessage);
                         });
                     }).start();
-
-                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, roomMessage);
-                    messageClickListener.sendFromBot(roomMessage);
+                    MessageObject botMessage = MessageObject.create(roomMessage);
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, botMessage);
+                    messageClickListener.sendFromBot(botMessage);
 
                 } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                     //TODO: fixed this and do not use G.currentActivity

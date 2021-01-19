@@ -13,6 +13,7 @@ package net.iGap.request;
 import net.iGap.proto.ProtoChannelSendMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAdditional;
+import net.iGap.structs.AdditionalObject;
 
 public class RequestChannelSendMessage {
     private ProtoChannelSendMessage.ChannelSendMessage.Builder channelSendMessage;
@@ -51,6 +52,12 @@ public class RequestChannelSendMessage {
 
     public RequestChannelSendMessage replyMessage(long messageId) {
         channelSendMessage.setReplyTo(messageId);
+        return this;
+    }
+
+    public RequestChannelSendMessage additionalData(AdditionalObject additionalObject) { // TODO: 1/19/21 MESSAGE_REFACTOR
+        channelSendMessage.setAdditionalData(additionalObject.data);
+        channelSendMessage.setAdditionalType(additionalObject.type);
         return this;
     }
 

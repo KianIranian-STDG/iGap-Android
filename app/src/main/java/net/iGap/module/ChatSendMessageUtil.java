@@ -29,6 +29,7 @@ import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
+import net.iGap.structs.AdditionalObject;
 import net.iGap.structs.MessageObject;
 
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
@@ -93,6 +94,17 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
+    public ChatSendMessageUtil additional(AdditionalObject additionalObject) { // TODO: 1/19/21 MESSAGE_REFACTOR
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.additionalData(additionalObject);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.additionalData(additionalObject);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.additionalData(additionalObject);
+        }
+        return this;
+    }
+
     public ChatSendMessageUtil additional(RealmAdditional realmAdditional) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.additionalData(realmAdditional);
@@ -136,9 +148,9 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         if (message.replayToMessage != null) {
             builder.replyMessage(message.replayToMessage.id);
         }
-        /*if (message.additional!= null) {
+        if (message.additional != null) {
             builder.additional(message.additional);
-        }*/
+        }
 
         builder.sendMessage(Long.toString(message.id));
         return this;
