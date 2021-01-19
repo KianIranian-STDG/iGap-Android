@@ -399,10 +399,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 long messageId = (long) message[1];
                 if (messageId == messageObject.id) {
                     ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
-                    if (message[2] == null || message[3] == null) {
+                    if (attachment == null || message[2] == null || message[3] == null) {
                         return;
                     }
-                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], messageObject.attachment.name, messageType.getNumber());
+                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], attachment.name, messageType.getNumber());
                     attachment.token = (String) message[3];
                     onProgressFinish(holder, attachment, messageType.getNumber());
                     if (attachment.isFileExistsOnLocalAndIsImage()) {

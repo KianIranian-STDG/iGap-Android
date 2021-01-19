@@ -18,7 +18,6 @@ import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
@@ -117,17 +116,18 @@ public class ResendMessage implements IResendMessage {
                                 public void run() {
                                     DbManager.getInstance().doRealmTask(realm1 -> {
                                         RealmRoomMessage roomMessage = realm1.where(RealmRoomMessage.class).equalTo("messageId", mMessages.get(j).id).findFirst();
-                                        if (roomMessage != null) {
-                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
+                                        MessageObject resendMessageObject = MessageObject.create(roomMessage);
+                                        if (resendMessageObject != null) {
+                                            RealmRoom realmRoom = realm1.where(RealmRoom.class).equalTo("id", resendMessageObject.roomId).findFirst();
                                             if (realmRoom != null) {
-                                                if (roomMessage.getAttachment() == null) {
+                                                if (resendMessageObject.attachment == null) {
                                                     ProtoGlobal.Room.Type roomType = realmRoom.getType();
-                                                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, roomMessage.getRoomId(), roomMessage);
+                                                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, resendMessageObject.roomId, resendMessageObject);
                                                 } else {
-                                                    if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
+                                                    if (resendMessageObject.additional != null && resendMessageObject.additional.type == 4) {
+                                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), resendMessageObject.roomId, resendMessageObject);
                                                     } else {
-                                                        UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+                                                        UploadObject fileObject = UploadObject.createForMessage(resendMessageObject, realmRoom.getType());
 
                                                         if (fileObject != null) {
                                                             Uploader.getInstance().upload(fileObject);
@@ -144,17 +144,18 @@ public class ResendMessage implements IResendMessage {
                         if (mMessages.get(j).id == mSelectedMessageID) {
                             if (FragmentChat.allowResendMessage(mSelectedMessageID)) {
                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo("messageId", mMessages.get(j).id).findFirst();
-                                if (roomMessage != null) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomMessage.getRoomId()).findFirst();
+                                MessageObject resendMessageObject = MessageObject.create(roomMessage);
+                                if (resendMessageObject != null) {
+                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", resendMessageObject.roomId).findFirst();
                                     if (realmRoom != null) {
                                         ProtoGlobal.Room.Type roomType = realmRoom.getType();
-                                        if (roomMessage.getAttachment() == null) {
-                                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, roomMessage.getRoomId(), roomMessage);
+                                        if (resendMessageObject.attachment == null) {
+                                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, resendMessageObject.roomId, resendMessageObject);
                                         } else {
-                                            if (roomMessage.getRealmAdditional() != null && roomMessage.getRealmAdditional().getAdditionalType() == 4) {
-                                                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), roomMessage.getRoomId(), roomMessage);
+                                            if (resendMessageObject.additional != null && resendMessageObject.additional.type == 4) {
+                                                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(realmRoom.getType(), resendMessageObject.roomId, resendMessageObject);
                                             } else {
-                                                UploadObject fileObject = UploadObject.createForMessage(roomMessage, realmRoom.getType());
+                                                UploadObject fileObject = UploadObject.createForMessage(resendMessageObject, realmRoom.getType());
 
                                                 if (fileObject != null) {
                                                     Uploader.getInstance().upload(fileObject);

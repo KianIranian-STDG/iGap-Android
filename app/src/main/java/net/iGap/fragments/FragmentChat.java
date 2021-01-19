@@ -3817,10 +3817,11 @@ public class FragmentChat extends BaseFragment
                 final String message = messages[i];
 
                 final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message, replyMessageId());
-                if (roomMessage != null) {
+                final MessageObject messageObject = MessageObject.create(roomMessage);
+                if (messageObject != null) {
                     edtChat.setText("");
-                    lastMessageId = roomMessage.getMessageId();
-                    mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(MessageObject.create(roomMessage)).withIdentifier(SUID.id().get()));
+                    lastMessageId = messageObject.id;
+                    mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject).withIdentifier(SUID.id().get()));
                     clearReplyView();
                     scrollToEnd();
 
@@ -3831,13 +3832,13 @@ public class FragmentChat extends BaseFragment
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (roomMessage.isValid() && !roomMessage.isDeleted()) {
-                                    getSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                                if (!messageObject.deleted) {
+                                    getSendMessageUtil().build(chatType, mRoomId, messageObject);
                                 }
                             }
                         }, 1000 * i);
                     } else {
-                        getSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                        getSendMessageUtil().build(chatType, mRoomId, messageObject);
                     }
                 } else {
                     Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
@@ -7812,7 +7813,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(roomMessage))), false);
-                getSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                MessageObject locationMessage = MessageObject.create(roomMessage);
+                getSendMessageUtil().build(chatType, mRoomId, locationMessage);
                 scrollToEnd();
             }
         }, 300);
