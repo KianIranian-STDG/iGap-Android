@@ -15,6 +15,7 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 import net.igap.video.compress.OnCompress;
 
 import java.io.File;
@@ -81,7 +82,8 @@ public class UploadManager {
                 message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT
         ) {
-            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, message.getRoomId(), message);
+            MessageObject uploadMessage = MessageObject.create(message);
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, message.getRoomId(), uploadMessage);
             return;
         }
 

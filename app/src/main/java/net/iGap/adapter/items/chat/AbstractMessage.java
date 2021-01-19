@@ -399,10 +399,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 long messageId = (long) message[1];
                 if (messageId == messageObject.id) {
                     ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
-                    if (message[2] == null || message[3] == null) {
+                    if (attachment == null || message[2] == null || message[3] == null) {
                         return;
                     }
-                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], messageObject.attachment.name, messageType.getNumber());
+                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], attachment.name, messageType.getNumber());
                     attachment.token = (String) message[3];
                     onProgressFinish(holder, attachment, messageType.getNumber());
                     if (attachment.isFileExistsOnLocalAndIsImage()) {
@@ -1885,9 +1885,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             realm12.copyToRealmOrUpdate(roomMessage);
                         });
                     }).start();
-
-                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, roomMessage);
-                    messageClickListener.sendFromBot(roomMessage);
+                    MessageObject botMessage = MessageObject.create(roomMessage);
+                    ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, botMessage);
+                    messageClickListener.sendFromBot(botMessage);
 
                 } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                     //TODO: fixed this and do not use G.currentActivity
@@ -1910,8 +1910,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(messageObject.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, realmRoomMessage);
-                                        messageClickListener.sendFromBot(realmRoomMessage);
+                                        MessageObject botMessage = MessageObject.create(realmRoomMessage);
+                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, botMessage);
+                                        messageClickListener.sendFromBot(botMessage);
                                     }
                                 });
                             }

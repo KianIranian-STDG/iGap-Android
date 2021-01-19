@@ -12,7 +12,7 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoChatSendMessage;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAdditional;
+import net.iGap.structs.AdditionalObject;
 
 public class RequestChatSendMessage {
     // builder to force use newBuilder
@@ -56,9 +56,9 @@ public class RequestChatSendMessage {
         return this;
     }
 
-    public RequestChatSendMessage additionalData(RealmAdditional realmAdditional) {
-        chatSendMessage.setAdditionalData(realmAdditional.getAdditionalData());
-        chatSendMessage.setAdditionalType(realmAdditional.getAdditionalType());
+    public RequestChatSendMessage additionalData(AdditionalObject additionalObject) {
+        chatSendMessage.setAdditionalData(additionalObject.data);
+        chatSendMessage.setAdditionalType(additionalObject.type);
         return this;
     }
 

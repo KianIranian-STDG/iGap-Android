@@ -12,7 +12,7 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoChannelSendMessage;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAdditional;
+import net.iGap.structs.AdditionalObject;
 
 public class RequestChannelSendMessage {
     private ProtoChannelSendMessage.ChannelSendMessage.Builder channelSendMessage;
@@ -54,12 +54,11 @@ public class RequestChannelSendMessage {
         return this;
     }
 
-    public RequestChannelSendMessage additionalData(RealmAdditional realmAdditional) {
-        channelSendMessage.setAdditionalData(realmAdditional.getAdditionalData());
-        channelSendMessage.setAdditionalType(realmAdditional.getAdditionalType());
+    public RequestChannelSendMessage additionalData(AdditionalObject additionalObject) {
+        channelSendMessage.setAdditionalData(additionalObject.data);
+        channelSendMessage.setAdditionalType(additionalObject.type);
         return this;
     }
-
 
     public RequestChannelSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         channelSendMessage.setRandomId(Long.parseLong(fakeMessageIdAsIdentity));
