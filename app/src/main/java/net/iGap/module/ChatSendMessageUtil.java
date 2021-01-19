@@ -22,7 +22,6 @@ import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.repository.StickerRepository;
@@ -94,24 +93,13 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
-    public ChatSendMessageUtil additional(AdditionalObject additionalObject) { // TODO: 1/19/21 MESSAGE_REFACTOR
+    public ChatSendMessageUtil additional(AdditionalObject additionalObject) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.additionalData(additionalObject);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
             requestGroupSendMessage.additionalData(additionalObject);
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
             requestChannelSendMessage.additionalData(additionalObject);
-        }
-        return this;
-    }
-
-    public ChatSendMessageUtil additional(RealmAdditional realmAdditional) {
-        if (roomType == ProtoGlobal.Room.Type.CHAT) {
-            requestChatSendMessage.additionalData(realmAdditional);
-        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-            requestGroupSendMessage.additionalData(realmAdditional);
-        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-            requestChannelSendMessage.additionalData(realmAdditional);
         }
         return this;
     }
@@ -153,35 +141,6 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         }
 
         builder.sendMessage(Long.toString(message.id));
-        return this;
-    }
-
-    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message) {
-        ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
-        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
-            builder.message(message.getMessage());
-        }
-        if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
-            builder.attachment(message.getAttachment().getToken());
-        }
-        /*if (message.getRoomMessageContact() != null) {
-            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
-        }*/
-        if (message.getLocation() != null) {
-            builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
-        }
-
-        if (message.getForwardMessage() != null) {
-            builder.forwardMessage(message.getForwardMessage().getRoomId(), message.getForwardMessage().getMessageId());
-        }
-        if (message.getReplyTo() != null) {
-            builder.replyMessage(message.getReplyTo().getMessageId());
-        }
-        if (message.getRealmAdditional() != null) {
-            builder.additional(message.getRealmAdditional());
-        }
-
-        builder.sendMessage(Long.toString(message.getMessageId()));
         return this;
     }
 
