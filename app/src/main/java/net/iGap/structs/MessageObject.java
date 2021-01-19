@@ -1,6 +1,5 @@
 package net.iGap.structs;
 
-import android.text.format.DateUtils;
 import android.util.Log;
 
 import net.iGap.helper.HelperUrl;
@@ -52,6 +51,7 @@ public class MessageObject {
     public long futureMessageId;
 
     public boolean isSelected;
+    public String username;
 
     private MessageObject() {
 
@@ -137,6 +137,7 @@ public class MessageObject {
         if (roomMessage.getUserId() != 0) {
             messageObject.userId = roomMessage.getUserId();
         } else {
+            messageObject.roomId = roomMessage.getAuthorRoomId();
             if (isForwardOrReplay) {// FIXME: 12/15/20
                 RealmRoom.needGetRoom(roomMessage.getRoomId());
             }
@@ -148,7 +149,7 @@ public class MessageObject {
 
         messageObject.setMessageText(roomMessage.getMessage());
 
-        messageObject.id = createForForward ? roomMessage.getMessageId() * (-1) : roomMessage.getMessageId();
+        messageObject.id = (createForForward && roomMessage.getMessageId() > 0) ? roomMessage.getMessageId() * (-1) : roomMessage.getMessageId();
         messageObject.forwardedMessage = create(roomMessage.getForwardMessage(), false, false, true);
         messageObject.replayToMessage = create(roomMessage.getReplyTo());
         messageObject.status = readStatus(roomMessage.getStatus());
