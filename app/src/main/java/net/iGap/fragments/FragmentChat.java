@@ -3764,11 +3764,12 @@ public class FragmentChat extends BaseFragment
         rootJsonArray.add(dataJsonArray);
 
         final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, description, replyMessageId(), rootJsonArray.toString(), AdditionalType.CARD_TO_CARD_MESSAGE);
-        if (roomMessage != null) {
+        final MessageObject messageObject = MessageObject.create(roomMessage);
+        if (messageObject != null) {
 
             edtChat.setText("");
-            lastMessageId = roomMessage.getMessageId();
-            mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(MessageObject.create(roomMessage)).withIdentifier(SUID.id().get()));
+            lastMessageId = messageObject.id;
+            mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject).withIdentifier(SUID.id().get()));
             clearReplyView();
             scrollToEnd();
 
@@ -3778,12 +3779,12 @@ public class FragmentChat extends BaseFragment
 
             if (!description.isEmpty()) {
                 G.handler.postDelayed(() -> {
-                    if (roomMessage.isValid() && !roomMessage.isDeleted()) {
-                        getSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                    if (!messageObject.deleted) {
+                        getSendMessageUtil().build(chatType, mRoomId, messageObject);
                     }
                 }, 1000);
             } else {
-                getSendMessageUtil().build(chatType, mRoomId, roomMessage);
+                getSendMessageUtil().build(chatType, mRoomId, messageObject);
             }
         } else {
             Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();

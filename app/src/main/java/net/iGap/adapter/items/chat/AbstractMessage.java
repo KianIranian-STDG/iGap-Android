@@ -1910,8 +1910,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     public void execute(Realm realm) {
                                         RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
                                         RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(messageObject.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), realmUserInfo.getUserInfo().getPhoneNumber(), 0, realm, ProtoGlobal.RoomMessageType.TEXT);
-                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, realmRoomMessage);
-                                        messageClickListener.sendFromBot(realmRoomMessage);
+                                        MessageObject botMessage = MessageObject.create(realmRoomMessage);
+                                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(type, messageObject.roomId, botMessage);
+                                        messageClickListener.sendFromBot(botMessage);
                                     }
                                 });
                             }
