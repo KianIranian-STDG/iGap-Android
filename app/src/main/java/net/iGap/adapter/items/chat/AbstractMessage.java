@@ -1023,11 +1023,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             replayView.setOnLongClickListener(getLongClickPerform(holder));
 
-//            try {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage.messageType : messageObject.replayToMessage.forwardedMessage.messageType, messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage : messageObject.replayToMessage.forwardedMessage);
-//            } catch (IllegalStateException e) {
-//                e.printStackTrace();
-//            }
+            try {// TODO: 12/29/20 MESSAGE_REFACTOR
+                AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage.messageType : messageObject.replayToMessage.forwardedMessage.messageType, messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage : messageObject.replayToMessage.forwardedMessage);
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
 
             if (type == ProtoGlobal.Room.Type.CHANNEL) {
                 if (mAdapter.getRealmRoom() != null) {
@@ -1042,8 +1042,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
             // TODO: 12/29/20 MESSAGE_REFACTOR
-//            String replayText = AppUtils.replyTextMessage(mMessage.replyTo, holder.itemView.getResources());
-//            replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
+            String replayText = AppUtils.replyTextMessage(messageObject.replayToMessage, holder.itemView.getResources());
+            replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
 
             if (messageObject.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                 replayView.setBackgroundResource(theme.getSendReplay(replayView.getContext()));
