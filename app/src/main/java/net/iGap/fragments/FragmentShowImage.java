@@ -98,7 +98,7 @@ public class FragmentShowImage extends BaseFragment {
     private PhotoView zoomableImageViewTmp = null;
     private int lastOrientation = 0;
     public static FocusAudioListener focusAudioListener;
-    private int messageType;
+    private ProtoGlobal.RoomMessageType messageType;
     private ArrayList<TextureView> mTextureViewTmp = new ArrayList<>();
     private RealmRoom room;
 
@@ -173,7 +173,7 @@ public class FragmentShowImage extends BaseFragment {
             Long mRoomId = bundle.getLong("RoomId");
             Long selectedFileToken = bundle.getLong("SelectedImage");
             if (bundle.getString("TYPE") != null) {
-                messageType = convertType(bundle.getString("TYPE")).getNumber();
+                messageType = convertType(bundle.getString("TYPE"));
             }
             if (mRoomId == null) {
                 popBackStackFragment();
@@ -190,7 +190,7 @@ public class FragmentShowImage extends BaseFragment {
 
             //todo : remove for and handle it with query
             for (RealmRoomMessage roomMessage : mRealmList) {
-                if (RealmRoomMessage.isImageOrVideo(roomMessage, ProtoGlobal.RoomMessageType.forNumber(messageType))) {
+                if (RealmRoomMessage.isImageOrVideo(roomMessage, messageType)) {
                     if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null)
                         mFList.add(MessageObject.create(roomMessage));
                 }
@@ -364,7 +364,7 @@ public class FragmentShowImage extends BaseFragment {
 
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.save_to_gallery));
-        if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
+        if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             items.add(getString(R.string.share_video_file_2));
         } else {
             items.add(getString(R.string.share_image_2));
@@ -719,13 +719,13 @@ public class FragmentShowImage extends BaseFragment {
                     showImageInfo(mFList.get(position));
 
                     if (mFList.get(position).forwardedMessage != null) {
-                        messageType = mFList.get(position).forwardedMessage.messageType;
+                        messageType = ProtoGlobal.RoomMessageType.forNumber(mFList.get(position).forwardedMessage.messageType);
                     } else {
-                        messageType = mFList.get(position).messageType;
+                        messageType = ProtoGlobal.RoomMessageType.forNumber(mFList.get(position).messageType);
                     }
 
                     if (mMediaPlayer != null && mMediaPlayer.isPlaying()) mMediaPlayer.stop();
-                    if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
+                    if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         File f = new File(getFilePath(position));
                         if (f.exists()) {
                             imgPlay.setVisibility(View.VISIBLE);
@@ -733,7 +733,7 @@ public class FragmentShowImage extends BaseFragment {
                         } else {
                             imgPlay.setVisibility(View.GONE);
                         }
-                    } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
+                    } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         imgPlay.setVisibility(View.GONE);
                     }
                     if (videoController != null) {
