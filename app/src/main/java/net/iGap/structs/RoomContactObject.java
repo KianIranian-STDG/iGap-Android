@@ -15,7 +15,21 @@ public class RoomContactObject {
     public List<String> emails = new ArrayList<>();
 
     public static RoomContactObject create(ProtoGlobal.RoomMessageContact contact) {
-        return null;
+        if (contact == null) {
+            return null;
+        }
+        RoomContactObject roomContactObject = new RoomContactObject();
+        roomContactObject.firstName = contact.getFirstName();
+        roomContactObject.lastName = contact.getLastName();
+        roomContactObject.nickName = contact.getNickname();
+        for (int i = 0; i < contact.getPhoneCount(); i++) {
+            roomContactObject.phones.add(contact.getPhone(i));
+        }
+        roomContactObject.lastPhoneNumber = roomContactObject.phones.get(roomContactObject.phones.size() - 1);
+        for (int i = 0; i < contact.getEmailCount(); i++) {
+            roomContactObject.emails.add(contact.getEmail(i));
+        }
+        return roomContactObject;
     }
 
     public static RoomContactObject create(RealmRoomMessageContact roomMessageContact) {

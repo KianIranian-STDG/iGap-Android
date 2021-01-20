@@ -161,7 +161,7 @@ public class MessageObject {
         }
 //        messageObject.location = LocationObject.create(roomMessage.getLocation());
         messageObject.log = LogObject.create(roomMessage.getLogs());
-//        messageObject.contact = ContactObject.create(roomMessage.getRoomMessageContact());
+
         if (roomMessage.getRoomMessageWallet() != null) {
             messageObject.wallet = WalletObject.create(roomMessage.getRoomMessageWallet());
         }
