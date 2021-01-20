@@ -77,17 +77,17 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-//        if (messageObject.forwardedMessage != null) {
-//            if (messageObject.forwardedMessage.contact != null) {
-//                holder.contactName.setText(mMessage.getForwardMessage().getRoomMessageContact().getFirstName() + " " + mMessage.getForwardMessage().getRoomMessageContact().getLastName());
-//                holder.contactNumberTv.setText(mMessage.getForwardMessage().getRoomMessageContact().getLastPhoneNumber());
-//            }
-//        } else {
-//            if (mMessage.getRoomMessageContact() != null) {
-//                holder.contactName.setText(mMessage.getRoomMessageContact().getFirstName() + " " + mMessage.getRoomMessageContact().getLastName());
-//                holder.contactNumberTv.setText(mMessage.getRoomMessageContact().getLastPhoneNumber());
-//            }
-//        }
+        if (messageObject.forwardedMessage != null) {
+            if (messageObject.forwardedMessage.contact != null) {
+                holder.contactName.setText(messageObject.forwardedMessage.contact.firstName + " " + messageObject.forwardedMessage.contact.lastName);
+                holder.contactNumberTv.setText(messageObject.forwardedMessage.contact.lastPhoneNumber);
+            }
+        } else {
+            if (messageObject.contact != null) {
+                holder.contactName.setText(messageObject.contact.firstName + " " + messageObject.contact.lastName);
+                holder.contactNumberTv.setText(messageObject.contact.lastPhoneNumber);
+            }
+        }
     }
 
     @Override
