@@ -159,7 +159,7 @@ public class MessageObject {
         if (roomMessage.getAttachment() != null) {
             messageObject.attachment = AttachmentObject.create(roomMessage.getAttachment());
         }
-//        messageObject.location = LocationObject.create(roomMessage.getLocation());
+        messageObject.location = LocationObject.create(roomMessage.getLocation());
         messageObject.log = LogObject.create(roomMessage.getLogs());
 
         if (roomMessage.getRoomMessageWallet() != null) {
