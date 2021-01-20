@@ -10,6 +10,7 @@ public class RoomContactObject {
     public String firstName;
     public String lastName;
     public String nickName;
+    public String lastPhoneNumber;
     public List<String> phones = new ArrayList<>();
     public List<String> emails = new ArrayList<>();
 
@@ -26,7 +27,7 @@ public class RoomContactObject {
         roomContactObject.firstName = roomMessageContact.getFirstName();
         roomContactObject.lastName = roomMessageContact.getLastName();
         roomContactObject.nickName = roomMessageContact.getNickName();
-
+        roomContactObject.lastPhoneNumber = roomMessageContact.getLastPhoneNumber();
         for (int i = 0; i < roomMessageContact.getPhones().size(); i++) {
             roomContactObject.phones.add(roomMessageContact.getPhones().get(i).getString());
         }
