@@ -228,7 +228,7 @@ public class LookUpClass {
         lookupMap.put(30323, "ProtoGroupRemoveUsername.GroupRemoveUsernameResponse");
         lookupMap.put(30324, "ProtoGroupRevokeLink.GroupRevokeLinkResponse");
 //        lookupMap.put(30325, "ProtoGroupEditMessage.GroupEditMessageResponse");
-        lookupMap.put(30326, "ProtoGroupPinMessage.GroupPinMessageResponse");
+//        lookupMap.put(30326, "ProtoGroupPinMessage.GroupPinMessageResponse");
         lookupMap.put(30327, "ProtoGroupChangeMemberRights.GroupChangeMemberRightsResponse");
 
         // Channel 4xx , 304xx
@@ -256,7 +256,7 @@ public class LookUpClass {
         lookupMap.put(30424, "ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse");
 //        lookupMap.put(30425, "ProtoChannelEditMessage.ChannelEditMessageResponse");
         lookupMap.put(30426, "ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse");
-        lookupMap.put(30427, "ProtoChannelPinMessage.ChannelPinMessageResponse");
+//        lookupMap.put(30427, "ProtoChannelPinMessage.ChannelPinMessageResponse");
 
         // Info 5xx , 305xx
         lookupMap.put(30500, "ProtoInfoLocation.InfoLocationResponse");

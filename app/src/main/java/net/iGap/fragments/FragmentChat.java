@@ -7961,12 +7961,12 @@ public class FragmentChat extends BaseFragment
             if (!messageObject.isTimeOrLogMessage() || (messageType == LOG_VALUE)) {
                 int index = 0;
                 if (addTop) {
-                    if (/*messageObject.realmRoomMessage.isShowTime()*/false) {
+                    if (messageObject.needToShow) {
                         for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
                             if (mAdapter.getAdapterItem(i) instanceof TimeItem) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//                                if (!RealmRoomMessage.isTimeDayDifferent(messageObject.realmRoomMessage.getUpdateOrCreateTime(), mAdapter.getAdapterItem(i).mMessage.getUpdateOrCreateTime())) {
-//                                    mAdapter.remove(i);
-//                                }
+                                if (!RealmRoomMessage.isTimeDayDifferent(messageObject.getUpdateOrCreateTime(), mAdapter.getAdapterItem(i).messageObject.getUpdateOrCreateTime())) {
+                                    mAdapter.remove(i);
+                                }
                                 break;
                             }
                         }
@@ -7995,16 +7995,16 @@ public class FragmentChat extends BaseFragment
                         lastMessageId = messageObject.id;
                     }
 
-//                    if (messageObject.realmRoomMessage.isShowTime()) {// TODO: 12/28/20 MESSAGE_REFACTOR
-//                        if (mAdapter.getItemCount() > 0) {
-//                            if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageObject.realmRoomMessage.getUpdateOrCreateTime(), mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.getUpdateOrCreateTime())) {
-//                                mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageObject.realmRoomMessage.getUpdateOrCreateTime())).withIdentifier(identifier++));
-//
-//                            }
-//                        } else {
-//                            mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageObject.realmRoomMessage.getUpdateOrCreateTime())).withIdentifier(identifier++));
-//                        }
-//                    }
+                    if (messageObject.needToShow) {// TODO: 12/28/20 MESSAGE_REFACTOR
+                        if (mAdapter.getItemCount() > 0) {
+                            if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).messageObject != null && RealmRoomMessage.isTimeDayDifferent(messageObject.getUpdateOrCreateTime(), mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).messageObject.getUpdateOrCreateTime())) {
+                                mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageObject.getUpdateOrCreateTime())).withIdentifier(identifier++));
+
+                            }
+                        } else {
+                            mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageObject.getUpdateOrCreateTime())).withIdentifier(identifier++));
+                        }
+                    }
                 }
 
                 switch (messageType) {
