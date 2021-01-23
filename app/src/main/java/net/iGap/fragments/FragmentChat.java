@@ -6034,30 +6034,30 @@ public class FragmentChat extends BaseFragment
     }
 
     private void storingLastPosition() {// TODO: 12/28/20 MESSAGE_REFACTOR
-//        try {
-//            if (recyclerView != null && mAdapter != null) {
-//
-//                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-//                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-//                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
-//                    firstVisiblePosition++;
-//                }
-//
-//                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
-//                    firstVisiblePosition++;
-//                }
-//
-//                long lastScrolledMessageID = 0;
-//
-//                if (mAdapter.getAdapterItemCount() - lastVisiblePosition > Config.STORE_MESSAGE_POSITION_LIMIT) {
-//                    lastScrolledMessageID = mAdapter.getItem(firstVisiblePosition).mMessage.getMessageId();
-//                }
-//
-//                saveMessageIdPositionState(lastScrolledMessageID);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            if (recyclerView != null && mAdapter != null) {
+
+                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
+                    firstVisiblePosition++;
+                }
+
+                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
+                    firstVisiblePosition++;
+                }
+
+                long lastScrolledMessageID = 0;
+
+                if (mAdapter.getAdapterItemCount() - lastVisiblePosition > Config.STORE_MESSAGE_POSITION_LIMIT) {
+                    lastScrolledMessageID = mAdapter.getItem(firstVisiblePosition).messageObject.id;
+                }
+
+                saveMessageIdPositionState(lastScrolledMessageID);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
