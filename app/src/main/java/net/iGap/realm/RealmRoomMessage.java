@@ -752,6 +752,7 @@ public class RealmRoomMessage extends RealmObject {
         message.setUserId(-1); // -1 means time message or unread message
         message.setMessage(countNewMessage + " " + G.fragmentActivity.getResources().getString(R.string.unread_message));
         message.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        message.setStatus(ProtoGlobal.RoomMessageStatus.DELIVERED.toString());
         return message;
     }
 
@@ -762,6 +763,7 @@ public class RealmRoomMessage extends RealmObject {
         timeMessage.setUpdateTime(time);
         timeMessage.setMessage(message);
         timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        timeMessage.setStatus(ProtoGlobal.RoomMessageStatus.DELIVERED.toString());
         return timeMessage;
     }
 

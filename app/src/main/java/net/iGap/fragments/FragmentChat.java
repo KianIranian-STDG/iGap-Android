@@ -3747,6 +3747,28 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    @Override
+    public void onGetVote(MessageObject messageObject) {
+
+        ArrayList<Long> messageIds = new ArrayList<>();
+
+        if (messageObject.forwardedMessage != null) {
+            ProtoGlobal.Room.Type roomType = messageObject.forwardedMessage.roomType;
+            if (roomType == CHANNEL) {
+
+                if (messageObject.forwardedMessage.id < 0) {
+                    messageId = messageId * (-1);
+                }
+
+                messageIds.add(messageObject.forwardedMessage.id);
+            }
+        } else {
+            messageIds.add(messageObject.id);
+        }
+
+        getMessageController().ChannelGetMessageVote(messageObject.roomId,messageIds);
+    }
+
     private void sendNewMessageCardToCard(String amount, String cardNumber, String description) {
         String mplCardNumber = cardNumber.replace("-", "");
         int mplAmount = Integer.parseInt(amount.replace(",", ""));

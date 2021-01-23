@@ -11,10 +11,6 @@
 package net.iGap.observers.interfaces;
 
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
-
-import androidx.appcompat.widget.AppCompatTextView;
 
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.structs.MessageObject;
@@ -51,4 +47,5 @@ public interface IMessageItem {
     void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, MessageObject structMessage);
 
     void onVoteClick(MessageObject messageObject, int reactionValue);
+    void onGetVote(MessageObject messageObject);
 }

@@ -750,31 +750,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * get channel message state, for clear unread message in channel client
      * need send request for getMessageState even show vote layout is hide
      */
-    private void getChannelMessageState() {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
-        if ((messageObject.forwardedMessage != null)) {
-            ProtoGlobal.Room.Type roomType = null;
-            if (messageObject.forwardedMessage != null) {
-
-                roomType = ProtoGlobal.Room.Type.valueOf(messageObject.forwardedMessage.messageType);
-            }
-            if ((messageObject.forwardedMessage != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
-                /**
-                 * if roomType is Channel don't consider forward
-                 *
-                 * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
-                 * so i need to (replyMessageId * (-1)) again for use this messageId
-                 */
-                long messageId = messageObject.forwardedMessage.id;
-                if (messageObject.forwardedMessage.id < 0) {
-                    messageId = messageId * (-1);
-                }
-                HelperGetMessageState.getMessageState(messageObject.forwardedMessage.roomId, messageId);
-            } else {
-                HelperGetMessageState.getMessageState(messageObject.roomId, messageObject.id);
-            }
-        } else {
-            HelperGetMessageState.getMessageState(messageObject.roomId, messageObject.id);
-        }
+    private void getChannelMessageState() {
+        HelperGetMessageState.getMessageState(messageObject.roomId, messageObject.id);
     }
 
     private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder) {

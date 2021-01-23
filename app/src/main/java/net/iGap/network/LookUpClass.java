@@ -59,7 +59,8 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Group_Delete_Message.actionId, IG_RPC.Res_Group_Delete_Message.class);
         classes.put(IG_RPC.Res_Chat_Clear_History.actionId, IG_RPC.Res_Chat_Clear_History.class);
         classes.put(IG_RPC.Res_Group_Clear_History.actionId, IG_RPC.Res_Group_Clear_History.class);
-        classes.put(IG_RPC.Res_Channel_AddMessage_Reaction.actionId, IG_RPC.Res_Channel_AddMessage_Reaction.class);
+        classes.put(IG_RPC.Res_Channel_Add_Message_Reaction.actionId, IG_RPC.Res_Channel_Add_Message_Reaction.class);
+        classes.put(IG_RPC.Res_Channel_Get_Message_Reaction.actionId, IG_RPC.Res_Channel_Get_Message_Reaction.class);
         classes.put(IG_RPC.Res_Channel_Update_Reaction_Status.actionId, IG_RPC.Res_Channel_Update_Reaction_Status.class);
     }
 

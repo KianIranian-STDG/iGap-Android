@@ -252,7 +252,6 @@ public class MessageDataStorage extends BaseController {
         });
 
     }
-
     private void putLastMessageInternal(final long roomId, RealmRoomMessage lastMessage) {
         try {
             database.beginTransaction();

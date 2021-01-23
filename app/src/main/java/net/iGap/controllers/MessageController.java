@@ -1,7 +1,6 @@
 package net.iGap.controllers;
 
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
@@ -407,14 +406,14 @@ public class MessageController extends BaseController implements EventListener {
 
     public void ChannelAddMessageVote(long roomId, long messageId, ProtoGlobal.RoomMessageReaction messageReaction) {
 
-        final IG_RPC.Channel_AddMessage_Reaction req = new IG_RPC.Channel_AddMessage_Reaction();
+        final IG_RPC.Channel_Add_Message_Reaction req = new IG_RPC.Channel_Add_Message_Reaction();
         req.roomId = roomId;
         req.messageId = messageId;
         req.reaction = messageReaction;
 
         getRequestManager().sendRequest(req, (response, error) -> {
             if (response != null) {
-                IG_RPC.Res_Channel_AddMessage_Reaction res = (IG_RPC.Res_Channel_AddMessage_Reaction) response;
+                IG_RPC.Res_Channel_Add_Message_Reaction res = (IG_RPC.Res_Channel_Add_Message_Reaction) response;
                 getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
@@ -423,4 +422,20 @@ public class MessageController extends BaseController implements EventListener {
         });
     }
 
+    public void ChannelGetMessageVote(long roomId, ArrayList<Long> messageIds) {
+
+        final IG_RPC.Channel_Get_Message_Reaction req = new IG_RPC.Channel_Get_Message_Reaction();
+        req.roomId = roomId;
+        req.messageIds = messageIds;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_Get_Message_Reaction res = (IG_RPC.Res_Channel_Get_Message_Reaction) response;
+
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
 }
