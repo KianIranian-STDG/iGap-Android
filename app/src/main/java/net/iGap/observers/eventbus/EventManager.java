@@ -74,6 +74,7 @@ public class EventManager {
     public static final int ON_UPLOAD_COMPLETED = eventId++;
 
     public static final int CHAT_UPDATE_STATUS = eventId++;
+    public static final int ON_FILE_DOWNLOAD_COMPLETED = eventId++;
 
     private static EventManager eventListenerInstance;
 
