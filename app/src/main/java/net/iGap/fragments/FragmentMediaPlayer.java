@@ -52,9 +52,10 @@ import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientSearchRoomHistory;
+import net.iGap.structs.AttachmentObject;
+import net.iGap.structs.MessageObject;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -262,10 +263,10 @@ public class FragmentMediaPlayer extends BaseFragment {
         loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO, ProtoGlobal.RoomMessageType.AUDIO);
         mediaList = new ArrayList<>();
 
-        for (RealmRoomMessage r : MusicPlayer.mediaList) {
-            if (r.isValid()) {
-                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
-            }
+        for (MessageObject r : MusicPlayer.mediaList) {
+
+            fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.id));
+
         }
         rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
     }
@@ -281,14 +282,14 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     public class AdapterListMusicPlayer extends AbstractItem<AdapterListMusicPlayer, AdapterListMusicPlayer.ViewHolder> {
 
-        private RealmRoomMessage realmRoomMessagesList;
+        private MessageObject messageRoomMessagesList;
 
         public AdapterListMusicPlayer() {
 
         }
 
-        public AdapterListMusicPlayer setItem(RealmRoomMessage realmRoomMessages) {
-            realmRoomMessagesList = realmRoomMessages;
+        public AdapterListMusicPlayer setItem(MessageObject realmRoomMessages) {
+            messageRoomMessagesList = realmRoomMessages;
             return this;
         }
 
@@ -310,13 +311,13 @@ public class FragmentMediaPlayer extends BaseFragment {
         public void bindView(ViewHolder holder, List payloads) {
             super.bindView(holder, payloads);
 
-            holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
-            if (realmRoomMessagesList.getAttachment().fileExistsOnLocal()) {
+            holder.txtNameMusic.setText(messageRoomMessagesList.attachment.name);
+            if (messageRoomMessagesList.attachment.isFileExistsOnLocal()) {
 
                 holder.iconPlay.setVisibility(View.VISIBLE);
                 holder.messageProgress.setVisibility(View.GONE);
 
-                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (realmRoomMessagesList.getMessageId())) {
+                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (messageRoomMessagesList.id)) {
                     holder.iconPlay.setText(R.string.pause_icon);
                 } else {
                     holder.iconPlay.setText(R.string.play_icon);
@@ -331,12 +332,12 @@ public class FragmentMediaPlayer extends BaseFragment {
                 }
             } else {
 
-                if (realmRoomMessagesList.getAttachment() != null) {
-                    holder.messageProgress.setTag(realmRoomMessagesList.getMessageId());
+                if (messageRoomMessagesList.getAttachment() != null) {
+                    holder.messageProgress.setTag(messageRoomMessagesList.id);
                     holder.messageProgress.withDrawable(R.drawable.ic_download, true);
                     holder.iconPlay.setVisibility(View.GONE);
 
-                    if (getDownloader().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
+                    if (getDownloader().isDownloading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.cacheId)) {
                         startDownload(holder.getAdapterPosition(), holder.messageProgress);
                     }
                 }
@@ -351,13 +352,13 @@ public class FragmentMediaPlayer extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!realmRoomMessagesList.getAttachment().fileExistsOnLocal()) {
+                    if (!messageRoomMessagesList.attachment.isFileExistsOnLocal()) {
                         downloadFile(holder.getAdapterPosition(), holder.messageProgress);
                     } else {
-                        if (MusicPlayer.musicName.equals(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getName())) {
+                        if (MusicPlayer.musicName.equals(MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.name)) {
                             MusicPlayer.playAndPause();
                         } else {
-                            MusicPlayer.startPlayer(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getName(), MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, MusicPlayer.mediaList.get(holder.getAdapterPosition()).getMessageId() + "");
+                            MusicPlayer.startPlayer(MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.name, MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.filePath, FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, MusicPlayer.mediaList.get(holder.getAdapterPosition()).id + "");
                         }
                     }
 
@@ -479,7 +480,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void downloadFile(int position, MessageProgress messageProgress) {
 
-        if (getDownloader().isDownloading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
+        if (getDownloader().isDownloading(MusicPlayer.mediaList.get(position).attachment.cacheId)) {
             stopDownload(position, messageProgress);
         } else {
             startDownload(position, messageProgress);
@@ -488,7 +489,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void stopDownload(int position, final MessageProgress messageProgress) {
 
-        getDownloader().cancelDownload(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
+        getDownloader().cancelDownload(MusicPlayer.mediaList.get(position).attachment.cacheId);
     }
 
     private void startDownload(final int position, final MessageProgress messageProgress) {
@@ -496,10 +497,10 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         messageProgress.withDrawable(R.drawable.ic_cancel, true);
 
-        final RealmAttachment at = MusicPlayer.mediaList.get(position).getForwardMessage() != null ? MusicPlayer.mediaList.get(position).getForwardMessage().getAttachment() : MusicPlayer.mediaList.get(position).getAttachment();
-        ProtoGlobal.RoomMessageType messageType = MusicPlayer.mediaList.get(position).getForwardMessage() != null ? MusicPlayer.mediaList.get(position).getForwardMessage().getMessageType() : MusicPlayer.mediaList.get(position).getMessageType();
+        final AttachmentObject at = MusicPlayer.mediaList.get(position).forwardedMessage != null ? MusicPlayer.mediaList.get(position).forwardedMessage.attachment : MusicPlayer.mediaList.get(position).attachment;
+        int messageType = MusicPlayer.mediaList.get(position).forwardedMessage != null ? MusicPlayer.mediaList.get(position).forwardedMessage.messageType : MusicPlayer.mediaList.get(position).messageType;
 
-        String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
+        String dirPath = AndroidUtils.getFilePathWithCashId(at.cacheId, at.name, messageType);
 
 
         messageProgress.withOnProgress(new OnProgress() {
@@ -509,10 +510,10 @@ public class FragmentMediaPlayer extends BaseFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).id)) {
                             messageProgress.withProgress(0);
                             messageProgress.setVisibility(View.GONE);
-                            updateViewAfterDownload(at.getCacheId());
+                            updateViewAfterDownload(at.cacheId);
                         }
                     }
                 });
@@ -535,12 +536,12 @@ public class FragmentMediaPlayer extends BaseFragment {
                             if (arg.data == null)
                                 return;
 
-                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).id)) {
                                 messageProgress.withProgress(arg.data.getProgress());
                             }
                             break;
                         case ERROR:
-                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).id)) {
                                 messageProgress.withProgress(0);
                                 messageProgress.withDrawable(R.drawable.ic_download, true);
                             }
@@ -553,10 +554,10 @@ public class FragmentMediaPlayer extends BaseFragment {
     private void updateViewAfterDownload(String cashId) {
         for (int j = MusicPlayer.mediaList.size() - 1; j >= 0; j--) {
             try {
-                if (MusicPlayer.mediaList.get(j) != null && MusicPlayer.mediaList.get(j).isValid() && !MusicPlayer.mediaList.get(j).isDeleted()) {
-                    String mCashId = MusicPlayer.mediaList.get(j).getForwardMessage() != null ? MusicPlayer.mediaList.get(j).getForwardMessage().getAttachment().getCacheId() : MusicPlayer.mediaList.get(j).getAttachment().getCacheId();
+                if (MusicPlayer.mediaList.get(j) != null && !MusicPlayer.mediaList.get(j).deleted) {
+                    String mCashId = MusicPlayer.mediaList.get(j).forwardedMessage != null ? MusicPlayer.mediaList.get(j).forwardedMessage.attachment.cacheId : MusicPlayer.mediaList.get(j).attachment.cacheId;
                     if (mCashId.equals(cashId)) {
-                        needDownloadList.remove(MusicPlayer.mediaList.get(j).getMessageId());
+                        needDownloadList.remove(MusicPlayer.mediaList.get(j).id);
 
                         final int finalJ = j;
                         G.handler.post(new Runnable() {
@@ -602,7 +603,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                         .equalTo("roomId", MusicPlayer.roomId)
                         .notEqualTo("deleted", true)
                         .contains("messageType", ProtoGlobal.RoomMessageType.AUDIO.toString())
-                        .lessThan("messageId", MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                        .lessThan("messageId", MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).id)
                         .findAll().sort("messageId", Sort.DESCENDING);
             });
         } catch (IllegalStateException e) {
@@ -619,8 +620,9 @@ public class FragmentMediaPlayer extends BaseFragment {
 
             footerAdapter.clear();
             for (RealmRoomMessage r : realmRoomMessages) {
-                MusicPlayer.mediaList.add(r);
-                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+                MessageObject messageObject = MessageObject.create(r);
+                MusicPlayer.mediaList.add(messageObject);
+                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(messageObject).withIdentifier(r.getMessageId()));
             }
 
         } else {

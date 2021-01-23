@@ -68,6 +68,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -114,7 +115,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
     public static boolean isPause = false;
-    public static ArrayList<RealmRoomMessage> mediaList;
+    public static ArrayList<MessageObject> mediaList;
     public static String strTimer = "";
     public static String messageId = "";
     public static boolean isNearDistance = false;
@@ -514,20 +515,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 selectedMedia = mediaList.size() - 1;
             }
-            RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+            MessageObject messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
             boolean _continue = true;
             while (_continue) {
-                if (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                if (!messageObject.attachment.isFileExistsOnLocal()) {
                     selectedMedia--;
                     if (selectedMedia < 0) {
                         selectedMedia = mediaList.size() - 1;
                     }
-                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
                 } else {
                     _continue = false;
                 }
             }
-            startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+            startPlayer(messageObject.attachment.name, messageObject.attachment.filePath, roomName, roomId, false, String.valueOf(mediaList.get(selectedMedia).id));
             if (FragmentChat.onMusicListener != null) {
                 FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }
@@ -579,11 +580,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (selectedMedia >= mediaList.size()) {
                 selectedMedia = 0;
             }
-            RealmRoomMessage roomMessage = null;
+            MessageObject messageObject = null;
             boolean _continue = true;
             while (_continue) {
-                roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
-                if (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                if (!messageObject.getAttachment().isFileExistsOnLocal()) {
                     selectedMedia++;
                     if (selectedMedia >= mediaList.size()) {
                         if (isVoice) { // avoid from return to first voice
@@ -600,7 +601,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     _continue = false;
                 }
             }
-            startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
+            startPlayer(messageObject.attachment.name, messageObject.attachment.filePath, roomName, roomId, false, mediaList.get(selectedMedia).id + "");
             if (FragmentChat.onMusicListener != null) {
                 FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }
@@ -1017,7 +1018,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         context.startService(intent);
     }
 
-    public static ArrayList<RealmRoomMessage> fillMediaList(boolean setSelectedItem) {
+    public static ArrayList<MessageObject> fillMediaList(boolean setSelectedItem) {
 
         boolean isOnListMusic = false;
         mediaList = new ArrayList<>();
@@ -1026,16 +1027,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             return realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).findAll().sort("messageId", Sort.DESCENDING);
         });
 
-        if (!roomMessages.isEmpty()) {
-            for (RealmRoomMessage realmRoomMessage : roomMessages) { //TODO Saeed Mozaffari; write better code for detect voice and audio instead get all roomMessages
+        List<MessageObject> messageObjects = new ArrayList<>();
+        for (RealmRoomMessage message : roomMessages) {
+            messageObjects.add(MessageObject.create(message));
+        }
+        if (!messageObjects.isEmpty()) {
+            for (MessageObject messageObject : messageObjects) { //TODO Saeed Mozaffari; write better code for detect voice and audio instead get all roomMessages
 
-                RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(realmRoomMessage);
+                MessageObject roomMessage = RealmRoomMessage.getFinalMessage(messageObject);
 
                 if (isVoice) {
-                    if (roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+                    if (ProtoGlobal.RoomMessageType.forNumber(roomMessage.messageType).toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
                         try {
-                            if (roomMessage.getAttachment().getLocalFilePath() != null) {
-                                if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
+                            if (roomMessage.attachment.filePath != null) {
+                                if (new File(roomMessage.attachment.filePath).exists()) {
                                     mediaList.add(roomMessage);
                                 }
                             }
@@ -1045,11 +1050,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     }
                 } else {
 
-                    if ((roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()))) {
+                    if ((ProtoGlobal.RoomMessageType.forNumber(roomMessage.messageType).toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || ProtoGlobal.RoomMessageType.forNumber(roomMessage.messageType).toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()))) {
 
                         if (mediaList.size() <= limitMediaList || !isOnListMusic) {
                             try {
-                                if (roomMessage.getMessageId() == Long.parseLong(messageId)) {
+                                if (roomMessage.id == Long.parseLong(messageId)) {
                                     isOnListMusic = true;
                                 }
                                 mediaList.add(roomMessage);
@@ -1065,8 +1070,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (setSelectedItem) {
             for (int i = mediaList.size() - 1; i >= 0; i--) {
                 try {
-                    RealmRoomMessage _rm = RealmRoomMessage.getFinalMessage(mediaList.get(i));
-                    if (_rm.getAttachment().getLocalFilePath() != null && _rm.getAttachment().getLocalFilePath().equals(musicPath)) {
+                    MessageObject _rm = RealmRoomMessage.getFinalMessage(mediaList.get(i));
+                    if (_rm.attachment.filePath != null && _rm.attachment.filePath.equals(musicPath)) {
                         selectedMedia = i;
                         break;
                     }
@@ -1294,12 +1299,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             for (RealmRoomMessage rm : roomMessages) {
                 if (isVoice) {
                     if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
-                        result = startDownload(rm);
+                        result = startDownload(MessageObject.create(rm));
                         break;
                     }
                 } else {
                     if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
-                        result = startDownload(rm);
+                        result = startDownload(MessageObject.create(rm));
                         break;
                     }
                 }
@@ -1309,16 +1314,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         return result;
     }
 
-    private static boolean startDownload(RealmRoomMessage rm) {
+    private static boolean startDownload(MessageObject rm) {
         boolean result = false;
         try {
-            if (rm.getAttachment().getLocalFilePath() == null || !new File(rm.getAttachment().getLocalFilePath()).exists()) {
-                ProtoGlobal.RoomMessageType _messageType = rm.getForwardMessage() != null ? rm.getForwardMessage().getMessageType() : rm.getMessageType();
-                String _cacheId = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getCacheId() : rm.getAttachment().getCacheId();
-                String _name = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getName() : rm.getAttachment().getName();
-                String _token = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getToken() : rm.getAttachment().getToken();
-                String _url = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getUrl() : rm.getAttachment().getUrl();
-                Long _size = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getSize() : rm.getAttachment().getSize();
+            if (rm.attachment.filePath == null || !new File(rm.attachment.filePath).exists()) {
+                int _messageType = rm.forwardedMessage != null ? rm.forwardedMessage.messageType : rm.messageType;
+                String _cacheId = rm.forwardedMessage != null ? rm.forwardedMessage.attachment.cacheId : rm.getAttachment().cacheId;
+                String _name = rm.forwardedMessage != null ? rm.forwardedMessage.attachment.name : rm.getAttachment().name;
+                String _token = rm.forwardedMessage != null ? rm.forwardedMessage.attachment.token : rm.getAttachment().token;
+                String _url = rm.forwardedMessage != null ? rm.forwardedMessage.attachment.publicUrl : rm.getAttachment().publicUrl;
+                Long _size = rm.forwardedMessage != null ? rm.forwardedMessage.attachment.size : rm.getAttachment().size;
 
                 if (_cacheId == null) {
                     return false;
