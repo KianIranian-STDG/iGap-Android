@@ -9,6 +9,7 @@ import net.iGap.proto.ProtoChannelDelete;
 import net.iGap.proto.ProtoChannelDeleteMessage;
 import net.iGap.proto.ProtoChannelEditMessage;
 import net.iGap.proto.ProtoChannelPinMessage;
+import net.iGap.proto.ProtoChannelUpdateReactionStatus;
 import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
@@ -1080,4 +1081,68 @@ public class IG_RPC {
             return actionId;
         }
     }
+
+    public static class Channel_Update_Reaction_Status extends AbstractObject {
+        public int actionId = 426;
+        public long roomId;
+        public boolean reactionStatus;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatus.Builder builder = ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatus.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setReactionStatus(reactionStatus);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Update_Reaction_Status().deserializeResponse(constructor, message);
+        }
+
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Update_Reaction_Status extends AbstractObject {
+
+        public static int actionId = 30426;
+        public long roomId;
+        public boolean reactionStatus;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse response = ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse.parseFrom(message);
+            roomId = response.getRoomId();
+            reactionStatus = response.getReactionStatus();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message != null) {
+                return null;
+            }
+
+            Res_Channel_Update_Reaction_Status object = null;
+            try {
+                object = new Res_Channel_Update_Reaction_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+
 }
