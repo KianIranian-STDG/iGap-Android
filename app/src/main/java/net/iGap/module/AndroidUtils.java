@@ -174,12 +174,15 @@ public final class AndroidUtils {
      * @return correct local path/passed path
      */
     public static String suitablePath(String path) {
-        if (path.matches("\\w+?://")) {
-            return path;
-        } else {
-            String encoded = Uri.fromFile(new File(path)).toString();
-            return Uri.decode(encoded);
+        if (path != null) {
+            if (path.matches("\\w+?://")) {
+                return path;
+            } else {
+                String encoded = Uri.fromFile(new File(path)).toString();
+                return Uri.decode(encoded);
+            }
         }
+        return null;
     }
 
     public static String saveBitmap(Bitmap bmp) {

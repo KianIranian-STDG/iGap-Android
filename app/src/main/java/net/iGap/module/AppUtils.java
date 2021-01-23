@@ -170,7 +170,7 @@ public final class AppUtils {
                         if (message.attachment.isFileExistsOnLocal()) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
                         } else if (message.attachment.isThumbnailExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.thumbnailPath), view);
                         } else {
                             view.setVisibility(View.GONE);
                         }
