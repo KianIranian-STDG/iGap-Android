@@ -56,6 +56,7 @@ import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -804,6 +805,9 @@ public class FragmentShowImage extends BaseFragment {
                     case SUCCESS:
                         ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, arg.data.getFilePath());
                         ZoomableImageView.setZoomable(true);
+                        rm.attachment.filePath = arg.data.getFilePath();
+                        rm.attachment.token = arg.data.getToken();
+                        EventManager.getInstance().postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm);
                         break;
                     case LOADING:
                         progress.withProgress(arg.data.getProgress());

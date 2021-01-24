@@ -405,20 +405,34 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], attachment.name, messageType.getNumber());
                     attachment.token = (String) message[3];
                     onProgressFinish(holder, attachment, messageType.getNumber());
-                    if (attachment.isFileExistsOnLocalAndIsImage()) {
-                        onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
-                    } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
-                        onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
-                    } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-                        if (attachment.isThumbnailExistsOnLocal()) {
-                            onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
-                        }
-                    }
+                    loadImageOrThumbnail(messageType);
 
+                }
+            });
+        } else if (id == EventManager.ON_FILE_DOWNLOAD_COMPLETED) {
+            G.runOnUiThread(() -> {
+                MessageObject downloadedMessage = (MessageObject) message[0];
+                if (downloadedMessage.id == messageObject.id) {
+                    attachment.filePath = downloadedMessage.attachment.filePath;
+                    attachment.token = downloadedMessage.attachment.token;
+                    ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(downloadedMessage.messageType);
+                    loadImageOrThumbnail(messageType);
                 }
             });
         }
 
+    }
+
+    private void loadImageOrThumbnail(ProtoGlobal.RoomMessageType messageType) {
+        if (attachment.isFileExistsOnLocalAndIsImage()) {
+            onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+        } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
+            onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
+        } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
+            if (attachment.isThumbnailExistsOnLocal()) {
+                onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
+            }
+        }
     }
 
     @Override
@@ -468,6 +482,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (attachment != null) {
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
             EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPLETED, this);
+            EventManager.getInstance().addEventListener(EventManager.ON_FILE_DOWNLOAD_COMPLETED, this);
 
         }
 
@@ -1699,15 +1714,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             case SUCCESS:
                                 attachment.filePath = arg.data.getFilePath();
                                 onProgressFinish(holder, attachment, messageType.getNumber());
-                                if (attachment.isFileExistsOnLocalAndIsImage()) {
-                                    onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
-                                } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
-                                    onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
-                                } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-                                    if (attachment.isThumbnailExistsOnLocal()) {
-                                        onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.THUMBNAIL);
-                                    }
-                                }
+                                loadImageOrThumbnail(messageType);
                                 break;
                             case LOADING:
                                 if (arg.data == null) {
