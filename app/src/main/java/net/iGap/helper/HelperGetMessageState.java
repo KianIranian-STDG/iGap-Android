@@ -13,8 +13,9 @@ package net.iGap.helper;
 import android.os.Handler;
 
 import net.iGap.Config;
-import net.iGap.fragments.FragmentChat;
-import net.iGap.request.RequestChannelGetMessagesStats;
+import net.iGap.controllers.MessageController;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.structs.MessageObject;
 
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,13 +27,13 @@ public class HelperGetMessageState {
     private static Thread thread;
     private static final Object object = new Object();
 
-    public static void getMessageState(long roomId, long messageId) {
+    public static void getMessageState(MessageObject messageObject, long roomId, long messageId) {
 
         synchronized (object) {
             if (thread == null) {
                 thread = new Thread(() -> {
                     final Handler handler = new Handler();
-                    sendMessageStateRequest();
+                    sendMessageStateRequest(messageObject);
                     handler.postDelayed(thread, Config.GET_MESSAGE_STATE_TIME_OUT);
                 });
                 thread.start();
@@ -56,14 +57,13 @@ public class HelperGetMessageState {
         }
     }
 
-    private static void sendMessageStateRequest() {
+    private static void sendMessageStateRequest(MessageObject messageObject) {
         synchronized (object) {
             for (long roomId : roomIds.keySet()) {
                 HashSet<Long> messageIds = roomIds.get(roomId);
                 roomIds.remove(roomId);
                 if (messageIds.size() > 0) {
-
-                    new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
+                    MessageController.getInstance(AccountManager.selectedAccount).ChannelGetMessageVote(messageObject,roomId, messageIds);
                 }
             }
         }

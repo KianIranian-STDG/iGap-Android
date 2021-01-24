@@ -218,8 +218,6 @@ public class G extends ApplicationContext {
     public static OnStickerDownloaded onStickerDownloaded;
     public static OnStickerDownload onStickerDownload;
     public static OnUserInfoMyClient onUserInfoMyClient;
-    public static OnChannelAddMessageReaction onChannelAddMessageReaction;
-    public static OnChannelGetMessagesStats onChannelGetMessagesStats;
     public static OnChannelRemoveUsername onChannelRemoveUsername;
     public static OnChannelRevokeLink onChannelRevokeLink;
     public static OnChannelUpdateSignature onChannelUpdateSignature;

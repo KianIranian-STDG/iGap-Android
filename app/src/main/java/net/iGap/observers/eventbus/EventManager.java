@@ -72,6 +72,9 @@ public class EventManager {
     public static final int ON_PINNED_MESSAGE = eventId++;
     public static final int CHAT_CLEAR_MESSAGE = eventId++;
 
+    public static final int CHANNEL_ADD_VOTE = eventId++;
+    public static final int CHANNEL_GET_VOTE = eventId++;
+
     private static EventManager eventListenerInstance;
 
     private ErrorHandler errorHandler;

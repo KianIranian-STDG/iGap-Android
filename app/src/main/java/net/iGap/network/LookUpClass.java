@@ -253,8 +253,6 @@ public class LookUpClass {
         lookupMap.put(30420, "ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse");
         lookupMap.put(30421, "ProtoChannelRevokeLink.ChannelRevokeLinkResponse");
         lookupMap.put(30422, "ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse");
-        lookupMap.put(30423, "ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse");
-        lookupMap.put(30424, "ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse");
 //        lookupMap.put(30425, "ProtoChannelEditMessage.ChannelEditMessageResponse");
         lookupMap.put(30426, "ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse");
         lookupMap.put(30427, "ProtoChannelPinMessage.ChannelPinMessageResponse");

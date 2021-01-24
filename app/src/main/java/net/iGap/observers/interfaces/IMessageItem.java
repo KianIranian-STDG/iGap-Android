@@ -47,5 +47,5 @@ public interface IMessageItem {
     void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, MessageObject structMessage);
 
     void onVoteClick(MessageObject messageObject, int reactionValue);
-    void onGetVote(MessageObject messageObject);
+
 }

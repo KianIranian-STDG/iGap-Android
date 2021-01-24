@@ -26,6 +26,7 @@ import net.iGap.proto.ProtoInfoConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class IG_RPC {
@@ -1088,7 +1089,7 @@ public class IG_RPC {
 
         public static int actionId = 423;
         public long roomId;
-        public ArrayList<Long> messageIds;
+        public HashSet<Long> messageIds;
 
         @Override
         public Object getProtoObject() {

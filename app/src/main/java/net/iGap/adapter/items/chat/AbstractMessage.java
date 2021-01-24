@@ -751,7 +751,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * need send request for getMessageState even show vote layout is hide
      */
     private void getChannelMessageState() {
-        HelperGetMessageState.getMessageState(messageObject.roomId, messageObject.id);
+        HelperGetMessageState.getMessageState(messageObject, messageObject.roomId, messageObject.id);
     }
 
     private void addSenderNameToGroupIfNeed(final NewChatItemHolder holder) {
