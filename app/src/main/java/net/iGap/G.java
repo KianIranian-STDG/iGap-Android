@@ -221,8 +221,6 @@ public class G extends ApplicationContext {
     public static OnChannelRemoveUsername onChannelRemoveUsername;
     public static OnChannelRevokeLink onChannelRevokeLink;
     public static OnChannelUpdateSignature onChannelUpdateSignature;
-    public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatus;
-    public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
     public static OnClientResolveUsername onClientResolveUsername;

@@ -214,7 +214,6 @@ import net.iGap.observers.interfaces.ISendPosition;
 import net.iGap.observers.interfaces.IUpdateLogItem;
 import net.iGap.observers.interfaces.LocationListener;
 import net.iGap.observers.interfaces.OnBotClick;
-import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.observers.interfaces.OnChatDelete;
 import net.iGap.observers.interfaces.OnChatEditMessageResponse;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
@@ -297,7 +296,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -361,7 +359,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChatDelete, LocationListener,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
+        OnConnectionChangeStateChat, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
 
     // TODO: 12/28/20 refactor
     @Deprecated
@@ -731,6 +729,7 @@ public class FragmentChat extends BaseFragment
         getEventManager().addEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
         getEventManager().addEventListener(EventManager.CHANNEL_ADD_VOTE, this);
         getEventManager().addEventListener(EventManager.CHANNEL_GET_VOTE, this);
+        getEventManager().addEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
 
         if (twoPaneMode)
             EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
@@ -1091,7 +1090,6 @@ public class FragmentChat extends BaseFragment
         G.onChatDelete = this;
         G.onConnectionChangeStateChat = this;
         HelperNotification.getInstance().cancelNotification();
-        G.onChannelUpdateReactionStatusChat = this;
         G.onBotClick = this;
 
         /*finishActivity = new FinishActivity() {
@@ -1229,6 +1227,7 @@ public class FragmentChat extends BaseFragment
         getEventManager().removeEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
         getEventManager().removeEventListener(EventManager.CHANNEL_ADD_VOTE, this);
         getEventManager().removeEventListener(EventManager.CHANNEL_GET_VOTE, this);
+        getEventManager().removeEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
 
         if (twoPaneMode)
             EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
@@ -7441,26 +7440,6 @@ public class FragmentChat extends BaseFragment
         }, 100);
     }
 
-    @Override
-    public void OnChannelUpdateReactionStatusResponse(long roomId, final boolean status) {
-        if (roomId == mRoomId) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    showVoteChannel = status;
-                    if (mAdapter != null) {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
-    public void OnChannelUpdateReactionStatusError() {
-
-    }
-
     /**
      * *************************** Messaging ***************************
      */
@@ -9342,6 +9321,14 @@ public class FragmentChat extends BaseFragment
                         mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
 
                     }
+                }
+            });
+
+        } else if (id == EventManager.CHANNEL_UPDATE_VOTE) {
+            G.runOnUiThread(() -> {
+                showVoteChannel = (boolean) message[1];
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
                 }
             });
 

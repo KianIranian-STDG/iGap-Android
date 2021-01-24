@@ -1,9 +1,10 @@
 package net.iGap.controllers;
 
-import net.iGap.G;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
+import net.iGap.realm.RealmChannelRoom;
 
 public class RoomController extends BaseController {
 
@@ -36,13 +37,9 @@ public class RoomController extends BaseController {
         getRequestManager().sendRequest(req, (response, error) -> {
             if (response != null) {
                 IG_RPC.Res_Channel_Update_Reaction_Status res = (IG_RPC.Res_Channel_Update_Reaction_Status) response;
-                if (G.onChannelUpdateReactionStatus != null) {
-                    G.onChannelUpdateReactionStatus.OnChannelUpdateReactionStatusResponse(res.roomId, res.reactionStatus);
-                }
+                RealmChannelRoom.updateReactionStatus(res.roomId, res.reactionStatus);
+                getEventManager().postEvent(EventManager.CHANNEL_UPDATE_VOTE, res.roomId, res.reactionStatus);
 
-                if (G.onChannelUpdateReactionStatusChat != null) {
-                    G.onChannelUpdateReactionStatusChat.OnChannelUpdateReactionStatusResponse(res.roomId, res.reactionStatus);
-                }
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
