@@ -62,6 +62,7 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Channel_Add_Message_Reaction.actionId, IG_RPC.Res_Channel_Add_Message_Reaction.class);
         classes.put(IG_RPC.Res_Channel_Get_Message_Reaction.actionId, IG_RPC.Res_Channel_Get_Message_Reaction.class);
         classes.put(IG_RPC.Res_Channel_Update_Reaction_Status.actionId, IG_RPC.Res_Channel_Update_Reaction_Status.class);
+        classes.put(IG_RPC.Res_Channel_Update_Signature.actionId, IG_RPC.Res_Channel_Update_Signature.class);
     }
 
     public boolean validObject(int actionId) {

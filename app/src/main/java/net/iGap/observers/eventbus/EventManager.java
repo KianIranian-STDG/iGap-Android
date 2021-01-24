@@ -75,6 +75,7 @@ public class EventManager {
     public static final int CHANNEL_ADD_VOTE = eventId++;
     public static final int CHANNEL_GET_VOTE = eventId++;
     public static final int CHANNEL_UPDATE_VOTE = eventId++;
+    public static final int CHANNEL_UPDATE_SIGNATURE = eventId++;
 
     private static EventManager eventListenerInstance;
 

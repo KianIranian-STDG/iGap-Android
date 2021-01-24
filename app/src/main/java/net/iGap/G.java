@@ -220,7 +220,6 @@ public class G extends ApplicationContext {
     public static OnUserInfoMyClient onUserInfoMyClient;
     public static OnChannelRemoveUsername onChannelRemoveUsername;
     public static OnChannelRevokeLink onChannelRevokeLink;
-    public static OnChannelUpdateSignature onChannelUpdateSignature;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
     public static OnClientResolveUsername onClientResolveUsername;

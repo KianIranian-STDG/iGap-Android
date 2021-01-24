@@ -5,6 +5,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmRoom;
 
 public class RoomController extends BaseController {
 
@@ -46,4 +47,24 @@ public class RoomController extends BaseController {
             }
         });
     }
+
+    public void ChannelUpdateSignature(long roomId, boolean signature) {
+
+        IG_RPC.Channel_Update_Signature req = new IG_RPC.Channel_Update_Signature();
+        req.roomId = roomId;
+        req.signature = signature;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_Update_Signature res = (IG_RPC.Res_Channel_Update_Signature) response;
+                RealmRoom.updateSignature(res.roomId, res.signature);
+                getEventManager().postEvent(EventManager.CHANNEL_UPDATE_SIGNATURE, res.roomId, res.signature);
+
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
 }

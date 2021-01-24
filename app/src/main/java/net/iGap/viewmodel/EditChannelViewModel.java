@@ -23,14 +23,12 @@ import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnChannelEdit;
-import net.iGap.observers.interfaces.OnChannelUpdateSignature;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelEdit;
-import net.iGap.request.RequestChannelUpdateSignature;
 
 import java.util.ArrayList;
 
@@ -78,15 +76,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     /*private AttachFile attachFile;*/
     private String pathSaveImage;
 
-    @Override
-    public void onDestroyViewModel() {
-        EventManager.getInstance().removeEventListener(EventManager.CHANNEL_UPDATE_VOTE,this);
-    }
 
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
 
-        EventManager.getInstance().addEventListener(EventManager.CHANNEL_UPDATE_VOTE,this);
+        EventManager.getInstance().addEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
+        EventManager.getInstance().addEventListener(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
 
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
@@ -193,29 +188,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             menuPopupVisibility.setValue(View.GONE);
         }*/
 
-        G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
-            @Override
-            public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
-                // handle realm to response class
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        isShowLoading.set(View.GONE);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(() -> {
-                    if (isSignedMessage.get()) {
-                        isSignedMessage.set(false);
-                    } else {
-                        isSignedMessage.set(true);
-                    }
-                });
-            }
-        };
         /*attachFile = new AttachFile(G.fragmentActivity);*/
     }
 
@@ -260,11 +232,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     public void onSingedMessageCheckedChange(boolean state) {
         if (state != isSignedMessage.get()) {
-            if (state) {
-                new RequestChannelUpdateSignature().channelUpdateSignature(roomId, true);
-            } else {
-                new RequestChannelUpdateSignature().channelUpdateSignature(roomId, false);
-            }
+            RoomController.getInstance(AccountManager.selectedAccount).ChannelUpdateSignature(roomId, state);
             isShowLoading.set(View.VISIBLE);
         }
     }
@@ -376,13 +344,28 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     @Override
     public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.CHANNEL_UPDATE_VOTE){
+        if (id == EventManager.CHANNEL_UPDATE_VOTE) {
             G.handler.post(() -> {
-                long roomId= (long) message[0];
+                long roomId = (long) message[0];
+                if (roomId == EditChannelViewModel.this.roomId) {
+                    isShowLoading.set(View.GONE);
+                }
+            });
+
+        } else if (id == EventManager.CHANNEL_UPDATE_SIGNATURE) {
+            G.handler.post(() -> {
+                long roomId = (long) message[0];
                 if (roomId == EditChannelViewModel.this.roomId) {
                     isShowLoading.set(View.GONE);
                 }
             });
         }
     }
+
+    @Override
+    public void onDestroyViewModel() {
+        EventManager.getInstance().removeEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
+        EventManager.getInstance().removeEventListener(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
+    }
+
 }

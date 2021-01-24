@@ -11,6 +11,7 @@ import net.iGap.proto.ProtoChannelEditMessage;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoChannelPinMessage;
 import net.iGap.proto.ProtoChannelUpdateReactionStatus;
+import net.iGap.proto.ProtoChannelUpdateSignature;
 import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
@@ -1122,7 +1123,6 @@ public class IG_RPC {
                 return null;
 
 
-
             }
 
             Res_Channel_Get_Message_Reaction object = null;
@@ -1197,6 +1197,68 @@ public class IG_RPC {
             Res_Channel_Update_Reaction_Status object = null;
             try {
                 object = new Res_Channel_Update_Reaction_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Channel_Update_Signature extends AbstractObject {
+
+        public int actionId = 422;
+        public long roomId;
+        public boolean signature;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelUpdateSignature.ChannelUpdateSignature.Builder builder = ProtoChannelUpdateSignature.ChannelUpdateSignature.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setSignature(signature);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Update_Signature().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Update_Signature extends AbstractObject {
+
+        public static int actionId = 30422;
+        public long roomId;
+        public boolean signature;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse response = ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse.parseFrom(message);
+            roomId = response.getRoomId();
+            signature = response.getSignature();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message != null) {
+                return null;
+            }
+
+            Res_Channel_Update_Signature object = null;
+            try {
+                object = new Res_Channel_Update_Signature();
                 object.readParams(message);
             } catch (Exception e) {
                 e.printStackTrace();
