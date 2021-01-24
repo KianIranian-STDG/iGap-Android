@@ -635,14 +635,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * display 'edited' indicator beside message time if message was edited
          */
 
-//        if (messageObject.edited)// TODO: 12/29/20 MESSAGE_REFACTOR
-//            if (structMessage.getChannelExtraWithoutForward() != null && structMessage.getChannelExtraWithoutForward().getSignature() != null && structMessage.getChannelExtraWithoutForward().getSignature().length() > 0)
-//                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + structMessage.getChannelExtraWithoutForward().getSignature());
-//            else {
-//            mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
-//            }
-//        else
-//            mHolder.getSignatureTv().setText("");
+        if (messageObject.edited)// TODO: 12/29/20 MESSAGE_REFACTOR
+            if (messageObject.channelExtra != null && messageObject.channelExtra.getSignature() != null && messageObject.forwardedMessage.channelExtra.getSignature().length() > 0)
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited) + " " + messageObject.forwardedMessage.channelExtra.getSignature());
+            else {
+                mHolder.getSignatureTv().setText(mHolder.getResources().getString(R.string.edited));
+            }
+        else
+            mHolder.getSignatureTv().setText("");
         /**
          * display user avatar only if chat type is GROUP
          */
