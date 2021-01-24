@@ -286,6 +286,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -4551,25 +4552,26 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onDownloadAllEqualCashId(String cashId, String messageID) { // TODO: 12/28/20 MESSAGE_REFACTOR
-//
-//        int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-//
-//        if (start < 0) {
-//            start = 0;
-//        }
-//
-//        for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
-//            try {
-//                AbstractMessage item = mAdapter.getAdapterItem(i);
-//                if (item.structMessage.hasAttachment()) {
-//                    if (item.structMessage.getAttachment().getCacheId() != null && item.structMessage.getAttachment().getCacheId().equals(cashId) && !(item.mMessage.getMessageId() + "").equals(messageID)) {
-//                        mAdapter.notifyItemChanged(i);
-//                    }
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+
+        int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+        if (start < 0) {
+            start = 0;
+        }
+
+        for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
+            try {
+                AbstractMessage item = mAdapter.getAdapterItem(i);
+                AttachmentObject attachmentObject = item.messageObject.forwardedMessage != null ? item.messageObject.forwardedMessage.attachment : item.messageObject.attachment;
+                if (attachmentObject != null) {
+                    if (attachmentObject.cacheId != null && attachmentObject.cacheId.equals(cashId) && !(item.messageObject.id + "").equals(messageID)) {
+                        mAdapter.notifyItemChanged(i);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setCountNewMessageZero() {
