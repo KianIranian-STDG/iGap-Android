@@ -194,6 +194,7 @@
             app:layout_constraintTop_toTopOf="@+id/planDesc"
             app:layout_constraintBottom_toBottomOf="@+id/planDesc"
             app:layout_constraintStart_toStartOf="parent"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toStartOf="@+id/planDesc" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -209,6 +210,7 @@
             android:ellipsize="end"
             app:layout_constraintStart_toEndOf="@+id/planDivider2"
             app:layout_constraintEnd_toStartOf="@+id/planDivider"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintBottom_toTopOf="@+id/paymentFeatureRC" />
 
         <View
@@ -221,6 +223,7 @@
             app:layout_constraintTop_toTopOf="@+id/planDesc"
             app:layout_constraintBottom_toBottomOf="@+id/planDesc"
             app:layout_constraintStart_toEndOf="@+id/planDesc"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -255,6 +258,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/discount"
             app:layout_constraintEnd_toStartOf="@+id/discount"
             app:layout_constraintStart_toStartOf="parent"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintTop_toTopOf="@+id/discount" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -270,6 +274,7 @@
             android:textSize="@dimen/smallTextSize"
             app:layout_constraintBottom_toTopOf="@+id/discountCardHolder"
             app:layout_constraintEnd_toStartOf="@+id/discountDividerRight"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintStart_toEndOf="@+id/discountDividerLeft" />
 
         <View
@@ -282,6 +287,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/discount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/discount"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintTop_toTopOf="@+id/discount" />
 
         <androidx.cardview.widget.CardView
@@ -298,6 +304,7 @@
             app:layout_constraintBottom_toTopOf="@id/cancelButton"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:visibility="@{viewModel.showMainView}"
             app:layout_constraintTop_toBottomOf="@+id/discountDividerRight">
 
             <androidx.constraintlayout.widget.ConstraintLayout
