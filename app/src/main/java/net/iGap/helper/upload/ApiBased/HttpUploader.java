@@ -50,7 +50,7 @@ public class HttpUploader implements IUpload {
 
     private static final int MAX_UPLOAD = 6;
 
-    private static final String TAG = "UploadApiManager";
+    private static final String TAG = "UploadHttpRequest";
 
     public static HttpUploader getInstance() {
         HttpUploader localInstance = instance;

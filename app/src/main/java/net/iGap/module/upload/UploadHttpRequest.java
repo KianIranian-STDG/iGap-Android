@@ -152,9 +152,12 @@ public class UploadHttpRequest {
                     } else if (resCode == 406) {
                         preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
                         fileObject.fileToken = token;
-                        if (delegate != null) {
-                            delegate.onUploadFinish(fileObject);
-                        }
+
+                        AndroidUtils.globalQueue.postRunnable(() -> {
+                            if (delegate != null) {
+                                delegate.onUploadFinish(fileObject);
+                            }
+                        });
                     }
                     FileLog.e("UploadHttpRequest " + req.toString() + " res -> " + res.code());
                 }
@@ -241,14 +244,15 @@ public class UploadHttpRequest {
                             error(new Exception("Download Canceled"), false);
                             return;
                         }
-
                         int progress = (int) ((totalByte * 100) / fileObject.file.length());
                         if (fileObject.progress < progress) {
                             fileObject.progress = progress;
 
-                            if (delegate != null) {
-                                delegate.onUploadProgress(fileObject);
-                            }
+                            AndroidUtils.globalQueue.postRunnable(() -> {
+                                if (delegate != null) {
+                                    delegate.onUploadProgress(fileObject);
+                                }
+                            });
 
                             if (storeTime >= 5) {
                                 storeTime = 0;
@@ -289,9 +293,11 @@ public class UploadHttpRequest {
 
                     HelperSetAction.sendCancel(fileObject.messageId);
 
-                    if (delegate != null) {
-                        delegate.onUploadFinish(fileObject);
-                    }
+                    AndroidUtils.globalQueue.postRunnable(() -> {
+                        if (delegate != null) {
+                            delegate.onUploadFinish(fileObject);
+                        }
+                    });
                 } else if (response.body() != null) {
                     if (response.code() >= 500 && response.code() < 600) {
                         preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
