@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -207,6 +208,8 @@ public class UploadHttpRequest {
             error(e, true);
         } catch (JSONException e) {
             error(e, true);
+        } catch (NullPointerException e) {
+            error(e, false);
         }
     }
 
@@ -248,13 +251,15 @@ public class UploadHttpRequest {
                         if (fileObject.progress < progress) {
                             fileObject.progress = progress;
 
+                            FileLog.i(TAG, fileObject.fileToken + " progress -> " + fileObject.progress + " bytes -> " + totalByte);
+
                             AndroidUtils.globalQueue.postRunnable(() -> {
                                 if (delegate != null) {
                                     delegate.onUploadProgress(fileObject);
                                 }
                             });
 
-                            if (storeTime >= 5) {
+                            if (storeTime >= 3) {
                                 storeTime = 0;
                                 preferences.edit().putLong("offset_" + md5Key, totalByte)
                                         .putString("token_" + md5Key, fileObject.fileToken)
@@ -324,13 +329,15 @@ public class UploadHttpRequest {
         isUploading = false;
         HelperSetAction.sendCancel(fileObject.messageId);
 
+        FileLog.i(TAG, "-----------------------------------------------------------------------------------");
+        FileLog.e("UploadHttpRequest md5 Reset " + needReset + " file size after error -> " + new File(fileObject.path).length());
         FileLog.e("UploadHttpRequest CustomException \n " + fileObject.toString() + "\n", exception);
 
         if (exception.getMessage() != null && !exception.getMessage().equals("Canceled") && needReset) {
             preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
         }
 
-        FileLog.e("UploadHttpRequest md5 Reset " + needReset + " Exception ", exception);
+        FileLog.i(TAG, "-----------------------------------------------------------------------------------");
 
         if (delegate != null) {
             delegate.onUploadFail(fileObject, exception);

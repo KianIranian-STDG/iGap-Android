@@ -204,7 +204,6 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
-                    FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
                     EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize);
                     if (fileObject.onUploadListener != null) {
                         fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
