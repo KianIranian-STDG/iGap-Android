@@ -287,9 +287,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void updateMessageText() {
         if (!TextUtils.isEmpty(myText)) {
             ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
-            MessageObject objectForLink = messageObject.forwardedMessage != null ? messageObject.forwardedMessage : messageObject;
-            if (objectForLink.hasLink) {
-                myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), objectForLink.linkInfo, messageObject.id + ""));
+            if (messageObject.forwardedMessage != null) {
+                if (messageObject.forwardedMessage.linkInfo != null) {
+                    messageObject.linkInfo = messageObject.forwardedMessage.linkInfo;
+                    messageObject.hasLink = messageObject.forwardedMessage.hasLink;
+                }
+            }
+
+            if (messageObject.hasLink) {
+                myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), messageObject.linkInfo, messageObject.id + ""));
             } /*else {
                 myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
             }*/

@@ -3,6 +3,7 @@ package net.iGap.structs;
 import android.util.Log;
 
 import net.iGap.helper.HelperUrl;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.proto.ProtoGlobal;
@@ -281,9 +282,19 @@ public class MessageObject {
                 iterator.remove();
                 continue;
             }
-            if (message.indexOf(s) >= lastIndex) {
-                stringMap.put(message.indexOf(s), s);
-                lastIndex = message.indexOf(s);
+            int indexOfComponent = message.indexOf(s);
+            if (indexOfComponent >= lastIndex) {
+                if (AndroidUtils.emojiPattern.matcher(String.valueOf(message.charAt(indexOfComponent))).matches()) {
+                    if (indexOfComponent + 1 < (message.length() - 1) && AndroidUtils.emojiPattern.matcher(String.valueOf(message.charAt(indexOfComponent + 1))).matches()) {
+                        indexOfComponent += 2;
+                        s = s.substring(2);
+                    } else {
+                        indexOfComponent++;
+                        s = s.substring(1);
+                    }
+                }
+                stringMap.put(indexOfComponent, s);
+                lastIndex = indexOfComponent;
                 iterator.remove();
             }
         }
