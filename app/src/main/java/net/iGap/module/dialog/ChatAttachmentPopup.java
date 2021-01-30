@@ -469,7 +469,7 @@ public class ChatAttachmentPopup {
                     FragmentEditImage.itemGalleryList.clear();
                     FragmentEditImage.textImageList.clear();
 
-                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, () -> {
+                    Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.PHOTO, () -> {
                         try {
                             attachFile.requestOpenGalleryForImageMultipleSelect(mFragment);
                         } catch (IOException e) {
@@ -501,7 +501,7 @@ public class ChatAttachmentPopup {
             HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
                 @Override
                 public void Allow() {
-                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
+                    Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.VIDEO, new FragmentGallery.GalleryFragmentListener() {
                         @Override
                         public void openOsGallery() {
                             try {
@@ -535,7 +535,7 @@ public class ChatAttachmentPopup {
             HelperPermission.getStoragePermision(mContext, new OnGetPermission() {
                 @Override
                 public void Allow() {
-                    Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.MUSIC, new FragmentGallery.GalleryFragmentListener() {
+                    Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.MUSIC, new FragmentGallery.GalleryFragmentListener() {
                         @Override
                         public void openOsGallery() {
                             try {

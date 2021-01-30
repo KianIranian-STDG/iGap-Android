@@ -24,7 +24,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -35,12 +34,13 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.interfaces.OnGetPermission;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.model.PassCode;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SUID;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.viewmodel.EditGroupViewModel;
 
@@ -241,7 +241,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                             @Override
                             public void Allow() {
                                 if (getActivity() == null) return;
-                                Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
+                                Fragment fragment = FragmentGallery.newInstance(false, FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
                                     @Override
                                     public void openOsGallery() {
 

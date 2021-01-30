@@ -25,6 +25,7 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
 
     private boolean isPhotoMode;
     private boolean isMultiSelect;
+    private boolean canMultiSelect;
     private List<GalleryAlbumModel> albumsItem = new ArrayList<>();
     private List<GalleryItemModel> photosItem = new ArrayList<>();
     private List<GalleryItemModel> mSelectedPhotos = new ArrayList<>();
@@ -52,6 +53,10 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
         this.isMultiSelect = enable;
         if (!enable) mSelectedPhotos.clear();
         notifyDataSetChanged();
+    }
+
+    public void setMultiState(boolean canMultiSelect) {
+      this.canMultiSelect = canMultiSelect;
     }
 
     public List<GalleryItemModel> getPhotosItem() {
@@ -106,10 +111,9 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
             });
 
         }
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
 
-            @Override
-            public boolean onLongClick(View v) {
+        holder.image.setOnLongClickListener(v -> {
+            if (canMultiSelect) {
                 if (!isMultiSelect && isPhotoMode) {
                     holder.check.setChecked(!holder.check.isChecked());
                     listener.onMultiSelect(mSelectedPhotos.size());
@@ -117,7 +121,9 @@ public class AdapterGalleryPhoto extends RecyclerView.Adapter<AdapterGalleryPhot
                 }
                 return true;
             }
+            return false;
         });
+
         //handle item click
         holder.image.setOnClickListener(v -> {
 

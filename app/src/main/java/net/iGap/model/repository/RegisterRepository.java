@@ -148,7 +148,7 @@ public class RegisterRepository {
         return method;
     }
 
-        public String getCountryCode() {
+    public String getCountryCode() {
         return countryCode;
     }
 
@@ -377,7 +377,8 @@ public class RegisterRepository {
             userVerify.setCode(Integer.parseInt(verificationCode
                     .replaceAll("[^0-9]", "")
                     .replaceAll("[\u0000-\u001f]", "")));
-            userVerify.setUsername(userName);
+            if (userName != null)
+                userVerify.setUsername(userName);
             RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                 @Override
                 public void onUserVerify(String tokenR, boolean newUserR) {
