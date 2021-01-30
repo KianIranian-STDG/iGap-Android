@@ -393,7 +393,7 @@ public class G extends ApplicationContext {
         //init account manager for handle multi account
 
         try {
-            Realm.init(this);
+            Realm.init(context);
         } catch (Exception e) {
             G.ISRealmOK = false;
         } catch (Error e) {
