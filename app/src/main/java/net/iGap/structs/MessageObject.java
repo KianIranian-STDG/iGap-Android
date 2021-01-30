@@ -10,6 +10,21 @@ import net.iGap.proto.ProtoGlobal.RoomMessage;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+import static net.iGap.module.AndroidUtils.atSignLink;
+import static net.iGap.module.AndroidUtils.botLink;
+import static net.iGap.module.AndroidUtils.deepLink;
+import static net.iGap.module.AndroidUtils.digitLink;
+import static net.iGap.module.AndroidUtils.hashTagLink;
+import static net.iGap.module.AndroidUtils.igapLink;
+import static net.iGap.module.AndroidUtils.igapResolve;
+import static net.iGap.module.AndroidUtils.webLink;
+
 public class MessageObject {
     public static final int STATUS_FAILED = 0;
     public static final int STATUS_SENDING = 1;
@@ -52,6 +67,7 @@ public class MessageObject {
 
     public boolean isSelected;
     public String username;
+    private HashMap<Integer, String> stringMap = new HashMap<>();
 
     private MessageObject() {
 
@@ -126,6 +142,8 @@ public class MessageObject {
             return null;
         }
 
+        Log.i("mohammad", "create: 1");
+
         MessageObject messageObject = new MessageObject();
         boolean isForwardOrReplay = roomMessage.replyTo != null || roomMessage.forwardMessage != null;
 
@@ -143,11 +161,21 @@ public class MessageObject {
             }
         }
 
+        Log.i("mohammad", "create: 2");
+
         if (!isForwardOrReplay) {
             messageObject.deleted = roomMessage.isDeleted();
         }
 
+        Log.i("mohammad", "create: 3");
+        /*if (roomMessage.hasMessageLink && roomMessage.getLinkInfo() != null) {
+            messageObject.hasLink = true;
+            messageObject.linkInfo = roomMessage.getLinkInfo();
+        } else {
+            messageObject.hasLink = false;
+        }*/
         messageObject.setMessageText(roomMessage.getMessage());
+        Log.i("mohammad", "create: 4");
 
         messageObject.id = (createForForward && roomMessage.getMessageId() > 0) ? roomMessage.getMessageId() * (-1) : roomMessage.getMessageId();
         messageObject.forwardedMessage = create(roomMessage.getForwardMessage(), false, false, true);
@@ -155,6 +183,8 @@ public class MessageObject {
         messageObject.status = readStatus(roomMessage.getStatus());
         messageObject.authorHash = roomMessage.getAuthorHash();
         messageObject.edited = roomMessage.isEdited();
+
+        Log.i("mohammad", "create: 5");
 
         if (roomMessage.getAttachment() != null) {
             messageObject.attachment = AttachmentObject.create(roomMessage.getAttachment());
@@ -176,6 +206,8 @@ public class MessageObject {
             messageObject.additional = AdditionalObject.create(roomMessage);
         }
 
+        Log.i("mohammad", "create: 6");
+
         if (roomMessage.getChannelExtra() != null) {
             messageObject.channelExtraObject = ChannelExtraObject.create(roomMessage.getChannelExtra());
         }
@@ -190,7 +222,7 @@ public class MessageObject {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
         }
 
-        Log.i("mmdCreate", "created successfully: " + messageObject.toString());
+        Log.i("mohammad", "create: 7");
 
         return messageObject;
     }
@@ -210,14 +242,73 @@ public class MessageObject {
         if (messageText != null) {
             message = messageText.replaceAll("[\\u2063]", "");
 
-            String messageLink = HelperUrl.getLinkInfo(message);
-            if (messageLink.length() > 0) {
+
+            String link = getMessageLinksInfo();
+            Log.i("matcher", "link info: " + link);
+            if (link.length() > 0) {
                 hasLink = true;
-                linkInfo = messageLink;
+                linkInfo = link;
             } else {
                 hasLink = false;
             }
         }
+    }
+
+    private String getMessageLinksInfo() {
+        LinkedList<String> components = new LinkedList<>(Arrays.asList(message.split("\\s")));
+        char[] chars = message.toCharArray();
+
+        int boldPlaces = 0;
+        int startDoubleStar = 0;
+        boolean starStarted = false;
+        for (int i = 0; i < chars.length; i++) {
+            if (message.charAt(i) == '*' && (i + 1) < message.length() && message.charAt(i + 1) == '*') {
+                if (i > (startDoubleStar + 1) && message.charAt(i - (message.substring((startDoubleStar + 2), i).length() + 1)) == '*' && starStarted) {
+                    boldPlaces += 4;
+                    starStarted = false;
+                } else {
+                    starStarted = true;
+                    startDoubleStar = i;
+                }
+            }
+        }
+
+        int lastIndex = 0;
+        Iterator<String> iterator = components.iterator();
+        while (iterator.hasNext()) {
+            String s = iterator.next();
+            if (s.length() == 0) {
+                iterator.remove();
+                continue;
+            }
+            if (message.indexOf(s) >= lastIndex) {
+                stringMap.put(message.indexOf(s), s);
+                lastIndex = message.indexOf(s);
+                iterator.remove();
+            }
+        }
+
+        String link = "";
+        for (Map.Entry<Integer, String> stringEntry : stringMap.entrySet()) {
+            if (hashTagLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.hash.toString() + "@";
+            } else if (atSignLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.atSighn.toString() + "@";
+            } else if (igapLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.igapLink.toString() + "@";
+            } else if (stringEntry.getValue().contains(igapResolve)) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.igapResolve.toString() + "@";
+            } else if (botLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.bot.toString() + "@";
+            } else if (webLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.webLink.toString() + "@";
+            } else if (digitLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.digitLink.toString() + "@";
+            } else if (deepLink.matcher(stringEntry.getValue()).matches()) {
+                link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.igapDeepLink.toString() + "@";
+            }
+        }
+        return link;
     }
 
     public boolean isForwarded() {
