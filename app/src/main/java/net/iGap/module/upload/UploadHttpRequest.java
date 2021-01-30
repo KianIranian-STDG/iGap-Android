@@ -274,7 +274,6 @@ public class UploadHttpRequest {
                     @Override
                     public void onError(Exception e) {
                         FileLog.i(TAG, "Error from stream " + e.getMessage());
-                        UploadHttpRequest.this.error(e, true);
                     }
                 });
 
@@ -286,19 +285,21 @@ public class UploadHttpRequest {
 
                 requestCall = client.newCall(request);
 
-                // FIXME: 10/12/2020 remove to SendMessageUtil
-                if (fileObject.message != null) {
-                    HelperSetAction.setActionFiles(fileObject.message.getRoomId(), fileObject.messageId, HelperSetAction.getAction(fileObject.messageType), fileObject.roomType);
-                }
+                AndroidUtils.globalQueue.postRunnable(() -> {
+                    // FIXME: 10/12/2020 remove to SendMessageUtil
+                    if (fileObject.message != null) {
+                        HelperSetAction.setActionFiles(fileObject.message.getRoomId(), fileObject.messageId, HelperSetAction.getAction(fileObject.messageType), fileObject.roomType);
+                    }
+                });
 
                 Response response = requestCall.execute();
 
                 if (response.isSuccessful() && response.body() != null) {
                     preferences.edit().remove("offset_" + md5Key).remove("token_" + md5Key).remove("progress_" + md5Key).apply();
 
-                    HelperSetAction.sendCancel(fileObject.messageId);
-
                     AndroidUtils.globalQueue.postRunnable(() -> {
+                        HelperSetAction.sendCancel(fileObject.messageId);
+
                         if (delegate != null) {
                             delegate.onUploadFinish(fileObject);
                         }
@@ -310,7 +311,7 @@ public class UploadHttpRequest {
                     error(new Exception(response.body().string()), false);
                 }
             } catch (Exception e) {
-                error(e, true);
+                error(e, false);
             }
         } catch (FileNotFoundException e) {
             FileLog.e(e);
@@ -320,7 +321,7 @@ public class UploadHttpRequest {
     }
 
     private void error(Exception exception, boolean needReset) {
-        if (exception == null) {
+        if (exception == null || cancelDownload.get()) {
             return;
         }
 

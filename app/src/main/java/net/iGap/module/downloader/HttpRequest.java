@@ -1,6 +1,5 @@
 package net.iGap.module.downloader;
 
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.WorkerThread;
@@ -87,8 +86,6 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     private void download(String jwtToken, DownloadObject fileStruct) {
         isDownloading = true;
         notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADING);
-
-        Log.i("abbasiDownload", "download: ");
 
         OkHttpClient client = OkHttpClientInstance.getInstance();
 
@@ -180,7 +177,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             fileObject.progress = 100;
             notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
-            
+
         } catch (Exception e) {
             onError(e);
         }
