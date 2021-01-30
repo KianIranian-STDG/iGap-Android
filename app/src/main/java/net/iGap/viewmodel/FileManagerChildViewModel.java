@@ -39,11 +39,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
         if (new File(Environment.getExternalStorageDirectory().getAbsolutePath()).exists()) {
             addItemToList(
                     R.string.internal_storage,
-                    null ,
+                    null,
                     R.drawable.ic_fm_internal,
                     Environment.getExternalStorageDirectory().getAbsolutePath(),
                     R.string.internal_desc,
-                    null ,
+                    null,
                     R.drawable.shape_file_manager_folder_bg,
                     true
             );
@@ -53,11 +53,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
             if (new File(sdPath).exists()) {
                 addItemToList(
                         R.string.external_storage,
-                        null ,
+                        null,
                         R.drawable.ic_fm_memory,
                         sdPath + "/",
                         R.string.external_desc,
-                        null ,
+                        null,
                         R.drawable.shape_file_manager_file_bg,
                         true
                 );
@@ -68,11 +68,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
             if (new File(G.DIR_SDCARD_EXTERNAL).exists()) {
                 addItemToList(
                         R.string.external_storage,
-                        null ,
+                        null,
                         R.drawable.ic_fm_folder,
                         G.DIR_SDCARD_EXTERNAL + "/",
                         R.string.file_manager_app_desc,
-                        null ,
+                        null,
                         R.drawable.shape_file_manager_file_bg,
                         true
                 );
@@ -82,11 +82,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
         if (new File(G.DIR_APP).exists()) {
             addItemToList(
                     R.string.app_name,
-                    null ,
+                    null,
                     R.drawable.ic_fm_folder,
-                    G.DIR_APP ,
+                    G.DIR_APP,
                     R.string.file_manager_app_desc,
-                    null ,
+                    null,
                     R.drawable.shape_file_manager_folder_bg,
                     true
             );
@@ -94,33 +94,33 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
         addItemToList(
                 R.string.images,
-                null ,
+                null,
                 R.drawable.ic_fm_image,
                 null,
                 R.string.file_manager_image_desc,
-                null ,
+                null,
                 R.drawable.shape_file_manager_file_1_bg,
                 false
         );
 
         addItemToList(
                 R.string.videos,
-                null ,
+                null,
                 R.drawable.ic_fm_video,
                 null,
                 R.string.file_manager_video_desc,
-                null ,
+                null,
                 R.drawable.shape_file_manager_file_1_bg,
                 false
         );
 
         addItemToList(
                 R.string.audios,
-                null ,
+                null,
                 R.drawable.ic_fm_audio,
                 null,
                 R.string.file_manager_music,
-                null ,
+                null,
                 R.drawable.shape_file_manager_file_2_bg,
                 false
         );
@@ -144,23 +144,29 @@ public class FileManagerChildViewModel extends BaseViewModel {
         return mItems;
     }
 
-    public void getFoldersSubItems(String folder , FolderResultCallback callback){
+    public void getFoldersSubItems(String folder, FolderResultCallback callback) {
+        boolean isLogDir = folder.endsWith("/logs") && Config.FILE_LOG_ENABLE;
+
         new Thread(() -> {
 
             File file = new File(folder);
             if (file.isDirectory()) {
                 String[] items = file.list();
-                for (String item : items) {
+                for (int i = 0; i < items.length; i++) {
+                    String item = items[i];
 
                     //ignore hidden and temp files
                     if (item.startsWith(".")) continue;
                     if (item.endsWith(".tmp")) continue;
+                    if (isLogDir && i == items.length - 1) {
+                        continue;
+                    }
 
                     String address = folder + "/" + item;
                     File subFile = new File(address);
 
                     addItemToList(
-                            0 ,
+                            0,
                             item,
                             subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
                             address,
@@ -180,17 +186,17 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     }
 
-    public void sortList(Boolean isDate){
-        if(isDate == null){
+    public void sortList(Boolean isDate) {
+        if (isDate == null) {
             Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
-        }else if(isDate){
+        } else if (isDate) {
             Collections.sort(mItems, new FileManager.SortFileDate());
-        }else {
+        } else {
             Collections.sort(mItems, new FileManager.SortFileName());
         }
     }
 
-    private void addItemToList(int title ,String titleStr, int image, String path, int desc , String descStr, int background, boolean isFolderOrFile) {
+    private void addItemToList(int title, String titleStr, int image, String path, int desc, String descStr, int background, boolean isFolderOrFile) {
         StructFileManager item = new StructFileManager();
         item.name = title;
         item.nameStr = titleStr;
@@ -207,17 +213,17 @@ public class FileManagerChildViewModel extends BaseViewModel {
         float kb, mb;
         kb = file.length() / 1024;
         mb = kb / 1024;
-        if(mb == 0) {
+        if (mb == 0) {
             return (new DecimalFormat("##.##").format(kb)) + " kb";
         } else {
             return (new DecimalFormat("##.##").format(mb)) + " mb";
         }
     }
 
-    public void checkListHasSelectedBefore(){
-        for (int i = 0 ; i < mItems.size() ; i++){
-            for(int j = 0 ; j < mSelectedList.size() ; j++){
-                if(mItems.get(i).path.equals(mSelectedList.get(j)))
+    public void checkListHasSelectedBefore() {
+        for (int i = 0; i < mItems.size(); i++) {
+            for (int j = 0; j < mSelectedList.size(); j++) {
+                if (mItems.get(i).path.equals(mSelectedList.get(j)))
                     mItems.get(i).isSelected = true;
             }
         }
@@ -233,8 +239,8 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public List<StructFileManager> convertMusicGalleryItems(List<GalleryMusicModel> items) {
         List<StructFileManager> result = new ArrayList<>();
-        StructFileManager item ;
-        for (int i = 0 ; i < items.size() ; i++){
+        StructFileManager item;
+        for (int i = 0; i < items.size(); i++) {
             item = new StructFileManager();
             item.nameStr = items.get(i).getTitle();
             item.path = items.get(i).getPath();
@@ -249,8 +255,8 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public List<StructFileManager> convertAlbumGalleryItems(List<GalleryAlbumModel> items) {
         List<StructFileManager> result = new ArrayList<>();
-        StructFileManager item ;
-        for (int i = 0 ; i < items.size() ; i++){
+        StructFileManager item;
+        for (int i = 0; i < items.size(); i++) {
             item = new StructFileManager();
             item.nameStr = items.get(i).getCaption();
             item.path = items.get(i).getId();
@@ -265,8 +271,8 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public List<StructFileManager> convertVideoAlbumGalleryItems(List<GalleryVideoModel> items) {
         List<StructFileManager> result = new ArrayList<>();
-        StructFileManager item ;
-        for (int i = 0 ; i < items.size() ; i++){
+        StructFileManager item;
+        for (int i = 0; i < items.size(); i++) {
             item = new StructFileManager();
             item.nameStr = items.get(i).getCaption();
             item.path = items.get(i).getId();
@@ -281,11 +287,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public List<StructFileManager> convertImageGalleryItems(List<GalleryItemModel> items) {
         List<StructFileManager> result = new ArrayList<>();
-        StructFileManager item ;
-        for (int i = 0 ; i < items.size() ; i++){
+        StructFileManager item;
+        for (int i = 0; i < items.size(); i++) {
             String[] splittedAddress = items.get(i).getAddress().split("/");
             item = new StructFileManager();
-            item.nameStr = splittedAddress[splittedAddress.length -1];
+            item.nameStr = splittedAddress[splittedAddress.length - 1];
             item.path = items.get(i).getAddress();
             item.image = R.drawable.ic_fm_image_small;
             item.backColor = R.drawable.shape_file_manager_file_bg;
@@ -298,11 +304,11 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public List<StructFileManager> convertVideoGalleryItems(List<GalleryVideoModel> items) {
         List<StructFileManager> result = new ArrayList<>();
-        StructFileManager item ;
-        for (int i = 0 ; i < items.size() ; i++){
+        StructFileManager item;
+        for (int i = 0; i < items.size(); i++) {
             String[] splittedAddress = items.get(i).getPath().split("/");
             item = new StructFileManager();
-            item.nameStr = splittedAddress[splittedAddress.length -1];
+            item.nameStr = splittedAddress[splittedAddress.length - 1];
             item.path = items.get(i).getPath();
             item.image = R.drawable.ic_fm_image_small;
             item.backColor = R.drawable.shape_file_manager_file_bg;
@@ -313,7 +319,7 @@ public class FileManagerChildViewModel extends BaseViewModel {
         return result;
     }
 
-    public interface FolderResultCallback{
+    public interface FolderResultCallback {
         void onResult(List<StructFileManager> items);
     }
 }
