@@ -62,22 +62,24 @@ public class FragmentGallery extends BaseFragment {
     private GalleryMode mGalleryMode;
     private boolean isReturnResultDirectly;
     private boolean isMusicSortedByDate = true;
+    private static boolean canMultiSelected;
 
     public FragmentGallery() {
     }
 
-    public static FragmentGallery newInstance(GalleryMode mode, String folder, String id) {
+    public static FragmentGallery newInstance(boolean canMultiSelect, GalleryMode mode, String folder, String id) {
         FragmentGallery fragment = new FragmentGallery();
         Bundle bundle = new Bundle();
         bundle.putString(fragment.FOLDER_KEY, folder);
         bundle.putString(fragment.MODE_KEY, mode.name());
         bundle.putString(fragment.ID_KEY, id);
         bundle.putBoolean(fragment.SUB_FOLDER_KEY, true);
+        canMultiSelected = canMultiSelect;
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static FragmentGallery newInstance(GalleryMode mode, boolean isReturnResultDirectly, String folder, String id, GalleryFragmentListener listener) {
+    public static FragmentGallery newInstance(boolean canMultiSelect, GalleryMode mode, boolean isReturnResultDirectly, String folder, String id, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
         Bundle bundle = new Bundle();
         bundle.putString(fragment.FOLDER_KEY, folder);
@@ -86,15 +88,17 @@ public class FragmentGallery extends BaseFragment {
         bundle.putSerializable(fragment.LISTENER_KEY, listener);
         bundle.putBoolean(fragment.RETURN_DIRECTLY_KEY, isReturnResultDirectly);
         bundle.putBoolean(fragment.SUB_FOLDER_KEY, true);
+        canMultiSelected = canMultiSelect;
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static FragmentGallery newInstance(GalleryMode mode, GalleryFragmentListener listener) {
+    public static FragmentGallery newInstance(boolean canMultiSelect, GalleryMode mode, GalleryFragmentListener listener) {
         FragmentGallery fragment = new FragmentGallery();
         Bundle bundle = new Bundle();
         bundle.putString(fragment.MODE_KEY, mode.name());
         bundle.putSerializable(fragment.LISTENER_KEY, listener);
+        canMultiSelected = canMultiSelect;
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -199,17 +203,19 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void galleryOnBackPressed() {
-        if (mGalleryMode == GalleryMode.PHOTO) {
-            if (mGalleryPhotoAdapter != null && mGalleryPhotoAdapter.getMultiSelectState()) {
-                mHelperToolbar.getRightButton().setText(R.string.edit_icon);
-                mGalleryPhotoAdapter.setMultiSelectState(!mGalleryPhotoAdapter.getMultiSelectState());
-                return;
-            }
-        } else if (mGalleryMode == GalleryMode.VIDEO) {
-            if (mGalleryVideoAdapter != null && mGalleryVideoAdapter.getMultiSelectState()) {
-                mHelperToolbar.getRightButton().setText(R.string.edit_icon);
-                mGalleryVideoAdapter.setMultiSelectState(!mGalleryVideoAdapter.getMultiSelectState());
-                return;
+        if (mHelperToolbar.getRightButton() != null) {
+            if (mGalleryMode == GalleryMode.PHOTO) {
+                if (mGalleryPhotoAdapter != null && mGalleryPhotoAdapter.getMultiSelectState()) {
+                    mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                    mGalleryPhotoAdapter.setMultiSelectState(!mGalleryPhotoAdapter.getMultiSelectState());
+                    return;
+                }
+            } else if (mGalleryMode == GalleryMode.VIDEO) {
+                if (mGalleryVideoAdapter != null && mGalleryVideoAdapter.getMultiSelectState()) {
+                    mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                    mGalleryVideoAdapter.setMultiSelectState(!mGalleryVideoAdapter.getMultiSelectState());
+                    return;
+                }
             }
         }
 
@@ -300,6 +306,7 @@ public class FragmentGallery extends BaseFragment {
     private void setupGalleryWithPhotoAdapter(View view, RecyclerView rvGallery) {
 
         mGalleryPhotoAdapter = new AdapterGalleryPhoto(isSubFolder);
+        mGalleryPhotoAdapter.setMultiState(canMultiSelected );
         rvGallery.setAdapter(mGalleryPhotoAdapter);
         mGalleryPhotoAdapter.setListener(new GalleryItemListener() {
             @Override
@@ -319,6 +326,7 @@ public class FragmentGallery extends BaseFragment {
                 handleUiWithMultiSelect(size);
             }
         });
+
 
         if (isSubFolder) {
             FileManager.getFolderPhotosById(getContext(), mFolderId, result -> {
@@ -480,7 +488,7 @@ public class FragmentGallery extends BaseFragment {
 
     private void openGallerySubDirectory(GalleryMode mode, String path, String id) {
         if (id == null || getActivity() == null) return;
-        Fragment fragment = FragmentGallery.newInstance(mode, false, path, id, new GalleryFragmentListener() {
+        Fragment fragment = FragmentGallery.newInstance(canMultiSelected, mode, false, path, id, new GalleryFragmentListener() {
             @Override
             public void openOsGallery() {
 
@@ -497,11 +505,13 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void handleUiWithMultiSelect(int size) {
-        if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
-            if (size > 0) {
-                mHelperToolbar.getRightButton().setText(R.string.md_send_button);
-            } else {
-                mHelperToolbar.getRightButton().setText(R.string.close_icon);
+        if (mHelperToolbar.getRightButton() != null) {
+            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
+                if (size > 0) {
+                    mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                } else {
+                    mHelperToolbar.getRightButton().setText(R.string.close_icon);
+                }
             }
         }
     }
