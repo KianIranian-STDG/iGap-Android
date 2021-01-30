@@ -181,19 +181,34 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
+            Log.i("mohammad", "getIntentData: before get list from database");
             RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
                 return RealmRoomMessage.findSorted(realm, mRoomId, "updateTime", Sort.ASCENDING);
             });
+
+            Log.i("mohammad", "getIntentData: after get list from database size -> " + mRealmList.size());
             if (mRealmList.size() < 1) {
                 popBackStackFragment();
                 return false;
             }
 
+
+            List<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.copyFromRealm(mRealmList);
+            });
+
             //todo : remove for and handle it with query
-            for (RealmRoomMessage roomMessage : mRealmList) {
+
+            for (RealmRoomMessage roomMessage : realmRoomMessages) {
+                Log.i("mohammad", "--------------------------------------------------------");
                 if (RealmRoomMessage.isImageOrVideo(roomMessage, messageType)) {
-                    if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null)
-                        mFList.add(MessageObject.create(roomMessage));
+                    if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null) {
+                        Log.i("mohammad", "start create");
+                        MessageObject messageObject = MessageObject.create(roomMessage);
+                        Log.i("mohammad", "end create");
+                        mFList.add(messageObject);
+                    }
+
                 }
             }
 

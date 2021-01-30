@@ -287,8 +287,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void updateMessageText() {
         if (!TextUtils.isEmpty(myText)) {
             ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
-            if (messageObject.hasLink) {
-                myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), messageObject.linkInfo, messageObject.id + ""));
+            MessageObject objectForLink = messageObject.forwardedMessage != null ? messageObject.forwardedMessage : messageObject;
+            if (objectForLink.hasLink) {
+                myText = SpannableString.valueOf(HelperUrl.getLinkText(G.currentActivity, myText.toString(), objectForLink.linkInfo, messageObject.id + ""));
             } /*else {
                 myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
             }*/
@@ -1667,7 +1668,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             break;
                         case ERROR:
                             Log.e("TAG", "thumbnailDownloadMessage: " + arg.message);
-                            FileLog.e(arg.message);
+                            if (arg.message != null)
+                                FileLog.e(arg.message);
                     }
                 });
             });
