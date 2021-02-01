@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
 
 public class ChooseMoneyTransferActionFragment extends Fragment {
@@ -57,6 +57,18 @@ public class ChooseMoneyTransferActionFragment extends Fragment {
         view.findViewById(R.id.stickerGift).setOnClickListener(v -> {
             if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
                 ((ParentChatMoneyTransferFragment) getParentFragment()).loadGiftSticker();
+            }
+        });
+
+        view.findViewById(R.id.chargePayment).setOnClickListener(v -> {
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).loadChargePayment();
+            }
+        });
+
+        view.findViewById(R.id.internetPayment).setOnClickListener(v -> {
+            if (getParentFragment() instanceof ParentChatMoneyTransferFragment) {
+                ((ParentChatMoneyTransferFragment) getParentFragment()).loadInternetPayment();
             }
         });
     }

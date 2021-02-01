@@ -45,6 +45,8 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.Config;
 import net.iGap.model.paymentPackage.ConfigData;
@@ -54,6 +56,7 @@ import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.MciPurchaseResponse;
 import net.iGap.model.paymentPackage.Operator;
 import net.iGap.model.paymentPackage.TopupChargeType;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -124,6 +127,11 @@ public class PaymentChargeFragment extends BaseFragment {
     private List<TopupChargeType> mtnTopupChargeTypes = new ArrayList<>();
     private List<TopupChargeType> rightelTopupChargeTypes = new ArrayList<>();
     private int rightelAmountDefaultIndex;
+    private String userNumber;
+    private long userId;
+    private String phoneNumber;
+    private long peerId;
+    private CircleImageView avatar;
 
     public static PaymentChargeFragment newInstance() {
         return new PaymentChargeFragment();
@@ -138,6 +146,11 @@ public class PaymentChargeFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            phoneNumber = bundle.getString("phoneNumber", "");
+            peerId = bundle.getLong("peerId", 0);
+        }
         if (getContext() == null)
             return;
         compositeDisposable = new CompositeDisposable();
@@ -156,6 +169,7 @@ public class PaymentChargeFragment extends BaseFragment {
         linearWarning = view.findViewById(R.id.llWarning);
         removeNumber = view.findViewById(R.id.btnRemoveSearch);
         lstOperator = view.findViewById(R.id.lstOperator);
+        avatar = view.findViewById(R.id.avatar);
         editTextNumber.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
         toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
@@ -247,7 +261,17 @@ public class PaymentChargeFragment extends BaseFragment {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             if (userInfo != null && editTextNumber.getText() != null) {
-                setPhoneNumberEditText(userInfo.getPhoneNumber());
+                userId = userInfo.getId();
+                userNumber = userInfo.getPhoneNumber();
+                if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                    setPhoneNumberEditText(phoneNumber);
+                    if (peerId != 0) {
+                        avatarHandler.getAvatar(new ParamWithAvatarType(avatar, peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+                    }
+                } else {
+                    setPhoneNumberEditText(userNumber);
+                    avatar.setVisibility(View.GONE);
+                }
                 if (editTextNumber.getText() != null && editTextNumber.getText().length() == 11) {
                     String number = editTextNumber.getText().toString().substring(0, 4);
                     OperatorType.Type operator = new OperatorType().getOperation(number);
@@ -402,6 +426,7 @@ public class PaymentChargeFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                avatar.setVisibility(View.GONE);
                 if (editTextNumber.getText() != null && editTextNumber.getText().length() > 0) {
                     removeNumber.setVisibility(View.VISIBLE);
                     if (editTextNumber.getText().length() == 10 && editTextNumber.getText().charAt(0) != '0')
@@ -426,6 +451,7 @@ public class PaymentChargeFragment extends BaseFragment {
             }
         });
         removeNumber.setOnClickListener(view1 -> {
+            avatar.setVisibility(View.GONE);
             toggleHistorySelected(false);
             editTextNumber.setText("");
             removeNumber.setVisibility(View.INVISIBLE);

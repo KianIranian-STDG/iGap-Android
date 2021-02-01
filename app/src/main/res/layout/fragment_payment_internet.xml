@@ -55,6 +55,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <net.iGap.module.CircleImageView
+                    android:id="@+id/avatar"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/phoneNumber"
+                    app:layout_constraintEnd_toStartOf="@+id/phoneNumber"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/phoneNumber" />
+
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/phoneNumber"
                     style="@style/iGapEditTextStyle"
@@ -71,7 +83,7 @@
                     android:paddingEnd="@dimen/dp10"
                     android:textSize="@dimen/dp16"
                     app:layout_constraintEnd_toStartOf="@+id/btnRemoveSearch"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/avatar"
                     app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
                 <net.iGap.module.MaterialDesignTextView

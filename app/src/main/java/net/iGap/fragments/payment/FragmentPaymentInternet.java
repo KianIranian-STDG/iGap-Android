@@ -39,6 +39,8 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.Config;
 import net.iGap.model.paymentPackage.ConfigData;
@@ -46,6 +48,7 @@ import net.iGap.model.paymentPackage.FavoriteNumber;
 import net.iGap.model.paymentPackage.GetFavoriteNumber;
 import net.iGap.model.paymentPackage.Operator;
 import net.iGap.model.paymentPackage.PackageChargeType;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
@@ -100,6 +103,11 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     private OperatorRecyclerAdapter operatorRecyclerAdapter;
     private RecyclerView lstOperator;
     private ScrollView scrollView;
+    private String userNumber;
+    private long userId;
+    private String phoneNumber;
+    private long peerId;
+    private CircleImageView avatar;
 
     public static FragmentPaymentInternet newInstance() {
         return new FragmentPaymentInternet();
@@ -114,6 +122,11 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            phoneNumber = bundle.getString("phoneNumber", "");
+            peerId = bundle.getLong("peerId", 0);
+        }
         toolbar = view.findViewById(R.id.toolbar);
         frameContact = view.findViewById(R.id.frame_contact);
         frameHistory = view.findViewById(R.id.frame_history);
@@ -124,6 +137,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         btnRemoveSearch = view.findViewById(R.id.btnRemoveSearch);
         lstOperator = view.findViewById(R.id.lstOperator);
         scrollView = view.findViewById(R.id.scroll_payment);
+        avatar = view.findViewById(R.id.avatar);
         if (G.themeColor == Theme.DARK) {
             frameHistory.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
             frameContact.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
@@ -194,13 +208,23 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRegisteredInfo userInfo = realm.where(RealmRegisteredInfo.class).findFirst();
             if (userInfo != null) {
-                String number = userInfo.getPhoneNumber();
-                setPhoneNumberEditText(number);
+                userId = userInfo.getId();
+                userNumber = userInfo.getPhoneNumber();
+                if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                    setPhoneNumberEditText(phoneNumber);
+                    if (peerId != 0) {
+                        avatarHandler.getAvatar(new ParamWithAvatarType(avatar, peerId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
+                    }
+                } else {
+                    avatar.setVisibility(View.GONE);
+                    setPhoneNumberEditText(userNumber);
+                }
                 onPhoneNumberInput();
                 numberEditText.setSelection(numberEditText.getText() == null ? 0 : numberEditText.getText().length());
             }
         });
         btnRemoveSearch.setOnClickListener(v -> {
+            avatar.setVisibility(View.GONE);
             numberEditText.setText(null);
             btnRemoveSearch.setVisibility(View.INVISIBLE);
         });
@@ -211,6 +235,7 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                avatar.setVisibility(View.GONE);
                 if (s.length() > 0 && btnRemoveSearch.getVisibility() == View.INVISIBLE) {
                     btnRemoveSearch.setVisibility(View.VISIBLE);
                 }
