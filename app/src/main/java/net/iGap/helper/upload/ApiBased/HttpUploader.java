@@ -8,6 +8,7 @@ import androidx.collection.ArrayMap;
 
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.upload.CompressTask;
 import net.iGap.module.ChatSendMessageUtil;
@@ -49,7 +50,7 @@ public class HttpUploader implements IUpload {
 
     private static final int MAX_UPLOAD = 6;
 
-    private static final String TAG = "UploadApiManager";
+    private static final String TAG = "UploadHttpRequest";
 
     public static HttpUploader getInstance() {
         HttpUploader localInstance = instance;
@@ -171,12 +172,13 @@ public class HttpUploader implements IUpload {
                         if (compress && compressFile.exists() && compressFile.length() < (new File(fileObject.message.attachment.localFilePath)).length()) {
                             compressFile.renameTo(completedCompressFile);
                             fileObject.file = completedCompressFile;
+                            fileObject.fileSize = completedCompressFile.length();
                         } else {
                             if (compressFile.exists()) {
                                 compressFile.delete();
                             }
                         }
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize);
                         pendingCompressTasks.remove(fileObject.messageId + "");
 
                         startUpload(fileObject, completedCompressFile);
@@ -199,10 +201,10 @@ public class HttpUploader implements IUpload {
         UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
         if (existedRequest == null) {
             existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
+
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
-                    FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
-                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress);
+                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize);
                     if (fileObject.onUploadListener != null) {
                         fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
                     }
@@ -210,6 +212,8 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFinish(UploadObject fileObject) {
+                    HelperDataUsage.increaseUploadFiles(fileObject.messageType);
+                    HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
                     FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {
@@ -248,6 +252,10 @@ public class HttpUploader implements IUpload {
 
                 @Override
                 public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
+                    FileLog.i("UploadHttpRequest", "onUploadFail: " + fileObject.toString());
+                    long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
+                    HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
+                    Log.i(TAG, "onUploadFail: " + uploadedBytes);
                     FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
                     UploadHttpRequest req = inProgressUploads.get(fileObject.key);
                     if (req != null) {

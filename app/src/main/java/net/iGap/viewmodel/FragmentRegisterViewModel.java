@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
-import androidx.core.text.HtmlCompat;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
@@ -61,7 +60,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
     public MutableLiveData<Uri> shareQrCodeIntent = new MutableLiveData<>();
     public MutableLiveData<Boolean> hideDialogQRCode = new MutableLiveData<>();
     public MutableLiveData<Integer> showError = new MutableLiveData<>();
-    public SingleLiveEvent<String> showTermsAndConditionDialog = new SingleLiveEvent<>();
+
 
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -77,7 +76,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
 
     public ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
     private boolean termsAndConditionIsChecked = false;
-    private String agreementDescription;
+
 
     public String _resultQrCode;
     private Uri image_uriQrCode;
@@ -131,6 +130,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
             public void onSuccess(LocationModel data) {
                 isShowLoading.set(View.GONE);
                 callbackEdtCodeNumber.set("+" + data.getCountryCode());
+                RegisterRepository.getInstance().setCountryCode("+" + data.getCountryCode());
                 if (data.getPhoneMask().equals("")) {
                     edtPhoneNumberMask.set("##################");
                 } else {
@@ -160,11 +160,9 @@ public class FragmentRegisterViewModel extends BaseViewModel {
             phoneNumber = "";
         }
         if (phoneNumber.length() > 0 && regex.equals("") || (!regex.equals("") && phoneNumber.replace("-", "").matches(regex))) {
-            if (termsAndConditionIsChecked) {
-                showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + callBackEdtPhoneNumber.get());
-            } else {
-                showConditionErrorDialog.setValue(true);
-            }
+
+            showConfirmPhoneNumberDialog.setValue(callbackEdtCodeNumber.get() + callBackEdtPhoneNumber.get());
+
         } else {
             if (phoneNumber.length() == 0) {
                 showErrorMessageEmptyErrorPhoneNumberDialog.setValue(true);
@@ -174,10 +172,13 @@ public class FragmentRegisterViewModel extends BaseViewModel {
         }
     }
 
+/*
     public void onRetryClick() {
         getTermsAndConditionData();
     }
+*/
 
+/*
     private void getTermsAndConditionData() {
         isShowLoading.set(View.VISIBLE);
         showRetryView.set(View.GONE);
@@ -193,7 +194,8 @@ public class FragmentRegisterViewModel extends BaseViewModel {
                     isShowLoading.set(View.INVISIBLE);
                     showTermsAndConditionDialog.postValue(agreementDescription);
                     viewVisibility.set(View.VISIBLE);
-                /*repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
+                */
+/*repository.getInfoLocation(new RegisterRepository.RepositoryCallback<LocationModel>() {
                     @Override
                     public void onSuccess(LocationModel data) {
                         repository.inRegisterMode(hideDialogQRCode, goToTwoStepVerificationPage);
@@ -213,7 +215,8 @@ public class FragmentRegisterViewModel extends BaseViewModel {
                         isShowLoading.set(View.INVISIBLE);
                         showRetryView.set(View.VISIBLE);
                     }
-                });*/
+                });*//*
+
                 }
 
                 @Override
@@ -228,6 +231,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
             viewVisibility.set(View.INVISIBLE);
         }
     }
+*/
 
     public void confirmPhoneNumber() {
         if (WebSocketClient.getInstance().isConnect()) { //connection ok
@@ -352,13 +356,13 @@ public class FragmentRegisterViewModel extends BaseViewModel {
                 });
     }
 
-    public void onTermsAndConditionClick() {
+    /*public void onTermsAndConditionClick() {
         if (agreementDescription == null || agreementDescription.isEmpty()) {
             getTermsAndConditionData();
         } else {
             showTermsAndConditionDialog.setValue(agreementDescription);
         }
-    }
+    }*/
 
     public void timerFinished() {
         btnStartEnable.set(true);

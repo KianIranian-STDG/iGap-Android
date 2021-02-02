@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperLog;
@@ -608,7 +609,7 @@ public class CallManager {
                 || "crosshatch".equals(Build.PRODUCT);    // Pixel 3 XL
     }
 
-    public boolean isMicMute() {
+    public boolean isMicEnable() {
         return isMicEnable;
     }
 

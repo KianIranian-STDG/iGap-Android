@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperString;
@@ -67,6 +68,7 @@ public class RegisterRepository {
     private String regexFetchCodeVerification;
     private boolean forgetTwoStepVerification = false;
     private ProtoUserRegister.UserRegisterResponse.Method method;
+    private String countryCode;
 
     private SingleLiveEvent<GoToMainFromRegister> goToMainPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Long> goToSyncContactPageForNewUser = new SingleLiveEvent<>();
@@ -146,6 +148,14 @@ public class RegisterRepository {
         return method;
     }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
     public void setForgetTwoStepVerification(boolean forgetTwoStepVerification) {
         this.forgetTwoStepVerification = forgetTwoStepVerification;
     }
@@ -190,7 +200,7 @@ public class RegisterRepository {
     }
 
     public void getTermsOfServiceBody(RepositoryCallback<String> callback) {
-        new RequestInfoPage().infoPageAgreementDiscovery("TOS", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery(BuildConfig.TOS, new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 callback.onSuccess(body);
@@ -367,7 +377,8 @@ public class RegisterRepository {
             userVerify.setCode(Integer.parseInt(verificationCode
                     .replaceAll("[^0-9]", "")
                     .replaceAll("[\u0000-\u001f]", "")));
-            userVerify.setUsername(userName);
+            if (userName != null)
+                userVerify.setUsername(userName);
             RequestWrapper requestWrapper = new RequestWrapper(101, userVerify, new OnUserVerification() {
                 @Override
                 public void onUserVerify(String tokenR, boolean newUserR) {

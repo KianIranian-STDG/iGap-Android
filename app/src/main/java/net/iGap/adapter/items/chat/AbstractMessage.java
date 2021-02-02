@@ -352,11 +352,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             G.runOnUiThread(() -> {
                 String messageKey = (String) message[0];
                 String messageId = String.valueOf(messageObject.id);
-
+                long fileSize = 0;
+                if (message.length == 3) {
+                    fileSize = (long) message[2];
+                } else {
+                    fileSize = attachment.size;
+                }
                 if (messageKey.equals(messageId)) {
                     int progress = (int) message[1];
                     String progressString = String.valueOf(progress);
-                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(attachment.size, true);
+                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(fileSize, true);
 
                     if (G.selectedLanguage.equals("fa")) {
                         progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
@@ -397,7 +402,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(attachment.size, true), AndroidUtils.formatDuration((int) (attachment.duration * 1000L))));
                     } else {
-                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(attachment.size, true) + " ", AndroidUtils.formatDuration((int) (attachment.duration * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
+                        long fileSize;
+                        if (message.length == 3) {
+                            fileSize = (long) message[2];
+                        } else {
+                            fileSize = attachment.size;
+                        }
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(fileSize, true) + " ", AndroidUtils.formatDuration((int) (attachment.duration * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
                     }
                 }
             });

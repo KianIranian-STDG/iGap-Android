@@ -9,6 +9,7 @@ import net.iGap.api.apiService.ApiStatic;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.OkHttpClientInstance;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
@@ -34,6 +35,8 @@ import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
 public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> implements Comparable<HttpRequest> {
     public static final String BASE_URL = ApiStatic.FILE + "download/";
@@ -113,7 +116,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             }
             InputStream inputStream = response.body().byteStream();
             byte[] iv = new byte[16];
-            int i = inputStream.read(iv, 0, 16);
+            int i = inputStream.read(iv, 0, 16);// do not remove i :)
             InputStream cipherInputStream = new CipherInputStream(inputStream, getCipher(iv, G.symmetricKey));
             byte[] data = new byte[4096];
             int count;
@@ -143,11 +146,24 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     }
 
     private void safelyCancelDownload() {
+        isDownloading = false;
+
+        if (fileObject.messageType == null)
+            fileObject.messageType = UNRECOGNIZED;
+
+        long downloadedBytes = (fileObject.fileSize / 100) * fileObject.progress;
+        HelperDataUsage.progressDownload(downloadedBytes, fileObject.messageType);
+
         if (fileObject.destFile.exists())
             fileObject.destFile.delete();
-        isDownloading = false;
+
+        if (fileObject.tempFile != null && fileObject.tempFile.exists() && fileObject.messageType == UNRECOGNIZED) {
+            fileObject.tempFile.delete();
+        }
+
         notifyDownloadStatus(HttpDownloader.DownloadStatus.NOT_DOWNLOADED);
     }
+
 
     public String getRequestKey() {
         return fileObject.key;
@@ -155,10 +171,13 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onDownloadCompleted() {
         try {
+            HelperDataUsage.progressDownload(fileObject.fileSize, fileObject.messageType);
+            HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
             notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
+
         } catch (Exception e) {
             onError(e);
         }

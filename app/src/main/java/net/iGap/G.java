@@ -388,7 +388,7 @@ public class G extends ApplicationContext {
         //init account manager for handle multi account
 
         try {
-            Realm.init(this);
+            Realm.init(context);
         } catch (Exception e) {
             G.ISRealmOK = false;
         } catch (Error e) {
@@ -408,7 +408,7 @@ public class G extends ApplicationContext {
             public void run() {
                 RaadApp.onCreate(getApplicationContext());
                 /*Raad.init(getApplicationContext());*/
-                WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
+                WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
             }
         }).start();
 
@@ -440,7 +440,8 @@ public class G extends ApplicationContext {
             FileLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
             FileLog.i("---------------------------------------------------");
         }
-        TapsellPlus.initialize(this, "ebooshceqodrpfrqscggitdtckqdpipnkbdhcpqbknqlqtjkepjcgslheaqkotkenqsclr");
+
+        TapsellPlus.initialize(this, BuildConfig.TAPSELL_KEY);
     }
 
     @Override

@@ -110,7 +110,8 @@ public class UploadManager {
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
                     if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
                         compressFile.renameTo(CompletedCompressFile);
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        message.attachment.size = CompletedCompressFile.length();
+                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, CompletedCompressFile.length());
 
                         uploadMessageAndSend(roomType, message, ignoreCompress);
                     } else {
@@ -143,7 +144,7 @@ public class UploadManager {
             @Override
             public void onProgress(String id, int progress) {
                 Log.d("bagi", progress + "uploadMessageAndSend2");
-                EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, id, progress);
+                EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, id, progress, message.attachment.size);
             }
 
             @Override

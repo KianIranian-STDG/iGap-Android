@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?rootBackgroundColor">
 
     <LinearLayout
@@ -21,6 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -213,120 +215,18 @@
                     app:layout_constraintWidth_default="percent"
                     app:layout_constraintWidth_percent=".9" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/view13"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/lstOperator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_topup_operator"
-                    android:padding="@dimen/dp4"
-                    android:paddingStart="@dimen/dp1"
-                    android:paddingTop="@dimen/dp6"
-                    android:paddingEnd="@dimen/dp1"
-                    android:paddingBottom="@dimen/dp6"
-                    app:layout_constraintBottom_toBottomOf="@+id/view12"
-                    app:layout_constraintEnd_toStartOf="@+id/view14"
-                    app:layout_constraintStart_toEndOf="@+id/view12"
-                    app:layout_constraintTop_toTopOf="@+id/view12">
-
-                    <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/radio_irancell"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="54dp"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="@dimen/dp2"
-                        android:layout_marginEnd="@dimen/dp8"
-                        android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginBottom="@dimen/dp2"
-                        android:src="@drawable/irancell_logo"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/radio_irancell"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/view14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/selector_topup_operator"
-                    android:padding="@dimen/dp4"
-                    android:paddingStart="@dimen/dp1"
-                    android:paddingTop="@dimen/dp6"
-                    android:paddingEnd="@dimen/dp1"
-                    android:paddingBottom="@dimen/dp6"
-                    app:layout_constraintBottom_toBottomOf="@+id/view13"
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="@+id/frame_history"
-                    app:layout_constraintTop_toTopOf="@+id/view13">
-
-                    <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/radio_rightel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="54dp"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="@dimen/dp2"
-                        android:layout_marginEnd="@dimen/dp8"
-                        android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginBottom="@dimen/dp2"
-                        android:src="@drawable/rightel_logo"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/radio_rightel"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/view12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp24"
-                    android:background="@drawable/selector_topup_operator"
-                    android:padding="@dimen/dp4"
-                    android:paddingStart="@dimen/dp1"
-                    android:paddingTop="@dimen/dp6"
-                    android:paddingEnd="@dimen/dp1"
-                    android:paddingBottom="@dimen/dp6"
                     app:layout_constraintStart_toStartOf="@+id/appCompatTextView"
-                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
-
-                    <androidx.appcompat.widget.AppCompatRadioButton
-                        android:id="@+id/radio_hamrahAval"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="54dp"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="@dimen/dp2"
-                        android:layout_marginEnd="@dimen/dp8"
-                        android:layout_marginRight="@dimen/dp8"
-                        android:layout_marginBottom="@dimen/dp2"
-                        android:src="@drawable/hamraheaval_logo"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/radio_hamrahAval"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/adapter_operator" />
 
                 <LinearLayout
                     android:id="@+id/llWarning"
@@ -341,7 +241,7 @@
                     android:padding="@dimen/dp2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view12"
+                    app:layout_constraintTop_toBottomOf="@id/lstOperator"
                     app:layout_constraintWidth_percent=".9">
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -386,48 +286,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line">
-
-                    <RadioButton
-                        android:id="@+id/rbCredit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:checked="true"
-                        android:text="@string/credit_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbPermanent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/permanent_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbTdLteCredit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/credit_tdlte_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbTdLtePermanent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/tdlte_permanent_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
-
-                    <RadioButton
-                        android:id="@+id/rbData"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp4"
-                        android:text="@string/data_sim"
-                        android:textColor="?attr/iGapTitleTextColor" />
                 </RadioGroup>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -342,6 +342,26 @@ public class MessageDataStorage extends BaseController {
         });
     }
 
+    public void deleteRoomAllMessage(final long roomId) {
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteRoomAllMessage: " + roomId);
+
+            try {
+                database.beginTransaction();
+
+                RealmResults<RealmRoomMessage> roomMessages = database.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll();
+
+                if (roomMessages != null && roomMessages.size() > 0) {
+                    roomMessages.deleteAllFromRealm();
+                }
+
+                database.commitTransaction();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+    }
+
     public void updateEditedMessage(final long roomId, final long messageId, final long messageVersion, final int messageType, final String message, boolean isUpdate) {
         storageQueue.postRunnable(() -> {
             FileLog.i(TAG, "updateEditedMessage: " + roomId + " " + messageId + " " + message);

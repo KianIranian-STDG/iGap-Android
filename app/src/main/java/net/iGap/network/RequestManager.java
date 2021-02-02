@@ -20,6 +20,7 @@ import net.iGap.helper.HelperString;
 import net.iGap.module.AESCrypt;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.AppConfig;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
@@ -482,6 +483,7 @@ public class RequestManager extends BaseController {
 
     public void setUserLogin(boolean userLogin) {
         this.userLogin = userLogin;
+        getEventManager().postEvent(EventManager.USER_LOGIN_CHANGED);
     }
 
     public void setPullRequestQueueRunned(boolean runned) {

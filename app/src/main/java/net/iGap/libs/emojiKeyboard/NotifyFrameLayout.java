@@ -40,9 +40,6 @@ public class NotifyFrameLayout extends FrameLayout {
             return 0;
         }
         int getViewInset = AndroidUtils.getViewInset(rootView);
-        if (getViewInset == 0) {
-            getViewInset = (rootView.getHeight() - rect.height() - AndroidUtils.statusBarHeight);
-        }
         int usableViewHeight = rootView.getHeight() - (rect.top != 0 ? AndroidUtils.statusBarHeight : 0) - getViewInset;
         return Math.max(0, usableViewHeight - (rect.bottom - rect.top));
     }

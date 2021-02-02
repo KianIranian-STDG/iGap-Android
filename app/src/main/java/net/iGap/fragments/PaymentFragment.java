@@ -46,9 +46,9 @@ import java.util.List;
 
 public class PaymentFragment extends BaseAPIViewFrag {
 
-    private static String TOKEN = "Payment_Token";
-    private static String TYPE = "Payment_Type";
-    private static String IS_SHOW_VALUE_ADDED = "VALUE_ADDED";
+    private static final String TOKEN = "Payment_Token";
+    private static final String TYPE = "Payment_Type";
+    private static final String IS_SHOW_VALUE_ADDED = "VALUE_ADDED";
 
     private FragmentUniversalPaymentBinding binding;
     private PaymentCallBack callBack;
@@ -180,6 +180,15 @@ public class PaymentFragment extends BaseAPIViewFrag {
                         (isShowValueAdded ? (" + " + getString(R.string.value_added)) : "") + ": " +
                         (HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(df.format(price)) : price) +
                         getString(R.string.rial));
+            }
+        });
+
+        binding.discountCode.requestFocus();
+        binding.saveDiscountCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String code = binding.discountCode.getText().toString();
+                paymentViewModel.checkOrderTokenForDiscount(code);
             }
         });
     }

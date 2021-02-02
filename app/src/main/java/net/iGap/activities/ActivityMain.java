@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -46,6 +47,10 @@ import androidx.lifecycle.Lifecycle;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.installreferrer.api.InstallReferrerClient;
+import com.android.installreferrer.api.InstallReferrerStateListener;
+import com.android.installreferrer.api.ReferrerDetails;
+import com.google.android.gms.analytics.CampaignTrackingReceiver;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -69,7 +74,6 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;
@@ -86,6 +90,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
+import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.model.PassCode;
 import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
@@ -134,6 +139,11 @@ import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.sdk.TapsellAdActivity;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -175,6 +185,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private int retryConnectToWallet = 0;
     public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
+    private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
 
     public static void setMediaLayout() {
         try {
@@ -340,7 +351,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = fragmentManager.findFragmentById(R.id.mainFrame);
+            Fragment fragment = fragmentManager.findFragmentByTag(PaymentFragment.class.getName());
             if (fragment instanceof PaymentFragment) {
                 ((PaymentFragment) fragment).setPaymentResult(new Payment(
                         intent.getStringExtra("status"),
@@ -656,6 +667,62 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         GPSTracker.getGpsTrackerInstance().checkLocation();
 
         Log.wtf(this.getClass().getName(), "onCreate");
+        InstallReferrerClient referrerClient = InstallReferrerClient.newBuilder(this).build();
+        backgroundExecutor.execute(() -> getInstallReferrerFromClient(referrerClient));
+    }
+
+    void getInstallReferrerFromClient(InstallReferrerClient referrerClient) {
+
+        referrerClient.startConnection(new InstallReferrerStateListener() {
+            @Override
+            public void onInstallReferrerSetupFinished(int responseCode) {
+                switch (responseCode) {
+                    case InstallReferrerClient.InstallReferrerResponse.OK:
+                        ReferrerDetails response = null;
+                        try {
+                            response = referrerClient.getInstallReferrer();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+                        final String referrerUrl = response.getInstallReferrer();
+
+
+                        // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
+                        trackInstallReferrer(referrerUrl);
+
+
+                        // End the connection
+                        referrerClient.endConnection();
+
+                        break;
+                    case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
+                        // API not available on the current Play Store app.
+                        break;
+                    case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
+                        // Connection couldn't be established.
+                        break;
+                }
+            }
+
+            @Override
+            public void onInstallReferrerServiceDisconnected() {
+
+            }
+        });
+    }
+
+    // Tracker for Classic GA (call this if you are using Classic GA only)
+    private void trackInstallReferrer(final String referrerUrl) {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                CampaignTrackingReceiver receiver = new CampaignTrackingReceiver();
+                Intent intent = new Intent("com.android.vending.INSTALL_REFERRER");
+                intent.putExtra("referrer", referrerUrl);
+                receiver.onReceive(getApplicationContext(), intent);
+            }
+        });
     }
 
     /**
@@ -1659,11 +1726,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime, String message) {
+    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount) {
         if (status == 0) {
             Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
             intent.putExtra("Type", "2");
             intent.putExtra("Token", token);
+
+            if (originalAmount > 0 && discountedAmount > 0) {
+                intent.putExtra("OriginalAmount", originalAmount);
+                intent.putExtra("DiscountedAmount", discountedAmount);
+            }
+
             startActivityForResult(intent, requestCodePaymentBill);
         } else {
             if (G.onMplResult != null) {
@@ -1684,7 +1757,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     /*public void getUserCredit() {
 
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
                 @Override

@@ -112,38 +112,38 @@ import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener, OnUserAvatarResponse {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
 
-    private ObservableField<String> appVersion = new ObservableField<>("");
-    private ObservableField<String> userPhoneNumber = new ObservableField<>();
-    private ObservableLong currentCredit = new ObservableLong(0);
-    private ObservableField<String> currentScore = new ObservableField<>("0");
-    private ObservableBoolean isDarkMode = new ObservableBoolean(false);
-    private ObservableInt editProfileIcon = new ObservableInt(View.VISIBLE);
-    private ObservableField<String> name = new ObservableField<>("");
-    private ObservableField<String> userName = new ObservableField<>("");
-    private ObservableField<String> bio = new ObservableField<>("");
-    private ObservableField<String> email = new ObservableField<>("");
-    private ObservableField<String> birthDate = new ObservableField<>("");
-    private ObservableInt gender = new ObservableInt(-1);
-    private MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
-    private ObservableInt usernameErrorMessage = new ObservableInt(R.string.empty_error_message);
-    private MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
-    private ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
-    private ObservableInt showLoading = new ObservableInt(View.GONE);
-    private ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
-    private ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
-    private ObservableInt referralError = new ObservableInt(R.string.waiting_for_network);
-    private ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
-    private ObservableInt accountArrowVisibility = new ObservableInt(View.VISIBLE);
+    private final ObservableField<String> appVersion = new ObservableField<>("");
+    private final ObservableField<String> userPhoneNumber = new ObservableField<>();
+    private final ObservableLong currentCredit = new ObservableLong(0);
+    private final ObservableField<String> currentScore = new ObservableField<>("0");
+    private final ObservableBoolean isDarkMode = new ObservableBoolean(false);
+    private final ObservableInt editProfileIcon = new ObservableInt(View.VISIBLE);
+    private final ObservableField<String> name = new ObservableField<>("");
+    private final ObservableField<String> userName = new ObservableField<>("");
+    private final ObservableField<String> bio = new ObservableField<>("");
+    private final ObservableField<String> email = new ObservableField<>("");
+    private final ObservableField<String> birthDate = new ObservableField<>("");
+    private final ObservableInt gender = new ObservableInt(-1);
+    private final MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
+    private final ObservableInt usernameErrorMessage = new ObservableInt(R.string.empty_error_message);
+    private final MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
+    private final ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
+    private final ObservableInt showLoading = new ObservableInt(View.GONE);
+    private final ObservableInt textsGravity = new ObservableInt(Gravity.LEFT);
+    private final ObservableBoolean showReferralErrorLiveData = new ObservableBoolean(false);
+    private final ObservableInt referralError = new ObservableInt(R.string.waiting_for_network);
+    private final ObservableInt showAddAvatarButton = new ObservableInt(View.GONE);
+    private final ObservableInt accountArrowVisibility = new ObservableInt(View.VISIBLE);
 
-    private MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
-    private MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
-    private ObservableField<String> referralNumberObservableField = new ObservableField<>("");
+    private final MutableLiveData<Boolean> showDialogSelectCountry = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
+    private final ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
 
     //ui
-    private SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
-    private SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> goToWalletAgreementPage = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> goToWalletPage = new SingleLiveEvent<>();
     public SingleLiveEvent<String> shareInviteLink = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> goToScannerPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> checkLocationPermission = new SingleLiveEvent<>();
@@ -159,24 +159,24 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public SingleLiveEvent<ChangeImageModel> setUserAvatarPath = new SingleLiveEvent<>();
     public SingleLiveEvent<GoToChatModel> goToChatPage = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> showDialogChooseImage = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Boolean> updateNewTheme = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Boolean> updateTwoPaneView = new SingleLiveEvent<>();
     public SingleLiveEvent<Integer> showError = new SingleLiveEvent<>();
     public MutableLiveData<String> changeUserProfileWallpaperPath = new MutableLiveData<>();
     public SingleLiveEvent<Boolean> openAccountsDialog = new SingleLiveEvent<>();
     public SingleLiveEvent<Boolean> setCurrentFragment = new SingleLiveEvent<>();
-    private SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
-    private MutableLiveData<Boolean> cancelIconClick = new MutableLiveData<>();
-    private ObservableInt checkProfileShow = new ObservableInt(View.GONE);
-    private ObservableInt cancelProfileShow = new ObservableInt(View.GONE);
-    private SingleLiveEvent<Boolean> editCompleteListener = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Boolean> popBackStack = new SingleLiveEvent<>();
+    private final MutableLiveData<Boolean> cancelIconClick = new MutableLiveData<>();
+    private final ObservableInt checkProfileShow = new ObservableInt(View.GONE);
+    private final ObservableInt cancelProfileShow = new ObservableInt(View.GONE);
+    private final SingleLiveEvent<Boolean> editCompleteListener = new SingleLiveEvent<>();
 
     private int phoneMax = 10;
     private boolean sendReferral = false;
     private RealmUserInfo userInfo;
     private String phoneNumber;
     private int retryConnectToWallet = 0;
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private String currentName;
     private String currentUserName;
     private String currentUserEmail;
@@ -186,7 +186,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private long userId;
     public String pathSaveImage;
     private long idAvatar;
-    private AvatarHandler avatarHandler;
+    private final AvatarHandler avatarHandler;
     private boolean isEditProfile;
 
     private int retryRequestTime = -1;
@@ -244,8 +244,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
-        if (G.isNeedToCheckProfileWallpaper)
+        if (G.isNeedToCheckProfileWallpaper) {
             getProfileWallpaperFromServer();
+        }
     }
 
     private void updateUserInfoUI() {
@@ -691,7 +692,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void getUserCredit() {
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
+        WebBase.apiKey = BuildConfig.WEB_BASE_API_KEY;
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCards(null, false, true).enqueue(new Callback<ArrayList<Card>>() {
                 @Override
@@ -947,26 +948,22 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void getProfileWallpaperFromServer() {
         G.onGetProfileWallpaper = list -> {
-
             G.isNeedToCheckProfileWallpaper = false;
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmWallpaper realmWallpaper = realm.where(RealmWallpaper.class).equalTo("type", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE).findFirst();
 
                 if (realmWallpaper != null) {
-
-                    if (realmWallpaper.getWallPaperList().get(0).getFile().getToken().equals(list.get(0).getFile().getToken())) {
-                        getProfileWallpaper(realm);
-                    } else {
+                    int count = realmWallpaper.getWallPaperList().size();
+                    assert realmWallpaper.getWallPaperList().get(count - 1) != null;
+                    if (!realmWallpaper.getWallPaperList().get(count - 1).getFile().getToken().equals(list.get(0).getFile().getToken())) {
                         RealmWallpaper.updateWallpaper(list);
-                        getProfileWallpaper(realm);
                     }
                 } else {
                     RealmWallpaper.updateField(list, "", ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER_VALUE);
-                    getProfileWallpaper(realm);
                 }
+                getProfileWallpaper(realm);
             });
         };
-
         new RequestInfoWallpaper().infoWallpaper(ProtoInfoWallpaper.InfoWallpaper.Type.PROFILE_WALLPAPER);
     }
 
@@ -1245,9 +1242,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public class ChangeImageModel {
-        private String imagePath;
-        private String initials;
-        private String color;
+        private final String imagePath;
+        private final String initials;
+        private final String color;
 
         ChangeImageModel(String imagePath, String initials, String color) {
             this.imagePath = imagePath;
@@ -1269,8 +1266,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public class DeleteAvatarModel {
-        private long userId;
-        private long avatarId;
+        private final long userId;
+        private final long avatarId;
 
         public DeleteAvatarModel(long userId, long avatarId) {
             this.userId = userId;
@@ -1287,8 +1284,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public class GoToChatModel {
-        private long roomId;
-        private long peerId;
+        private final long roomId;
+        private final long peerId;
 
         public GoToChatModel(long roomId, long peerId) {
             this.roomId = roomId;

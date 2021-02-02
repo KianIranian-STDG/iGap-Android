@@ -2,11 +2,13 @@ package net.iGap.viewmodel;
 
 import android.view.View;
 
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableDouble;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -21,44 +23,51 @@ import net.iGap.repository.PaymentRepository;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class PaymentViewModel extends BaseAPIViewModel {
 
-    private ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
-    private ObservableInt showRetryView = new ObservableInt(View.GONE);
-    private ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
-    private ObservableInt showPaymentErrorMessage = new ObservableInt(View.GONE);
+    private final ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
+    private final ObservableInt showRetryView = new ObservableInt(View.GONE);
+    private final ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
+    private final ObservableInt showPaymentErrorMessage = new ObservableInt(View.GONE);
     /*private ObservableInt background = new ObservableInt();*/
-    private ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
-    private ObservableInt paymentStatusTextColor = new ObservableInt(R.color.black);
-    private ObservableInt showButtons = new ObservableInt(View.GONE);
-    private ObservableInt showPaymentStatus = new ObservableInt(View.GONE);
-    private ObservableInt closeButtonColor = new ObservableInt(R.color.accent);
-    private ObservableField<String> paymentType = new ObservableField<>();
-    private ObservableField<String> title = new ObservableField<>();
-    private ObservableField<String> description = new ObservableField<>();
+    private final ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
+    private final ObservableInt paymentStatusTextColor = new ObservableInt(R.color.black);
+    private final ObservableInt showButtons = new ObservableInt(View.GONE);
+    private final ObservableInt showPaymentStatus = new ObservableInt(View.GONE);
+    private final ObservableInt closeButtonColor = new ObservableInt(R.color.accent);
+    private final ObservableField<String> paymentType = new ObservableField<>();
+    private final ObservableField<String> title = new ObservableField<>();
+    private final ObservableField<String> description = new ObservableField<>();
     /*private ObservableField<String> paymentOrderId = new ObservableField<>();*/
-    private ObservableField<String> paymentStatus = new ObservableField<>();
-    private SingleLiveEvent<Integer> price = new SingleLiveEvent<>();
-    private ObservableDouble paymentRRN = new ObservableDouble();
-    private MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
-    private MutableLiveData<String> goToWebPage = new MutableLiveData<>();
+    private final ObservableField<String> paymentStatus = new ObservableField<>();
+    private final SingleLiveEvent<Integer> price = new SingleLiveEvent<>();
+    private final ObservableDouble paymentRRN = new ObservableDouble();
+    private final MutableLiveData<PaymentResult> goBack = new MutableLiveData<>();
+    private final MutableLiveData<String> goToWebPage = new MutableLiveData<>();
 
-    private MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
-    private ObservableInt discountVisibility = new ObservableInt(View.GONE);
-    private ObservableInt discountReceiptVisibility = new ObservableInt(View.GONE);
-    private ObservableField<String> discountReceiptAmount = new ObservableField<>("");
-    private ObservableInt taxReceiptVisibility = new ObservableInt(View.GONE);
-    private ObservableField<String> taxReceiptAmount = new ObservableField<>("");
+    private final MutableLiveData<List<PaymentFeature>> discountOption = new MutableLiveData<>(null);
+    private final ObservableInt discountVisibility = new ObservableInt(View.GONE);
+    private final ObservableInt discountReceiptVisibility = new ObservableInt(View.GONE);
+    private final ObservableField<String> discountReceiptAmount = new ObservableField<>("");
+    private final ObservableInt taxReceiptVisibility = new ObservableInt(View.GONE);
+    private final ObservableField<String> taxReceiptAmount = new ObservableField<>("");
+    private final ObservableBoolean discountCodeEnable = new ObservableBoolean(true);
+    private final ObservableBoolean saveDiscountCodeEnable = new ObservableBoolean(true);
+    private final ObservableInt discountErrorVisibility = new ObservableInt(View.GONE);
+    private final ObservableField<String> discountErrorText = new ObservableField<>();
+    private final ObservableInt saveDiscountCodeColor = new ObservableInt(R.color.green);
+
     private int discountPlanPosition = -1;
     private int originalPrice;
 
-    private String token;
+    private final String token;
     private String orderId;
     private CheckOrderResponse orderDetail;
-    private PaymentRepository repository;
+    private final PaymentRepository repository;
     private PaymentResult paymentResult;
 
     public PaymentViewModel(String token, String type) {
@@ -71,6 +80,26 @@ public class PaymentViewModel extends BaseAPIViewModel {
         } else {
             goBack.setValue(paymentResult);
         }
+    }
+
+    public ObservableBoolean getDiscountCodeEnable() {
+        return discountCodeEnable;
+    }
+
+    public ObservableBoolean getSaveDiscountCodeEnable() {
+        return saveDiscountCodeEnable;
+    }
+
+    public ObservableInt getDiscountErrorVisibility() {
+        return discountErrorVisibility;
+    }
+
+    public ObservableField<String> getDiscountErrorText() {
+        return discountErrorText;
+    }
+
+    public ObservableInt getSaveDiscountCodeColor() {
+        return saveDiscountCodeColor;
     }
 
     public ObservableInt getShowLoadingView() {
@@ -205,6 +234,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         checkOrderStatus();
     }
 
+
     private void checkOrderToken() {
         showMainView.set(View.INVISIBLE);
         showButtons.set(View.INVISIBLE);
@@ -237,6 +267,48 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 onFailedHandler();
             }
         });
+    }
+
+    public void checkOrderTokenForDiscount(String strCoupon) {
+        if (strCoupon == null || strCoupon.isEmpty()) {
+            discountErrorVisibility.set(View.VISIBLE);
+            discountErrorText.set(G.context.getString(R.string.enter_your_discount_code));
+        } else {
+            HashMap<String, String> coupon = new HashMap<>();
+            coupon.put("coupon", strCoupon);
+            repository.checkOrderForDiscount(token, coupon, this, new ResponseCallback<CheckOrderResponse>() {
+                @Override
+                public void onSuccess(CheckOrderResponse data) {
+                    discountCodeEnable.set(false);
+                    saveDiscountCodeEnable.set(false);
+                    saveDiscountCodeColor.set(R.color.gray);
+                    discountErrorVisibility.set(View.GONE);
+                    description.set(data.getInfo().getProduct().getDescription());
+                    originalPrice = data.getInfo().getPrice();
+                    price.setValue(originalPrice);
+                    title.set(data.getInfo().getProduct().getTitle());
+                    orderDetail = data;
+                    discountOption.setValue(data.getDiscountOption());
+                    if (data.getDiscountOption() != null && data.getDiscountOption().size() > 0) {
+                        discountVisibility.set(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    discountCodeEnable.set(true);
+                    saveDiscountCodeEnable.set(true);
+                    saveDiscountCodeColor.set(R.color.green);
+                    discountErrorVisibility.set(View.VISIBLE);
+                    discountErrorText.set(error);
+                }
+
+                @Override
+                public void onFailed() {
+                    onFailedHandler();
+                }
+            });
+        }
     }
 
     private void checkOrderStatus() {

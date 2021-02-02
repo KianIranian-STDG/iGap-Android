@@ -194,13 +194,17 @@ public class HelperTracker {
             canSendMetrixEvent = packageName != null && packageName.toLowerCase().equals("net.igap");
 
             if (canSendMetrixEvent) {
-                MetrixConfig metrixConfig = new MetrixConfig(context, "jpbnabzrmeqvxme");
-                metrixConfig.setFirebaseId("1:780057141561:android:69c59b7595e50096", "igap-im", "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA");
+                MetrixConfig metrixConfig = new MetrixConfig(context, BuildConfig.METRIX_ID);
+                metrixConfig.setFirebaseId(BuildConfig.METRIX_FIREBASE_FIRST_ID, BuildConfig.METRIX_FIREBASE_SECOND_ID, BuildConfig.METRIX_FIREBASE_THEIRD_ID);
                 Metrix.onCreate(metrixConfig);
-                Metrix.initialize(context, "jpbnabzrmeqvxme");
+                Metrix.initialize(context, BuildConfig.METRIX_ID);
                 if (!BuildConfig.DEBUG) {
-                    Metrix.getInstance().setStore(BuildConfig.Store);
-                    Metrix.getInstance().setAppSecret(1, 1728320174, 43612053, 1626881868, 580653578);
+                    if (BuildConfig.isStore) {
+                        Metrix.getInstance().setStore(BuildConfig.Store);
+                    } else {
+                        Metrix.getInstance().setDefaultTracker(BuildConfig.TrackCode);
+                    }
+                    Metrix.getInstance().setAppSecret(BuildConfig.METRIX_SECRET, BuildConfig.METRIX_FIRST_SECRET, BuildConfig.METRIX_SECOND_SECRET, BuildConfig.METRIX_THEIRD_SECRET, BuildConfig.METRIX_FOURTH_SECRET);
                 }
             }
         } catch (Exception e) {

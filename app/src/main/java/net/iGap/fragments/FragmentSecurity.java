@@ -85,7 +85,7 @@ public class FragmentSecurity extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-                new HelperFragment(getActivity().getSupportFragmentManager(), new FragmentSetSecurityPassword()).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentSetSecurityPassword).load();
             }
         });
 

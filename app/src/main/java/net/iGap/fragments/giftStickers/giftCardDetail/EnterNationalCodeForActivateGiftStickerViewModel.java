@@ -14,7 +14,9 @@ import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.fragments.giftStickers.enterNationalCode.CheckNationalCodeResponse;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.realm.RealmUserInfo;
 
 public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIViewModel {
 
@@ -34,6 +36,15 @@ public class EnterNationalCodeForActivateGiftStickerViewModel extends BaseAPIVie
         if (nationalCode.length() != 0) {
             if (nationalCode.length() == 10) {
                 isShowLoading.set(View.VISIBLE);
+
+                DbManager.getInstance().doRealmTask(realm -> {
+                    realm.executeTransactionAsync(realm1 -> {
+                        RealmUserInfo realmUserInfo = realm1.where(RealmUserInfo.class).findFirst();
+                        if (realmUserInfo != null) {
+                            realmUserInfo.setNationalCode(nationalCode);
+                        }
+                    });
+                });
 
                 G.nationalCode = nationalCode;
 

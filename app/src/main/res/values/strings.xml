@@ -36,8 +36,8 @@
     <string name="rg_Select_Country">Select your Country</string>
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
-    <string name="verify_socket_message">Please enter verification code sent by iGap</string>
-    <string name="verify_sms_message">Please enter verification code sent by sms</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap to \n %1$s</string>
+    <string name="verify_sms_message">Please enter verification code sent by sms </string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
     <string name="verify_invalid_code_message">Unfortunately; the verification code is invalid , Please enter the correct one manually.</string>
@@ -1458,7 +1458,7 @@ Want to get it?</string>
     <string name="auto_play_media">Auto-play Media</string>
     <string name="auto_download_media">Auto-download Media</string>
     <string name="chat_setting">Chat Settings</string>
-    <string name="terms_and_condition">I accept the %s</string>
+    <string name="terms_and_condition">By pressing the start button you will accept %s</string>
     <string name="terms_and_condition_clickable">rules and regulations</string>
     <string name="add_bank_card">Add Your Card Here!</string>
     <string name="chat_setting_title">Chat Setting</string>
@@ -2169,6 +2169,11 @@ Want to get it?</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
+    <string name="discount_code">Discount Code</string>
+    <string name="enter_discount_code">Enter the discount code.</string>
+    <string name="save_discount_code">Save Code</string>
+    <string name="enter_your_discount_code">Enter Your discount code.</string>
+    <string name="discount_code_not_valid">Sorry, your discount code is incorrect.</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
     <string name="mobile_bank_activeNotification">Activate Notification</string>
@@ -2225,6 +2230,7 @@ Want to get it?</string>
     <string name="suggested_packages">Suggested packages</string>
     <string name="all_packages">All Packages</string>
     <string name="sim_type_not_choosed">SIM card not been chosen</string>
+    <string name="invalid_sim_type">Please change the SIM card type, There is no package for it. </string>
     <string name="credit_sim">Credit SIM</string>
     <string name="permanent_sim">Permanent SIM</string>
     <string name="credit_tdlte_sim">Credit TD-LTE SIM</string>

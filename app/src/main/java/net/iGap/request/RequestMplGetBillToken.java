@@ -14,10 +14,11 @@ import net.iGap.proto.ProtoMplGetBillToken;
 
 public class RequestMplGetBillToken {
 
-    public void mplGetBillToken(long billId, long payId) {
+    public void mplGetBillToken(long billId, long payId, int type) {
         ProtoMplGetBillToken.MplGetBillToken.Builder builder = ProtoMplGetBillToken.MplGetBillToken.newBuilder();
         builder.setBillId(billId);
         builder.setPayId(payId);
+        builder.setType(ProtoMplGetBillToken.MplGetBillToken.Type.forNumber(type));
 
         RequestWrapper requestWrapper = new RequestWrapper(9100, builder);
         try {

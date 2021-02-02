@@ -1271,7 +1271,7 @@
     <string name="refound">بەڵگەی چاک­کردنی پێدانی بڕی پارە بە جانتای پارە</string>
     <string name="Favorite_Sticker">دڵخواز</string>
     <string name="item_selected">بابەتی هەڵبژێردراو</string>
-    <string name="terms_and_condition">%s پەسەند دەکەم</string>
+    <string name="terms_and_condition"> اسٹارٹ بٹن دبانے سے آپ قبول کرلیں گے %s</string>
     <string name="terms_and_condition_clickable">یاسا و رێساکان</string>
     <string name="new_channel_hint">تۆ دەتوانی روونکردنەوەی دڵخوازی خۆت بۆ کەناڵی خۆت پێشکەش بکەیت.</string>
     <string name="new_group_hint">تۆ دەتوانی یەک روونکردنەوەی دڵخوازی خۆت بە گرووپی خۆت پێشکەش بکەیت.</string>

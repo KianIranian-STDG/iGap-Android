@@ -26,6 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.MessageController;
 import net.iGap.helper.HelperTracker;
 import net.iGap.module.AppUtils;
 import net.iGap.network.IG_RPC;
@@ -66,7 +67,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
     public MutableLiveData<Long> createdRoomId = new MutableLiveData<>();
     public MutableLiveData<ContactGroupFragmentModel> goToContactGroupPage = new MutableLiveData<>();
     public MutableLiveData<CreateChannelModel> goToCreateChannelPage = new MutableLiveData<>();
-
+    public String imagePath;
 
     public FragmentNewGroupViewModel(Bundle arguments) {
         getInfo(arguments);
@@ -88,6 +89,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
+                view.setEnabled(false);
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
                         IG_RPC.Res_Channel_Create res = (IG_RPC.Res_Channel_Create) response;
@@ -95,12 +97,17 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
 
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_CHANNEL);
                     } else {
-                        IG_RPC.Error err = (IG_RPC.Error) error;
+                        G.runOnUiThread(() -> {
+                            IG_RPC.Error err = (IG_RPC.Error) error;
 
-                        hideProgressBar();
-                        if (err.major == 479) {
-                            G.runOnUiThread(this::ShowDialogLimitCreate);
-                        }
+                            view.setEnabled(true);
+                            hideProgressBar();
+
+                            if (err.major == 479) {
+                                ShowDialogLimitCreate();
+                            }
+                        });
+
                     }
                 });
 
@@ -114,6 +121,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                 req.name = edtSetNewGroup.get();
                 req.description = edtDescription.get();
 
+                view.setEnabled(false);
                 getRequestManager().sendRequest(req, (response, error) -> {
                     if (error == null) {
                         IG_RPC.Res_Group_Create res = (IG_RPC.Res_Group_Create) response;
@@ -124,9 +132,11 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                         getRoom(res.roomId, ProtoGlobal.Room.Type.GROUP, true);
                         HelperTracker.sendTracker(HelperTracker.TRACKER_CREATE_GROUP);
                     } else {
-                        IG_RPC.Error err = (IG_RPC.Error) error;
-
                         G.runOnUiThread(() -> {
+                            IG_RPC.Error err = (IG_RPC.Error) error;
+
+                            view.setEnabled(true);
+
                             hideProgressBar();
                             if (err.major == 380) {
                                 ShowDialogLimitCreate();
@@ -213,7 +223,7 @@ public class FragmentNewGroupViewModel extends BaseViewModel {
                     public void run() {
                         mInviteLink = room.getChannelRoomExtra().getPrivateExtra().getInviteLink();
                         if (existAvatar) {
-                            new RequestChannelAvatarAdd().channelAvatarAdd(room.getId(), token);
+                            MessageController.getInstance(currentAccount).saveChannelAvatar(imagePath, room.getId());
                         } else {
                             hideProgressBar();
                             goToCreateChannelPage.setValue(new CreateChannelModel(room.getId(), mInviteLink, token));

@@ -167,7 +167,7 @@ public class RoomListCell extends FrameLayout {
             messageDataTv.setSingleLine(true);
             messageDataTv.setTextColor(Theme.getInstance().getSendMessageTextColor(messageDataTv.getContext()));
             messageDataTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
-            setTextSize(messageDataTv, R.dimen.dp10);
+            setTextSize(messageDataTv, R.dimen.smallTextSize);
             setTypeFace(messageDataTv);
             addView(messageDataTv);
             haveDate = true;
@@ -181,7 +181,7 @@ public class RoomListCell extends FrameLayout {
                 muteIconTv = new FontIconTextView(getContext());
                 muteIconTv.setText(R.string.mute_icon);
                 muteIconTv.setGravity(Gravity.RIGHT);
-                muteIconTv.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+                muteIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(getContext()));
                 setTextSize(muteIconTv, R.dimen.dp13);
                 addView(muteIconTv);
                 isMute = true;
@@ -263,8 +263,7 @@ public class RoomListCell extends FrameLayout {
         if (haveLastMessage && room.getLastMessage().isAuthorMe()) {
             if (!haveStatus) {
                 statusTv = new FontIconTextView(getContext());
-                statusTv.setTextSize(30);
-                setTextSize(statusTv, R.dimen.standardTextSize);
+                setTextSize(statusTv, R.dimen.xlargeTextSize);
                 addView(statusTv);
                 haveStatus = true;
             }

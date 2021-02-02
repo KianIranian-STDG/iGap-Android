@@ -25,8 +25,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         multiDexEnabled true
-        versionCode 223
-        versionName "2.1.7"
+        versionCode 227
+        versionName "2.2.0.alpha3"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -36,6 +36,23 @@ android {
                 includeCompileClasspath true
             }
         }
+
+        buildConfigField("String", "WEB_BASE_API_KEY", WEB_BASE_API_KEY)
+        buildConfigField("String", "TAPSELL_KEY", TAPSELL_KEY)
+        buildConfigField("String", "METRIX_ID", METRIX_ID)
+        buildConfigField("String", "METRIX_FIREBASE_FIRST_ID", METRIX_FIREBASE_FIRST_ID)
+        buildConfigField("String", "METRIX_FIREBASE_SECOND_ID", METRIX_FIREBASE_SECOND_ID)
+        buildConfigField("String", "METRIX_FIREBASE_THEIRD_ID", METRIX_FIREBASE_THEIRD_ID)
+        buildConfigField("Integer", "METRIX_SECRET", METRIX_SECRET)
+        buildConfigField("Integer", "METRIX_FIRST_SECRET", METRIX_FIRST_SECRET)
+        buildConfigField("Integer", "METRIX_SECOND_SECRET", METRIX_SECOND_SECRET)
+        buildConfigField("Integer", "METRIX_THEIRD_SECRET", METRIX_THEIRD_SECRET)
+        buildConfigField("Integer", "METRIX_FOURTH_SECRET", METRIX_FOURTH_SECRET)
+
+        buildConfigField("String", "TOS", TOS)
+        buildConfigField("String", "WALLET_AGREEMENT", WALLET_AGREEMENT)
+        buildConfigField("Integer", "APP_ID", APP_ID)
+        buildConfigField("String", "APP_NAME", APP_NAME)
     }
 
 
@@ -54,6 +71,8 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"release\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -61,6 +80,8 @@ android {
             debuggable true
             jniDebuggable true
             buildConfigField "String", "Store", "\"debug\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -70,6 +91,8 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"MyKet\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -79,6 +102,8 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"IranMarket\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -88,6 +113,8 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"WEB\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -97,6 +124,8 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"CharKhone\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -106,6 +135,8 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"GooglePlay\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
@@ -115,6 +146,558 @@ android {
             minifyEnabled true
             shrinkResources true
             buildConfigField "String", "Store", "\"Bazaar\""
+            buildConfigField "String", "TrackCode", "\"\""
+            buildConfigField "boolean", "isStore", "true"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups1 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"wowcgx\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups2 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"6ctrvi\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups3 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"thgsaw\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups4 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"retuxf\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups5 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"f0vuim\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups6 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"bpvylu\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups7 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"vbaqex\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups8 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"fvgtot\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups9 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"8mhtj4\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups10 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"yovaov\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups11 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"ulhqtg\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups12 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"1q1ydn\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups13 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"d3jauf\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups14 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"q2lqus\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups15 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"srm4v6\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups16 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"i7udlv\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups17 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"6kgoly\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups18 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"lflowh\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups19 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"by4rdx\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups20 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"nb3fay\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups21 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"s7ntpm\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups22 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"7pt1oz\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups23 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"ulwama\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups24 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"sthv1p\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups25 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"vgouqj\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups26 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"7z2idy\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups27 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"vqkumb\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups28 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"l64btl\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups29 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"1igqkp\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups30 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"9xvpwg\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups31 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"vhw6lt\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups32 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"hor4sa\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups33 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"0cojpo\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups34 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"o6tm5v\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups35 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"if6kox\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups36 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"f0yrj8\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups37 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"dgp6zy\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups38 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"rbkuha\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups39 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"kzfeea\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups40 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"zyfvux\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups41 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"5cqyey\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups42 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"oror37\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups43 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"nthgtu\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups44 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"uodcxv\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups45 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"dspj5f\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups46 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"bjhxf3\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups47 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"dkt9zi\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups48 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"yrnsz5\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups49 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"cdv4vo\""
+            buildConfigField "boolean", "isStore", "false"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release_Takups50 {
+            matchingFallbacks = ['release', 'debug']
+
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Store", "\"Takups\""
+            buildConfigField "String", "TrackCode", "\"v6vij1\""
+            buildConfigField "boolean", "isStore", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -219,13 +802,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.2.0'
     implementation 'com.github.KianIranian-STDG:Websocket:2.8.0_iGap9'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.1.2'
-    releaseImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_IranImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_MyketImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_WebImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_CharImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_GooglePlayImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
-    release_BazaarImplementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
+    implementation "com.github.KianIranian-STDG:Proto:$project.protoMainVersion"
     debugImplementation "com.github.KianIranian-STDG:Proto:$project.protoBetaVersion"
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
@@ -234,7 +811,7 @@ dependencies {
     // don't upgrade this lib
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.squareup.picasso:picasso:2.5.2' // mpl lib uses 2.5.2 don't upgrade it
+    implementation 'com.squareup.picasso:picasso:2.71828' // mpl lib uses 2.5.2 don't upgrade it
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -251,7 +828,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'ir.metrix:metrix:0.15.5'
-    implementation 'com.android.installreferrer:installreferrer:1.1.1'
+    implementation 'com.android.installreferrer:installreferrer:2.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     annotationProcessor 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'

@@ -3,6 +3,7 @@ package net.iGap.helper;
 
 import android.util.Log;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.downloadFile.time.FastDateFormat;
@@ -60,7 +61,13 @@ public class FileLog {
             currentFile.createNewFile();
             FileOutputStream stream = new FileOutputStream(currentFile);
             streamWriter = new OutputStreamWriter(stream);
-            streamWriter.write("******* start " + dateFormat.format(System.currentTimeMillis()) + "*******\n");
+            streamWriter.write("******* start " + dateFormat.format(System.currentTimeMillis()) + " *******\n\n\n");
+            streamWriter.write("----------- APPLICATION ----------- \n");
+            streamWriter.write("APP_NAME: " + BuildConfig.APP_NAME + "\n");
+            streamWriter.write("APPLICATION_ID: " + BuildConfig.APPLICATION_ID + "\n");
+            streamWriter.write("BUILD_TYPE: " + BuildConfig.BUILD_TYPE + "\n");
+            streamWriter.write("VERSION_NAME: " + BuildConfig.VERSION_NAME + "\n");
+            streamWriter.write("VERSION_CODE: " + BuildConfig.VERSION_CODE + "\n\n\n");
             streamWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,6 +91,25 @@ public class FileLog {
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E -> : " + message + "\n");
                     getInstance().streamWriter.write(exception.toString());
+                    getInstance().streamWriter.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
+    public static void e(final String TAG, final String message) {
+        if (!Config.FILE_LOG_ENABLE) {
+            return;
+        }
+
+        initied();
+        Log.e(TAG, message);
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E -> : " + message + "\n");
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();

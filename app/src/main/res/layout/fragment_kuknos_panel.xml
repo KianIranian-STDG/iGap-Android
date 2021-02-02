@@ -217,13 +217,13 @@
                     style="@style/iGapButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp10"
-                    android:minHeight="48dp"
                     android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp10"
                     android:layout_marginEnd="@dimen/dp16"
+                    android:minHeight="48dp"
                     android:text="@string/kuknos_panelStr_buyAgain"
-                    android:visibility="invisible"
                     android:textSize="16dp"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fragKuknosPSend" />
@@ -233,13 +233,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:elevation="@dimen/dp2"
+                    android:indeterminateTint="@color/kuknos_WH_itembg"
                     android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="@id/fragKuknosBuyAgain"
-                    app:layout_constraintTop_toTopOf="@id/fragKuknosBuyAgain"
                     app:layout_constraintBottom_toBottomOf="@id/fragKuknosBuyAgain"
                     app:layout_constraintHeight_percent="0.08"
                     app:layout_constraintHorizontal_bias="0.08"
-                    android:indeterminateTint="@color/kuknos_WH_itembg"/>
+                    app:layout_constraintStart_toStartOf="@id/fragKuknosBuyAgain"
+                    app:layout_constraintTop_toTopOf="@id/fragKuknosBuyAgain" />
 
                 <LinearLayout
                     android:id="@+id/fragKuknosPSetting"

@@ -3,12 +3,6 @@ package org.paygear.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -19,9 +13,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+
 import com.squareup.picasso.Picasso;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.model.Card;
@@ -200,12 +200,12 @@ public class BankCardView extends CardView {
         BankUtils bankInfo = BankUtils.getBank(getContext(), card.bankCode);
 
         if (!TextUtils.isEmpty(mCard.backgroundImage)) {
-            Picasso.with(G.context)
+            Picasso.get()
                     .load(RaadCommonUtils.getImageUrl(mCard.backgroundImage))
                     .fit()
                     .into(mBackImage);
         } else {
-            Picasso.with(G.context)
+            Picasso.get()
                     .load(R.drawable.default_card_pattern)
                     .fit()
                     .into(mBackImage);

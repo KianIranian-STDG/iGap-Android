@@ -51,10 +51,10 @@
     <string name="rg_Select_Country">Choisissez votre pays</string>
     <string name="Re_dialog_verify_number_part1">Vous avez entré ce numéro de téléphone:</string>
     <string name="Re_dialog_verify_number_part2">Si le numéro entré est correct, confirmez sinon le corriger </string>
-    <string name="verify_socket_message">کد تایید ارسال شده توسط آیگپ را وارد نمایید.</string>
-    <string name="verify_sms_message">کد تایید ارسال شده توسط پیامک را وارد نمایید.</string>
-    <string name="verify_call_message">کد تایید ارسال شده توسط تماس را وارد نمایید.</string>
-    <string name="verify_sms_socket_message">کد تایید ارسال شده توسط پیامک و آیگپ را وارد نمایید.</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap</string>
+    <string name="verify_sms_message">Please enter verification code sent by sms</string>
+    <string name="verify_call_message">Please enter verification code sent by call</string>
+    <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
     <string name="verify_invalid_code_message">Désolé! Votre code de validation n\'est pas valable. Veuillez l\'entrer correctement</string>
     <string name="phone_number">Numéro de téléphone</string>
     <string name="ra_enter_reagent_code">Veuillez enter le numéro de téléphone de votre représentant?</string>
@@ -1271,7 +1271,7 @@
     <string name="refound">Document corrigeant le montant du dépôt dans le portefeuille</string>
     <string name="Favorite_Sticker">Mes autocollants</string>
     <string name="item_selected">sélectionné</string>
-    <string name="terms_and_condition">j\'accepte %s</string>
+    <string name="terms_and_condition">En appuyant sur le bouton de démarrage, vous acceptez %s</string>
     <string name="terms_and_condition_clickable">les règlements</string>
     <string name="new_channel_hint">vous pouvez  rédiger des explications facultatives pour votre canal</string>
     <string name="new_group_hint">vous pouvez rédiger une explications facultatives pour votre group</string>

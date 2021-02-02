@@ -19,6 +19,7 @@ import android.view.WindowManager;
 
 import com.google.protobuf.ByteString;
 
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
@@ -43,8 +44,8 @@ public class RequestUserLogin {
         ProtoUserLogin.UserLogin.Builder userLogin = ProtoUserLogin.UserLogin.newBuilder();
         userLogin.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
         userLogin.setToken(token);
-        userLogin.setAppName("iGap Android");
-        userLogin.setAppId(2);
+        userLogin.setAppName(BuildConfig.APP_NAME);
+        userLogin.setAppId(BuildConfig.APP_ID);
         userLogin.setSymmetricKey(ByteString.copyFrom(G.symmetricKey.getEncoded()));
         userLogin.setAppBuildVersion(AppBuildVersion);
 
