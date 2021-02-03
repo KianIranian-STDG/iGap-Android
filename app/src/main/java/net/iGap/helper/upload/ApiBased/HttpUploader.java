@@ -163,7 +163,7 @@ public class HttpUploader implements IUpload {
                 CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.message.attachment.localFilePath, savePathVideoCompress, new OnCompress() {
                     @Override
                     public void onCompressProgress(String id, int percent) {
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, percent));
                     }
 
                     @Override
@@ -176,7 +176,7 @@ public class HttpUploader implements IUpload {
                                 compressFile.delete();
                             }
                         }
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, 100));
                         pendingCompressTasks.remove(fileObject.messageId + "");
 
                         startUpload(fileObject, completedCompressFile);
@@ -202,7 +202,7 @@ public class HttpUploader implements IUpload {
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
                     FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
-                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress));
                     if (fileObject.onUploadListener != null) {
                         fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
                     }

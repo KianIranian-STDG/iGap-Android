@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import net.iGap.G;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -128,7 +129,7 @@ public class HelperMessageResponse {
         }
 
         if ((roomMessage.getAuthor().getUser().getUserId() == AccountManager.getInstance().getCurrentUser().getId()) && roomMessage.getAttachment() != null) {
-            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken());
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken()));
         }
     }
 }

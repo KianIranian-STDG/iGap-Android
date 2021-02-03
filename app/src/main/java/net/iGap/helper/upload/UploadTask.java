@@ -130,7 +130,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
             onUploadListener.onProgress(identity, this.progress);
         }
 
-        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_PROGRESS, identity, progress));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_PROGRESS, identity, progress));
 
         if (progress != 100.0) {
             upload(offset, limit);
@@ -157,7 +157,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
             if (onUploadListener != null)
                 onUploadListener.onProgress(identity, this.progress);
 
-            G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_PROGRESS, identity, progress));
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_PROGRESS, identity, progress));
 
             upload(nextOffset, nextLimit);
         } else {
@@ -178,7 +178,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
             if (onUploadListener != null)
                 onUploadListener.onFinish(identity, token);
 
-            G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_SUCCESS, identity, token));
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_SUCCESS, identity, token));
 
             try {
                 closeFile();
@@ -207,7 +207,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         if (onUploadListener != null)
             onUploadListener.onError(identity);
 
-        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_FAILED, identity));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_FAILED, identity));
 
         synchronized (this) {
             notify();
@@ -220,7 +220,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         if (onUploadListener != null)
             onUploadListener.onError(identity);
 
-        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_PROGRESS, identity));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_PROGRESS, identity));
 
         synchronized (this) {
             notify();
@@ -233,7 +233,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         if (onUploadListener != null)
             onUploadListener.onError(identity);
 
-        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_FAILED, identity));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_FAILED, identity));
 
         synchronized (this) {
             notify();
@@ -246,7 +246,7 @@ public class UploadTask extends Thread implements RequestFileUploadOption.OnFile
         if (onUploadListener != null)
             onUploadListener.onError(identity);
 
-        G.runOnUiThread(() -> EventManager.getInstance().postEvent(EventManager.FILE_UPLOAD_FAILED, identity));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.FILE_UPLOAD_FAILED, identity));
 
         synchronized (this) {
             notify();

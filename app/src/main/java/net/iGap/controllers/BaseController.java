@@ -2,6 +2,7 @@ package net.iGap.controllers;
 
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.IDownloader;
 import net.iGap.module.upload.IUpload;
@@ -17,7 +18,7 @@ public class BaseController {
     }
 
     public EventManager getEventManager() {
-        return EventManager.getInstance();
+        return EventManager.getInstance(AccountManager.selectedAccount);
     }
 
     public MessageController getMessageController() {

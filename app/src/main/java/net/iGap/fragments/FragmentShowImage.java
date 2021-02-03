@@ -51,6 +51,7 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
@@ -822,7 +823,7 @@ public class FragmentShowImage extends BaseFragment {
                         ZoomableImageView.setZoomable(true);
                         rm.attachment.filePath = arg.data.getFilePath();
                         rm.attachment.token = arg.data.getToken();
-                        EventManager.getInstance().postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
                         break;
                     case LOADING:
                         progress.withProgress(arg.data.getProgress());

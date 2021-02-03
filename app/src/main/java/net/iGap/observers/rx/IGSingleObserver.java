@@ -7,6 +7,7 @@ import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.ExceptionMessageFactory;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperError;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 import io.reactivex.SingleObserver;
@@ -39,6 +40,6 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
         ErrorModel errorModel = ExceptionMessageFactory.getMessage(e);
         G.runOnUiThread(() -> HelperError.showSnackMessage(errorModel.getMessage(), false));
 
-        EventManager.getInstance().postEvent(EventManager.IG_ERROR, e);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.IG_ERROR, e));
     }
 }

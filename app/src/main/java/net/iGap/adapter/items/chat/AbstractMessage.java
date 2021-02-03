@@ -90,7 +90,6 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.RequestManager;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnProgressUpdate;
@@ -136,7 +135,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements EventListener {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements EventManager.NotificationCenterDelegate {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     //    @Deprecated
@@ -240,6 +239,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
         StringBuilder stringBuilder = new StringBuilder();
+
         if (boldPlaces.size() == 0)
             stringBuilder.append(text);
         else {
@@ -345,91 +345,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.ON_UPLOAD_PROGRESS) {
-            G.runOnUiThread(() -> {
-                String messageKey = (String) message[0];
-                String messageId = String.valueOf(messageObject.id);
-
-                if (messageKey.equals(messageId)) {
-                    int progress = (int) message[1];
-                    String progressString = String.valueOf(progress);
-                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(attachment.size, true);
-
-                    if (G.selectedLanguage.equals("fa")) {
-                        progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
-                        attachmentSizeString = HelperCalander.convertToUnicodeFarsiNumber(attachmentSizeString);
-                    }
-
-                    if (holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder) {
-                        TextView progressTextView = ((IProgress) holder).getProgressTextView();
-                        progressTextView.setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
-                    } else if (holder instanceof AudioItem.ViewHolder) {
-                        AudioItem.ViewHolder audioHolder = (AudioItem.ViewHolder) holder;
-                        audioHolder.getSongTimeTv().setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
-                    }
-
-                    MessageProgress progressView = ((IProgress) holder).getProgress();
-                    if (progressView.getTag() != null && progressView.getTag().equals(messageObject.id) && messageObject.status != MessageObject.STATUS_FAILED) {
-                        if (progress >= 1 && progress != 100) {
-                            progressView.withProgress(progress);
-                        }
-                    }
-                }
-            });
-        } else if (id == EventManager.ON_UPLOAD_COMPRESS) {
-            G.runOnUiThread(() -> {
-                String messageKey = (String) message[0];
-                String messageId = String.valueOf(messageObject.id);
-
-                if (messageKey.equals(messageId) && holder instanceof VideoWithTextItem.ViewHolder) {
-                    VideoWithTextItem.ViewHolder videoHolder = (VideoWithTextItem.ViewHolder) holder;
-                    int progress = (int) message[1];
-
-                    if (progress <= 99) {
-                        String progressString = String.valueOf(progress);
-
-                        if (G.selectedLanguage.equals("fa")) {
-                            progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
-                        }
-
-                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(attachment.size, true), AndroidUtils.formatDuration((int) (attachment.duration * 1000L))));
-                    } else {
-                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(attachment.size, true) + " ", AndroidUtils.formatDuration((int) (attachment.duration * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
-                    }
-                }
-            });
-        } else if (id == EventManager.ON_UPLOAD_COMPLETED) {
-            G.runOnUiThread(() -> {
-                long messageId = (long) message[1];
-                if (messageId == messageObject.id) {
-                    ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) message[0];
-                    if (attachment == null || message[2] == null || message[3] == null) {
-                        return;
-                    }
-                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) message[2], attachment.name, messageType.getNumber());
-                    attachment.token = (String) message[3];
-                    onProgressFinish(holder, attachment, messageType.getNumber());
-                    loadImageOrThumbnail(messageType);
-
-                }
-            });
-        } else if (id == EventManager.ON_FILE_DOWNLOAD_COMPLETED) {
-            G.runOnUiThread(() -> {
-                MessageObject downloadedMessage = (MessageObject) message[0];
-                if (downloadedMessage.id == messageObject.id) {
-                    attachment.filePath = downloadedMessage.attachment.filePath;
-                    attachment.token = downloadedMessage.attachment.token;
-                    ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(downloadedMessage.messageType);
-                    loadImageOrThumbnail(messageType);
-                }
-            });
-        }
-
-    }
-
     private void loadImageOrThumbnail(ProtoGlobal.RoomMessageType messageType) {
         if (attachment.isFileExistsOnLocalAndIsImage()) {
             onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
@@ -467,8 +382,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.holder = holder;
 
         if (messageObject.forwardedMessage == null && messageObject.isSenderMe() && attachment != null && messageObject.status == MessageObject.STATUS_SENDING) {
-            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
-            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_COMPRESS, this);
 
             if (!Uploader.getInstance().isCompressingOrUploading(messageObject.id + "")) {// TODO: 12/29/20 MESSAGE_REFACTOR
                 UploadObject fileObject = UploadObject.createForMessage(messageObject, type);
@@ -479,17 +394,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 MessageProgress messageProgress = ((IProgress) holder).getProgress();
                 int progress = Uploader.getInstance().getUploadProgress(messageObject.id + "");
                 messageProgress.withProgress(progress);
-                receivedMessage(EventManager.ON_UPLOAD_PROGRESS, String.valueOf(messageObject.id), progress);
+
+                didReceivedNotification(EventManager.ON_UPLOAD_PROGRESS, AccountManager.selectedAccount, messageObject.id, progress);
             }
         } else {
-            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_PROGRESS, this);
-            EventManager.getInstance().removeEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_UPLOAD_COMPRESS, this);
         }
 
         if (attachment != null) {
-            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPRESS, this);
-            EventManager.getInstance().addEventListener(EventManager.ON_UPLOAD_COMPLETED, this);
-            EventManager.getInstance().addEventListener(EventManager.ON_FILE_DOWNLOAD_COMPLETED, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_COMPLETED, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_FILE_DOWNLOAD_COMPLETED, this);
 
         }
 
@@ -1993,6 +1909,89 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * The data was sent via the button via the view tag. Right now I only do this for the card due to lack of time with the new object
          * */
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == EventManager.ON_UPLOAD_PROGRESS) {
+            G.runOnUiThread(() -> {
+                String messageKey = (String) args[0];
+                String messageId = String.valueOf(messageObject.id);
+
+                if (messageKey.equals(messageId)) {
+                    int progress = (int) args[1];
+                    String progressString = String.valueOf(progress);
+                    String attachmentSizeString = AndroidUtils.humanReadableByteCount(attachment.size, true);
+
+                    if (G.selectedLanguage.equals("fa")) {
+                        progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
+                        attachmentSizeString = HelperCalander.convertToUnicodeFarsiNumber(attachmentSizeString);
+                    }
+
+                    if (holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder) {
+                        TextView progressTextView = ((IProgress) holder).getProgressTextView();
+                        progressTextView.setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
+                    } else if (holder instanceof AudioItem.ViewHolder) {
+                        AudioItem.ViewHolder audioHolder = (AudioItem.ViewHolder) holder;
+                        audioHolder.getSongTimeTv().setText(String.format(Locale.US, "%s%% — %s", progressString, attachmentSizeString));
+                    }
+
+                    MessageProgress progressView = ((IProgress) holder).getProgress();
+                    if (progressView.getTag() != null && progressView.getTag().equals(messageObject.id) && messageObject.status != MessageObject.STATUS_FAILED) {
+                        if (progress >= 1 && progress != 100) {
+                            progressView.withProgress(progress);
+                        }
+                    }
+                }
+            });
+        } else if (id == EventManager.ON_UPLOAD_COMPRESS) {
+            G.runOnUiThread(() -> {
+                String messageKey = (String) args[0];
+                String messageId = String.valueOf(messageObject.id);
+
+                if (messageKey.equals(messageId) && holder instanceof VideoWithTextItem.ViewHolder) {
+                    VideoWithTextItem.ViewHolder videoHolder = (VideoWithTextItem.ViewHolder) holder;
+                    int progress = (int) args[1];
+
+                    if (progress <= 99) {
+                        String progressString = String.valueOf(progress);
+
+                        if (G.selectedLanguage.equals("fa")) {
+                            progressString = HelperCalander.convertToUnicodeFarsiNumber(progressString);
+                        }
+
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), progressString + "%" + G.context.getResources().getString(R.string.compressing) + "—" + AndroidUtils.humanReadableByteCount(attachment.size, true), AndroidUtils.formatDuration((int) (attachment.duration * 1000L))));
+                    } else {
+                        videoHolder.duration.setText(String.format(G.context.getResources().getString(R.string.video_duration), AndroidUtils.humanReadableByteCount(attachment.size, true) + " ", AndroidUtils.formatDuration((int) (attachment.duration * 1000L)) + G.context.getResources().getString(R.string.Uploading)));
+                    }
+                }
+            });
+        } else if (id == EventManager.ON_UPLOAD_COMPLETED) {
+            G.runOnUiThread(() -> {
+                long messageId = (long) args[1];
+                if (messageId == messageObject.id) {
+                    ProtoGlobal.RoomMessageType messageType = (ProtoGlobal.RoomMessageType) args[0];
+                    if (attachment == null || args[2] == null || args[3] == null) {
+                        return;
+                    }
+                    attachment.filePath = AndroidUtils.getFilePathWithCashId((String) args[2], attachment.name, messageType.getNumber());
+                    attachment.token = (String) args[3];
+                    onProgressFinish(holder, attachment, messageType.getNumber());
+                    loadImageOrThumbnail(messageType);
+
+                }
+            });
+        } else if (id == EventManager.ON_FILE_DOWNLOAD_COMPLETED) {
+            G.runOnUiThread(() -> {
+                MessageObject downloadedMessage = (MessageObject) args[0];
+                if (downloadedMessage.id == messageObject.id) {
+                    attachment.filePath = downloadedMessage.attachment.filePath;
+                    attachment.token = downloadedMessage.attachment.token;
+                    ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(downloadedMessage.messageType);
+                    loadImageOrThumbnail(messageType);
+                }
+            });
+        }
     }
 
     @FunctionalInterface

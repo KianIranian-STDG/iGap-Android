@@ -17,11 +17,11 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 
 import net.iGap.WebSocketClient;
-import net.iGap.observers.eventbus.EventListener;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 public class JobServiceReconnect extends JobService {
-    EventListener eventListener;
+    EventManager.NotificationCenterDelegate eventListener;
 
     @Override
     public boolean onStartJob(@NonNull JobParameters job) {
@@ -36,7 +36,8 @@ public class JobServiceReconnect extends JobService {
     }
 
     private void addListener(JobParameters job) {
-        eventListener = (id, message) -> {
+        eventListener = (id, account, args) -> {
+
             if (id == EventManager.SOCKET_CONNECT_DENY || id == EventManager.SOCKET_CONNECT_ERROR || id == EventManager.SOCKET_CONNECT_OK) {
                 Log.d("bagi", "JobServiceReconnectStartFinish");
                 removeListener();
@@ -44,15 +45,15 @@ public class JobServiceReconnect extends JobService {
             }
         };
 
-        EventManager.getInstance().addEventListener(EventManager.SOCKET_CONNECT_DENY, eventListener);
-        EventManager.getInstance().addEventListener(EventManager.SOCKET_CONNECT_ERROR, eventListener);
-        EventManager.getInstance().addEventListener(EventManager.SOCKET_CONNECT_OK, eventListener);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.SOCKET_CONNECT_DENY, eventListener);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.SOCKET_CONNECT_ERROR, eventListener);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.SOCKET_CONNECT_OK, eventListener);
     }
 
     private void removeListener() {
-        EventManager.getInstance().removeEventListener(EventManager.SOCKET_CONNECT_DENY, eventListener);
-        EventManager.getInstance().removeEventListener(EventManager.SOCKET_CONNECT_ERROR, eventListener);
-        EventManager.getInstance().removeEventListener(EventManager.SOCKET_CONNECT_OK, eventListener);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.SOCKET_CONNECT_DENY, eventListener);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.SOCKET_CONNECT_ERROR, eventListener);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.SOCKET_CONNECT_OK, eventListener);
         eventListener = null;
 
     }

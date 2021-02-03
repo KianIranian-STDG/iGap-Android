@@ -101,7 +101,7 @@ public class UploadManager {
                 @Override
                 public void onCompressProgress(String id, int percent) {
                     Log.d("bagi", "onCompressProgress" + percent);
-                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, percent));
                 }
 
                 @Override
@@ -110,7 +110,7 @@ public class UploadManager {
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
                     if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
                         compressFile.renameTo(CompletedCompressFile);
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, 100));
 
                         uploadMessageAndSend(roomType, message, ignoreCompress);
                     } else {
@@ -118,7 +118,7 @@ public class UploadManager {
                             compressFile.delete();
                         }
 
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, 100));
                         uploadMessageAndSend(roomType, message, true);
                     }
                 }
@@ -143,7 +143,7 @@ public class UploadManager {
             @Override
             public void onProgress(String id, int progress) {
                 Log.d("bagi", progress + "uploadMessageAndSend2");
-                EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, id, progress);
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_PROGRESS, id, progress));
             }
 
             @Override
@@ -200,7 +200,7 @@ public class UploadManager {
             pendingUploadTasks.put(uploadTask.identity, uploadTask);
             mThreadPoolExecutor.execute(uploadTask);
             HelperSetAction.setActionFiles(message.getRoomId(), message.getMessageId(), HelperSetAction.getAction(message.getMessageType()), roomType);
-            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, message.getMessageId() + "", 1);
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_PROGRESS, message.getMessageId() + "", 1));
         }
     }
 

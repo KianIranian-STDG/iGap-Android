@@ -7,15 +7,15 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 
 import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class AnimatedStickerCell extends LottieAnimationView implements EventListener {
+public class AnimatedStickerCell extends LottieAnimationView implements EventManager.NotificationCenterDelegate {
 
     public boolean animatedLoaded;
     private String path;
@@ -88,7 +88,7 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detached = true;
-        EventManager.getInstance().removeEventListener(EventManager.STICKER_DOWNLOAD, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STICKER_DOWNLOAD, this);
 //        try {
 //            if (inputStream != null)
 //                inputStream.close();
@@ -112,14 +112,15 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventLis
             }
         detached = false;
 
-        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, this);
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void didReceivedNotification(int id, int account, Object... args) {
+
         if (id == EventManager.STICKER_DOWNLOAD) {
-            String filePath = (String) message[0];
-            String fileToken = (String) message[1];
+            String filePath = (String) args[0];
+            String fileToken = (String) args[1];
 
             if (getTag().equals(fileToken)) {
                 G.handler.post(() -> {

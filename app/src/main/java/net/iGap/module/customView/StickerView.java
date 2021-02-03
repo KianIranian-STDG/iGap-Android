@@ -18,14 +18,14 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 
-public class StickerView extends FrameLayout implements EventListener {
+public class StickerView extends FrameLayout implements EventManager.NotificationCenterDelegate {
     private AppCompatImageView stickerIv;
     private AppCompatImageView stickerEmojiView;
 
@@ -143,23 +143,27 @@ public class StickerView extends FrameLayout implements EventListener {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, this);
-        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.EMOJI_LOADED, this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        EventManager.getInstance().removeEventListener(EventManager.STICKER_DOWNLOAD, this);
-        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STICKER_DOWNLOAD, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.EMOJI_LOADED, this);
+    }
+
+    public boolean hasFileOnLocal() {
+        return new File(viewPath).exists() && new File(viewPath).canRead();
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void didReceivedNotification(int id, int account, Object... args) {
         G.runOnUiThread(() -> {
             if (id == EventManager.STICKER_DOWNLOAD) {
-                String filePath = (String) message[0];
-                String fileToken = (String) message[1];
+                String filePath = (String) args[0];
+                String fileToken = (String) args[1];
 
                 if (viewToken != null && viewToken.equals(fileToken)) {
                     if (viewType == StructIGSticker.ANIMATED_STICKER && stickerIv instanceof AnimatedStickerCell) {
@@ -175,10 +179,4 @@ public class StickerView extends FrameLayout implements EventListener {
             }
         });
     }
-
-
-    public boolean hasFileOnLocal() {
-        return new File(viewPath).exists() && new File(viewPath).canRead();
-    }
-
 }

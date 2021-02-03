@@ -43,7 +43,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
@@ -109,7 +108,7 @@ import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventListener, OnUserAvatarResponse {
+public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventManager.NotificationCenterDelegate, OnUserAvatarResponse {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
 
     private ObservableField<String> appVersion = new ObservableField<>("");
@@ -1084,31 +1083,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     }
 
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
-            int response = (int) message[0];
-            switch (response) {
-                case socketMessages.SUCCESS:
-                    new Handler(getMainLooper()).post(() -> {
-                        getUserCredit();
-                        retryConnectToWallet = 0;
-                    });
-
-                    break;
-
-                case socketMessages.FAILED:
-                    if (retryConnectToWallet < 3) {
-                        new RequestWalletGetAccessToken().walletGetAccessToken();
-                        retryConnectToWallet++;
-                    }
-
-                    break;
-            }
-            // backthread
-        }
-    }
-
     public void uploadAvatar(String path) {
         pathSaveImage = path;
         long lastUploadedAvatarId = idAvatar + 1L;
@@ -1244,6 +1218,32 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         referralNumberObservableField.set("");
     }
 
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+
+        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
+            int response = (int) args[0];
+            switch (response) {
+                case socketMessages.SUCCESS:
+                    new Handler(getMainLooper()).post(() -> {
+                        getUserCredit();
+                        retryConnectToWallet = 0;
+                    });
+
+                    break;
+
+                case socketMessages.FAILED:
+                    if (retryConnectToWallet < 3) {
+                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        retryConnectToWallet++;
+                    }
+
+                    break;
+            }
+            // backthread
+        }
+    }
+
     public class ChangeImageModel {
         private String imagePath;
         private String initials;
@@ -1303,4 +1303,5 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             return peerId;
         }
     }
+
 }

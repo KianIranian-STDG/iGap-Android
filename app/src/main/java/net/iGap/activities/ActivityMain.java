@@ -69,7 +69,6 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;
@@ -86,6 +85,7 @@ import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
+import net.iGap.kuknos.Fragment.KuknosSendFrag;
 import net.iGap.model.PassCode;
 import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
@@ -103,7 +103,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.SubmitScoreDialog;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.network.RequestManager;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.eventbus.socketMessages;
 import net.iGap.observers.interfaces.DataTransformerListener;
@@ -140,7 +139,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.NotificationCenterDelegate {
 
     public static final String openChat = "openChat";
     public static final String userId = "userId";
@@ -277,7 +276,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (G.onAudioFocusChangeListener != null) {
                 G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
             }
-            EventManager.getInstance().removeEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
             try {
                 AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 
@@ -484,7 +483,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
 //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -1486,7 +1485,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-
     @Override
     public void onUserInfoTimeOut() {
         //empty
@@ -1719,35 +1717,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }*/
 
-    @Override
-    public void receivedMessage(int id, Object... message) {
-
-        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
-            int response = (int) message[0];
-            switch (response) {
-                case socketMessages.SUCCESS:
-                    new Handler(getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            /*getUserCredit();*/
-                            retryConnectToWallet = 0;
-                        }
-                    });
-
-                    break;
-
-                case socketMessages.FAILED:
-                    if (retryConnectToWallet < 3) {
-                        new RequestWalletGetAccessToken().walletGetAccessToken();
-                        retryConnectToWallet++;
-                    }
-
-                    break;
-            }
-            // backthread
-        }
-    }
-
     private void isChinesPhone() {
         final SharedPreferences settings = getSharedPreferences("ProtectedApps", Context.MODE_PRIVATE);
         final String saveIfSkip = "skipProtectedAppsMessage";
@@ -1852,6 +1821,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).updateContacts();
+        }
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+
+        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
+            int response = (int) args[0];
+            switch (response) {
+                case socketMessages.SUCCESS:
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            /*getUserCredit();*/
+                            retryConnectToWallet = 0;
+                        }
+                    });
+
+                    break;
+
+                case socketMessages.FAILED:
+                    if (retryConnectToWallet < 3) {
+                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        retryConnectToWallet++;
+                    }
+
+                    break;
+            }
+            // backthread
         }
     }
 
