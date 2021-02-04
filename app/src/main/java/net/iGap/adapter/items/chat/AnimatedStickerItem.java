@@ -72,9 +72,9 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
                     return;
                 }
                 if (messageObject.status == MessageObject.STATUS_FAILED) {
-//                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                    messageClickListener.onFailedMessageClick(v, messageObject, holder.getAdapterPosition());
                 } else {
-//                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
+                    messageClickListener.onOpenClick(v, messageObject, holder.getAdapterPosition());
                 }
             }
         });
