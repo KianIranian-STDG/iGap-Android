@@ -113,6 +113,10 @@ import net.iGap.adapter.items.chat.GiftStickerItem;
 import net.iGap.adapter.items.chat.ImageWithTextItem;
 import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
+import net.iGap.adapter.items.chat.LogWallet;
+import net.iGap.adapter.items.chat.LogWalletBill;
+import net.iGap.adapter.items.chat.LogWalletCardToCard;
+import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.NewChatItemHolder;
 import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.StickerItem;
@@ -8003,7 +8007,7 @@ public class FragmentChat extends BaseFragment
                         lastMessageId = messageObject.id;
                     }
 
-                    if (messageObject.needToShow) {// TODO: 12/28/20 MESSAGE_REFACTOR
+                    if (messageObject.needToShow) {
                         if (mAdapter.getItemCount() > 0) {
                             if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).messageObject != null && RealmRoomMessage.isTimeDayDifferent(messageObject.getUpdateOrCreateTime(), mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).messageObject.getUpdateOrCreateTime())) {
                                 mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageObject.getUpdateOrCreateTime())).withIdentifier(identifier++));
@@ -8032,31 +8036,31 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case WALLET_VALUE:
-//                        if (messageObject.realmRoomMessage.getRoomMessageWallet().getRealmRoomMessageWalletCardToCard() != null) {
-//                            if (!addTop) {
-//                                mAdapter.add(new LogWalletCardToCard(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            } else {
-//                                mAdapter.add(index, new LogWalletCardToCard(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            }
-//                        } else if (messageObject.realmRoomMessage.getRoomMessageWallet().getRealmRoomMessageWalletTopup() != null) {
-//                            if (!addTop) {
-//                                mAdapter.add(new LogWalletTopup(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            } else {
-//                                mAdapter.add(index, new LogWalletTopup(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            }
-//                        } else if (messageObject.realmRoomMessage.getRoomMessageWallet().getRealmRoomMessageWalletBill() != null) {
-//                            if (!addTop) {
-//                                mAdapter.add(new LogWalletBill(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            } else {
-//                                mAdapter.add(index, new LogWalletBill(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            }
-//                        } else {
-//                            if (!addTop) {
-//                                mAdapter.add(new LogWallet(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            } else {
-//                                mAdapter.add(index, new LogWallet(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-//                            }
-//                        }
+                        if (messageObject.wallet.cardToCard != null) {
+                            if (!addTop) {
+                                mAdapter.add(new LogWalletCardToCard(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogWalletCardToCard(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            }
+                        } else if (messageObject.wallet.topupObject != null) {
+                            if (!addTop) {
+                                mAdapter.add(new LogWalletTopup(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogWalletTopup(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            };
+                        } else if (messageObject.wallet.billObject != null) {
+                            if (!addTop) {
+                                mAdapter.add(new LogWalletBill(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogWalletBill(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            }
+                        } else {
+                            if (!addTop) {
+                                mAdapter.add(new LogWallet(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new LogWallet(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            }
+                        }
                         break;
                     case IMAGE_VALUE:
                     case IMAGE_TEXT_VALUE:
