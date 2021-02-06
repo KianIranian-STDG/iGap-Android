@@ -25,6 +25,7 @@ import static net.iGap.module.AndroidUtils.hashTagLink;
 import static net.iGap.module.AndroidUtils.igapLink;
 import static net.iGap.module.AndroidUtils.igapResolve;
 import static net.iGap.module.AndroidUtils.webLink;
+import static net.iGap.module.AndroidUtils.webLink_with_port;
 
 public class MessageObject {
     public static final int STATUS_FAILED = 0;
@@ -225,12 +226,10 @@ public class MessageObject {
         if (messageText != null) {
             message = messageText.replaceAll("[\\u2063]", "");
 
-
-            String link = getMessageLinksInfo();
-            Log.i("matcher", "link info: " + link);
-            if (link.length() > 0) {
+            String messageLink = HelperUrl.getLinkInfo(message);
+            if (messageLink.length() > 0) {
                 hasLink = true;
-                linkInfo = link;
+                linkInfo = messageLink;
             } else {
                 hasLink = false;
             }
@@ -293,7 +292,7 @@ public class MessageObject {
                 link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.igapResolve.toString() + "@";
             } else if (botLink.matcher(stringEntry.getValue()).matches()) {
                 link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.bot.toString() + "@";
-            } else if (webLink.matcher(stringEntry.getValue()).matches()) {
+            } else if (webLink.matcher(stringEntry.getValue()).matches() || webLink_with_port.matcher(stringEntry.getValue()).matches()) {
                 link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.webLink.toString() + "@";
             } else if (digitLink.matcher(stringEntry.getValue()).matches()) {
                 link += stringEntry.getKey() - boldPlaces + "_" + (stringEntry.getKey() + stringEntry.getValue().length() - boldPlaces) + "_" + HelperUrl.linkType.digitLink.toString() + "@";
