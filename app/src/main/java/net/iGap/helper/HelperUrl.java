@@ -93,6 +93,12 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
 
+    private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/.*)";
+    private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
+    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)";
+    private static final String BOT_LINK = "(^\\/\\w+)";
+    private static final String IGAP_RESOLVE = "(igap://resolve?)";
+    private static final String IGAP_DIGIT_LINK = "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
     //TODO: change this class. dependency is in all line of code
     public static int LinkColor = Color.BLUE;
     public static int LinkColorDark = Color.CYAN;
@@ -765,12 +771,12 @@ public class HelperUrl {
         String newText = text.toLowerCase();
 
         Matcher igapMatcher = Pattern.compile(
-                "([https]+?\\:\\/\\/?igap.net\\/.*)|" + //1- igap link
-                        "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)|" + //2- igap deep link
-                        "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)|" + //3- web link
-                        "(^\\/\\w+)|" + //4- bot link
-                        "(igap://resolve?)|" + //5- igap resolve
-                        "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)") //6- igap digit link
+                 IGAP_LINK_PATTERN +"|" + //1- igap link
+                        IGAP_DEEP_LINK_PATTERN +"|" + //2- igap deep link
+                        WEB_LINK +"|" + //3- web link
+                        BOT_LINK+"|" + //4- bot link
+                        IGAP_RESOLVE +"|" + //5- igap resolve
+                        IGAP_DIGIT_LINK) //6- igap digit link
                 .matcher(newText);
 
 
