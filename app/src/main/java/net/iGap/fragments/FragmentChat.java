@@ -193,6 +193,7 @@ import net.iGap.module.customView.EventEditText;
 import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -5075,19 +5076,19 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToGallery(MessageObject message, int pos) {
+    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos) {
         String filename;
         String filepath;
         int messageType;
 
-        if (message.forwardedMessage != null) {
-            messageType = message.forwardedMessage.messageType;
-            filename = message.forwardedMessage.getAttachment().name;
-            filepath = message.forwardedMessage.getAttachment().filePath != null ? message.forwardedMessage.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(message.forwardedMessage.getAttachment().cacheId, filename, messageType);
+        if (messageObject.forwardedMessage != null) {
+            messageType = messageObject.forwardedMessage.messageType;
+            filename = messageObject.forwardedMessage.getAttachment().name;
+            filepath = messageObject.forwardedMessage.getAttachment().filePath != null ? messageObject.forwardedMessage.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.forwardedMessage.getAttachment().cacheId, filename, messageType);
         } else {
-            messageType = message.messageType;
-            filename = message.getAttachment().name;
-            filepath = message.getAttachment().filePath != null ? message.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cacheId, message.getAttachment().name, messageType);
+            messageType = messageObject.messageType;
+            filename = messageObject.getAttachment().name;
+            filepath = messageObject.getAttachment().filePath != null ? messageObject.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.getAttachment().cacheId, messageObject.getAttachment().name, messageType);
         }
         if (new File(filepath).exists()) {
             if (messageType == VIDEO_VALUE) {
@@ -5098,12 +5099,12 @@ public class FragmentChat extends BaseFragment
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
             }
         } else {
-            final int _messageType = message.forwardedMessage != null ? message.forwardedMessage.messageType : message.messageType;
-            String cacheId = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().cacheId : message.getAttachment().cacheId;
-            final String name = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().name : message.getAttachment().name;
-            String fileToken = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().token : message.getAttachment().token;
-            String fileUrl = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().publicUrl : message.getAttachment().publicUrl;
-            long size = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().size : message.getAttachment().size;
+            final int _messageType = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
+            String cacheId = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.getAttachment().cacheId : messageObject.getAttachment().cacheId;
+            final String name = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.getAttachment().name : messageObject.getAttachment().name;
+            String fileToken = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.getAttachment().token : messageObject.getAttachment().token;
+            String fileUrl = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.getAttachment().publicUrl : messageObject.getAttachment().publicUrl;
+            long size = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.getAttachment().size : messageObject.getAttachment().size;
 
             if (cacheId == null) {
                 return;
@@ -5111,36 +5112,37 @@ public class FragmentChat extends BaseFragment
             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
-            // TODO: 1/6/21 MESSAGE_REFACTOR
-//            DownloadObject fileObject = DownloadObject.createForRoomMessage(message.realmRoomMessage);
-//
-//            if (fileObject != null) {
-//                getDownloader().download(fileObject, selector, arg -> {
-//                    if (canUpdateAfterDownload) {
-//                        G.handler.post(() -> {
-//                            switch (arg.status) {
-//                                case SUCCESS:
-//                                case LOADING:
-//                                    if (arg.data == null)
-//                                        return;
-//                                    if (arg.data.getProgress() == 100) {
-//                                        if (_messageType.toString().contains(VIDEO.toString())) {
-//                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-//                                        } else if (_messageType.toString().contains(GIF.toString())) {
-//                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
-//                                        } else if (_messageType.toString().contains(IMAGE.toString())) {
-//                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
-//                                        }
-//                                    }
-//                                    break;
-//                            }
-//                        });
-//                    }
-//                });
-//
-//                mAdapter.notifyItemChanged(pos);
-//            }
-//            onDownloadAllEqualCashId(cacheId, message.realmRoomMessage.getMessageId() + "");
+
+            DownloadObject fileObject = DownloadObject.createForRoomMessage(messageObject);
+
+            if (fileObject != null) {
+                getDownloader().download(fileObject, selector, arg -> {
+                    if (canUpdateAfterDownload) {
+                        G.handler.post(() -> {
+                            switch (arg.status) {
+                                case SUCCESS:
+                                case LOADING:
+                                    if (arg.data == null)
+                                        return;
+                                    if (arg.data.getProgress() == 100) {
+                                        if (_messageType == VIDEO_VALUE) {
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                                        } else if (_messageType == GIF_VALUE) {
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
+                                        } else if (_messageType == IMAGE_VALUE) {
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                                        }
+                                    }
+                                    break;
+                            }
+                        });
+                    }
+                });
+
+                mAdapter.notifyItemChanged(pos);
+            }
+
+            onDownloadAllEqualCashId(cacheId, messageObject.id + "");
         }
     }
 
