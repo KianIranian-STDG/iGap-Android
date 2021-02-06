@@ -143,8 +143,6 @@ public class MessageObject {
             return null;
         }
 
-        Log.i("mohammad", "create: 1");
-
         MessageObject messageObject = new MessageObject();
         boolean isForwardOrReplay = roomMessage.replyTo != null || roomMessage.forwardMessage != null;
 
@@ -162,21 +160,11 @@ public class MessageObject {
             }
         }
 
-        Log.i("mohammad", "create: 2");
-
         if (!isForwardOrReplay) {
             messageObject.deleted = roomMessage.isDeleted();
         }
 
-        Log.i("mohammad", "create: 3");
-        /*if (roomMessage.hasMessageLink && roomMessage.getLinkInfo() != null) {
-            messageObject.hasLink = true;
-            messageObject.linkInfo = roomMessage.getLinkInfo();
-        } else {
-            messageObject.hasLink = false;
-        }*/
         messageObject.setMessageText(roomMessage.getMessage());
-        Log.i("mohammad", "create: 4");
 
         messageObject.id = (createForForward && roomMessage.getMessageId() > 0) ? roomMessage.getMessageId() * (-1) : roomMessage.getMessageId();
         messageObject.forwardedMessage = create(roomMessage.getForwardMessage(), false, false, true);
@@ -184,8 +172,6 @@ public class MessageObject {
         messageObject.status = readStatus(roomMessage.getStatus());
         messageObject.authorHash = roomMessage.getAuthorHash();
         messageObject.edited = roomMessage.isEdited();
-
-        Log.i("mohammad", "create: 5");
 
         if (roomMessage.getAttachment() != null) {
             messageObject.attachment = AttachmentObject.create(roomMessage.getAttachment());
@@ -207,8 +193,6 @@ public class MessageObject {
             messageObject.additional = AdditionalObject.create(roomMessage);
         }
 
-        Log.i("mohammad", "create: 6");
-
         if (roomMessage.getChannelExtra() != null) {
             messageObject.channelExtraObject = ChannelExtraObject.create(roomMessage.getChannelExtra());
         }
@@ -222,8 +206,6 @@ public class MessageObject {
         if (isGap) {
             messageObject.previousMessageId = roomMessage.getPreviousMessageId();
         }
-
-        Log.i("mohammad", "create: 7");
 
         return messageObject;
     }

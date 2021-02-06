@@ -839,14 +839,10 @@ public class FragmentChat extends BaseFragment
         gongingHandler = new Handler(Looper.getMainLooper());
 
         startPageFastInitialize();
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {
-                    initMain();
-                }
-            }
-        }, Config.LOW_START_PAGE_TIME);
+
+        if (getActivity() != null && !getActivity().isFinishing() && isAdded()) {
+            initMain();
+        }
 
         if ((chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
@@ -1946,10 +1942,6 @@ public class FragmentChat extends BaseFragment
 
     private void initMain() {
         HelperGetMessageState.clearMessageViews();
-
-        /**
-         * define views
-         */
         initPinedMessage();
 
         viewMicRecorder = rootView.findViewById(R.id.layout_mic_recorde);
@@ -2879,12 +2871,9 @@ public class FragmentChat extends BaseFragment
         txtNewUnreadMessage.setBadgeColor(new Theme().getPrimaryDarkColor(txtNewUnreadMessage.getContext()));
         llScrollNavigate.addView(txtNewUnreadMessage, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP));
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                getMessages();
-                manageForwardedMessage(false);
-            }
+        G.handler.post(() -> {
+            AndroidUtils.globalQueue.postRunnable(this::getMessages);
+            manageForwardedMessage(false);
         });
 
         MaterialDesignTextView txtNavigationLayout = rootView.findViewById(R.id.ac_txt_down_navigation);
@@ -8047,7 +8036,8 @@ public class FragmentChat extends BaseFragment
                                 mAdapter.add(new LogWalletTopup(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(index, new LogWalletTopup(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
-                            };
+                            }
+                            ;
                         } else if (messageObject.wallet.billObject != null) {
                             if (!addTop) {
                                 mAdapter.add(new LogWalletBill(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
@@ -8145,7 +8135,6 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case LOG_VALUE:
-                        // TODO: 1/6/21 MESSAGE_REFACTOR
                         if (messageObject.needToShow) {
                             if (!addTop) {
                                 mAdapter.add(new LogItem(mAdapter, this).setMessage(messageObject).withIdentifier(identifier));
@@ -8160,51 +8149,49 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    /**
-     * manage save changeState , unread message , load from local or need get message from server and finally load message
-     */
     private void getMessages() {
-
         DbManager.getInstance().doRealmTask(realm -> {
             ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
             ArrayList<StructMessageInfo> messageInfos = new ArrayList<>();
-            /**
-             * get message in first enter to chat if has unread get message with down direction
-             */
             RealmResults<RealmRoomMessage> results;
             RealmResults<RealmRoomMessage> resultsDown = null;
             RealmResults<RealmRoomMessage> resultsUp;
             long fetchMessageId = 0; // with this value realm will be queried for get message
             if (hasUnread() || hasSavedState()) {
+                RealmRoomMessage firstUnreadMessage = null;
+                RealmRoom room = realm.where(RealmRoom.class).equalTo("id", mRoomId).findFirst();
 
-                /**
-                 * show unread layout and also set firstUnreadMessageId in startFutureMessageIdUp
-                 * for try load top message and also topMore default value is true for this target
-                 */
+                if (room != null) {
+                    room = realm.copyFromRealm(room);
+                    firstUnreadMessage = room.getFirstUnreadMessage();
+                }
+
                 if (hasSavedState()) {
                     fetchMessageId = getSavedState();
 
                     if (hasUnread()) {
-                        if (getFirstUnreadMessage() == null) {
+                        if (firstUnreadMessage == null) {
                             resetMessagingValue();
                             getMessages();
                             return;
                         }
                     }
                 } else {
-                    if (getFirstUnreadMessage() == null) {
+                    if (firstUnreadMessage == null) {
                         resetMessagingValue();
                         getMessages();
                         return;
                     }
-                    unreadLayoutMessage();
-                    fetchMessageId = getFirstUnreadMessage().getMessageId();
+                    G.runOnUiThread(this::unreadLayoutMessage);
+                    fetchMessageId = firstUnreadMessage.getMessageId();
                 }
 
                 if (hasUnread()) {
                     countNewMessage = unreadCount;
-                    txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                    txtNewUnreadMessage.getTextView().setText(countNewMessage + "");
+                    G.runOnUiThread(() -> {
+                        txtNewUnreadMessage.setVisibility(View.VISIBLE);
+                        txtNewUnreadMessage.getTextView().setText(String.valueOf(countNewMessage));
+                    });
                 }
 
                 startFutureMessageIdUp = fetchMessageId;
@@ -8219,25 +8206,16 @@ public class FragmentChat extends BaseFragment
                 direction = UP;
             }
 
-            /**
-             * Hint: don't use "findFirst()" for find biggest message, because "findFirst()" just will be
-             * returned latest message that inserted to "RealmRoomMessage" and it is not biggest always
-             **/
             Number latestMessageId = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).max("messageId");
             if (latestMessageId != null) {
                 resultsUp = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).equalTo("messageId", latestMessageId.longValue()).findAll();
             } else {
-                /** use fake query for make empty RealmResult */
                 resultsUp = realm.where(RealmRoomMessage.class).equalTo("roomId", -100).findAll();
             }
 
             long gapMessageId;
             if (direction == DOWN) {
                 RealmQuery realmQuery = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).lessThanOrEqualTo("messageId", fetchMessageId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true);
-                /**
-                 * if for UP changeState client have message detect gap otherwise try for get online message
-                 * because maybe client have message but not exist in Realm yet
-                 */
                 if (realmQuery.count() > 1) {
                     resultsUp = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).equalTo("messageId", fetchMessageId).notEqualTo("createTime", 0).equalTo("deleted", false).equalTo("showMessage", true).findAll();
                     gapDetection(resultsUp, UP);
@@ -8271,32 +8249,17 @@ public class FragmentChat extends BaseFragment
                         startFutureMessageIdDown = 0;
                     }
                 }
-
-                /**
-                 * if gap is exist ,check that reached to gap or not and if
-                 * reached send request to server for clientGetRoomHistory
-                 */
                 if (gapMessageId > 0) {
                     boolean hasSpaceToGap = (boolean) object[2];
                     if (!hasSpaceToGap) {
 
                         long oldMessageId = 0;
                         if (messageInfos.size() > 0) {
-                            /**
-                             * this code is correct for UP or DOWN load message result
-                             */
                             oldMessageId = messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId();
                         }
-                        /**
-                         * send request to server for clientGetRoomHistory
-                         */
                         getOnlineMessage(oldMessageId, direction);
                     }
                 } else {
-                    /**
-                     * if gap not exist and also not exist more message in local
-                     * send request for get message from server
-                     */
                     if ((direction == UP && !topMore) || (direction == DOWN && !bottomMore)) {
                         if (messageInfos.size() > 0) {
                             getOnlineMessage(messageInfos.get(messageInfos.size() - 1).realmRoomMessage.getMessageId(), direction);
@@ -8306,11 +8269,6 @@ public class FragmentChat extends BaseFragment
                     }
                 }
             } else {
-                /** send request to server for get message.
-                 * if direction is DOWN check again realmRoomMessage for detection
-                 * that exist any message without checking deleted changeState and if
-                 * exist use from that messageId instead of zero for getOnlineMessage
-                 */
                 long oldMessageId = 0;
                 if (direction == DOWN) {
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).notEqualTo("createTime", 0).equalTo("showMessage", true).equalTo("messageId", fetchMessageId).findFirst();
@@ -8322,65 +8280,62 @@ public class FragmentChat extends BaseFragment
                 getOnlineMessage(oldMessageId, direction);
             }
 
-            if (direction == UP) {
-                switchAddItem(messageInfos, true);
-            } else {
-                switchAddItem(messageInfos, false);
-                if (hasSavedState()) {
-
-                    if (messageId != 0) {
-                        if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
-                            savedScrollMessageId = 0;
-                        }
-                    } else {
-                        int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
-                        LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
-                        savedScrollMessageId = 0;
-                    }
-
-                }
-            }
-
-            /**
-             * make scrollListener for detect change in scroll and load more in chat
-             */
-            scrollListener = new RecyclerView.OnScrollListener() {
+            final ArrayList<StructMessageInfo> finalMessageInfos = messageInfos;
+            G.runOnUiThread(new Runnable() {
                 @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-                    int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
-                    View view = linearLayoutManager.getChildAt(0);
-                    if (firstVisiblePosition > 0 && view != null) {
-                        firstVisiblePositionOffset = view.getTop();
+                public void run() {
+                    if (direction == UP) {
+                        switchAddItem(finalMessageInfos, true);
+                    } else {
+                        switchAddItem(finalMessageInfos, false);
+                        if (hasSavedState()) {
+                            if (messageId != 0) {
+                                if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
+                                    savedScrollMessageId = 0;
+                                }
+                            } else {
+                                int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
+                                LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                                linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
+                                savedScrollMessageId = 0;
+                            }
+                        }
                     }
 
-                    visibleItemCount = linearLayoutManager.getChildCount();
-                    totalItemCount = linearLayoutManager.getItemCount();
+                    scrollListener = new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
 
-                    if (firstVisiblePosition < scrollEnd) {  /** scroll to top */
-                        loadMessage(UP);
+                            LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                            int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
+                            View view = linearLayoutManager.getChildAt(0);
+                            if (firstVisiblePosition > 0 && view != null) {
+                                firstVisiblePositionOffset = view.getTop();
+                            }
 
-                        /** if totalItemCount is lower than scrollEnd so (firstVisiblePosition < scrollEnd) is always true and we can't load DOWN,
-                         * finally for solve this problem we to check following state and load DOWN even totalItemCount is lower than scrollEnd count
-                         */
-                        if (totalItemCount <= scrollEnd) {
-                            loadMessage(DOWN);
+                            visibleItemCount = linearLayoutManager.getChildCount();
+                            totalItemCount = linearLayoutManager.getItemCount();
+
+                            if (firstVisiblePosition < scrollEnd) {
+                                loadMessage(UP);
+                                if (totalItemCount <= scrollEnd) {
+                                    loadMessage(DOWN);
+                                }
+                            } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+                                loadMessage(DOWN);
+                            }
                         }
-                    } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) { /** scroll to bottom */
-                        loadMessage(DOWN);
+                    };
+
+                    recyclerView.addOnScrollListener(scrollListener);
+
+                    if (unreadCount > 0) {
+                        recyclerView.scrollToPosition(0);
                     }
                 }
-            };
-
-            recyclerView.addOnScrollListener(scrollListener);
-            if (unreadCount > 0)
-                recyclerView.scrollToPosition(0);
+            });
         });
-
-
     }
 
     /**
