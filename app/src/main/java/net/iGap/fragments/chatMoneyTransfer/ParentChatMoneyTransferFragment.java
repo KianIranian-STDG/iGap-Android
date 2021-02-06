@@ -11,16 +11,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
-import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.GiftStickerItemDetailFragment;
 import net.iGap.fragments.giftStickers.GiftStickerItemListFragment;
 import net.iGap.fragments.giftStickers.GiftStickerPackageListFragment;
 import net.iGap.fragments.giftStickers.enterNationalCode.EnterNationalCodeFragment;
+import net.iGap.fragments.payment.FragmentPaymentInternet;
+import net.iGap.fragments.payment.PaymentChargeFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperWallet;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.proto.ProtoWalletPaymentInit;
 
 import org.paygear.WalletActivity;
@@ -35,6 +38,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     private long peerId;
     private boolean isWalletActive;
     private boolean isWalletRegister;
+    private String phoneNumber;
 
     public Delegate delegate;
 
@@ -47,6 +51,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
             peerId = getArguments().getLong("peerId", -1);
             isWalletActive = getArguments().getBoolean("isWalletActive", false);
             isWalletRegister = getArguments().getBoolean("isWalletRegister", false);
+            phoneNumber = getArguments().getString("phoneNumber", "");
         } else {
             if (getActivity() != null) {
                 getActivity().onBackPressed();
@@ -205,6 +210,26 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
         }
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
+    }
+
+    public void loadChargePayment() {
+        Fragment fragment = PaymentChargeFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber", phoneNumber);
+        bundle.putLong("peerId", peerId);
+        fragment.setArguments(bundle);
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        dismiss();
+    }
+
+    public void loadInternetPayment() {
+        Fragment fragment = FragmentPaymentInternet.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber", phoneNumber);
+        bundle.putLong("peerId", peerId);
+        fragment.setArguments(bundle);
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        dismiss();
     }
 
     public void dismissDialog() {

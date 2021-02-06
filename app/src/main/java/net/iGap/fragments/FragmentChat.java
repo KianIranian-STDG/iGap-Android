@@ -460,7 +460,7 @@ public class FragmentChat extends BaseFragment
     private ChannelChatRole channelRole;
     private MaterialDialog dialogWait;
     private Uri latestUri;
-    private Calendar lastDateCalendar = Calendar.getInstance();
+    private final Calendar lastDateCalendar = Calendar.getInstance();
     private TextView iconMute;
     private LinearLayout ll_Search;
     private LinearLayout layoutAttachBottom;
@@ -508,7 +508,7 @@ public class FragmentChat extends BaseFragment
     private String userStatus;
     private Boolean isGoingFromUserLink = false;
     private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
-    private boolean firsInitScrollPosition = false;
+    private final boolean firsInitScrollPosition = false;
     private boolean initHash = false;
     private boolean hasDraft = false;
     private boolean hasForward = false;
@@ -533,7 +533,7 @@ public class FragmentChat extends BaseFragment
     private int countNewMessage = 0;
     private int unreadCount = 0;
     private int latestRequestCode;
-    private boolean isEmojiSHow = false;
+    private final boolean isEmojiSHow = false;
     private boolean isPublicGroup = false;
     private boolean roomIsPublic;
     private ArrayList<Long> bothDeleteMessageId;
@@ -543,7 +543,7 @@ public class FragmentChat extends BaseFragment
     private FrameLayout rootView;
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
-    private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
+    private final ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
 
     /**
      * **********************************************************************
@@ -574,7 +574,7 @@ public class FragmentChat extends BaseFragment
     private int firstVisiblePositionOffset; // amount of offset from top of view for first visible item in adapter
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
-    private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
+    private final int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
     private HelperToolbar mHelperToolbar;
     private ViewGroup layoutToolbar;
@@ -586,7 +586,7 @@ public class FragmentChat extends BaseFragment
     private boolean receiveMessageLoaded;
     private int sendMessageSound;
     private int receiveMessageSound;
-    private String TAG = "abbasiKeyboard";
+    private final String TAG = "abbasiKeyboard";
     private ChatAttachmentPopup mAttachmentPopup;
     private int messageLentghCounter;
     private int oldMessageLentghCounter;
@@ -3592,7 +3592,7 @@ public class FragmentChat extends BaseFragment
         keyboardView.setVisibility(View.GONE);
     }
 
-    private Runnable openKeyboardRunnable = new Runnable() {
+    private final Runnable openKeyboardRunnable = new Runnable() {
         @Override
         public void run() {
             edtChat.requestFocus();
@@ -3669,7 +3669,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void showSelectItem() {
-
         RealmRoom realmRoom = getRoom();
         if (realmRoom != null) {
             chatType = realmRoom.getType();
@@ -3682,6 +3681,7 @@ public class FragmentChat extends BaseFragment
                         bundle.putString("userName", txtName.getText().toString());
                         bundle.putLong("roomId", mRoomId);
                         bundle.putLong("peerId", chatPeerId);
+                        bundle.putString("phoneNumber", phoneNumber);
                         fragment.setArguments(bundle);
                         fragment.setDelegate(new ParentChatMoneyTransferFragment.Delegate() {
                             @Override
@@ -8385,11 +8385,7 @@ public class FragmentChat extends BaseFragment
             recyclerView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (direction == UP) {
-                        switchAddItem(structMessageInfos, true);
-                    } else {
-                        switchAddItem(structMessageInfos, false);
-                    }
+                    switchAddItem(structMessageInfos, direction == UP);
                 }
             });
 
@@ -9410,7 +9406,7 @@ public class FragmentChat extends BaseFragment
         private String hashString = "";
         private int currentHashPosition;
 
-        private ArrayList<String> hashList = new ArrayList<>();
+        private final ArrayList<String> hashList = new ArrayList<>();
 
         void setHashString(String hashString) {
             this.hashString = hashString.toLowerCase();
