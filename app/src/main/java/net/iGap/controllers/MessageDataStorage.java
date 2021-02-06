@@ -31,6 +31,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED;
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.SEEN;
+
 public class MessageDataStorage extends BaseController {
 
     private static volatile MessageDataStorage[] instance = new MessageDataStorage[AccountManager.MAX_ACCOUNT_COUNT];
@@ -99,7 +102,7 @@ public class MessageDataStorage extends BaseController {
 
                 if (realmRoom != null && message != null && !message.deleted
                         && !message.isSenderMe()
-                        && !message.status.equals(ProtoGlobal.RoomMessageStatus.SEEN.toString())
+                        && !message.status.equals(SEEN.toString())
                         && realmRoom.firstUnreadMessage != null
                         && realmRoom.firstUnreadMessage.messageId <= messageId
                         && realmRoom.unreadCount > 0) {
@@ -617,9 +620,9 @@ public class MessageDataStorage extends BaseController {
             try {
                 database.beginTransaction();
                 if (!update) {
-                    if (messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
+                    if (messageStatus == SEEN) {
                         deleteOfflineAction(messageId, ClientConditionOffline.SEEN, false, false);
-                    } else if (messageStatus == ProtoGlobal.RoomMessageStatus.LISTENED) {
+                    } else if (messageStatus == LISTENED) {
                         deleteOfflineAction(messageId, ClientConditionOffline.LISTEN, false, false);
                     }
                 } else {
@@ -627,27 +630,19 @@ public class MessageDataStorage extends BaseController {
                     RealmUserInfo realmUser = database.where(RealmUserInfo.class).findFirst();
                     if (realmUser != null) {
                         currentUserAuthorHash = realmUser.getAuthorHash();
-                    } else {
-                        currentUserAuthorHash = "";
                     }
-                    if (currentUserAuthorHash.equals(updaterAuthorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
 
+                    if (currentUserAuthorHash.equals(updaterAuthorHash) && messageStatus == SEEN) {
                         RealmRoom realmRoom = database.where(RealmRoom.class).equalTo("id", roomId).findFirst();
-
-                        if (realmRoom != null) {
-                            realmRoom = database.copyFromRealm(realmRoom);
-                        }
 
                         if (realmRoom != null && (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getMessageId() <= messageId)) {
                             realmRoom.setUnreadCount(0);
                         }
                     }
-                    /**
-                     * find message from database and update its status
-                     */
+
                     RealmRoomMessage roomMessage;
-                    if (messageStatus != ProtoGlobal.RoomMessageStatus.LISTENED) {
-                        roomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+                    if (messageStatus != LISTENED) {
+                        roomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", SEEN.toString()).notEqualTo("status", LISTENED.toString()).findFirst();
                     } else {
                         roomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).findFirst();
                     }
@@ -658,20 +653,16 @@ public class MessageDataStorage extends BaseController {
                         database.copyToRealmOrUpdate(roomMessage);
                     }
 
-                    if (roomMessage != null || messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
+                    if (roomMessage != null || messageStatus == SEEN) {
                         EventManager.getInstance().postEvent(EventManager.CHAT_UPDATE_STATUS, roomId, messageId, messageStatus);
                     }
-
                 }
 
                 database.commitTransaction();
-
-
             } catch (Exception e) {
                 FileLog.e(e);
             }
         });
-
     }
 
     public void setOfflineSeen(final long roomId, final long messageId, boolean needTransaction, boolean needQueue) {
@@ -711,10 +702,10 @@ public class MessageDataStorage extends BaseController {
                 setOfflineSeen(roomId, messageId, false, false);
                 // setOfflineSeenInternal(roomId, messageId, false);
 
-                RealmRoomMessage realmRoomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo("status", ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+                RealmRoomMessage realmRoomMessage = database.where(RealmRoomMessage.class).equalTo("messageId", messageId).notEqualTo("status", SEEN.toString()).notEqualTo("status", LISTENED.toString()).findFirst();
                 if (realmRoomMessage != null) {
-                    if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                        realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
+                    if (!realmRoomMessage.getStatus().equalsIgnoreCase(SEEN.toString())) {
+                        realmRoomMessage.setStatus(SEEN.toString());
                     }
                 }
 
