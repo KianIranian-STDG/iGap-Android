@@ -187,14 +187,15 @@ public class HelperUrl {
                     "youtube", "yt", "za", "zip", "zm", "zone", "zuerich", "zw"
             };
 
-            List<String> urlList = new ArrayList<String>(Arrays.asList(strings));
+            List<String> urlList = new ArrayList<>(Arrays.asList(strings));
 
-            for (String matches : urlList) {
+            return true;
+            /*for (String matches : urlList) {
 
                 if (text.contains("." + matches) && text.length() > matches.length() + 2) {
                     return true;
                 }
-            }
+            }*/
         }
 
         return false;
@@ -763,7 +764,32 @@ public class HelperUrl {
 
         String newText = text.toLowerCase();
 
-        String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
+        Matcher igapMatcher = Pattern.compile(
+                "([https]+?\\:\\/\\/?igap.net\\/.*)|" + //1- igap link
+                        "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)|" + //2- igap deep link
+                        "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)|" + //3- web link
+                        "(^\\/\\w+)|" + //4- bot link
+                        "(igap://resolve?)|" + //5- igap resolve
+                        "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)") //6- igap digit link
+                .matcher(newText);
+
+
+        while (igapMatcher.find()) {
+            if (igapMatcher.group(1) != null) {
+                linkInfo += igapMatcher.start(1) + "_" + igapMatcher.end(1) + "_" + linkType.igapLink.toString() + "@";
+            } else if (igapMatcher.group(2) != null) {
+                linkInfo += igapMatcher.start(2) + "_" + igapMatcher.end(2) + "_" + linkType.igapDeepLink.toString() + "@";
+            } else if (igapMatcher.group(3) != null) {
+                linkInfo += igapMatcher.start(3) + "_" + igapMatcher.end(3) + "_" + linkType.webLink.toString() + "@";
+            } else if (igapMatcher.group(4) != null) {
+                linkInfo += igapMatcher.start(4) + "_" + igapMatcher.end(4) + "_" + linkType.bot.toString() + "@";
+            } else if (igapMatcher.group(5) != null) {
+                linkInfo += igapMatcher.start(5) + "_" + igapMatcher.end(5) + "_" + linkType.igapResolve.toString() + "@";
+            } else if (igapMatcher.group(6) != null) {
+                linkInfo += igapMatcher.start(6) + "_" + igapMatcher.end(6) + "_" + linkType.digitLink.toString() + "@";
+            }
+        }
+        /*String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
 
         int count = 0;
 
@@ -785,7 +811,7 @@ public class HelperUrl {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapDeepLink.toString() + "@";
             }
             count += str.length() + 1;
-        }
+        }*/
 
         return linkInfo;
     }
@@ -856,7 +882,8 @@ public class HelperUrl {
         }
     }
 
-    private static void openDialogJoin(FragmentActivity activity, final ProtoGlobal.Room room, final String token) {
+    private static void openDialogJoin(FragmentActivity activity, final ProtoGlobal.Room room,
+                                       final String token) {
         if (room == null) {
             return;
         }
@@ -896,7 +923,8 @@ public class HelperUrl {
         }
     }
 
-    private static void joinToRoom(FragmentActivity activity, String token, final ProtoGlobal.Room room) {
+    private static void joinToRoom(FragmentActivity activity, String token,
+                                   final ProtoGlobal.Room room) {
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             showIndeterminateProgressDialog(activity);
 
@@ -967,7 +995,8 @@ public class HelperUrl {
         return false;
     }
 
-    public static void checkUsernameAndGoToRoom(FragmentActivity activity, final String userName, final ChatEntry chatEntery) {
+    public static void checkUsernameAndGoToRoom(FragmentActivity activity,
+                                                final String userName, final ChatEntry chatEntery) {
         checkUsernameAndGoToRoomWithMessageId(activity, userName, chatEntery, 0);
     }
 
@@ -978,7 +1007,8 @@ public class HelperUrl {
      * @param messageId // use for detect message position
      */
 
-    public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity, final String username, final ChatEntry chatEntry, final long messageId) {
+    public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity,
+                                                             final String username, final ChatEntry chatEntry, final long messageId) {
         if (username == null || username.length() < 1) return;
 
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
@@ -1012,7 +1042,10 @@ public class HelperUrl {
     /**
      * if message isn't exist in Realm resolve from server and then open chat
      */
-    private static void resolveMessageAndOpenChat(FragmentActivity activity, final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
+    private static void resolveMessageAndOpenChat(FragmentActivity activity,
+                                                  final long messageId, final String username, final ChatEntry chatEntry,
+                                                  final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type,
+                                                  final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
         DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
             @Override
             public void doTask(Realm realm) {
@@ -1090,7 +1123,10 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    private static void openChat(FragmentActivity activity, String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery, long messageId) {
+    private static void openChat(FragmentActivity activity, String
+            username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type
+                                         type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery,
+                                 long messageId) {
         switch (type) {
             case USER:
                 goToChat(activity, user, chatEntery, messageId);
@@ -1101,7 +1137,8 @@ public class HelperUrl {
         }
     }
 
-    private static void goToActivity(FragmentActivity activity, final long roomId, final long peerId, ChatEntry chatEntry, final long messageId) {
+    private static void goToActivity(FragmentActivity activity, final long roomId,
+                                     final long peerId, ChatEntry chatEntry, final long messageId) {
 
         switch (chatEntry) {
             case chat:
@@ -1169,7 +1206,8 @@ public class HelperUrl {
         }
     }
 
-    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId, final long peerId) {
+    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId,
+                                           final long peerId) {
 
         if (roomId != FragmentChat.lastChatRoomId) {
             DbManager.getInstance().doRealmTask(realm -> {
@@ -1252,7 +1290,8 @@ public class HelperUrl {
 
     }
 
-    private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
+    private static void goToChat(FragmentActivity activity,
+                                 final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).equalTo("isDeleted", false).findFirst();
@@ -1294,7 +1333,8 @@ public class HelperUrl {
         }
     }
 
-    private static void addChatToDatabaseAndGoToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final long roomId, final ChatEntry chatEntery) {
+    private static void addChatToDatabaseAndGoToChat(FragmentActivity activity,
+                                                     final ProtoGlobal.RegisteredUser user, final long roomId, final ChatEntry chatEntery) {
 
         closeDialogWaiting();
 
@@ -1318,7 +1358,8 @@ public class HelperUrl {
         });
     }
 
-    private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
+    private static void goToRoom(FragmentActivity activity, String username,
+                                 final ProtoGlobal.Room room, long messageId) {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
 
@@ -1350,7 +1391,8 @@ public class HelperUrl {
         });
     }
 
-    private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity, final String username, final ProtoGlobal.Room room, long messageId) {
+    private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity,
+                                                     final String username, final ProtoGlobal.Room room, long messageId) {
         closeDialogWaiting();
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {

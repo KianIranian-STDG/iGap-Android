@@ -66,10 +66,11 @@ import java.util.regex.Pattern;
 public final class AndroidUtils {
     public static Pattern hashTagLink = Pattern.compile("[#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b");
     public static Pattern atSignLink = Pattern.compile("[@]+[A-za-z0-9]+\\b");
-    public static Pattern igapLink = Pattern.compile("(https?\\:\\/\\/)?igap.net/(.*)");
+    public static Pattern igapLink = Pattern.compile("(https?\\:\\/\\/)?(?i)(igap.net)/(.*)");
     public static String igapResolve = "igap://resolve?";
     public static Pattern botLink = Pattern.compile("^\\/\\w+");
-    public static Pattern webLink = Pattern.compile("(((http|https)\\:\\/\\/)|(w+))+[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.([a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_=#])*");
+    public static Pattern webLink = Pattern.compile("([a-z]+)?(://)?([a-z0-9\\-.:]+(?<!igap))(\\.[a-z0-9]+)+/[A-Za-z0-9\\-/_]+");
+    public static Pattern webLink_with_port = Pattern.compile("([a-z]+)?(://)?([a-z\\d\\-.]+(?<!igap))(:\\d+/)(/)?[A-Za-z0-9\\-/_]*");
     public static Pattern digitLink = Pattern.compile("^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$");
     public static Pattern deepLink = Pattern.compile("(igap?://)([^:^/]*)(:\\d*)?(.*)?");
     public static Pattern specialCharacter = Pattern.compile("^[^\\p{L}\\w!@#$%&*()\\-.\\\\,_+=|<>?{}/^\\]\\[~{}ًٌٍْ.َُِّ\\s]");
