@@ -93,6 +93,14 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
 
+    private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/.*)";
+    private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
+    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)";
+    private static final String BOT_LINK = "(^\\/\\w+)";
+    private static final String IGAP_RESOLVE = "(igap://resolve?)";
+    private static final String IGAP_DIGIT_LINK = "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
+    private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_]+\\b)";
+    private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
     //TODO: change this class. dependency is in all line of code
     public static int LinkColor = Color.BLUE;
     public static int LinkColorDark = Color.CYAN;
@@ -745,75 +753,54 @@ public class HelperUrl {
 
     public static String getLinkInfo(String text) {
 
-        String linkInfo = "";
+        StringBuilder linkInfo = new StringBuilder();
 
         if (text == null) {
-            return linkInfo;
+            return linkInfo.toString();
         }
 
         if (text.trim().length() < 1) {
-            return linkInfo;
+            return linkInfo.toString();
         }
 
         ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(text);
         text = AbstractMessage.removeBoldMark(text, boldPlaces);
 
-        linkInfo += analysisAtSignLinkInfo(text);
-
-        linkInfo += analysisHashLinkInfo(text);
-
         String newText = text.toLowerCase();
 
         Matcher igapMatcher = Pattern.compile(
-                "([https]+?\\:\\/\\/?igap.net\\/.*)|" + //1- igap link
-                        "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)|" + //2- igap deep link
-                        "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)|" + //3- web link
-                        "(^\\/\\w+)|" + //4- bot link
-                        "(igap://resolve?)|" + //5- igap resolve
-                        "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)") //6- igap digit link
+                IGAP_LINK_PATTERN + "|" + //1- igap link
+                        IGAP_DEEP_LINK_PATTERN + "|" + //2- igap deep link
+                        WEB_LINK + "|" + //3- web link
+                        BOT_LINK + "|" + //4- bot link
+                        IGAP_RESOLVE + "|" + //5- igap resolve
+                        IGAP_DIGIT_LINK + "|" + //6- igap digit link
+                        IGAP_AT_SIGN_PATTERN + "|" + //7- igap atsign pattern
+                        IGAP_HASH_TAG_PATTERN) // 8- igap hashTag pattern
                 .matcher(newText);
 
 
         while (igapMatcher.find()) {
             if (igapMatcher.group(1) != null) {
-                linkInfo += igapMatcher.start(1) + "_" + igapMatcher.end(1) + "_" + linkType.igapLink.toString() + "@";
+                linkInfo.append(igapMatcher.start(1)).append("_").append(igapMatcher.end(1)).append("_").append(linkType.igapLink.toString()).append("@");
             } else if (igapMatcher.group(2) != null) {
-                linkInfo += igapMatcher.start(2) + "_" + igapMatcher.end(2) + "_" + linkType.igapDeepLink.toString() + "@";
+                linkInfo.append(igapMatcher.start(2)).append("_").append(igapMatcher.end(2)).append("_").append(linkType.igapDeepLink.toString()).append("@");
             } else if (igapMatcher.group(3) != null) {
-                linkInfo += igapMatcher.start(3) + "_" + igapMatcher.end(3) + "_" + linkType.webLink.toString() + "@";
+                linkInfo.append(igapMatcher.start(3)).append("_").append(igapMatcher.end(3)).append("_").append(linkType.webLink.toString()).append("@");
             } else if (igapMatcher.group(4) != null) {
-                linkInfo += igapMatcher.start(4) + "_" + igapMatcher.end(4) + "_" + linkType.bot.toString() + "@";
+                linkInfo.append(igapMatcher.start(4)).append("_").append(igapMatcher.end(4)).append("_").append(linkType.bot.toString()).append("@");
             } else if (igapMatcher.group(5) != null) {
-                linkInfo += igapMatcher.start(5) + "_" + igapMatcher.end(5) + "_" + linkType.igapResolve.toString() + "@";
+                linkInfo.append(igapMatcher.start(5)).append("_").append(igapMatcher.end(5)).append("_").append(linkType.igapResolve.toString()).append("@");
             } else if (igapMatcher.group(6) != null) {
-                linkInfo += igapMatcher.start(6) + "_" + igapMatcher.end(6) + "_" + linkType.digitLink.toString() + "@";
+                linkInfo.append(igapMatcher.start(6)).append("_").append(igapMatcher.end(6)).append("_").append(linkType.digitLink.toString()).append("@");
+            } else if (igapMatcher.group(7) != null) {
+                linkInfo.append(igapMatcher.start(7)).append("_").append(igapMatcher.end(7)).append("_").append(linkType.atSighn.toString()).append("@");
+            } else if (igapMatcher.group(8) != null) {
+                linkInfo.append(igapMatcher.start(8)).append("_").append(igapMatcher.end(8)).append("_").append(linkType.hash.toString()).append("@");
             }
         }
-        /*String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
 
-        int count = 0;
-
-        for (int i = 0; i < list.length; i++) {
-
-            String str = list[i];
-
-            if (isIgapLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "@";
-            } else if (str.contains(igapResolve)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "@";
-            } else if (isBotLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.bot.toString() + "@";
-            } else if (isTextLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "@";
-            } else if (isDigitLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.digitLink.toString() + "@";
-            } else if (isIgapDeepLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapDeepLink.toString() + "@";
-            }
-            count += str.length() + 1;
-        }*/
-
-        return linkInfo;
+        return linkInfo.toString();
     }
 
     private static boolean isDigitLink(String text) {
