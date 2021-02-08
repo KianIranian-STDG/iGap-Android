@@ -1,5 +1,6 @@
 package net.iGap.controllers;
 
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.upload.UploadManager;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.downloader.Downloader;

@@ -37,6 +37,7 @@ import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.AppUtils;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
@@ -210,6 +211,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      *                           that forwarded to another chats
      */
     public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long forwardedMessageId) {
+
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
             if (messageInfo.messageObject != null) {

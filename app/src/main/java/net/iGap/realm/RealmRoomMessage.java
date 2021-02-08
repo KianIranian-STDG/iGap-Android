@@ -775,6 +775,7 @@ public class RealmRoomMessage extends RealmObject {
         timeMessage.setUpdateTime(time);
         timeMessage.setMessage(message);
         timeMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        timeMessage.setStatus(ProtoGlobal.RoomMessageStatus.DELIVERED.toString());
         return timeMessage;
     }
 

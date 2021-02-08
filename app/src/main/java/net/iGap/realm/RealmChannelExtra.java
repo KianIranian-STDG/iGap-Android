@@ -69,19 +69,6 @@ public class RealmChannelExtra extends RealmObject {
         realmChannelExtra.setViewsLabel("1");
     }
 
-    public static void setVote(final long messageId, final ProtoGlobal.RoomMessageReaction messageReaction, final String counterLabel) {
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo("messageId", messageId).findFirst();
-            if (realmChannelExtra != null) {
-                if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                    realmChannelExtra.setThumbsUp(counterLabel);
-                } else {
-                    realmChannelExtra.setThumbsDown(counterLabel);
-                }
-            }
-        });
-    }
-
     public static void updateMessageStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsArrayList) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {

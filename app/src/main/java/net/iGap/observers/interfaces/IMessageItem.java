@@ -47,4 +47,7 @@ public interface IMessageItem {
     void onOpenLinkDialog(String url);
 
     void onActiveGiftStickerClick(StructIGSticker structIGSticker, int mode, MessageObject structMessage);
+
+    void onVoteClick(MessageObject messageObject, int reactionValue);
+
 }

@@ -15,12 +15,14 @@ import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT_VALUE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP_VALUE;
@@ -446,4 +448,54 @@ public class MessageController extends BaseController implements EventListener {
         getMessageDataStorage().processDeleteMessage(roomId, messageId, deleteVersion, update);
     }
 
+    public void channelAddMessageVote(MessageObject messageObject, int reaction) {
+
+        final IG_RPC.Channel_Add_Message_Reaction req = new IG_RPC.Channel_Add_Message_Reaction();
+        long messageId = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.id : messageObject.id;
+
+        req.messageId = messageId;
+        req.roomId = messageObject.roomId;
+        req.reaction = ProtoGlobal.RoomMessageReaction.forNumber(reaction);
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_Add_Message_Reaction res = (IG_RPC.Res_Channel_Add_Message_Reaction) response;
+                getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
+                getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction, messageObject.forwardedMessage.id);
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
+    public void ChannelGetMessageVote(MessageObject messageObject, long roomId, HashSet<Long> messageIds) {
+
+        long messageId;
+
+        if (messageObject.forwardedMessage != null) {
+            messageId = messageObject.forwardedMessage.id;
+            if (messageId < 0)
+                messageId = messageId * (-1);
+        } else {
+            messageId = messageObject.id;
+        }
+
+        messageIds.add(messageId);
+
+        final IG_RPC.Channel_Get_Message_Reaction req = new IG_RPC.Channel_Get_Message_Reaction();
+        req.roomId = roomId;
+        req.messageIds = messageIds;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_Get_Message_Reaction res = (IG_RPC.Res_Channel_Get_Message_Reaction) response;
+                RealmChannelExtra.updateMessageStats(res.states);
+                getEventManager().postEvent(EventManager.CHANNEL_GET_VOTE, res.states);
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
 }

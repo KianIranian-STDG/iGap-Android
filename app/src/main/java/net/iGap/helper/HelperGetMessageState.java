@@ -13,95 +13,65 @@ package net.iGap.helper;
 import android.os.Handler;
 
 import net.iGap.Config;
-import net.iGap.request.RequestChannelGetMessagesStats;
+import net.iGap.controllers.MessageController;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.structs.MessageObject;
 
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * helper for manage count of message and latest time
- * that scrolled chat for get message states from server
- */
 public class HelperGetMessageState {
 
-    private static ConcurrentHashMap<Long, HashSet<Long>> getViewsMessage = new ConcurrentHashMap<>();
-    private static HashSet<Long> getViews = new HashSet<>();
+    private static ConcurrentHashMap<Long, HashSet<Long>> roomIds = new ConcurrentHashMap<>();
+    private static HashSet<Long> messageIds = new HashSet<>();
     private static Thread thread;
-    private static final Object mutex = new Object();
+    private static final Object object = new Object();
 
-    /**
-     * check limit and timeout for sending getMessageState
-     *
-     * @param roomId    currentRoomId
-     * @param messageId messageId that show in view
-     */
+    public static void getMessageState(MessageObject messageObject, long roomId, long messageId) {
 
-    public static void getMessageState(long roomId, long messageId) {
-
-        synchronized (mutex) {
+        synchronized (object) {
             if (thread == null) {
-                thread = new Thread(new RepeatingThread());
+                thread = new Thread(() -> {
+                    final Handler handler = new Handler();
+                    sendMessageStateRequest(messageObject);
+                    handler.postDelayed(thread, Config.GET_MESSAGE_STATE_TIME_OUT);
+                });
                 thread.start();
             }
         }
 
-        if (getViews.contains(messageId)) {
+        if (messageIds.contains(messageId)) {
             return;
         }
 
-        getViews.add(messageId);
+        messageIds.add(messageId);
 
-        synchronized (mutex) {
-            if (!getViewsMessage.containsKey(roomId)) {
+        synchronized (object) {
+            if (!roomIds.containsKey(roomId)) {
                 HashSet<Long> messageIdsForRoom = new HashSet<>();
-                getViewsMessage.put(roomId, messageIdsForRoom);
+                roomIds.put(roomId, messageIdsForRoom);
             }
 
-            HashSet<Long> messageIdsForRoom = getViewsMessage.get(roomId);
-            //            if (messageIdsForRoom.size() > 50) {
-            //                sendMessageStateRequest();
-            //            }
+            HashSet<Long> messageIdsForRoom = roomIds.get(roomId);
             messageIdsForRoom.add(messageId);
         }
     }
 
-    /**
-     * send request for get message state for each room
-     */
-    private static void sendMessageStateRequest() {
-        synchronized (mutex) {
-            for (long roomId : getViewsMessage.keySet()) {
-                HashSet<Long> messageIds = getViewsMessage.get(roomId);
-                getViewsMessage.remove(roomId);
+    private static void sendMessageStateRequest(MessageObject messageObject) {
+        synchronized (object) {
+            for (long roomId : roomIds.keySet()) {
+                HashSet<Long> messageIds = roomIds.get(roomId);
+                roomIds.remove(roomId);
                 if (messageIds.size() > 0) {
-                    new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
+                    MessageController.getInstance(AccountManager.selectedAccount).ChannelGetMessageVote(messageObject,roomId, messageIds);
                 }
             }
         }
     }
 
-    /**
-     * clear getViews(ArrayList) .reason : when getViews contain a messageId
-     * not allow that messageId send for getState. client clear this
-     * array in enter to chat for allow message to get new state
-     */
     public static void clearMessageViews() {
-        getViews.clear();
+        messageIds.clear();
     }
 
-    private static class RepeatingThread implements Runnable {
-
-        private final Handler mHandler = new Handler();
-
-        RepeatingThread() {
-
-        }
-
-        @Override
-        public void run() {
-            sendMessageStateRequest();
-            mHandler.postDelayed(this, Config.GET_MESSAGE_STATE_TIME_OUT);
-        }
-    }
 
 }

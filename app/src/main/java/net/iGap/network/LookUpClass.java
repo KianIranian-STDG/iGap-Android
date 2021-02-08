@@ -59,6 +59,10 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Group_Delete_Message.actionId, IG_RPC.Res_Group_Delete_Message.class);
         classes.put(IG_RPC.Res_Chat_Clear_History.actionId, IG_RPC.Res_Chat_Clear_History.class);
         classes.put(IG_RPC.Res_Group_Clear_History.actionId, IG_RPC.Res_Group_Clear_History.class);
+        classes.put(IG_RPC.Res_Channel_Add_Message_Reaction.actionId, IG_RPC.Res_Channel_Add_Message_Reaction.class);
+        classes.put(IG_RPC.Res_Channel_Get_Message_Reaction.actionId, IG_RPC.Res_Channel_Get_Message_Reaction.class);
+        classes.put(IG_RPC.Res_Channel_Update_Reaction_Status.actionId, IG_RPC.Res_Channel_Update_Reaction_Status.class);
+        classes.put(IG_RPC.Res_Channel_Update_Signature.actionId, IG_RPC.Res_Channel_Update_Signature.class);
         classes.put(IG_RPC.Res_Chat_Update_Status.actionId, IG_RPC.Res_Chat_Update_Status.class);
         classes.put(IG_RPC.Res_Group_Update_Status.actionId, IG_RPC.Res_Group_Update_Status.class);
     }
@@ -252,8 +256,6 @@ public class LookUpClass {
         lookupMap.put(30420, "ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse");
         lookupMap.put(30421, "ProtoChannelRevokeLink.ChannelRevokeLinkResponse");
         lookupMap.put(30422, "ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse");
-        lookupMap.put(30423, "ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse");
-        lookupMap.put(30424, "ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse");
 //        lookupMap.put(30425, "ProtoChannelEditMessage.ChannelEditMessageResponse");
         lookupMap.put(30426, "ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse");
 //        lookupMap.put(30427, "ProtoChannelPinMessage.ChannelPinMessageResponse");
