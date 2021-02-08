@@ -1235,7 +1235,7 @@ public class RealmRoomMessage extends RealmObject {
         this.attachment = attachment;
     }
 
-    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration, LocalFileType type) {
+    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration, String token, LocalFileType type) {
         if (path == null) {
             return;
         }
@@ -1255,6 +1255,7 @@ public class RealmRoomMessage extends RealmObject {
                 realmAttachment.setHeight(height);
                 realmAttachment.setName(name);
                 realmAttachment.setDuration(duration);
+                realmAttachment.setToken(token);
                 attachment = realmAttachment;
             } else {
                 if (attachment.isValid()) {

@@ -10,6 +10,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
+import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -23,6 +24,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 
 import java.util.concurrent.CountDownLatch;
@@ -754,6 +756,12 @@ public class MessageDataStorage extends BaseController {
                     forwardedMessage[0].setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
                     forwardedMessage[0].setMessageType(ProtoGlobal.RoomMessageType.forNumber(sourceMessage.messageType));
                     forwardedMessage[0].setMessage(sourceMessage.message);
+                    if (sourceMessage.attachment != null) {
+                        AttachmentObject attObject = sourceMessage.attachment;
+                        LocalFileType type = attObject.filePath == null ? LocalFileType.THUMBNAIL : LocalFileType.FILE;
+                        String filePath = attObject.filePath != null ? attObject.filePath : attObject.thumbnailPath;
+                        forwardedMessage[0].setAttachment(newMessageId, filePath, attObject.width, attObject.height, attObject.size, attObject.name, attObject.duration, attObject.token, type);
+                    }
                     forwardedMessage[0].setUserId(AccountManager.getInstance().getCurrentUser().getId());
                     database.copyToRealmOrUpdate(forwardedMessage[0]);
                     copyMessage = database.copyFromRealm(forwardedMessage[0]);
@@ -769,7 +777,6 @@ public class MessageDataStorage extends BaseController {
                             forwardedMessage[0].setForwardMessage(roomMessage);
                             forwardedMessage[0].setHasMessageLink(roomMessage.getHasMessageLink());
                         }
-
                         forwardedMessage[0].setCreateTime(TimeUtils.currentLocalTime());
                         forwardedMessage[0].setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                         forwardedMessage[0].setRoomId(destinationRoomId);
