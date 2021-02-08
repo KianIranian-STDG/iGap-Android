@@ -41,6 +41,7 @@ import net.iGap.structs.MessageObject;
 
 import org.parceler.Parcel;
 
+import java.io.File;
 import java.util.Calendar;
 
 import io.realm.Realm;
@@ -880,6 +881,7 @@ public class RealmRoomMessage extends RealmObject {
         final long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
         final long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filepath) / 1000;
+        File voiceFile = new File(filepath);
         RealmRoomMessage roomMessage = new RealmRoomMessage();
         roomMessage.setMessageId(messageId);
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
@@ -892,7 +894,7 @@ public class RealmRoomMessage extends RealmObject {
         realmAttachment.setWidth(0);
         realmAttachment.setSize(0);
         realmAttachment.setHeight(0);
-        realmAttachment.setName(null);
+        realmAttachment.setName(voiceFile.getName());
         realmAttachment.setDuration(duration);
 
 
