@@ -30,11 +30,9 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
 
 import java.util.List;
 
@@ -82,22 +80,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         }
         holder.tempText = holder.cslf_txt_file_size.getText().toString();
         setTextIfNeeded(holder.messageView);
-        RealmRoomMessage roomMessage = DbManager.getInstance().doRealmTask(realm -> {
-            return RealmRoomMessage.getFinalMessage(realm.where(RealmRoomMessage.class).equalTo("messageId", messageObject.id).findFirst());
-        });
 
-        if (roomMessage != null) {
+        if (attachment != null) {
             holder.thumbnail.setVisibility(View.VISIBLE);
-            if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".pdf")) {
+            if (attachment.name.toLowerCase().endsWith(".pdf")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.pdf_icon));
                 holder.fileType.setText("PDF");
-            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".txt")) {
+            } else if (attachment.name.toLowerCase().endsWith(".txt")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.txt_icon));
                 holder.fileType.setText("TXT");
-            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".exe")) {
+            } else if (attachment.name.toLowerCase().endsWith(".exe")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.exe_icon));
                 holder.fileType.setText("EXE");
-            } else if (roomMessage.getAttachment().getName().toLowerCase().endsWith(".doc") || roomMessage.getAttachment().getName().toLowerCase().endsWith(".docs") || roomMessage.getAttachment().getName().toLowerCase().endsWith(".docx")) {
+            } else if (attachment.name.toLowerCase().endsWith(".doc") || attachment.name.toLowerCase().endsWith(".docs") || attachment.name.toLowerCase().endsWith(".docx")) {
                 holder.thumbnail.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, R.drawable.docx_icon));
                 holder.fileType.setText("DOC");
             } else {
