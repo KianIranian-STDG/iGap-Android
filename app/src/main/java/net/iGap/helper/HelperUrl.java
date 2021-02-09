@@ -96,14 +96,12 @@ public class HelperUrl {
     private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/.*)";
     private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
     private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)";
-    private static final String BOT_LINK = "(^\\/\\w+)";
+    private static final String BOT_LINK = "(\\/\\w+)";
     private static final String IGAP_RESOLVE = "(igap://resolve?)";
     private static final String IGAP_DIGIT_LINK = "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
     private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_]+\\b)";
     private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
-    //TODO: change this class. dependency is in all line of code
-    public static int LinkColor = Color.BLUE;
-    public static int LinkColorDark = Color.CYAN;
+
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
     public static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
