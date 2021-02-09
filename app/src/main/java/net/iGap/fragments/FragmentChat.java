@@ -207,6 +207,7 @@ import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
@@ -5380,7 +5381,8 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(() -> {
                                 DbManager.getInstance().doRealmTransaction(realm1 -> {
                                     for (ProtoGlobal.RoomMessage roomMessage : messageList) {
-                                        onReplyClick(MessageObject.create(roomMessage, false, true));
+                                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(realm1, mRoomId, roomMessage, new StructMessageOption().setGap());
+                                        onReplyClick(MessageObject.create(realmRoomMessage, false, true, false));
                                     }
                                 });
 
@@ -7591,6 +7593,7 @@ public class FragmentChat extends BaseFragment
             replyMessage.setShowTime(replyLayoutObject.needToShow);
             replyMessage.setRoomId(replyLayoutObject.roomId);
             replyMessage.setPreviousMessageId(replyLayoutObject.previousMessageId);
+            replyMessage.setFutureMessageId(replyLayoutObject.futureMessageId);
             replyMessage.setMessageId(replyLayoutObject.id);
             replyMessage.setEdited(replyLayoutObject.edited);
             replyMessage.setDeleted(replyLayoutObject.deleted);
@@ -7598,6 +7601,19 @@ public class FragmentChat extends BaseFragment
             replyMessage.setMessage(replyLayoutObject.message);
             replyMessage.setMessageType(ProtoGlobal.RoomMessageType.forNumber(replyLayoutObject.messageType));
             replyMessage.setStatus(ProtoGlobal.RoomMessageStatus.forNumber(replyLayoutObject.status).toString());
+
+            if (replyLayoutObject.getAttachment() != null) {
+                AttachmentObject attachmentObject = replyLayoutObject.getAttachment();
+                RealmAttachment replyToAttachment = new RealmAttachment();
+                replyToAttachment.setId(replyLayoutObject.id);
+                replyToAttachment.setLocalFilePath(attachmentObject.filePath);
+                replyToAttachment.setWidth(attachmentObject.width);
+                replyToAttachment.setHeight(attachmentObject.height);
+                replyToAttachment.setSize(attachmentObject.size);
+                replyToAttachment.setName(attachmentObject.name);
+                replyToAttachment.setDuration(attachmentObject.duration);
+                replyMessage.setAttachment(replyToAttachment);
+            }
 
             roomMessage.setReplyTo(replyMessage); // TODO: 1/13/21 MESSAGE_REFACTOR
         }
