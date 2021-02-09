@@ -46,6 +46,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 
@@ -514,7 +515,7 @@ public class FileUtils {
      * @param fileOrDirectory main iGap directory
      */
     public static void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory()) {
+        if (fileOrDirectory.isDirectory() && fileOrDirectory.listFiles() != null) {
             for (File child : fileOrDirectory.listFiles()) {
                 deleteRecursive(child);
             }
@@ -692,8 +693,9 @@ public class FileUtils {
     }
 
     private void clearFile(@NotNull File fileTmp) {
-        for (File file : fileTmp.listFiles()) {
-            if (!file.isDirectory()) file.delete();
-        }
+        if (fileTmp.listFiles() != null)
+            for (File file : fileTmp.listFiles()) {
+                if (!file.isDirectory()) file.delete();
+            }
     }
 }
