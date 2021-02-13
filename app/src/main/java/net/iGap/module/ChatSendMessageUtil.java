@@ -152,9 +152,9 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         if (message.getAttachment() != null && message.getAttachment().token != null && !message.getAttachment().token.isEmpty()) {
             builder.attachment(message.getAttachment().token);
         }
-        /*if (message.contact != null) {
-            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString()); // TODO: 1/5/21 MESSAGE_REFACTOR
-        }*/
+        if (message.contact != null) {
+            builder.contact(message.contact.firstName, message.contact.lastName, message.contact.phones.get(0)); // TODO: 1/5/21 MESSAGE_REFACTOR
+        }
         if (message.location != null) {
             builder.location(message.location.lat, message.location.lan);
         }
