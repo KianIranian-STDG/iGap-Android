@@ -198,8 +198,8 @@ public class LookUpClass {
         lookupMap.put(30201, "ProtoChatSendMessage.ChatSendMessageResponse");
         //lookupMap.put(30202, "ProtoChatUpdateStatus.ChatUpdateStatusResponse");
 //        lookupMap.put(30203, "ProtoChatEditMessage.ChatEditMessageResponse");
-        lookupMap.put(30204, "ProtoChatDeleteMessage.ChatDeleteMessageResponse");
-        lookupMap.put(30205, "ProtoChatClearMessage.ChatClearMessageResponse");
+//        lookupMap.put(30204, "ProtoChatDeleteMessage.ChatDeleteMessageResponse");
+//        lookupMap.put(30205, "ProtoChatClearMessage.ChatClearMessageResponse");
         lookupMap.put(30206, "ProtoChatDelete.ChatDeleteResponse");
         lookupMap.put(30207, "ProtoChatUpdateDraft.ChatUpdateDraftResponse");
         lookupMap.put(30208, "ProtoChatGetDraft.ChatGetDraftResponse");
@@ -210,14 +210,14 @@ public class LookUpClass {
         lookupMap.put(30301, "ProtoGroupAddMember.GroupAddMemberResponse");
         lookupMap.put(30302, "ProtoGroupAddAdmin.GroupAddAdminResponse");
         lookupMap.put(30303, "ProtoGroupAddModerator.GroupAddModeratorResponse");
-        lookupMap.put(30304, "ProtoGroupClearMessage.GroupClearMessageResponse");
+//        lookupMap.put(30304, "ProtoGroupClearMessage.GroupClearMessageResponse");
         lookupMap.put(30305, "ProtoGroupEdit.GroupEditResponse");
         lookupMap.put(30306, "ProtoGroupKickAdmin.GroupKickAdminResponse");
         lookupMap.put(30307, "ProtoGroupKickMember.GroupKickMemberResponse");
         lookupMap.put(30308, "ProtoGroupKickModerator.GroupKickModeratorResponse");
         lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
         lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
-       // lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
+        // lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
         lookupMap.put(30312, "ProtoGroupAvatarAdd.GroupAvatarAddResponse");
         lookupMap.put(30313, "ProtoGroupAvatarDelete.GroupAvatarDeleteResponse");
         lookupMap.put(30314, "ProtoGroupAvatarGetList.GroupAvatarGetListResponse");
@@ -226,7 +226,7 @@ public class LookUpClass {
         lookupMap.put(30317, "ProtoGroupGetMemberList.GroupGetMemberListResponse");
         lookupMap.put(30318, "ProtoGroupDelete.GroupDeleteResponse");
         lookupMap.put(30319, "ProtoGroupSetAction.GroupSetActionResponse");
-        lookupMap.put(30320, "ProtoGroupDeleteMessage.GroupDeleteMessageResponse");
+//        lookupMap.put(30320, "ProtoGroupDeleteMessage.GroupDeleteMessageResponse");
         lookupMap.put(30321, "ProtoGroupCheckUsername.GroupCheckUsernameResponse");
         lookupMap.put(30322, "ProtoGroupUpdateUsername.GroupUpdateUsernameResponse");
         lookupMap.put(30323, "ProtoGroupRemoveUsername.GroupRemoveUsernameResponse");
@@ -245,7 +245,7 @@ public class LookUpClass {
         lookupMap.put(30408, "ProtoChannelKickModerator.ChannelKickModeratorResponse");
         lookupMap.put(30409, "ProtoChannelLeft.ChannelLeftResponse");
         lookupMap.put(30410, "ProtoChannelSendMessage.ChannelSendMessageResponse");
-        lookupMap.put(30411, "ProtoChannelDeleteMessage.ChannelDeleteMessageResponse");
+//        lookupMap.put(30411, "ProtoChannelDeleteMessage.ChannelDeleteMessageResponse");
         lookupMap.put(30413, "ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse");
         lookupMap.put(30414, "ProtoChannelAvatarGetList.ChannelAvatarGetListResponse");
         lookupMap.put(30415, "ProtoChannelUpdateDraft.ChannelUpdateDraftResponse");
@@ -255,9 +255,9 @@ public class LookUpClass {
         lookupMap.put(30419, "ProtoChannelUpdateUsername.ChannelUpdateUsernameResponse");
         lookupMap.put(30420, "ProtoChannelRemoveUsername.ChannelRemoveUsernameResponse");
         lookupMap.put(30421, "ProtoChannelRevokeLink.ChannelRevokeLinkResponse");
-        lookupMap.put(30422, "ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse");
+//        lookupMap.put(30422, "ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse");
 //        lookupMap.put(30425, "ProtoChannelEditMessage.ChannelEditMessageResponse");
-        lookupMap.put(30426, "ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse");
+//        lookupMap.put(30426, "ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse");
 //        lookupMap.put(30427, "ProtoChannelPinMessage.ChannelPinMessageResponse");
 
         // Info 5xx , 305xx
