@@ -8269,6 +8269,7 @@ public class FragmentChat extends BaseFragment
                             } else {
                                 int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
                                 LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                                recyclerView.removeOnScrollListener(scrollListener);
                                 linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
                                 savedScrollMessageId = 0;
                             }
@@ -8300,8 +8301,8 @@ public class FragmentChat extends BaseFragment
                             }
                         }
                     };
-
-                    recyclerView.addOnScrollListener(scrollListener);
+                    // TODO: 2/14/21 Should write a better logic to loadMessage
+                    G.handler.postDelayed(() -> recyclerView.addOnScrollListener(scrollListener), 200); // it's a bad idea to fix it but for now we have to do this.
 
                     if (unreadCount > 0) {
                         recyclerView.scrollToPosition(0);
