@@ -271,6 +271,7 @@ public class RegisterRepository {
         builder.setPhoneNumber(Long.parseLong(this.phoneNumber));
         builder.setPreferenceMethodValue(ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS.getNumber());
         builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
+        builder.setAppId(BuildConfig.APP_ID);
         RequestWrapper requestWrapper = new RequestWrapper(100, builder, new OnUserRegistration() {
             @Override
             public void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported) {

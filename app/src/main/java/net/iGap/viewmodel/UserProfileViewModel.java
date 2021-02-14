@@ -534,7 +534,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onInviteFriendsClick() {
-        shareInviteLink.setValue("Hey Join iGap : https://www.igap.net I'm waiting for you!");
+        shareInviteLink.setValue(BuildConfig.INVITE_FRIEND_LINK);
     }
 
     public void onQRCodeScannerClick() {
@@ -595,7 +595,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onFAQClick() {
-        goToFAQPage.setValue("https://blog.igap.net/fa/%d9%be%d8%b1%d8%b3%d8%b4%e2%80%8c%d9%87%d8%a7%db%8c-%d9%85%d8%aa%d8%af%d8%a7%d9%88%d9%84/");
+        goToFAQPage.setValue(BuildConfig.FAQ_LINK);
     }
 
     public void onAvatarClick() {

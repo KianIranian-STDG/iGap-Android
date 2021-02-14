@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import net.iGap.BuildConfig;
 import net.iGap.observers.interfaces.OnUserGetDeleteToken;
 import net.iGap.proto.ProtoUserGetDeleteToken;
 
@@ -18,6 +19,7 @@ public class RequestUserGetDeleteToken {
     public void userGetDeleteToken(OnUserGetDeleteToken onUserGetDeleteToken) {
 
         ProtoUserGetDeleteToken.UserGetDeleteToken.Builder builder = ProtoUserGetDeleteToken.UserGetDeleteToken.newBuilder();
+        builder.setAppId(BuildConfig.APP_ID);
 
         RequestWrapper requestWrapper = new RequestWrapper(118, builder, onUserGetDeleteToken);
         try {

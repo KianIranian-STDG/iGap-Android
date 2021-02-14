@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -805,7 +806,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                     .content(R.string.deprecated)
                                     .contentGravity(GravityEnum.CENTER)
                                     .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
-                                String url = "http://d.igap.net/update";
+                                String url = BuildConfig.UPDATE_LINK;
                                 Intent i = new Intent(Intent.ACTION_VIEW);
                                 i.setData(Uri.parse(url));
                                 startActivity(i);
@@ -840,7 +841,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
                                     try {
-                                        String url = "http://d.igap.net/update";
+                                        String url =BuildConfig.UPDATE_LINK;
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         startActivity(i);
