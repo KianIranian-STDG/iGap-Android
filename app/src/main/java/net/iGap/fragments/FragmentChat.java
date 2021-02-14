@@ -721,7 +721,7 @@ public class FragmentChat extends BaseFragment
          * init chat box edit text and send item because we need change this color in dark mode!
          * */
 
-        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
+        edtChat  = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         edtChat.setGravity(Gravity.CENTER_VERTICAL);
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
@@ -6301,7 +6301,7 @@ public class FragmentChat extends BaseFragment
             layoutAttachBottom.clearAnimation();
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
-            layoutAttachBottom.setVisibility(View.GONE);
+           // layoutAttachBottom.setVisibility(View.GONE);
         }
 
         if (visibility && isAttachVisibilityAnimInProcess) {
