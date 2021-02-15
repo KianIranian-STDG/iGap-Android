@@ -10,13 +10,14 @@
 
 package net.iGap.request;
 
+import net.iGap.BuildConfig;
 import net.iGap.proto.ProtoInfoUpdate;
 
 public class RequestInfoUpdate {
 
     public void infoUpdate(int appBuildVersion, updateInfoCallback callback) {
         ProtoInfoUpdate.InfoUpdate.Builder builder = ProtoInfoUpdate.InfoUpdate.newBuilder();
-        builder.setAppId(2);
+        builder.setAppId(BuildConfig.APP_ID);
         builder.setAppBuildVersion(appBuildVersion);
 
         RequestWrapper requestWrapper = new RequestWrapper(505, builder, callback);
