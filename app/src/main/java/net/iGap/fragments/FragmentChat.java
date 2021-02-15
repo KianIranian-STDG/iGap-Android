@@ -198,6 +198,7 @@ import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Status;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -4965,19 +4966,19 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             // TODO: 1/6/21 MESSAGE_REFACTOR
-//            DownloadObject fileObject = DownloadObject.createForRoomMessage(message.realmRoomMessage);
-//
-//            if (fileObject != null) {
-//                getDownloader().download(fileObject, arg -> {
-//                    if (arg.data != null && arg.data.getProgress() == 100) {
-//                        if (canUpdateAfterDownload) {
-//                            G.handler.post(() -> {
-//                                getStoragePermission(_path, name);
-//                            });
-//                        }
-//                    }
-//                });
-//            }
+            DownloadObject fileObject = DownloadObject.createForRoomMessage(messageObject);
+
+            if (fileObject != null) {
+                getDownloader().download(fileObject, arg -> {
+                    if (arg.data != null && arg.data.getProgress() == 100) {
+                        if (canUpdateAfterDownload) {
+                            G.handler.post(() -> {
+                                getStoragePermission(_path, name);
+                            });
+                        }
+                    }
+                });
+            }
 
             onDownloadAllEqualCashId(cacheId, messageObject.id + "");
             mAdapter.notifyItemChanged(pos);
@@ -5054,21 +5055,21 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             // TODO: 1/6/21 MESSAGE_REFACTOR
-            // DownloadObject fileObject = DownloadObject.createForRoomMessage(message.realmRoomMessage);
-//
-//            if (fileObject != null) {
-//                getDownloader().download(fileObject, selector, arg -> {
-//                    if (canUpdateAfterDownload) {
-//                        G.handler.post(() -> {
-//                            if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
-//                                if (arg.data != null && arg.data.getProgress() == 100) {
-//                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
-//                                }
-//                            }
-//                        });
-//                    }
-//                });
-//            }
+             DownloadObject fileObject = DownloadObject.createForRoomMessage(message);
+
+            if (fileObject != null) {
+                getDownloader().download(fileObject, selector, arg -> {
+                    if (canUpdateAfterDownload) {
+                        G.handler.post(() -> {
+                            if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
+                                if (arg.data != null && arg.data.getProgress() == 100) {
+                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
             onDownloadAllEqualCashId(cacheId, message.id + "");
             mAdapter.notifyItemChanged(pos);
         }

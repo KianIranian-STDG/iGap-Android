@@ -6,6 +6,7 @@ import net.iGap.realm.RealmRoomMessageLocation;
 public class LocationObject {
     public double lat;
     public double lan;
+    public String imagePath;
 
     public static LocationObject create(ProtoGlobal.RoomMessageLocation location) {
         if (location == null) {
@@ -27,6 +28,7 @@ public class LocationObject {
 
         locationObject.lan = realmLocation.getLocationLong();
         locationObject.lat = realmLocation.getLocationLat();
+        locationObject.imagePath = realmLocation.getImagePath();
 
         return locationObject;
 
