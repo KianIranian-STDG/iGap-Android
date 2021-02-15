@@ -98,7 +98,7 @@ public class HelperUrl {
     private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)";
     private static final String BOT_LINK = "(\\/\\w+)";
     private static final String IGAP_RESOLVE = "(igap://resolve?)";
-    private static final String IGAP_DIGIT_LINK = "(^\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
+    private static final String IGAP_DIGIT_LINK = "(\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
     private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_]+\\b)";
     private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
 

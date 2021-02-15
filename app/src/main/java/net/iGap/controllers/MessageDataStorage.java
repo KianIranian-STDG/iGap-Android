@@ -24,9 +24,11 @@ import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
+import net.iGap.structs.RoomContactObject;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -261,6 +263,7 @@ public class MessageDataStorage extends BaseController {
         });
 
     }
+
     private void putLastMessageInternal(final long roomId, RealmRoomMessage lastMessage) {
         try {
             database.beginTransaction();
@@ -785,6 +788,17 @@ public class MessageDataStorage extends BaseController {
                         LocalFileType type = attObject.filePath == null ? LocalFileType.THUMBNAIL : LocalFileType.FILE;
                         String filePath = attObject.filePath != null ? attObject.filePath : attObject.thumbnailPath;
                         forwardedMessage[0].setAttachment(newMessageId, filePath, attObject.width, attObject.height, attObject.size, attObject.name, attObject.duration, attObject.token, type);
+                    }
+                    if (sourceMessage.contact != null) {
+                        RoomContactObject contactObject = sourceMessage.contact;
+                        ProtoGlobal.RoomMessageContact.Builder builder = ProtoGlobal.RoomMessageContact.newBuilder();
+                        builder.setPhone(0, contactObject.phones.get(0));
+                        builder.setFirstName(contactObject.firstName);
+                        builder.setLastName(contactObject.lastName);
+                        builder.setEmail(0, contactObject.emails.get(0));
+
+                        RealmRoomMessageContact roomMessageContact = RealmRoomMessageContact.put(database, builder.build());
+                        forwardedMessage[0].setRoomMessageContact(roomMessageContact);
                     }
                     forwardedMessage[0].setUserId(AccountManager.getInstance().getCurrentUser().getId());
                     database.copyToRealmOrUpdate(forwardedMessage[0]);

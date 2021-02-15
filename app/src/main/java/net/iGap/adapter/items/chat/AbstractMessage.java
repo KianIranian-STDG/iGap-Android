@@ -505,7 +505,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         // TODO: 12/29/20 MESSAGE_REFACTOR
-//        structMessage.addAttachmentChangeListener(this, getIdentifier(), this, holder, mMessage.getForwardMessage() != null ? mMessage.getForwardMessage().getMessageType() : mMessage.getMessageType());
         mHolder.getItemContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -779,18 +778,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (!(holder instanceof StickerItem.ViewHolder /*|| mHolder instanceof AnimatedStickerItem.ViewHolder*/)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showSeenContainer(holder);
-            } else {
-                if (messageObject.forwardedMessage != null) {
-                    if (messageObject.forwardedMessage.roomId > 0) {// TODO: 12/29/20 MESSAGE_REFACTOR
-//                        if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-//                            showVote(holder);
-//
-//                            if (mMessage.isSenderMe()) {
-//                                mHolder.getCslm_view_left_dis().setVisibility(View.VISIBLE);
-//                            }
-//                        }
-                    }
-                }
             }
         }
 
