@@ -277,7 +277,7 @@ public final class AppUtils {
                     final String savedPath = AppUtils.saveMapToFile(bitmap, message.location.lat, message.location.lan);
                     DbManager.getInstance().doRealmTask(realm -> {
                         if (message.location != null) {
-//                            message.location.setImagePath(savedPath); // TODO: 1/2/21  MESSAGE_REFACTOR
+                            message.location.imagePath = savedPath; // TODO: 1/2/21  MESSAGE_REFACTOR
                         }
                     });
                 }
