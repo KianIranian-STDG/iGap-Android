@@ -25,8 +25,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         multiDexEnabled true
-        versionCode 229
-        versionName "2.2.0.alpha6"
+        versionCode 232
+        versionName "2.2.0.alpha9"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
