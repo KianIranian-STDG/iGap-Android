@@ -13,6 +13,7 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperMobileBank;
 import net.iGap.helper.HelperNumerical;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
@@ -181,6 +182,20 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             pay2BtnEnable.set(false);
             MobileDebit temp2 = (MobileDebit) debit.getData();
             payBill(temp2.getMidTerm().getBillID(), temp2.getMidTerm().getPayID(), temp2.getMidTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.MID_TERM_VALUE);
+        }
+        switch (info.getBillType()) {
+            case MOBILE:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_MOBILE_BILL_PAY);
+                break;
+            case PHONE:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_PHONE_BILL_PAY);
+                break;
+            case ELECTRICITY:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_ELECTRIC_BILL_PAY);
+                break;
+            case GAS:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_GAS_BILL_PAY);
+                break;
         }
     }
 

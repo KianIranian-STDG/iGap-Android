@@ -20,6 +20,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
@@ -98,7 +99,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
             dismiss();
         } else {
             if (getActivity() != null) {
-
+                HelperTracker.sendTracker(HelperTracker.TRACKER_ADD_NEW_ACCOUNT);
                 new AccountHelper().addAccount();
                 RaadApp.onCreate(getContext());
                 // WebSocketClient.connectNewAccount();
