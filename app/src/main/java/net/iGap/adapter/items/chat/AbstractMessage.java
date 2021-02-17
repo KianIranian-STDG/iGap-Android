@@ -382,8 +382,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.holder = holder;
 
         if (messageObject.forwardedMessage == null && messageObject.isSenderMe() && attachment != null && messageObject.status == MessageObject.STATUS_SENDING) {
-            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_PROGRESS, this);
-            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance(currentAccount).addObserver(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance(currentAccount).addObserver(EventManager.ON_UPLOAD_COMPRESS, this);
 
             if (!Uploader.getInstance().isCompressingOrUploading(messageObject.id + "")) {// TODO: 12/29/20 MESSAGE_REFACTOR
                 UploadObject fileObject = UploadObject.createForMessage(messageObject, type);
@@ -398,14 +398,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 onReceivedEvent(EventManager.ON_UPLOAD_PROGRESS, AccountManager.selectedAccount, messageObject.id, progress);
             }
         } else {
-            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_UPLOAD_PROGRESS, this);
-            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance(currentAccount).removeObserver(EventManager.ON_UPLOAD_PROGRESS, this);
+            EventManager.getInstance(currentAccount).removeObserver(EventManager.ON_UPLOAD_COMPRESS, this);
         }
 
         if (attachment != null) {
-            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_COMPRESS, this);
-            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_UPLOAD_COMPLETED, this);
-            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_FILE_DOWNLOAD_COMPLETED, this);
+            EventManager.getInstance(currentAccount).addObserver(EventManager.ON_UPLOAD_COMPRESS, this);
+            EventManager.getInstance(currentAccount).addObserver(EventManager.ON_UPLOAD_COMPLETED, this);
+            EventManager.getInstance(currentAccount).addObserver(EventManager.ON_FILE_DOWNLOAD_COMPLETED, this);
 
         }
 

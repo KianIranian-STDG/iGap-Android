@@ -256,9 +256,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().addObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().addObserver(EventManager.ROOM_LIST_CHANGED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -730,9 +730,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().removeObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
     }

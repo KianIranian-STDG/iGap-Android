@@ -726,13 +726,14 @@ public class FragmentChat extends BaseFragment
 
         edtChat.setListener(this::chatMotionEvent);
 
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_MESSAGE_DELETE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_EDIT_MESSAGE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_PINNED_MESSAGE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_UPDATE_STATUS, this);
+        getEventManager().addObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().addObserver(EventManager.ON_MESSAGE_DELETE, this);
+        getEventManager().addObserver(EventManager.ON_EDIT_MESSAGE, this);
+        getEventManager().addObserver(EventManager.ON_PINNED_MESSAGE, this);
+        getEventManager().addObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
+        getEventManager().addObserver(EventManager.CHAT_UPDATE_STATUS, this);
+
         if (twoPaneMode)
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
@@ -1224,15 +1225,18 @@ public class FragmentChat extends BaseFragment
         mAttachmentPopup = null;
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_MESSAGE_DELETE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_EDIT_MESSAGE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_PINNED_MESSAGE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.CHAT_UPDATE_STATUS, this);
+
+        getEventManager().removeObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().removeObserver(EventManager.ON_MESSAGE_DELETE, this);
+        getEventManager().removeObserver(EventManager.ON_EDIT_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.ON_PINNED_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.CHAT_UPDATE_STATUS, this);
+
         if (twoPaneMode)
-            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
+            getEventManager().removeObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
+
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {

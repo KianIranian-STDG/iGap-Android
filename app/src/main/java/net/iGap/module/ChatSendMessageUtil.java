@@ -347,10 +347,10 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
 
         if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_CHANGED, sticker.getGroupId()));
+            G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.STICKER_CHANGED, sticker.getGroupId()));
         } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_CHANGED, sticker.getGroupId()));
+            G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.STICKER_CHANGED, sticker.getGroupId()));
         }
 
     }
