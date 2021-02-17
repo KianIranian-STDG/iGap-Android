@@ -1189,7 +1189,6 @@ Want to get it?</string>
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
     <string name="card_to_card">Request card to card</string>
-    <string name="top_sheet_behavior" translatable="false">net.iGap.module.dialog.topsheet.TopSheetBehavior</string>
     <string name="change_language_title">Change Language</string>
     <string name="terms_condition_title">Terms and Condition</string>
     <string name="warning">Warning</string>
