@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.R;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.repository.RegisterRepository;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.AccountManager;
@@ -37,6 +38,7 @@ public class IntroductionViewModel extends ViewModel {
     }
 
     public void onLanguageChangeClick() {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_CHANGE_LANGUAGE_FIRST);
         if (WebSocketClient.getInstance().isConnect()) {
             goToChangeLanguagePage.setValue(false);
         } else {

@@ -155,7 +155,6 @@ public class FragmentRegisterViewModel extends BaseViewModel {
     }
 
     public void onClicksStart() {
-        HelperTracker.sendTracker(HelperTracker.TRACKER_ENTRY_PHONE);
         String phoneNumber = callBackEdtPhoneNumber.get();
         String regex = repository.getRegex();
         if (phoneNumber == null) {

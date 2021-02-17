@@ -21,6 +21,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.model.LocationModel;
@@ -150,6 +151,7 @@ public class FragmentRegistrationNicknameViewModel extends ViewModel implements 
     }
 
     public void OnClickBtnLetsGo(@NotNull String name, String lastName) {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ENTRY_NEW_USER_INFO);
         if (name.length() > 0) {
             showErrorName.set(0);
             if (lastName.length() > 0) {

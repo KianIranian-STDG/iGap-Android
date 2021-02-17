@@ -47,6 +47,7 @@ import net.iGap.activities.ActivityRegistration;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
@@ -89,7 +90,7 @@ public class FragmentRegister extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ENTRY_PHONE);
 
         fragmentRegisterViewModel.showConditionErrorDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {

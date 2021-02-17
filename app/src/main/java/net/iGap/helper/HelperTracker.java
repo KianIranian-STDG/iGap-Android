@@ -61,6 +61,8 @@ public class HelperTracker {
     public static final String TRACKER_REGISTRATION_NEW_USER = CATEGORY_REGISTRATION + "TRACKER_REGISTRATION_NEW_USER";
     public static final String TRACKER_TWO_STEP = CATEGORY_REGISTRATION + "TRACKER_TWO_STEP";
     public static final String TRACKER_ENTRY_PHONE = CATEGORY_REGISTRATION + "TRACKER_ENTRY_PHONE";
+    public static final String TRACKER_ENTRY_NEW_USER_INFO = CATEGORY_REGISTRATION + "TRACKER_ENTRY_NEW_USER_INFO";
+    public static final String TRACKER_CHANGE_LANGUAGE_FIRST = CATEGORY_REGISTRATION + "TRACKER_CHANGE_LANGUAGE_FIRST";
 
     public static final String TRACKER_DISCOVERY_PAGE = CATEGORY_DISCOVERY + "TRACKER_DISCOVERY_PAGE";
     public static final String TRACKER_WALLET_PAGE = CATEGORY_DISCOVERY + "TRACKER_WALLET_PAGE";
@@ -121,6 +123,8 @@ public class HelperTracker {
             switch (trackerTag) {
                 case TRACKER_CHANGE_LANGUAGE:
                     Metrix.getInstance().newEvent("rvwun");
+                    //CHANGE_LANGUAGE_UNIQUE
+                    Metrix.getInstance().newEvent("hrvwa");
                     break;
                 case TRACKER_CALL_PAGE:
                     Metrix.getInstance().newEvent("mlrxn");
@@ -317,6 +321,16 @@ public class HelperTracker {
                     Metrix.getInstance().newEvent("zdaaq");
                     //GAS_BILL_PAY_UNIQUE
                     Metrix.getInstance().newEvent("wegcl");
+                    break;
+                case TRACKER_ENTRY_NEW_USER_INFO:
+                    Metrix.getInstance().newEvent("xsqei");
+                    //ENTRY_NEW_USER_INFO_UNIQUE
+                    Metrix.getInstance().newEvent("gmtgx");
+                    break;
+                case TRACKER_CHANGE_LANGUAGE_FIRST:
+                    Metrix.getInstance().newEvent("lmkey");
+                    //CHANGE_LANGUAGE_FIRST_UNIQUE
+                    Metrix.getInstance().newEvent("gxkzj");
                     break;
             }
 
