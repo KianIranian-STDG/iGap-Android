@@ -139,7 +139,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.NotificationCenterDelegate {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.EventManagerDelegate {
 
     public static final String openChat = "openChat";
     public static final String userId = "userId";
@@ -1825,7 +1825,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
             int response = (int) args[0];

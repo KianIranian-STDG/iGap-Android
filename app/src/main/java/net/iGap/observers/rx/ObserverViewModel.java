@@ -6,7 +6,7 @@ import net.iGap.observers.eventbus.EventManager;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class ObserverViewModel extends BaseAPIViewModel implements EventManager.NotificationCenterDelegate {
+public abstract class ObserverViewModel extends BaseAPIViewModel implements EventManager.EventManagerDelegate {
     public CompositeDisposable backgroundDisposable;
     public CompositeDisposable mainThreadDisposable;
 
@@ -48,7 +48,7 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
         if (id == EventManager.IG_ERROR)
             try {
                 onResponseError((Throwable) args[0]);

@@ -135,7 +135,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements EventManager.NotificationCenterDelegate {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements EventManager.EventManagerDelegate {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     //    @Deprecated
@@ -395,7 +395,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 int progress = Uploader.getInstance().getUploadProgress(messageObject.id + "");
                 messageProgress.withProgress(progress);
 
-                didReceivedNotification(EventManager.ON_UPLOAD_PROGRESS, AccountManager.selectedAccount, messageObject.id, progress);
+                onReceivedEvent(EventManager.ON_UPLOAD_PROGRESS, AccountManager.selectedAccount, messageObject.id, progress);
             }
         } else {
             EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -1912,7 +1912,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
         if (id == EventManager.ON_UPLOAD_PROGRESS) {
             G.runOnUiThread(() -> {
                 String messageKey = (String) args[0];

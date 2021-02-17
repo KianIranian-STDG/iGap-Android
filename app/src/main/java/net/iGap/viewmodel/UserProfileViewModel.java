@@ -108,7 +108,7 @@ import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventManager.NotificationCenterDelegate, OnUserAvatarResponse {
+public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventManager.EventManagerDelegate, OnUserAvatarResponse {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
 
     private ObservableField<String> appVersion = new ObservableField<>("");
@@ -1219,7 +1219,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
             int response = (int) args[0];

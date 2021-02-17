@@ -25,7 +25,7 @@ import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 
-public class StickerView extends FrameLayout implements EventManager.NotificationCenterDelegate {
+public class StickerView extends FrameLayout implements EventManager.EventManagerDelegate {
     private AppCompatImageView stickerIv;
     private AppCompatImageView stickerEmojiView;
 
@@ -159,7 +159,7 @@ public class StickerView extends FrameLayout implements EventManager.Notificatio
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
         G.runOnUiThread(() -> {
             if (id == EventManager.STICKER_DOWNLOAD) {
                 String filePath = (String) args[0];

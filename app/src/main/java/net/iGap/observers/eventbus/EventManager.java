@@ -11,39 +11,11 @@ import net.iGap.helper.FileLog;
 
 import java.util.ArrayList;
 
-
-/**
- * Created by keyvan on 3/14/16.
- */
 public class EventManager {
-
-    /**
-     * READ ME :
-     * this class used for notifying part of application to another part that not related to each other
-     * for using this class you need to use instance method.
-     * if your event number is exists just use it (I will tell in continue how to use), else declare your event number
-     * event number MUST NOT equal with other event number, for this purpose use '++' to increment last number.
-     * <p/>
-     * HOW TO USE:
-     * in onCreate() or onStart() ( It's related to your usage ) use following function :
-     * {@link EventManager#getInstance()#addEventListener(int, EventListener)}
-     * int is your event num and EventListener can be `this` so your activity must be implement or new instance of EventListener
-     * {@link EventListener}.
-     * then in onDestroy() or onPause() use {@link EventManager#getInstance()#removeEventListener(int, EventListener)}
-     * to optimize eventManager and prevent from crash.
-     * PS: if you remove your listener with above code your component not listen on event anymore.
-     * <p/>
-     * after getting event onReceived will be called in eventManager thread,
-     * if you want heavy process in {@link EventListener#receivedMessage(int, Object...)} use your thread
-     */
-
     private static int eventId = 1;
 
     public static final int stopAllHeavyOperations = eventId++;
     public static final int startAllHeavyOperations = eventId++;
-
-    public static final int networkStateChange = eventId++;
-    public static final int didSetNewTheme = eventId++;
 
     public static final int ON_ACCESS_TOKEN_RECIVE = eventId++;
     public static final int ON_INIT_PAY = eventId++;
@@ -84,27 +56,26 @@ public class EventManager {
     public static final int CHAT_UPDATE_STATUS = eventId++;
     public static final int ON_FILE_DOWNLOAD_COMPLETED = eventId++;
 
-    private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
-    private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
-    private SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();
+    private final SparseArray<ArrayList<EventManagerDelegate>> observers = new SparseArray<>();
+    private final SparseArray<ArrayList<EventManagerDelegate>> removeAfterBroadcast = new SparseArray<>();
+    private final SparseArray<ArrayList<EventManagerDelegate>> addAfterBroadcast = new SparseArray<>();
     private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
 
     private int broadcasting = 0;
     private boolean animationInProgress;
     private int[] allowedNotifications;
 
-    private int currentAccount;
+    private final int currentAccount;
 
     private int currentHeavyOperationFlags;
     private static volatile EventManager[] Instance = new EventManager[3];
     private static volatile EventManager globalInstance;
 
-    public interface NotificationCenterDelegate {
-        void didReceivedNotification(int id, int account, Object... args);
+    public interface EventManagerDelegate {
+        void onReceivedEvent(int id, int account, Object... args);
     }
 
     private class DelayedPost {
-
         private DelayedPost(int id, Object[] args) {
             this.id = id;
             this.args = args;
@@ -169,8 +140,8 @@ public class EventManager {
     public void postNotificationName(int id, Object... args) {
         boolean allowDuringAnimation = id == startAllHeavyOperations || id == stopAllHeavyOperations;
         if (!allowDuringAnimation && allowedNotifications != null) {
-            for (int a = 0; a < allowedNotifications.length; a++) {
-                if (allowedNotifications[a] == id) {
+            for (int allowedNotification : allowedNotifications) {
+                if (allowedNotification == id) {
                     allowDuringAnimation = true;
                     break;
                 }
@@ -210,11 +181,11 @@ public class EventManager {
             return;
         }
         broadcasting++;
-        ArrayList<NotificationCenterDelegate> objects = observers.get(id);
+        ArrayList<EventManagerDelegate> objects = observers.get(id);
         if (objects != null && !objects.isEmpty()) {
             for (int a = 0; a < objects.size(); a++) {
-                NotificationCenterDelegate obj = objects.get(a);
-                obj.didReceivedNotification(id, currentAccount, args);
+                EventManagerDelegate obj = objects.get(a);
+                obj.onReceivedEvent(id, currentAccount, args);
             }
         }
         broadcasting--;
@@ -222,7 +193,7 @@ public class EventManager {
             if (removeAfterBroadcast.size() != 0) {
                 for (int a = 0; a < removeAfterBroadcast.size(); a++) {
                     int key = removeAfterBroadcast.keyAt(a);
-                    ArrayList<NotificationCenterDelegate> arrayList = removeAfterBroadcast.get(key);
+                    ArrayList<EventManagerDelegate> arrayList = removeAfterBroadcast.get(key);
                     for (int b = 0; b < arrayList.size(); b++) {
                         removeObserver(key, arrayList.get(b));
                     }
@@ -232,7 +203,7 @@ public class EventManager {
             if (addAfterBroadcast.size() != 0) {
                 for (int a = 0; a < addAfterBroadcast.size(); a++) {
                     int key = addAfterBroadcast.keyAt(a);
-                    ArrayList<NotificationCenterDelegate> arrayList = addAfterBroadcast.get(key);
+                    ArrayList<EventManagerDelegate> arrayList = addAfterBroadcast.get(key);
                     for (int b = 0; b < arrayList.size(); b++) {
                         addObserver(key, arrayList.get(b));
                     }
@@ -242,14 +213,14 @@ public class EventManager {
         }
     }
 
-    public void addObserver(int id, NotificationCenterDelegate observer) {
+    public void addObserver(int id, EventManagerDelegate observer) {
         if (BuildConfig.DEBUG) {
             if (Thread.currentThread() != G.handler.getLooper().getThread()) {
                 throw new RuntimeException("addObserver allowed only from MAIN thread");
             }
         }
         if (broadcasting != 0) {
-            ArrayList<NotificationCenterDelegate> arrayList = addAfterBroadcast.get(id);
+            ArrayList<EventManagerDelegate> arrayList = addAfterBroadcast.get(id);
             if (arrayList == null) {
                 arrayList = new ArrayList<>();
                 addAfterBroadcast.put(id, arrayList);
@@ -257,7 +228,7 @@ public class EventManager {
             arrayList.add(observer);
             return;
         }
-        ArrayList<NotificationCenterDelegate> objects = observers.get(id);
+        ArrayList<EventManagerDelegate> objects = observers.get(id);
         if (objects == null) {
             observers.put(id, (objects = new ArrayList<>()));
         }
@@ -267,14 +238,14 @@ public class EventManager {
         objects.add(observer);
     }
 
-    public void removeObserver(int id, NotificationCenterDelegate observer) {
+    public void removeObserver(int id, EventManagerDelegate observer) {
         if (BuildConfig.DEBUG) {
             if (Thread.currentThread() != G.handler.getLooper().getThread()) {
                 throw new RuntimeException("removeObserver allowed only from MAIN thread");
             }
         }
         if (broadcasting != 0) {
-            ArrayList<NotificationCenterDelegate> arrayList = removeAfterBroadcast.get(id);
+            ArrayList<EventManagerDelegate> arrayList = removeAfterBroadcast.get(id);
             if (arrayList == null) {
                 arrayList = new ArrayList<>();
                 removeAfterBroadcast.put(id, arrayList);
@@ -282,7 +253,7 @@ public class EventManager {
             arrayList.add(observer);
             return;
         }
-        ArrayList<NotificationCenterDelegate> objects = observers.get(id);
+        ArrayList<EventManagerDelegate> objects = observers.get(id);
         if (objects != null) {
             objects.remove(observer);
         }
@@ -291,5 +262,4 @@ public class EventManager {
     public boolean hasObservers(int id) {
         return observers.indexOfKey(id) >= 0;
     }
-
 }

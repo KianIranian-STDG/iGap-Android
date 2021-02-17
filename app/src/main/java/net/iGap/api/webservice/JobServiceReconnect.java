@@ -21,7 +21,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 public class JobServiceReconnect extends JobService {
-    EventManager.NotificationCenterDelegate eventListener;
+    EventManager.EventManagerDelegate eventListener;
 
     @Override
     public boolean onStartJob(@NonNull JobParameters job) {

@@ -46,7 +46,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.fragmentActivity;
 
-public class TransferMoneyFragment extends Fragment implements EventManager.NotificationCenterDelegate {
+public class TransferMoneyFragment extends Fragment implements EventManager.EventManagerDelegate {
 
     private long peerId;
     private String userName;
@@ -198,7 +198,7 @@ public class TransferMoneyFragment extends Fragment implements EventManager.Noti
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
         G.handler.post(() -> {
             confirmBtn.setEnabled(true);
             if (id == EventManager.ON_INIT_PAY) {

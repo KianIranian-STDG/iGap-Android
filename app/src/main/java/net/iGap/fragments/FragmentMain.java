@@ -92,7 +92,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged, EventManager.NotificationCenterDelegate {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged, EventManager.EventManagerDelegate {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -1213,7 +1213,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
      */
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.CALL_STATE_CHANGED) {
             if (args == null || args.length == 0) return;

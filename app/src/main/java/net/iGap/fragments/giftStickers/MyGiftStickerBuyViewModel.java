@@ -128,8 +128,8 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        super.didReceivedNotification(id, AccountManager.selectedAccount, args);
+    public void onReceivedEvent(int id, int account, Object... args) {
+        super.onReceivedEvent(id, AccountManager.selectedAccount, args);
         G.handler.post(this::getData);
     }
 }

@@ -72,7 +72,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited, EventManager.NotificationCenterDelegate {
+public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited, EventManager.EventManagerDelegate {
 
     private static final String ROOM_ID = "RoomId";
 
@@ -678,7 +678,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.AVATAR_UPDATE) {
             G.runOnUiThread(() -> {

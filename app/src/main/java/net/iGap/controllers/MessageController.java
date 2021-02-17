@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT_VALUE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP_VALUE;
 
-public class MessageController extends BaseController implements EventManager.NotificationCenterDelegate {
+public class MessageController extends BaseController implements EventManager.EventManagerDelegate {
 
     private String lastUploadedAvatarId;
     private long lastUploadedAvatarRoomId;
@@ -418,7 +418,7 @@ public class MessageController extends BaseController implements EventManager.No
     }
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
         if (id == EventManager.FILE_UPLOAD_SUCCESS) {
             String fileId = (String) args[0];
             String fileToken = (String) args[1];

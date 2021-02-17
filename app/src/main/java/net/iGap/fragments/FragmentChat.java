@@ -364,7 +364,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatSendMessageResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, LocationListener,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, ToolbarListener, ChatAttachmentPopup.ChatPopupListener, EventManager.NotificationCenterDelegate {
+        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick, ToolbarListener, ChatAttachmentPopup.ChatPopupListener, EventManager.EventManagerDelegate {
 
     // TODO: 12/28/20 refactor
     @Deprecated
@@ -9355,7 +9355,7 @@ public class FragmentChat extends BaseFragment
      */
 
     @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
+    public void onReceivedEvent(int id, int account, Object... args) {
 
 
         if (id == EventManager.CALL_STATE_CHANGED) {
