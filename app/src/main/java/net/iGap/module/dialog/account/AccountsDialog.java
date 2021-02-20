@@ -30,7 +30,7 @@ import net.iGap.viewmodel.controllers.CallManager;
 
 import org.paygear.RaadApp;
 
-public class AccountsDialog extends BaseBottomSheet implements EventManager.EventManagerDelegate {
+public class AccountsDialog extends BaseBottomSheet implements EventManager.EventDelegate {
 
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
@@ -115,7 +115,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventManager.Even
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.CALL_STATE_CHANGED) {
             G.runOnUiThread(() -> {

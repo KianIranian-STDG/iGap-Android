@@ -25,7 +25,7 @@ import net.iGap.repository.StickerRepository;
 
 import java.io.File;
 
-public class StickerView extends FrameLayout implements EventManager.EventManagerDelegate {
+public class StickerView extends FrameLayout implements EventManager.EventDelegate {
     private AppCompatImageView stickerIv;
     private AppCompatImageView stickerEmojiView;
 
@@ -159,7 +159,7 @@ public class StickerView extends FrameLayout implements EventManager.EventManage
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
         G.runOnUiThread(() -> {
             if (id == EventManager.STICKER_DOWNLOAD) {
                 String filePath = (String) args[0];

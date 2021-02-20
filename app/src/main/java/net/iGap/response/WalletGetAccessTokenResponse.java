@@ -13,7 +13,7 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.eventbus.SocketMessages;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletGetAccessToken;
 
@@ -47,7 +47,7 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.SUCCESS));
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_ACCESS_TOKEN_RECIVE, SocketMessages.SUCCESS));
             }
         }, 1000);
     }
@@ -55,7 +55,7 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.FAILED));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_ACCESS_TOKEN_RECIVE, SocketMessages.FAILED));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.FAILED));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_ACCESS_TOKEN_RECIVE, SocketMessages.FAILED));
     }
 }
 

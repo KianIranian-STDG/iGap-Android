@@ -44,7 +44,7 @@ import net.iGap.module.structs.StructCountry;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.eventbus.SocketMessages;
 import net.iGap.observers.interfaces.OnGeoGetConfiguration;
 import net.iGap.observers.interfaces.OnInfoCountryResponse;
 import net.iGap.observers.interfaces.OnUserAvatarResponse;
@@ -108,7 +108,7 @@ import static android.os.Looper.getMainLooper;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventManager.EventManagerDelegate, OnUserAvatarResponse {
+public class UserProfileViewModel extends ViewModel implements RefreshWalletBalance, OnUserInfoMyClient, EventManager.EventDelegate, OnUserAvatarResponse {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList<>();
 
     private ObservableField<String> appVersion = new ObservableField<>("");
@@ -1219,12 +1219,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
             int response = (int) args[0];
             switch (response) {
-                case socketMessages.SUCCESS:
+                case SocketMessages.SUCCESS:
                     new Handler(getMainLooper()).post(() -> {
                         getUserCredit();
                         retryConnectToWallet = 0;
@@ -1232,7 +1232,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
                     break;
 
-                case socketMessages.FAILED:
+                case SocketMessages.FAILED:
                     if (retryConnectToWallet < 3) {
                         new RequestWalletGetAccessToken().walletGetAccessToken();
                         retryConnectToWallet++;

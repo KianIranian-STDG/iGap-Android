@@ -143,7 +143,7 @@ public class MakeButtons {
 
 
         TextView textView = new AppCompatTextView(mainLayout.getContext()) {
-            EventManager.EventManagerDelegate eventListener = (id, account, args) -> {
+            EventManager.EventDelegate eventListener = (id, account, args) -> {
                 if (id == EventManager.EMOJI_LOADED) {
                     G.runOnUiThread(this::invalidate);
                 }

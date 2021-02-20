@@ -23,7 +23,7 @@ import net.iGap.module.customView.ProgressButton;
 import net.iGap.module.customView.StickerView;
 import net.iGap.observers.eventbus.EventManager;
 
-public class AddStickerCell extends FrameLayout implements EventManager.EventManagerDelegate {
+public class AddStickerCell extends FrameLayout implements EventManager.EventDelegate {
 
     private StickerView groupAvatarIv;
     private TextView groupNameTv;
@@ -112,7 +112,7 @@ public class AddStickerCell extends FrameLayout implements EventManager.EventMan
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.STICKER_CHANGED) {
             String groupId = (String) args[0];

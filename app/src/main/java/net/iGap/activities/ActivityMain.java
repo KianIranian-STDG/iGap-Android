@@ -104,7 +104,7 @@ import net.iGap.module.dialog.SubmitScoreDialog;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.eventbus.SocketMessages;
 import net.iGap.observers.interfaces.DataTransformerListener;
 import net.iGap.observers.interfaces.FinishActivity;
 import net.iGap.observers.interfaces.ITowPanModDesinLayout;
@@ -139,7 +139,7 @@ import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.EventManagerDelegate {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.EventDelegate {
 
     public static final String openChat = "openChat";
     public static final String userId = "userId";
@@ -1825,12 +1825,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
             int response = (int) args[0];
             switch (response) {
-                case socketMessages.SUCCESS:
+                case SocketMessages.SUCCESS:
                     new Handler(getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -1841,7 +1841,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     break;
 
-                case socketMessages.FAILED:
+                case SocketMessages.FAILED:
                     if (retryConnectToWallet < 3) {
                         new RequestWalletGetAccessToken().walletGetAccessToken();
                         retryConnectToWallet++;

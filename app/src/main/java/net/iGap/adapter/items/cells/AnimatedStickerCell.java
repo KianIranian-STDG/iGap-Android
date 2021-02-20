@@ -15,7 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class AnimatedStickerCell extends LottieAnimationView implements EventManager.EventManagerDelegate {
+public class AnimatedStickerCell extends LottieAnimationView implements EventManager.EventDelegate {
 
     public boolean animatedLoaded;
     private String path;
@@ -116,7 +116,7 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventMan
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
 
         if (id == EventManager.STICKER_DOWNLOAD) {
             String filePath = (String) args[0];

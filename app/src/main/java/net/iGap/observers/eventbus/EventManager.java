@@ -56,9 +56,9 @@ public class EventManager {
     public static final int CHAT_UPDATE_STATUS = eventId++;
     public static final int ON_FILE_DOWNLOAD_COMPLETED = eventId++;
 
-    private final SparseArray<ArrayList<EventManagerDelegate>> observers = new SparseArray<>();
-    private final SparseArray<ArrayList<EventManagerDelegate>> removeAfterBroadcast = new SparseArray<>();
-    private final SparseArray<ArrayList<EventManagerDelegate>> addAfterBroadcast = new SparseArray<>();
+    private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
+    private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();
+    private final SparseArray<ArrayList<EventDelegate>> addAfterBroadcast = new SparseArray<>();
     private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
 
     private int broadcasting = 0;
@@ -71,8 +71,8 @@ public class EventManager {
     private static volatile EventManager[] Instance = new EventManager[3];
     private static volatile EventManager globalInstance;
 
-    public interface EventManagerDelegate {
-        void onReceivedEvent(int id, int account, Object... args);
+    public interface EventDelegate {
+        void receivedEvent(int id, int account, Object... args);
     }
 
     private class DelayedPost {
@@ -181,11 +181,11 @@ public class EventManager {
             return;
         }
         broadcasting++;
-        ArrayList<EventManagerDelegate> objects = observers.get(id);
+        ArrayList<EventDelegate> objects = observers.get(id);
         if (objects != null && !objects.isEmpty()) {
             for (int a = 0; a < objects.size(); a++) {
-                EventManagerDelegate obj = objects.get(a);
-                obj.onReceivedEvent(id, currentAccount, args);
+                EventDelegate obj = objects.get(a);
+                obj.receivedEvent(id, currentAccount, args);
             }
         }
         broadcasting--;
@@ -193,7 +193,7 @@ public class EventManager {
             if (removeAfterBroadcast.size() != 0) {
                 for (int a = 0; a < removeAfterBroadcast.size(); a++) {
                     int key = removeAfterBroadcast.keyAt(a);
-                    ArrayList<EventManagerDelegate> arrayList = removeAfterBroadcast.get(key);
+                    ArrayList<EventDelegate> arrayList = removeAfterBroadcast.get(key);
                     for (int b = 0; b < arrayList.size(); b++) {
                         removeObserver(key, arrayList.get(b));
                     }
@@ -203,7 +203,7 @@ public class EventManager {
             if (addAfterBroadcast.size() != 0) {
                 for (int a = 0; a < addAfterBroadcast.size(); a++) {
                     int key = addAfterBroadcast.keyAt(a);
-                    ArrayList<EventManagerDelegate> arrayList = addAfterBroadcast.get(key);
+                    ArrayList<EventDelegate> arrayList = addAfterBroadcast.get(key);
                     for (int b = 0; b < arrayList.size(); b++) {
                         addObserver(key, arrayList.get(b));
                     }
@@ -213,14 +213,14 @@ public class EventManager {
         }
     }
 
-    public void addObserver(int id, EventManagerDelegate observer) {
+    public void addObserver(int id, EventDelegate observer) {
         if (BuildConfig.DEBUG) {
             if (Thread.currentThread() != G.handler.getLooper().getThread()) {
                 throw new RuntimeException("addObserver allowed only from MAIN thread");
             }
         }
         if (broadcasting != 0) {
-            ArrayList<EventManagerDelegate> arrayList = addAfterBroadcast.get(id);
+            ArrayList<EventDelegate> arrayList = addAfterBroadcast.get(id);
             if (arrayList == null) {
                 arrayList = new ArrayList<>();
                 addAfterBroadcast.put(id, arrayList);
@@ -228,7 +228,7 @@ public class EventManager {
             arrayList.add(observer);
             return;
         }
-        ArrayList<EventManagerDelegate> objects = observers.get(id);
+        ArrayList<EventDelegate> objects = observers.get(id);
         if (objects == null) {
             observers.put(id, (objects = new ArrayList<>()));
         }
@@ -238,14 +238,14 @@ public class EventManager {
         objects.add(observer);
     }
 
-    public void removeObserver(int id, EventManagerDelegate observer) {
+    public void removeObserver(int id, EventDelegate observer) {
         if (BuildConfig.DEBUG) {
             if (Thread.currentThread() != G.handler.getLooper().getThread()) {
                 throw new RuntimeException("removeObserver allowed only from MAIN thread");
             }
         }
         if (broadcasting != 0) {
-            ArrayList<EventManagerDelegate> arrayList = removeAfterBroadcast.get(id);
+            ArrayList<EventDelegate> arrayList = removeAfterBroadcast.get(id);
             if (arrayList == null) {
                 arrayList = new ArrayList<>();
                 removeAfterBroadcast.put(id, arrayList);
@@ -253,7 +253,7 @@ public class EventManager {
             arrayList.add(observer);
             return;
         }
-        ArrayList<EventManagerDelegate> objects = observers.get(id);
+        ArrayList<EventDelegate> objects = observers.get(id);
         if (objects != null) {
             objects.remove(observer);
         }

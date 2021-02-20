@@ -25,7 +25,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.eventbus.SocketMessages;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
 import net.iGap.realm.RealmUserInfo;
@@ -46,7 +46,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.fragmentActivity;
 
-public class TransferMoneyFragment extends Fragment implements EventManager.EventManagerDelegate {
+public class TransferMoneyFragment extends Fragment implements EventManager.EventDelegate {
 
     private long peerId;
     private String userName;
@@ -173,14 +173,14 @@ public class TransferMoneyFragment extends Fragment implements EventManager.Even
                             + String.valueOf(paymentResult.traceNumber)
                             + getResources().getString(R.string.amount_2)
                             + paymentResult.amount, false);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedSuccess));
                 } else {
                     HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedFailed));
                 }
             } else {
                 HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved));
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultNotReceived));
             }
         }
 
@@ -198,7 +198,7 @@ public class TransferMoneyFragment extends Fragment implements EventManager.Even
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
         G.handler.post(() -> {
             confirmBtn.setEnabled(true);
             if (id == EventManager.ON_INIT_PAY) {
@@ -263,17 +263,17 @@ public class TransferMoneyFragment extends Fragment implements EventManager.Even
                 dismissProgress();
                 int response = (int) args[0];
                 switch (response) {
-                    case socketMessages.PaymentResultRecievedSuccess:
+                    case SocketMessages.PaymentResultReceivedSuccess:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
                         break;
 
-                    case socketMessages.PaymentResultRecievedFailed:
+                    case SocketMessages.PaymentResultReceivedFailed:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.not_success_2), false);
                         break;
 
-                    case socketMessages.PaymentResultNotRecieved:
+                    case SocketMessages.PaymentResultNotReceived:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.result_3), false);
                         break;

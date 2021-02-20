@@ -19,7 +19,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 @SuppressLint("ViewConstructor")
-public class EmojiImageView extends AppCompatImageView implements EventManager.EventManagerDelegate {
+public class EmojiImageView extends AppCompatImageView implements EventManager.EventDelegate {
     private boolean needToDrawBack;
 
     public EmojiImageView(Context context) {
@@ -78,7 +78,7 @@ public class EmojiImageView extends AppCompatImageView implements EventManager.E
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
         if (id == EventManager.EMOJI_LOADED)
             G.runOnUiThread(this::invalidate);
     }

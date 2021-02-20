@@ -13,7 +13,7 @@ import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
-public abstract class ObserverFragment<T extends ObserverViewModel> extends BaseAPIViewFrag<T> implements EventManager.EventManagerDelegate {
+public abstract class ObserverFragment<T extends ObserverViewModel> extends BaseAPIViewFrag<T> implements EventManager.EventDelegate {
     protected T viewModel;
     public ViewGroup rootView;
 
@@ -103,7 +103,7 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     }
 
     @Override
-    public void onReceivedEvent(int id, int account, Object... args) {
+    public void receivedEvent(int id, int account, Object... args) {
         if (id == EventManager.IG_ERROR) {
             try {
                 onResponseError((Throwable) args[0]);
