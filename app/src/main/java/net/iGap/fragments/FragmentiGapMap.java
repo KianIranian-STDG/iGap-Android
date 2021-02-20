@@ -128,7 +128,6 @@ import io.realm.Sort;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
-import static net.iGap.G.context;
 import static net.iGap.R.id.st_fab_gps;
 
 public class FragmentiGapMap extends BaseFragment implements ToolbarListener, OnLocationChanged, OnGetNearbyCoordinate, OnMapRegisterState, OnMapClose, OnMapUsersGet, OnGeoGetComment, GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener {
@@ -245,7 +244,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             }
             return bitmap1;
         });
-        return new BitmapDrawable(context.getResources(), drawAvatar(bitmap, markerColor, userId == AccountManager.getInstance().getCurrentUser().getId()));
+        return new BitmapDrawable(G.context.getResources(), drawAvatar(bitmap, markerColor, userId == AccountManager.getInstance().getCurrentUser().getId()));
     }
 
     private static Bitmap getInitials(Realm realm, long userId) {
