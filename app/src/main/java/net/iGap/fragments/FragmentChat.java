@@ -8315,6 +8315,12 @@ public class FragmentChat extends BaseFragment
                             super.onScrollStateChanged(recyclerView, newState);
                             if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                                 shouldLoadMessage = true;
+                                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                                int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
+
+                                if (firstVisiblePosition < scrollEnd) {
+                                    loadMessage(UP);
+                                }
                             }
                         }
                     };
