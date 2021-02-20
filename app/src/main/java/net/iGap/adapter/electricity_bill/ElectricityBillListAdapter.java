@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.bill.BillList;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
@@ -185,6 +186,20 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
             title.setText(bill.get(position).getBillTitle());
             pay.setOnClickListener(v -> {
                 if (!debit.isLoading()) {
+                    switch (bill.get(position).getBillType()) {
+                        case "ELECTRICITY":
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_ELECTRIC_BILL_PAY);
+                            break;
+                        case "GAS":
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_GAS_BILL_PAY);
+                            break;
+                        case "PHONE":
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_PHONE_BILL_PAY);
+                            break;
+                        case "MOBILE_MCI":
+                            HelperTracker.sendTracker(HelperTracker.TRACKER_MOBILE_BILL_PAY);
+                            break;
+                    }
                     clickListener.onClick(bill.get(position), OnItemClickListener.Action.LAST_PAY);
                 } else
                     Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
@@ -193,6 +208,20 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                 @Override
                 public void onClick(View v) {
                     if (!debit.isLoading()) {
+                        switch (bill.get(position).getBillType()) {
+                            case "ELECTRICITY":
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_ELECTRIC_BILL_PAY);
+                                break;
+                            case "GAS":
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_GAS_BILL_PAY);
+                                break;
+                            case "PHONE":
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_PHONE_BILL_PAY);
+                                break;
+                            case "MOBILE_MCI":
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_MOBILE_BILL_PAY);
+                                break;
+                        }
                         clickListener.onClick(bill.get(position), OnItemClickListener.Action.MID_PAY);
                     } else
                         Toast.makeText(context, "", Toast.LENGTH_SHORT).show();

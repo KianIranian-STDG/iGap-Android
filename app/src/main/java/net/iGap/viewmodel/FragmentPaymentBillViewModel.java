@@ -20,6 +20,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperNumerical;
+import net.iGap.helper.HelperTracker;
 import net.iGap.proto.ProtoMplGetBillToken;
 import net.iGap.request.RequestMplGetBillToken;
 
@@ -134,6 +135,12 @@ public class FragmentPaymentBillViewModel extends BaseViewModel {
     }
 
     public void onPayBillClick(String billId, String payId) {
+        if (isPolice) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_FINE_BILL_PAY);
+        } else {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_SERVICE_BILL_PAY);
+        }
+
         hideKeyword.setValue(true);
         if (getRequestManager().isUserLogin()) {
             if (isPolice) {

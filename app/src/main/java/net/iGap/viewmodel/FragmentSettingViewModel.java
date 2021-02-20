@@ -16,6 +16,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
@@ -92,6 +93,7 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public void onLogoutClick() {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_LOGOUT_ACCOUNT);
         showDialogLogout.setValue(true);
     }
 
@@ -121,6 +123,7 @@ public class FragmentSettingViewModel extends ViewModel {
     }
 
     public void onDeleteAccountClick() {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_DELETE_ACCOUNT);
         showDialogDeleteAccount.setValue(true);
     }
 }

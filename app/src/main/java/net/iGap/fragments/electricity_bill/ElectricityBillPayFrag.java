@@ -27,6 +27,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.electricity_bill.Bill;
 import net.iGap.model.electricity_bill.LastBillData;
@@ -116,7 +117,7 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ADD_BILL_PAGE);
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
