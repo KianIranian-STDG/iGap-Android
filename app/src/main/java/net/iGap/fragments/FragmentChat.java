@@ -2319,6 +2319,7 @@ public class FragmentChat extends BaseFragment
         if (position != -1) {
             LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
             linearLayout.scrollToPositionWithOffset(position, 0);
+            shouldLoadMessage = true;
 
             mAdapter.getItem(position).messageObject.isSelected = true;
             mAdapter.notifyItemChanged(position);
