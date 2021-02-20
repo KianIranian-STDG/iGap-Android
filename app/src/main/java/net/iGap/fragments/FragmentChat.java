@@ -54,6 +54,7 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -722,7 +723,7 @@ public class FragmentChat extends BaseFragment
          * init chat box edit text and send item because we need change this color in dark mode!
          * */
 
-        edtChat  = rootView.findViewById(R.id.et_chatRoom_writeMessage);
+        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         edtChat.setGravity(Gravity.CENTER_VERTICAL);
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
@@ -5055,7 +5056,7 @@ public class FragmentChat extends BaseFragment
 
             final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
             // TODO: 1/6/21 MESSAGE_REFACTOR
-             DownloadObject fileObject = DownloadObject.createForRoomMessage(message);
+            DownloadObject fileObject = DownloadObject.createForRoomMessage(message);
 
             if (fileObject != null) {
                 getDownloader().download(fileObject, selector, arg -> {
@@ -6302,7 +6303,7 @@ public class FragmentChat extends BaseFragment
             layoutAttachBottom.clearAnimation();
             isSendVisibilityAnimInProcess = false;
             isAttachVisibilityAnimInProcess = false;
-           // layoutAttachBottom.setVisibility(View.GONE);
+            // layoutAttachBottom.setVisibility(View.GONE);
         }
 
         if (visibility && isAttachVisibilityAnimInProcess) {
@@ -8123,6 +8124,8 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+    boolean shouldLoadMessage = false;
+
     private void getMessages() {
         DbManager.getInstance().doRealmTask(realm -> {
             ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
@@ -8176,6 +8179,7 @@ public class FragmentChat extends BaseFragment
                 addToView = false;
                 direction = DOWN;
             } else {
+                shouldLoadMessage = true;
                 addToView = true;
                 direction = UP;
             }
@@ -8259,10 +8263,13 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void run() {
                     if (direction == UP) {
+                        shouldLoadMessage = true;
                         switchAddItem(finalMessageInfos, true);
                     } else {
+                        shouldLoadMessage = true;
                         switchAddItem(finalMessageInfos, false);
                         if (hasSavedState()) {
+                            shouldLoadMessage = false;
                             if (messageId != 0) {
                                 if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
                                     savedScrollMessageId = 0;
@@ -8270,7 +8277,6 @@ public class FragmentChat extends BaseFragment
                             } else {
                                 int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
                                 LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                                recyclerView.removeOnScrollListener(scrollListener);
                                 linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
                                 savedScrollMessageId = 0;
                             }
@@ -8292,18 +8298,30 @@ public class FragmentChat extends BaseFragment
                             visibleItemCount = linearLayoutManager.getChildCount();
                             totalItemCount = linearLayoutManager.getItemCount();
 
-                            if (firstVisiblePosition < scrollEnd) {
-                                loadMessage(UP);
-                                if (totalItemCount <= scrollEnd) {
+                            if (shouldLoadMessage) {
+                                if (firstVisiblePosition < scrollEnd) {
+                                    loadMessage(UP);
+                                    if (totalItemCount <= scrollEnd) {
+                                        loadMessage(DOWN);
+                                    }
+                                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
                                     loadMessage(DOWN);
                                 }
-                            } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
-                                loadMessage(DOWN);
+                            }
+                        }
+
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                                shouldLoadMessage = true;
                             }
                         }
                     };
                     // TODO: 2/14/21 Should write a better logic to loadMessage
-                    G.handler.postDelayed(() -> recyclerView.addOnScrollListener(scrollListener), 200); // it's a bad idea to fix it but for now we have to do this.
+
+                    recyclerView.addOnScrollListener(scrollListener);
+
 
                     if (unreadCount > 0) {
                         recyclerView.scrollToPosition(0);
