@@ -32,6 +32,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
     private final ObservableInt showLoadingView = new ObservableInt(View.VISIBLE);
     private final ObservableInt showRetryView = new ObservableInt(View.GONE);
     private final ObservableInt showMainView = new ObservableInt(View.INVISIBLE);
+    private final ObservableInt showDiscountCoupon = new ObservableInt(View.INVISIBLE);
     private final ObservableInt showPaymentErrorMessage = new ObservableInt(View.GONE);
     /*private ObservableInt background = new ObservableInt();*/
     private final ObservableInt paymentStateIcon = new ObservableInt(R.string.icon_card_to_card);
@@ -112,6 +113,10 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     public ObservableInt getShowMainView() {
         return showMainView;
+    }
+
+    public ObservableInt getShowDiscountCoupon() {
+        return showDiscountCoupon;
     }
 
     public ObservableInt getShowPaymentErrorMessage() {
@@ -218,6 +223,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             showRetryView.set(View.GONE);
             showLoadingView.set(View.GONE);
             showMainView.set(View.VISIBLE);
+            showDiscountCoupon.set(View.VISIBLE);
             showButtons.set(View.INVISIBLE);
             showPaymentErrorMessage.set(View.VISIBLE);
             showPaymentStatus.set(View.VISIBLE);
@@ -237,6 +243,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     private void checkOrderToken() {
         showMainView.set(View.INVISIBLE);
+        showDiscountCoupon.set(View.INVISIBLE);
         showButtons.set(View.INVISIBLE);
         showRetryView.set(View.GONE);
         showLoadingView.set(View.VISIBLE);
@@ -245,6 +252,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             public void onSuccess(CheckOrderResponse data) {
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
+                showDiscountCoupon.set(View.VISIBLE);
                 showButtons.set(View.VISIBLE);
                 description.set(data.getInfo().getProduct().getDescription());
                 originalPrice = data.getInfo().getPrice();
@@ -313,6 +321,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     private void checkOrderStatus() {
         showMainView.set(View.INVISIBLE);
+        showDiscountCoupon.set(View.INVISIBLE);
         showLoadingView.set(View.VISIBLE);
         showButtons.set(View.INVISIBLE);
         showRetryView.set(View.GONE);
@@ -325,6 +334,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 showRetryView.set(View.GONE);
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
+                showDiscountCoupon.set(View.VISIBLE);
                 description.set(data.getPaymentInfo().getProduct().getDescription());
                 price.setValue(data.getPaymentInfo().getPrice());
                 title.set(data.getPaymentInfo().getProduct().getTitle());
@@ -333,6 +343,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 if (data.isPaymentSuccess()) {
                     paymentStatusTextColor.set(R.color.green);
                     paymentStateIcon.set(R.string.check_icon);
+                    showDiscountCoupon.set(View.GONE);
                 } else if (data.isPaymentUnknown()) {
                     paymentStatusTextColor.set(R.color.orange);
                     paymentStateIcon.set(R.string.error_icon2);
