@@ -236,7 +236,7 @@ public class CallManager {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.CALL_STATE_CHANGED, true));
         if (CallService.getInstance() != null) {
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
         }
@@ -248,7 +248,7 @@ public class CallManager {
     public void makeAccept(String sdp) {
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.CALL_STATE_CHANGED, true));
         if (CallService.getInstance() != null) {
             CallService.getInstance().stopSoundAndVibrate();
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
@@ -577,7 +577,7 @@ public class CallManager {
 
     public void changeState(CallState callState) {
         currentSate = callState;
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, false);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.CALL_STATE_CHANGED, false));
         if (callState == CallState.CONNECTED) {
             if (callStartTime == 0) {
                 callStartTime = SystemClock.elapsedRealtime();

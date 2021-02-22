@@ -25,6 +25,7 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -79,11 +80,11 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         if (new File(path).exists()) {
             G.imageLoader.displayImage(suitablePath(path), holder.image);
         } else {
-            EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, (id, account, args) -> {
                 if (id == EventManager.STICKER_DOWNLOAD) {
 
-                    String filePath = (String) message[0];
-                    String fileToken = (String) message[1];
+                    String filePath = (String) args[0];
+                    String fileToken = (String) args[1];
 
                     if (holder.image.getTag().equals(fileToken)) {
                         G.handler.post(() -> {

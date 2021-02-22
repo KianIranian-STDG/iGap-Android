@@ -19,8 +19,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.additionalData.ButtonEntity;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 
@@ -143,7 +143,7 @@ public class MakeButtons {
 
 
         TextView textView = new AppCompatTextView(mainLayout.getContext()) {
-            EventListener eventListener = (id, message) -> {
+            EventManager.EventDelegate eventListener = (id, account, args) -> {
                 if (id == EventManager.EMOJI_LOADED) {
                     G.runOnUiThread(this::invalidate);
                 }
@@ -152,13 +152,13 @@ public class MakeButtons {
             @Override
             protected void onAttachedToWindow() {
                 super.onAttachedToWindow();
-                EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, eventListener);
+                EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.EMOJI_LOADED, eventListener);
             }
 
             @Override
             protected void onDetachedFromWindow() {
                 super.onDetachedFromWindow();
-                EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, eventListener);
+                EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.EMOJI_LOADED, eventListener);
             }
         };
 

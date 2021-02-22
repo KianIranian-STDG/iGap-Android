@@ -12,6 +12,7 @@ package net.iGap.module;
 
 import com.google.gson.Gson;
 
+import net.iGap.G;
 import net.iGap.controllers.BaseController;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.FileLog;
@@ -346,10 +347,10 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
 
         if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
-            EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, sticker.getGroupId());
+            G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.STICKER_CHANGED, sticker.getGroupId()));
         } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
             StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
-            EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, sticker.getGroupId());
+            G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.STICKER_CHANGED, sticker.getGroupId()));
         }
 
     }

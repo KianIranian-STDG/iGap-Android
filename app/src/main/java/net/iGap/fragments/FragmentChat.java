@@ -213,7 +213,6 @@ import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IDispatchTochEvent;
 import net.iGap.observers.interfaces.IMessageItem;
@@ -370,7 +369,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatSendMessageResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChatDelete, LocationListener,
-        OnConnectionChangeStateChat, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
+        OnConnectionChangeStateChat, OnBotClick, ToolbarListener, ChatAttachmentPopup.ChatPopupListener, EventManager.EventDelegate {
 
     // TODO: 12/28/20 refactor
     @Deprecated
@@ -732,18 +731,19 @@ public class FragmentChat extends BaseFragment
 
         edtChat.setListener(this::chatMotionEvent);
 
-        getEventManager().addEventListener(EventManager.CALL_STATE_CHANGED, this);
-        getEventManager().addEventListener(EventManager.EMOJI_LOADED, this);
-        getEventManager().addEventListener(EventManager.ON_MESSAGE_DELETE, this);
-        getEventManager().addEventListener(EventManager.ON_EDIT_MESSAGE, this);
-        getEventManager().addEventListener(EventManager.ON_PINNED_MESSAGE, this);
-        getEventManager().addEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
-        getEventManager().addEventListener(EventManager.CHANNEL_ADD_VOTE, this);
-        getEventManager().addEventListener(EventManager.CHANNEL_GET_VOTE, this);
-        getEventManager().addEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
-        EventManager.getInstance().addEventListener(EventManager.CHAT_UPDATE_STATUS, this);
+        getEventManager().addObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().addObserver(EventManager.ON_MESSAGE_DELETE, this);
+        getEventManager().addObserver(EventManager.ON_EDIT_MESSAGE, this);
+        getEventManager().addObserver(EventManager.ON_PINNED_MESSAGE, this);
+        getEventManager().addObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_ADD_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_GET_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().addObserver(EventManager.CHAT_UPDATE_STATUS, this);
         if (twoPaneMode)
-            EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -1226,18 +1226,21 @@ public class FragmentChat extends BaseFragment
         mAttachmentPopup = null;
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        getEventManager().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
-        getEventManager().removeEventListener(EventManager.EMOJI_LOADED, this);
-        getEventManager().removeEventListener(EventManager.ON_MESSAGE_DELETE, this);
-        getEventManager().removeEventListener(EventManager.ON_EDIT_MESSAGE, this);
-        getEventManager().removeEventListener(EventManager.ON_PINNED_MESSAGE, this);
-        getEventManager().removeEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
-        getEventManager().removeEventListener(EventManager.CHANNEL_ADD_VOTE, this);
-        getEventManager().removeEventListener(EventManager.CHANNEL_GET_VOTE, this);
-        getEventManager().removeEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
-        EventManager.getInstance().removeEventListener(EventManager.CHAT_UPDATE_STATUS, this);
+
+        getEventManager().removeObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().removeObserver(EventManager.ON_MESSAGE_DELETE, this);
+        getEventManager().removeObserver(EventManager.ON_EDIT_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.ON_PINNED_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_ADD_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_GET_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHAT_UPDATE_STATUS, this);
+
         if (twoPaneMode)
-            EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
+            getEventManager().removeObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
+
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {
@@ -9222,124 +9225,6 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    /**
-     * receive call state from event bus
-     * and change visibility of toolbar layout
-     */
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.CALL_STATE_CHANGED) {
-            if (message == null || message.length == 0) return;
-            boolean state = (boolean) message[0];
-            G.handler.post(() -> {
-                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
-                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
-                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
-            });
-        } else if (id == EventManager.EMOJI_LOADED) {
-            G.runOnUiThread(this::invalidateViews);
-        } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
-            G.handler.post(() -> {
-                String path = (String) message[0];
-                if (new File(path).exists())
-                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
-            });
-        } else if (id == EventManager.ON_MESSAGE_DELETE) {
-            long roomId = (long) message[0];
-            long messageId = (long) message[1];
-            boolean update = (boolean) message[2];
-
-            if (roomId == mRoomId && update) {
-                G.runOnUiThread(() -> {
-                    if (mAdapter == null) {
-                        return;
-                    }
-
-                    ArrayList<Long> messages = new ArrayList<>(1);
-                    messages.add(messageId);
-                    deleteSelectedMessageFromAdapter(messages);
-
-                    if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
-                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
-                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
-                            clearReplyView();
-                        }
-                    }
-                });
-            }
-        } else if (id == EventManager.ON_EDIT_MESSAGE) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                long messageId = (long) message[1];
-                String newMessage = (String) message[2];
-
-                if (mRoomId == roomId && mAdapter != null) {
-                    mAdapter.updateMessageText(messageId, newMessage);
-                    removeEditedMessage();
-                }
-            });
-        } else if ((long) message[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
-            G.runOnUiThread(this::initPinedMessage);
-        } else if (id == EventManager.CHAT_CLEAR_MESSAGE) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                if (roomId == mRoomId) {
-                    long clearID = (long) message[1];
-                    onChatClearMessage(roomId, clearID);
-                }
-
-            });
-        } else if (id == EventManager.CHANNEL_ADD_VOTE) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                if (roomId == mRoomId) {
-
-                    long messageId = (long) message[1];
-                    String reactionCount = (String) message[2];
-                    ProtoGlobal.RoomMessageReaction reaction = (ProtoGlobal.RoomMessageReaction) message[3];
-                    long forwardedMessageId = (long) message[4];
-
-                    if (mAdapter != null) {
-                        mAdapter.updateVote(roomId, messageId, reactionCount, reaction, forwardedMessageId);
-                    }
-                }
-            });
-        } else if (id == EventManager.CHANNEL_GET_VOTE) {
-            G.runOnUiThread(() -> {
-                if (mAdapter != null) {
-
-                    List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> states = (List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats>) message[0];
-
-                    for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : states) {
-                        mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
-
-                    }
-                }
-            });
-
-        } else if (id == EventManager.CHANNEL_UPDATE_VOTE) {
-            G.runOnUiThread(() -> {
-                showVoteChannel = (boolean) message[1];
-                if (mAdapter != null) {
-                    mAdapter.notifyDataSetChanged();
-                }
-            });
-
-        } else if (id == EventManager.CHAT_UPDATE_STATUS) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                long messageId = (long) message[1];
-                ProtoGlobal.RoomMessageStatus status = (ProtoGlobal.RoomMessageStatus) message[2];
-                if (roomId == mRoomId) {
-                    if (mAdapter != null) {
-                        mAdapter.updateMessageStatus(messageId, status);
-                    }
-                }
-
-            });
-        }
-    }
-
     @Override
     public void onAttachPopupVideoPickerResult(List<String> results) {
 
@@ -9429,6 +9314,120 @@ public class FragmentChat extends BaseFragment
         })).start();
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.CALL_STATE_CHANGED) {
+            if (args == null || args.length == 0) return;
+            boolean state = (boolean) args[0];
+            G.handler.post(() -> {
+                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
+                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
+                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
+            });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.runOnUiThread(this::invalidateViews);
+        } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
+            G.handler.post(() -> {
+                String path = (String) args[0];
+                if (new File(path).exists())
+                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
+            });
+        } else if (id == EventManager.ON_MESSAGE_DELETE) {
+            long roomId = (long) args[0];
+            long messageId = (long) args[1];
+            boolean update = (boolean) args[2];
+
+            if (roomId == mRoomId && update) {
+                G.runOnUiThread(() -> {
+                    if (mAdapter == null) {
+                        return;
+                    }
+
+                    ArrayList<Long> messages = new ArrayList<>(1);
+                    messages.add(messageId);
+                    deleteSelectedMessageFromAdapter(messages);
+
+                    if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
+                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
+                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
+                            clearReplyView();
+                        }
+                    }
+                });
+            }
+        } else if (id == EventManager.ON_EDIT_MESSAGE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                long messageId = (long) args[1];
+                String newMessage = (String) args[2];
+
+                if (mRoomId == roomId && mAdapter != null) {
+                    mAdapter.updateMessageText(messageId, newMessage);
+                    removeEditedMessage();
+                }
+            });
+        } else if ((long) args[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
+            G.runOnUiThread(this::initPinedMessage);
+        } else if (id == EventManager.CHAT_CLEAR_MESSAGE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                if (roomId == mRoomId) {
+                    long clearID = (long) args[1];
+                    onChatClearMessage(roomId, clearID);
+                }
+
+            });
+        } else if (id == EventManager.CHANNEL_ADD_VOTE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                if (roomId == mRoomId) {
+
+                    long messageId = (long) args[1];
+                    String reactionCount = (String) args[2];
+                    ProtoGlobal.RoomMessageReaction reaction = (ProtoGlobal.RoomMessageReaction) args[3];
+                    long forwardedMessageId = (long) args[4];
+
+                    if (mAdapter != null) {
+                        mAdapter.updateVote(roomId, messageId, reactionCount, reaction, forwardedMessageId);
+                    }
+                }
+            });
+        } else if (id == EventManager.CHANNEL_GET_VOTE) {
+            G.runOnUiThread(() -> {
+                if (mAdapter != null) {
+
+                    List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> states = (List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats>) args[0];
+
+                    for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : states) {
+                        mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
+
+                    }
+                }
+            });
+
+        } else if (id == EventManager.CHANNEL_UPDATE_VOTE) {
+            G.runOnUiThread(() -> {
+                showVoteChannel = (boolean) args[1];
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+
+        } else if (id == EventManager.CHAT_UPDATE_STATUS) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                long messageId = (long) args[1];
+                ProtoGlobal.RoomMessageStatus status = (ProtoGlobal.RoomMessageStatus) args[2];
+                if (roomId == mRoomId) {
+                    if (mAdapter != null) {
+                        mAdapter.updateMessageStatus(messageId, status);
+                    }
+                }
+
+            });
+        }
+    }
+
     /**
      * *** SearchHash ***
      */
@@ -9439,7 +9438,7 @@ public class FragmentChat extends BaseFragment
         private String hashString = "";
         private int currentHashPosition;
 
-        private final ArrayList<String> hashList = new ArrayList<>();
+        private ArrayList<String> hashList = new ArrayList<>();
 
         void setHashString(String hashString) {
             this.hashString = hashString.toLowerCase();

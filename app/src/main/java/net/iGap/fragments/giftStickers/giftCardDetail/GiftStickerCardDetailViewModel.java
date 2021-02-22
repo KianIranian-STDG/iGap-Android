@@ -66,7 +66,7 @@ public class GiftStickerCardDetailViewModel extends ObserverViewModel {
                                 showMainView.set(View.VISIBLE);
                                 showLoadingView.set(View.GONE);
 
-                                EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, true);
+                                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_CHANGED, true));
                             }
 
                             @Override

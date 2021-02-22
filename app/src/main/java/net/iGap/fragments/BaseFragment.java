@@ -324,7 +324,7 @@ public class BaseFragment extends SwipeBackFragment {
 
 
     public EventManager getEventManager() {
-        return EventManager.getInstance();
+        return EventManager.getInstance(currentAccount);
     }
 
     public MessageController getMessageController() {

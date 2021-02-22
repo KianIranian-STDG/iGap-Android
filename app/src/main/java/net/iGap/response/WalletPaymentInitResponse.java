@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletPaymentInit;
@@ -35,13 +37,13 @@ public class WalletPaymentInitResponse extends MessageHandler {
         ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder builder = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message;
         builder.getToken();
         builder.getPublicKey();
-        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, builder);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_INIT_PAY, builder));
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, "");
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_INIT_PAY, ""));
     }
 
     @Override
@@ -51,7 +53,7 @@ public class WalletPaymentInitResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, "");
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_INIT_PAY, ""));
     }
 }
 

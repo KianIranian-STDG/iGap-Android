@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGGiftSticker;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
@@ -35,7 +36,7 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
 
     @Override
     public void subscribe() {
-        EventManager.getInstance().addEventListener(EventManager.STICKER_CHANGED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_CHANGED, this);
 
         showLoading.postValue(View.VISIBLE);
         showEmptyListMessage.postValue(View.GONE);
@@ -125,12 +126,12 @@ public class MyGiftStickerBuyViewModel extends ObserverViewModel {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        EventManager.getInstance().removeEventListener(EventManager.STICKER_CHANGED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STICKER_CHANGED, this);
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
-        super.receivedMessage(id, message);
+    public void receivedEvent(int id, int account, Object... args) {
+        super.receivedEvent(id, AccountManager.selectedAccount, args);
         G.handler.post(() -> pagination.onNext(0));
     }
 
