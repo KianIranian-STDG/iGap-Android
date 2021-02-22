@@ -30,7 +30,6 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestUserInfo;
@@ -433,7 +432,8 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
             }
         };
 
-        new RequestGroupLeft().groupLeft(roomId);
+        RoomController.getInstance(currentAccount).groupLeft(roomId);
+
     }
 
     private void showProgressBar() {

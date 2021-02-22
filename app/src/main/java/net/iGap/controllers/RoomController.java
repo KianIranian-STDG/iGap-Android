@@ -8,6 +8,7 @@ import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 
 public class RoomController extends BaseController {
@@ -158,6 +159,34 @@ public class RoomController extends BaseController {
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Group Delete Room -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
+    public void groupLeft(long roomId) {
+
+        IG_RPC.Group_Left req = new IG_RPC.Group_Left();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Group_Left res = (IG_RPC.Res_Group_Left) response;
+
+                if (AccountManager.getInstance().getCurrentUser().getId() == res.memberId) {
+                    RealmRoom.deleteRoom(roomId);
+
+                    if (G.onGroupLeft != null) {
+                        G.onGroupLeft.onGroupLeft(roomId, res.memberId);
+                    }
+                    if (G.onGroupDeleteInRoomList != null) {
+                        G.onGroupDeleteInRoomList.onGroupDelete(roomId);
+                    }
+                } else {
+                    RealmMember.kickMember(res.roomId, res.memberId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Group Left -> Major" + e.major + "Minor" + e.minor);
             }
         });
     }

@@ -69,6 +69,7 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Client_Mute_Room.actionId, IG_RPC.Res_Client_Mute_Room.class);
         classes.put(IG_RPC.Res_Chat_Delete_Room.actionId, IG_RPC.Res_Chat_Delete_Room.class);
         classes.put(IG_RPC.Res_Group_Delete_Room.actionId, IG_RPC.Res_Group_Delete_Room.class);
+        classes.put(IG_RPC.Res_Group_Left.actionId, IG_RPC.Res_Group_Left.class);
 
     }
 
@@ -220,7 +221,7 @@ public class LookUpClass {
         lookupMap.put(30306, "ProtoGroupKickAdmin.GroupKickAdminResponse");
         lookupMap.put(30307, "ProtoGroupKickMember.GroupKickMemberResponse");
         lookupMap.put(30308, "ProtoGroupKickModerator.GroupKickModeratorResponse");
-        lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
+        //  lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
         lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
         // lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
         lookupMap.put(30312, "ProtoGroupAvatarAdd.GroupAvatarAddResponse");

@@ -32,7 +32,6 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestGroupAvatarAdd;
 import net.iGap.request.RequestGroupEdit;
-import net.iGap.request.RequestGroupLeft;
 
 import java.util.ArrayList;
 
@@ -246,7 +245,7 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         if (role == GroupChatRole.OWNER) {
             RoomController.getInstance(currentAccount).groupDeleteRoom(roomId);
         } else {
-            new RequestGroupLeft().groupLeft(roomId);
+            RoomController.getInstance(currentAccount).groupLeft(roomId);
         }
     }
 

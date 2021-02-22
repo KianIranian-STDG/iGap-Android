@@ -70,7 +70,6 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.Room;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestClientGetRoomList;
-import net.iGap.request.RequestGroupLeft;
 import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -533,7 +532,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (item.getGroupRole() == GroupChatRole.OWNER) {
                 getRoomController().groupDeleteRoom(item.getId());
             } else {
-                new RequestGroupLeft().groupLeft(item.getId());
+                getRoomController().groupLeft(item.getId());
             }
         } else if (item.getType() == CHANNEL) {
 
@@ -562,7 +561,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
                 getRoomController().groupDeleteRoom(item.getId());
             } else {
-                new RequestGroupLeft().groupLeft(item.getId());
+                getRoomController().groupLeft(item.getId());
             }
         } else if (item.getType() == CHANNEL) {
 

@@ -27,6 +27,7 @@ import net.iGap.proto.ProtoGroupCreate;
 import net.iGap.proto.ProtoGroupDelete;
 import net.iGap.proto.ProtoGroupDeleteMessage;
 import net.iGap.proto.ProtoGroupEditMessage;
+import net.iGap.proto.ProtoGroupLeft;
 import net.iGap.proto.ProtoGroupPinMessage;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoInfoConfig;
@@ -1662,4 +1663,64 @@ public class IG_RPC {
 
     }
 
+    public static class Group_Left extends AbstractObject {
+
+        public int actionId = 309;
+        public long roomId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupLeft.GroupLeft.Builder builder = ProtoGroupLeft.GroupLeft.newBuilder();
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Group_Left().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Group_Left extends AbstractObject {
+
+        public static int actionId = 30309;
+        public long roomId;
+        public long memberId;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupLeft.GroupLeftResponse response = ProtoGroupLeft.GroupLeftResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            memberId = response.getMemberId();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Left object = null;
+            try {
+                object = new Res_Group_Left();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
 }
