@@ -32,6 +32,7 @@ import net.iGap.R;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
+import net.iGap.controllers.RoomController;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -72,7 +73,6 @@ import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestClientMuteRoom;
-import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.response.ClientGetRoomListResponse;
@@ -635,7 +635,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
-        new RequestClientPinRoom().pinRoom(roomId, !isPinned);
+        RoomController.getInstance(currentAccount).clientPinRoom(roomId, !isPinned);
         if (!isPinned) {
             goToTop();
         }
