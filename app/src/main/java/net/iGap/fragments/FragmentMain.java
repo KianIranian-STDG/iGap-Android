@@ -72,7 +72,6 @@ import net.iGap.realm.Room;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestClientGetRoomList;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.response.ClientGetRoomListResponse;
@@ -600,7 +599,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void muteNotification(final long roomId, final boolean mute) {
-        new RequestClientMuteRoom().muteRoom(roomId, !mute);
+        RoomController.getInstance(currentAccount).clientMuteRoom(roomId, !mute);
         disableMultiSelect();
     }
 
@@ -674,7 +673,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onRemoveFragment(Fragment fragment) {
         removeFromBaseFragment(fragment);
     }
-
 
 
     @Override
@@ -841,7 +839,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
                                     try {
-                                        String url =BuildConfig.UPDATE_LINK;
+                                        String url = BuildConfig.UPDATE_LINK;
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         startActivity(i);

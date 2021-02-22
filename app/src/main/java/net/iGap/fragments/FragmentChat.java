@@ -128,6 +128,7 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.controllers.MessageController;
+import net.iGap.controllers.RoomController;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -281,7 +282,6 @@ import net.iGap.request.RequestClientGetFavoriteMenu;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -324,7 +324,6 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
-import static net.iGap.G.context;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -5893,7 +5892,7 @@ public class FragmentChat extends BaseFragment
     private void muteNotification(final long roomId) {
 
         isMuteNotification = !isMuteNotification;
-        new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
+        RoomController.getInstance(currentAccount).clientMuteRoom(roomId,isMuteNotification);
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);

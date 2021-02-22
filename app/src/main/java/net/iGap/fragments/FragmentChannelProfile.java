@@ -29,6 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.controllers.RoomController;
 import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -48,7 +49,6 @@ import net.iGap.realm.RealmRoomAccess;
 import net.iGap.request.RequestChannelKickAdmin;
 import net.iGap.request.RequestChannelKickMember;
 import net.iGap.request.RequestChannelKickModerator;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -172,7 +172,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         });
 
         viewModel.muteNotifListener.observe(getViewLifecycleOwner(), isMute -> {
-            new RequestClientMuteRoom().muteRoom(viewModel.roomId, isMute);
+            RoomController.getInstance(currentAccount).clientMuteRoom(viewModel.roomId,isMute);
             binding.enableNotification.setChecked(isMute);
         });
 

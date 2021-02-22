@@ -40,6 +40,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.controllers.RoomController;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -57,8 +58,6 @@ import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoUserReport;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
@@ -72,7 +71,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
 //todo : fixed view mode and view and remove logic code from view
@@ -185,7 +183,7 @@ public class FragmentContactsProfile extends BaseFragment {
         //todo: fixed it and move to viewModel
         viewModel.isMuteNotificationChangeListener.observe(getViewLifecycleOwner(), isChecked -> {
             binding.enableNotification.setChecked(isChecked);
-            new RequestClientMuteRoom().muteRoom(viewModel.roomId, isChecked);
+            RoomController.getInstance(currentAccount).clientMuteRoom(viewModel.roomId,isChecked);
         });
 
         viewModel.contactName.observe(getViewLifecycleOwner(), name -> {

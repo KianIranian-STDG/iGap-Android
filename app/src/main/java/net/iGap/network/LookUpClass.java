@@ -66,6 +66,7 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Chat_Update_Status.actionId, IG_RPC.Res_Chat_Update_Status.class);
         classes.put(IG_RPC.Res_Group_Update_Status.actionId, IG_RPC.Res_Group_Update_Status.class);
         classes.put(IG_RPC.Res_Client_Pin_Room.actionId, IG_RPC.Res_Client_Pin_Room.class);
+        classes.put(IG_RPC.Res_Client_Mute_Room.actionId,IG_RPC.Res_Client_Mute_Room.class);
     }
 
     public boolean validObject(int actionId) {

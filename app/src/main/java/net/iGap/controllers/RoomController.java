@@ -2,8 +2,10 @@ package net.iGap.controllers;
 
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmRoom;
 
@@ -89,4 +91,26 @@ public class RoomController extends BaseController {
 
     }
 
+    public void clientMuteRoom(long roomId, boolean roomMute) {
+
+        IG_RPC.Client_Mute_Room req = new IG_RPC.Client_Mute_Room();
+        req.roomId = roomId;
+        req.roomMute = roomMute ? ProtoGlobal.RoomMute.MUTE : ProtoGlobal.RoomMute.UNMUTE;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Client_Mute_Room res = (IG_RPC.Res_Client_Mute_Room) response;
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", res.roomId).findFirst();
+                    if (room != null) {
+                        room.setMute(res.roomMute);
+                    }
+                });
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Client Mute Room -> Major" + e.major + "Minor" + e.minor);
+            }
+
+        });
+    }
 }

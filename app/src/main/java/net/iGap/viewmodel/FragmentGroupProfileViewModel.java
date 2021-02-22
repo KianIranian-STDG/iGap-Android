@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.RoomController;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
@@ -29,7 +30,6 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
@@ -270,7 +270,7 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
     }
 
     public void onNotificationCheckChange() {
-        new RequestClientMuteRoom().muteRoom(roomId, !isUnMuteNotification.get());
+        RoomController.getInstance(currentAccount).clientMuteRoom(roomId, !isUnMuteNotification.get());
     }
 
     public void onInviteLinkClick() {
