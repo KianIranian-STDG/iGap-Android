@@ -1446,6 +1446,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoClientPinRoom.ClientPinRoomResponse response = ProtoClientPinRoom.ClientPinRoomResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             pinId = response.getPinId();
         }
