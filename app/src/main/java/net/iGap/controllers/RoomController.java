@@ -190,4 +190,33 @@ public class RoomController extends BaseController {
             }
         });
     }
+
+    public void channelLeft(long roomId) {
+
+        IG_RPC.Channel_Left req = new IG_RPC.Channel_Left();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_Left res = (IG_RPC.Res_Channel_Left) response;
+
+                if (AccountManager.getInstance().getCurrentUser().getId() == res.memberId) {
+                    RealmRoom.deleteRoom(res.roomId);
+
+                    if (G.onChannelLeft != null) {
+                        G.onChannelLeft.onChannelLeft(res.roomId, res.memberId);
+                    }
+                    if (G.onChannelDeleteInRoomList != null) {
+                        G.onChannelDeleteInRoomList.onChannelDelete(res.roomId);
+                    }
+                } else {
+                    RealmMember.kickMember(res.roomId, res.memberId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Group Left -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
 }

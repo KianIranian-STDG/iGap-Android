@@ -68,7 +68,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.Room;
-import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.viewmodel.controllers.CallManager;
@@ -546,7 +545,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (item.getChannelRole() == ChannelChatRole.OWNER) {
                 getMessageController().deleteChannel(item.getId());
             } else {
-                new RequestChannelLeft().channelLeft(item.getId());
+                getRoomController().channelLeft(item.getId());
             }
         }
         if (exit)
@@ -575,7 +574,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
                 getMessageController().deleteChannel(item.getId());
             } else {
-                new RequestChannelLeft().channelLeft(item.getId());
+                getRoomController().channelLeft(item.getId());
             }
         }
         if (exit)

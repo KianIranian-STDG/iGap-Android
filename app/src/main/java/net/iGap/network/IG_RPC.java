@@ -9,6 +9,7 @@ import net.iGap.proto.ProtoChannelDelete;
 import net.iGap.proto.ProtoChannelDeleteMessage;
 import net.iGap.proto.ProtoChannelEditMessage;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
+import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoChannelPinMessage;
 import net.iGap.proto.ProtoChannelUpdateReactionStatus;
 import net.iGap.proto.ProtoChannelUpdateSignature;
@@ -1710,6 +1711,67 @@ public class IG_RPC {
             Res_Group_Left object = null;
             try {
                 object = new Res_Group_Left();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Channel_Left extends AbstractObject {
+
+        public int actionId = 409;
+        public long roomId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelLeft.ChannelLeft.Builder builder = ProtoChannelLeft.ChannelLeft.newBuilder();
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Left().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Channel_Left extends AbstractObject {
+
+        public static int actionId = 30409;
+        public long roomId;
+        public long memberId;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelLeft.ChannelLeftResponse response = ProtoChannelLeft.ChannelLeftResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            memberId = response.getMemberId();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Channel_Left object = null;
+            try {
+                object = new Res_Channel_Left();
                 object.readParams(message);
             } catch (Exception e) {
                 e.printStackTrace();
