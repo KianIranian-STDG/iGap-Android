@@ -1,5 +1,6 @@
 package net.iGap.controllers;
 
+import net.iGap.G;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -111,6 +112,53 @@ public class RoomController extends BaseController {
                 FileLog.e("Client Mute Room -> Major" + e.major + "Minor" + e.minor);
             }
 
+        });
+    }
+
+    public void chatDeleteRoom(long roomId) {
+
+        IG_RPC.Chat_Delete_Room req = new IG_RPC.Chat_Delete_Room();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Chat_Delete_Room res = (IG_RPC.Res_Chat_Delete_Room) response;
+                RealmRoom.deleteRoom(res.roomId);
+                if (G.onChatDelete != null) {
+                    G.onChatDelete.onChatDelete(res.roomId);
+                }
+
+                if (G.onChatDeleteInRoomList != null) {
+                    G.onChatDeleteInRoomList.onChatDelete(res.roomId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Chat Delete Room -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+
+    }
+
+    public void groupDeleteRoom(long roomId) {
+
+        IG_RPC.Group_Delete_Room req = new IG_RPC.Group_Delete_Room();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Group_Delete_Room res = (IG_RPC.Res_Group_Delete_Room) response;
+                RealmRoom.deleteRoom(res.roomId);
+                if (G.onGroupDelete != null) {
+                    G.onGroupDelete.onGroupDelete(res.roomId);
+                }
+                if (G.onGroupDeleteInRoomList != null) {
+                    G.onGroupDeleteInRoomList.onGroupDelete(res.roomId);
+                }
+
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Group Delete Room -> Major" + e.major + "Minor" + e.minor);
+            }
         });
     }
 }

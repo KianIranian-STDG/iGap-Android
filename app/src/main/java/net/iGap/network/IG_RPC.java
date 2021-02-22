@@ -13,6 +13,7 @@ import net.iGap.proto.ProtoChannelPinMessage;
 import net.iGap.proto.ProtoChannelUpdateReactionStatus;
 import net.iGap.proto.ProtoChannelUpdateSignature;
 import net.iGap.proto.ProtoChatClearMessage;
+import net.iGap.proto.ProtoChatDelete;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
 import net.iGap.proto.ProtoChatUpdateStatus;
@@ -23,6 +24,7 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupClearMessage;
 import net.iGap.proto.ProtoGroupCreate;
+import net.iGap.proto.ProtoGroupDelete;
 import net.iGap.proto.ProtoGroupDeleteMessage;
 import net.iGap.proto.ProtoGroupEditMessage;
 import net.iGap.proto.ProtoGroupPinMessage;
@@ -1536,4 +1538,128 @@ public class IG_RPC {
         }
 
     }
+
+    public static class Chat_Delete_Room extends AbstractObject {
+
+        public int actionId = 206;
+        public long roomId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatDelete.ChatDelete.Builder builder = ProtoChatDelete.ChatDelete.newBuilder();
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Chat_Delete_Room().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Chat_Delete_Room extends AbstractObject {
+
+        public static int actionId = 30206;
+        public long roomId;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatDelete.ChatDeleteResponse response = ProtoChatDelete.ChatDeleteResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Delete_Room object = null;
+
+            try {
+                object = new Res_Chat_Delete_Room();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Group_Delete_Room extends AbstractObject {
+
+        public int actionId = 318;
+        public long roomId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupDelete.GroupDelete.Builder builder = ProtoGroupDelete.GroupDelete.newBuilder();
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Group_Delete_Room().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Group_Delete_Room extends AbstractObject {
+
+        public static int actionId = 30318;
+        public long roomId;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupDelete.GroupDeleteResponse response = ProtoGroupDelete.GroupDeleteResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Delete_Room object = null;
+            try {
+                object = new Res_Group_Delete_Room();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
 }

@@ -128,7 +128,6 @@ import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.controllers.MessageController;
-import net.iGap.controllers.RoomController;
 import net.iGap.fragments.chatMoneyTransfer.ParentChatMoneyTransferFragment;
 import net.iGap.fragments.emoji.SuggestedStickerAdapter;
 import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
@@ -275,7 +274,6 @@ import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelUpdateDraft;
-import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
@@ -5885,14 +5883,14 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void deleteChat(final long chatId) {
-        new RequestChatDelete().chatDelete(chatId);
+    private void deleteChat(final long roomId) {
+        getRoomController().chatDeleteRoom(roomId);
     }
 
     private void muteNotification(final long roomId) {
 
         isMuteNotification = !isMuteNotification;
-        RoomController.getInstance(currentAccount).clientMuteRoom(roomId,isMuteNotification);
+        getRoomController().clientMuteRoom(roomId,isMuteNotification);
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);

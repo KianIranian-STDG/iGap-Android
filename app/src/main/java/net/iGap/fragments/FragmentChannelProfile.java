@@ -172,7 +172,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         });
 
         viewModel.muteNotifListener.observe(getViewLifecycleOwner(), isMute -> {
-            RoomController.getInstance(currentAccount).clientMuteRoom(viewModel.roomId,isMute);
+            getRoomController().clientMuteRoom(viewModel.roomId,isMute);
             binding.enableNotification.setChecked(isMute);
         });
 
