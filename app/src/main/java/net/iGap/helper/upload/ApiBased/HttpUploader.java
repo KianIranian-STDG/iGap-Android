@@ -164,7 +164,7 @@ public class HttpUploader implements IUpload {
                 CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.message.attachment.localFilePath, savePathVideoCompress, new OnCompress() {
                     @Override
                     public void onCompressProgress(String id, int percent) {
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, percent));
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent));
                     }
 
                     @Override
@@ -178,7 +178,7 @@ public class HttpUploader implements IUpload {
                                 compressFile.delete();
                             }
                         }
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
                         pendingCompressTasks.remove(fileObject.messageId + "");
 
                         startUpload(fileObject, completedCompressFile);
@@ -205,7 +205,7 @@ public class HttpUploader implements IUpload {
                 @Override
                 public void onUploadProgress(UploadObject fileObject) {
                     FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
                     if (fileObject.onUploadListener != null) {
                         fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
                     }

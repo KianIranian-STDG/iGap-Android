@@ -204,7 +204,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     private void updateChannelAvatarInternal(IG_RPC.Res_Channel_Avatar avatar) {
         getMessageDataStorage().putUserAvatar(avatar.roomId, avatar.avatar);
-        G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.AVATAR_UPDATE, avatar.roomId, avatar.avatar));
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.AVATAR_UPDATE, avatar.roomId, avatar.avatar));
     }
 
     public void deleteChannel(long roomId) {
@@ -300,7 +300,7 @@ public class MessageController extends BaseController implements EventManager.Ev
         }
 
         getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
-        G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage));
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage));
 
     }
 
@@ -429,7 +429,7 @@ public class MessageController extends BaseController implements EventManager.Ev
             if (response != null) {
                 IG_RPC.Res_Channel_Add_Message_Reaction res = (IG_RPC.Res_Channel_Add_Message_Reaction) response;
                 getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
-                G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction, messageObject.forwardedMessage.id));
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction, messageObject.forwardedMessage.id));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
@@ -458,7 +458,7 @@ public class MessageController extends BaseController implements EventManager.Ev
             if (response != null) {
                 IG_RPC.Res_Channel_Get_Message_Reaction res = (IG_RPC.Res_Channel_Get_Message_Reaction) response;
                 RealmChannelExtra.updateMessageStats(res.states);
-                G.runOnUiThread(() -> getEventManager().postNotificationName(EventManager.CHANNEL_GET_VOTE, res.states));
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_GET_VOTE, res.states));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);

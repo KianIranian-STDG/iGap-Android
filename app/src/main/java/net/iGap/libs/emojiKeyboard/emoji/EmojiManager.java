@@ -55,7 +55,7 @@ public class EmojiManager {
     private Paint placeholderPaint;
     private boolean recentEmojiLoaded;
 
-    private Runnable invalidateRunnable = () -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.EMOJI_LOADED);
+    private Runnable invalidateRunnable = () -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.EMOJI_LOADED);
 
     static {
         getInstance();

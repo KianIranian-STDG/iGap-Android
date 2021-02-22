@@ -60,7 +60,7 @@ public class WebSocketClient {
                     latestResponse = System.currentTimeMillis();
                     HelperConnectionState.connectionState(ConnectionState.CONNECTING);
                     checkFirstResponse();
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.SOCKET_CONNECT_OK, ""));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.SOCKET_CONNECT_OK, ""));
 
                     if (Config.FILE_LOG_ENABLE) {
                         FileLog.i("on Connected");
@@ -108,7 +108,7 @@ public class WebSocketClient {
                     if (autoConnect)
                         G.handler.postDelayed(() -> connect(true), DateUtils.SECOND_IN_MILLIS);
 
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.SOCKET_DISCONNECT, ""));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.SOCKET_DISCONNECT, ""));
 
                     if (Config.FILE_LOG_ENABLE) {
                         FileLog.i("on onDisconnected ");
@@ -125,7 +125,7 @@ public class WebSocketClient {
                     if (autoConnect)
                         G.handler.postDelayed(() -> connect(true), DateUtils.SECOND_IN_MILLIS);
 
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.SOCKET_CONNECT_ERROR, exception.getError().name() + ": " + exception.getMessage()));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.SOCKET_CONNECT_ERROR, exception.getError().name() + ": " + exception.getMessage()));
 
                     super.onConnectError(websocket, exception);
                 }
@@ -236,7 +236,7 @@ public class WebSocketClient {
 
             webSocketClient.connectAsynchronously();
         } else {
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.SOCKET_CONNECT_DENY, "state of socket is : " + webSocketClient.getState().name()));
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.SOCKET_CONNECT_DENY, "state of socket is : " + webSocketClient.getState().name()));
         }
     }
 

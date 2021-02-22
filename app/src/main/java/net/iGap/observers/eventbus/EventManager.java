@@ -130,9 +130,9 @@ public class EventManager {
 
     public void setAnimationInProgress(boolean value) {
         if (value) {
-            G.runOnUiThread(() -> EventManager.getGlobalInstance().postNotificationName(stopAllHeavyOperations, 512));
+            G.runOnUiThread(() -> EventManager.getGlobalInstance().postEvent(stopAllHeavyOperations, 512));
         } else {
-            G.runOnUiThread(() -> EventManager.getGlobalInstance().postNotificationName(startAllHeavyOperations, 512));
+            G.runOnUiThread(() -> EventManager.getGlobalInstance().postEvent(startAllHeavyOperations, 512));
         }
         animationInProgress = value;
         if (!animationInProgress && !delayedPosts.isEmpty()) {
@@ -144,7 +144,7 @@ public class EventManager {
         }
     }
 
-    public void postNotificationName(int id, Object... args) {
+    public void postEvent(int id, Object... args) {
         boolean allowDuringAnimation = id == startAllHeavyOperations || id == stopAllHeavyOperations;
         if (!allowDuringAnimation && allowedNotifications != null) {
             for (int allowedNotification : allowedNotifications) {

@@ -129,7 +129,7 @@ public class HelperMessageResponse {
         }
 
         if ((roomMessage.getAuthor().getUser().getUserId() == AccountManager.getInstance().getCurrentUser().getId()) && roomMessage.getAttachment() != null) {
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken()));
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken()));
         }
     }
 }

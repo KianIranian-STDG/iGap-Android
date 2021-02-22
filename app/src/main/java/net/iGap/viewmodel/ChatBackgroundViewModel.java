@@ -207,7 +207,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                     .apply();
             if (G.twoPaneMode) {
                 String finalPath1 = finalPath;
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.CHAT_BACKGROUND_CHANGED, finalPath1));
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CHAT_BACKGROUND_CHANGED, finalPath1));
             }
             goBack.setValue(true);
         }
@@ -220,7 +220,7 @@ public class ChatBackgroundViewModel extends ViewModel {
                 .putBoolean(SHP_SETTING.KEY_CHAT_BACKGROUND_IS_DEFAULT, true)
                 .apply();
         if (G.twoPaneMode) {
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.CHAT_BACKGROUND_CHANGED, ""));
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CHAT_BACKGROUND_CHANGED, ""));
         }
         goBack.setValue(true);
     }

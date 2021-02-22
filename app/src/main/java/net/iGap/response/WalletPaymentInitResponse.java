@@ -37,13 +37,13 @@ public class WalletPaymentInitResponse extends MessageHandler {
         ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder builder = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message;
         builder.getToken();
         builder.getPublicKey();
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_INIT_PAY, builder));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_INIT_PAY, builder));
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_INIT_PAY, ""));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_INIT_PAY, ""));
     }
 
     @Override
@@ -53,7 +53,7 @@ public class WalletPaymentInitResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
 
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_INIT_PAY, ""));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_INIT_PAY, ""));
     }
 }
 

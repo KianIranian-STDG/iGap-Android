@@ -41,7 +41,7 @@ public class RequestClientGetRoomList {
         IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset, identity);
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identityGetRoomList);
 
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ROOM_LIST_CHANGED, true));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ROOM_LIST_CHANGED, true));
 
         try {
 

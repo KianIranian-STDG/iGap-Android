@@ -40,6 +40,6 @@ public abstract class IGSingleObserver<T> implements SingleObserver<T> {
         ErrorModel errorModel = ExceptionMessageFactory.getMessage(e);
         G.runOnUiThread(() -> HelperError.showSnackMessage(errorModel.getMessage(), false));
 
-        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.IG_ERROR, e));
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.IG_ERROR, e));
     }
 }

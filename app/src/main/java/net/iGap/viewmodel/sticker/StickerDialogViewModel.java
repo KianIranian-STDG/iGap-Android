@@ -93,7 +93,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         onStickerFavoriteChange(stickerGroup.isInUserList());
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), stickerGroup.isInUserList()));
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), stickerGroup.isInUserList()));
                     }
 
                     @Override
@@ -111,7 +111,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), false));
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), false));
                         onStickerFavoriteChange(false);
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         closeDialogMutableLiveData.postValue(true);

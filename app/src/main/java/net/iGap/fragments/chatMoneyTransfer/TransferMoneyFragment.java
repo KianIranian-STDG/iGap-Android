@@ -173,14 +173,14 @@ public class TransferMoneyFragment extends Fragment implements EventManager.Even
                             + String.valueOf(paymentResult.traceNumber)
                             + getResources().getString(R.string.amount_2)
                             + paymentResult.amount, false);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedSuccess));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedSuccess));
                 } else {
                     HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedFailed));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedFailed));
                 }
             } else {
                 HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultNotReceived));
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultNotReceived));
             }
         }
 

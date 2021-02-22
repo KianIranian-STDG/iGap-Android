@@ -62,7 +62,7 @@ public class AppConfig {
                 editor.putBoolean("show_advertisement", showAdvertisement);
                 editor.apply();
 
-                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.APP_CONFIG_CHANGED));
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.APP_CONFIG_CHANGED));
 
             } catch (Exception e) {
                 FileLog.e(e);

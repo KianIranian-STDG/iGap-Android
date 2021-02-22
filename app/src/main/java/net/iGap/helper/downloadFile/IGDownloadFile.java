@@ -48,7 +48,7 @@ public class IGDownloadFile {
                 @Override
                 public void onError(IGDownloadFileStruct igDownloadFileStruct, int majorCode, int minorCode) {
                     AndroidUtils.deleteFile(new File(igDownloadFileStruct.path));
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token));
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token));
                     if (fileStruct.listener != null)
                         fileStruct.listener.onDownloadFailed(fileStruct);
                     fileHashMap.remove(igDownloadFileStruct.id);
@@ -69,7 +69,7 @@ public class IGDownloadFile {
             sendRequest(fileStruct);
         } else {
             fileHashMap.remove(fileStruct.id);
-            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postNotificationName(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token));
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token));
             if (fileStruct.listener != null)
                 fileStruct.listener.onDownloadComplete(fileStruct);
 
