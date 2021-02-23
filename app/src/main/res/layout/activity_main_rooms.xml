@@ -19,7 +19,6 @@
         android:id="@+id/amr_layout_selected_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar_with_search"
         android:layout_marginBottom="4dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +51,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:paddingTop="@dimen/dp24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +62,7 @@
         android:layout_height="wrap_content"
         android:minHeight="@dimen/toolbar_height_root_with_search"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

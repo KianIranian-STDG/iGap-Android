@@ -74,7 +74,6 @@ public class RoomListCell extends FrameLayout {
     private TextBadge badgeView;
     private FontIconTextView statusTv;
     private AppCompatImageView pinView;
-    private AppCompatImageView pinCornerView;
     private CheckBox checkBox;
 
     private boolean haveAvatar = false;
@@ -98,20 +97,13 @@ public class RoomListCell extends FrameLayout {
         if (room.isPinned()) {
             if (!havePin) {
                 pinView = new AppCompatImageView(getContext());
-                pinCornerView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
-                pinCornerView.setBackground(Theme.getInstance().tintDrawable(getResources().getDrawable(R.drawable.pin_corner), getContext(), R.attr.colorAccent));
-
-                if (isRtl)
-                    pinCornerView.setRotationY(180);
 
                 addView(pinView, 0);
-                addView(pinCornerView, 1);
                 havePin = true;
             }
         } else if (havePin) {
             removeView(pinView);
-            removeView(pinCornerView);
             havePin = false;
         }
 
@@ -475,14 +467,7 @@ public class RoomListCell extends FrameLayout {
 
             if (havePin) {
                 pinView.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(getHeight(), EXACTLY));
-                pinCornerView.measure(makeMeasureSpec(dpToPx(15), AT_MOST), makeMeasureSpec(dpToPx(15), AT_MOST));
-                if (isRtl) {
-                    pinView.layout(smallMargin, smallMargin, getWidth() - avatarImageView.getWidth() / 2, getHeight() - smallMargin);
-                    pinCornerView.layout(pinView.getLeft(), pinView.getTop(), pinView.getLeft() + dpToPx(15), pinView.getTop() + dpToPx(15));
-                } else {
-                    pinView.layout(avatarImageView.getWidth() / 2, smallMargin, getWidth() - smallMargin, getHeight() - smallMargin);
-                    pinCornerView.layout(pinView.getRight() - dpToPx(15), pinView.getTop(), pinView.getRight(), pinView.getTop() + dpToPx(15));
-                }
+                pinView.layout(0, 0, getWidth(), getHeight());
             }
 
             if (haveCheckBox) {
