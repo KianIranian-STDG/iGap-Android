@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +36,7 @@ public class ToolbarItem extends FrameLayout {
     private TextView textView;
     private IconView iconView;
     private FrameLayout searchContainer;
-    private ImageView searchClearButton;
+    private TextView searchClearButton;
     private SearchEditText searchEditText;
     private boolean isSearchBox;
     private boolean processedPopupClick;
@@ -150,17 +149,23 @@ public class ToolbarItem extends FrameLayout {
         };
         searchContainer.setClipChildren(false);
 
-        parentToolbarItem.addView(searchContainer, 0, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 6, 0, 0, 0));
+        parentToolbarItem.addView(searchContainer, 0, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 6, 0, 0, 0));
+
         searchContainer.setVisibility(GONE);
         searchEditText = new SearchEditText(getContext());
         searchEditText.setHint(R.string.search);
         searchEditText.setSingleLine(true);
         searchEditText.setEllipsize(TextUtils.TruncateAt.END);
-        searchEditText.setHintTextColor(Theme.getInstance().getButtonSelectorBackground(getContext()));
+        searchEditText.setHintTextColor(Theme.getInstance().getDividerColor(getContext()));
 
         searchContainer.addView(searchEditText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL, 6, 0, 48, 0));
-        searchClearButton = new ImageView(getContext());
-        searchClearButton.setImageDrawable(getResources().getDrawable(R.drawable.crop_image_menu_flip));
+        searchClearButton = new TextView(getContext());
+        searchClearButton.setTextSize(22);
+        searchClearButton.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
+        searchClearButton.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        searchClearButton.setText(R.string.close_icon);
+        searchClearButton.setVisibility(GONE);
+        searchClearButton.setGravity(Gravity.CENTER);
 
         searchClearButton.setOnClickListener(view -> {
             if (searchEditText.length() != 0) {
@@ -352,6 +357,7 @@ public class ToolbarItem extends FrameLayout {
         }
         if (searchContainer.getVisibility() == VISIBLE) {
             searchContainer.setVisibility(GONE);
+            searchClearButton.setVisibility(GONE);
             searchEditText.clearFocus();
             if (listener != null) {
                 listener.onSearchCollapse();
@@ -363,6 +369,7 @@ public class ToolbarItem extends FrameLayout {
             return false;
         } else {
             searchContainer.setVisibility(VISIBLE);
+            searchClearButton.setVisibility(VISIBLE);
             searchContainer.setAlpha(1f);
             setVisibility(GONE);
             searchEditText.setText("");

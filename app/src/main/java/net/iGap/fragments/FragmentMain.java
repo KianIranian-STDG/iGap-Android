@@ -4,12 +4,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +50,11 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.View.CubicBezierInterpolator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.NumberTextView;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.model.MultiSelectStruct;
 import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
@@ -117,8 +129,22 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private RecyclerView multiSelectRv;
     private SelectedItemAdapter multiSelectAdapter;
     private View selectedItemView;
+    private NumberTextView multiSelectCounter;
+    private ToolbarItem pinToTop, leaveItem, muteItem, moreItem;
 
     private AnimatorSet progressAnimatorSet;
+
+    ToolbarItem searchItem;
+    ToolbarItem test1;
+    ToolbarItem test2;
+    ToolbarItem pinItem;
+    private final int pin = 1;
+    private final int leave = 2;
+    private final int mute = 3;
+    private final int more = 4;
+    private final int close = 5;
+    private ArrayList<View> actionModeViews = new ArrayList<>();
+    private int selectedCount;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -128,16 +154,67 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         return fragment;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_main_rooms, container, false);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isNeedResume = true;
+    }
+
+    @Override
+    public View createView(Context context) {
+        ToolbarItems toolbarItems = toolbar.createToolbarItems();
+        ToolbarItem moreItem = toolbarItems.addItemWithWidth(0, R.string.add_icon_2, 52);
+        searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
+            @Override
+            public void onSearchExpand() {
+                if (test1 != null) {
+                    test1.setVisibility(View.GONE);
+                }
+                if (test2 != null) {
+                    test2.setVisibility(View.GONE);
+                }
+
+                if (moreItem != null) {
+                    moreItem.setVisibility(View.GONE);
+                }
+                toolbar.setBackIcon(new BackDrawable(false));
+            }
+
+            @Override
+            public boolean canCollapseSearch() {
+                return super.canCollapseSearch();
+            }
+
+            @Override
+            public void onSearchCollapse() {
+                if (test1 != null) {
+                    test1.setVisibility(View.VISIBLE);
+                }
+                if (test2 != null) {
+                    test2.setVisibility(View.VISIBLE);
+                }
+                if (moreItem != null) {
+                    moreItem.setVisibility(View.VISIBLE);
+                }
+                toolbar.setBackIcon(null);
+            }
+
+            @Override
+            public void onTextChanged(EditText editText) {
+                super.onTextChanged(editText);
+            }
+        });
+        test1 = toolbarItems.addItem(0, R.string.ic_internet, Color.WHITE);
+        test2 = toolbarItems.addItem(0, R.string.igap_en_icon, Color.WHITE);
+        createActionMode();
+        return LayoutInflater.from(context).inflate(R.layout.activity_main_rooms, null, false);
+    }
+
+    @Override
+    public View createToolBar(Context context) {
+        toolbar = new Toolbar(context);
+        toolbar.setTitle("iGap");
+        return toolbar;
     }
 
     @Override
@@ -281,10 +358,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void checkMultiSelectState() {
         if (isChatMultiSelectEnable) {
             enableMultiSelect();
-            selectedItemCountTv.setVisibility(View.VISIBLE);
-            multiSelectRv.setVisibility(View.VISIBLE);
+            toolbar.showActionToolbar();
+//            selectedItemCountTv.setVisibility(View.VISIBLE);
+//            multiSelectRv.setVisibility(View.VISIBLE);
             multiSelectAdapter.notifyDataSetChanged();
             selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
+            multiSelectCounter.setNumber(mSelectedRoomList.size(), false);
         }
     }
 
@@ -359,38 +438,38 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void notifyChatRoomsList() {
-
-        try {
-            if (mRecyclerView != null) {
-                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable) {
-                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
-                    return;
-                }
-                if (CallManager.getInstance().isCallAlive() && isChatMultiSelectEnable) {
-                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
-                    return;
-                }
-                setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
-
-                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-                } else if (CallManager.getInstance().isCallAlive()) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
-                } else if (isChatMultiSelectEnable) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
-                } else if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-                } else if (MusicPlayer.mp != null && MusicPlayer.playerStatusObservable.getValue() != null && MusicPlayer.playerStatusObservable.getValue().equals(MusicPlayer.PAUSE)) {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-                } else {
-                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+//
+//        try {
+//            if (mRecyclerView != null) {
+//                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable) {
+//                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
+//                    return;
+//                }
+//                if (CallManager.getInstance().isCallAlive() && isChatMultiSelectEnable) {
+//                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
+//                    return;
+//                }
+//                setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
+//
+//                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+//                } else if (CallManager.getInstance().isCallAlive()) {
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
+//                } else if (isChatMultiSelectEnable) {
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
+//                } else if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+//                } else if (MusicPlayer.mp != null && MusicPlayer.playerStatusObservable.getValue() != null && MusicPlayer.playerStatusObservable.getValue().equals(MusicPlayer.PAUSE)) {
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
+//                } else {
+//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     private void refreshChatList(int pos, boolean isRefreshAll) {
@@ -465,6 +544,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (isChatMultiSelectEnable) {
                     onChatCellClickedInEditMode.onClicked(realmRoom, adapterPosition, roomListCell.getCheckBox().isChecked());
                     selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
+                    multiSelectCounter.setNumber(mSelectedRoomList.size(), true);
                 } else {
                     if (realmRoom.isValid() && G.fragmentActivity != null) {
                         boolean openChat = true;
@@ -494,10 +574,28 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
                 if (!isChatMultiSelectEnable && FragmentChat.mForwardMessages == null && !HelperGetDataFromOtherApp.hasSharedData) {
                     enableMultiSelect();
-                    selectedItemCountTv.setVisibility(View.VISIBLE);
-                    multiSelectRv.setVisibility(View.VISIBLE);
+//                    selectedItemCountTv.setVisibility(View.VISIBLE);
+//                    multiSelectRv.setVisibility(View.VISIBLE);
                     onChatCellClickedInEditMode.onClicked(realmRoom, position, false);
                     selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
+                    createActionMode();
+                    multiSelectCounter.setNumber(mSelectedRoomList.size(), true);
+                    toolbar.showActionToolbar();
+                    BackDrawable backDrawable = new BackDrawable(true);
+                    backDrawable.setRotation(1,true);
+                    backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+                    toolbar.setBackIcon(backDrawable);
+
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    ArrayList<Animator> animators = new ArrayList<>();
+                    for (int a = 0; a < actionModeViews.size(); a++) {
+                        View view = actionModeViews.get(a);
+                        view.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
+                        animators.add(ObjectAnimator.ofFloat(view, View.SCALE_Y, 0.1f, 1.0f));
+                    }
+                    animatorSet.playTogether(animators);
+                    animatorSet.setDuration(180);
+                    animatorSet.start();
                 }
                 return true;
             }
@@ -511,6 +609,58 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 }
             }
         });
+
+    }
+
+    private void updateCount() {
+
+        ArrayList<Animator> animators = new ArrayList<>();
+        AnimatorSet animatorSet = new AnimatorSet();
+        if (selectedCount < mSelectedRoomList.size()) {
+            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.TRANSLATION_Y, -multiSelectCounter.getMeasuredHeight() / 2.f, 0));
+            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.ALPHA, 0.01f, 1.0f));
+        } else {
+            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.TRANSLATION_Y, multiSelectCounter.getMeasuredHeight() * 1.5f, 0));
+            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.ALPHA, 0.01f, 1.0f));
+        }
+        animatorSet.playTogether(animators);
+        animatorSet.setDuration(1000);
+        animatorSet.setInterpolator(new DecelerateInterpolator());
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+//                multiSelectCounter.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
+                multiSelectCounter.requestLayout();
+            }
+        });
+
+        animatorSet.start();
+        selectedCount = mSelectedRoomList.size();
+    }
+
+    private void createActionMode() {
+        if (toolbar.isInActionMode(null)) {
+            return;
+        }
+        final ToolbarItems toolbarItems = toolbar.createActionToolbar(null);
+        toolbarItems.setBackground(null);
+
+        moreItem = toolbarItems.addItemWithWidth(more, R.string.more_icon, 52);
+        leaveItem = toolbarItems.addItemWithWidth(leave, R.string.ic_charge, 52);
+        pinItem = toolbarItems.addItemWithWidth(pin, R.string.add_icon_2, 52);
+        muteItem = toolbarItems.addItemWithWidth(mute, R.string.icon_music, 52);
+
+        multiSelectCounter = new NumberTextView(toolbarItems.getContext());
+        multiSelectCounter.setTextSize(18);
+        multiSelectCounter.setTypeface(ResourcesCompat.getFont(toolbarItems.getContext(), R.font.main_font_bold));
+        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        toolbarItems.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.f, 72, 0, 0, 0));
+
+        actionModeViews.add(pinItem);
+        actionModeViews.add(muteItem);
+        actionModeViews.add(leaveItem);
+        actionModeViews.add(moreItem);
 
     }
 
@@ -674,7 +824,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onRemoveFragment(Fragment fragment) {
         removeFromBaseFragment(fragment);
     }
-
 
 
     @Override
@@ -841,7 +990,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
                                     try {
-                                        String url =BuildConfig.UPDATE_LINK;
+                                        String url = BuildConfig.UPDATE_LINK;
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         startActivity(i);
@@ -899,6 +1048,8 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             roomListAdapter.setMultiSelect(false);
             roomListAdapter.notifyDataSetChanged();
             notifyChatRoomsList();
+            toolbar.setBackIcon(null);
+            toolbar.hideActionToolbar();
         }
     }
 

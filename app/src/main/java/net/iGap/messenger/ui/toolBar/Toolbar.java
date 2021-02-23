@@ -1,5 +1,10 @@
 package net.iGap.messenger.ui.toolBar;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -15,9 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.Theme;
+
+import java.util.ArrayList;
 
 public class Toolbar extends FrameLayout {
     public static final int SEARCH_TAG = 1020;
@@ -26,11 +34,17 @@ public class Toolbar extends FrameLayout {
     private ImageView backIcon;
     private ToolbarListener listener;
     private ToolbarItems items;
+    private ToolbarItems actionItems;
+    private String actionModeTag;
     private boolean isSearchBoxVisible;
+    private int actionModeColor;
+    private int extraHeight;
+    private boolean actionItemsVisible;
+    private AnimatorSet actionModeAnimation;
 
     public Toolbar(@NonNull Context context) {
         super(context);
-        setBackgroundColor(Theme.getInstance().getButtonSelectorBackground(context));
+        setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(context));
     }
 
     public void setTitle(String title) {
@@ -57,6 +71,10 @@ public class Toolbar extends FrameLayout {
 
     public void setBackIcon(@StringRes int iconRes) {
         setBackIcon(getResources().getDrawable(iconRes));
+    }
+
+    public void setBackIconToNull() {
+        backIcon = null;
     }
 
     public void setListener(ToolbarListener listener) {
@@ -131,7 +149,7 @@ public class Toolbar extends FrameLayout {
         }
 
         titleTextView = new TextView(getContext());
-        titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+        titleTextView.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
         titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setSingleLine();
@@ -157,9 +175,11 @@ public class Toolbar extends FrameLayout {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        int actionBarHeight = LayoutCreator.dp(56);
+        int actionBarHeight = getCurrentActionBarHeight();
         int actionBarHeightSpec = MeasureSpec.makeMeasureSpec(actionBarHeight, MeasureSpec.EXACTLY);
         int titleLeft;
+
+        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), actionBarHeight);
 
         if (backIcon != null && backIcon.getVisibility() != GONE) {
             backIcon.measure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(54), MeasureSpec.EXACTLY), backIcon.getMeasuredHeight());
@@ -168,8 +188,8 @@ public class Toolbar extends FrameLayout {
             titleLeft = LayoutCreator.dp(16);
         }
 
+        int menuWidth = 0;
         if (items != null && items.getVisibility() != GONE) {
-            int menuWidth;
             if (isSearchBoxVisible) {
                 menuWidth = MeasureSpec.makeMeasureSpec(width - LayoutCreator.dp(64), MeasureSpec.EXACTLY);
             } else {
@@ -197,27 +217,28 @@ public class Toolbar extends FrameLayout {
 
         for (int i = 0, count = getChildCount(); i < count; i++) {
             final View child = getChildAt(i);
-            if (child.getVisibility() != GONE) {
-                if (child != backIcon && child != titleTextView && child != subTitleTextView && child != items) {
-                    measureChild(child, widthMeasureSpec, heightMeasureSpec);
-                }
-            }
-        }
 
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), actionBarHeight);
+            if (child.getVisibility() == GONE || child == backIcon || child == titleTextView || child == subTitleTextView || child == items) {
+                continue;
+            }
+            measureChildWithMargins(child, menuWidth, 0, MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY), 0);
+        }
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int p) {
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int titleLeft;
         int titleTop;
-
         if (backIcon != null && backIcon.getVisibility() != GONE) {
             backIcon.layout(0, 0, backIcon.getMeasuredWidth(), getMeasuredHeight());
             titleLeft = LayoutCreator.dp(64); // 56 icon with + 8 margin
+            if (backIcon.getDrawable() == null) {
+                titleLeft = LayoutCreator.dp(16);
+            }
         } else {
             titleLeft = LayoutCreator.dp(16);
         }
+
 
         if (titleTextView != null && titleTextView.getVisibility() != GONE) {
             int titleTextHeight = titleTextView.getMeasuredHeight();
@@ -240,5 +261,211 @@ public class Toolbar extends FrameLayout {
             int menuLeft = isSearchBoxVisible ? LayoutCreator.dp(64) : getMeasuredWidth() - items.getMeasuredWidth();
             items.layout(menuLeft, 0, menuLeft + items.getMeasuredWidth(), items.getMeasuredHeight());
         }
+
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() == GONE || child == titleTextView || child == subTitleTextView || child == items || child == backIcon) {
+                continue;
+            }
+
+            LayoutParams lp = (LayoutParams) child.getLayoutParams();
+
+            int width = child.getMeasuredWidth();
+            int height = child.getMeasuredHeight();
+            int childLeft;
+            int childTop;
+
+            int gravity = lp.gravity;
+            if (gravity == -1) {
+                gravity = Gravity.TOP | Gravity.LEFT;
+            }
+
+            final int absoluteGravity = gravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+            final int verticalGravity = gravity & Gravity.VERTICAL_GRAVITY_MASK;
+
+            switch (absoluteGravity & Gravity.HORIZONTAL_GRAVITY_MASK) {
+                case Gravity.CENTER_HORIZONTAL:
+                    childLeft = (right - left - width) / 2 + lp.leftMargin - lp.rightMargin;
+                    break;
+                case Gravity.RIGHT:
+                    childLeft = right - width - lp.rightMargin;
+                    break;
+                case Gravity.LEFT:
+                default:
+                    childLeft = lp.leftMargin;
+            }
+
+            switch (verticalGravity) {
+                case Gravity.CENTER_VERTICAL:
+                    childTop = (bottom - top - height) / 2 + lp.topMargin - lp.bottomMargin;
+                    break;
+                case Gravity.BOTTOM:
+                    childTop = (bottom - top) - height - lp.bottomMargin;
+                    break;
+                default:
+                    childTop = lp.topMargin;
+            }
+            child.layout(childLeft, childTop, childLeft + width, childTop + height);
+        }
     }
+
+    public boolean isInActionMode(String tag) {
+        return actionItems != null && (actionModeTag == null && tag == null) || (actionModeTag != null && actionModeTag.equals(tag));
+    }
+
+    public ImageView getBackIcon() {
+        return backIcon;
+    }
+
+    public ToolbarItems createActionToolbar(String tag) {
+        if (isInActionMode(tag)) {
+            return actionItems;
+        }
+        if (actionItems != null) {
+            removeView(actionItems);
+            actionItems = null;
+        }
+
+        actionModeTag = tag;
+        actionItems = new ToolbarItems(getContext(), this) {
+            @Override
+            public void setBackgroundColor(int color) {
+                super.setBackgroundColor(actionModeColor = color);
+            }
+        };
+
+        actionItems.isActionMode = true;
+        actionItems.setClickable(true);
+        actionItems.setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(getContext()));
+        addView(actionItems, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
+        actionItems.setVisibility(INVISIBLE);
+
+        return actionItems;
+    }
+
+    public static int getCurrentActionBarHeight() {
+        if (G.twoPaneMode) {
+            return LayoutCreator.dp(68);
+        } else {
+            return LayoutCreator.dp(60);
+        }
+    }
+
+    public void showActionToolbar() {
+        if (actionItems == null || actionItemsVisible) {
+            return;
+        }
+
+        actionItemsVisible = true;
+
+        if (actionModeAnimation != null) {
+            actionModeAnimation.cancel();
+        }
+        actionModeAnimation = new AnimatorSet();
+        actionModeAnimation.playTogether(
+                ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f, 1.0f),
+                ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f, 0.0f),
+                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarBackgroundColor(getContext()), Theme.getInstance().getDividerColor(getContext()))
+        );
+        actionModeAnimation.setDuration(100);
+        actionModeAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                actionItems.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (actionModeAnimation != null && actionModeAnimation.equals(animation)) {
+                    actionModeAnimation = null;
+                    if (titleTextView != null) {
+                        titleTextView.setVisibility(INVISIBLE);
+                    }
+
+                    if (subTitleTextView != null && !TextUtils.isEmpty(subTitleTextView.getText())) {
+                        subTitleTextView.setVisibility(INVISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (actionModeAnimation != null && actionModeAnimation.equals(animation)) {
+                    actionModeAnimation = null;
+                }
+            }
+        });
+        actionModeAnimation.start();
+
+        if (backIcon != null) {
+            Drawable drawable = backIcon.getDrawable();
+            if (drawable instanceof BackDrawable) {
+                ((BackDrawable) drawable).setRotation(1, true);
+            }
+        }
+    }
+
+    public void hideActionToolbar() {
+        if (actionItems == null || !actionItemsVisible) {
+            return;
+        }
+
+        actionItemsVisible = false;
+        ArrayList<Animator> animators = new ArrayList<>();
+        animators.add(ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f));
+        animators.add(ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f));
+        animators.add(ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getDividerColor(getContext()), Theme.getInstance().getToolbarBackgroundColor(getContext())));
+
+        if (actionModeAnimation != null) {
+            actionModeAnimation.cancel();
+        }
+
+        actionModeAnimation = new AnimatorSet();
+        actionModeAnimation.playTogether(animators);
+        actionModeAnimation.setDuration(100);
+        actionModeAnimation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (actionModeAnimation != null && actionModeAnimation.equals(animation)) {
+                    actionModeAnimation = null;
+                    actionItems.setVisibility(INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                if (actionModeAnimation != null && actionModeAnimation.equals(animation)) {
+                    actionModeAnimation = null;
+                }
+            }
+        });
+        actionModeAnimation.start();
+        if (!isSearchBoxVisible) {
+            if (titleTextView != null) {
+                titleTextView.setVisibility(VISIBLE);
+            }
+            if (subTitleTextView != null && !TextUtils.isEmpty(subTitleTextView.getText())) {
+                subTitleTextView.setVisibility(VISIBLE);
+            }
+        }
+
+        if (backIcon != null) {
+            Drawable drawable = backIcon.getDrawable();
+            if (drawable instanceof BackDrawable) {
+                ((BackDrawable) drawable).setRotation(1, true);
+            }
+        }
+    }
+
+    public void setActionModeColor(int color) {
+        if (actionItems != null) {
+            actionItems.setBackgroundColor(color);
+        }
+    }
+
+    public ToolbarItems getActionMode() {
+        return actionItems;
+    }
+
 }

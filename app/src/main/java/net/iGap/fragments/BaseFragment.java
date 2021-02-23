@@ -116,7 +116,7 @@ public class BaseFragment extends SwipeBackFragment {
             FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Theme.getInstance().getRootColor(context));
             frameLayout.addView(toolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 0, 0, 0, 0));
-            frameLayout.addView(fragmentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, 54, 0, 0));
+            frameLayout.addView(fragmentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, 60, 0, 0));
 
             rootView = frameLayout;
         }
