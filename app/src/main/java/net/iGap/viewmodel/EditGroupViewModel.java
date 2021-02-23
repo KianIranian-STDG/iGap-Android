@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.BindingAdapter;
+import net.iGap.controllers.RoomController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -30,9 +31,7 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestGroupAvatarAdd;
-import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupEdit;
-import net.iGap.request.RequestGroupLeft;
 
 import java.util.ArrayList;
 
@@ -244,9 +243,9 @@ public class EditGroupViewModel extends BaseViewModel implements OnGroupAvatarRe
         };
 
         if (role == GroupChatRole.OWNER) {
-            new RequestGroupDelete().groupDelete(roomId);
+            RoomController.getInstance(currentAccount).groupDeleteRoom(roomId);
         } else {
-            new RequestGroupLeft().groupLeft(roomId);
+            RoomController.getInstance(currentAccount).groupLeft(roomId);
         }
     }
 

@@ -36,7 +36,6 @@ import net.iGap.R;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.SelectedItemAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
-import net.iGap.controllers.RoomController;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperCalander;
@@ -78,12 +77,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.Room;
-import net.iGap.request.RequestChannelLeft;
-import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestClientGetRoomList;
-import net.iGap.request.RequestClientMuteRoom;
-import net.iGap.request.RequestGroupDelete;
-import net.iGap.request.RequestGroupLeft;
 import net.iGap.response.ClientGetRoomListResponse;
 import net.iGap.viewmodel.controllers.CallManager;
 
@@ -609,12 +603,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void deleteChat(Room item, boolean exit) {
 
         if (item.getType() == CHAT) {
-            new RequestChatDelete().chatDelete(item.getId());
+            getRoomController().chatDeleteRoom(item.getId());
         } else if (item.getType() == GROUP) {
             if (item.getGroupRole() == GroupChatRole.OWNER) {
-                new RequestGroupDelete().groupDelete(item.getId());
+                getRoomController().groupDeleteRoom(item.getId());
             } else {
-                new RequestGroupLeft().groupLeft(item.getId());
+                getRoomController().groupLeft(item.getId());
             }
         } else if (item.getType() == CHANNEL) {
 
@@ -628,7 +622,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (item.getChannelRole() == ChannelChatRole.OWNER) {
                 getMessageController().deleteChannel(item.getId());
             } else {
-                new RequestChannelLeft().channelLeft(item.getId());
+                getRoomController().channelLeft(item.getId());
             }
         }
         if (exit)
@@ -638,12 +632,12 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     private void deleteChatWithRealm(RealmRoom item, boolean exit) {
 
         if (item.getType() == CHAT) {
-            new RequestChatDelete().chatDelete(item.getId());
+            getRoomController().chatDeleteRoom(item.getId());
         } else if (item.getType() == GROUP) {
             if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
-                new RequestGroupDelete().groupDelete(item.getId());
+                getRoomController().groupDeleteRoom(item.getId());
             } else {
-                new RequestGroupLeft().groupLeft(item.getId());
+                getRoomController().groupLeft(item.getId());
             }
         } else if (item.getType() == CHANNEL) {
 
@@ -657,7 +651,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
                 getMessageController().deleteChannel(item.getId());
             } else {
-                new RequestChannelLeft().channelLeft(item.getId());
+                getRoomController().channelLeft(item.getId());
             }
         }
         if (exit)
@@ -677,7 +671,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void muteNotification(final long roomId, final boolean mute) {
-        new RequestClientMuteRoom().muteRoom(roomId, !mute);
+        getRoomController().clientMuteRoom(roomId, !mute);
         disableMultiSelect();
     }
 
@@ -712,7 +706,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
-        RoomController.getInstance(currentAccount).clientPinRoom(roomId, !isPinned);
+        getRoomController().clientPinRoom(roomId, !isPinned);
         if (!isPinned) {
             goToTop();
         }

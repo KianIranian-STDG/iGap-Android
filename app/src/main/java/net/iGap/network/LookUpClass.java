@@ -66,6 +66,12 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Chat_Update_Status.actionId, IG_RPC.Res_Chat_Update_Status.class);
         classes.put(IG_RPC.Res_Group_Update_Status.actionId, IG_RPC.Res_Group_Update_Status.class);
         classes.put(IG_RPC.Res_Client_Pin_Room.actionId, IG_RPC.Res_Client_Pin_Room.class);
+        classes.put(IG_RPC.Res_Client_Mute_Room.actionId, IG_RPC.Res_Client_Mute_Room.class);
+        classes.put(IG_RPC.Res_Chat_Delete_Room.actionId, IG_RPC.Res_Chat_Delete_Room.class);
+        classes.put(IG_RPC.Res_Group_Delete_Room.actionId, IG_RPC.Res_Group_Delete_Room.class);
+        classes.put(IG_RPC.Res_Group_Left.actionId, IG_RPC.Res_Group_Left.class);
+        classes.put(IG_RPC.Res_Channel_Left.actionId, IG_RPC.Res_Channel_Left.class);
+
     }
 
     public boolean validObject(int actionId) {
@@ -201,7 +207,7 @@ public class LookUpClass {
 //        lookupMap.put(30203, "ProtoChatEditMessage.ChatEditMessageResponse");
 //        lookupMap.put(30204, "ProtoChatDeleteMessage.ChatDeleteMessageResponse");
 //        lookupMap.put(30205, "ProtoChatClearMessage.ChatClearMessageResponse");
-        lookupMap.put(30206, "ProtoChatDelete.ChatDeleteResponse");
+        // lookupMap.put(30206, "ProtoChatDelete.ChatDeleteResponse");
         lookupMap.put(30207, "ProtoChatUpdateDraft.ChatUpdateDraftResponse");
         lookupMap.put(30208, "ProtoChatGetDraft.ChatGetDraftResponse");
         lookupMap.put(30209, "ProtoChatConvertToGroup.ChatConvertToGroupResponse");
@@ -216,7 +222,7 @@ public class LookUpClass {
         lookupMap.put(30306, "ProtoGroupKickAdmin.GroupKickAdminResponse");
         lookupMap.put(30307, "ProtoGroupKickMember.GroupKickMemberResponse");
         lookupMap.put(30308, "ProtoGroupKickModerator.GroupKickModeratorResponse");
-        lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
+        //  lookupMap.put(30309, "ProtoGroupLeft.GroupLeftResponse");
         lookupMap.put(30310, "ProtoGroupSendMessage.GroupSendMessageResponse");
         // lookupMap.put(30311, "ProtoGroupUpdateStatus.GroupUpdateStatusResponse");
         lookupMap.put(30312, "ProtoGroupAvatarAdd.GroupAvatarAddResponse");
@@ -225,7 +231,7 @@ public class LookUpClass {
         lookupMap.put(30315, "ProtoGroupUpdateDraft.GroupUpdateDraftResponse");
         lookupMap.put(30316, "ProtoGroupGetDraft.GroupGetDraftResponse");
         lookupMap.put(30317, "ProtoGroupGetMemberList.GroupGetMemberListResponse");
-        lookupMap.put(30318, "ProtoGroupDelete.GroupDeleteResponse");
+        // lookupMap.put(30318, "ProtoGroupDelete.GroupDeleteResponse");
         lookupMap.put(30319, "ProtoGroupSetAction.GroupSetActionResponse");
 //        lookupMap.put(30320, "ProtoGroupDeleteMessage.GroupDeleteMessageResponse");
         lookupMap.put(30321, "ProtoGroupCheckUsername.GroupCheckUsernameResponse");
@@ -244,7 +250,7 @@ public class LookUpClass {
         lookupMap.put(30406, "ProtoChannelKickAdmin.ChannelKickAdminResponse");
         lookupMap.put(30407, "ProtoChannelKickMember.ChannelKickMemberResponse");
         lookupMap.put(30408, "ProtoChannelKickModerator.ChannelKickModeratorResponse");
-        lookupMap.put(30409, "ProtoChannelLeft.ChannelLeftResponse");
+        //     lookupMap.put(30409, "ProtoChannelLeft.ChannelLeftResponse");
         lookupMap.put(30410, "ProtoChannelSendMessage.ChannelSendMessageResponse");
 //        lookupMap.put(30411, "ProtoChannelDeleteMessage.ChannelDeleteMessageResponse");
         lookupMap.put(30413, "ProtoChannelAvatarDelete.ChannelAvatarDeleteResponse");
@@ -284,8 +290,8 @@ public class LookUpClass {
         lookupMap.put(30611, "ProtoClientUnsubscribeFromRoom.ClientUnsubscribeFromRoomResponse");
         lookupMap.put(30612, "ProtoClientSearchUsername.ClientSearchUsernameResponse");
         lookupMap.put(30613, "ProtoClientCountRoomHistory.ClientCountRoomHistoryResponse");
-        lookupMap.put(30614, "ProtoClientMuteRoom.ClientMuteRoomResponse");
-        lookupMap.put(30615, "ProtoClientPinRoom.ClientPinRoomResponse");
+        //    lookupMap.put(30614, "ProtoClientMuteRoom.ClientMuteRoomResponse");
+        //  lookupMap.put(30615, "ProtoClientPinRoom.ClientPinRoomResponse");
         lookupMap.put(30616, "ProtoClientRoomReport.ClientRoomReportResponse");
         lookupMap.put(30617, "ProtoClientRegisterDevice.ClientRegisterDeviceResponse");
         lookupMap.put(30618, "ProtoClientGetPromote.ClientGetPromoteResponse");

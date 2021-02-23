@@ -274,14 +274,12 @@ import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelUpdateDraft;
-import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -324,7 +322,6 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
-import static net.iGap.G.context;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -5886,14 +5883,14 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void deleteChat(final long chatId) {
-        new RequestChatDelete().chatDelete(chatId);
+    private void deleteChat(final long roomId) {
+        getRoomController().chatDeleteRoom(roomId);
     }
 
     private void muteNotification(final long roomId) {
 
         isMuteNotification = !isMuteNotification;
-        new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
+        getRoomController().clientMuteRoom(roomId,isMuteNotification);
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);

@@ -1,10 +1,14 @@
 package net.iGap.controllers;
 
+import net.iGap.G;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 
 public class RoomController extends BaseController {
@@ -87,6 +91,132 @@ public class RoomController extends BaseController {
             }
         });
 
+    }
+
+    public void clientMuteRoom(long roomId, boolean roomMute) {
+
+        IG_RPC.Client_Mute_Room req = new IG_RPC.Client_Mute_Room();
+        req.roomId = roomId;
+        req.roomMute = roomMute ? ProtoGlobal.RoomMute.MUTE : ProtoGlobal.RoomMute.UNMUTE;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Client_Mute_Room res = (IG_RPC.Res_Client_Mute_Room) response;
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmRoom room = realm.where(RealmRoom.class).equalTo("id", res.roomId).findFirst();
+                    if (room != null) {
+                        room.setMute(res.roomMute);
+                    }
+                });
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Client Mute Room -> Major" + e.major + "Minor" + e.minor);
+            }
+
+        });
+    }
+
+    public void chatDeleteRoom(long roomId) {
+
+        IG_RPC.Chat_Delete_Room req = new IG_RPC.Chat_Delete_Room();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Chat_Delete_Room res = (IG_RPC.Res_Chat_Delete_Room) response;
+                RealmRoom.deleteRoom(res.roomId);
+                if (G.onChatDelete != null) {
+                    G.onChatDelete.onChatDelete(res.roomId);
+                }
+
+                if (G.onChatDeleteInRoomList != null) {
+                    G.onChatDeleteInRoomList.onChatDelete(res.roomId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Chat Delete Room -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+
+    }
+
+    public void groupDeleteRoom(long roomId) {
+
+        IG_RPC.Group_Delete_Room req = new IG_RPC.Group_Delete_Room();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Group_Delete_Room res = (IG_RPC.Res_Group_Delete_Room) response;
+                RealmRoom.deleteRoom(res.roomId);
+                if (G.onGroupDelete != null) {
+                    G.onGroupDelete.onGroupDelete(res.roomId);
+                }
+                if (G.onGroupDeleteInRoomList != null) {
+                    G.onGroupDeleteInRoomList.onGroupDelete(res.roomId);
+                }
+
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Group Delete Room -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
+    public void groupLeft(long roomId) {
+
+        IG_RPC.Group_Left req = new IG_RPC.Group_Left();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Group_Left res = (IG_RPC.Res_Group_Left) response;
+
+                if (AccountManager.getInstance().getCurrentUser().getId() == res.memberId) {
+                    RealmRoom.deleteRoom(roomId);
+
+                    if (G.onGroupLeft != null) {
+                        G.onGroupLeft.onGroupLeft(roomId, res.memberId);
+                    }
+                    if (G.onGroupDeleteInRoomList != null) {
+                        G.onGroupDeleteInRoomList.onGroupDelete(roomId);
+                    }
+                } else {
+                    RealmMember.kickMember(res.roomId, res.memberId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Group Left -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+    }
+
+    public void channelLeft(long roomId) {
+
+        IG_RPC.Channel_Left req = new IG_RPC.Channel_Left();
+        req.roomId = roomId;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Channel_Left res = (IG_RPC.Res_Channel_Left) response;
+
+                if (AccountManager.getInstance().getCurrentUser().getId() == res.memberId) {
+                    RealmRoom.deleteRoom(res.roomId);
+
+                    if (G.onChannelLeft != null) {
+                        G.onChannelLeft.onChannelLeft(res.roomId, res.memberId);
+                    }
+                    if (G.onChannelDeleteInRoomList != null) {
+                        G.onChannelDeleteInRoomList.onChannelDelete(res.roomId);
+                    }
+                } else {
+                    RealmMember.kickMember(res.roomId, res.memberId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Group Left -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
     }
 
 }
