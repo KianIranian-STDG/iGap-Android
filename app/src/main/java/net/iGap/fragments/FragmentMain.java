@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -324,8 +323,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
 
         if (MusicPlayer.playerStateChangeListener != null) {
             MusicPlayer.playerStateChangeListener.observe(getViewLifecycleOwner(), isVisible -> {
-                notifyChatRoomsList();
-
                 if (!mHelperToolbar.getmSearchBox().isShown()) {
                     mHelperToolbar.animateSearchBox(false, 0, 0);
                 }
@@ -342,14 +339,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         initRecycleView();
 
-        //check is available forward,shared message
         setForwardMessage(true);
         checkHasSharedData(true);
         checkMultiSelectState();
-
-        //just check at first time page loaded
-        notifyChatRoomsList();
-
     }
 
     private void checkMultiSelectState() {
@@ -434,41 +426,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 .show();
     }
 
-    private void notifyChatRoomsList() {
-//
-//        try {
-//            if (mRecyclerView != null) {
-//                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown() && isChatMultiSelectEnable) {
-//                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_music_player);
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
-//                    return;
-//                }
-//                if (CallManager.getInstance().isCallAlive() && isChatMultiSelectEnable) {
-//                    setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_call_layout);
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp4), 0, 0);
-//                    return;
-//                }
-//                setMargin(R.dimen.margin_for_below_layouts_of_toolbar_with_search);
-//
-//                if (MusicPlayer.mainLayout != null && MusicPlayer.mainLayout.isShown()) {
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-//                } else if (CallManager.getInstance().isCallAlive()) {
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp60), 0, 0);
-//                } else if (isChatMultiSelectEnable) {
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp1), 0, 0);
-//                } else if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-//                } else if (MusicPlayer.mp != null && MusicPlayer.playerStatusObservable.getValue() != null && MusicPlayer.playerStatusObservable.getValue().equals(MusicPlayer.PAUSE)) {
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp68), 0, 0);
-//                } else {
-//                    mRecyclerView.setPadding(0, i_Dp(R.dimen.dp24), 0, 0);
-//                }
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-    }
-
     private void refreshChatList(int pos, boolean isRefreshAll) {
         if (mRecyclerView.getAdapter() != null) {
             if (isRefreshAll) {
@@ -541,7 +498,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 if (isChatMultiSelectEnable) {
                     onChatCellClickedInEditMode.onClicked(realmRoom, adapterPosition, roomListCell.getCheckBox().isChecked());
                     selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
-                    multiSelectCounter.setNumber(mSelectedRoomList.size(), true);
+                    multiSelectCounter.setNumber(mSelectedRoomList.size(), mSelectedRoomList.size() != 1);
                 } else {
                     if (realmRoom.isValid() && G.fragmentActivity != null) {
                         boolean openChat = true;
@@ -576,7 +533,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     onChatCellClickedInEditMode.onClicked(realmRoom, position, false);
                     selectedItemCountTv.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
                     createActionMode();
-                    multiSelectCounter.setNumber(mSelectedRoomList.size(), true);
+                    multiSelectCounter.setNumber(mSelectedRoomList.size(), mSelectedRoomList.size() != 1);
                     toolbar.showActionToolbar();
                     BackDrawable backDrawable = new BackDrawable(true);
                     backDrawable.setRotation(1, true);
@@ -607,33 +564,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
         });
 
-    }
-
-    private void updateCount() {
-
-        ArrayList<Animator> animators = new ArrayList<>();
-        AnimatorSet animatorSet = new AnimatorSet();
-        if (selectedCount < mSelectedRoomList.size()) {
-            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.TRANSLATION_Y, -multiSelectCounter.getMeasuredHeight() / 2.f, 0));
-            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.ALPHA, 0.01f, 1.0f));
-        } else {
-            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.TRANSLATION_Y, multiSelectCounter.getMeasuredHeight() * 1.5f, 0));
-            animators.add(ObjectAnimator.ofFloat(multiSelectCounter, View.ALPHA, 0.01f, 1.0f));
-        }
-        animatorSet.playTogether(animators);
-        animatorSet.setDuration(1000);
-        animatorSet.setInterpolator(new DecelerateInterpolator());
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-//                multiSelectCounter.setText(isAppRtl ? HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(mSelectedRoomList.size())) : String.valueOf(mSelectedRoomList.size()));
-                multiSelectCounter.requestLayout();
-            }
-        });
-
-        animatorSet.start();
-        selectedCount = mSelectedRoomList.size();
     }
 
     private void createActionMode() {
@@ -1027,7 +957,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         roomListAdapter.notifyDataSetChanged();
         mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
         mHelperToolbar.setLeftIcon(R.string.back_icon);
-        notifyChatRoomsList();
     }
 
     private void disableMultiSelect() {
@@ -1044,7 +973,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             mSelectedRoomList.clear();
             roomListAdapter.setMultiSelect(false);
             roomListAdapter.notifyDataSetChanged();
-            notifyChatRoomsList();
             toolbar.setBackIcon(null);
             toolbar.hideActionToolbar();
         }
@@ -1290,7 +1218,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             if (message == null || message.length == 0) return;
             boolean state = (boolean) message[0];
             G.handler.post(() -> {
-                notifyChatRoomsList();
                 if (!mHelperToolbar.getmSearchBox().isShown())
                     mHelperToolbar.animateSearchBox(false, 0, 0);
                 mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);

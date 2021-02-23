@@ -25,8 +25,6 @@ import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.Theme;
 
-import java.util.ArrayList;
-
 public class Toolbar extends FrameLayout {
     public static final int SEARCH_TAG = 1020;
     private TextView titleTextView;
@@ -390,6 +388,14 @@ public class Toolbar extends FrameLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 actionItems.setVisibility(VISIBLE);
+
+                if (titleTextView != null) {
+                    titleTextView.setVisibility(INVISIBLE);
+                }
+
+                if (subTitleTextView != null && !TextUtils.isEmpty(subTitleTextView.getText())) {
+                    subTitleTextView.setVisibility(INVISIBLE);
+                }
             }
 
             @Override
@@ -429,17 +435,16 @@ public class Toolbar extends FrameLayout {
         }
 
         actionItemsVisible = false;
-        ArrayList<Animator> animators = new ArrayList<>();
-        animators.add(ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f));
-        animators.add(ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f));
-        animators.add(ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarActionModeBackgroundColor(getContext()), Theme.getInstance().getToolbarBackgroundColor(getContext())));
-
         if (actionModeAnimation != null) {
             actionModeAnimation.cancel();
         }
 
         actionModeAnimation = new AnimatorSet();
-        actionModeAnimation.playTogether(animators);
+        actionModeAnimation.playTogether(
+                ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f),
+                ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f),
+                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarActionModeBackgroundColor(getContext()), Theme.getInstance().getToolbarBackgroundColor(getContext()))
+        );
         actionModeAnimation.setDuration(100);
         actionModeAnimation.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -447,6 +452,15 @@ public class Toolbar extends FrameLayout {
                 if (actionModeAnimation != null && actionModeAnimation.equals(animation)) {
                     actionModeAnimation = null;
                     actionItems.setVisibility(INVISIBLE);
+                }
+
+                if (!isSearchBoxVisible) {
+                    if (titleTextView != null) {
+                        titleTextView.setVisibility(VISIBLE);
+                    }
+                    if (subTitleTextView != null && !TextUtils.isEmpty(subTitleTextView.getText())) {
+                        subTitleTextView.setVisibility(VISIBLE);
+                    }
                 }
             }
 
@@ -458,14 +472,6 @@ public class Toolbar extends FrameLayout {
             }
         });
         actionModeAnimation.start();
-        if (!isSearchBoxVisible) {
-            if (titleTextView != null) {
-                titleTextView.setVisibility(VISIBLE);
-            }
-            if (subTitleTextView != null && !TextUtils.isEmpty(subTitleTextView.getText())) {
-                subTitleTextView.setVisibility(VISIBLE);
-            }
-        }
 
         if (backIcon != null) {
             Drawable drawable = backIcon.getDrawable();
