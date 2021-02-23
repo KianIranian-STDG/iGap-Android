@@ -85,6 +85,7 @@
     <attr name="colorPrimaryLight" format="reference|color" />
     <attr name="colorAccentDark" format="reference|color" />
     <attr name="toolbarBackgroundColor" format="reference|color" />
+    <attr name="toolbarActionModeBackgroundColor" format="reference|color" />
     <!--general color-->
     <attr name="rootBackgroundColor" format="reference|color" />
     <attr name="iGapTitleTextColor" format="reference|color" />

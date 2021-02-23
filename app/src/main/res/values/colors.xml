@@ -106,7 +106,9 @@
     <color name="bottomSheetHeaderLineDark">@color/toolbar_search_box_dark_bg</color>
     <color name="setting_items_value_color">#41B120</color>
     <color name="colorToolbarBackgroundEnd">#FF5EBC45</color>
+    <color name="colorToolbarActionModeBackgroundEnd">#7CBA6C</color>
     <color name="colorToolbarBackgroundStart">#B9E244</color>
+    <color name="colorToolbarActionModeBackgroundStart">#BEDD65</color>
     <color name="toolbar_search_box_bg">#F6F6F9</color>
     <color name="notification_badge">#5ebc45</color>
 
@@ -139,7 +141,7 @@
 
     <color name="voice_round">#468da7</color>
     <color name="navigation_dark_mode_bg">#555857</color>
-
+    <color name="ToolbarDarkActionModeBackgroundEnd">#555857</color>
     <color name="voice_item">#468ba7</color>
     <color name="voice_item_dark">#5D92A7</color>
     <color name="colorWhite">#fff</color>

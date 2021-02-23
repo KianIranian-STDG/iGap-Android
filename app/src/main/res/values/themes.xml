@@ -6,6 +6,7 @@
         <item name="colorAccentDark">#333635</item>
         <item name="colorPrimary">@color/navigation_dark_mode_bg</item>
         <item name="toolbarBackgroundColor">@color/navigation_dark_mode_bg</item>
+        <item name="toolbarActionModeBackgroundColor">@color/ToolbarDarkActionModeBackgroundEnd</item>
         <item name="colorPrimaryDark">@color/background_setting_dark</item>
         <item name="colorPrimaryLight">#565656</item>
 
@@ -67,6 +68,7 @@
         <item name="colorAccentDark">#28820d</item>
         <item name="colorPrimary">@color/colorToolbarBackgroundStart</item>
         <item name="toolbarBackgroundColor">@color/colorToolbarBackgroundEnd</item>
+        <item name="toolbarActionModeBackgroundColor">@color/colorToolbarActionModeBackgroundEnd</item>
         <item name="colorPrimaryDark">@color/colorToolbarBackgroundEnd</item>
         <item name="colorPrimaryLight">#ececee</item>
 

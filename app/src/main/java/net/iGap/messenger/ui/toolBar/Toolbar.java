@@ -41,6 +41,7 @@ public class Toolbar extends FrameLayout {
     private int extraHeight;
     private boolean actionItemsVisible;
     private AnimatorSet actionModeAnimation;
+    private boolean titleIsFontIcon;
 
     public Toolbar(@NonNull Context context) {
         super(context);
@@ -51,7 +52,21 @@ public class Toolbar extends FrameLayout {
         if (titleTextView == null) {
             createTitleTextView();
         }
+        titleIsFontIcon = false;
+        titleTextView.setText(title);
+    }
 
+    public void setTitle(@StringRes int title) {
+        if (titleTextView == null) {
+            titleTextView = new TextView(getContext());
+            titleTextView.setSingleLine(true);
+            addView(titleTextView);
+        }
+        titleIsFontIcon = true;
+        titleTextView.setGravity(Gravity.LEFT);
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 52);
+        titleTextView.setTextColor(0xffffffff);
+        titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
         titleTextView.setText(title);
     }
 
@@ -203,10 +218,12 @@ public class Toolbar extends FrameLayout {
 
             if (titleTextView != null && titleTextView.getVisibility() != GONE) {
                 if (subTitleTextView != null && subTitleTextView.getVisibility() != GONE) {
-                    titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+                    if (!titleIsFontIcon)
+                        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
                     subTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 } else {
-                    titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+                    if (!titleIsFontIcon)
+                        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
                 }
                 titleTextView.measure(MeasureSpec.makeMeasureSpec(textWidth, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
             }
@@ -366,7 +383,7 @@ public class Toolbar extends FrameLayout {
         actionModeAnimation.playTogether(
                 ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f, 1.0f),
                 ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f, 0.0f),
-                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarBackgroundColor(getContext()), Theme.getInstance().getDividerColor(getContext()))
+                ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarBackgroundColor(getContext()), Theme.getInstance().getToolbarActionModeBackgroundColor(getContext()))
         );
         actionModeAnimation.setDuration(100);
         actionModeAnimation.addListener(new AnimatorListenerAdapter() {
@@ -415,7 +432,7 @@ public class Toolbar extends FrameLayout {
         ArrayList<Animator> animators = new ArrayList<>();
         animators.add(ObjectAnimator.ofFloat(actionItems, View.ALPHA, 0.0f));
         animators.add(ObjectAnimator.ofFloat(items, View.ALPHA, 1.0f));
-        animators.add(ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getDividerColor(getContext()), Theme.getInstance().getToolbarBackgroundColor(getContext())));
+        animators.add(ObjectAnimator.ofObject(this, "backgroundColor", new ArgbEvaluator(), Theme.getInstance().getToolbarActionModeBackgroundColor(getContext()), Theme.getInstance().getToolbarBackgroundColor(getContext())));
 
         if (actionModeAnimation != null) {
             actionModeAnimation.cancel();

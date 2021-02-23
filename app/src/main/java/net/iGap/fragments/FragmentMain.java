@@ -7,10 +7,8 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,7 +161,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public View createView(Context context) {
         ToolbarItems toolbarItems = toolbar.createToolbarItems();
-        ToolbarItem moreItem = toolbarItems.addItemWithWidth(0, R.string.add_icon_2, 52);
+        ToolbarItem moreItem = toolbarItems.addItemWithWidth(0, R.string.wallet_icon, 52);
         searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
@@ -204,8 +202,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                 super.onTextChanged(editText);
             }
         });
-        test1 = toolbarItems.addItem(0, R.string.ic_internet, Color.WHITE);
-        test2 = toolbarItems.addItem(0, R.string.igap_en_icon, Color.WHITE);
+        test1 = toolbarItems.addItem(0, R.string.add_icon_without_circle_font, Color.WHITE);
         createActionMode();
         return LayoutInflater.from(context).inflate(R.layout.activity_main_rooms, null, false);
     }
@@ -213,7 +210,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     @Override
     public View createToolBar(Context context) {
         toolbar = new Toolbar(context);
-        toolbar.setTitle("iGap");
+        toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
         return toolbar;
     }
 
@@ -582,7 +579,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                     multiSelectCounter.setNumber(mSelectedRoomList.size(), true);
                     toolbar.showActionToolbar();
                     BackDrawable backDrawable = new BackDrawable(true);
-                    backDrawable.setRotation(1,true);
+                    backDrawable.setRotation(1, true);
                     backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
                     toolbar.setBackIcon(backDrawable);
 

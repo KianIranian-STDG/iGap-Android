@@ -384,6 +384,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.toolbarBackgroundColor);
     }
 
+    public int getToolbarActionModeBackgroundColor(Context context) {
+        return getColorFromAttr(context, R.attr.toolbarActionModeBackgroundColor);
+    }
+
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
         TypedValue typedValue = new TypedValue();
         TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});
