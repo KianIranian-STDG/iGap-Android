@@ -122,7 +122,7 @@ public class AnimatedStickerCell extends LottieAnimationView implements EventMan
             String filePath = (String) args[0];
             String fileToken = (String) args[1];
 
-            if (getTag().equals(fileToken)) {
+            if (getTag() != null && getTag().equals(fileToken)) {
                 G.handler.post(() -> {
                     playAnimation(filePath);
                 });

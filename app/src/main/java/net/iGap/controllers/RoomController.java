@@ -1,5 +1,6 @@
 package net.iGap.controllers;
 
+import net.iGap.G;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.IG_RPC;
@@ -39,8 +40,7 @@ public class RoomController extends BaseController {
             if (response != null) {
                 IG_RPC.Res_Channel_Update_Reaction_Status res = (IG_RPC.Res_Channel_Update_Reaction_Status) response;
                 RealmChannelRoom.updateReactionStatus(res.roomId, res.reactionStatus);
-                getEventManager().postEvent(EventManager.CHANNEL_UPDATE_VOTE, res.roomId, res.reactionStatus);
-
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_UPDATE_VOTE, res.roomId, res.reactionStatus));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
@@ -58,8 +58,7 @@ public class RoomController extends BaseController {
             if (response != null) {
                 IG_RPC.Res_Channel_Update_Signature res = (IG_RPC.Res_Channel_Update_Signature) response;
                 RealmRoom.updateSignature(res.roomId, res.signature);
-                getEventManager().postEvent(EventManager.CHANNEL_UPDATE_SIGNATURE, res.roomId, res.signature);
-
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_UPDATE_SIGNATURE, res.roomId, res.signature));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
