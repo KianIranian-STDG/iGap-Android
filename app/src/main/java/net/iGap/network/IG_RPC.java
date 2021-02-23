@@ -17,6 +17,7 @@ import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
 import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
+import net.iGap.proto.ProtoClientPinRoom;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupClearMessage;
@@ -1268,6 +1269,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse response = ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             states = response.getStatsList();
         }
 
@@ -1312,6 +1314,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse response = ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             reactionStatus = response.getReactionStatus();
         }
@@ -1374,6 +1377,7 @@ public class IG_RPC {
         @Override
         public void readParams(byte[] message) throws Exception {
             ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse response = ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse.parseFrom(message);
+            resId = response.getResponse().getId();
             roomId = response.getRoomId();
             signature = response.getSignature();
         }
@@ -1399,6 +1403,70 @@ public class IG_RPC {
         @Override
         public int getActionId() {
             return actionId;
+        }
+    }
+
+    public static class Client_Pin_Room extends AbstractObject {
+
+        public int actionId = 615;
+        public long roomId;
+        public boolean pin;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoClientPinRoom.ClientPinRoom.Builder builder = ProtoClientPinRoom.ClientPinRoom.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setPin(pin);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Client_Pin_Room().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Client_Pin_Room extends AbstractObject {
+
+        public static int actionId = 30615;
+        public long roomId;
+        public long pinId;
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoClientPinRoom.ClientPinRoomResponse response = ProtoClientPinRoom.ClientPinRoomResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            pinId = response.getPinId();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Client_Pin_Room object = null;
+            try {
+                object = new Res_Client_Pin_Room();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
         }
     }
 }

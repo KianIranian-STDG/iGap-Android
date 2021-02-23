@@ -30,6 +30,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.controllers.RoomController;
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -46,7 +47,6 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetPromote;
 import net.iGap.request.RequestClientGetRoom;
-import net.iGap.request.RequestClientPinRoom;
 import net.iGap.structs.MessageObject;
 
 import org.json.JSONArray;
@@ -121,7 +121,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                             for (RealmRoom room : roomList) {
                                 if (!promoteIds.contains(room.getPromoteId())) {
                                     room.setFromPromote(false);
-                                    new RequestClientPinRoom().pinRoom(room.getId(), false);
+                                    RoomController.getInstance(AccountManager.selectedAccount).clientPinRoom(room.getId(), false);
                                 }
                             }
                         }
@@ -152,7 +152,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                                             //  RealmRoom.setPromote(2297310L, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER);
                                         });
 
-                                        new RequestClientPinRoom().pinRoom(room.getId(), true);
+                                        RoomController.getInstance(AccountManager.selectedAccount).clientPinRoom(room.getId(), true);
 
                                         ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
 
@@ -174,7 +174,7 @@ public class BotInit implements MakeButtons.OnClickListener {
                                 new RequestClientGetRoom().clientGetRoom(builder.getPromoteList().get(i).getId(), RequestClientGetRoom.CreateRoomMode.getPromote);
                             }
                         } else {
-                            new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
+                            RoomController.getInstance(AccountManager.selectedAccount).clientPinRoom(realmRoom.getId(), true);
                         }
                     }
                 });

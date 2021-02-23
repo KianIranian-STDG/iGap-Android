@@ -29,7 +29,7 @@ public class RoomController extends BaseController {
         super(currentAccount);
     }
 
-    public void ChannelUpdateReactionStatus(long roomId, boolean status) {
+    public void channelUpdateReactionStatus(long roomId, boolean status) {
 
         IG_RPC.Channel_Update_Reaction_Status req = new IG_RPC.Channel_Update_Reaction_Status();
         req.roomId = roomId;
@@ -43,12 +43,12 @@ public class RoomController extends BaseController {
 
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
-                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+                FileLog.e("Channel Update Reaction Status -> Major" + e.major + "Minor" + e.minor);
             }
         });
     }
 
-    public void ChannelUpdateSignature(long roomId, boolean signature) {
+    public void channelUpdateSignature(long roomId, boolean signature) {
 
         IG_RPC.Channel_Update_Signature req = new IG_RPC.Channel_Update_Signature();
         req.roomId = roomId;
@@ -62,9 +62,31 @@ public class RoomController extends BaseController {
 
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
-                FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
+                FileLog.e("Channel Update Signature -> Major" + e.major + "Minor" + e.minor);
             }
         });
+    }
+
+    public void clientPinRoom(long roomId, boolean pin) {
+
+        IG_RPC.Client_Pin_Room req = new IG_RPC.Client_Pin_Room();
+        req.roomId = roomId;
+        req.pin = pin;
+
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (response != null) {
+                IG_RPC.Res_Client_Pin_Room res = (IG_RPC.Res_Client_Pin_Room) response;
+                if (res.pinId > 0) {
+                    RealmRoom.updatePin(res.roomId, true, res.pinId);
+                } else {
+                    RealmRoom.updatePin(res.roomId, false, res.pinId);
+                }
+            } else {
+                IG_RPC.Error e = new IG_RPC.Error();
+                FileLog.e("Client Pin Room -> Major" + e.major + "Minor" + e.minor);
+            }
+        });
+
     }
 
 }
