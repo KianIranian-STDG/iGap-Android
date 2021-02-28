@@ -53,7 +53,7 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private static String TAG = "iGapCall WebRTC ";
+    private static final String TAG = "iGapCall WebRTC ";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 1920;
@@ -100,6 +100,15 @@ public class WebRTC {
         }
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(isEnable);
+        }
+    }
+
+    public void toggleCamera(boolean isEnable) {
+        if (mediaStream == null) {
+            return;
+        }
+        for (VideoTrack videoTrack : mediaStream.videoTracks) {
+            videoTrack.setEnabled(isEnable);
         }
     }
 
@@ -346,7 +355,6 @@ public class WebRTC {
             addAudioTrack(mediaStream);
             addVideoTrack(mediaStream);
             peerConnection.addStream(mediaStream);
-
         }
 
         return peerConnection;
