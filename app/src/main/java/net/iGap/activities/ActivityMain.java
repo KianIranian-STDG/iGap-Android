@@ -141,9 +141,6 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import ir.tapsell.plus.TapsellPlus;
-import ir.tapsell.sdk.TapsellAdActivity;
-
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
@@ -1724,7 +1721,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount) {
+    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount, String organName) {
         if (status == 0) {
             Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
             intent.putExtra("Type", "2");
@@ -1733,6 +1730,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (originalAmount > 0 && discountedAmount > 0) {
                 intent.putExtra("OriginalAmount", originalAmount);
                 intent.putExtra("DiscountedAmount", discountedAmount);
+                intent.putExtra("OrganName", organName);
             }
 
             startActivityForResult(intent, requestCodePaymentBill);
