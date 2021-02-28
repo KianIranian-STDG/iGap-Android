@@ -84,7 +84,7 @@ public class CallManager {
 
     private static volatile CallManager instance = null;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private final String TAG = "iGapCall " + getClass().getSimpleName();
     private CallState currentSate;
 
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
@@ -315,6 +315,7 @@ public class CallManager {
         iHoldCall = !builder.getResponse().getId().isEmpty();
         changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
         WebRTC.getInstance().toggleSound(!isCallHold);
+        WebRTC.getInstance().toggleCamera(!isCallHold);
     }
 
     public void holdCall(boolean state) {
