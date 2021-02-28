@@ -37,7 +37,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,7 +53,6 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -323,7 +321,6 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
-import static net.iGap.G.context;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -331,7 +328,6 @@ import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
 import static net.iGap.module.AttachFile.request_code_pic_file;
-import static net.iGap.module.MessageLoader.getLocalMessage;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
@@ -2322,8 +2318,6 @@ public class FragmentChat extends BaseFragment
         if (position != -1) {
             LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
             linearLayout.scrollToPositionWithOffset(position, 0);
-            shouldLoadMessage = true;
-
             mAdapter.getItem(position).messageObject.isSelected = true;
             mAdapter.notifyItemChanged(position);
 
@@ -5999,7 +5993,7 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
-        recyclerView.postDelayed(new Runnable() {
+        G.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
@@ -7877,9 +7871,6 @@ public class FragmentChat extends BaseFragment
 
     private void sendForwardedMessage(final MessageObject sourceMessage, final long destinationRoomId, final boolean isSingleForward, int k, boolean isMessage) {
         final long messageId = AppUtils.makeRandomId();
-
-        Log.i("mmdCreate", "sendForwardedMessage: new message " + sourceMessage.toString());
-
         RealmRoom destinationRoom = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo("id", destinationRoomId).findFirst();
         });
@@ -7887,9 +7878,6 @@ public class FragmentChat extends BaseFragment
         if (destinationRoom == null || destinationRoom.getReadOnly()) {
             return;
         }
-
-        Log.i("mmdCreate", "sendForwardedMessage: new messageId " + messageId + " source message id " + sourceMessage.id + " destinationRoom room id" + destinationRoom.getId());
-
         final int type = destinationRoom.getType().getNumber();
 
 
@@ -7900,14 +7888,11 @@ public class FragmentChat extends BaseFragment
             Long sourceRoomId = (Long) object[2];
             Long sourceMessageId = (Long) object[3];
 
-            Log.i("mmdCreate", "sendForwardedMessage commit to db successfully createdForwardMessage: " + createdForwardMessage.toString());
-
             if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
                 if (isSingleForward) {
                     switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
                     scrollToEnd();
                 }
-                Log.i("mmdCreate", "final process for sending message to a room with Type: " + type + " destinationRoomId: " + createdForwardMessage.roomId + " sourceRoomId: " + sourceRoomId + " sourceMessageId: " + sourceMessageId);
                 getSendMessageUtil().buildForward(type, createdForwardMessage.roomId, createdForwardMessage, sourceRoomId, sourceMessageId);
             }
         });
@@ -8128,7 +8113,6 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    boolean shouldLoadMessage = false;
 
     private void getMessages() {
         DbManager.getInstance().doRealmTask(realm -> {
@@ -8183,7 +8167,6 @@ public class FragmentChat extends BaseFragment
                 addToView = false;
                 direction = DOWN;
             } else {
-                shouldLoadMessage = true;
                 addToView = true;
                 direction = UP;
             }
@@ -8214,7 +8197,7 @@ public class FragmentChat extends BaseFragment
 
             if (results.size() > 0) {
 
-                Object[] object = getLocalMessage(realm, mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
+                Object[] object = MessageLoader.getLocalMessage(realm, mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
                 messageInfos = (ArrayList<StructMessageInfo>) object[0];
                 if (messageInfos.size() > 0) {
                     if (direction == UP) {
@@ -8267,13 +8250,10 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void run() {
                     if (direction == UP) {
-                        shouldLoadMessage = true;
                         switchAddItem(finalMessageInfos, true);
                     } else {
-                        shouldLoadMessage = true;
                         switchAddItem(finalMessageInfos, false);
                         if (hasSavedState()) {
-                            shouldLoadMessage = false;
                             if (messageId != 0) {
                                 if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
                                     savedScrollMessageId = 0;
@@ -8302,30 +8282,19 @@ public class FragmentChat extends BaseFragment
                             visibleItemCount = linearLayoutManager.getChildCount();
                             totalItemCount = linearLayoutManager.getItemCount();
 
-                            if (shouldLoadMessage) {
-                                if (firstVisiblePosition < scrollEnd) {
-                                    loadMessage(UP);
-                                    if (totalItemCount <= scrollEnd) {
-                                        loadMessage(DOWN);
-                                    }
-                                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+                            if (firstVisiblePosition < scrollEnd) {
+                                loadMessage(UP);
+                                if (totalItemCount <= scrollEnd) {
                                     loadMessage(DOWN);
                                 }
+                            } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+                                loadMessage(DOWN);
                             }
                         }
 
                         @Override
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
-                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                shouldLoadMessage = true;
-                                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-                                int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
-
-                                if (firstVisiblePosition < scrollEnd) {
-                                    loadMessage(UP);
-                                }
-                            }
                         }
                     };
                     // TODO: 2/14/21 Should write a better logic to loadMessage
@@ -8356,7 +8325,7 @@ public class FragmentChat extends BaseFragment
         }
         if ((direction == UP && topMore) || (direction == DOWN && bottomMore)) {
             Object[] object = DbManager.getInstance().doRealmTask(realm -> {
-                return getLocalMessage(realm, mRoomId, startFutureMessageId, gapMessageId, false, direction);
+                return MessageLoader.getLocalMessage(realm, mRoomId, startFutureMessageId, gapMessageId, false, direction);
             });
             if (direction == UP) {
                 topMore = (boolean) object[1];
@@ -8383,12 +8352,12 @@ public class FragmentChat extends BaseFragment
                 //}
             }
 
-            recyclerView.post(new Runnable() {
+            recyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     switchAddItem(structMessageInfos, direction == UP);
                 }
-            });
+            }, 100);
 
             /**
              * if gap is exist ,check that reached to gap or not and if
@@ -8710,18 +8679,14 @@ public class FragmentChat extends BaseFragment
                 }
                 if (progressState == SHOW) {
                     if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                        recyclerView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (direction == DOWN && progressIdentifierDown == 0) {
-                                    progressIdentifierDown = SUID.id().get();
-                                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
-                                } else if (direction == UP && progressIdentifierUp == 0) {
-                                    progressIdentifierUp = SUID.id().get();
-                                    mAdapter.add(0, new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierUp));
-                                }
-                            }
-                        });
+
+                        if (direction == DOWN && progressIdentifierDown == 0) {
+                            progressIdentifierDown = SUID.id().get();
+                            mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
+                        } else if (direction == UP && progressIdentifierUp == 0) {
+                            progressIdentifierUp = SUID.id().get();
+                            mAdapter.add(0, new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierUp));
+                        }
                     }
                 } else {
                     /**

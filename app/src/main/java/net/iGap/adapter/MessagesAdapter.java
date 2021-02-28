@@ -33,11 +33,9 @@ import net.iGap.adapter.items.chat.LogWalletBill;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.TimeItem;
-import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.AppUtils;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
@@ -269,7 +267,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         try {
             return getAdapterItem(position).messageObject.getUpdateOrCreateTime();
         } catch (Exception e) {
-            FileLog.e(e);
         }
         return 0;
 
