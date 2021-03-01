@@ -22,11 +22,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -302,7 +300,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 LinearLayout layoutGroupLink = new LinearLayout(getActivity());
                 layoutGroupLink.setOrientation(LinearLayout.VERTICAL);
                 View viewRevoke = new View(getActivity());
-                LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
                 TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
                 MEditText edtLink = new MEditText(getActivity());
                 edtLink.setHint(getString(R.string.group_link_hint_revoke));
@@ -311,15 +308,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 edtLink.setText(link);
                 edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
                 edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-                edtLink.setPadding(0, 8, 0, 8);
+                edtLink.setPadding(0, 16, 0, 8);
                 edtLink.setEnabled(false);
                 edtLink.setSingleLine(true);
                 inputGroupLink.addView(edtLink);
-                inputGroupLink.addView(viewRevoke, viewParams);
-
-                TextView txtLink = new AppCompatTextView(getActivity());
-                txtLink.setText(/*Config.IGAP_LINK_PREFIX*/link);
-                txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
+                inputGroupLink.addView(viewRevoke);
 
                 viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -328,13 +321,28 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                 layoutGroupLink.addView(inputGroupLink, layoutParams);
-                layoutGroupLink.addView(txtLink, layoutParams);
-                if (getActivity() != null) {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(getActivity(), R.string.copied, Toast.LENGTH_SHORT).show();
-                }
+
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
+                        .positiveText(R.string.array_Copy)
+                        .customView(layoutGroupLink, true)
+                        .widgetColor(new Theme().getPrimaryColor(getContext()))
+                        .negativeText(R.string.edit)
+                        .onPositive((dialog1, which) -> {
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                            clipboard.setPrimaryClip(clip);
+                        })
+                        .onNegative((dialog12, which) -> {
+                            if (viewModel.isPrivate) {
+                                viewModel.sendRequestRevokeGroupUsername();
+                            } else {
+                                setUsername();
+                            }
+                        })
+                        .build();
+
+                dialog.show();
+
             }
         });
 
