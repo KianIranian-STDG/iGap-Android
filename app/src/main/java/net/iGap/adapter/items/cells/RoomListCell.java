@@ -91,6 +91,7 @@ public class RoomListCell extends FrameLayout {
 
     public RoomListCell(@NonNull Context context) {
         super(context);
+        setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
     }
 
     public void setData(RealmRoom room, AvatarHandler avatarHandler, boolean isSelectedMode) {
@@ -98,6 +99,7 @@ public class RoomListCell extends FrameLayout {
             if (!havePin) {
                 pinView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
+                pinView.setAlpha(0.6f);
 
                 addView(pinView, 0);
                 havePin = true;
