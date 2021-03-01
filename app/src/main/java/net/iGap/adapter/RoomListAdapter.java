@@ -31,12 +31,12 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
     private View emptyView;
     private View loadingView;
     private AvatarHandler avatarHandler;
-    private List<Room> mSelectedRoomList;
+    private List<Long> mSelectedRoomList;
     private OnMainFragmentCallBack callBack;
     private boolean isChatMultiSelectEnable;
     private OnCloseSelectMode onCloseSelctMode;
 
-    public RoomListAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, View emptyView, View loadingView, AvatarHandler avatarHandler, List<Room> mSelectedRoomList, OnCloseSelectMode onCloseSelctMode) {
+    public RoomListAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, View emptyView, View loadingView, AvatarHandler avatarHandler, List<Long> mSelectedRoomList, OnCloseSelectMode onCloseSelctMode) {
         super(data, true);
         this.emptyView = emptyView;
         this.loadingView = loadingView;
@@ -112,7 +112,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
             return;
         }
         holder.getRootView().setData(mInfo, avatarHandler, isChatMultiSelectEnable);
-        holder.getRootView().setCheck(mSelectedRoomList.contains(holder.SelectedModel));
+        holder.getRootView().setCheck(mSelectedRoomList.contains(holder.realmRoom.id));
     }
 
     public void setCallBack(OnMainFragmentCallBack callBack) {
@@ -126,7 +126,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
     public class ViewHolder extends RecyclerView.ViewHolder {
         private RealmRoom realmRoom;
         private RoomListCell rootView;
-        private Room SelectedModel;
+        private Room selectedModel;
 
         public ViewHolder(View view) {
             super(view);
@@ -141,11 +141,11 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
         }
 
         public void setSelectedRoom() {
-            SelectedModel = new Room(realmRoom.getId(), realmRoom.getType().name(), realmRoom.getTitle(), "", "");
+            selectedModel = new Room(realmRoom.getId(), realmRoom.getType().name(), realmRoom.getTitle(), "", "");
             if (realmRoom.getType() == GROUP) {
-                SelectedModel.setGroupRole(realmRoom.getGroupRoom().getRole().toString());
+                selectedModel.setGroupRole(realmRoom.getGroupRoom().getRole().toString());
             } else if (realmRoom.getType() == CHANNEL) {
-                SelectedModel.setChannelRole(realmRoom.getChannelRoom().getRole().toString());
+                selectedModel.setChannelRole(realmRoom.getChannelRoom().getRole().toString());
             }
         }
     }

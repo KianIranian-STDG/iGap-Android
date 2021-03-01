@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,9 +158,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case CHAT_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(FragmentMain.class.getName());
+                fragment = fragmentManager.findFragmentByTag(MainFragment.class.getName());
                 if (fragment == null) {
-                    fragment = FragmentMain.newInstance(FragmentMain.MainType.all);
+                    fragment = MainFragment.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
@@ -227,29 +226,29 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
     }
 
     public void checkPassCodeIconVisibility() {
-        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(MainFragment.class.getName());
 
-        if (fragment instanceof FragmentMain) {
-            ((FragmentMain) fragment).checkPassCodeIconVisibility();
+        if (fragment instanceof MainFragment) {
+            ((MainFragment) fragment).checkPassCodeVisibility();
         }
     }
 
     public void setForwardMessage(boolean enable) {
-        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(MainFragment.class.getName());
 
-        if (fragment instanceof FragmentMain) {
-            ((FragmentMain) fragment).setForwardMessage(enable);
+        if (fragment instanceof MainFragment) {
+            ((MainFragment) fragment).setForwardMessage(enable);
         }
     }
 
     public void checkHasSharedData(boolean enable) {
-        Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentMain.class.getName());
+        Fragment fragment = getChildFragmentManager().findFragmentByTag(MainFragment.class.getName());
 
-        if (fragment instanceof FragmentMain) {
+        if (fragment instanceof MainFragment) {
             if (enable) {
-                ((FragmentMain) fragment).checkHasSharedData(true);
+                ((MainFragment) fragment).checkHasSharedData(true);
             } else {
-                ((FragmentMain) fragment).revertToolbarFromForwardMode();
+                ((MainFragment) fragment).revertToolbarFromForwardMode();
             }
         }
     }

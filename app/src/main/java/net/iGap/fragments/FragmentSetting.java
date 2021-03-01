@@ -195,7 +195,7 @@ public class FragmentSetting extends BaseFragment {
                     if (f == null) {
                         continue;
                     }
-                    if (f instanceof FragmentMain || f instanceof FragmentCall) {
+                    if (f instanceof MainFragment || f instanceof FragmentCall) {
                         f.onResume();
                     }
                 }
