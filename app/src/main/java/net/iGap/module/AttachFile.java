@@ -891,7 +891,7 @@ public class AttachFile {
         }).negativeText(R.string.B_cancel).show();
     }
 
-    private File createImageFile() throws IOException {
+    public File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";

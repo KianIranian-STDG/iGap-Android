@@ -196,7 +196,12 @@ public final class AndroidUtils {
         }
         return null;
     }
-
+    public static int dp(float value) {
+        if (value == 0) {
+            return 0;
+        }
+        return (int) Math.ceil(density * value);
+    }
     public static String saveBitmap(Bitmap bmp) {
         FileOutputStream out = null;
         String outPath = G.DIR_TEMP + "/thumb_" + SUID.id().get() + ".jpg";
