@@ -92,7 +92,7 @@ public class ToolbarItem extends FrameLayout {
         parentToolbarItem = toolbarItems;
         if (text != null) {
             textView = new TextView(context);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             textView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
             textView.setGravity(Gravity.CENTER);
             textView.setPadding(LayoutCreator.dp(4), 0, LayoutCreator.dp(4), 0);
@@ -110,6 +110,12 @@ public class ToolbarItem extends FrameLayout {
             if (color != 0) {
                 iconView.setIconColor(color);
             }
+        }
+    }
+
+    public void setIcon(int icon) {
+        if (iconView != null) {
+            iconView.setIcon(icon);
         }
     }
 
@@ -208,6 +214,9 @@ public class ToolbarItem extends FrameLayout {
                 }
                 processedPopupClick = true;
                 popupWindow.dismiss(true);
+                if (parentToolbarItem.parentToolbar.listener != null) {
+                    parentToolbarItem.parentToolbar.listener.onItemClick((Integer) view.getTag());
+                }
             }
         });
 

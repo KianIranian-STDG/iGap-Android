@@ -40,6 +40,10 @@ public class ToolbarItems extends LinearLayout {
                 toolbarItem.togglePopup();
             } else if (toolbarItem.isSearchBox()) {
                 parentToolbar.onSearchVisibilityChanged(toolbarItem.toggleSearch(true));
+            } else {
+                if (parentToolbar.listener != null) {
+                    parentToolbar.listener.onItemClick((Integer) toolbarItem.getTag());
+                }
             }
         });
         return item;

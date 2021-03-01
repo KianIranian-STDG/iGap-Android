@@ -30,7 +30,7 @@ public class Toolbar extends FrameLayout {
     private TextView titleTextView;
     private TextView subTitleTextView;
     private ImageView backIcon;
-    private ToolbarListener listener;
+    protected ToolbarListener listener;
     private ToolbarItems items;
     private ToolbarItems actionItems;
     private String actionModeTag;
@@ -62,10 +62,14 @@ public class Toolbar extends FrameLayout {
         }
         titleIsFontIcon = true;
         titleTextView.setGravity(Gravity.LEFT);
-        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 52);
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 64);
         titleTextView.setTextColor(0xffffffff);
         titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
         titleTextView.setText(title);
+    }
+
+    public void setTitleSize(int size) {
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size);
     }
 
     public void setSubTitle(String subTitle) {
@@ -92,6 +96,10 @@ public class Toolbar extends FrameLayout {
 
     public void setListener(ToolbarListener listener) {
         this.listener = listener;
+    }
+
+    public ToolbarItem addItem(int tag, int icon, @ColorInt int color) {
+        return addItem(tag, null, icon, color);
     }
 
     public ToolbarItem addItem(int tag, String text, int icon, @ColorInt int color) {
@@ -323,6 +331,10 @@ public class Toolbar extends FrameLayout {
             }
             child.layout(childLeft, childTop, childLeft + width, childTop + height);
         }
+    }
+
+    public boolean isInActionMode() {
+        return isInActionMode(null);
     }
 
     public boolean isInActionMode(String tag) {
