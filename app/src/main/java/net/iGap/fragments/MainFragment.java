@@ -35,8 +35,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
-import net.iGap.controllers.MessageController;
-import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -218,6 +216,9 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 
                 case muteTag:
                     confirmActionForMuteNotification();
+                    break;
+                case pinTag:
+                    confirmActionForPinToTop();
             }
         });
 
@@ -793,13 +794,24 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             disableMultiSelect();
     }
 
-    private void confirmActionForPinToTop(final long roomId, final boolean isPinned) {
+    private void confirmActionForPinToTop() {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
                 .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-                    pinToTop(roomId, isPinned);
+                    int pinCount = DbManager.getInstance().doRealmTask(realm -> {
+                        return realm.where(RealmRoom.class).equalTo("isPinned", true).findAll().size();
+                    });
+                    for (int i = 0; i < selectedRoom.size(); i++) {
+                        long roomId = selectedRoom.get(i);
+                        RealmRoom room = getMessageDataStorage().getRoom(roomId);
+                        if (pinCount < 5 || room.isPinned) {
+                            pinToTop(roomId, room.isPinned);
+                        }
+                        pinCount++;
+                    }
+                    disableMultiSelect();
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
@@ -810,7 +822,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         if (!isPinned) {
             goToTop();
         }
-        disableMultiSelect();
     }
 
     private void goToTop() {
