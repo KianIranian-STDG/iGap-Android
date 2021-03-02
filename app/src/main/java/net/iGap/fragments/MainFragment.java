@@ -76,7 +76,6 @@ import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.Room;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
@@ -219,6 +218,9 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                     break;
                 case pinTag:
                     confirmActionForPinToTop();
+                    break;
+                case leaveTag:
+                    confirmActionForRemoveSelected();
             }
         });
 
@@ -697,12 +699,12 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    private void deleteChat(Room item, boolean exit) {
+    private void deleteChat(RealmRoom item, boolean exit) {
 
         if (item.getType() == CHAT) {
             getRoomController().chatDeleteRoom(item.getId());
         } else if (item.getType() == GROUP) {
-            if (item.getGroupRole() == GroupChatRole.OWNER) {
+            if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
                 getRoomController().groupDeleteRoom(item.getId());
             } else {
                 getRoomController().groupLeft(item.getId());
@@ -716,7 +718,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             }
 
 
-            if (item.getChannelRole() == ChannelChatRole.OWNER) {
+            if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
                 getMessageController().deleteChannel(item.getId());
             } else {
                 getRoomController().channelLeft(item.getId());
@@ -1147,24 +1149,23 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 //        return mSelectedRoomList.contains(mInfo);
 //    }
 
-//    private void confirmActionForRemoveSelected() {
-//        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
-//                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-//                .onPositive((dialog, which) -> {
-//                    dialog.dismiss();
-//
-//                    if (mSelectedRoomList.size() > 0) {
-//
-//                        for (Room item : mSelectedRoomList) {
-//                            deleteChat(item, false);
-//                        }
-//                        disableMultiSelect();
-//
-//                    }
-//                })
-//                .onNegative((dialog, which) -> dialog.dismiss())
-//                .show();
-//    }
+    private void confirmActionForRemoveSelected() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
+                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+
+                    if (selectedRoom.size() > 0) {
+                        for (int i = 0; i < selectedRoom.size(); i++) {
+                            RealmRoom item = getMessageDataStorage().getRoom(selectedRoom.get(i));
+                            deleteChat(item, false);
+                        }
+                    }
+                    disableMultiSelect();
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
 
     private void confirmActionForRemoveItem(RealmRoom item) {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
