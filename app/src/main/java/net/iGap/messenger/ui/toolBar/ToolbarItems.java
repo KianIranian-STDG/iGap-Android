@@ -53,6 +53,15 @@ public class ToolbarItems extends LinearLayout {
         return addItem(tag, null, icon, width, Color.WHITE);
     }
 
+    public boolean itemExist(int tag) {
+        for (int i = 0; i < getChildCount(); i++) {
+            if (((Integer) getChildAt(i).getTag()) == tag) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void closeSearchBox(boolean closeKeyboard) {
         int count = getChildCount();
         for (int i = 0; i < count; i++) {

@@ -35,6 +35,8 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
+import net.iGap.controllers.MessageController;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -123,13 +125,15 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     private final int pinTag = 5;
     private final int deleteTag = 6;
     private final int clearHistoryTag = 7;
-    private final int markAsReadTag = 7;
+    private final int selectCounter = 8;
+    private final int markAsReadTag = 9;
     private ArrayList<View> actionModeViews = new ArrayList<>();
     private ToolbarItem passCodeItem;
     private ToolbarItem pintItem;
     private ToolbarItem deleteItem;
     private ToolbarItem muteItem;
     private ToolbarItem moreItem;
+    private ToolbarItems toolbarItems;
     private ToolBarMenuSubItem clearHistoryItem;
     private ToolBarMenuSubItem markAsReadItem;
     private ToolBarMenuSubItem leaveItem;
@@ -189,25 +193,31 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 
         toolbar.setListener(i -> {
             Log.i("abbasiMainFragment", "createToolBar: " + i);
-            if (i == -1) {
-                if (toolbar.isInActionMode()) {
-                    disableMultiSelect();
-                }
-            } else if (i == passCodeTag) {
-                if (passCodeItem == null) {
-                    return;
-                }
-                if (ActivityMain.isLock) {
-                    passCodeItem.setIcon(R.string.unlock_icon);
-                    ActivityMain.isLock = false;
-                    HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
-                } else {
-                    passCodeItem.setIcon(R.string.lock_icon);
-                    ActivityMain.isLock = true;
-                    HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
-                }
+            switch (i) {
+                case -1:
+                    if (toolbar.isInActionMode()) {
+                        disableMultiSelect();
+                    }
+                    break;
+                case passCodeTag:
+                    if (passCodeItem == null) {
+                        return;
+                    }
+                    if (ActivityMain.isLock) {
+                        passCodeItem.setIcon(R.string.unlock_icon);
+                        ActivityMain.isLock = false;
+                        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+                    } else {
+                        passCodeItem.setIcon(R.string.lock_icon);
+                        ActivityMain.isLock = true;
+                        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
+                    }
 
-                checkPassCodeVisibility();
+                    checkPassCodeVisibility();
+                    break;
+
+                case muteTag:
+                    confirmActionForMuteNotification();
             }
         });
 
@@ -255,7 +265,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 //                disableMultiSelect();
 //                return;
 //            }
-
+//
 //            multiSelectAdapter.setItemsList(setMultiSelectAdapterItem(item, mSelectedRoomList.size() == 1));
 //
 //            RealmRoom finalItem = item;
@@ -292,8 +302,8 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 //
 //                }
 //            });
-
-            refreshChatList(position, false);
+//
+//            refreshChatList(position, false);
         };
 
         if (MusicPlayer.playerStateChangeListener != null) {
@@ -324,7 +334,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             return;
         }
 
-        final ToolbarItems toolbarItems = toolbar.createActionToolbar(null);
+        toolbarItems = toolbar.createActionToolbar(null);
         toolbarItems.setBackground(null);
 
         moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 52);
@@ -340,6 +350,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         multiSelectCounter.setTextSize(18);
         multiSelectCounter.setTypeface(ResourcesCompat.getFont(toolbarItems.getContext(), R.font.main_font_bold));
         multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTag(selectCounter);
         toolbarItems.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
         actionModeViews.add(moreItem);
@@ -632,6 +643,11 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void checkSelectedRoom() {
+        boolean hasMute = false;
+        boolean hasUnMute = false;
+
+        boolean hasPinned = false;
+        boolean hasUnPin = false;
         for (int i = 0; i < selectedRoom.size(); i++) {
             Long roomId = selectedRoom.get(i);
             RealmRoom room = getMessageDataStorage().getRoom(roomId);
@@ -639,12 +655,40 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             if (room == null) {
                 continue;
             }
+            if (room.mute) {
+                hasMute = true;
+            } else {
+                hasUnMute = true;
+            }
 
-            pintItem.setIcon(room.isPinned ? R.string.location_pin_icon : R.string.delete_icon);
-            muteItem.setIcon(room.mute ? R.string.unmute_icon : R.string.mute_icon);
+            if (room.isPinned) {
+                hasPinned = true;
+            } else {
+                hasUnPin = true;
+            }
+        }
 
+        if (hasMute && hasUnMute) {
+            muteItem.setVisibility(View.GONE);
+        } else if (hasMute) {
+            muteItem.setVisibility(View.VISIBLE);
+            muteItem.setIcon(R.string.unmute_icon);
+        } else if (hasUnMute) {
+            muteItem.setVisibility(View.VISIBLE);
+            muteItem.setIcon(R.string.mute_icon);
+        }
+
+        if (hasPinned && hasUnPin) {
+            pintItem.setVisibility(View.GONE);
+        } else if (hasPinned) {
+            pintItem.setVisibility(View.VISIBLE);
+            pintItem.setIcon(R.string.location_pin_icon);
+        } else {
+            pintItem.setVisibility(View.VISIBLE);
+            pintItem.setIcon(R.string.check_icon);
         }
     }
+
 
     private void invalidateViews() {
         if (roomListAdapter != null) {
@@ -710,21 +754,25 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             disableMultiSelect();
     }
 
-    private void confirmActionForMuteNotification(long id, boolean mute) {
+    private void confirmActionForMuteNotification() {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
                 .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                 .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-                    muteNotification(id, mute);
+                    for (int i = 0; i < selectedRoom.size(); i++) {
+                        long roomId = selectedRoom.get(i);
+                        boolean mute = getMessageDataStorage().getRoom(roomId).mute;
+                        getRoomController().clientMuteRoom(roomId, !mute);
+                    }
+                    disableMultiSelect();
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
     }
 
     private void muteNotification(final long roomId, final boolean mute) {
-        getRoomController().clientMuteRoom(roomId, !mute);
-        disableMultiSelect();
+
     }
 
     private void confirmActionForClearHistory(long id) {
