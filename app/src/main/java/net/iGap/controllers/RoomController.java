@@ -11,6 +11,9 @@ import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 
+import io.realm.RealmResults;
+import io.realm.Sort;
+
 public class RoomController extends BaseController {
 
     private static volatile RoomController[] instance = new RoomController[AccountManager.MAX_ACCOUNT_COUNT];
@@ -219,4 +222,14 @@ public class RoomController extends BaseController {
         });
     }
 
+
+    public RealmResults<RealmRoom> getLiveRoomList() {
+        return DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class)
+                    .equalTo("keepRoom", false)
+                    .equalTo("isDeleted", false)
+                    .sort(new String[]{"isPinned", "pinId", "updatedTime"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING})
+                    .findAllAsync();
+        });
+    }
 }

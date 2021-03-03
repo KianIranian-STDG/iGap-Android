@@ -9,11 +9,15 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -79,8 +83,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 import static net.iGap.G.isAppRtl;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -93,11 +95,10 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     private RecyclerView recyclerView;
     private ProgressBar loadMoreProgress;
     private ProgressBar loadingProgress;
-    private FrameLayout emptyView;
+    private LinearLayout emptyView;
 
     private RoomListAdapter roomListAdapter;
     private boolean inMultiSelectMode;
-    private RealmResults<RealmRoom> results;
     private List<Long> selectedRoom = new ArrayList<>();
     private NumberTextView multiSelectCounter;
 
@@ -144,21 +145,50 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         recyclerView.setItemAnimator(null);
         recyclerView.setItemViewCacheSize(0);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(roomListAdapter = new RoomListAdapter(getRoomController().getLiveRoomList(), avatarHandler, selectedRoom));
         layout.addView(recyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!ClientGetRoomListResponse.roomListFetched) {
+                    if (mOffset > 0) {
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, String.valueOf(System.currentTimeMillis()));
+                        }
+                    }
+                }
+            }
+        });
 
         loadMoreProgress = new ProgressBar(context);
-        AppUtils.setProgresColler(loadMoreProgress);
         loadMoreProgress.setVisibility(View.GONE);
+        AppUtils.setProgresColler(loadMoreProgress);
         layout.addView(loadMoreProgress, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER, 0, 0, 0, 8));
 
         loadingProgress = new ProgressBar(context);
         AppUtils.setProgresColler(loadingProgress);
         layout.addView(loadingProgress, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
-        emptyView = new FrameLayout(context);
-        emptyView.setBackgroundColor(Color.RED);
-        emptyView.setVisibility(View.GONE);
+
+        emptyView = new LinearLayout(context);
+        emptyView.setOrientation(LinearLayout.VERTICAL);
+        emptyView.setVisibility(View.VISIBLE);
         layout.addView(emptyView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+        ImageView emptyImageView = new ImageView(context);
+        emptyImageView.setImageResource(R.drawable.empty_chat);
+        emptyView.addView(emptyImageView, LayoutCreator.createLinear(160, 160, Gravity.CENTER));
+
+        TextView emptyTextView = new TextView(context);
+        emptyTextView.setText(getResources().getString(R.string.empty_room));
+        emptyTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        emptyTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        emptyTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        emptyTextView.setSingleLine();
+        emptyTextView.setGravity(Gravity.CENTER);
+        emptyView.addView(emptyTextView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 8));
 
         return fragmentView;
     }
@@ -222,7 +252,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 
                     checkPassCodeVisibility();
                     break;
-
                 case muteTag:
                     confirmActionForMuteNotification();
                     break;
@@ -240,7 +269,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                     break;
                 case readAllTag:
                     confirmActionForReadAllRoom();
-
+                    break;
             }
         });
 
@@ -252,23 +281,66 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
 
-        if (MusicPlayer.playerStateChangeListener != null) {
-            MusicPlayer.playerStateChangeListener.observe(getViewLifecycleOwner(), isVisible -> {
-//                if (!mHelperToolbar.getmSearchBox().isShown()) {
-//                    mHelperToolbar.animateSearchBox(false, 0, 0);
-//                }
-            });
-        }
-
         EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
 
-        initRecycleView();
+        roomListAdapter.setCallBack(new RoomListAdapter.OnMainFragmentCallBack() {
+            @Override
+            public void onClick(RoomListCell roomListCell, RealmRoom realmRoom, int adapterPosition) {
+                onItemClick(roomListCell, realmRoom, adapterPosition);
+            }
 
-        if (results == null) {
-            loadMoreProgress.setVisibility(View.VISIBLE);
-        }
+            @Override
+            public boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position) {
+                if (!inMultiSelectMode && FragmentChat.mForwardMessages == null && !HelperGetDataFromOtherApp.hasSharedData) {
+                    enableMultiSelect();
+                    updateSelectedRoom(realmRoom, position);
+                    createActionMode();
+                    multiSelectCounter.setNumber(selectedRoom.size(), selectedRoom.size() != 1);
+                    toolbar.showActionToolbar();
+                    BackDrawable backDrawable = new BackDrawable(true);
+                    backDrawable.setRotation(1, true);
+                    backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+                    toolbar.setBackIcon(backDrawable);
+
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    ArrayList<Animator> animators = new ArrayList<>();
+                    for (int a = 0; a < actionModeViews.size(); a++) {
+                        View view = actionModeViews.get(a);
+                        view.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
+                        animators.add(ObjectAnimator.ofFloat(view, View.SCALE_Y, 0.1f, 1.0f));
+                    }
+                    animatorSet.playTogether(animators);
+                    animatorSet.setDuration(180);
+                    animatorSet.start();
+                }
+                return true;
+            }
+
+            @Override
+            public void needShowLoadProgress(boolean show) {
+                loadingProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void needShowEmptyView(boolean show) {
+                emptyView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void needCheckMultiSelect() {
+                disableMultiSelect();
+            }
+        });
+
+        G.onNotifyTime = () -> G.handler.post(() -> {
+            if (recyclerView != null) {
+                if (recyclerView.getAdapter() != null) {
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
+            }
+        });
 
         setForwardMessage(true);
         checkHasSharedData(true);
@@ -374,81 +446,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                 })
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .show();
-    }
-
-    private void initRecycleView() {
-
-        if (results == null) {
-            results = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).sort(new String[]{"isPinned", "pinId", "updatedTime"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
-            });
-            roomListAdapter = new RoomListAdapter(results, emptyView, loadingProgress, avatarHandler, selectedRoom, this::disableMultiSelect);
-        } else {
-            loadingProgress.setVisibility(View.GONE);
-        }
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (!ClientGetRoomListResponse.roomListFetched)
-                    if (mOffset > 0) {
-                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                        if (lastVisiblePosition + 10 >= mOffset) {
-                            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, String.valueOf(System.currentTimeMillis()));
-                        }
-                    }
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
-        recyclerView.setAdapter(roomListAdapter);
-
-        roomListAdapter.setCallBack(new RoomListAdapter.OnMainFragmentCallBack() {
-            @Override
-            public void onClick(RoomListCell roomListCell, RealmRoom realmRoom, int adapterPosition) {
-                onItemClick(roomListCell, realmRoom, adapterPosition);
-            }
-
-            @Override
-            public boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position) {
-                if (!inMultiSelectMode && FragmentChat.mForwardMessages == null && !HelperGetDataFromOtherApp.hasSharedData) {
-                    enableMultiSelect();
-                    updateSelectedRoom(realmRoom, position);
-                    createActionMode();
-                    multiSelectCounter.setNumber(selectedRoom.size(), selectedRoom.size() != 1);
-                    toolbar.showActionToolbar();
-                    BackDrawable backDrawable = new BackDrawable(true);
-                    backDrawable.setRotation(1, true);
-                    backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
-                    toolbar.setBackIcon(backDrawable);
-
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    ArrayList<Animator> animators = new ArrayList<>();
-                    for (int a = 0; a < actionModeViews.size(); a++) {
-                        View view = actionModeViews.get(a);
-                        view.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
-                        animators.add(ObjectAnimator.ofFloat(view, View.SCALE_Y, 0.1f, 1.0f));
-                    }
-                    animatorSet.playTogether(animators);
-                    animatorSet.setDuration(180);
-                    animatorSet.start();
-                }
-                return true;
-            }
-        });
-
-        G.onNotifyTime = () -> G.handler.post(() -> {
-            if (recyclerView != null) {
-                if (recyclerView.getAdapter() != null) {
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                }
-            }
-        });
     }
 
     private void onItemClick(RoomListCell roomCell, RealmRoom room, int position) {

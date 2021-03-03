@@ -28,21 +28,15 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomListAdapter.ViewHolder> {
 
-    private View emptyView;
-    private View loadingView;
-    private AvatarHandler avatarHandler;
-    private List<Long> mSelectedRoomList;
+    private final AvatarHandler avatarHandler;
+    private final List<Long> selectedRoom;
     private OnMainFragmentCallBack callBack;
     private boolean isChatMultiSelectEnable;
-    private OnCloseSelectMode onCloseSelctMode;
 
-    public RoomListAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, View emptyView, View loadingView, AvatarHandler avatarHandler, List<Long> mSelectedRoomList, OnCloseSelectMode onCloseSelctMode) {
+    public RoomListAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, AvatarHandler avatarHandler, List<Long> selectedRoom) {
         super(data, true);
-        this.emptyView = emptyView;
-        this.loadingView = loadingView;
         this.avatarHandler = avatarHandler;
-        this.mSelectedRoomList = mSelectedRoomList;
-        this.onCloseSelctMode = onCloseSelctMode;
+        this.selectedRoom = selectedRoom;
     }
 
     @NotNull
@@ -54,7 +48,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
     }
 
     @Override
-    protected OrderedRealmCollectionChangeListener createListener() {
+    protected OrderedRealmCollectionChangeListener<RealmResults<RealmRoom>> createListener() {
         return (OrderedRealmCollectionChangeListener<RealmResults<RealmRoom>>) (collection, changeSet) -> {
             if (G.onUnreadChange != null) {
                 int unreadCount = 0;
@@ -66,26 +60,23 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
                 G.onUnreadChange.onChange(unreadCount);
             }
 
-            if (getData() != null && getData().size() > 0) {
-                emptyView.setVisibility(View.GONE);
-            } else {
-                emptyView.setVisibility(View.VISIBLE);
-            }
+            callBack.needShowEmptyView(getData() == null || getData().size() <= 0);
+
             if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
-                loadingView.setVisibility(View.GONE);
+                callBack.needShowLoadProgress(false);
                 notifyDataSetChanged();
                 return;
             }
+
             // For deletions, the adapter has to be notified in reverse order.
             OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
             for (int i = deletions.length - 1; i >= 0; i--) {
                 OrderedCollectionChangeSet.Range range = deletions[i];
                 notifyItemRangeRemoved(range.startIndex, range.length);
             }
-            if (deletions.length > 0 && mSelectedRoomList.size() > 0) {
-                mSelectedRoomList.clear();
-                if (onCloseSelctMode != null)
-                    onCloseSelctMode.close();
+            if (deletions.length > 0 && selectedRoom.size() > 0) {
+                selectedRoom.clear();
+                callBack.needCheckMultiSelect();
             }
 
             OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
@@ -112,7 +103,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
             return;
         }
         holder.getRootView().setData(mInfo, avatarHandler, isChatMultiSelectEnable);
-        holder.getRootView().setCheck(mSelectedRoomList.contains(holder.realmRoom.id));
+        holder.getRootView().setCheck(selectedRoom.contains(holder.realmRoom.id));
     }
 
     public void setCallBack(OnMainFragmentCallBack callBack) {
@@ -125,7 +116,7 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private RealmRoom realmRoom;
-        private RoomListCell rootView;
+        private final RoomListCell rootView;
         private Room selectedModel;
 
         public ViewHolder(View view) {
@@ -154,10 +145,11 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
         void onClick(RoomListCell roomListCell, RealmRoom realmRoom, int adapterPosition);
 
         boolean onLongClick(RoomListCell roomListCell, RealmRoom realmRoom, int position);
-    }
 
-    @FunctionalInterface
-    public interface OnCloseSelectMode {
-        void close();
+        void needShowLoadProgress(boolean show);
+
+        void needShowEmptyView(boolean show);
+
+        void needCheckMultiSelect();
     }
 }

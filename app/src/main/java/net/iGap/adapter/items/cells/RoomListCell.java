@@ -99,8 +99,7 @@ public class RoomListCell extends FrameLayout {
             if (!havePin) {
                 pinView = new AppCompatImageView(getContext());
                 pinView.setBackgroundResource(R.drawable.pin);
-                pinView.setAlpha(0.6f);
-
+                pinView.setAlpha(G.themeColor == Theme.DARK ? 0.2f : 0.6f);
                 addView(pinView, 0);
                 havePin = true;
             }
