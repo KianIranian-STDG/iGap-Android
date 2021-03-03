@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -10,9 +9,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -42,7 +42,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.libs.emojiKeyboard.View.CubicBezierInterpolator;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.ToolBarMenuSubItem;
@@ -89,21 +88,18 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class MainFragment extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
-
-    private ProgressBar progressBar;
     public static int mOffset = 0;
-    private View viewById;
-    private RecyclerView mRecyclerView;
-    private long tagId;
-    private ProgressBar pbLoading;
+
+    private RecyclerView recyclerView;
+    private ProgressBar loadMoreProgress;
+    private ProgressBar loadingProgress;
+    private FrameLayout emptyView;
 
     private RoomListAdapter roomListAdapter;
     private boolean inMultiSelectMode;
     private RealmResults<RealmRoom> results;
     private List<Long> selectedRoom = new ArrayList<>();
     private NumberTextView multiSelectCounter;
-
-    private AnimatorSet progressAnimatorSet;
 
     private final int passCodeTag = 1;
     private final int leaveTag = 2;
@@ -141,7 +137,30 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 
     @Override
     public View createView(Context context) {
-        return LayoutInflater.from(context).inflate(R.layout.activity_main_rooms, null, false);
+        fragmentView = new FrameLayout(context);
+        FrameLayout layout = (FrameLayout) fragmentView;
+
+        recyclerView = new RecyclerView(context);
+        recyclerView.setItemAnimator(null);
+        recyclerView.setItemViewCacheSize(0);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        layout.addView(recyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+
+        loadMoreProgress = new ProgressBar(context);
+        AppUtils.setProgresColler(loadMoreProgress);
+        loadMoreProgress.setVisibility(View.GONE);
+        layout.addView(loadMoreProgress, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM | Gravity.CENTER, 0, 0, 0, 8));
+
+        loadingProgress = new ProgressBar(context);
+        AppUtils.setProgresColler(loadingProgress);
+        layout.addView(loadingProgress, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+        emptyView = new FrameLayout(context);
+        emptyView.setBackgroundColor(Color.RED);
+        emptyView.setVisibility(View.GONE);
+        layout.addView(emptyView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+        return fragmentView;
     }
 
     @Override
@@ -232,17 +251,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
-        tagId = System.currentTimeMillis();
-
-
-        progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
-        viewById = view.findViewById(R.id.empty_icon);
-        pbLoading = view.findViewById(R.id.pbLoading);
-        pbLoading.setVisibility(View.VISIBLE);
-        viewById.setVisibility(View.GONE);
-
-        if (results == null)
-            changeRoomListProgress(true);
 
         if (MusicPlayer.playerStateChangeListener != null) {
             MusicPlayer.playerStateChangeListener.observe(getViewLifecycleOwner(), isVisible -> {
@@ -256,11 +264,11 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
         EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
 
-        mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
-        mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setItemViewCacheSize(0);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         initRecycleView();
+
+        if (results == null) {
+            loadMoreProgress.setVisibility(View.VISIBLE);
+        }
 
         setForwardMessage(true);
         checkHasSharedData(true);
@@ -374,12 +382,12 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             results = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).sort(new String[]{"isPinned", "pinId", "updatedTime"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING}).findAllAsync();
             });
-            roomListAdapter = new RoomListAdapter(results, viewById, pbLoading, avatarHandler, selectedRoom, this::disableMultiSelect);
+            roomListAdapter = new RoomListAdapter(results, emptyView, loadingProgress, avatarHandler, selectedRoom, this::disableMultiSelect);
         } else {
-            pbLoading.setVisibility(View.GONE);
+            loadingProgress.setVisibility(View.GONE);
         }
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -387,7 +395,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                     if (mOffset > 0) {
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                         if (lastVisiblePosition + 10 >= mOffset) {
-                            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, String.valueOf(System.currentTimeMillis()));
                         }
                     }
             }
@@ -398,7 +406,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             }
         });
 
-        mRecyclerView.setAdapter(roomListAdapter);
+        recyclerView.setAdapter(roomListAdapter);
 
         roomListAdapter.setCallBack(new RoomListAdapter.OnMainFragmentCallBack() {
             @Override
@@ -434,15 +442,13 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             }
         });
 
-
         G.onNotifyTime = () -> G.handler.post(() -> {
-            if (mRecyclerView != null) {
-                if (mRecyclerView.getAdapter() != null) {
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
+            if (recyclerView != null) {
+                if (recyclerView.getAdapter() != null) {
+                    recyclerView.getAdapter().notifyDataSetChanged();
                 }
             }
         });
-
     }
 
     private void onItemClick(RoomListCell roomCell, RealmRoom room, int position) {
@@ -676,8 +682,8 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
-                    mRecyclerView.smoothScrollToPosition(0);
+                if (((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition() <= 1) {
+                    recyclerView.smoothScrollToPosition(0);
                 }
             }
         }, 50);
@@ -689,8 +695,8 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     @Override
     public void onChange() {
         G.handler.post(() -> {
-            if (mRecyclerView.getAdapter() != null) {
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+            if (recyclerView.getAdapter() != null) {
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
         });
     }
@@ -777,10 +783,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         if (G.isDepricatedApp)
             isDeprecated();
 
-        if (progressBar != null) {
-            AppUtils.setProgresColler(progressBar);
-        }
-
         checkPassCodeVisibility();
 
         boolean canUpdate = false;
@@ -792,9 +794,9 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 
         if (canUpdate) {
 
-            if (mRecyclerView != null) {
-                if (mRecyclerView.getAdapter() != null) {
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
+            if (recyclerView != null) {
+                if (recyclerView.getAdapter() != null) {
+                    recyclerView.getAdapter().notifyDataSetChanged();
                 }
             }
         }
@@ -1048,44 +1050,16 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         } else if (id == EventManager.ROOM_LIST_CHANGED) {
             G.runOnUiThread(() -> {
                 boolean show = (boolean) message[0];
-                changeRoomListProgress(show);
+                loadMoreProgress.setVisibility(show ? View.VISIBLE : View.GONE);
             });
         }
     }
 
-    private void changeRoomListProgress(boolean show) {
-
-        if (show && progressBar.getTag() == null || !show && progressBar.getTag() != null) {
-            return;
-        }
-
-        if (progressAnimatorSet != null) {
-            progressAnimatorSet.cancel();
-            progressAnimatorSet = null;
-        }
-
-        if (show)
-            progressBar.setVisibility(View.VISIBLE);
-
-        progressBar.setTag(show ? null : 1);
-
-        progressAnimatorSet = new AnimatorSet();
-        progressAnimatorSet.playTogether(ObjectAnimator.ofFloat(progressBar, View.TRANSLATION_Y, show ? 0 : LayoutCreator.dp(100)));
-        progressAnimatorSet.setDuration(200);
-        progressAnimatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        progressAnimatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-        progressAnimatorSet.start();
-    }
-
     @Override
     public void scrollToTopOfList() {
-        if (mRecyclerView != null) mRecyclerView.smoothScrollToPosition(0);
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     public void setForwardMessage(boolean enable) {
