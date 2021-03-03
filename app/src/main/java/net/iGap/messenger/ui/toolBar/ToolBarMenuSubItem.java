@@ -10,6 +10,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
@@ -46,6 +48,7 @@ public class ToolBarMenuSubItem extends FrameLayout {
         textView.setGravity(Gravity.LEFT);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextColor(textColor);
+        textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         addView(textView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
 

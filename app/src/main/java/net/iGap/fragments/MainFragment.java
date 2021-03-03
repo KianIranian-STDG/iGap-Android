@@ -124,6 +124,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     private final int clearHistoryTag = 7;
     private final int selectCounter = 8;
     private final int markAsReadTag = 9;
+    private final int readAllTag = 10;
     private ArrayList<View> actionModeViews = new ArrayList<>();
     private ToolbarItem passCodeItem;
     private ToolbarItem pintItem;
@@ -221,6 +222,16 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                     break;
                 case leaveTag:
                     confirmActionForRemoveSelected();
+                    break;
+                case clearHistoryTag:
+                    confirmActionForClearHistoryOfSelected();
+                    break;
+                case markAsReadTag:
+                    confirmActionForMarkAsRead();
+                    break;
+                case readAllTag:
+                    confirmActionForReadAllRoom();
+
             }
         });
 
@@ -341,9 +352,9 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         toolbarItems.setBackground(null);
 
         moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 52);
-        clearHistoryItem = moreItem.addSubItem(0, R.string.lock_icon, getResources().getString(R.string.clear_history));
-        markAsReadItem = moreItem.addSubItem(0, R.string.lock_icon, getResources().getString(R.string.mark_as_unread));
-        leaveItem = moreItem.addSubItem(0, R.string.lock_icon, getResources().getString(R.string.leave_channel));
+        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.lock_icon, getResources().getString(R.string.clear_history));
+        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.lock_icon, getResources().getString(R.string.mark_as_unread));
+        leaveItem = moreItem.addSubItem(readAllTag, R.string.lock_icon, getResources().getString(R.string.read_all));
 
         deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.delete_icon, 52);
         muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.mute_icon, 52);
@@ -455,21 +466,14 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
 
     private void markAsRead() {
         DbManager.getInstance().doRealmTask(realm -> {
-            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    if (selectedRoom.size() > 0) {
-                        for (int i = 0; i < selectedRoom.size(); i++) {
-//                            markAsRead(realm, selectedRoom.get(i).getType(), selectedRoom.get(i).getId());
-                        }
+            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, realm1 -> {
+                if (selectedRoom.size() > 0) {
+                    for (int i = 0; i < selectedRoom.size(); i++) {
+                        RealmRoom room = getMessageDataStorage().getRoom(selectedRoom.get(i));
+                        markAsRead(realm1, room.getType(), room.getId());
                     }
                 }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    disableMultiSelect();
-                }
-            });
+            }, () -> disableMultiSelect());
         });
     }
 
@@ -1178,19 +1182,19 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                 .show();
     }
 
-//    private void confirmActionForClearHistoryOfSelected() {
-//        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
-//                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-//                .onPositive((dialog, which) -> {
-//                    dialog.dismiss();
-//                    for (Room item : mSelectedRoomList) {
-//                        clearHistory(item.getId(), false);
-//                    }
-//                    disableMultiSelect();
-//                })
-//                .onNegative((dialog, which) -> dialog.dismiss())
-//                .show();
-//    }
+    private void confirmActionForClearHistoryOfSelected() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
+                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    for (long roomId : selectedRoom) {
+                        clearHistory(roomId, false);
+                    }
+                    disableMultiSelect();
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
+    }
 
     private void setMargin(int mTop) {
         ConstraintSet constraintSet = new ConstraintSet();
