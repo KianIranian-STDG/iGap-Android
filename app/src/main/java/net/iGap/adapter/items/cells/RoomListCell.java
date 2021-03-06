@@ -208,7 +208,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getTitle() != null && !haveName) {
             roomNameTv = new AppCompatTextView(getContext());
             roomNameTv.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
-            setTextSize(roomNameTv, R.dimen.dp14);
+            setTextSize(roomNameTv, R.dimen.dp15);
             roomNameTv.setSingleLine(true);
             roomNameTv.setEllipsize(TextUtils.TruncateAt.END);
             roomNameTv.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), roomNameTv.getPaint().getFontMetricsInt(), -1, false));
