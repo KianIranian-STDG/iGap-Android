@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,10 +119,12 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     private ToolbarItem deleteItem;
     private ToolbarItem muteItem;
     private ToolbarItem moreItem;
+    private ToolbarItem searchItem;
     private ToolbarItems toolbarItems;
     private ToolBarMenuSubItem clearHistoryItem;
     private ToolBarMenuSubItem markAsReadItem;
     private ToolBarMenuSubItem leaveItem;
+    private SearchFragment fragment;
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -198,12 +201,19 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         toolbar = new Toolbar(context);
         toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
         ToolbarItems toolbarItems = toolbar.createToolbarItems();
-        toolbarItems.addItem(0, R.string.search_icon, Color.WHITE)
+        searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE)
                 .setIsSearchBox(true)
                 .setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
                     @Override
                     public void onSearchExpand() {
                         toolbar.setBackIcon(new BackDrawable(false));
+                        if (getActivity() != null) {
+                            fragment = SearchFragment.newInstance();
+                            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+                            fragmentView.setId(R.id.mainFragmentView);
+                            fragmentTransaction.replace(fragmentView.getId(), fragment).commit();
+                        }
                     }
 
                     @Override
@@ -214,11 +224,14 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                     @Override
                     public void onSearchCollapse() {
                         toolbar.setBackIcon(null);
+                        fragment.onSearchCollapsed();
                     }
 
                     @Override
                     public void onTextChanged(EditText editText) {
                         super.onTextChanged(editText);
+                        fragment.onTextChanged(editText.getText().toString());
+
                     }
                 });
 

@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -386,6 +388,36 @@ public class ToolbarItem extends FrameLayout {
             if (listener != null) {
                 listener.onSearchExpand();
             }
+            searchEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                    if (ignoreOnTextChange) {
+//                        ignoreOnTextChange = false;
+//                        return;
+//                    }
+                    if (listener != null) {
+                        listener.onTextChanged(searchEditText);
+                    }
+      /*              checkClearButton();
+                    if (!currentSearchFilters.isEmpty()) {
+                        if (!TextUtils.isEmpty(searchField.getText()) && selectedFilterIndex >= 0) {
+                            selectedFilterIndex = -1;
+                            onFiltersChanged();
+                        }
+                    }*/
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+
+            });
             if (openKeyboard) {
                 AndroidUtils.showKeyboard(searchEditText);
             }
