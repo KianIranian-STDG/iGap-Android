@@ -82,6 +82,7 @@ android {
         debug {
             debuggable true
             jniDebuggable true
+            applicationIdSuffix ".debug"
             buildConfigField "String", "Store", "\"debug\""
             buildConfigField "String", "TrackCode", "\"\""
             buildConfigField "boolean", "isStore", "true"
