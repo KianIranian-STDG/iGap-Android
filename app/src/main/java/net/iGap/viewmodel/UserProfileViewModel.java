@@ -26,8 +26,10 @@ import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.fragments.FragmentStoryViews;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.avatar.AvatarHandler;
@@ -64,7 +66,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoUserIVandGetScore;
 import net.iGap.proto.ProtoUserProfileCheckUsername;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
@@ -598,11 +599,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onAvatarClick() {
-        if (DbManager.getInstance().doRealmTask(realm -> {
+ /*       if (DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmAvatar.class).equalTo("ownerId", userId).findFirst();
         }) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
-        }
+        }*/
+        FragmentStoryViews fragment = new FragmentStoryViews();
+        new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();
     }
 
     public void onAddImageClick() {

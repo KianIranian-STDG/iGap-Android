@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +17,7 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.module.customView.RecyclerListView;
 
 
-public class FragmentStoryViews extends BaseFragment implements RecyclerListView.OnItemClickListener {
+public class FragmentStoryViews extends BaseFragment implements StoryUserCell.IconClicked {
 
     RecyclerView recyclerListView;
     ListAdapter adapter;
@@ -35,30 +36,41 @@ public class FragmentStoryViews extends BaseFragment implements RecyclerListView
     }
 
     @Override
-    public void onClick(View view, int position) {
+    public void clickedIcon(View icon, View icon2) {
+        icon.setOnClickListener(view1 -> {
+            Toast.makeText(getContext(), "111111111", Toast.LENGTH_SHORT).show();
+        });
 
+        icon2.setOnClickListener(view21 -> {
+            Toast.makeText(getContext(), "222222222", Toast.LENGTH_SHORT).show();
+
+        });
     }
 
-    public class ListAdapter extends RecyclerView.Adapter {
+
+    public class ListAdapter extends RecyclerListView.ItemAdapter {
+        @Override
+        public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
+            return true;
+        }
+
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = new StoryUserCell(parent.getContext());
-            return new RecyclerListView.ItemViewHolder(view, FragmentStoryViews.this);
+            return new RecyclerListView.ItemViewHolder(new StoryUserCell(parent.getContext(), true,FragmentStoryViews.this::clickedIcon), null);
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             StoryUserCell storyUserCell = (StoryUserCell) holder.itemView;
-/*            storyUserCell.setText("nazanin-om92","llllllllllllll",true);
-            storyUserCell.setIcons(R.string.back_icon,R.string.back_icon);
-            storyUserCell.setTextColor(R.color.red,R.color.red);*/
-
+            storyUserCell.setText("topppppppppp", "bottommmm");
+            storyUserCell.setIconsValue(R.string.md_send_button, R.string.more_icon);
+            storyUserCell.setImage(R.color.red);
         }
 
         @Override
         public int getItemCount() {
-            return 20;
+            return 15;
         }
     }
 
