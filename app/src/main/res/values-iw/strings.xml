@@ -1930,4 +1930,6 @@
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Your Story</string>
 </resources>

@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.adapter.items.BottomSheetStory;
 import net.iGap.adapter.items.cells.StoryUserCell;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.cell.TextCell;
 import net.iGap.module.customView.RecyclerListView;
-
 
 public class FragmentStoryViews extends BaseFragment implements StoryUserCell.IconClicked {
 
@@ -38,15 +39,14 @@ public class FragmentStoryViews extends BaseFragment implements StoryUserCell.Ic
     @Override
     public void clickedIcon(View icon, View icon2) {
         icon.setOnClickListener(view1 -> {
-            Toast.makeText(getContext(), "111111111", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
         });
 
         icon2.setOnClickListener(view21 -> {
-            Toast.makeText(getContext(), "222222222", Toast.LENGTH_SHORT).show();
-
+            BottomSheetStory addPhotoBottomDialogFragment = new BottomSheetStory();
+            addPhotoBottomDialogFragment.show(getActivity().getSupportFragmentManager(),"BottomSheetStory");
         });
     }
-
 
     public class ListAdapter extends RecyclerListView.ItemAdapter {
         @Override
@@ -71,6 +71,12 @@ public class FragmentStoryViews extends BaseFragment implements StoryUserCell.Ic
         @Override
         public int getItemCount() {
             return 15;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+
+            return super.getItemViewType(position);
         }
     }
 
