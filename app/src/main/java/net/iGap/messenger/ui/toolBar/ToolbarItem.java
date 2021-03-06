@@ -3,6 +3,7 @@ package net.iGap.messenger.ui.toolBar;
 import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -39,7 +40,7 @@ public class ToolbarItem extends FrameLayout {
     private IconView iconView;
     private FrameLayout searchContainer;
     private TextView searchClearButton;
-    private SearchEditText searchEditText;
+    private EditText searchEditText;
     private boolean isSearchBox;
     private boolean processedPopupClick;
     private int yOffset;
@@ -160,11 +161,39 @@ public class ToolbarItem extends FrameLayout {
         parentToolbarItem.addView(searchContainer, 0, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 6, 0, 0, 0));
 
         searchContainer.setVisibility(GONE);
-        searchEditText = new SearchEditText(getContext());
+        searchEditText = new androidx.appcompat.widget.AppCompatEditText(getContext()){
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(MeasureSpec.makeMeasureSpec(widthMeasureSpec, MeasureSpec.EXACTLY), heightMeasureSpec);
+            }
+        };
         searchEditText.setHint(R.string.search);
         searchEditText.setSingleLine(true);
+        searchEditText.setBackground(null);
+        searchEditText.setTextColor(Color.WHITE);
         searchEditText.setEllipsize(TextUtils.TruncateAt.END);
         searchEditText.setHintTextColor(Theme.getInstance().getDividerColor(getContext()));
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    searchClearButton.setVisibility(VISIBLE);
+                } else {
+                    searchClearButton.setVisibility(GONE);
+                }
+            }
+        });
 
         searchContainer.addView(searchEditText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL, 6, 0, 48, 0));
         searchClearButton = new TextView(getContext());
@@ -368,7 +397,7 @@ public class ToolbarItem extends FrameLayout {
         }
         if (searchContainer.getVisibility() == VISIBLE) {
             searchContainer.setVisibility(GONE);
-            searchClearButton.setVisibility(GONE);
+//            searchClearButton.setVisibility(GONE);
             searchEditText.clearFocus();
             if (listener != null) {
                 listener.onSearchCollapse();
@@ -380,7 +409,7 @@ public class ToolbarItem extends FrameLayout {
             return false;
         } else {
             searchContainer.setVisibility(VISIBLE);
-            searchClearButton.setVisibility(VISIBLE);
+//            searchClearButton.setVisibility(VISIBLE);
             searchContainer.setAlpha(1f);
             setVisibility(GONE);
             searchEditText.setText("");
