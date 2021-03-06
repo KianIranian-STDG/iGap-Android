@@ -134,6 +134,7 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     private boolean floatingHidden;
     private float floatingButtonHideProgress;
     private float floatingButtonTranslation;
+    private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -265,12 +266,12 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         ValueAnimator valueAnimator = ValueAnimator.ofFloat(floatingButtonHideProgress, floatingHidden ? 1f : 0f);
         valueAnimator.addUpdateListener(animation -> {
             floatingButtonHideProgress = (float) animation.getAnimatedValue();
-            floatingButtonTranslation = LayoutCreator.dp(100) * floatingButtonHideProgress;
-            floatActionLayout.setTranslationY(floatingButtonTranslation * (1f - floatingButtonHideProgress));
+            floatingButtonTranslation = (LayoutCreator.dp(100) * floatingButtonHideProgress);
+            floatActionLayout.setTranslationY(floatingButtonTranslation - 0 * (1f - floatingButtonHideProgress));
         });
         animatorSet.playTogether(valueAnimator);
-        animatorSet.setDuration(250);
-        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        animatorSet.setDuration(300);
+        animatorSet.setInterpolator(floatingInterpolator);
         floatActionLayout.setClickable(!hide);
         animatorSet.start();
     }
