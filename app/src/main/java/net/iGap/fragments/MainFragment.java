@@ -3,15 +3,18 @@ package net.iGap.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -47,6 +50,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.components.IconView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.ToolBarMenuSubItem;
@@ -94,9 +98,11 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     public static int mOffset = 0;
 
     private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
     private ProgressBar loadMoreProgress;
     private ProgressBar loadingProgress;
     private LinearLayout emptyView;
+    private FrameLayout floatActionLayout;
 
     private RoomListAdapter roomListAdapter;
     private boolean inMultiSelectMode;
@@ -124,7 +130,10 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     private ToolBarMenuSubItem clearHistoryItem;
     private ToolBarMenuSubItem markAsReadItem;
     private ToolBarMenuSubItem leaveItem;
-    private SearchFragment fragment;
+
+    private boolean floatingHidden;
+    private float floatingButtonHideProgress;
+    private float floatingButtonTranslation;
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -147,10 +156,21 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         recyclerView = new RecyclerView(context);
         recyclerView.setItemAnimator(null);
         recyclerView.setItemViewCacheSize(0);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(layoutManager = new LinearLayoutManager(context));
         recyclerView.setAdapter(roomListAdapter = new RoomListAdapter(getRoomController().getLiveRoomList(), avatarHandler, selectedRoom));
         layout.addView(recyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private boolean scrollUpdated;
+            private boolean scrollingManually;
+            private int prevTop;
+            private int prevPosition;
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                scrollingManually = newState == RecyclerView.SCROLL_STATE_DRAGGING;
+            }
+
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -160,6 +180,29 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                         if (lastVisiblePosition + 10 >= mOffset) {
                             new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, String.valueOf(System.currentTimeMillis()));
                         }
+                    }
+                }
+
+                int firstVisibleItem = layoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItem != RecyclerView.NO_POSITION) {
+                    RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(firstVisibleItem);
+                    if (holder != null && holder.getAdapterPosition() != 0) {
+                        int firstViewTop = holder.itemView.getTop();
+                        boolean goingDown;
+                        boolean changed = true;
+                        if (prevPosition == firstVisibleItem) {
+                            final int topDelta = prevTop - firstViewTop;
+                            goingDown = firstViewTop < prevTop;
+                            changed = Math.abs(topDelta) > 1;
+                        } else {
+                            goingDown = firstVisibleItem > prevPosition;
+                        }
+                        if (changed && scrollUpdated && (goingDown || scrollingManually)) {
+                            hideFloatingButton(goingDown);
+                        }
+                        prevPosition = firstVisibleItem;
+                        prevTop = firstViewTop;
+                        scrollUpdated = true;
                     }
                 }
             }
@@ -193,7 +236,43 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         emptyTextView.setGravity(Gravity.CENTER);
         emptyView.addView(emptyTextView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 16, 0, 8));
 
+        floatActionLayout = new FrameLayout(context);
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        floatActionLayout.setBackground(drawable);
+        floatActionLayout.setOnClickListener(v -> onFloatActionClick());
+        layout.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
+
+        IconView addButton = new IconView(context);
+        addButton.setIcon(R.string.add_icon_without_circle_font);
+        addButton.setIconColor(Color.WHITE);
+        floatActionLayout.addView(addButton);
+
         return fragmentView;
+    }
+
+    private void onFloatActionClick() {
+        Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
+        addFragment(fragment);
+    }
+
+    private void hideFloatingButton(boolean hide) {
+        if (floatingHidden == hide) {
+            return;
+        }
+        floatingHidden = hide;
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(floatingButtonHideProgress, floatingHidden ? 1f : 0f);
+        valueAnimator.addUpdateListener(animation -> {
+            floatingButtonHideProgress = (float) animation.getAnimatedValue();
+            floatingButtonTranslation = LayoutCreator.dp(100) * floatingButtonHideProgress;
+            floatActionLayout.setTranslationY(floatingButtonTranslation * (1f - floatingButtonHideProgress));
+        });
+        animatorSet.playTogether(valueAnimator);
+        animatorSet.setDuration(250);
+        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        floatActionLayout.setClickable(!hide);
+        animatorSet.start();
     }
 
     @Override
@@ -204,15 +283,17 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE)
                 .setIsSearchBox(true)
                 .setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
+                    SearchFragment searchFragment;
+
                     @Override
                     public void onSearchExpand() {
                         toolbar.setBackIcon(new BackDrawable(false));
                         if (getActivity() != null) {
-                            fragment = SearchFragment.newInstance();
+                            searchFragment = SearchFragment.newInstance();
                             FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
                             fragmentView.setId(R.id.mainFragmentView);
-                            fragmentTransaction.replace(fragmentView.getId(), fragment).commit();
+                            fragmentTransaction.replace(fragmentView.getId(), searchFragment).commit();
                         }
                     }
 
@@ -224,13 +305,13 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                     @Override
                     public void onSearchCollapse() {
                         toolbar.setBackIcon(null);
-                        fragment.onSearchCollapsed();
+                        searchFragment.onSearchCollapsed();
                     }
 
                     @Override
                     public void onTextChanged(EditText editText) {
                         super.onTextChanged(editText);
-                        fragment.onTextChanged(editText.getText().toString());
+                        searchFragment.onTextChanged(editText.getText().toString());
 
                     }
                 });
