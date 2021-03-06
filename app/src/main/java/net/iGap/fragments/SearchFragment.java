@@ -44,7 +44,6 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IClientSearchUserName;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -65,10 +64,9 @@ import java.util.TimerTask;
 import io.realm.Case;
 import io.realm.RealmResults;
 
-public class SearchFragment extends BaseFragment implements ToolbarListener {
+public class SearchFragment extends BaseFragment {
 
     private FastAdapter fastAdapter;
-    private EditText edtSearch;
     private ArrayList<StructSearch> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
@@ -157,8 +155,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     SearchItem si = (SearchItem) currentItem;
                     goToRoom(si.item.id, si.item.type, si.item.messageId, si.item.userName);
 
-                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
+                   hideKeyboard();
                 }
 
                 return false;
@@ -736,40 +733,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         public SearchType type = SearchType.header;
     }
 
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
-    }
-
-    @Override
-    public void onSearchClickListener(View view) {
-        if (getContext() != null) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
-        }
-
-    }
-
-    @Override
-    public void onBtnClearSearchClickListener(View view) {
-        cancelSearchTimer();
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
-    }
-
-    @Override
-    public void onSearchTextChangeListener(View view, String text) {
-        if (text.trim().length() < 2) {
-            cancelSearchTimer();
-            fillList("");
-            preventRepeatSearch = "";
-            return;
-        }
-        startOrReStartSearchTimer();
-    }
 
     private Timer mTimerSearch;
     private TimerTask mTimerTaskSearch;
