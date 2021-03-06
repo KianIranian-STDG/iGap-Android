@@ -56,7 +56,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         this.fileObject = fileObject;
         selector = fileObject.selector;
         fileExecutors = FileIOExecutor.getInstance();
-        isDownloaded = fileObject.destFile.exists() && fileObject.destFile.length() == fileObject.fileSize;
+        isDownloaded = fileObject.destFile.exists() && fileObject.destFile.length() == fileObject.fileSize || fileObject.offset == fileObject.fileSize;
         isDownloading = false;
 
         onProgress(1);
@@ -103,7 +103,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
         }
 
-        FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
+        FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize + " cashId: "  + fileStruct.mainCacheId);
 
         Request request = builder.build();
         Response response = null;
