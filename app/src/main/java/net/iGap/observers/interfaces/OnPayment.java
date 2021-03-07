@@ -12,6 +12,6 @@ package net.iGap.observers.interfaces;
 public interface OnPayment {
     void onChargeToken(int status, String token, int expireTime, String Message);
 
-    void onBillToken(int status, String token, int expireTime, String Message, int originalAmount, int discountedAmount);
+    void onBillToken(int status, String token, int expireTime, String Message, int originalAmount, int discountedAmount, String organNAme);
 
 }

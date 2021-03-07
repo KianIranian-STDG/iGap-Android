@@ -4,9 +4,11 @@ import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
@@ -91,7 +93,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         onStickerFavoriteChange(stickerGroup.isInUserList());
-                        EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), stickerGroup.isInUserList());
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), stickerGroup.isInUserList()));
                     }
 
                     @Override
@@ -109,7 +111,7 @@ public class StickerDialogViewModel extends ObserverViewModel {
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {
                     @Override
                     public void onSuccess(StructIGStickerGroup stickerGroup) {
-                        EventManager.getInstance().postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), false);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_CHANGED, stickerGroup.getGroupId(), false));
                         onStickerFavoriteChange(false);
                         addOrRemoveProgressLiveData.postValue(View.GONE);
                         closeDialogMutableLiveData.postValue(true);

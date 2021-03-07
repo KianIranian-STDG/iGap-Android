@@ -12,7 +12,6 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.network.RequestManager;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelExtra;
@@ -27,7 +26,7 @@ import java.util.HashSet;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT_VALUE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP_VALUE;
 
-public class MessageController extends BaseController implements EventListener {
+public class MessageController extends BaseController implements EventManager.EventDelegate {
 
     private String lastUploadedAvatarId;
     private long lastUploadedAvatarRoomId;
@@ -52,8 +51,8 @@ public class MessageController extends BaseController implements EventListener {
         super(currentAccount);
 
         G.runOnUiThread(() -> {
-            EventManager.getInstance().addEventListener(EventManager.FILE_UPLOAD_FAILED, this);
-            EventManager.getInstance().addEventListener(EventManager.FILE_UPLOAD_SUCCESS, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.FILE_UPLOAD_FAILED, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.FILE_UPLOAD_SUCCESS, this);
         });
     }
 
@@ -203,34 +202,6 @@ public class MessageController extends BaseController implements EventListener {
         return lastUploadedAvatarId;
     }
 
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.FILE_UPLOAD_SUCCESS) {
-            String fileId = (String) message[0];
-            String fileToken = (String) message[1];
-
-            if (lastUploadedAvatarId != null && lastUploadedAvatarId.equals(fileId)) {
-                IG_RPC.Channel_AddAvatar req = new IG_RPC.Channel_AddAvatar();
-                req.attachment = fileToken;
-                req.roomId = lastUploadedAvatarRoomId;
-
-                getRequestManager().sendRequest(req, (response, error) -> {
-                    if (error == null) {
-                        IG_RPC.Res_Channel_Avatar channelAvatar = (IG_RPC.Res_Channel_Avatar) response;
-                        updateChannelAvatarInternal(channelAvatar);
-                    }
-                });
-            }
-        } else if (id == EventManager.FILE_UPLOAD_FAILED) {
-            String fileId = (String) message[0];
-
-            if (lastUploadedAvatarId != null && lastUploadedAvatarId.equals(fileId)) {
-                lastUploadedAvatarId = null;
-                lastUploadedAvatarRoomId = -1;
-            }
-        }
-    }
-
     private void updateChannelAvatarInternal(IG_RPC.Res_Channel_Avatar avatar) {
         getMessageDataStorage().putUserAvatar(avatar.roomId, avatar.avatar);
         G.runOnUiThread(() -> getEventManager().postEvent(EventManager.AVATAR_UPDATE, avatar.roomId, avatar.avatar));
@@ -295,11 +266,11 @@ public class MessageController extends BaseController implements EventListener {
             return;
         }
 
-        long roomId = 0;
-        long messageId = 0;
-        int messageType = 0;
-        long messageVersion = 0;
-        String newMessage = null;
+        long roomId;
+        long messageId;
+        int messageType;
+        long messageVersion;
+        String newMessage;
 
         if (response instanceof IG_RPC.Res_Chat_Edit_Message) {
             IG_RPC.Res_Chat_Edit_Message res = (IG_RPC.Res_Chat_Edit_Message) response;
@@ -329,7 +300,7 @@ public class MessageController extends BaseController implements EventListener {
         }
 
         getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
-        getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage);
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage));
 
     }
 
@@ -449,11 +420,8 @@ public class MessageController extends BaseController implements EventListener {
     }
 
     public void channelAddMessageVote(MessageObject messageObject, int reaction) {
-
         final IG_RPC.Channel_Add_Message_Reaction req = new IG_RPC.Channel_Add_Message_Reaction();
-        long messageId = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.id : messageObject.id;
-
-        req.messageId = messageId;
+        req.messageId = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.id : messageObject.id;
         req.roomId = messageObject.roomId;
         req.reaction = ProtoGlobal.RoomMessageReaction.forNumber(reaction);
 
@@ -461,7 +429,7 @@ public class MessageController extends BaseController implements EventListener {
             if (response != null) {
                 IG_RPC.Res_Channel_Add_Message_Reaction res = (IG_RPC.Res_Channel_Add_Message_Reaction) response;
                 getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
-                getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction, messageObject.forwardedMessage.id);
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction, messageObject.forwardedMessage.id));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
@@ -470,7 +438,6 @@ public class MessageController extends BaseController implements EventListener {
     }
 
     public void ChannelGetMessageVote(MessageObject messageObject, long roomId, HashSet<Long> messageIds) {
-
         long messageId;
 
         if (messageObject.forwardedMessage != null) {
@@ -491,11 +458,39 @@ public class MessageController extends BaseController implements EventListener {
             if (response != null) {
                 IG_RPC.Res_Channel_Get_Message_Reaction res = (IG_RPC.Res_Channel_Get_Message_Reaction) response;
                 RealmChannelExtra.updateMessageStats(res.states);
-                getEventManager().postEvent(EventManager.CHANNEL_GET_VOTE, res.states);
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_GET_VOTE, res.states));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);
             }
         });
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.FILE_UPLOAD_SUCCESS) {
+            String fileId = (String) args[0];
+            String fileToken = (String) args[1];
+
+            if (lastUploadedAvatarId != null && lastUploadedAvatarId.equals(fileId)) {
+                IG_RPC.Channel_AddAvatar req = new IG_RPC.Channel_AddAvatar();
+                req.attachment = fileToken;
+                req.roomId = lastUploadedAvatarRoomId;
+
+                getRequestManager().sendRequest(req, (response, error) -> {
+                    if (error == null) {
+                        IG_RPC.Res_Channel_Avatar channelAvatar = (IG_RPC.Res_Channel_Avatar) response;
+                        updateChannelAvatarInternal(channelAvatar);
+                    }
+                });
+            }
+        } else if (id == EventManager.FILE_UPLOAD_FAILED) {
+            String fileId = (String) args[0];
+
+            if (lastUploadedAvatarId != null && lastUploadedAvatarId.equals(fileId)) {
+                lastUploadedAvatarId = null;
+                lastUploadedAvatarRoomId = -1;
+            }
+        }
     }
 }

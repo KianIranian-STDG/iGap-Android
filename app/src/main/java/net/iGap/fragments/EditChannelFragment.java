@@ -52,7 +52,6 @@ import net.iGap.module.SUID;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChannelCheckUsername;
 import net.iGap.observers.interfaces.OnChannelRemoveUsername;
@@ -72,7 +71,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited, EventListener {
+public class EditChannelFragment extends BaseFragment implements FragmentEditImage.OnImageEdited, EventManager.EventDelegate {
 
     private static final String ROOM_ID = "RoomId";
 
@@ -106,8 +105,8 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
             }
         }).get(EditChannelViewModel.class);
 
-        getEventManager().addEventListener(EventManager.AVATAR_UPDATE, this);
-        getEventManager().addEventListener(EventManager.FILE_UPLOAD_FAILED, this);
+        getEventManager().addObserver(EventManager.AVATAR_UPDATE, this);
+        getEventManager().addObserver(EventManager.FILE_UPLOAD_FAILED, this);
     }
 
     @Nullable
@@ -663,8 +662,8 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getEventManager().removeEventListener(EventManager.AVATAR_UPDATE, this);
-        getEventManager().removeEventListener(EventManager.FILE_UPLOAD_FAILED, this);
+        getEventManager().removeObserver(EventManager.AVATAR_UPDATE, this);
+        getEventManager().removeObserver(EventManager.FILE_UPLOAD_FAILED, this);
     }
 
     @Override
@@ -678,12 +677,13 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void receivedEvent(int id, int account, Object... args) {
+
         if (id == EventManager.AVATAR_UPDATE) {
             G.runOnUiThread(() -> {
                 viewModel.getShowUploadProgressLiveData().postValue(View.GONE);
 
-                long roomId = (long) message[0];
+                long roomId = (long) args[0];
 
                 if (roomId == this.roomId) {
                     avatarHandler.getAvatar(new ParamWithAvatarType(binding.channelAvatar, viewModel.roomId).avatarType(AvatarHandler.AvatarType.ROOM).showMain());
@@ -691,7 +691,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
 
             }, 500);
         } else if (id == EventManager.FILE_UPLOAD_FAILED) {
-            String fileId = (String) message[0];
+            String fileId = (String) args[0];
 
             if (uploadAvatarId != null && uploadAvatarId.equals(fileId)) {
                 G.runOnUiThread(() -> viewModel.getShowUploadProgressLiveData().postValue(View.GONE));

@@ -3,6 +3,7 @@ package net.iGap.viewmodel;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.RequestManager;
+import net.iGap.observers.eventbus.EventManager;
 
 public class BaseViewModel extends BaseAPIViewModel implements BaseViewHolder {
     public int currentAccount;
@@ -25,5 +26,9 @@ public class BaseViewModel extends BaseAPIViewModel implements BaseViewHolder {
 
     public RequestManager getRequestManager() {
         return RequestManager.getInstance(currentAccount);
+    }
+
+    public EventManager getEventManager() {
+        return EventManager.getInstance(currentAccount);
     }
 }

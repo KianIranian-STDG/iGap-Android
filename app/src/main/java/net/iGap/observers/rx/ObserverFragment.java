@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.observers.eventbus.EventListener;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
-public abstract class ObserverFragment<T extends ObserverViewModel> extends BaseAPIViewFrag<T> implements EventListener {
+public abstract class ObserverFragment<T extends ObserverViewModel> extends BaseAPIViewFrag<T> implements EventManager.EventDelegate {
     protected T viewModel;
     public ViewGroup rootView;
 
@@ -69,14 +69,14 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     public void onStart() {
         super.onStart();
         viewModel.subscribe();
-        EventManager.getInstance().addEventListener(EventManager.IG_ERROR, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.IG_ERROR, this);
         Log.e(getClass().getName(), "onStart: ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.IG_ERROR, this);
         Log.e(getClass().getName(), "onStop: ");
     }
 
@@ -103,10 +103,10 @@ public abstract class ObserverFragment<T extends ObserverViewModel> extends Base
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void receivedEvent(int id, int account, Object... args) {
         if (id == EventManager.IG_ERROR) {
             try {
-                onResponseError((Throwable) message[0]);
+                onResponseError((Throwable) args[0]);
             } catch (ClassCastException e) {
                 e.printStackTrace();
             } catch (Exception e) {

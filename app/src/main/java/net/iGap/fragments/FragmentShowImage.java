@@ -822,7 +822,7 @@ public class FragmentShowImage extends BaseFragment {
                         ZoomableImageView.setZoomable(true);
                         rm.attachment.filePath = arg.data.getFilePath();
                         rm.attachment.token = arg.data.getToken();
-                        EventManager.getInstance().postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm);
+                        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
                         break;
                     case LOADING:
                         progress.withProgress(arg.data.getProgress());

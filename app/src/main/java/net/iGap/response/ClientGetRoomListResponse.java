@@ -84,7 +84,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
             roomListFetched = true;
         }
 
-        EventManager.getInstance().postEvent(EventManager.ROOM_LIST_CHANGED, false);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ROOM_LIST_CHANGED, false));
 
         retryCountZeroOffset = 0;
     }

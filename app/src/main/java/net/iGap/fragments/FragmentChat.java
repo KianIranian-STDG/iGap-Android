@@ -37,7 +37,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,7 +53,6 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -213,7 +211,6 @@ import net.iGap.module.structs.StructMessageOption;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IDispatchTochEvent;
 import net.iGap.observers.interfaces.IMessageItem;
@@ -329,7 +326,6 @@ import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
 import static net.iGap.module.AttachFile.request_code_pic_file;
-import static net.iGap.module.MessageLoader.getLocalMessage;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
@@ -367,7 +363,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatSendMessageResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChatDelete, LocationListener,
-        OnConnectionChangeStateChat, OnBotClick, EventListener, ToolbarListener, ChatAttachmentPopup.ChatPopupListener {
+        OnConnectionChangeStateChat, OnBotClick, ToolbarListener, ChatAttachmentPopup.ChatPopupListener, EventManager.EventDelegate {
 
     // TODO: 12/28/20 refactor
     @Deprecated
@@ -729,18 +725,19 @@ public class FragmentChat extends BaseFragment
 
         edtChat.setListener(this::chatMotionEvent);
 
-        getEventManager().addEventListener(EventManager.CALL_STATE_CHANGED, this);
-        getEventManager().addEventListener(EventManager.EMOJI_LOADED, this);
-        getEventManager().addEventListener(EventManager.ON_MESSAGE_DELETE, this);
-        getEventManager().addEventListener(EventManager.ON_EDIT_MESSAGE, this);
-        getEventManager().addEventListener(EventManager.ON_PINNED_MESSAGE, this);
-        getEventManager().addEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
-        getEventManager().addEventListener(EventManager.CHANNEL_ADD_VOTE, this);
-        getEventManager().addEventListener(EventManager.CHANNEL_GET_VOTE, this);
-        getEventManager().addEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
-        EventManager.getInstance().addEventListener(EventManager.CHAT_UPDATE_STATUS, this);
+        getEventManager().addObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().addObserver(EventManager.ON_MESSAGE_DELETE, this);
+        getEventManager().addObserver(EventManager.ON_EDIT_MESSAGE, this);
+        getEventManager().addObserver(EventManager.ON_PINNED_MESSAGE, this);
+        getEventManager().addObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_ADD_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_GET_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().addObserver(EventManager.CHAT_UPDATE_STATUS, this);
         if (twoPaneMode)
-            EventManager.getInstance().addEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
 
         return attachToSwipeBack(notifyFrameLayout);
     }
@@ -1223,18 +1220,21 @@ public class FragmentChat extends BaseFragment
         mAttachmentPopup = null;
         FragmentEditImage.itemGalleryList.clear();
         FragmentEditImage.textImageList.clear();
-        getEventManager().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
-        getEventManager().removeEventListener(EventManager.EMOJI_LOADED, this);
-        getEventManager().removeEventListener(EventManager.ON_MESSAGE_DELETE, this);
-        getEventManager().removeEventListener(EventManager.ON_EDIT_MESSAGE, this);
-        getEventManager().removeEventListener(EventManager.ON_PINNED_MESSAGE, this);
-        getEventManager().removeEventListener(EventManager.CHAT_CLEAR_MESSAGE, this);
-        getEventManager().removeEventListener(EventManager.CHANNEL_ADD_VOTE, this);
-        getEventManager().removeEventListener(EventManager.CHANNEL_GET_VOTE, this);
-        getEventManager().removeEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
-        EventManager.getInstance().removeEventListener(EventManager.CHAT_UPDATE_STATUS, this);
+
+        getEventManager().removeObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().removeObserver(EventManager.ON_MESSAGE_DELETE, this);
+        getEventManager().removeObserver(EventManager.ON_EDIT_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.ON_PINNED_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.CHAT_CLEAR_MESSAGE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_ADD_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_GET_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHAT_UPDATE_STATUS, this);
+
         if (twoPaneMode)
-            EventManager.getInstance().removeEventListener(EventManager.CHAT_BACKGROUND_CHANGED, this);
+            getEventManager().removeObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
+
         mHelperToolbar.unRegisterTimerBroadcast();
 
         if (compositeDisposable != null) {
@@ -2316,8 +2316,6 @@ public class FragmentChat extends BaseFragment
         if (position != -1) {
             LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
             linearLayout.scrollToPositionWithOffset(position, 0);
-            shouldLoadMessage = true;
-
             mAdapter.getItem(position).messageObject.isSelected = true;
             mAdapter.notifyItemChanged(position);
 
@@ -5993,7 +5991,7 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
-        recyclerView.postDelayed(new Runnable() {
+        G.runOnUiThread(new Runnable() {
             @Override
             public void run() {
 
@@ -7871,9 +7869,6 @@ public class FragmentChat extends BaseFragment
 
     private void sendForwardedMessage(final MessageObject sourceMessage, final long destinationRoomId, final boolean isSingleForward, int k, boolean isMessage) {
         final long messageId = AppUtils.makeRandomId();
-
-        Log.i("mmdCreate", "sendForwardedMessage: new message " + sourceMessage.toString());
-
         RealmRoom destinationRoom = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo("id", destinationRoomId).findFirst();
         });
@@ -7881,9 +7876,6 @@ public class FragmentChat extends BaseFragment
         if (destinationRoom == null || destinationRoom.getReadOnly()) {
             return;
         }
-
-        Log.i("mmdCreate", "sendForwardedMessage: new messageId " + messageId + " source message id " + sourceMessage.id + " destinationRoom room id" + destinationRoom.getId());
-
         final int type = destinationRoom.getType().getNumber();
 
 
@@ -7894,14 +7886,11 @@ public class FragmentChat extends BaseFragment
             Long sourceRoomId = (Long) object[2];
             Long sourceMessageId = (Long) object[3];
 
-            Log.i("mmdCreate", "sendForwardedMessage commit to db successfully createdForwardMessage: " + createdForwardMessage.toString());
-
             if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
                 if (isSingleForward) {
                     switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
                     scrollToEnd();
                 }
-                Log.i("mmdCreate", "final process for sending message to a room with Type: " + type + " destinationRoomId: " + createdForwardMessage.roomId + " sourceRoomId: " + sourceRoomId + " sourceMessageId: " + sourceMessageId);
                 getSendMessageUtil().buildForward(type, createdForwardMessage.roomId, createdForwardMessage, sourceRoomId, sourceMessageId);
             }
         });
@@ -8122,7 +8111,6 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    boolean shouldLoadMessage = false;
 
     private void getMessages() {
         DbManager.getInstance().doRealmTask(realm -> {
@@ -8177,7 +8165,6 @@ public class FragmentChat extends BaseFragment
                 addToView = false;
                 direction = DOWN;
             } else {
-                shouldLoadMessage = true;
                 addToView = true;
                 direction = UP;
             }
@@ -8208,7 +8195,7 @@ public class FragmentChat extends BaseFragment
 
             if (results.size() > 0) {
 
-                Object[] object = getLocalMessage(realm, mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
+                Object[] object = MessageLoader.getLocalMessage(realm, mRoomId, results.first().getMessageId(), gapMessageId, true, direction);
                 messageInfos = (ArrayList<StructMessageInfo>) object[0];
                 if (messageInfos.size() > 0) {
                     if (direction == UP) {
@@ -8261,13 +8248,10 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void run() {
                     if (direction == UP) {
-                        shouldLoadMessage = true;
                         switchAddItem(finalMessageInfos, true);
                     } else {
-                        shouldLoadMessage = true;
                         switchAddItem(finalMessageInfos, false);
                         if (hasSavedState()) {
-                            shouldLoadMessage = false;
                             if (messageId != 0) {
                                 if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
                                     savedScrollMessageId = 0;
@@ -8296,30 +8280,19 @@ public class FragmentChat extends BaseFragment
                             visibleItemCount = linearLayoutManager.getChildCount();
                             totalItemCount = linearLayoutManager.getItemCount();
 
-                            if (shouldLoadMessage) {
-                                if (firstVisiblePosition < scrollEnd) {
-                                    loadMessage(UP);
-                                    if (totalItemCount <= scrollEnd) {
-                                        loadMessage(DOWN);
-                                    }
-                                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+                            if (firstVisiblePosition < scrollEnd) {
+                                loadMessage(UP);
+                                if (totalItemCount <= scrollEnd) {
                                     loadMessage(DOWN);
                                 }
+                            } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
+                                loadMessage(DOWN);
                             }
                         }
 
                         @Override
                         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                             super.onScrollStateChanged(recyclerView, newState);
-                            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                                shouldLoadMessage = true;
-                                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
-                                int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
-
-                                if (firstVisiblePosition < scrollEnd) {
-                                    loadMessage(UP);
-                                }
-                            }
                         }
                     };
                     // TODO: 2/14/21 Should write a better logic to loadMessage
@@ -8350,7 +8323,7 @@ public class FragmentChat extends BaseFragment
         }
         if ((direction == UP && topMore) || (direction == DOWN && bottomMore)) {
             Object[] object = DbManager.getInstance().doRealmTask(realm -> {
-                return getLocalMessage(realm, mRoomId, startFutureMessageId, gapMessageId, false, direction);
+                return MessageLoader.getLocalMessage(realm, mRoomId, startFutureMessageId, gapMessageId, false, direction);
             });
             if (direction == UP) {
                 topMore = (boolean) object[1];
@@ -8377,12 +8350,12 @@ public class FragmentChat extends BaseFragment
                 //}
             }
 
-            recyclerView.post(new Runnable() {
+            recyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     switchAddItem(structMessageInfos, direction == UP);
                 }
-            });
+            }, 100);
 
             /**
              * if gap is exist ,check that reached to gap or not and if
@@ -8704,18 +8677,14 @@ public class FragmentChat extends BaseFragment
                 }
                 if (progressState == SHOW) {
                     if ((mAdapter.getAdapterItemCount() > 0) && !(mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
-                        recyclerView.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (direction == DOWN && progressIdentifierDown == 0) {
-                                    progressIdentifierDown = SUID.id().get();
-                                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
-                                } else if (direction == UP && progressIdentifierUp == 0) {
-                                    progressIdentifierUp = SUID.id().get();
-                                    mAdapter.add(0, new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierUp));
-                                }
-                            }
-                        });
+
+                        if (direction == DOWN && progressIdentifierDown == 0) {
+                            progressIdentifierDown = SUID.id().get();
+                            mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
+                        } else if (direction == UP && progressIdentifierUp == 0) {
+                            progressIdentifierUp = SUID.id().get();
+                            mAdapter.add(0, new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierUp));
+                        }
                     }
                 } else {
                     /**
@@ -9219,124 +9188,6 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    /**
-     * receive call state from event bus
-     * and change visibility of toolbar layout
-     */
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.CALL_STATE_CHANGED) {
-            if (message == null || message.length == 0) return;
-            boolean state = (boolean) message[0];
-            G.handler.post(() -> {
-                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
-                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
-                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
-            });
-        } else if (id == EventManager.EMOJI_LOADED) {
-            G.runOnUiThread(this::invalidateViews);
-        } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
-            G.handler.post(() -> {
-                String path = (String) message[0];
-                if (new File(path).exists())
-                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
-            });
-        } else if (id == EventManager.ON_MESSAGE_DELETE) {
-            long roomId = (long) message[0];
-            long messageId = (long) message[1];
-            boolean update = (boolean) message[2];
-
-            if (roomId == mRoomId && update) {
-                G.runOnUiThread(() -> {
-                    if (mAdapter == null) {
-                        return;
-                    }
-
-                    ArrayList<Long> messages = new ArrayList<>(1);
-                    messages.add(messageId);
-                    deleteSelectedMessageFromAdapter(messages);
-
-                    if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
-                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
-                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
-                            clearReplyView();
-                        }
-                    }
-                });
-            }
-        } else if (id == EventManager.ON_EDIT_MESSAGE) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                long messageId = (long) message[1];
-                String newMessage = (String) message[2];
-
-                if (mRoomId == roomId && mAdapter != null) {
-                    mAdapter.updateMessageText(messageId, newMessage);
-                    removeEditedMessage();
-                }
-            });
-        } else if ((long) message[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
-            G.runOnUiThread(this::initPinedMessage);
-        } else if (id == EventManager.CHAT_CLEAR_MESSAGE) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                if (roomId == mRoomId) {
-                    long clearID = (long) message[1];
-                    onChatClearMessage(roomId, clearID);
-                }
-
-            });
-        } else if (id == EventManager.CHANNEL_ADD_VOTE) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                if (roomId == mRoomId) {
-
-                    long messageId = (long) message[1];
-                    String reactionCount = (String) message[2];
-                    ProtoGlobal.RoomMessageReaction reaction = (ProtoGlobal.RoomMessageReaction) message[3];
-                    long forwardedMessageId = (long) message[4];
-
-                    if (mAdapter != null) {
-                        mAdapter.updateVote(roomId, messageId, reactionCount, reaction, forwardedMessageId);
-                    }
-                }
-            });
-        } else if (id == EventManager.CHANNEL_GET_VOTE) {
-            G.runOnUiThread(() -> {
-                if (mAdapter != null) {
-
-                    List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> states = (List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats>) message[0];
-
-                    for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : states) {
-                        mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
-
-                    }
-                }
-            });
-
-        } else if (id == EventManager.CHANNEL_UPDATE_VOTE) {
-            G.runOnUiThread(() -> {
-                showVoteChannel = (boolean) message[1];
-                if (mAdapter != null) {
-                    mAdapter.notifyDataSetChanged();
-                }
-            });
-
-        } else if (id == EventManager.CHAT_UPDATE_STATUS) {
-            G.runOnUiThread(() -> {
-                long roomId = (long) message[0];
-                long messageId = (long) message[1];
-                ProtoGlobal.RoomMessageStatus status = (ProtoGlobal.RoomMessageStatus) message[2];
-                if (roomId == mRoomId) {
-                    if (mAdapter != null) {
-                        mAdapter.updateMessageStatus(messageId, status);
-                    }
-                }
-
-            });
-        }
-    }
-
     @Override
     public void onAttachPopupVideoPickerResult(List<String> results) {
 
@@ -9426,6 +9277,120 @@ public class FragmentChat extends BaseFragment
         })).start();
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.CALL_STATE_CHANGED) {
+            if (args == null || args.length == 0) return;
+            boolean state = (boolean) args[0];
+            G.handler.post(() -> {
+                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
+                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
+                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
+            });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.runOnUiThread(this::invalidateViews);
+        } else if (id == EventManager.CHAT_BACKGROUND_CHANGED) {
+            G.handler.post(() -> {
+                String path = (String) args[0];
+                if (new File(path).exists())
+                    ImageLoadingServiceInjector.inject().loadImage(imgBackGround, path, true);
+            });
+        } else if (id == EventManager.ON_MESSAGE_DELETE) {
+            long roomId = (long) args[0];
+            long messageId = (long) args[1];
+            boolean update = (boolean) args[2];
+
+            if (roomId == mRoomId && update) {
+                G.runOnUiThread(() -> {
+                    if (mAdapter == null) {
+                        return;
+                    }
+
+                    ArrayList<Long> messages = new ArrayList<>(1);
+                    messages.add(messageId);
+                    deleteSelectedMessageFromAdapter(messages);
+
+                    if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
+                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
+                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
+                            clearReplyView();
+                        }
+                    }
+                });
+            }
+        } else if (id == EventManager.ON_EDIT_MESSAGE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                long messageId = (long) args[1];
+                String newMessage = (String) args[2];
+
+                if (mRoomId == roomId && mAdapter != null) {
+                    mAdapter.updateMessageText(messageId, newMessage);
+                    removeEditedMessage();
+                }
+            });
+        } else if ((long) args[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
+            G.runOnUiThread(this::initPinedMessage);
+        } else if (id == EventManager.CHAT_CLEAR_MESSAGE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                if (roomId == mRoomId) {
+                    long clearID = (long) args[1];
+                    onChatClearMessage(roomId, clearID);
+                }
+
+            });
+        } else if (id == EventManager.CHANNEL_ADD_VOTE) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                if (roomId == mRoomId) {
+
+                    long messageId = (long) args[1];
+                    String reactionCount = (String) args[2];
+                    ProtoGlobal.RoomMessageReaction reaction = (ProtoGlobal.RoomMessageReaction) args[3];
+                    long forwardedMessageId = (long) args[4];
+
+                    if (mAdapter != null) {
+                        mAdapter.updateVote(roomId, messageId, reactionCount, reaction, forwardedMessageId);
+                    }
+                }
+            });
+        } else if (id == EventManager.CHANNEL_GET_VOTE) {
+            G.runOnUiThread(() -> {
+                if (mAdapter != null) {
+
+                    List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> states = (List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats>) args[0];
+
+                    for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : states) {
+                        mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
+
+                    }
+                }
+            });
+
+        } else if (id == EventManager.CHANNEL_UPDATE_VOTE) {
+            G.runOnUiThread(() -> {
+                showVoteChannel = (boolean) args[1];
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+
+        } else if (id == EventManager.CHAT_UPDATE_STATUS) {
+            G.runOnUiThread(() -> {
+                long roomId = (long) args[0];
+                long messageId = (long) args[1];
+                ProtoGlobal.RoomMessageStatus status = (ProtoGlobal.RoomMessageStatus) args[2];
+                if (roomId == mRoomId) {
+                    if (mAdapter != null) {
+                        mAdapter.updateMessageStatus(messageId, status);
+                    }
+                }
+
+            });
+        }
+    }
+
     /**
      * *** SearchHash ***
      */
@@ -9436,7 +9401,7 @@ public class FragmentChat extends BaseFragment
         private String hashString = "";
         private int currentHashPosition;
 
-        private final ArrayList<String> hashList = new ArrayList<>();
+        private ArrayList<String> hashList = new ArrayList<>();
 
         void setHashString(String hashString) {
             this.hashString = hashString.toLowerCase();

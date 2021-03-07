@@ -1,7 +1,9 @@
 package net.iGap.helper.downloadFile;
 
+import net.iGap.G;
 import net.iGap.fragments.emoji.OnStickerDownload;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
@@ -46,7 +48,7 @@ public class IGDownloadFile {
                 @Override
                 public void onError(IGDownloadFileStruct igDownloadFileStruct, int majorCode, int minorCode) {
                     AndroidUtils.deleteFile(new File(igDownloadFileStruct.path));
-                    EventManager.getInstance().postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token));
                     if (fileStruct.listener != null)
                         fileStruct.listener.onDownloadFailed(fileStruct);
                     fileHashMap.remove(igDownloadFileStruct.id);
@@ -67,7 +69,7 @@ public class IGDownloadFile {
             sendRequest(fileStruct);
         } else {
             fileHashMap.remove(fileStruct.id);
-            EventManager.getInstance().postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token);
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STICKER_DOWNLOAD, fileStruct.path, fileStruct.token));
             if (fileStruct.listener != null)
                 fileStruct.listener.onDownloadComplete(fileStruct);
 

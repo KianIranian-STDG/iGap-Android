@@ -11,7 +11,6 @@ import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperLog;
@@ -85,7 +84,7 @@ public class CallManager {
 
     private static volatile CallManager instance = null;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private final String TAG = "iGapCall " + getClass().getSimpleName();
     private CallState currentSate;
 
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
@@ -236,7 +235,7 @@ public class CallManager {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, true));
         if (CallService.getInstance() != null) {
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
         }
@@ -248,7 +247,7 @@ public class CallManager {
     public void makeAccept(String sdp) {
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, true));
         if (CallService.getInstance() != null) {
             CallService.getInstance().stopSoundAndVibrate();
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
@@ -316,6 +315,7 @@ public class CallManager {
         iHoldCall = !builder.getResponse().getId().isEmpty();
         changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
         WebRTC.getInstance().toggleSound(!isCallHold);
+        WebRTC.getInstance().toggleCamera(!isCallHold);
     }
 
     public void holdCall(boolean state) {
@@ -577,7 +577,7 @@ public class CallManager {
 
     public void changeState(CallState callState) {
         currentSate = callState;
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, false);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, false));
         if (callState == CallState.CONNECTED) {
             if (callStartTime == 0) {
                 callStartTime = SystemClock.elapsedRealtime();

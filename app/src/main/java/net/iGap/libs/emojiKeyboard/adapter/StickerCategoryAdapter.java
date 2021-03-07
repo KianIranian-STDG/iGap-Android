@@ -16,13 +16,14 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import net.iGap.G;
 import net.iGap.adapter.items.cells.AnimatedStickerCell;
-import net.iGap.libs.emojiKeyboard.struct.StructStickerCategory;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
+import net.iGap.libs.emojiKeyboard.struct.StructStickerCategory;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,9 +139,9 @@ public class StickerCategoryAdapter extends RecyclerView.Adapter {
                             .transition(DrawableTransitionOptions.withCrossFade(200))
                             .into(normalStickerCell);
                 } else {
-                    EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
-                        String filePath = (String) message[0];
-                        String token = (String) message[1];
+                    EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, (id, account, args) -> {
+                        String filePath = (String) args[0];
+                        String token = (String) args[1];
 
                         if (token.equals(group.getAvatarToken())) {
                             G.handler.post(() -> Glide.with(itemView.getContext())

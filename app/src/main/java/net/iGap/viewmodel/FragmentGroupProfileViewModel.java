@@ -336,6 +336,35 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
         }
     }
 
+    public void sendRequestRevokeGroupUsername() {
+        if (getRequestManager().isUserLogin()) {
+            showProgressBar();
+
+                new RequestGroupRevokeLink().groupRevokeLink(roomId, new OnGroupRevokeLink() {
+                    @Override
+                    public void onGroupRevokeLink(long roomId, String inviteLink, String inviteToken) {
+                        hideProgressBar();
+                        G.handler.post(() -> FragmentGroupProfileViewModel.this.inviteLink.set(inviteLink));
+                    }
+
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
+                        hideProgressBar();
+                    }
+
+                    @Override
+                    public void onTimeOut() {
+                        hideProgressBar();
+                        G.handler.post(() -> showRequestError.setValue(R.string.time_out));
+                    }
+                });
+
+        } else {
+            showRequestError.setValue(R.string.wallet_error_server);
+        }
+    }
+
+
     //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
     public void onClickGroupShearedMedia(int type) {
         goToShearedMediaPage.setValue(new GoToSharedMediaModel(roomId, type));

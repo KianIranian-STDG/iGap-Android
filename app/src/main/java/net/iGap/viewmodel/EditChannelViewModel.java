@@ -19,7 +19,6 @@ import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnChannelEdit;
@@ -32,7 +31,7 @@ import net.iGap.request.RequestChannelEdit;
 
 import java.util.ArrayList;
 
-public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, EventListener {
+public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, EventManager.EventDelegate {
 
     public ObservableField<String> channelName = new ObservableField<>("");
     public ObservableField<String> channelDescription = new ObservableField<>("");
@@ -80,8 +79,8 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
 
-        EventManager.getInstance().addEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
-        EventManager.getInstance().addEventListener(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
 
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
@@ -343,29 +342,23 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.CHANNEL_UPDATE_VOTE) {
-            G.handler.post(() -> {
-                long roomId = (long) message[0];
-                if (roomId == EditChannelViewModel.this.roomId) {
-                    isShowLoading.set(View.GONE);
-                }
-            });
-
-        } else if (id == EventManager.CHANNEL_UPDATE_SIGNATURE) {
-            G.handler.post(() -> {
-                long roomId = (long) message[0];
-                if (roomId == EditChannelViewModel.this.roomId) {
-                    isShowLoading.set(View.GONE);
-                }
-            });
-        }
+    public void onDestroyViewModel() {
+        getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
     }
 
     @Override
-    public void onDestroyViewModel() {
-        EventManager.getInstance().removeEventListener(EventManager.CHANNEL_UPDATE_VOTE, this);
-        EventManager.getInstance().removeEventListener(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.CHANNEL_UPDATE_VOTE) {
+            long roomId = (long) args[0];
+            if (roomId == EditChannelViewModel.this.roomId) {
+                isShowLoading.set(View.GONE);
+            }
+        } else if (id == EventManager.CHANNEL_UPDATE_SIGNATURE) {
+            long roomId = (long) args[0];
+            if (roomId == EditChannelViewModel.this.roomId) {
+                isShowLoading.set(View.GONE);
+            }
+        }
     }
-
 }

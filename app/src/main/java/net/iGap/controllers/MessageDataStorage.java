@@ -133,7 +133,7 @@ public class MessageDataStorage extends BaseController {
                     }
                 }
 
-                getEventManager().postEvent(EventManager.ON_MESSAGE_DELETE, roomId, messageId, update);
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_MESSAGE_DELETE, roomId, messageId, update));
 
                 if (realmRoom != null && realmRoom.lastMessage != null) {
                     if (realmRoom.lastMessage.messageId == messageId) {
@@ -478,7 +478,7 @@ public class MessageDataStorage extends BaseController {
                 }
 
                 database.commitTransaction();
-                getEventManager().postEvent(EventManager.CHAT_CLEAR_MESSAGE, roomId, clearId);
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHAT_CLEAR_MESSAGE, roomId, clearId));
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -498,7 +498,7 @@ public class MessageDataStorage extends BaseController {
 
                 database.commitTransaction();
 
-                getEventManager().postEvent(EventManager.ON_PINNED_MESSAGE, roomId, messageId);
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_PINNED_MESSAGE, roomId, messageId));
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -683,7 +683,7 @@ public class MessageDataStorage extends BaseController {
                     }
 
                     if (roomMessage != null || messageStatus == SEEN) {
-                        EventManager.getInstance().postEvent(EventManager.CHAT_UPDATE_STATUS, roomId, messageId, messageStatus);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CHAT_UPDATE_STATUS, roomId, messageId, messageStatus));
                     }
                 }
 
