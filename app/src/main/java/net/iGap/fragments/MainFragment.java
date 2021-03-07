@@ -64,8 +64,8 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
@@ -94,7 +94,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class MainFragment extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class MainFragment extends BaseMainFragments implements ToolbarListener, EventManager.EventDelegate, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
     public static int mOffset = 0;
 
     private RecyclerView recyclerView;
@@ -376,9 +376,10 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         super.onViewCreated(view, savedInstanceState);
         HelperTracker.sendTracker(HelperTracker.TRACKER_ROOM_PAGE);
 
-        EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().addObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().addObserver(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().addObserver(EventManager.CONNECTION_STATE_CHANGED, this);
 
         roomListAdapter.setCallBack(new RoomListAdapter.OnMainFragmentCallBack() {
             @Override
@@ -860,9 +861,28 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance().removeEventListener(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().removeObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
+    }
+
+    private void onConnectionStateChange(final ConnectionState connectionState) {
+        if (connectionState == null) {
+            return;
+        }
+
+        if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+            toolbar.setTitle(getResources().getString(R.string.waiting_for_network));
+        } else if (connectionState == ConnectionState.CONNECTING) {
+            toolbar.setTitle(getResources().getString(R.string.connecting));
+        } else if (connectionState == ConnectionState.UPDATING) {
+            toolbar.setTitle(getResources().getString(R.string.updating));
+        } else if (connectionState == ConnectionState.IGAP) {
+            toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+        } else {
+            toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+        }
     }
 
     @Override
@@ -1128,26 +1148,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
-
-        if (id == EventManager.CALL_STATE_CHANGED) {
-            if (message == null || message.length == 0) return;
-            boolean state = (boolean) message[0];
-            G.handler.post(() -> {
-                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
-                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
-            });
-        } else if (id == EventManager.EMOJI_LOADED) {
-            G.handler.post(this::invalidateViews);
-        } else if (id == EventManager.ROOM_LIST_CHANGED) {
-            G.runOnUiThread(() -> {
-                boolean show = (boolean) message[0];
-                loadMoreProgress.setVisibility(show ? View.VISIBLE : View.GONE);
-            });
-        }
-    }
-
-    @Override
     public void scrollToTopOfList() {
         if (recyclerView != null) {
             recyclerView.smoothScrollToPosition(0);
@@ -1181,6 +1181,30 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
             } else {
                 revertToolbarFromForwardMode();
             }
+        }
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.CALL_STATE_CHANGED) {
+            if (args == null || args.length == 0) {
+                return;
+            }
+
+            if (MusicPlayer.chatLayout != null) {
+                MusicPlayer.chatLayout.setVisibility(View.GONE);
+            }
+            if (MusicPlayer.mainLayout != null) {
+                MusicPlayer.mainLayout.setVisibility(View.GONE);
+            }
+        } else if (id == EventManager.EMOJI_LOADED) {
+            invalidateViews();
+        } else if (id == EventManager.ROOM_LIST_CHANGED) {
+            boolean show = (boolean) args[0];
+            loadMoreProgress.setVisibility(show ? View.VISIBLE : View.GONE);
+        } else if (id == EventManager.CONNECTION_STATE_CHANGED) {
+            ConnectionState state = (ConnectionState) args[0];
+            onConnectionStateChange(state);
         }
     }
 }

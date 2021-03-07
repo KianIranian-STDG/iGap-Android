@@ -779,6 +779,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(() -> {
                     G.connectionState = ConnectionState.UPDATING;
                     G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CONNECTION_STATE_CHANGED, ConnectionState.UPDATING));
                 });
             }
 
@@ -791,6 +792,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (G.connectionState == ConnectionState.UPDATING) {
                     G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
                     G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CONNECTION_STATE_CHANGED, ConnectionState.IGAP));
                 }
             }
         };
