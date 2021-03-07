@@ -52,6 +52,8 @@ public class Toolbar extends FrameLayout {
         }
         titleIsFontIcon = false;
         titleTextView.setText(title);
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
     }
 
     public void setTitle(@StringRes int title) {
