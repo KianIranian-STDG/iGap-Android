@@ -5155,7 +5155,7 @@ public class FragmentChat extends BaseFragment
         isEditMessage = true;
         sendButtonVisibility(true);
         reply(message, true);
-        G.runOnUiThread(() -> editTextRequestFocus(edtChat));
+        G.runOnUiThread(() -> editTextRequestFocus(edtChat), 200);
     }
 
     private void forwardSelectedMessageToOutOfChat(MessageObject message) {
