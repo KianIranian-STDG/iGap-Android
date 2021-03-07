@@ -1043,6 +1043,12 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         FragmentChat.mForwardMessages = null;
         HelperGetDataFromOtherApp.hasSharedData = false;
         HelperGetDataFromOtherApp.sharedList.clear();
+
+        if (passCodeItem != null) {
+            passCodeItem.setVisibility(View.VISIBLE);
+        }
+
+        onConnectionStateChange(ConnectionState.IGAP);
     }
 
     @Override
@@ -1157,27 +1163,23 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     public void setForwardMessage(boolean enable) {
         if (!(G.isLandscape && G.twoPaneMode) && (FragmentChat.mForwardMessages != null || FragmentChat.structIGSticker != null)) {
             if (enable) {
-//                mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
-//                mHelperToolbar.getRightButton().setVisibility(View.GONE);
-//                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-//                mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
-//                mHelperToolbar.setLeftIcon(R.string.back_icon);
+                toolbar.setTitle(getResources().getString(R.string.send_message_to) + "...");
+                if (passCodeItem != null) {
+                    passCodeItem.setVisibility(View.INVISIBLE);
+                }
             } else {
                 revertToolbarFromForwardMode();
             }
         }
-
     }
 
     public void checkHasSharedData(boolean enable) {
-
         if (!(G.isLandscape && G.twoPaneMode) && HelperGetDataFromOtherApp.hasSharedData) {
             if (enable) {
-//                mHelperToolbar.setDefaultTitle(getString(R.string.send_message_to) + "...");
-//                mHelperToolbar.getRightButton().setVisibility(View.GONE);
-//                mHelperToolbar.getScannerButton().setVisibility(View.GONE);
-//                mHelperToolbar.getLeftButton().setVisibility(View.VISIBLE);
-//                mHelperToolbar.setLeftIcon(R.string.back_icon);
+                toolbar.setTitle(getResources().getString(R.string.send_message_to) + "...");
+                if (passCodeItem != null) {
+                    passCodeItem.setVisibility(View.INVISIBLE);
+                }
             } else {
                 revertToolbarFromForwardMode();
             }
