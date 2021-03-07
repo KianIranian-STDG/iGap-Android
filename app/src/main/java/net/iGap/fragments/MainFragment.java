@@ -43,7 +43,6 @@ import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
@@ -67,15 +66,10 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
-import net.iGap.observers.interfaces.OnChatSendMessageResponse;
-import net.iGap.observers.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.observers.interfaces.OnDateChanged;
-import net.iGap.observers.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.observers.interfaces.OnRemoveFragment;
 import net.iGap.observers.interfaces.OnSetActionInRoom;
 import net.iGap.observers.interfaces.OnVersionCallBack;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
@@ -94,7 +88,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class MainFragment extends BaseMainFragments implements ToolbarListener, EventManager.EventDelegate, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class MainFragment extends BaseMainFragments implements EventManager.EventDelegate, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnDateChanged {
     public static int mOffset = 0;
 
     private RecyclerView recyclerView;
@@ -719,10 +713,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
                 .show();
     }
 
-    private void muteNotification(final long roomId, final boolean mute) {
-
-    }
-
     private void confirmActionForClearHistory(long id) {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
                 .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
@@ -782,9 +772,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         }, 50);
     }
 
-    /**
-     * ************************************ Callbacks ************************************
-     */
     @Override
     public void onChange() {
         G.handler.post(() -> {
@@ -803,54 +790,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     public void onRemoveFragment(Fragment fragment) {
         removeFromBaseFragment(fragment);
     }
-
-
-    @Override
-    public void onChatDelete(final long roomId) {
-
-    }
-
-    @Override
-    public void onGroupDelete(long roomId) {
-
-    }
-
-    @Override
-    public void onGroupDeleteError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onGroupDeleteTimeOut() {
-
-    }
-
-    @Override
-    public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
-
-    }
-
-    @Override
-    public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
-
-    }
-
-    @Override
-    public void onMessageFailed(long roomId, long messageId) {
-
-    }
-
-    @Override
-    public void onClientGetRoomResponse(final long roomId) {
-
-    }
-
-    @Override
-    public void onChatDeleteError(int majorCode, int minorCode) {
-
-    }
-
-    //**************************************************************************************************************************************
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -1010,18 +949,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (!(G.isLandscape && G.twoPaneMode)) {
-            if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData)
-                revertToolbarFromForwardMode();
-        }
-
-        if (inMultiSelectMode) {
-            disableMultiSelect();
-        }
-    }
-
     private void enableMultiSelect() {
         inMultiSelectMode = true;
         roomListAdapter.setMultiSelect(true);
@@ -1049,39 +976,6 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
         }
 
         onConnectionStateChange(ConnectionState.IGAP);
-    }
-
-    @Override
-    public void onSearchClickListener(View view) {
-        if (getActivity() != null) {
-            Fragment fragment = SearchFragment.newInstance();
-            try {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment)
-                        .setAnimated(true)
-                        .setReplace(false)
-                        .setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        .load();
-            } catch (Exception e) {
-                e.getStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void onToolbarTitleClickListener(View view) {
-        scrollToTopOfList();
-    }
-
-    @Override
-    public void onRightIconClickListener(View view) {
-        Fragment fragment = RegisteredContactsFragment.newInstance(true, false, RegisteredContactsFragment.ADD);
-        try {
-            if (getActivity() != null) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-            }
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
     }
 
     private void confirmActionForRemoveSelected() {
@@ -1143,7 +1037,14 @@ public class MainFragment extends BaseMainFragments implements ToolbarListener, 
     @Override
     public boolean isAllowToBackPressed() {
         if (inMultiSelectMode) {
-            onLeftIconClickListener(null);
+            if (!(G.isLandscape && G.twoPaneMode)) {
+                if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData)
+                    revertToolbarFromForwardMode();
+            }
+
+            if (inMultiSelectMode) {
+                disableMultiSelect();
+            }
             return false;
         } else if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
             revertToolbarFromForwardMode();

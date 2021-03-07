@@ -129,10 +129,6 @@ public class RoomController extends BaseController {
                 if (G.onChatDelete != null) {
                     G.onChatDelete.onChatDelete(res.roomId);
                 }
-
-                if (G.onChatDeleteInRoomList != null) {
-                    G.onChatDeleteInRoomList.onChatDelete(res.roomId);
-                }
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Chat Delete Room -> Major" + e.major + "Minor" + e.minor);
@@ -153,10 +149,6 @@ public class RoomController extends BaseController {
                 if (G.onGroupDelete != null) {
                     G.onGroupDelete.onGroupDelete(res.roomId);
                 }
-                if (G.onGroupDeleteInRoomList != null) {
-                    G.onGroupDeleteInRoomList.onGroupDelete(res.roomId);
-                }
-
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Group Delete Room -> Major" + e.major + "Minor" + e.minor);
@@ -178,9 +170,6 @@ public class RoomController extends BaseController {
 
                     if (G.onGroupLeft != null) {
                         G.onGroupLeft.onGroupLeft(roomId, res.memberId);
-                    }
-                    if (G.onGroupDeleteInRoomList != null) {
-                        G.onGroupDeleteInRoomList.onGroupDelete(roomId);
                     }
                 } else {
                     RealmMember.kickMember(res.roomId, res.memberId);
