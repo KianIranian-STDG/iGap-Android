@@ -208,7 +208,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      *                           mainMessageId is new messageId that created and messageId is for message
      *                           that forwarded to another chats
      */
-    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long forwardedMessageId) {
+    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction) {
 
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
@@ -219,7 +219,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  */
 
                 // TODO: 5/16/20 must change vote structure
-                if (messageInfo.messageObject.id == messageId && (forwardedMessageId != 0 || messageInfo.messageObject.roomId == roomId)) {
+                if (messageInfo.messageObject.id == messageId && messageInfo.messageObject.roomId == roomId) {
                     int pos = items.indexOf(messageInfo);// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
                     if (messageInfo.messageObject.channelExtraObject != null) {
                         if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {

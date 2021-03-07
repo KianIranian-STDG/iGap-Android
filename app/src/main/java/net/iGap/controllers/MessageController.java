@@ -429,7 +429,7 @@ public class MessageController extends BaseController implements EventManager.Ev
             if (response != null) {
                 IG_RPC.Res_Channel_Add_Message_Reaction res = (IG_RPC.Res_Channel_Add_Message_Reaction) response;
                 getMessageDataStorage().voteUpdate(req.reaction, req.messageId, res.reactionCounter);
-                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction, messageObject.forwardedMessage.id));
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.CHANNEL_ADD_VOTE, req.roomId, req.messageId, res.reactionCounter, req.reaction));
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
                 FileLog.e("Delete Message -> Major" + e.major + "Minor" + e.minor);

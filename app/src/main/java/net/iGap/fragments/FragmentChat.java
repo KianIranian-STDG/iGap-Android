@@ -9350,10 +9350,9 @@ public class FragmentChat extends BaseFragment
                     long messageId = (long) args[1];
                     String reactionCount = (String) args[2];
                     ProtoGlobal.RoomMessageReaction reaction = (ProtoGlobal.RoomMessageReaction) args[3];
-                    long forwardedMessageId = (long) args[4];
 
                     if (mAdapter != null) {
-                        mAdapter.updateVote(roomId, messageId, reactionCount, reaction, forwardedMessageId);
+                        mAdapter.updateVote(roomId, messageId, reactionCount, reaction);
                     }
                 }
             });
