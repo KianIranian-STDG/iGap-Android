@@ -395,7 +395,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 int progress = Uploader.getInstance().getUploadProgress(messageObject.id + "");
                 messageProgress.withProgress(progress);
 
-                receivedEvent(EventManager.ON_UPLOAD_PROGRESS, AccountManager.selectedAccount, messageObject.id, progress);
+                receivedEvent(EventManager.ON_UPLOAD_PROGRESS, AccountManager.selectedAccount, String.valueOf(messageObject.id), progress);
             }
         } else {
             EventManager.getInstance(currentAccount).removeObserver(EventManager.ON_UPLOAD_PROGRESS, this);
@@ -1880,6 +1880,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
                 }
+
             });
         } else if (id == EventManager.ON_UPLOAD_COMPRESS) {
             G.runOnUiThread(() -> {
