@@ -5194,8 +5194,9 @@ public class FragmentChat extends BaseFragment
                 .positiveText(R.string.yes)
                 .negativeText(R.string.cancel)
                 .onPositive((dialog, which) -> {
-                    deleteFileFromStorageIfExist(messageObject);
-                    getMessageDataStorage().deleteFileFromStorage(messageObject, object -> {
+                    MessageObject finalMessage = messageObject.forwardedMessage != null ? messageObject.forwardedMessage : messageObject;
+                    getMessageDataStorage().deleteFileFromStorage(finalMessage, object -> {
+                        deleteFileFromStorageIfExist(finalMessage);
                         mAdapter.notifyAdapterItemChanged(pos);
                     });
                 }).show();
