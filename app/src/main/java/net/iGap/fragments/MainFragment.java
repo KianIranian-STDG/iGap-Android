@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.BuildConfig;
 import net.iGap.Config;
@@ -49,6 +54,8 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
@@ -80,7 +87,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
 import static net.iGap.G.isAppRtl;
@@ -342,10 +351,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     checkPassCodeVisibility();
                     break;
                 case muteTag:
-                    confirmActionForMuteNotification();
+                    muteNotification();
                     break;
                 case pinTag:
-                    confirmActionForPinToTop();
+                    setPinToTop();
                     break;
                 case leaveTag:
                     confirmActionForRemoveSelected();
@@ -354,10 +363,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     confirmActionForClearHistoryOfSelected();
                     break;
                 case markAsReadTag:
-                    confirmActionForMarkAsRead();
+                    markAsRead();
                     break;
                 case readAllTag:
-                    confirmActionForReadAllRoom();
+                    readAllRoom();
                     break;
             }
         });
@@ -475,18 +484,6 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         }
     }
 
-    private void confirmActionForMarkAsRead() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive((dialog, which) -> {
-                    dialog.dismiss();
-                    markAsRead();
-                })
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
     private void markAsRead() {
         DbManager.getInstance().doRealmTask(realm -> {
             AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, realm1 -> {
@@ -500,7 +497,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         });
     }
 
-    private void confirmActionForReadAllRoom() {
+    private void readAllRoom() {
         List<RealmRoom> unreadList = DbManager.getInstance().doRealmTask(realm -> {
             return realm.copyFromRealm(realm.where(RealmRoom.class).greaterThan("unreadCount", 0).equalTo("isDeleted", false).findAll());
         });
@@ -509,33 +506,20 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
             return;
         }
+        
+        DbManager.getInstance().doRealmTask(realm -> {
+            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive((dialog, which) -> {
-                    dialog.dismiss();
-                    DbManager.getInstance().doRealmTask(realm -> {
-                        AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                if (unreadList.size() > 0) {
-                                    for (RealmRoom room : unreadList) {
-                                        markAsRead(realm, room.getType(), room.getId());
-                                    }
-                                }
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                disableMultiSelect();
-                            }
-                        });
-                    });
-
-                })
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show();
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    disableMultiSelect();
+                }
+            });
+        });
     }
 
     private void onItemClick(RoomListCell roomCell, RealmRoom room, int position) {
@@ -696,21 +680,49 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             disableMultiSelect();
     }
 
-    private void confirmActionForMuteNotification() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive((dialog, which) -> {
-                    dialog.dismiss();
-                    for (int i = 0; i < selectedRoom.size(); i++) {
-                        long roomId = selectedRoom.get(i);
-                        boolean mute = getMessageDataStorage().getRoom(roomId).mute;
-                        getRoomController().clientMuteRoom(roomId, !mute);
-                    }
-                    disableMultiSelect();
-                })
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show();
+    private void muteNotification() {
+
+        long roomId = selectedRoom.get(0);
+        boolean mute = getMessageDataStorage().getRoom(roomId).mute;
+
+        FrameLayout frameLayout = new FrameLayout(context);
+        frameLayout.setBackground(ContextCompat.getDrawable(context,R.drawable.drawable_rounded_corners));
+
+        IconView iconView = new IconView(context);
+        iconView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        if (mute)
+            iconView.setIcon(R.string.unmute_icon);
+        else
+            iconView.setIcon(R.string.mute_icon);
+        iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
+        frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,16,20,20));
+
+        TextView textView = new TextView(context);
+        if (mute)
+            textView.setText(R.string.unmuted);
+        else
+            textView.setText(R.string.muted);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 5 : 50,15,isAppRtl ?  50 : 5,15));
+
+        Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setDuration(1000);
+        iconView.setAnimation(fadeIn);
+
+        Snackbar snackbar = Snackbar.make(Objects.requireNonNull(getView()), "", Snackbar.LENGTH_LONG);
+        Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
+        layout.setBackgroundColor(Color.TRANSPARENT);
+        layout.addView(frameLayout, 0);
+
+        snackbar.show();
+
+        for (int i = 0; i < selectedRoom.size(); i++) {
+            roomId = selectedRoom.get(i);
+            mute = getMessageDataStorage().getRoom(roomId).mute;
+            getRoomController().clientMuteRoom(roomId, !mute);
+        }
+        disableMultiSelect();
     }
 
     private void confirmActionForClearHistory(long id) {
@@ -731,27 +743,19 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             disableMultiSelect();
     }
 
-    private void confirmActionForPinToTop() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive((dialog, which) -> {
-                    dialog.dismiss();
-                    int pinCount = DbManager.getInstance().doRealmTask(realm -> {
-                        return realm.where(RealmRoom.class).equalTo("isPinned", true).findAll().size();
-                    });
-                    for (int i = 0; i < selectedRoom.size(); i++) {
-                        long roomId = selectedRoom.get(i);
-                        RealmRoom room = getMessageDataStorage().getRoom(roomId);
-                        if (pinCount < 5 || room.isPinned) {
-                            pinToTop(roomId, room.isPinned);
-                        }
-                        pinCount++;
-                    }
-                    disableMultiSelect();
-                })
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show();
+    private void setPinToTop() {
+        int pinCount = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmRoom.class).equalTo("isPinned", true).findAll().size();
+        });
+        for (int i = 0; i < selectedRoom.size(); i++) {
+            long roomId = selectedRoom.get(i);
+            RealmRoom room = getMessageDataStorage().getRoom(roomId);
+            if (pinCount < 5 || room.isPinned) {
+                pinToTop(roomId, room.isPinned);
+            }
+            pinCount++;
+        }
+        disableMultiSelect();
     }
 
     private void pinToTop(final long roomId, final boolean isPinned) {
@@ -978,12 +982,48 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         onConnectionStateChange(ConnectionState.IGAP);
     }
 
+    @SuppressLint("DefaultLocale")
     private void confirmActionForRemoveSelected() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
-                .content(getString(R.string.do_you_want_delete_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+        int selectedRoomCount = selectedRoom.size();
+        FrameLayout frameLayout = new FrameLayout(context);
+
+        if (selectedRoomCount == 1){
+            CircleImageView imageView = new CircleImageView(context);
+            AvatarHandler handler = new AvatarHandler();
+            handler.getAvatar(new ParamWithAvatarType(imageView,selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
+            frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
+        }
+
+        TextView title = new TextView(context);
+        if (selectedRoomCount == 1)
+            title.setText(getString(R.string.left));
+        else
+            title.setText(String.format("%s %d %s", getString(R.string.delete), selectedRoomCount, getString(R.string.chat)));
+        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        title.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        if (selectedRoomCount == 1)
+            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 20 : 70,20,isAppRtl ?  70 : 20,20));
+        else
+            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,20,20,20));
+
+        TextView confirmText = new TextView(context);
+        if (selectedRoomCount == 1) {
+            RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
+            String channelName = realmRoom.title;
+            confirmText.setText(String.format(getString(R.string.leave_confirm), channelName));
+        }
+        else {
+            confirmText.setText(R.string.delete_selected_chat);
+        }
+        confirmText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        confirmText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        frameLayout.addView(confirmText, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
+
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
+        builder.customView(frameLayout,false);
+        builder .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
-
                     if (selectedRoom.size() > 0) {
                         for (int i = 0; i < selectedRoom.size(); i++) {
                             RealmRoom item = getMessageDataStorage().getRoom(selectedRoom.get(i));
@@ -1007,9 +1047,46 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 .show();
     }
 
+    @SuppressLint("DefaultLocale")
     private void confirmActionForClearHistoryOfSelected() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.clear_history))
-                .content(getString(R.string.do_you_want_clear_history_this)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+        int selectedRoomCount = selectedRoom.size();
+        FrameLayout frameLayout = new FrameLayout(context);
+
+        if (selectedRoomCount == 1){
+            CircleImageView imageView = new CircleImageView(context);
+            AvatarHandler handler = new AvatarHandler();
+            handler.getAvatar(new ParamWithAvatarType(imageView,selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
+            frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
+        }
+
+        TextView title = new TextView(context);
+        if (selectedRoomCount == 1)
+            title.setText(getString(R.string.clear_history));
+        else
+            title.setText(String.format("%s %d %s", getString(R.string.clear_history), selectedRoomCount, getString(R.string.chat)));
+        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        title.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        if (selectedRoomCount == 1)
+            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 20 : 70,20,isAppRtl ?  70 : 20,20));
+        else
+            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,20,20,20));
+
+        TextView confirmText = new TextView(context);
+        if (selectedRoomCount == 1) {
+            RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
+            String channelName = realmRoom.title;
+            confirmText.setText(String.format(getString(R.string.clear_selected_history), channelName));
+        }
+        else {
+            confirmText.setText(R.string.do_you_want_clear_history_this);
+        }
+        confirmText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        confirmText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        frameLayout.addView(confirmText, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
+
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
+        builder.customView(frameLayout,false);
+        builder.positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     for (long roomId : selectedRoom) {
