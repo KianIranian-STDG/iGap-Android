@@ -119,7 +119,12 @@ public class FragmentGallery extends BaseFragment {
             mFolderId = getArguments().getString(ID_KEY, null);
             isSubFolder = getArguments().getBoolean(SUB_FOLDER_KEY, false);
         }
-        initToolbar(view);
+        if (mGalleryMode == GalleryMode.STORY) {
+            ViewGroup lytToolbar = view.findViewById(R.id.toolbar);
+            lytToolbar.setVisibility(View.GONE);
+        } else {
+            initToolbar(view);
+        }
         initRecyclerView(view);
     }
 
@@ -186,6 +191,7 @@ public class FragmentGallery extends BaseFragment {
         RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
         switch (mGalleryMode) {
             case PHOTO:
+            case STORY:
                 rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? 3 : 2));
                 setupGalleryWithPhotoAdapter(view, rvGallery);
                 break;
@@ -306,7 +312,7 @@ public class FragmentGallery extends BaseFragment {
     private void setupGalleryWithPhotoAdapter(View view, RecyclerView rvGallery) {
 
         mGalleryPhotoAdapter = new AdapterGalleryPhoto(isSubFolder);
-        mGalleryPhotoAdapter.setMultiState(canMultiSelected );
+        mGalleryPhotoAdapter.setMultiState(canMultiSelected);
         rvGallery.setAdapter(mGalleryPhotoAdapter);
         mGalleryPhotoAdapter.setListener(new GalleryItemListener() {
             @Override
@@ -558,7 +564,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     public enum GalleryMode {
-        PHOTO, VIDEO, MUSIC
+        PHOTO, VIDEO, MUSIC, STORY
     }
 
 }

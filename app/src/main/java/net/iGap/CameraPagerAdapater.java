@@ -15,19 +15,21 @@ import net.iGap.fragments.FragmentGallery;
 import java.io.IOException;
 
 public class CameraPagerAdapater extends FragmentStateAdapter {
+    private CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked;
 
-    public CameraPagerAdapater(@NonNull FragmentActivity fragmentActivity) {
+    public CameraPagerAdapater(@NonNull FragmentActivity fragmentActivity, CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked) {
         super(fragmentActivity);
+        this.onGalleryIconClicked = onGalleryIconClicked;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
+        switch (position) {
             case 0:
-                return new CameraStoryFragment();
+                return CameraStoryFragment.newInstance(onGalleryIconClicked);
             case 1:
-                Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.PHOTO, () -> {
+                Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.STORY, () -> {
                     Log.e("dlkfdlfd", "createFragment: ");
                 });
                 return fragment;
@@ -35,7 +37,6 @@ public class CameraPagerAdapater extends FragmentStateAdapter {
                 return new CameraStoryFragment();
         }
     }
-
 
 
     @Override

@@ -10,7 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-public class StoryFragment extends Fragment {
+import net.iGap.camera.CameraStoryFragment;
+
+public class StoryFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked {
     ViewPager2 viewPager2;
 
     @Nullable
@@ -21,7 +23,13 @@ public class StoryFragment extends Fragment {
         viewPager2 = view.findViewById(R.id.pager);
         viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         viewPager2.setOffscreenPageLimit(2);
-        viewPager2.setAdapter(new CameraPagerAdapater(getActivity()));
+        viewPager2.setAdapter(new CameraPagerAdapater(getActivity(),this::onGalleryIconClicked));
         return view;
+    }
+
+
+    @Override
+    public void onGalleryIconClicked() {
+        viewPager2.setCurrentItem(viewPager2.getCurrentItem() + 1);
     }
 }

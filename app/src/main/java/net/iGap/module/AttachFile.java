@@ -18,6 +18,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -51,6 +52,8 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
+import net.iGap.module.dialog.ChatAttachmentPopup;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.IPickFile;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -338,6 +341,44 @@ public class AttachFile {
 
             }
         });
+    }
+
+    public static void getAllShownImagesPath(Activity activity, int count, ChatAttachmentPopup.OnImagesGalleryPrepared onImagesGalleryPrepared) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+                Uri uri;
+                Cursor cursor;
+                int column_index_data;
+                String absolutePathOfImage;
+                uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+                String[] projection = {
+                        MediaStore.MediaColumns.DATA
+                };
+
+                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
+
+                if (cursor != null) {
+                    column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+
+                    while (cursor.moveToNext()) {
+                        absolutePathOfImage = cursor.getString(column_index_data);
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setId(listOfAllImages.size());
+                        item.setPath(absolutePathOfImage);
+                        item.isSelected = true;
+                        listOfAllImages.add(item);
+                        if (listOfAllImages.size() >= count) break;
+                    }
+                    cursor.close();
+                    onImagesGalleryPrepared.imagesList(listOfAllImages);
+
+                }
+            }
+        }).start();
     }
 
     public void requestPaint() throws IOException {

@@ -152,10 +152,10 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     @Override
     public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {
         if (!initied && cameraSession != null && cameraSession.isInitied()) {
+            initied = true;
             if (delegate != null) {
                 delegate.onCameraInit();
             }
-            initied = true;
         }
     }
 
