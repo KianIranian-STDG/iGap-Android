@@ -8,6 +8,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -65,10 +66,10 @@ public class TextCell extends View {
     }
 
     public void setText(CharSequence text) {
-        setText(text, false);
+        setText(text, false,null);
     }
 
-    public void setText(CharSequence cellText, boolean needDivider) {
+    public void setText(CharSequence cellText, boolean needDivider, Gravity gravity) {
         this.needDivider = needDivider;
         if (lastText != cellText) {
             lastText = cellText;
