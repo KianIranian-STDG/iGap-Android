@@ -2278,7 +2278,11 @@ Want to get it?</string>
     <string name="location_list_tile">Search entertainment centers</string>
     <string name="share_file_link">Share public Link</string>
     <string name="can_not_support_file">Can not support file</string>
-
+    <string name="unmuted">Notification UnMuted</string>
+    <string name="muted">Notification Muted</string>
+    <string name="delete_selected_chat">Are you sure you want to delete selected chats?</string>
+    <string name="leave_confirm">Are you sure you want to leave %s?</string>
+    <string name="clear_selected_history">Are you sure you want to clear history of %s?</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>
