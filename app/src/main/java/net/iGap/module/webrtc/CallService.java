@@ -109,11 +109,14 @@ public class CallService extends Service implements CallManager.CallStateChange 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.PHONE_STATE");
+        myPhoneStateService = new CallManager.MyPhoneStateService();
+        registerReceiver(myPhoneStateService, intentFilter);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
 
         if (instance != null) {
             return START_NOT_STICKY;
@@ -132,11 +135,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
         instance = this;
         CallManager.getInstance().setOnCallStateChanged(this);
         initialAudioManager();
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.PHONE_STATE");
-        myPhoneStateService = new CallManager.MyPhoneStateService();
-        registerReceiver(myPhoneStateService, intentFilter);
 
         if (isIncoming) {
             playSoundAndVibration();

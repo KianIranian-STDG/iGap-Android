@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -650,7 +651,6 @@ public class CallManager {
     }
 
     public static class MyPhoneStateListener extends PhoneStateListener {
-
         /**
          * in this function we observe phone's state changes. and we manage two things:
          * 1- manage music player state when phone state changes
@@ -719,11 +719,11 @@ public class CallManager {
     public static class MyPhoneStateService extends BroadcastReceiver {
         TelephonyManager telephony;
         private MyPhoneStateListener phoneListener;
-
         /**
          * use when start or finish ringing
          */
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             phoneListener = new MyPhoneStateListener();
             telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
