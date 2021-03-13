@@ -42,7 +42,6 @@ public class Type8ViewHolder extends BaseViewHolder {
                 adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_8);
                 break;
             case 9:
-            case 10:
                 adContainer = itemView.findViewById(R.id.root_ad_layout_banner);
                 adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_9);
                 break;

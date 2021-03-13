@@ -69,10 +69,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             case 8:
                 return new Type8ViewHolder(layoutInflater.inflate(R.layout.item_discovery_8, viewGroup, false), activity);
             case 9:
-            case 10:
                 return new Type8ViewHolder(layoutInflater.inflate(R.layout.item_discovery_9, viewGroup, false), activity);
-
-
         }
         return new TypeUnknownViewHolder(layoutInflater.inflate(R.layout.item_discovery_unknown, viewGroup, false), activity);
     }
