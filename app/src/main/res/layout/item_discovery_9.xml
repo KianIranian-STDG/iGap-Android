@@ -32,7 +32,7 @@
                 android:scaleType="fitXY" />
 
             <TextView
-                android:id="@+id/tapsell_nativead_title"
+                android:id="@+id/tapsell_nativead_sponsored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -43,7 +43,7 @@
                 android:paddingRight="6.0dip"
                 android:paddingBottom="2.0dip"
                 android:text="@string/tapsell_advertisement"
-                android:textColor="?iGapTitleTextColor"
+                android:textColor="@color/black"
                 android:textSize="11sp" />
         </FrameLayout>
 
