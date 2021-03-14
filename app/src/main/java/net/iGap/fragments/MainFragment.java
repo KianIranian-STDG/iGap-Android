@@ -698,11 +698,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,16,20,20));
 
         TextView textView = new TextView(context);
+        textView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         if (mute)
             textView.setText(R.string.unmuted);
         else
             textView.setText(R.string.muted);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
         frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 5 : 50,15,isAppRtl ?  50 : 5,15));
 
@@ -982,7 +983,6 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         onConnectionStateChange(ConnectionState.IGAP);
     }
 
-    @SuppressLint("DefaultLocale")
     private void confirmActionForRemoveSelected() {
         int selectedRoomCount = selectedRoom.size();
         FrameLayout frameLayout = new FrameLayout(context);
@@ -994,34 +994,43 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
         }
 
-        TextView title = new TextView(context);
+        TextView titleTextView = new TextView(context);
         if (selectedRoomCount == 1)
-            title.setText(getString(R.string.left));
+            titleTextView.setText(getString(R.string.left));
         else
-            title.setText(String.format("%s %d %s", getString(R.string.delete), selectedRoomCount, getString(R.string.chat)));
-        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        title.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        if (selectedRoomCount == 1)
-            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 20 : 70,20,isAppRtl ?  70 : 20,20));
-        else
-            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,20,20,20));
+            titleTextView.setText(String.format("%s %d %s", getString(R.string.delete), selectedRoomCount, getString(R.string.chat)));
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        titleTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
+        titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
 
-        TextView confirmText = new TextView(context);
+        int leftMargin = 20;
+        int rightMargin = 20;
+        if (selectedRoomCount == 1){
+            if (isAppRtl)
+                rightMargin = 70;
+            else
+                leftMargin = 70;
+        }
+        frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,leftMargin,20,rightMargin,20));
+
+        TextView confirmTextView = new TextView(context);
         if (selectedRoomCount == 1) {
             RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
             String channelName = realmRoom.title;
-            confirmText.setText(String.format(getString(R.string.leave_confirm), channelName));
+            confirmTextView.setText(String.format(getString(R.string.leave_confirm), channelName));
         }
         else {
-            confirmText.setText(R.string.delete_selected_chat);
+            confirmTextView.setText(R.string.delete_selected_chat);
         }
-        confirmText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        confirmText.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        frameLayout.addView(confirmText, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
+        confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        confirmTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        confirmTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
         builder.customView(frameLayout,false);
         builder .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .negativeColor(Color.GRAY)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     if (selectedRoom.size() > 0) {
@@ -1047,7 +1056,6 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 .show();
     }
 
-    @SuppressLint("DefaultLocale")
     private void confirmActionForClearHistoryOfSelected() {
         int selectedRoomCount = selectedRoom.size();
         FrameLayout frameLayout = new FrameLayout(context);
@@ -1059,34 +1067,37 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
         }
 
-        TextView title = new TextView(context);
+        TextView titleTextView = new TextView(context);
+        titleTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
         if (selectedRoomCount == 1)
-            title.setText(getString(R.string.clear_history));
+            titleTextView.setText(getString(R.string.clear_history));
         else
-            title.setText(String.format("%s %d %s", getString(R.string.clear_history), selectedRoomCount, getString(R.string.chat)));
-        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-        title.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            titleTextView.setText(String.format("%s %d %s", getString(R.string.clear_history), selectedRoomCount, getString(R.string.chat)));
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
         if (selectedRoomCount == 1)
-            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 20 : 70,20,isAppRtl ?  70 : 20,20));
+            frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 20 : 70,20,isAppRtl ?  70 : 20,20));
         else
-            frameLayout.addView(title, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,20,20,20));
+            frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,20,20,20));
 
-        TextView confirmText = new TextView(context);
+        TextView confirmTextView = new TextView(context);
+        confirmTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         if (selectedRoomCount == 1) {
             RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
             String channelName = realmRoom.title;
-            confirmText.setText(String.format(getString(R.string.clear_selected_history), channelName));
+            confirmTextView.setText(String.format(getString(R.string.clear_selected_history), channelName));
         }
         else {
-            confirmText.setText(R.string.do_you_want_clear_history_this);
+            confirmTextView.setText(R.string.do_you_want_clear_history_this);
         }
-        confirmText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        confirmText.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        frameLayout.addView(confirmText, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
+        confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        confirmTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
         builder.customView(frameLayout,false);
         builder.positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .negativeColor(Color.GRAY)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
                     for (long roomId : selectedRoom) {
