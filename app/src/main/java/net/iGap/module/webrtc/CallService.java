@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
@@ -70,7 +71,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private MediaPlayer player;
     private Vibrator vibrator;
     private SharedPreferences sharedPreferences;
-//    private RealmRegisteredInfo info;
+    //    private RealmRegisteredInfo info;
     private CallAudioManager audioManager = null;
     private CallAudioManager.AudioManagerEvents audioManagerEvents;
 
@@ -462,8 +463,10 @@ public class CallService extends Service implements CallManager.CallStateChange 
     public void onDestroy() {
         super.onDestroy();
 
-        if (myPhoneStateService != null)
+        if (myPhoneStateService != null) {
             unregisterReceiver(myPhoneStateService);
+            myPhoneStateService = null;
+        }
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(CallState.LEAVE_CALL);
@@ -491,7 +494,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
 
             if (intent.getAction().equals(ACTION_ANSWER_CALL)) {
                 CallManager.getInstance().acceptCall();
-
                 Intent activityIntent = new Intent(this, CallActivity.class);
                 activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(activityIntent);
