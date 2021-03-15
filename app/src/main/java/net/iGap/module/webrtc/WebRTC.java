@@ -163,20 +163,20 @@ public class WebRTC {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
             VideoSource videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
             SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
-            videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
-            videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
-            VideoTrack videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
-            videoTrackFromCamera.setEnabled(true);
-
-            videoTrackFromCamera.addSink(videoFrame -> {
-                if (frameListener != null)
-                    frameListener.onLocalFrame(videoFrame);
-//                if (G.onVideoCallFrame != null) {
-//                    G.onVideoCallFrame.onPeerFrame(videoFrame);
-//                }
-            });
-
-            mediaStream.addTrack(videoTrackFromCamera);
+            if (surfaceTextureHelper != null) {
+                videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
+                videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
+                VideoTrack videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
+                videoTrackFromCamera.setEnabled(true);
+                videoTrackFromCamera.addSink(videoFrame -> {
+                    if (frameListener != null)
+                        frameListener.onLocalFrame(videoFrame);
+//              if (G.onVideoCallFrame != null) {
+//                   G.onVideoCallFrame.onPeerFrame(videoFrame);
+//              }
+                });
+                mediaStream.addTrack(videoTrackFromCamera);
+            }
         }
     }
 
