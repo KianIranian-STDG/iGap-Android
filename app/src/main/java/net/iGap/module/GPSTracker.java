@@ -48,6 +48,10 @@ public class GPSTracker implements LocationListener {
     }
 
     public void detectLocation() {
+        if (!AndroidUtils.isAppOnForeground(context)) {
+            return;
+        }
+
         try {
             locationManager = (LocationManager) G.context.getSystemService(LOCATION_SERVICE);
 
