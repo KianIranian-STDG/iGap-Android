@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -56,6 +55,7 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.ui.components.FragmentMediaContainer;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.NumberTextView;
@@ -87,6 +87,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -106,6 +107,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private ProgressBar loadingProgress;
     private LinearLayout emptyView;
     private FrameLayout floatActionLayout;
+    private FragmentMediaContainer mediaContainer;
 
     private RoomListAdapter roomListAdapter;
     private boolean inMultiSelectMode;
@@ -250,6 +252,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         addButton.setIcon(R.string.add_icon_without_circle_font);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
+
+        mediaContainer = new FragmentMediaContainer(context, this);
+        layout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 36, Gravity.TOP | Gravity.LEFT, 0, -36, 0, 0));
 
         return fragmentView;
     }
@@ -506,7 +511,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             Toast.makeText(getContext(), getString(R.string.no_item), Toast.LENGTH_SHORT).show();
             return;
         }
-        
+
         DbManager.getInstance().doRealmTask(realm -> {
             AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
                 @Override
@@ -686,7 +691,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         boolean mute = getMessageDataStorage().getRoom(roomId).mute;
 
         FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.setBackground(ContextCompat.getDrawable(context,R.drawable.drawable_rounded_corners));
+        frameLayout.setBackground(ContextCompat.getDrawable(context, R.drawable.drawable_rounded_corners));
 
         IconView iconView = new IconView(context);
         iconView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -695,7 +700,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         else
             iconView.setIcon(R.string.mute_icon);
         iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
-        frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,16,20,20));
+        frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
         TextView textView = new TextView(context);
         textView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
@@ -705,7 +710,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             textView.setText(R.string.muted);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 5 : 50,15,isAppRtl ?  50 : 5,15));
+        frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 5 : 50, 15, isAppRtl ? 50 : 5, 15));
 
         Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(1000);
@@ -987,49 +992,51 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         int selectedRoomCount = selectedRoom.size();
         FrameLayout frameLayout = new FrameLayout(context);
 
-        if (selectedRoomCount == 1){
+        if (selectedRoomCount == 1) {
             CircleImageView imageView = new CircleImageView(context);
             AvatarHandler handler = new AvatarHandler();
-            handler.getAvatar(new ParamWithAvatarType(imageView,selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
+            handler.getAvatar(new ParamWithAvatarType(imageView, selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
             frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
         }
 
         TextView titleTextView = new TextView(context);
-        if (selectedRoomCount == 1)
+        if (selectedRoomCount == 1) {
             titleTextView.setText(getString(R.string.left));
-        else
-            titleTextView.setText(String.format("%s %d %s", getString(R.string.delete), selectedRoomCount, getString(R.string.chat)));
+        } else {
+            titleTextView.setText(String.format(Locale.US, "%s %d %s", getString(R.string.delete), selectedRoomCount, getString(R.string.chat)));
+        }
+
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         titleTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
         titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
 
         int leftMargin = 20;
         int rightMargin = 20;
-        if (selectedRoomCount == 1){
+        if (selectedRoomCount == 1) {
             if (isAppRtl)
                 rightMargin = 70;
             else
                 leftMargin = 70;
         }
-        frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,leftMargin,20,rightMargin,20));
+        frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, leftMargin, 20, rightMargin, 20));
 
         TextView confirmTextView = new TextView(context);
         if (selectedRoomCount == 1) {
             RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
             String channelName = realmRoom.title;
             confirmTextView.setText(String.format(getString(R.string.leave_confirm), channelName));
-        }
-        else {
+        } else {
             confirmTextView.setText(R.string.delete_selected_chat);
         }
         confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         confirmTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         confirmTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
+        frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 70, 20, 8));
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
-        builder.customView(frameLayout,false);
-        builder .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+        builder.customView(frameLayout, false);
+        builder.positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .negativeColor(Color.GRAY)
                 .onPositive((dialog, which) -> {
                     dialog.dismiss();
@@ -1045,25 +1052,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 .show();
     }
 
-    private void confirmActionForRemoveItem(RealmRoom item) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.delete_chat))
-                .content(getString(R.string.are_you_sure_request)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .onPositive((dialog, which) -> {
-                    dialog.dismiss();
-                    deleteChatWithRealm(item, true);
-                })
-                .onNegative((dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
     private void confirmActionForClearHistoryOfSelected() {
         int selectedRoomCount = selectedRoom.size();
         FrameLayout frameLayout = new FrameLayout(context);
 
-        if (selectedRoomCount == 1){
+        if (selectedRoomCount == 1) {
             CircleImageView imageView = new CircleImageView(context);
             AvatarHandler handler = new AvatarHandler();
-            handler.getAvatar(new ParamWithAvatarType(imageView,selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
+            handler.getAvatar(new ParamWithAvatarType(imageView, selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
             frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
         }
 
@@ -1072,13 +1068,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         if (selectedRoomCount == 1)
             titleTextView.setText(getString(R.string.clear_history));
         else
-            titleTextView.setText(String.format("%s %d %s", getString(R.string.clear_history), selectedRoomCount, getString(R.string.chat)));
+            titleTextView.setText(String.format(Locale.US, "%s %d %s", getString(R.string.clear_history), selectedRoomCount, getString(R.string.chat)));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        if (selectedRoomCount == 1)
-            frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,isAppRtl ? 20 : 70,20,isAppRtl ?  70 : 20,20));
-        else
-            frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,20,20,20));
+        if (selectedRoomCount == 1) {
+            frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 20 : 70, 20, isAppRtl ? 70 : 20, 20));
+        } else {
+            frameLayout.addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 20, 20, 20));
+        }
 
         TextView confirmTextView = new TextView(context);
         confirmTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
@@ -1086,16 +1083,15 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
             String channelName = realmRoom.title;
             confirmTextView.setText(String.format(getString(R.string.clear_selected_history), channelName));
-        }
-        else {
+        } else {
             confirmTextView.setText(R.string.do_you_want_clear_history_this);
         }
         confirmTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         confirmTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT,isAppRtl ? Gravity.RIGHT : Gravity.LEFT,20,70,20,8));
+        frameLayout.addView(confirmTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 70, 20, 8));
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(G.fragmentActivity);
-        builder.customView(frameLayout,false);
+        builder.customView(frameLayout, false);
         builder.positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                 .negativeColor(Color.GRAY)
                 .onPositive((dialog, which) -> {

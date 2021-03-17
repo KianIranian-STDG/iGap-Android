@@ -162,6 +162,10 @@ public class BaseFragment extends SwipeBackFragment {
             new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(fragment).setReplace(false).load();
     }
 
+    public View getFragmentView() {
+        return fragmentView;
+    }
+
     public Dialog showDialog(Dialog dialog, final Dialog.OnDismissListener onDismissListener) {
         if (dialog == null || fragmentView == null) {
             return null;
