@@ -1546,6 +1546,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             });
         }
         Log.wtf(this.getClass().getName(), "onPause");
+
+        // Stop using gps for nearby when app is on background
+        GPSTracker.getGpsTrackerInstance().stopUsingGPS();
     }
 
 

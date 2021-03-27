@@ -104,9 +104,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private RelativeLayout rvIcon;
     private net.iGap.module.MaterialDesignTextView itemIcon;
     private Location location;
+    private LocationManager locationManager;
+    private String provider;
 
 
-    public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
+    public static FragmentMap getInstance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
 
         FragmentMap fragmentMap = new FragmentMap();
 
@@ -123,7 +125,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         return fragmentMap;
     }
 
-    public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode) {
+    public static FragmentMap getInstance(Double latitude, Double longitude, Mode mode) {
 
         FragmentMap fragmentMap = new FragmentMap();
 
@@ -386,12 +388,12 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
 
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria how to select the locatioin provider -> use
         // default
         Criteria criteria = new Criteria();
 
-        String provider;
+
         try {
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
             provider = locationManager.getBestProvider(criteria, true);
@@ -400,7 +402,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         }
 
         location = locationManager.getLastKnownLocation(provider);
-        locationManager.requestLocationUpdates(provider, 60, 10, this);
+        //locationManager.requestLocationUpdates(provider, 60, 10, this);
         onLocationChanged(location);
 
 

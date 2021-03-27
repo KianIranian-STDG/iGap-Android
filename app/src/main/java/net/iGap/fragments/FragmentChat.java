@@ -2610,7 +2610,7 @@ public class FragmentChat extends BaseFragment
                         String[] split = messageOne.split(",");
                         Double latitude = Double.parseDouble(split[0]);
                         Double longitude = Double.parseDouble(split[1]);
-                        FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                        FragmentMap fragment = FragmentMap.getInstance(latitude, longitude, FragmentMap.Mode.sendPosition);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                     }
                 } catch (Exception e) {
@@ -9222,7 +9222,7 @@ public class FragmentChat extends BaseFragment
                 String[] split = message.split(",");
                 Double latitude = Double.parseDouble(split[0]);
                 Double longitude = Double.parseDouble(split[1]);
-                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                FragmentMap fragment = FragmentMap.getInstance(latitude, longitude, FragmentMap.Mode.sendPosition);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
