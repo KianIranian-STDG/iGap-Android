@@ -9423,23 +9423,23 @@ public class FragmentChat extends BaseFragment
             hashList.clear();
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-//                if (mAdapter.getItem(i).mMessage != null) {
-//
-//                    if (messageId.length() > 0) {
-//                        if ((mAdapter.getItem(i).mMessage.getMessageId() + "").equals(messageId)) {
-//                            currentHashPosition = hashList.size();
-//                            lastMessageId = messageId;
-//                            mAdapter.getItem(i).structMessage.isSelected = true;
-//                            mAdapter.notifyItemChanged(i);
-//                        }
-//                    }
-//
-//                    String mText = mAdapter.getItem(i).mMessage.getForwardMessage() != null ? mAdapter.getItem(i).mMessage.getForwardMessage().getMessage() : mAdapter.getItem(i).mMessage.getMessage();
-//
-//                    if (mText.toLowerCase().contains(hashString)) {
-//                        hashList.add(mAdapter.getItem(i).mMessage.getMessageId() + "");
-//                    }
-//                }
+                if (mAdapter.getItem(i).messageObject != null) {
+
+                    if (messageId.length() > 0) {
+                        if ((mAdapter.getItem(i).messageObject.id + "").equals(messageId)) {
+                            currentHashPosition = hashList.size();
+                            lastMessageId = messageId;
+                            mAdapter.getItem(i).messageObject.isSelected = true;
+                            mAdapter.notifyItemChanged(i);
+                        }
+                    }
+
+                    String mText = mAdapter.getItem(i).messageObject.forwardedMessage != null ? mAdapter.getItem(i).messageObject.forwardedMessage.message : mAdapter.getItem(i).messageObject.message;
+
+                    if (mText.toLowerCase().contains(hashString)) {
+                        hashList.add(mAdapter.getItem(i).messageObject.id + "");
+                    }
+                }
             }
 
             if (messageId.length() == 0) {
