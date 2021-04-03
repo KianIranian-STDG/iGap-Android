@@ -3641,6 +3641,7 @@ public class FragmentChat extends BaseFragment
                 .setRootView(rootView)
                 .setFragment(FragmentChat.this)
                 .setFragmentActivity(G.fragmentActivity)
+                .setActivity(getActivity())
                 .setSharedPref(sharedPreferences)
                 .setMessagesLayoutHeight(recyclerView.getMeasuredHeight())
                 .setChatBoxHeight(viewAttachFile.getMeasuredHeight())
