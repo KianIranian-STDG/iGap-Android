@@ -98,7 +98,7 @@ public class BrushDrawingView extends View {
         mDrawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
-    void setBrushDrawingMode(boolean brushDrawMode) {
+   public void setBrushDrawingMode(boolean brushDrawMode) {
         this.mBrushDrawMode = brushDrawMode;
         if (brushDrawMode) {
             this.setVisibility(View.VISIBLE);
@@ -106,8 +106,9 @@ public class BrushDrawingView extends View {
         }
     }
 
-    void setOpacity(@IntRange(from = 0, to = 255) int opacity) {
+    public void setOpacity(@IntRange(from = 0, to = 255) int opacity) {
         this.mOpacity = opacity;
+        mDrawPaint.setAlpha(opacity);
         setBrushDrawingMode(true);
     }
 
@@ -119,22 +120,22 @@ public class BrushDrawingView extends View {
         return mBrushDrawMode;
     }
 
-    void setBrushSize(float size) {
+    public void setBrushSize(float size) {
         mBrushSize = size;
         setBrushDrawingMode(true);
     }
 
-    void setBrushColor(@ColorInt int color) {
+    public void setBrushColor(@ColorInt int color) {
         mDrawPaint.setColor(color);
         setBrushDrawingMode(true);
     }
 
-    void setBrushEraserSize(float brushEraserSize) {
+    public void setBrushEraserSize(float brushEraserSize) {
         this.mBrushEraserSize = brushEraserSize;
         setBrushDrawingMode(true);
     }
 
-    void setBrushEraserColor(@ColorInt int color) {
+    public void setBrushEraserColor(@ColorInt int color) {
         mDrawPaint.setColor(color);
         setBrushDrawingMode(true);
     }
@@ -165,18 +166,28 @@ public class BrushDrawingView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        Bitmap canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Bitmap canvasBitmap = Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
         mDrawCanvas = new Canvas(canvasBitmap);
     }
 
+//    @Override
+//    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+//        super.onSizeChanged(w, h, oldw, oldh);
+//        Bitmap canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+//        mDrawCanvas = new Canvas(canvasBitmap);
+//    }
+
     @Override
     protected void onDraw(Canvas canvas) {
-        for (LinePath linePath : mDrawnPaths) {
-            canvas.drawPath(linePath.getDrawPath(), linePath.getDrawPaint());
+
+            for (LinePath linePath : mDrawnPaths) {
+                canvas.drawPath(linePath.getDrawPath(), linePath.getDrawPaint());
+            }
+        if (mBrushDrawMode) {
+            canvas.drawPath(mPath, mDrawPaint);
         }
-        canvas.drawPath(mPath, mDrawPaint);
     }
 
     /**

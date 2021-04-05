@@ -19,7 +19,7 @@ import androidx.appcompat.widget.AppCompatImageView;
  * @version 0.1.2
  * @since 5/21/2018
  */
-class FilterImageView extends AppCompatImageView {
+public class FilterImageView extends AppCompatImageView {
 
     private OnImageChangedListener mOnImageChangedListener;
 
@@ -124,7 +124,7 @@ class FilterImageView extends AppCompatImageView {
     }
 
     @Nullable
-    Bitmap getBitmap() {
+    public Bitmap getBitmap() {
         if (getDrawable() != null) {
             return ((BitmapDrawable) getDrawable()).getBitmap();
         }

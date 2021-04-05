@@ -54,6 +54,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         fragment.show(appCompatActivity.getSupportFragmentManager(), TAG);
         return fragment;
     }
+
     public static TextEditorDialogFragment newInstance(@NonNull FragmentActivity appCompatActivity,
                                                        @NonNull String inputText,
                                                        @ColorInt int initialColorCode) {
@@ -65,6 +66,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         fragment.show(appCompatActivity.getSupportFragmentManager(), TAG);
         return fragment;
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -91,6 +93,8 @@ public class TextEditorDialogFragment extends DialogFragment {
         addTextEditTExt = new EditText(getContext());
         addTextEditTExt.setGravity(Gravity.CENTER);
         addTextEditTExt.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        addTextEditTExt.setTextColor(getArguments() != null ? colorCode = getArguments().getInt(EXTRA_COLOR_CODE, Color.WHITE) : Color.WHITE);
+        addTextEditTExt.setText(getArguments() != null ? getArguments().getString(EXTRA_INPUT_TEXT, "") : "");
         addTextEditTExt.setTextSize(40);
         addTextEditTExt.setSingleLine(false);
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
@@ -104,8 +108,6 @@ public class TextEditorDialogFragment extends DialogFragment {
         doneTextView.setTextColor(Color.WHITE);
         doneTextView.setTextSize(16);
         rootView.addView(doneTextView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 20, 20, 20, 20));
-
-
 
 
         colorPickerRecylerView = new RecyclerView(getContext());

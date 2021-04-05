@@ -7,7 +7,7 @@ package net.iGap.libs.photoEdit;
  * <p></p>
  */
 
-interface BrushViewChangeListener {
+public interface BrushViewChangeListener {
     void onViewAdd(BrushDrawingView brushDrawingView);
 
     void onViewRemoved(BrushDrawingView brushDrawingView);

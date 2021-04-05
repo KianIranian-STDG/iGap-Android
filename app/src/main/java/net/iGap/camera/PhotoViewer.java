@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -39,10 +40,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.G;
@@ -58,7 +61,11 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
+import net.iGap.libs.emojiKeyboard.NotifyLinearLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.libs.photoEdit.BrushDrawingView;
+import net.iGap.libs.photoEdit.BrushViewChangeListener;
+import net.iGap.libs.photoEdit.PhotoEditorView;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -72,7 +79,11 @@ import net.iGap.observers.interfaces.OnRotateImage;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,13 +93,17 @@ import yogesh.firzen.mukkiasevaigal.M;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
 
-public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Listener, OnPhotoEditorListener {
-    private NotifyFrameLayout rootView;
+public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.Listener, OnPhotoEditorListener, BrushConfigDialog.Properties, BrushViewChangeListener {
+    private static final float MAX_PERCENT = 100;
+    private static final float MAX_ALPHA = 255;
+    private static final float INITIAL_WIDTH = 50;
+    private NotifyLinearLayout rootView;
     private ViewPager viewPager;
     private Toolbar toolbar;
     private LinearLayout toolbarPanel;
     private RippleView rippleView;
     private MaterialDesignTextView designTextView;
+    private MaterialDesignTextView revertTextView;
     private MaterialDesignTextView emoji;
     private TextView toolbarTitle;
     private TextView imageNumber;
@@ -124,8 +139,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private TextStickerView textStickersParentView;
     private ImageViewTouch imageViewTouch;
     private List<View> addedViews;
+    private List<View> redoViews;
     private FrameLayout stickerBorder;
     private TextView textTv;
+    private CustomPaintView customPaintView;
+    private boolean isEraser = false;
+    private float brushSize = INITIAL_WIDTH;
+    private float brushAlpha = MAX_ALPHA;
+    private int brushColor = Color.WHITE;
+    private BrushConfigDialog brushConfigDialog;
+    private Modes mode;
+    private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
 
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
@@ -138,7 +162,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     @SuppressLint("ResourceType")
     @Override
     public View createView(Context context) {
-        rootView = new NotifyFrameLayout(context) {
+        rootView = new NotifyLinearLayout(context) {
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
@@ -154,18 +178,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         rootView.setListener(this);
         rootView.setBackgroundColor(context.getResources().getColor(R.color.black_register));
         rootView.setClickable(true);
-
-        imageViewTouch = new ImageViewTouch(context);
-        rootView.addView(imageViewTouch, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
-
-        viewPager = new ViewPager(context);
-        viewPager.setVisibility(View.GONE);
-        zoomLayout = new ZoomLayout(context);
-        textStickersParentView = new TextStickerView(context);
-        textStickersParentView.setVisibility(View.GONE);
-        zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
-        rootView.addView(zoomLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
-        rootView.addView(viewPager, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+        rootView.setOrientation(LinearLayout.VERTICAL);
 
         toolbar = new Toolbar(context);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -230,6 +243,13 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         countImageTextView.setTypeface(countImageTextView.getTypeface(), Typeface.BOLD);
         toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 1, 0));
 
+        revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        revertTextView.setText(context.getString(R.string.forward_icon));
+        revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        revertTextView.setGravity(Gravity.CENTER);
+        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 3, 0));
+
+
         animateCheckBox = new AnimCheckBox(context);
         animateCheckBox.setBackground(context.getResources().getDrawable(R.drawable.background_check));
         animateCheckBox.setCircleColor(R.attr.iGapButtonColor);
@@ -241,7 +261,30 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
 
         toolbar.addView(toolbarPanel, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        rootView.addView(toolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
+        rootView.addView(toolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 60, Gravity.CENTER));
+
+
+        viewPager = new ViewPager(context);
+        viewPager.setVisibility(View.GONE);
+        zoomLayout = new ZoomLayout(context);
+        zoomLayout.setVisibility(View.GONE);
+        textStickersParentView = new TextStickerView(context, false);
+        textStickersParentView.setDrawingCacheEnabled(true);
+        textStickersParentView.setVisibility(View.GONE);
+        zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+        rootView.addView(zoomLayout, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 0, 1F, Gravity.CENTER));
+
+        customPaintView = new CustomPaintView(context);
+        customPaintView.setVisibility(View.GONE);
+        // zoomLayout.addView(customPaintView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+        rootView.addView(customPaintView, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 0, 1F, Gravity.CENTER));
+        rootView.addView(viewPager, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 0, 1F, Gravity.CENTER));
+
+        imageViewTouch = new ImageViewTouch(context);
+        imageViewTouch.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        rootView.addView(imageViewTouch, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 0, 1F, Gravity.CENTER));
+
 
         bottomLayoutPanel = new LinearLayout(context);
         bottomLayoutPanel.setOrientation(LinearLayout.VERTICAL);
@@ -325,7 +368,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         bottomLayoutPanel.addView(cancelCropLayout, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
 
-        rootView.addView(bottomLayoutPanel, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+        rootView.addView(bottomLayoutPanel, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         return rootView;
     }
@@ -335,7 +378,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         addedViews = new ArrayList<>();
         path = getArguments().getString(PATH);
-
+        brushConfigDialog = new BrushConfigDialog();
+        brushConfigDialog.setPropertiesChangeListener(this);
         if (!HelperPermission.grantedUseStorage()) {
             try {
                 HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
@@ -370,7 +414,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
             @Override
             public void onClick(View view) {
-                onAddTextShow();
+                if (mode == Modes.PAINT) {
+                    textStickersParentView.setPaintMode(false, null);
+                } else if (mode == Modes.ADD_TEXT) {
+                    textStickersParentView.setPaintMode(false, null);
+                } else {
+                    onAddTextShow();
+                }
+
+                mode = Modes.ADD_TEXT;
+
+
                 TextEditorDialogFragment textEditorDialogFragment =
                         TextEditorDialogFragment.newInstance(getActivity());
                 textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode) -> {
@@ -429,7 +483,41 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             }
         });
 
+        paintTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageViewTouch.setVisibility(View.GONE);
 
+//                customPaintView.updateImageBitmap(BitmapFactory.decodeFile(path));
+//                zoomLayout.setVisibility(View.VISIBLE);
+                zoomLayout.setVisibility(VISIBLE);
+                textStickersParentView.setVisibility(View.VISIBLE);
+                if (mode == Modes.ADD_TEXT) {
+                    textStickersParentView.setPaintMode(true, null);
+                    //textStickersParentView.setPaintMode(false);
+                    //  Glide.with(getContext()).asDrawable().load(getFinalBitmapAfterAddText(textStickersParentView)).centerCrop().into(customPaintView.getSource());
+//                    textStickersParentView.setVisibility(View.GONE);
+                } else if (mode == Modes.PAINT) {
+                    textStickersParentView.setPaintMode(true, null);
+//                    textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(path));
+                    //  Glide.with(getContext()).asDrawable().load(new File(path)).centerCrop().into(textStickersParentView.getBitmapHolderImageView());
+//                customPaintView.getSource().setImageURI(Uri.parse(path));
+                } else {
+                    textStickersParentView.setPaintMode(true, BitmapFactory.decodeFile(path));
+                }
+                mode = Modes.PAINT;
+                String tag = brushConfigDialog.getTag();
+
+                // Avoid IllegalStateException "Fragment already added"
+                if (brushConfigDialog.isAdded()) return;
+
+                brushConfigDialog.show(getParentFragmentManager(), tag);
+
+                updateBrushParams();
+
+            }
+        });
+        initStroke();
         rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -442,9 +530,27 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     }
 
+    private Bitmap getFinalBitmapAfterAddText(View view) {
+
+        Bitmap finalBitmap = Bitmap.createBitmap(view.getDrawingCache());
+        Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        int textStickerHeightCenterY = textStickersParentView.getHeight() / 2;
+        int textStickerWidthCenterX = textStickersParentView.getWidth() / 2;
+
+        int imageViewHeight = textStickersParentView.getBitmapHolderImageView().getHeight();
+        int imageViewWidth = textStickersParentView.getBitmapHolderImageView().getWidth();
+
+        view.setDrawingCacheEnabled(false);
+        // Crop actual image from textStickerView
+        return Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
+    }
+
     private void onAddTextShow() {
         imageViewTouch.setVisibility(View.GONE);
+        textStickersParentView.setPaintMode(false, null);
         textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(this.path));
+        zoomLayout.setVisibility(VISIBLE);
         textStickersParentView.setVisibility(View.VISIBLE);
 
         autoScaleImageToFitBounds();
@@ -578,6 +684,37 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     }
 
+    @Override
+    public void onViewAdd(BrushDrawingView brushDrawingView) {
+        if (redoViews.size() > 0) {
+            redoViews.remove(redoViews.size() - 1);
+        }
+        addedViews.add(brushDrawingView);
+        onPaintChanged.setValue(addedViews.size());
+    }
+
+    @Override
+    public void onViewRemoved(BrushDrawingView brushDrawingView) {
+        if (addedViews.size() > 0) {
+            View removeView = addedViews.remove(addedViews.size() - 1);
+            if (!(removeView instanceof BrushDrawingView)) {
+                textStickersParentView.removeView(removeView);
+            }
+            onPaintChanged.setValue(addedViews.size());
+            redoViews.add(removeView);
+        }
+    }
+
+    @Override
+    public void onStartDrawing() {
+
+    }
+
+    @Override
+    public void onStopDrawing() {
+
+    }
+
     private class AdapterViewPager extends PagerAdapter {
 
         ArrayList<StructBottomSheet> itemGalleryList;
@@ -621,7 +758,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                             }
                         }
                         itemGalleryList.get(position).path = finalPath;
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), imgPlay);
+
+                        Glide.with(getContext()).asDrawable().load(new File(finalPath)).centerCrop().into(imgPlay);
                     });
                 }).start();
             }
@@ -666,13 +804,53 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                         itemGalleryList.add(0, item);
                         textImageList.put(newPath, item);
                         setUpViewPager();
-                        imageViewTouch.setImageBitmap(BitmapFactory.decodeFile(newPath));
+                        //   G.imageLoader.displayImage(newPath, imageViewTouch);
+                        Glide.with(getContext()).asDrawable().load(new File(newPath)).centerCrop().into(imageViewTouch);
+//                        imageViewTouch.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(newPath),getSize(-1), getSize(-1), true));
                         imageViewTouch.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
                     }
                 });
 
             }
         });
+    }
+
+    private Bitmap decodeFile(File f) {
+        try {
+            //decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+            //Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = getSize(-1);
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale++;
+            }
+
+            //decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return null;
+    }
+
+    public int getSize(float size) {
+        return (int) (size < 0 ? size : dp(size));
+    }
+
+    public int dp(float value) {
+        if (value == 0) {
+            return 0;
+        }
+        return (int) Math.ceil(getContext().getResources().getDisplayMetrics().density * value);
     }
 
     private void setUpViewPager() {
@@ -804,6 +982,35 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         chatKeyBoardContainer.addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
     }
 
+    private void initStroke() {
+        textStickersParentView.setBrushSize(INITIAL_WIDTH);
+        textStickersParentView.setBrushColor(Color.WHITE);
+        textStickersParentView.setStrokeAlpha(MAX_ALPHA);
+    }
+
+    @Override
+    public void onColorChanged(int colorCode) {
+        brushColor = colorCode;
+        updateBrushParams();
+    }
+
+    @Override
+    public void onOpacityChanged(int opacity) {
+        brushAlpha = (opacity / MAX_PERCENT) * MAX_ALPHA;
+        updateBrushParams();
+    }
+
+    @Override
+    public void onBrushSizeChanged(int brushSize) {
+        this.brushSize = brushSize;
+        updateBrushParams();
+    }
+
+    private void updateBrushParams() {
+        textStickersParentView.setBrushColor(brushColor);
+        textStickersParentView.setBrushSize(brushSize);
+        textStickersParentView.setStrokeAlpha(brushAlpha);
+    }
 
     private boolean isPopupShowing() {
         return emojiView != null && emojiView.getVisibility() == VISIBLE;
@@ -821,5 +1028,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     public void closeKeyboard() {
         captionEditText.clearFocus();
         AndroidUtils.hideKeyboard(captionEditText);
+    }
+
+    enum Modes {
+        PAINT, ADD_TEXT
     }
 }

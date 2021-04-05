@@ -1,65 +1,68 @@
 package net.iGap.camera;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.bumptech.glide.Glide;
+import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.FilterImageView;
+import net.iGap.libs.photoEdit.OnSaveBitmap;
 
-import java.io.File;
-
-public class TextStickerView extends RelativeLayout {
-    private FilterImageView bitmapHolderImageView;
+public class CustomPaintView extends RelativeLayout {
+    private FilterImageView mImgSource;
     private BrushDrawingView mBrushDrawingView;
     private static final int imgSrcId = 1, brushSrcId = 2;
 
-    public TextStickerView(Context context, boolean isPaintMode) {
+
+    public CustomPaintView(Context context) {
         super(context);
-        if (isPaintMode)
-            init(null);
+        init(null);
     }
 
-    public TextStickerView(Context context, AttributeSet attrs) {
+    public CustomPaintView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public TextStickerView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomPaintView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
 
+    @SuppressLint("Recycle")
     private void init(@Nullable AttributeSet attrs) {
         //Setup image attributes
-        if (bitmapHolderImageView == null) {
-            bitmapHolderImageView = new FilterImageView(getContext());
-            RelativeLayout.LayoutParams imgSrcParam = new RelativeLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            imgSrcParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-            addView(bitmapHolderImageView, imgSrcParam);
-        }
-        bitmapHolderImageView.setId(imgSrcId);
-        bitmapHolderImageView.setAdjustViewBounds(true);
-        bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        bitmapHolderImageView.setDrawingCacheEnabled(true);
-
+        mImgSource = new FilterImageView(getContext());
+        mImgSource.setId(imgSrcId);
+        mImgSource.setAdjustViewBounds(true);
+        RelativeLayout.LayoutParams imgSrcParam = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        imgSrcParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.PhotoEditorView);
             Drawable imgSrcDrawable = a.getDrawable(R.styleable.PhotoEditorView_photo_src);
             if (imgSrcDrawable != null) {
-                bitmapHolderImageView.setImageDrawable(imgSrcDrawable);
+                mImgSource.setImageDrawable(imgSrcDrawable);
             }
         }
 
@@ -81,50 +84,26 @@ public class TextStickerView extends RelativeLayout {
         imgFilterParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
         imgFilterParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
 
+        //Add image source
+        addView(mImgSource, imgSrcParam);
 
         //Add brush view
         addView(mBrushDrawingView, brushParam);
+
     }
 
-    public ImageView getBitmapHolderImageView() {
-        return bitmapHolderImageView;
+
+    void saveFilter(@NonNull final OnSaveBitmap onSaveBitmap) {
+        onSaveBitmap.onBitmapReady(mImgSource.getBitmap());
     }
 
-    public void updateImageBitmap(Bitmap bitmap) {
-        if (bitmapHolderImageView != null) {
-            removeView(bitmapHolderImageView);
-        }
-
-        bitmapHolderImageView = new FilterImageView(getContext());
-
-        //Setup image attributes
-        RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        imageViewParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        bitmapHolderImageView.setLayoutParams(imageViewParams);
-        bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        bitmapHolderImageView.setAdjustViewBounds(true);
-
-        bitmapHolderImageView.setDrawingCacheEnabled(true);
-        Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
-//        bitmapHolderImageView.setImageBitmap(bitmap);
-        addView(bitmapHolderImageView);
-    }
-
-    public void setPaintMode(boolean paintMode, Bitmap bitmap) {
-        if (paintMode) {
-            if (mBrushDrawingView != null) {
-                mBrushDrawingView.setBrushDrawingMode(true);
-            }
-            if (bitmap != null) {
-                init(null);
-                Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
-            }
-        } else {
-            if (mBrushDrawingView != null) {
-                mBrushDrawingView.setBrushDrawingMode(false);
-            }
-        }
+    /**
+     * Source image which you want to edit
+     *
+     * @return source ImageView
+     */
+    public ImageView getSource() {
+        return mImgSource;
     }
 
     public void setBrushSize(float size) {
@@ -145,5 +124,9 @@ public class TextStickerView extends RelativeLayout {
     public void setStrokeAlpha(float alpha) {
         if (mBrushDrawingView != null)
             mBrushDrawingView.setOpacity((int) alpha);
+    }
+
+    BrushDrawingView getBrushDrawingView() {
+        return mBrushDrawingView;
     }
 }

@@ -1,5 +1,6 @@
 package net.iGap.viewmodel;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.databinding.ObservableBoolean;
@@ -210,6 +211,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
     public void setPaymentResult(Payment payment) {
         if (payment.getStatus().equals("SUCCESS") || payment.getStatus().equals("PAID")) {
+            Log.e("jdhfjhfjsdhf", "setPaymentResult: " );
             checkOrderStatus(payment.getOrderId());
             if (payment.getDiscount() != null && !payment.getDiscount().equals("null")) {
                 discountReceiptVisibility.set(View.VISIBLE);
@@ -220,6 +222,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 taxReceiptAmount.set(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(payment.getTax()) : payment.getTax());
             }
         } else {
+            Log.e("jdhfjhfjsdhf", "setPaymentResultError: "+payment.getMessage()+"/"+payment.getStatus());
             showRetryView.set(View.GONE);
             showLoadingView.set(View.GONE);
             showMainView.set(View.VISIBLE);
@@ -250,6 +253,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         repository.checkOrder(token, this, new ResponseCallback<CheckOrderResponse>() {
             @Override
             public void onSuccess(CheckOrderResponse data) {
+                Log.e("jdhfjhfjsdhf", "checkOrderToken: " );
                 showLoadingView.set(View.GONE);
                 showMainView.set(View.VISIBLE);
                 showDiscountCoupon.set(View.VISIBLE);
@@ -268,6 +272,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             @Override
             public void onError(String error) {
                 onErrorHandler(error);
+                Log.e("jdhfjhfjsdhf", "checkOrderTokenError: "+error );
             }
 
             @Override
@@ -287,6 +292,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             repository.checkOrderForDiscount(token, coupon, this, new ResponseCallback<CheckOrderResponse>() {
                 @Override
                 public void onSuccess(CheckOrderResponse data) {
+                    Log.e("jdhfjhfjsdhf", "onSuccess2: " );
                     discountCodeEnable.set(false);
                     saveDiscountCodeEnable.set(false);
                     saveDiscountCodeColor.set(R.color.gray);
@@ -304,6 +310,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
 
                 @Override
                 public void onError(String error) {
+                    Log.e("jdhfjhfjsdhf", "onError2: "+error );
                     discountCodeEnable.set(true);
                     saveDiscountCodeEnable.set(true);
                     saveDiscountCodeColor.set(R.color.green);
@@ -329,6 +336,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
         repository.checkOrderStatus(orderId, this, new ResponseCallback<CheckOrderStatusResponse>() {
             @Override
             public void onSuccess(CheckOrderStatusResponse data) {
+                Log.e("jdhfjhfjsdhf", "checkOrderStatus: " );
                 showPaymentErrorMessage.set(View.VISIBLE);
                 showPaymentStatus.set(View.VISIBLE);
                 showRetryView.set(View.GONE);
@@ -359,6 +367,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             @Override
             public void onError(String error) {
                 onErrorHandler(error);
+                Log.e("jdhfjhfjsdhf", "checkOrderStatusError: "+error );
             }
 
             @Override
