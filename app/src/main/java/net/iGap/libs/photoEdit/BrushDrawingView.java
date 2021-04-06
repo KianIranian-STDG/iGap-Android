@@ -161,7 +161,7 @@ public class BrushDrawingView extends View {
         invalidate();
     }
 
-    void setBrushViewChangeListener(BrushViewChangeListener brushViewChangeListener) {
+    public void setBrushViewChangeListener(BrushViewChangeListener brushViewChangeListener) {
         mBrushViewChangeListener = brushViewChangeListener;
     }
 
@@ -220,7 +220,7 @@ public class BrushDrawingView extends View {
         }
     }
 
-    boolean undo() {
+    public boolean undo() {
         if (!mDrawnPaths.empty()) {
             mRedoPaths.push(mDrawnPaths.pop());
             invalidate();

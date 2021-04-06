@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -47,6 +49,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.hanks.library.AnimateCheckBox;
+import com.zomato.photofilters.imageprocessors.Filter;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -66,6 +69,7 @@ import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
 import net.iGap.libs.photoEdit.PhotoEditorView;
+import net.iGap.libs.photoEdit.ViewType;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
@@ -93,7 +97,8 @@ import yogesh.firzen.mukkiasevaigal.M;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
 
-public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.Listener, OnPhotoEditorListener, BrushConfigDialog.Properties, BrushViewChangeListener {
+public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.Listener,
+        OnPhotoEditorListener, BrushConfigDialog.Properties, BrushViewChangeListener, EmojiDialogFrag.EmojiListener, FilterDialogFragment.FiltersListFragmentListener {
     private static final float MAX_PERCENT = 100;
     private static final float MAX_ALPHA = 255;
     private static final float INITIAL_WIDTH = 50;
@@ -235,6 +240,12 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         setTextView.setVisibility(View.GONE);
         toolbarPanel.addView(setTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
 
+        revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        revertTextView.setText(context.getString(R.string.forward_icon));
+        revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        revertTextView.setGravity(Gravity.CENTER);
+        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 3, 0));
+
         countImageTextView = new TextView(context);
         countImageTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
         countImageTextView.setText(context.getString(R.string.photo));
@@ -242,13 +253,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         countImageTextView.setTextSize(22);
         countImageTextView.setTypeface(countImageTextView.getTypeface(), Typeface.BOLD);
         toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 1, 0));
-
-        revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        revertTextView.setText(context.getString(R.string.forward_icon));
-        revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        revertTextView.setGravity(Gravity.CENTER);
-        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 3, 0));
-
 
         animateCheckBox = new AnimCheckBox(context);
         animateCheckBox.setBackground(context.getResources().getDrawable(R.drawable.background_check));
@@ -377,6 +381,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         addedViews = new ArrayList<>();
+        redoViews = new ArrayList<>();
         path = getArguments().getString(PATH);
         brushConfigDialog = new BrushConfigDialog();
         brushConfigDialog.setPropertiesChangeListener(this);
@@ -506,6 +511,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                     textStickersParentView.setPaintMode(true, BitmapFactory.decodeFile(path));
                 }
                 mode = Modes.PAINT;
+                textStickersParentView.getmBrushDrawingView().setBrushViewChangeListener(PhotoViewer.this);
                 String tag = brushConfigDialog.getTag();
 
                 // Avoid IllegalStateException "Fragment already added"
@@ -518,6 +524,20 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             }
         });
         initStroke();
+
+        revertTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                if (onPaintChanged.getValue() != null) {
+//                    if (onPaintChanged.getValue() > 0) {
+//                       undo();
+//                    } else {
+//                        popBackStackFragment();
+//                    }
+//                }
+                undo();
+            }
+        });
         rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -527,7 +547,14 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 }
             }
         });
-
+        emoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EmojiDialogFrag emojiDialogFrag = new EmojiDialogFrag();
+                emojiDialogFrag.setEmojiListener(PhotoViewer.this::onEmojiClick);
+                emojiDialogFrag.show(getParentFragmentManager(), emojiDialogFrag.getTag());
+            }
+        });
     }
 
     private Bitmap getFinalBitmapAfterAddText(View view) {
@@ -617,6 +644,56 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             }
         }
     }
+
+    public void addEmoji(Typeface emojiTypeface, String emojiName) {
+        textStickersParentView.getmBrushDrawingView().setBrushDrawingMode(false);
+
+        FrameLayout rootView = new FrameLayout(getContext());
+        FrameLayout stickerBorder = new FrameLayout(getContext());
+//                    stickerBorder.setBackground(getResources().getDrawable(R.drawable.background_border));
+        rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
+
+        TextView textTv = new TextView(getContext());
+        textTv.setTextColor(Color.BLACK);
+        textTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
+                18);
+        textTv.setGravity(Gravity.CENTER);
+        textTv.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        stickerBorder.addView(textTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+
+
+        if (emojiTypeface != null) {
+            textTv.setTypeface(emojiTypeface);
+        }
+        textTv.setTextSize(56);
+        textTv.setText(emojiName);
+
+        MultiTouchListener multiTouchListener = new MultiTouchListener(
+                null,
+                textStickersParentView,
+                imageViewTouch,
+                PhotoViewer.this, getContext());
+
+        multiTouchListener.setOnGestureControl(new OnGestureControl() {
+            boolean isDownAlready = false;
+
+            @Override
+            public void onClick() {
+            }
+
+            @Override
+            public void onDown() {
+            }
+
+            @Override
+            public void onLongClick() {
+            }
+        });
+        rootView.setOnTouchListener(multiTouchListener);
+
+        addViewToParent(rootView);
+    }
+
 
     @Override
     public void onSizeChanged(int keyboardSize, boolean land) {
@@ -714,6 +791,17 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     public void onStopDrawing() {
 
     }
+
+    @Override
+    public void onEmojiClick(String emojiUnicode) {
+        addEmoji(null, emojiUnicode);
+    }
+
+    @Override
+    public void onFilterSelected(PhotoFilter filter) {
+        textStickersParentView.setFilterEffect(filter);
+    }
+
 
     private class AdapterViewPager extends PagerAdapter {
 
@@ -815,32 +903,42 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         });
     }
 
-    private Bitmap decodeFile(File f) {
-        try {
-            //decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-            //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = getSize(-1);
-            int width_tmp = o.outWidth, height_tmp = o.outHeight;
-            int scale = 1;
-            while (true) {
-                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
-                    break;
-                width_tmp /= 2;
-                height_tmp /= 2;
-                scale++;
-            }
+    private class FilterImageTask extends AsyncTask<Filter, Integer, Bitmap> {
+        Bitmap filteredImage;
 
-            //decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
+        @Override
+        protected Bitmap doInBackground(Filter... filters) {
+            // applying the selected filter
+            filteredImage = BitmapFactory.decodeFile(path).copy(Bitmap.Config.ARGB_8888, true);
+            // preview filtered image
+            Bitmap bitmap = filters[0].processFilter(filteredImage);
+
+            return filteredImage.copy(Bitmap.Config.ARGB_8888, true);
         }
-        return null;
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+
+            textStickersParentView.updateImageBitmap(bitmap);
+        }
     }
+
+    public boolean undo() {
+        if (addedViews.size() > 0) {
+            View removeView = addedViews.get(addedViews.size() - 1);
+            if (removeView instanceof BrushDrawingView) {
+                return textStickersParentView.getmBrushDrawingView() != null && textStickersParentView.getmBrushDrawingView().undo();
+            } else {
+                addedViews.remove(addedViews.size() - 1);
+                textStickersParentView.removeView(removeView);
+                redoViews.add(removeView);
+                onPaintChanged.setValue(addedViews.size());
+            }
+        }
+        return addedViews.size() != 0;
+    }
+
 
     public int getSize(float size) {
         return (int) (size < 0 ? size : dp(size));
@@ -921,6 +1019,39 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 rootView.requestLayout();
 
             }
+        } else if (event == KeyboardView.MODE_EMOJI) {
+            if (emojiView == null) {
+                createEmojiView();
+            }
+
+            captionEditText.requestFocus();
+            emojiView.setVisibility(VISIBLE);
+            chatKeyBoardContainer.setVisibility(VISIBLE);
+
+            if (keyboardHeight <= 0) {
+                keyboardHeight = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT, LayoutCreator.dp(300));
+            }
+            if (keyboardHeightLand <= 0) {
+                keyboardHeightLand = emojiSharedPreferences.getInt(SHP_SETTING.KEY_KEYBOARD_HEIGHT_LAND, LayoutCreator.dp(300));
+            }
+
+            int currentHeight = AndroidUtils.displaySize.x > AndroidUtils.displaySize.y ? keyboardHeightLand : keyboardHeight;
+
+            ViewGroup.LayoutParams layoutParams = chatKeyBoardContainer.getLayoutParams();
+            layoutParams.width = AndroidUtils.displaySize.x;
+            layoutParams.height = currentHeight;
+            chatKeyBoardContainer.setLayoutParams(layoutParams);
+
+            if (keyboardVisible) {
+                closeKeyboard();
+            }
+
+            if (rootView != null) {
+                emojiPadding = currentHeight;
+                rootView.requestLayout();
+                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                bottomLayoutPanel.setVisibility(View.GONE);
+            }
         } else {
             cancelCropLayout.setVisibility(VISIBLE);
             chatKeyBoardContainer.setVisibility(View.GONE);
@@ -929,6 +1060,10 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             closeKeyboard();
         }
 
+    }
+
+    private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
+        emoji.setText(drawableResourceId);
     }
 
     private void createEmojiView() {
@@ -1029,6 +1164,27 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         captionEditText.clearFocus();
         AndroidUtils.hideKeyboard(captionEditText);
     }
+
+    private ArrayList<String> getEmojis(Context context) {
+        ArrayList<String> convertedEmojiList = new ArrayList<>();
+        String[] emojiList = context.getResources().getStringArray(R.array.photo_editor_emoji);
+        for (String emojiUnicode : emojiList) {
+            convertedEmojiList.add(convertEmoji(emojiUnicode));
+        }
+        return convertedEmojiList;
+    }
+
+    private static String convertEmoji(String emoji) {
+        String returnedEmoji;
+        try {
+            int convertEmojiToInt = Integer.parseInt(emoji.substring(2), 16);
+            returnedEmoji = new String(Character.toChars(convertEmojiToInt));
+        } catch (NumberFormatException e) {
+            returnedEmoji = "";
+        }
+        return returnedEmoji;
+    }
+
 
     enum Modes {
         PAINT, ADD_TEXT

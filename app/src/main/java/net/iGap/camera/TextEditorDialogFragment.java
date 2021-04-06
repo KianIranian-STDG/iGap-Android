@@ -89,6 +89,7 @@ public class TextEditorDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = new FrameLayout(getContext());
         rootView.setBackgroundColor(Color.BLACK);
+        rootView.setBackgroundColor(Color.TRANSPARENT);
 
         addTextEditTExt = new EditText(getContext());
         addTextEditTExt.setGravity(Gravity.CENTER);

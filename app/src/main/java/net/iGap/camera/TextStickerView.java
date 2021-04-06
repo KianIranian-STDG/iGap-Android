@@ -5,11 +5,13 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
@@ -23,7 +25,9 @@ import java.io.File;
 public class TextStickerView extends RelativeLayout {
     private FilterImageView bitmapHolderImageView;
     private BrushDrawingView mBrushDrawingView;
-    private static final int imgSrcId = 1, brushSrcId = 2;
+    private ImageFilterView mImageFilterView;
+    private static final int imgSrcId = 1, brushSrcId = 2, glFilterId = 3;
+    ;
 
     public TextStickerView(Context context, boolean isPaintMode) {
         super(context);
@@ -74,6 +78,12 @@ public class TextStickerView extends RelativeLayout {
         brushParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
         brushParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
 
+        //Setup GLSurface attributes
+        mImageFilterView = new ImageFilterView(getContext());
+        mImageFilterView.setId(glFilterId);
+        mImageFilterView.setVisibility(GONE);
+
+
         //Align brush to the size of image view
         RelativeLayout.LayoutParams imgFilterParam = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -81,7 +91,7 @@ public class TextStickerView extends RelativeLayout {
         imgFilterParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
         imgFilterParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
 
-
+        addView(mImageFilterView, imgFilterParam);
         //Add brush view
         addView(mBrushDrawingView, brushParam);
     }
@@ -109,6 +119,28 @@ public class TextStickerView extends RelativeLayout {
         Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
 //        bitmapHolderImageView.setImageBitmap(bitmap);
         addView(bitmapHolderImageView);
+    }
+
+    void saveFilter(@NonNull final OnSaveBitmap onSaveBitmap) {
+        if (mImageFilterView.getVisibility() == VISIBLE) {
+            mImageFilterView.saveBitmap(new OnSaveBitmap() {
+                @Override
+                public void onBitmapReady(final Bitmap saveBitmap) {
+                    bitmapHolderImageView.setImageBitmap(saveBitmap);
+                    mImageFilterView.setVisibility(GONE);
+                    onSaveBitmap.onBitmapReady(saveBitmap);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    onSaveBitmap.onFailure(e);
+                }
+            });
+        } else {
+            onSaveBitmap.onBitmapReady(bitmapHolderImageView.getBitmap());
+        }
+
+
     }
 
     public void setPaintMode(boolean paintMode, Bitmap bitmap) {
@@ -145,5 +177,25 @@ public class TextStickerView extends RelativeLayout {
     public void setStrokeAlpha(float alpha) {
         if (mBrushDrawingView != null)
             mBrushDrawingView.setOpacity((int) alpha);
+    }
+
+    public ImageFilterView getmImageFilterView() {
+        return mImageFilterView;
+    }
+
+    public BrushDrawingView getmBrushDrawingView() {
+        return mBrushDrawingView;
+    }
+
+    void setFilterEffect(PhotoFilter filterType) {
+        mImageFilterView.setVisibility(VISIBLE);
+        mImageFilterView.setSourceBitmap(bitmapHolderImageView.getBitmap());
+        mImageFilterView.setFilterEffect(filterType);
+    }
+
+    void setFilterEffect(CustomEffect customEffect) {
+        mImageFilterView.setVisibility(VISIBLE);
+        mImageFilterView.setSourceBitmap(bitmapHolderImageView.getBitmap());
+        mImageFilterView.setFilterEffect(customEffect);
     }
 }
