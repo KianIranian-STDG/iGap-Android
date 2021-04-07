@@ -113,7 +113,7 @@
                     app:layout_constraintTop_toTopOf="@+id/billImage"
                     app:layout_constraintBottom_toBottomOf="@+id/billImage"
                     app:layout_constraintStart_toStartOf="@+id/billImage"
-                    app:layout_constraintEnd_toEndOf="@+id/billImage" />
+                    app:layout_constraintEnd_toEndOf="@+id/billImage"/>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardHolder"
@@ -143,7 +143,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintDimensionRatio="2:1"
-                            app:layout_constraintWidth_percent="0.25" />
+                            app:layout_constraintWidth_percent="0.25"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billIDTitle"
@@ -159,7 +159,7 @@
                             android:gravity="start"
                             android:ellipsize="end"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/baseLine2" />
+                            app:layout_constraintTop_toBottomOf="@+id/baseLine2"/>
 
                         <View
                             android:id="@+id/followUp"
@@ -171,7 +171,7 @@
                             android:layout_marginEnd="@dimen/dp32"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/billIDTitle" />
+                            app:layout_constraintTop_toBottomOf="@+id/billIDTitle"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billID"
@@ -187,7 +187,7 @@
                             android:layout_marginRight="@dimen/dp16"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/billIDTitle"
-                            app:layout_constraintBottom_toBottomOf="@+id/billIDTitle" />
+                            app:layout_constraintBottom_toBottomOf="@+id/billIDTitle"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billPayIDTitle"
@@ -203,7 +203,7 @@
                             android:gravity="start"
                             android:ellipsize="end"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/followUp" />
+                            app:layout_constraintTop_toBottomOf="@+id/followUp"/>
 
                         <View
                             android:id="@+id/followUp4"
@@ -215,7 +215,7 @@
                             android:layout_marginEnd="@dimen/dp32"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/billPayIDTitle" />
+                            app:layout_constraintTop_toBottomOf="@+id/billPayIDTitle"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billPayID"
@@ -231,7 +231,7 @@
                             android:layout_marginRight="@dimen/dp16"
                             app:layout_constraintEnd_toStartOf="@+id/ProgressVPay"
                             app:layout_constraintTop_toTopOf="@+id/billPayIDTitle"
-                            app:layout_constraintBottom_toBottomOf="@+id/billPayIDTitle" />
+                            app:layout_constraintBottom_toBottomOf="@+id/billPayIDTitle"/>
 
                         <ProgressBar
                             android:id="@+id/ProgressVPay"
@@ -260,7 +260,7 @@
                             android:gravity="start"
                             android:ellipsize="end"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/followUp4" />
+                            app:layout_constraintTop_toBottomOf="@+id/followUp4"/>
 
                         <View
                             android:id="@+id/followUp2"
@@ -272,7 +272,7 @@
                             android:layout_marginEnd="@dimen/dp32"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/billPriceTitle" />
+                            app:layout_constraintTop_toBottomOf="@+id/billPriceTitle"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billPrice"
@@ -288,7 +288,7 @@
                             android:layout_marginRight="@dimen/dp16"
                             app:layout_constraintEnd_toStartOf="@+id/ProgressVPrice"
                             app:layout_constraintTop_toTopOf="@+id/billPriceTitle"
-                            app:layout_constraintBottom_toBottomOf="@+id/billPriceTitle" />
+                            app:layout_constraintBottom_toBottomOf="@+id/billPriceTitle"/>
 
                         <ProgressBar
                             android:id="@+id/ProgressVPrice"
@@ -319,7 +319,7 @@
                             android:ellipsize="end"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/followUp2"
-                            app:layout_constraintBottom_toBottomOf="parent" />
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/billTime"
@@ -335,7 +335,7 @@
                             android:layout_marginRight="@dimen/dp16"
                             app:layout_constraintEnd_toStartOf="@+id/ProgressVTime"
                             app:layout_constraintTop_toTopOf="@+id/billTimeTitle"
-                            app:layout_constraintBottom_toBottomOf="@+id/billTimeTitle" />
+                            app:layout_constraintBottom_toBottomOf="@+id/billTimeTitle"/>
 
                         <ProgressBar
                             android:id="@+id/ProgressVTime"
@@ -441,7 +441,7 @@
                     android:layout_marginLeft="@dimen/dp32"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/KontorInfo" />
+                    app:layout_constraintTop_toBottomOf="@+id/KontorInfo"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/showBillImage"
@@ -460,7 +460,7 @@
                     android:layout_marginLeft="@dimen/dp32"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/add_to_list" />
+                    app:layout_constraintTop_toBottomOf="@+id/add_to_list"/>
 
                 <ProgressBar
                     android:id="@+id/ProgressDownloadImageV"

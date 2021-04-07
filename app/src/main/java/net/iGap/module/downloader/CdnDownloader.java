@@ -11,6 +11,7 @@ import com.downloader.Status;
 
 import net.iGap.controllers.BaseController;
 import net.iGap.controllers.MessageDataStorage;
+import net.iGap.helper.FileLog;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoFileDownload.FileDownload.Selector;
@@ -92,6 +93,7 @@ public class CdnDownloader extends BaseController implements IDownloader {
                         @Override
                         public void onError(Error error) {
                             handleError(finalPublicMessage, error.getServerErrorMessage());
+                            FileLog.e("CDN Downloader", error.getConnectionException());
                         }
                     });
             requestedDownload.put(publicMessage.key, publicMessage);

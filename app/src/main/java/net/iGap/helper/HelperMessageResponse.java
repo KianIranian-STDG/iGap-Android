@@ -10,10 +10,12 @@
 
 package net.iGap.helper;
 
+import net.iGap.G;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmNotificationRoomMessage;
@@ -124,6 +126,10 @@ public class HelperMessageResponse {
              * invoke following callback when I'm the sender and the message has updated
              */
             ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
+        }
+
+        if ((roomMessage.getAuthor().getUser().getUserId() == AccountManager.getInstance().getCurrentUser().getId()) && roomMessage.getAttachment() != null) {
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken()));
         }
     }
 }

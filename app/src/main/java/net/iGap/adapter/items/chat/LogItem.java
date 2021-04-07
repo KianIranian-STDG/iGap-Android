@@ -47,8 +47,8 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-        super.bindView(holder, payloads);
-        holder.text.setText(HelperLogMessage.deserializeLog(holder.text.getContext(), mMessage.getLogs(), true));
+        super.bindView(holder, payloads);// TODO: 12/29/20 MESSAGE_REFACTOR
+       holder.text.setText(HelperLogMessage.deserializeLog(holder.text.getContext(), messageObject.log.data, true));
     }
 
     @Override

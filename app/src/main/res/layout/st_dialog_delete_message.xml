@@ -20,7 +20,7 @@
         android:layout_marginBottom="@dimen/dp8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/del_for"
@@ -36,7 +36,7 @@
         android:gravity="start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/content" />
+        app:layout_constraintTop_toBottomOf="@id/content"/>
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/del_from_device"

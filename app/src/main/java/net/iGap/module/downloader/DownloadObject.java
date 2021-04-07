@@ -6,6 +6,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmThumbnail;
+import net.iGap.structs.AttachmentObject;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.Locale;
@@ -78,7 +80,81 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         return struct;
     }
 
-    public static DownloadObject createForRoomMessage(RealmRoomMessage message) {
+    public static DownloadObject createForThumb(AttachmentObject attachment, int messageType, boolean big) {
+        if (attachment == null) {
+            return null;
+        }
+
+        final AttachmentObject thumbnail = big ? attachment.largeThumbnail : attachment.smallThumbnail;
+
+        if (thumbnail == null || (thumbnail.cacheId == null || thumbnail.cacheId.isEmpty())) {
+            return null;
+        }
+
+        DownloadObject struct = new DownloadObject();
+        struct.selector = big ? LARGE_THUMBNAIL_VALUE : SMALL_THUMBNAIL_VALUE;
+        struct.key = createKey(thumbnail.cacheId, struct.selector);
+        struct.thumbCacheId = thumbnail.cacheId;
+        struct.mainCacheId = attachment.cacheId;
+        struct.fileToken = attachment.token;
+        struct.fileName = attachment.name;
+        struct.fileSize = big ? attachment.largeThumbnail.size : attachment.smallThumbnail.size;
+        struct.mimeType = struct.extractMime(struct.fileName);
+        struct.publicUrl = struct.getPublicUrl(attachment.publicUrl);
+        struct.priority = HttpRequest.PRIORITY.PRIORITY_HIGH;
+
+        String path = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+        struct.destFile = new File(path + "/" + struct.thumbCacheId + "_" + struct.mimeType);
+        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.valueOf(messageType);
+
+        if (struct.tempFile.exists()) {
+            struct.offset = struct.tempFile.length();
+
+            if (struct.offset > 0 && struct.fileSize > 0) {
+                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            }
+        }
+
+        return struct;
+    }
+
+
+    public static DownloadObject createForRoomMessage(MessageObject messageObject) {
+        final MessageObject finalMessage = RealmRoomMessage.getFinalMessage(messageObject);
+
+        if (finalMessage == null || finalMessage.attachment == null) {
+            return null;
+        }
+
+        DownloadObject struct = new DownloadObject();
+        struct.selector = FILE_VALUE;
+        struct.key = createKey(finalMessage.attachment.cacheId, struct.selector);
+        struct.mainCacheId = finalMessage.attachment.cacheId;
+        struct.fileToken = finalMessage.attachment.token;
+        struct.fileName = finalMessage.attachment.name;
+        struct.fileSize = finalMessage.attachment.size;
+        struct.mimeType = struct.extractMime(struct.fileName);
+        struct.publicUrl = struct.getPublicUrl(finalMessage.attachment.publicUrl);
+        struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+
+        String path = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(finalMessage.messageType));
+        struct.destFile = new File(path + "/" + struct.mainCacheId + "_" + struct.mimeType);
+        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.valueOf(finalMessage.messageType);
+
+        if (struct.tempFile.exists()) {
+            struct.offset = struct.tempFile.length();
+
+            if (struct.offset > 0 && struct.fileSize > 0) {
+                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            }
+        }
+
+        return struct;
+    }
+
+    public static DownloadObject createForRoomMessage(RealmRoomMessage message) { // TODO: 1/18/21 MESSAGE_REFACTOR
         final RealmRoomMessage finalMessage = RealmRoomMessage.getFinalMessage(message);
 
         if (finalMessage == null || finalMessage.attachment == null) {
@@ -120,7 +196,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
 
         DownloadObject struct = new DownloadObject();
         struct.selector = LARGE_THUMBNAIL_VALUE;
-        struct.key = createKey(attachment.cacheId, struct.selector);
+        struct.key = createKey(String.valueOf(attachment.id), struct.selector);
         struct.mainCacheId = attachment.cacheId;
         struct.fileToken = attachment.token;
         struct.fileName = attachment.name;
@@ -129,9 +205,10 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.publicUrl = struct.getPublicUrl(attachment.url);
         struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
 
-        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_TEMP, true);
+        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
         struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
         struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
 
         if (struct.tempFile.exists()) {
             struct.offset = struct.tempFile.length();

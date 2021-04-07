@@ -7,6 +7,9 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -23,10 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;

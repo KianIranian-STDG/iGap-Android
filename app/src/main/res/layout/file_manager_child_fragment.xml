@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/standardTextSize"
-                android:text="@string/no_item" />
+                android:text="@string/no_item"/>
 
             <TextView
                 android:id="@+id/btnBack"
@@ -45,7 +45,7 @@
                 android:background="@drawable/shape_file_manager_file_bg"
                 style="@style/myIconToolbarStyle"
                 android:text="@string/back_icon"
-                android:layout_marginTop="@dimen/dp6" />
+                android:layout_marginTop="@dimen/dp6"/>
 
         </LinearLayout>
 

@@ -21,6 +21,7 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperLogout;
@@ -28,7 +29,6 @@ import net.iGap.helper.HelperPreferences;
 import net.iGap.model.PassCode;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
 
 import java.io.IOException;

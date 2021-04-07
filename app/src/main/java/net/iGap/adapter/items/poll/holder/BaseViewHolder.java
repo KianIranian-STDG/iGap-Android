@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.adapter.items.poll.PollItem;
 import net.iGap.adapter.items.poll.PollItemField;
 import net.iGap.request.RequestClientSetPollItemClick;
+
+import yogesh.firzen.mukkiasevaigal.M;
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     private long mLastClickTime = 0;

@@ -65,7 +65,7 @@ public class BindingAdapter {
         if (errorMessage != 0) {
             view.setErrorEnabled(true);
             view.setError(view.getContext().getString(errorMessage));
-        } else {
+        }else{
             view.setError("");
             view.setErrorEnabled(false);
         }

@@ -43,12 +43,12 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.CountryReader;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.structs.StructListOfContact;
 import net.iGap.observers.interfaces.OnCountryCallBack;
 import net.iGap.observers.interfaces.OnUserContactEdit;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.module.CountryReader;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.structs.StructListOfContact;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserContactsEdit;
 
@@ -457,9 +457,9 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             loader.setVisibility(View.GONE);
             //HelperError.showSnackMessage(getString(R.string.user_edited), false);
             if (onContactUpdate != null)
-                onContactUpdate.updateContact(firstName, lastName);
+                onContactUpdate.updateContact(firstName , lastName);
             popBackStackFragment();
-        }, 100);
+        },100);
     }
 
     @Override
@@ -485,7 +485,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
 
     @FunctionalInterface
     public interface OnContactUpdate {
-        void updateContact(String name, String family);
+        void updateContact(String name , String family);
     }
 
 }

@@ -2,6 +2,8 @@ package net.iGap.repository.news;
 
 import net.iGap.api.NewsApi;
 import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.news.NewsApiArg;
 import net.iGap.model.news.NewsComment;
@@ -12,8 +14,6 @@ import net.iGap.model.news.NewsList;
 import net.iGap.model.news.NewsPN;
 import net.iGap.model.news.NewsPublisher;
 import net.iGap.model.news.NewsSubmitComment;
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
 
 import org.jetbrains.annotations.NotNull;
 

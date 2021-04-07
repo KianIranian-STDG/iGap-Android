@@ -77,7 +77,8 @@ public class ElectricityBillMainVM extends BaseAPIViewModel {
                 billPayID = payId;
                 billPrice = new HelperNumerical().getCommaSeparatedPrice((Integer.parseInt(price) * 1000)) + " ریال";
                 goToBillDetailFrag.setValue(true);
-            } else {
+            }
+            else {
                 activateError(R.string.elecBill_Entry_barcodeError);
             }
         }

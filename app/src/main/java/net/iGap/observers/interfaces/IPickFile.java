@@ -15,5 +15,5 @@ import java.util.List;
 
 public interface IPickFile extends Serializable {
 
-    void onPick(List<String> selectedPathList, String caption);
+    void onPick(List<String> selectedPathList , String caption);
 }

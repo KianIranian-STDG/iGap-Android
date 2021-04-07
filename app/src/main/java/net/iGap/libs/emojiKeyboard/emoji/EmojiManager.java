@@ -21,6 +21,7 @@ import net.iGap.G;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 import java.io.InputStream;
@@ -54,7 +55,7 @@ public class EmojiManager {
     private Paint placeholderPaint;
     private boolean recentEmojiLoaded;
 
-    private Runnable invalidateRunnable = () -> EventManager.getInstance().postEvent(EventManager.EMOJI_LOADED);
+    private Runnable invalidateRunnable = () -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.EMOJI_LOADED);
 
     static {
         getInstance();

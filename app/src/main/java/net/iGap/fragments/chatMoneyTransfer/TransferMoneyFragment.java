@@ -23,9 +23,9 @@ import net.iGap.R;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.observers.eventbus.EventListener;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.eventbus.SocketMessages;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
 import net.iGap.realm.RealmUserInfo;
@@ -46,7 +46,7 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.fragmentActivity;
 
-public class TransferMoneyFragment extends Fragment implements EventListener {
+public class TransferMoneyFragment extends Fragment implements EventManager.EventDelegate {
 
     private long peerId;
     private String userName;
@@ -117,7 +117,7 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
             }
         });
 
-        EventManager.getInstance().addEventListener(EventManager.ON_INIT_PAY, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_INIT_PAY, this);
 
 
         amountEt.addTextChangedListener(new TextWatcher() {
@@ -164,11 +164,45 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 66) {
+            if (resultCode == RESULT_OK) {
+                PaymentResult paymentResult = (PaymentResult) data.getSerializableExtra("result");
+                if (paymentResult != null) {
+                    HelperError.showSnackMessage(getResources().getString(R.string.trace_number)
+                            + String.valueOf(paymentResult.traceNumber)
+                            + getResources().getString(R.string.amount_2)
+                            + paymentResult.amount, false);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedSuccess));
+                } else {
+                    HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultReceivedFailed));
+                }
+            } else {
+                HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, SocketMessages.PaymentResultNotReceived));
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void dismissProgress() {
+        progressBar.setVisibility(View.INVISIBLE);
+        confirmBtn.setEnabled(true);
+    }
+
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        confirmBtn.setEnabled(false);
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
         G.handler.post(() -> {
             confirmBtn.setEnabled(true);
             if (id == EventManager.ON_INIT_PAY) {
-                if (message[0].equals("")) {
+                if (args[0].equals("")) {
                     dismissProgress();
                     if (isAdded())
                         try {
@@ -180,7 +214,7 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
                 }
 
                 final ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse
-                        = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message[0];
+                        = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) args[0];
 
                 Web.getInstance().getWebService()
                         .getCards(null, false, true)
@@ -227,19 +261,19 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
                         });
             } else if (id == EventManager.ON_PAYMENT_RESULT_RECIEVED) {
                 dismissProgress();
-                int response = (int) message[0];
+                int response = (int) args[0];
                 switch (response) {
-                    case socketMessages.PaymentResultRecievedSuccess:
+                    case SocketMessages.PaymentResultReceivedSuccess:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
                         break;
 
-                    case socketMessages.PaymentResultRecievedFailed:
+                    case SocketMessages.PaymentResultReceivedFailed:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.not_success_2), false);
                         break;
 
-                    case socketMessages.PaymentResultNotRecieved:
+                    case SocketMessages.PaymentResultNotReceived:
                         fragmentActivity.onBackPressed();
                         HelperError.showSnackMessage(getResources().getString(R.string.result_3), false);
                         break;
@@ -248,39 +282,5 @@ public class TransferMoneyFragment extends Fragment implements EventListener {
                 dismissProgress();
             }
         });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 66) {
-            if (resultCode == RESULT_OK) {
-                PaymentResult paymentResult = (PaymentResult) data.getSerializableExtra("result");
-                if (paymentResult != null) {
-                    HelperError.showSnackMessage(getResources().getString(R.string.trace_number)
-                            + String.valueOf(paymentResult.traceNumber)
-                            + getResources().getString(R.string.amount_2)
-                            + paymentResult.amount, false);
-                    EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
-                } else {
-                    HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
-                    EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
-                }
-            } else {
-                HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
-                EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void dismissProgress() {
-        progressBar.setVisibility(View.INVISIBLE);
-        confirmBtn.setEnabled(true);
-    }
-
-    private void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-        confirmBtn.setEnabled(false);
     }
 }

@@ -2,7 +2,7 @@ package net.iGap.model.electricity_bill;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ElectricityResponseModel<G> extends ElectricityResponse {
+public class ElectricityResponseModel<G> extends ElectricityResponse{
 
     @SerializedName("data")
     private G data;

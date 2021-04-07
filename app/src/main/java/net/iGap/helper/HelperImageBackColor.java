@@ -114,7 +114,7 @@ public class HelperImageBackColor {
             textPaint.setColor(Color.parseColor(mColor));
             textPaint.setTextAlign(Paint.Align.CENTER);
             textPaint.setTextSize(fontSize);
-            textPaint.setTypeface(ResourcesCompat.getFont(G.context, R.font.main_font_bold));
+            textPaint.setTypeface(ResourcesCompat.getFont(G.context , R.font.main_font_bold));
             textPaint.setStyle(Paint.Style.FILL);
             cs.drawText(alphabetName, with / 2, with / 2 + fontSize / 4, textPaint);
         } catch (NullPointerException e) {

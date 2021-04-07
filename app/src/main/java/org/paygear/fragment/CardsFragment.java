@@ -40,11 +40,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.cachapa.expandablelayout.ExpandableLayout;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.Theme;
 import net.iGap.databinding.FragmentCardsBinding;
 import net.iGap.databinding.OtpDialogBinding;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
-import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
 
 import org.paygear.RaadApp;
@@ -74,7 +74,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CardsFragment extends Fragment implements ToolbarListener, OnFragmentInteraction, RefreshLayout, MerchantsListAdapter.ItemClickListener {
+public class CardsFragment extends Fragment implements ToolbarListener , OnFragmentInteraction, RefreshLayout, MerchantsListAdapter.ItemClickListener {
 
     private static final int COLLAPSE = 60;
 
@@ -102,7 +102,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
     FragmentCardsBinding mBinding;
     private HelperToolbar mHelperToolbar;
 
-    boolean checkAfterGift = false;
+    boolean checkAfterGift=false;
     String qrDataAccountId;
 
     public CardsFragment() {
@@ -116,7 +116,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
         return fragment;
     }
 
-    public static CardsFragment newInstance(boolean checkAfterGift, String qrDataAccountId) {
+    public static CardsFragment newInstance(boolean checkAfterGift,String qrDataAccountId) {
         CardsFragment fragment = new CardsFragment();
         Bundle args = new Bundle();
         args.putSerializable("CheckAfterGift", checkAfterGift);
@@ -131,7 +131,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPayment = (Payment) getArguments().getSerializable("Payment");
-            checkAfterGift = getArguments().getBoolean("CheckAfterGift");
+            checkAfterGift =  getArguments().getBoolean("CheckAfterGift");
             qrDataAccountId = getArguments().getString("QrDataAccountId");
         }
     }
@@ -164,7 +164,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.setting_icon, R.string.group_icon)
+                .setRightIcons(R.string.setting_icon , R.string.group_icon)
                 .setListener(this)
                 .setDefaultTitle(getString(R.string.wallet));
 
@@ -175,7 +175,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
             mHelperToolbar.setDefaultTitle(getString(R.string.select_card));
         } else {
             mHelperToolbar.setDefaultTitle(getString(R.string.wallet));
-            // mHelperToolbar.getLeftButton().setVisibility(View.INVISIBLE);
+           // mHelperToolbar.getLeftButton().setVisibility(View.INVISIBLE);
         }
         mRefreshLayout = view.findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(new RecyclerRefreshLayout.OnRefreshListener() {
@@ -217,7 +217,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
         updateAppBar();
         mCards = RaadApp.cards;
 
-        if (checkAfterGift) {
+        if(checkAfterGift){
             mCards = null;
         }
 
@@ -379,19 +379,19 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
                     }
 
                     //collapsedItem = -1;
-                    if (checkAfterGift) {
+                    if(checkAfterGift){
                         setAdapter();
                         checkAfterGift = false;
                         for (int i = 0; i < mCards.size(); i++) {
-                            if (qrDataAccountId.equals(mCards.get(i).clubId)) {
-                                if (getActivity() != null)
+                            if(qrDataAccountId.equals(mCards.get(i).clubId)){
+                                if(getActivity() != null)
                                     ((NavigationBarActivity) getActivity()).pushFullFragment(
                                             CardFragment.newInstance(mPayment, mCards.get(i)), "CardFragment");
 
                             }
                         }
 
-                    } else {
+                    }else {
                         setAdapter();
                     }
                 } else {
@@ -749,6 +749,7 @@ public class CardsFragment extends Fragment implements ToolbarListener, OnFragme
             //long giftPrice = card.balance - card.cashOutBalance;
             //giftBalance.setText(RaadCommonUtils.formatPrice(giftPrice, false));
             view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
+
 
 
         } else {

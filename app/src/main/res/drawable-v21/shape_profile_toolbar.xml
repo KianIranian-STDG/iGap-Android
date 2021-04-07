@@ -5,5 +5,6 @@
             <solid android:color="?attr/rootBackgroundColor" />
         </shape>
     </item>
-    <item android:drawable="?iGapToolbarBackground"></item>
+    <item android:drawable="?iGapToolbarBackground">
+    </item>
 </layer-list>

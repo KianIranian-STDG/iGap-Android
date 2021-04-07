@@ -79,7 +79,7 @@ public class IgapRetrofitInterceptor implements Interceptor {
         builder.method(request.method(), request.body());
 
         String token = tokenContainer.getToken();
-        Log.e(TAG, "intercept: " + token);
+        Log.e(TAG, "intercept: " + token );
 
         request = builder.build();
         Response response = chain

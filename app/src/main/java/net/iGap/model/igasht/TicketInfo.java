@@ -3,6 +3,7 @@ package net.iGap.model.igasht;
 import com.google.gson.annotations.SerializedName;
 
 import net.iGap.G;
+import net.iGap.model.igasht.IGashtVoucherInfo;
 
 import java.util.List;
 

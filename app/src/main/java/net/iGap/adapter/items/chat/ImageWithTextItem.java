@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -29,6 +31,7 @@ import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.structs.MessageObject;
 
 import java.util.List;
 
@@ -62,13 +65,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                 if (FragmentChat.isInSelectionMode) {
                     holder.itemView.performLongClick();
                 } else {
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (messageObject.status == MessageObject.STATUS_SENDING) {
                         return;
                     }
-                    if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                    if (messageObject.status == MessageObject.STATUS_FAILED) {
+                        messageClickListener.onFailedMessageClick(v, messageObject, holder.getAdapterPosition());
                     } else {
-                        messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
+                        messageClickListener.onOpenClick(v, messageObject, holder.getAdapterPosition());
                     }
                 }
             }
@@ -86,7 +89,8 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+//        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+        Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
     }
 
     @Override

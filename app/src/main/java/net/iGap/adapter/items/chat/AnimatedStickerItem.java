@@ -26,6 +26,7 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.repository.StickerRepository;
+import net.iGap.structs.MessageObject;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +53,7 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.stickerCell.setTag(structMessage.getAttachment().getToken());
+        holder.stickerCell.setTag(attachment.token);
         super.bindView(holder, payloads);
 
         holder.stickerCell.setOnLongClickListener(getLongClickPerform(holder));
@@ -67,23 +68,22 @@ public class AnimatedStickerItem extends AbstractMessage<AnimatedStickerItem, An
             if (FragmentChat.isInSelectionMode) {
                 holder.itemView.performLongClick();
             } else {
-                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                if (messageObject.status == MessageObject.STATUS_SENDING) {
                     return;
                 }
-                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                if (messageObject.status == MessageObject.STATUS_FAILED) {
+                    messageClickListener.onFailedMessageClick(v, messageObject, holder.getAdapterPosition());
                 } else {
-                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
+                    messageClickListener.onOpenClick(v, messageObject, holder.getAdapterPosition());
                 }
             }
         });
 
-        String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        String path = StickerRepository.getInstance().getStickerPath(attachment.token, attachment.name);
         if (new File(path).exists()) {
             holder.stickerCell.playAnimation(path);
         } else {
-            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(),
-                    structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
+            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(attachment.cacheId, attachment.token, attachment.size, path));
         }
     }
 

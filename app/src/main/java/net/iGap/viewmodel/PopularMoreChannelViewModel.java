@@ -5,12 +5,12 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.G;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.model.popularChannel.Advertisement;
 import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.ChildChannel;
 import net.iGap.model.popularChannel.GoToChannel;
 import net.iGap.model.popularChannel.Slide;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.viewmodel.repository.PopularChannelRepository;
 
 import java.util.ArrayList;

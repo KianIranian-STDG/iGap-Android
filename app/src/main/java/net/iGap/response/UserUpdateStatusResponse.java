@@ -10,9 +10,9 @@
 
 package net.iGap.response;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.helper.HelperLog;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmRegisteredInfo;

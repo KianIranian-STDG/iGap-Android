@@ -21,7 +21,9 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import net.iGap.BuildConfig;
 import net.iGap.R;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentProfileBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -29,9 +31,8 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
-import net.iGap.module.SHP_SETTING;
-import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.OnGetPermission;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.paygear.WalletActivity;
@@ -216,7 +217,7 @@ public class FragmentProfile extends BaseFragment {
                         .content(body)
                         .contentGravity(GravityEnum.CENTER)
                         .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
-                    String url = "http://d.igap.net/update";
+                    String url = BuildConfig.UPDATE_LINK;
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);

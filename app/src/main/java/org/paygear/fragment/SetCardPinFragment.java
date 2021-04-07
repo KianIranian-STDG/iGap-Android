@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,8 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.fragment.app.Fragment;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;

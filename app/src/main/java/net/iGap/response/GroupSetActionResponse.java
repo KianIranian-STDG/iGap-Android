@@ -10,11 +10,13 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
-import net.iGap.helper.HelperGetAction;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.G;
+import net.iGap.helper.HelperGetAction;
 import net.iGap.proto.ProtoGroupSetAction;
+
+import io.realm.Realm;
 
 public class GroupSetActionResponse extends MessageHandler {
 

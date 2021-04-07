@@ -22,10 +22,8 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessageWalletBill;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,19 +47,17 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
 
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
-        RealmRoomMessageWalletBill realmRoomMessageWalletBill = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletBill();
-        DbManager.getInstance().doRealmTask(realm -> {
-            String amount = String.valueOf(realmRoomMessageWalletBill.getAmount());
-            String billId = realmRoomMessageWalletBill.getBillId();
-            String payId = realmRoomMessageWalletBill.getPayId();
-            String cardNumber = realmRoomMessageWalletBill.getCardNumber();
-            String orderId = String.valueOf(realmRoomMessageWalletBill.getOrderId());
-            String terminalNo = String.valueOf(realmRoomMessageWalletBill.getTerminalNo());
-            String rrn = String.valueOf(realmRoomMessageWalletBill.getRrn());
-            String traceNumber = String.valueOf(realmRoomMessageWalletBill.getTraceNumber());
-            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletBill.getRequestTime()) + " " + "-" + " " + TimeUtils.toLocal(realmRoomMessageWalletBill.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+            String amount = String.valueOf(messageObject.wallet.billObject.amount);
+            String billId = messageObject.wallet.billObject.billId;
+            String payId = messageObject.wallet.billObject.payId;
+            String cardNumber = messageObject.wallet.billObject.cardNumber;
+            String orderId = String.valueOf(messageObject.wallet.billObject.orderId);
+            String terminalNo = String.valueOf(messageObject.wallet.billObject.terminalNo);
+            String rrn = String.valueOf(messageObject.wallet.billObject.rrn);
+            String traceNumber = String.valueOf(messageObject.wallet.billObject.traceNumber);
+            String persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.billObject.requestTime) + " " + "-" + " " + TimeUtils.toLocal(messageObject.wallet.billObject.requestTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
 
             if (HelperCalander.isPersianUnicode) {
                 amount = HelperCalander.convertToUnicodeFarsiNumber(amount);
@@ -76,7 +72,7 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
             }
 
             holder.amount.setText(amount);
-            holder.billType.setText(realmRoomMessageWalletBill.getBillType());
+            holder.billType.setText(messageObject.wallet.billObject.billType);
             holder.billId.setText(billId);
             holder.payId.setText(payId);
             holder.cardNumber.setText(cardNumber);
@@ -85,7 +81,7 @@ public class LogWalletBill extends AbstractMessage<LogWalletBill, LogWalletBill.
             holder.rrn.setText(rrn);
             holder.traceNumber.setText(traceNumber);
             holder.requestTime.setText(persianCalender);
-        });
+
     }
 
     @NotNull

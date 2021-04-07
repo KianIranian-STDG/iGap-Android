@@ -35,7 +35,6 @@ public class ActivityManageSpace extends ActivityEnhanced {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {

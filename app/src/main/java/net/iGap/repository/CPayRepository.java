@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.api.CPayApi;
 import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.cPay.CPayWalletAmountModel;
 import net.iGap.model.cPay.ChargeWalletBodyModel;
@@ -13,8 +15,6 @@ import net.iGap.model.cPay.PlaqueInfoModel;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
 import net.iGap.model.cPay.UserPlaquesModel;
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
 
 public class CPayRepository {
 

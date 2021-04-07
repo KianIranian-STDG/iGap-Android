@@ -10,11 +10,13 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.G;
 import net.iGap.proto.ProtoUserAvatarAdd;
 import net.iGap.realm.RealmAvatar;
+
+import io.realm.Realm;
 
 public class UserAvatarAddResponse extends MessageHandler {
 

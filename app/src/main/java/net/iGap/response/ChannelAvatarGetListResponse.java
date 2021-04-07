@@ -15,6 +15,8 @@ import net.iGap.proto.ProtoChannelAvatarGetList;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 
+import io.realm.Realm;
+
 public class ChannelAvatarGetListResponse extends MessageHandler {
 
     public int actionId;

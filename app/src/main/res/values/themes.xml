@@ -49,8 +49,7 @@
         <item name="iGapBottomSheetBackground">@drawable/bottom_sheet_background_dark</item>
         <item name="iGapTopRoundButtonPrimary">@drawable/button_round_background_dark</item>
         <item name="iGapCardToCardBackground">@drawable/background_item_card_to_card_dark</item>
-        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_dark
-        </item>
+        <item name="iGapCardToCardButtonBackground">@drawable/background_button_card_to_card_dark</item>
         <item name="iGapCardToCardButton">@drawable/background_card_to_card_dark</item>
         <item name="iGapCardToCardIconBackground">@drawable/background_card_to_card_icon_dark</item>
         <item name="iGapBottomSheetHeaderLine">@drawable/bottom_sheet_dialog_line_dark</item>

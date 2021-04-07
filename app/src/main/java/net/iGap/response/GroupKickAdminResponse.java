@@ -13,7 +13,7 @@ package net.iGap.response;
 import net.iGap.helper.HelperMember;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoGroupKickAdmin;
 import net.iGap.realm.RealmRoomAccess;
 
@@ -32,15 +32,15 @@ public class GroupKickAdminResponse extends MessageHandler {
             realm.executeTransaction(asyncRealm -> RealmRoomAccess.groupMemberPutOrUpdate(builder.getPermission(), builder.getMemberId(), builder.getRoomId(), asyncRealm));
         });
 
-        if (identity instanceof OnResponse) {
-            ((OnResponse) identity).onReceived(message, null);
+        if (identity instanceof RequestDelegate) {
+            ((RequestDelegate) identity).onReceived(message, null);
         }
     }
 
     @Override
     public void error() {
         super.error();
-        if (identity instanceof OnResponse)
-            ((OnResponse) identity).onReceived(null, message);
+        if (identity instanceof RequestDelegate)
+            ((RequestDelegate) identity).onReceived(null, message);
     }
 }

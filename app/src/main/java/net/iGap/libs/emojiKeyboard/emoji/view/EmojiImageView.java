@@ -15,18 +15,12 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
-import net.iGap.observers.eventbus.EventListener;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 @SuppressLint("ViewConstructor")
-public class EmojiImageView extends AppCompatImageView implements EventListener {
+public class EmojiImageView extends AppCompatImageView implements EventManager.EventDelegate {
     private boolean needToDrawBack;
-
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.EMOJI_LOADED)
-            G.runOnUiThread(this::invalidate);
-    }
 
     public EmojiImageView(Context context) {
         super(context);
@@ -37,13 +31,13 @@ public class EmojiImageView extends AppCompatImageView implements EventListener 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.EMOJI_LOADED, this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.EMOJI_LOADED, this);
     }
 
     @Override
@@ -81,5 +75,11 @@ public class EmojiImageView extends AppCompatImageView implements EventListener 
         }
         super.onDraw(canvas);
 
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.EMOJI_LOADED)
+            G.runOnUiThread(this::invalidate);
     }
 }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.top.lib.mpl.view.PaymentInitiator;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -20,6 +19,8 @@ import net.iGap.request.RequestMplSetSalesResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.top.lib.mpl.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 

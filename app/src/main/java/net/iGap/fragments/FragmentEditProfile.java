@@ -28,12 +28,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.Theme;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.databinding.FragmentEditProfileBinding;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SoftKeyboard;
-import net.iGap.module.Theme;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 public class FragmentEditProfile extends BaseFragment {

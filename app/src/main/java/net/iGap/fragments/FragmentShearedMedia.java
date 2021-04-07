@@ -21,7 +21,6 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.Gravity;
@@ -76,7 +75,6 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
-import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
 import net.iGap.observers.interfaces.OnComplete;
@@ -90,9 +88,9 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientCountRoomHistory;
 import net.iGap.request.RequestClientSearchRoomHistory;
+import net.iGap.structs.MessageObject;
 
 import org.jetbrains.annotations.NotNull;
-import org.parceler.Parcels;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -106,6 +104,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -404,9 +403,9 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Parcelable> messageInfos = new ArrayList<>(SelectedList.size());
+                ArrayList<MessageObject> messageInfos = new ArrayList<>(SelectedList.size());
                 for (StructShearedMedia media : SelectedList) {
-                    messageInfos.add(Parcels.wrap(new StructMessageInfo(media.item)));
+                    messageInfos.add(MessageObject.create(media.item));
                 }
                 FragmentChat.mForwardMessages = messageInfos;
                 adapter.resetSelected();
@@ -423,61 +422,52 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (roomType == ProtoGlobal.Room.Type.CHANNEL)
             rippleDeleteSelected.setVisibility(View.GONE);
 
-        rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                DbManager.getInstance().doRealmTask(realm -> {
-                    String count = SelectedList.size() + "";
-                    final RealmRoom realmRoom = RealmRoom.getRealmRoom(realm, roomId);
+        rippleDeleteSelected.setOnRippleCompleteListener(rippleView -> DbManager.getInstance().doRealmTask(realm -> {
+            
+            String count = SelectedList.size() + "";
+            final RealmRoom realmRoom = RealmRoom.getRealmRoom(realm, roomId);
 
-                    if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
-                        // show both Delete check box
-                        String delete;
-                        if (HelperCalander.isPersianUnicode) {
-                            delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
-                        } else {
-                            delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
-                        }
-                        new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                if (!dialog.isPromptCheckBoxChecked()) {
-                                    bothDeleteMessageId = null;
-                                }
-                                if (realmRoom != null) {
-                                    ArrayList<Long> selectedListForDel = new ArrayList<>();
-
-                                    for (StructShearedMedia item : SelectedList) {
-                                        selectedListForDel.add(item.messageId);
-                                    }
-                                    RealmRoomMessage.deleteSelectedMessages(realm, roomId, selectedListForDel, bothDeleteMessageId, roomType);
-                                }
-                                resetItems();
-                            }
-                        }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
-
-                    } else {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                bothDeleteMessageId = null;
-                                if (realmRoom != null) {
-                                    //TODO:// optimize code
-                                    ArrayList<Long> selectedListForDel = new ArrayList<>();
-
-
-                                    for (StructShearedMedia item : SelectedList) {
-                                        selectedListForDel.add(item.messageId);
-                                    }
-                                    RealmRoomMessage.deleteSelectedMessages(realm, roomId, selectedListForDel, bothDeleteMessageId, roomType);
-                                }
-                                resetItems();
-                            }
-                        }).show();
+            if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
+                // TODO: 1/10/21 OPTIMAZE CODE
+                // show both Delete check box
+                String delete;
+                if (HelperCalander.isPersianUnicode) {
+                    delete = HelperCalander.convertToUnicodeFarsiNumber(Objects.requireNonNull(getContext()).getResources().getString(R.string.st_desc_delete) + count);
+                } else {
+                    delete = HelperCalander.convertToUnicodeFarsiNumber(Objects.requireNonNull(getContext()).getResources().getString(R.string.st_desc_delete) + "the");
+                }
+                new MaterialDialog.Builder(getContext()).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive((dialog, which) -> {
+                    if (!dialog.isPromptCheckBoxChecked()) {
+                        bothDeleteMessageId = null;
                     }
-                });
+                    if (realmRoom != null) {
+                        ArrayList<Long> selectedListForDel = new ArrayList<>();
+
+                        for (StructShearedMedia item : SelectedList) {
+                            selectedListForDel.add(item.messageId);
+                        }
+                        getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, selectedListForDel, bothDeleteMessageId);
+                    }
+                    resetItems();
+                }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+
+            } else {
+                new MaterialDialog.Builder(Objects.requireNonNull(getContext())).title(R.string.message).content(getContext().getResources().getString(R.string.st_desc_delete)+ count).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        bothDeleteMessageId = null;
+                        if (realmRoom != null) {
+                            ArrayList<Long> messageIds = new ArrayList<>();
+                            for (StructShearedMedia item : SelectedList) {
+                                messageIds.add(item.messageId);
+                            }
+                            getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, messageIds, bothDeleteMessageId);
+                        }
+                        resetItems();
+                    }
+                }).show();
             }
-        });
+        }));
 
         txtNumberOfSelected = view.findViewById(R.id.asm_txt_number_of_selected);
 

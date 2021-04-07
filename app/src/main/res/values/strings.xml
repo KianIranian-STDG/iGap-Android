@@ -36,8 +36,8 @@
     <string name="rg_Select_Country">Select your Country</string>
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
-    <string name="verify_socket_message">Please enter verification code sent by iGap</string>
-    <string name="verify_sms_message">Please enter verification code sent by sms</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap to \n %1$s</string>
+    <string name="verify_sms_message">Please enter verification code sent by sms </string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
     <string name="verify_invalid_code_message">Unfortunately; the verification code is invalid , Please enter the correct one manually.</string>
@@ -944,7 +944,8 @@ Want to get it?</string>
     <string name="st_Abuse">Abuse</string>
     <string name="st_FakeAccount">Fake Account</string>
     <string name="st_checkbox_delete">Delete for</string>
-    <string name="st_desc_delete">Are you sure you want to delete %1$s message(s)?</string>
+    <string name="st_desc_delete">Are you sure you want to delete this message?</string>
+    <string name="st_desc_deletes">Are you sure you want to delete these messages?</string>
     <string name="st_send_report">Report was successfully sent.</string>
     <string name="set_position">Can not set position</string>
     <string name="date">Date</string>
@@ -1188,7 +1189,6 @@ Want to get it?</string>
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
     <string name="card_to_card">Request card to card</string>
-    <string name="top_sheet_behavior" translatable="false">net.iGap.module.dialog.topsheet.TopSheetBehavior</string>
     <string name="change_language_title">Change Language</string>
     <string name="terms_condition_title">Terms and Condition</string>
     <string name="warning">Warning</string>
@@ -2168,6 +2168,11 @@ Want to get it?</string>
     <string name="kuknos_send_token_error">Can Not send this token.</string>
     <string name="active_gift_card_note">Are you sure you want to activate your gift card ?! Note that once activated, it will not be possible to send it to another and the gift card information will only be visible to your account.</string>
     <string name="payment_discount_plans_title">Discount Plans</string>
+    <string name="discount_code">Discount Code</string>
+    <string name="enter_discount_code">Enter the discount code.</string>
+    <string name="save_discount_code">Save Code</string>
+    <string name="enter_your_discount_code">Enter Your discount code.</string>
+    <string name="discount_code_not_valid">Sorry, your discount code is incorrect.</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
     <string name="mobile_bank_activeNotification">Activate Notification</string>
@@ -2224,6 +2229,7 @@ Want to get it?</string>
     <string name="suggested_packages">Suggested packages</string>
     <string name="all_packages">All Packages</string>
     <string name="sim_type_not_choosed">SIM card not been chosen</string>
+    <string name="invalid_sim_type">Please change the SIM card type, There is no package for it. </string>
     <string name="credit_sim">Credit SIM</string>
     <string name="permanent_sim">Permanent SIM</string>
     <string name="credit_tdlte_sim">Credit TD-LTE SIM</string>
@@ -2271,6 +2277,7 @@ Want to get it?</string>
     <string name="Submitـomment">To view the poll results, please register your vote first!</string>
     <string name="location_list_tile">Search entertainment centers</string>
     <string name="share_file_link">Share public Link</string>
+    <string name="can_not_support_file">Can not support file</string>
 
     <string-array name="billsOptions">
         <item>Electricity</item>

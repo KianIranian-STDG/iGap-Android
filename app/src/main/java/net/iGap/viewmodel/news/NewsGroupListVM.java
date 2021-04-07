@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.model.news.NewsError;
-import net.iGap.model.news.NewsGroup;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.news.NewsAPIRepository;
+import net.iGap.model.news.NewsError;
+import net.iGap.model.news.NewsGroup;
 
 public class NewsGroupListVM extends BaseAPIViewModel {
 

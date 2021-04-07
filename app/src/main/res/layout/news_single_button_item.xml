@@ -22,6 +22,6 @@
         android:text="..."
         app:backgroundTint="@color/news_red"
         app:cornerRadius="3dp"
-        app:cardUseCompatPadding="true" />
+        app:cardUseCompatPadding="true"/>
 
 </LinearLayout>

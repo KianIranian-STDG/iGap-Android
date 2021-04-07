@@ -36,23 +36,23 @@ import com.pchmn.materialchips.model.ChipInterface;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.ContactChip;
-import net.iGap.module.Contacts;
-import net.iGap.module.LoginActions;
-import net.iGap.module.ScrollingLinearLayoutManager;
-import net.iGap.module.Theme;
-import net.iGap.module.scrollbar.FastScroller;
-import net.iGap.module.structs.StructContactInfo;
 import net.iGap.observers.interfaces.OnChannelAddMember;
 import net.iGap.observers.interfaces.OnContactsGetList;
 import net.iGap.observers.interfaces.OnGroupAddMember;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.module.ContactChip;
+import net.iGap.module.Contacts;
+import net.iGap.module.LoginActions;
+import net.iGap.module.ScrollingLinearLayoutManager;
+import net.iGap.module.scrollbar.FastScroller;
+import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelAddMember;
@@ -131,9 +131,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         ViewGroup layoutChips = view.findViewById(R.id.fcg_layout_search);
 
         //todo:// use material chips
-        if (G.themeColor == Theme.DARK) {
+        if (G.themeColor == Theme.DARK){
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout_dark, null));
-        } else {
+        }else {
             layoutChips.addView(getLayoutInflater().inflate(R.layout.item_chips_layout, null));
         }
 

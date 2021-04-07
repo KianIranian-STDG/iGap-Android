@@ -98,5 +98,67 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chargePayment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:background="?attr/selectableItemBackgroundBorderless">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/chargePaymentIcon"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:text="@string/ic_charge"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp8"
+            android:text="@string/topUp_title"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chargePaymentIcon"
+            tools:layout_editor_absoluteY="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/internetPayment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp52"
+        android:background="?attr/selectableItemBackgroundBorderless">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/internetPaymentIcon"
+            style="@style/myIconTextViewStyle"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:text="@string/ic_internet"
+            android:textSize="@dimen/xlargeTextSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="@dimen/dp8"
+            android:text="@string/buy_internet_package_title"
+            android:textColor="?attr/iGapTitleTextColor"
+            android:textSize="@dimen/largeTextSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/internetPaymentIcon"
+            tools:layout_editor_absoluteY="0dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </LinearLayout>

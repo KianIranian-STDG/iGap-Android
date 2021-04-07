@@ -21,15 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
-import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.interfaces.IMessageItem;
-import net.iGap.observers.interfaces.RealmMoneyTransfer;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRegisteredInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,10 +52,10 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
 
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
 
-        if (mMessage.getRoomMessageWallet().getType().equals(ProtoGlobal.RoomMessageWallet.Type.UNRECOGNIZED.toString())) {
+        if (messageObject.wallet.type.equals(ProtoGlobal.RoomMessageWallet.Type.UNRECOGNIZED.toString())) {
 
             holder.titleTxt.setText(R.string.unknown_message);
 
@@ -83,22 +82,38 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
         holder.cardNumberRoot.setVisibility(View.VISIBLE);
         holder.rrnNumberRoot.setVisibility(View.VISIBLE);
 
-        RealmMoneyTransfer realmMoneyTransfer;
+        String fromDisplayName = "";
+        String toDisplayName = "";
+        String persianCalender = "";
+        String traceNumber = "";
+        String invoiceNumber = "";
 
-        if (mMessage.getRoomMessageWallet().getType().equals(ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER.toString())) {
+        if (messageObject.wallet.type.equals(ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER.toString())) {
             holder.cardNumberRoot.setVisibility(View.GONE);
             holder.rrnNumberRoot.setVisibility(View.GONE);
-            realmMoneyTransfer = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletMoneyTransfer();
             holder.titleTxt.setText(R.string.WALLET_TRANSFER_MONEY);
             String iGapYellowWallet = "#E6F4D442";
             holder.payTime.setBackgroundColor(Color.parseColor(iGapYellowWallet));
             holder.titleTxt.setBackgroundColor(Color.parseColor(iGapYellowWallet));
+
+            fromDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.moneyTransferObject.fromUserId);
+            toDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.moneyTransferObject.toUserId);
+
+            persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.moneyTransferObject.payTime) + " " + "-" + " " +
+                    TimeUtils.toLocal(messageObject.wallet.moneyTransferObject.payTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+            holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(messageObject.wallet.moneyTransferObject.amount));
+            traceNumber = String.valueOf(messageObject.wallet.moneyTransferObject.traceNumber);
+            invoiceNumber = String.valueOf(messageObject.wallet.moneyTransferObject.invoiceNumber);
+            holder.description.setText(messageObject.wallet.moneyTransferObject.description);
+
+            if (messageObject.wallet.moneyTransferObject.description == null || messageObject.wallet.moneyTransferObject.description.isEmpty()) {
+                holder.descriptionRoot.setVisibility(View.GONE);
+            }
         } else {
-            realmMoneyTransfer = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletPayment();
             holder.cardNumberRoot.setVisibility(View.VISIBLE);
             holder.rrnNumberRoot.setVisibility(View.VISIBLE);
-            String cardNumber = realmMoneyTransfer.getCardNumber();
-            String rrn = realmMoneyTransfer.getRrn() + "";
+            String cardNumber = messageObject.wallet.paymentObject.cardNumber;
+            String rrn = messageObject.wallet.paymentObject.rrn + "";
             if (HelperCalander.isPersianUnicode) {
                 cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
                 rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
@@ -108,45 +123,36 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.titleTxt.setText(R.string.PAYMENT_TRANSFER_MONEY);
             holder.payTime.setBackgroundColor(theme.getPrimaryColor(holder.payTime.getContext()));
             holder.titleTxt.setBackgroundColor(theme.getPrimaryColor(holder.titleTxt.getContext()));
-        }
-        DbManager.getInstance().doRealmTask(realm -> {
-            RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getFromUserId());
-            RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(realm, realmMoneyTransfer.getToUserId());
+            fromDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.fromUserId);
+            toDisplayName = MessageDataStorage.getInstance(currentAccount).getDisplayNameWithUserId(messageObject.wallet.paymentObject.toUserId);
 
-            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmMoneyTransfer.getPayTime()) + " " + "-" + " " +
-                    TimeUtils.toLocal(realmMoneyTransfer.getPayTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+            persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.paymentObject.payTime) + " " + "-" + " " +
+                    TimeUtils.toLocal(messageObject.wallet.paymentObject.payTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
+            holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(messageObject.wallet.paymentObject.amount));
+            traceNumber = String.valueOf(messageObject.wallet.paymentObject.traceNumber);
+            invoiceNumber = String.valueOf(messageObject.wallet.paymentObject.invoiceNumber);
+            holder.description.setText(messageObject.wallet.paymentObject.description);
 
-            String fromDisplayName = "";
-            String toDisplayName = "";
-
-            if (mRealmRegisteredInfoFrom != null) {
-                fromDisplayName = mRealmRegisteredInfoFrom.getDisplayName();
-            }
-
-            if (mRealmRegisteredInfoTo != null) {
-                toDisplayName = mRealmRegisteredInfoTo.getDisplayName();
-            }
-
-            holder.fromUserId.setText(fromDisplayName);
-            holder.toUserId.setText(toDisplayName);
-            holder.amount.setText(DirectPayHelper.convertNumberToPriceRial(realmMoneyTransfer.getAmount()));
-            String traceNumber = String.valueOf(realmMoneyTransfer.getTraceNumber());
-            String invoiceNumber = String.valueOf(realmMoneyTransfer.getInvoiceNumber());
-            if (HelperCalander.isPersianUnicode) {
-                traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
-                invoiceNumber = HelperCalander.convertToUnicodeFarsiNumber(invoiceNumber);
-                persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
-            }
-
-            holder.description.setText(realmMoneyTransfer.getDescription());
-            holder.traceNumber.setText(traceNumber);
-            holder.invoiceNumber.setText(invoiceNumber);
-            holder.payTime.setText(persianCalender);
-
-            if (realmMoneyTransfer.getDescription() == null || realmMoneyTransfer.getDescription().isEmpty()) {
+            if (messageObject.wallet.paymentObject.description == null || messageObject.wallet.paymentObject.description.isEmpty()) {
                 holder.descriptionRoot.setVisibility(View.GONE);
             }
-        });
+        }
+
+
+        holder.fromUserId.setText(fromDisplayName);
+        holder.toUserId.setText(toDisplayName);
+        if (HelperCalander.isPersianUnicode) {
+            traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
+            invoiceNumber = HelperCalander.convertToUnicodeFarsiNumber(invoiceNumber);
+            persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
+        }
+
+
+        holder.traceNumber.setText(traceNumber);
+        holder.invoiceNumber.setText(invoiceNumber);
+        holder.payTime.setText(persianCalender);
+
+
     }
 
     @NotNull

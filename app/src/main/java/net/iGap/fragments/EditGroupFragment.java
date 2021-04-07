@@ -241,7 +241,7 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                             @Override
                             public void Allow() {
                                 if (getActivity() == null) return;
-                                Fragment fragment = FragmentGallery.newInstance(FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
+                                Fragment fragment = FragmentGallery.newInstance(false, FragmentGallery.GalleryMode.PHOTO, true, getString(R.string.gallery), "-1", new FragmentGallery.GalleryFragmentListener() {
                                     @Override
                                     public void openOsGallery() {
 

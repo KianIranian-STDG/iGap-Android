@@ -37,7 +37,7 @@ public class UserScoreViewModel extends ViewModel {
             return realm.where(RealmUserInfo.class).findFirst();
         });
 
-        if (userInfo != null) {
+        if (userInfo != null){
             userInfo.addChangeListener(realmModel -> {
                 userInfo = (RealmUserInfo) realmModel;
 

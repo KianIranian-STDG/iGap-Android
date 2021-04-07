@@ -13,7 +13,9 @@ package net.iGap.helper;
 import android.os.Handler;
 
 import net.iGap.Config;
-import net.iGap.request.RequestChannelGetMessagesStats;
+import net.iGap.controllers.MessageController;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.structs.MessageObject;
 
 import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,11 +38,11 @@ public class HelperGetMessageState {
      * @param messageId messageId that show in view
      */
 
-    public static void getMessageState(long roomId, long messageId) {
+    public static void getMessageState(MessageObject messageObject, long roomId, long messageId) {
 
         synchronized (mutex) {
             if (thread == null) {
-                thread = new Thread(new RepeatingThread());
+                thread = new Thread(new RepeatingThread(messageObject));
                 thread.start();
             }
         }
@@ -68,13 +70,13 @@ public class HelperGetMessageState {
     /**
      * send request for get message state for each room
      */
-    private static void sendMessageStateRequest() {
+    private static void sendMessageStateRequest(MessageObject messageObject) {
         synchronized (mutex) {
             for (long roomId : getViewsMessage.keySet()) {
                 HashSet<Long> messageIds = getViewsMessage.get(roomId);
                 getViewsMessage.remove(roomId);
                 if (messageIds.size() > 0) {
-                    new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
+                    MessageController.getInstance(AccountManager.selectedAccount).ChannelGetMessageVote(messageObject, roomId, messageIds);
                 }
             }
         }
@@ -92,14 +94,15 @@ public class HelperGetMessageState {
     private static class RepeatingThread implements Runnable {
 
         private final Handler mHandler = new Handler();
+        private final MessageObject messageObject;
 
-        RepeatingThread() {
-
+        RepeatingThread(MessageObject messageObject) {
+            this.messageObject = messageObject;
         }
 
         @Override
         public void run() {
-            sendMessageStateRequest();
+            sendMessageStateRequest(messageObject);
             mHandler.postDelayed(this, Config.GET_MESSAGE_STATE_TIME_OUT);
         }
     }

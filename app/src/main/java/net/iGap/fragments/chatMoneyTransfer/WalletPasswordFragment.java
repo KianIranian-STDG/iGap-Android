@@ -16,16 +16,16 @@ import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.api.webservice.APIService;
-import net.iGap.api.webservice.ApiUtils;
-import net.iGap.api.webservice.Post;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.api.webservice.APIService;
+import net.iGap.api.webservice.ApiUtils;
+import net.iGap.api.webservice.Post;
 
 import org.paygear.RaadApp;
 import org.paygear.fragment.PaymentResultDialog;

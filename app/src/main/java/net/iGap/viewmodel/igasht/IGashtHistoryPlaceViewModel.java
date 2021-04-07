@@ -5,9 +5,9 @@ import android.view.View;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.repository.IGashtRepository;
 import net.iGap.model.igasht.IGashtTicketDetail;
 import net.iGap.model.igasht.TicketHistoryListResponse;
-import net.iGap.repository.IGashtRepository;
 
 import org.jetbrains.annotations.NotNull;
 

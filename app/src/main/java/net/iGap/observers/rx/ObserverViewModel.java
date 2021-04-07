@@ -1,35 +1,23 @@
 package net.iGap.observers.rx;
 
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.observers.eventbus.EventListener;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class ObserverViewModel extends BaseAPIViewModel implements EventListener {
+public abstract class ObserverViewModel extends BaseAPIViewModel implements EventManager.EventDelegate {
     public CompositeDisposable backgroundDisposable;
     public CompositeDisposable mainThreadDisposable;
 
     public ObserverViewModel() {
         backgroundDisposable = new CompositeDisposable();
         mainThreadDisposable = new CompositeDisposable();
-        EventManager.getInstance().addEventListener(EventManager.IG_ERROR, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.IG_ERROR, this);
     }
 
     public void onResponseError(Throwable throwable) {
 
-    }
-
-    @Override
-    public void receivedMessage(int id, Object... message) {
-        if (id == EventManager.IG_ERROR)
-            try {
-                onResponseError((Throwable) message[0]);
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
     }
 
     public abstract void subscribe();
@@ -38,7 +26,7 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     public void onDestroyView() {
-        EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.IG_ERROR, this);
         if (mainThreadDisposable != null && !mainThreadDisposable.isDisposed()) {
             mainThreadDisposable.dispose();
             mainThreadDisposable = null;
@@ -46,7 +34,7 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     }
 
     public void onDestroy() {
-        EventManager.getInstance().removeEventListener(EventManager.IG_ERROR, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.IG_ERROR, this);
         if (backgroundDisposable != null && !backgroundDisposable.isDisposed()) {
             backgroundDisposable.dispose();
             backgroundDisposable = null;
@@ -57,5 +45,17 @@ public abstract class ObserverViewModel extends BaseAPIViewModel implements Even
     protected void onCleared() {
         super.onCleared();
         onDestroy();
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.IG_ERROR)
+            try {
+                onResponseError((Throwable) args[0]);
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 }

@@ -36,7 +36,7 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image"
@@ -52,7 +52,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/source"
-                app:layout_constraintBottom_toTopOf="@+id/rootTitle" />
+                app:layout_constraintBottom_toTopOf="@+id/rootTitle"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/rootTitle"
@@ -71,7 +71,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image"
-                app:layout_constraintBottom_toTopOf="@+id/title" />
+                app:layout_constraintBottom_toTopOf="@+id/title"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title"
@@ -92,7 +92,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rootTitle"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,7 +130,7 @@
                 android:layout_marginRight="@dimen/dp8"
                 android:textColor="?attr/iGapTitleTextColor"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/image1"
@@ -146,7 +146,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/source1"
-                app:layout_constraintBottom_toTopOf="@+id/rootTitle1" />
+                app:layout_constraintBottom_toTopOf="@+id/rootTitle1"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/rootTitle1"
@@ -165,7 +165,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image1"
-                app:layout_constraintBottom_toTopOf="@+id/title1" />
+                app:layout_constraintBottom_toTopOf="@+id/title1"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/title1"
@@ -186,7 +186,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rootTitle1"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModel;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
+import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
 

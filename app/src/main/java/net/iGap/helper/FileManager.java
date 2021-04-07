@@ -231,7 +231,7 @@ public class FileManager {
         }).start();
     }
 
-    public static void getDeviceMusics(Context context, boolean sortByDate, FetchListener<List<GalleryMusicModel>> callback) {
+    public static void getDeviceMusics(Context context , boolean sortByDate , FetchListener<List<GalleryMusicModel>> callback){
 
         new Thread(() -> {
 
@@ -243,12 +243,12 @@ public class FileManager {
 
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             String[] projection = {
-                    MediaStore.Audio.Media.DATA,
-                    MediaStore.Audio.Media.ARTIST,
+                    MediaStore.Audio.Media.DATA ,
+                    MediaStore.Audio.Media.ARTIST ,
                     MediaStore.Audio.Media.TITLE
             };
 
-            String sortType;
+            String sortType ;
             if (sortByDate) sortType = MediaStore.Audio.Media.DATE_ADDED + " DESC";
             else sortType = MediaStore.Audio.Media.TITLE + " ASC";
 
@@ -272,9 +272,8 @@ public class FileManager {
                         music.setId(musics.size());
                         music.setPath(cursor.getString(COLUMN_DATA));
                         music.setTitle(cursor.getString(COLUMN_TITLE));
-                        String artist = cursor.getString(COLUMN_ARTIST);
-                        if (artist.contains("unknown"))
-                            artist = context.getString(R.string.unknown);
+                        String artist = cursor.getString(COLUMN_ARTIST) ;
+                        if (artist.contains("unknown")) artist = context.getString(R.string.unknown);
                         music.setArtist(artist);
                         musics.add(music);
                     } catch (Exception e) {
@@ -322,7 +321,7 @@ public class FileManager {
     public static class SortFileName implements Comparator<StructFileManager> {
         @Override
         public int compare(StructFileManager f1, StructFileManager f2) {
-            if (f1.nameStr == null)
+            if(f1.nameStr == null)
                 return 1;
             else
                 return f1.nameStr.compareTo(f2.nameStr);
@@ -337,9 +336,9 @@ public class FileManager {
         public int compare(StructFileManager obj1, StructFileManager obj2) {
             File f1 = new File(obj1.path);
             File f2 = new File(obj2.path);
-            if ((f1.lastModified() == f2.lastModified()))
-                return 0;
-            else if (f1.lastModified() > f2.lastModified())
+            if((f1.lastModified() == f2.lastModified()) )
+                return 0 ;
+            else if(f1.lastModified() > f2.lastModified())
                 return -1;
             else
                 return 1;

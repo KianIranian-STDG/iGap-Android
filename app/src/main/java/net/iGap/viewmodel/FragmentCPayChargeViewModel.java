@@ -8,12 +8,12 @@ import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
+import net.iGap.observers.interfaces.ResponseCallback;
+import net.iGap.repository.CPayRepository;
 import net.iGap.model.cPay.CPayWalletAmountModel;
 import net.iGap.model.cPay.ChargeWalletBodyModel;
 import net.iGap.model.cPay.ChargeWalletModel;
 import net.iGap.model.cPay.PlaqueBodyModel;
-import net.iGap.observers.interfaces.ResponseCallback;
-import net.iGap.repository.CPayRepository;
 
 public class FragmentCPayChargeViewModel extends BaseCPayViewModel<CPayWalletAmountModel> {
 

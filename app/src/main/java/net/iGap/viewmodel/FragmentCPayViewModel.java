@@ -3,8 +3,8 @@ package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.model.cPay.UserPlaquesModel;
 import net.iGap.repository.CPayRepository;
+import net.iGap.model.cPay.UserPlaquesModel;
 
 public class FragmentCPayViewModel extends BaseCPayViewModel<UserPlaquesModel> {
 

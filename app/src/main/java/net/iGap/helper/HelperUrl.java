@@ -93,9 +93,15 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
 
-    //TODO: change this class. dependency is in all line of code
-    public static int LinkColor = Color.BLUE;
-    public static int LinkColorDark = Color.CYAN;
+    private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/.*)";
+    private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
+    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)";
+    private static final String BOT_LINK = "(\\/\\w+)";
+    private static final String IGAP_RESOLVE = "(igap://resolve?)";
+    private static final String IGAP_DIGIT_LINK = "(\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
+    private static final String IGAP_AT_SIGN_PATTERN = "([@]+[A-Za-z0-9-_]+\\b)";
+    private static final String IGAP_HASH_TAG_PATTERN = "([#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b)";
+
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
     public static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
@@ -187,14 +193,15 @@ public class HelperUrl {
                     "youtube", "yt", "za", "zip", "zm", "zone", "zuerich", "zw"
             };
 
-            List<String> urlList = new ArrayList<String>(Arrays.asList(strings));
+            List<String> urlList = new ArrayList<>(Arrays.asList(strings));
 
-            for (String matches : urlList) {
+            return true;
+            /*for (String matches : urlList) {
 
                 if (text.contains("." + matches) && text.length() > matches.length() + 2) {
                     return true;
                 }
-            }
+            }*/
         }
 
         return false;
@@ -744,50 +751,54 @@ public class HelperUrl {
 
     public static String getLinkInfo(String text) {
 
-        String linkInfo = "";
+        StringBuilder linkInfo = new StringBuilder();
 
         if (text == null) {
-            return linkInfo;
+            return linkInfo.toString();
         }
 
         if (text.trim().length() < 1) {
-            return linkInfo;
+            return linkInfo.toString();
         }
 
         ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(text);
         text = AbstractMessage.removeBoldMark(text, boldPlaces);
 
-        linkInfo += analysisAtSignLinkInfo(text);
-
-        linkInfo += analysisHashLinkInfo(text);
-
         String newText = text.toLowerCase();
 
-        String[] list = newText.replace(System.getProperty("line.separator"), " ").split(" ");
+        Matcher igapMatcher = Pattern.compile(
+                IGAP_LINK_PATTERN + "|" + //1- igap link
+                        IGAP_DEEP_LINK_PATTERN + "|" + //2- igap deep link
+                        WEB_LINK + "|" + //3- web link
+                        BOT_LINK + "|" + //4- bot link
+                        IGAP_RESOLVE + "|" + //5- igap resolve
+                        IGAP_DIGIT_LINK + "|" + //6- igap digit link
+                        IGAP_AT_SIGN_PATTERN + "|" + //7- igap atsign pattern
+                        IGAP_HASH_TAG_PATTERN) // 8- igap hashTag pattern
+                .matcher(newText);
 
-        int count = 0;
 
-        for (int i = 0; i < list.length; i++) {
-
-            String str = list[i];
-
-            if (isIgapLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "@";
-            } else if (str.contains(igapResolve)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "@";
-            } else if (isBotLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.bot.toString() + "@";
-            } else if (isTextLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "@";
-            } else if (isDigitLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.digitLink.toString() + "@";
-            } else if (isIgapDeepLink(str)) {
-                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapDeepLink.toString() + "@";
+        while (igapMatcher.find()) {
+            if (igapMatcher.group(1) != null) {
+                linkInfo.append(igapMatcher.start(1)).append("_").append(igapMatcher.end(1)).append("_").append(linkType.igapLink.toString()).append("@");
+            } else if (igapMatcher.group(2) != null) {
+                linkInfo.append(igapMatcher.start(2)).append("_").append(igapMatcher.end(2)).append("_").append(linkType.igapDeepLink.toString()).append("@");
+            } else if (igapMatcher.group(3) != null) {
+                linkInfo.append(igapMatcher.start(3)).append("_").append(igapMatcher.end(3)).append("_").append(linkType.webLink.toString()).append("@");
+            } else if (igapMatcher.group(4) != null) {
+                linkInfo.append(igapMatcher.start(4)).append("_").append(igapMatcher.end(4)).append("_").append(linkType.bot.toString()).append("@");
+            } else if (igapMatcher.group(5) != null) {
+                linkInfo.append(igapMatcher.start(5)).append("_").append(igapMatcher.end(5)).append("_").append(linkType.igapResolve.toString()).append("@");
+            } else if (igapMatcher.group(6) != null) {
+                linkInfo.append(igapMatcher.start(6)).append("_").append(igapMatcher.end(6)).append("_").append(linkType.digitLink.toString()).append("@");
+            } else if (igapMatcher.group(7) != null) {
+                linkInfo.append(igapMatcher.start(7)).append("_").append(igapMatcher.end(7)).append("_").append(linkType.atSighn.toString()).append("@");
+            } else if (igapMatcher.group(8) != null) {
+                linkInfo.append(igapMatcher.start(8)).append("_").append(igapMatcher.end(8)).append("_").append(linkType.hash.toString()).append("@");
             }
-            count += str.length() + 1;
         }
 
-        return linkInfo;
+        return linkInfo.toString();
     }
 
     private static boolean isDigitLink(String text) {
@@ -856,7 +867,8 @@ public class HelperUrl {
         }
     }
 
-    private static void openDialogJoin(FragmentActivity activity, final ProtoGlobal.Room room, final String token) {
+    private static void openDialogJoin(FragmentActivity activity, final ProtoGlobal.Room room,
+                                       final String token) {
         if (room == null) {
             return;
         }
@@ -896,7 +908,8 @@ public class HelperUrl {
         }
     }
 
-    private static void joinToRoom(FragmentActivity activity, String token, final ProtoGlobal.Room room) {
+    private static void joinToRoom(FragmentActivity activity, String token,
+                                   final ProtoGlobal.Room room) {
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             showIndeterminateProgressDialog(activity);
 
@@ -967,7 +980,8 @@ public class HelperUrl {
         return false;
     }
 
-    public static void checkUsernameAndGoToRoom(FragmentActivity activity, final String userName, final ChatEntry chatEntery) {
+    public static void checkUsernameAndGoToRoom(FragmentActivity activity,
+                                                final String userName, final ChatEntry chatEntery) {
         checkUsernameAndGoToRoomWithMessageId(activity, userName, chatEntery, 0);
     }
 
@@ -978,7 +992,8 @@ public class HelperUrl {
      * @param messageId // use for detect message position
      */
 
-    public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity, final String username, final ChatEntry chatEntry, final long messageId) {
+    public static void checkUsernameAndGoToRoomWithMessageId(FragmentActivity activity,
+                                                             final String username, final ChatEntry chatEntry, final long messageId) {
         if (username == null || username.length() < 1) return;
 
         if (RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
@@ -1012,7 +1027,10 @@ public class HelperUrl {
     /**
      * if message isn't exist in Realm resolve from server and then open chat
      */
-    private static void resolveMessageAndOpenChat(FragmentActivity activity, final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
+    private static void resolveMessageAndOpenChat(FragmentActivity activity,
+                                                  final long messageId, final String username, final ChatEntry chatEntry,
+                                                  final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type,
+                                                  final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
         DbManager.getInstance().doRealmTask(new DbManager.RealmTask() {
             @Override
             public void doTask(Realm realm) {
@@ -1090,7 +1108,10 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    private static void openChat(FragmentActivity activity, String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery, long messageId) {
+    private static void openChat(FragmentActivity activity, String
+            username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type
+                                         type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery,
+                                 long messageId) {
         switch (type) {
             case USER:
                 goToChat(activity, user, chatEntery, messageId);
@@ -1101,7 +1122,8 @@ public class HelperUrl {
         }
     }
 
-    private static void goToActivity(FragmentActivity activity, final long roomId, final long peerId, ChatEntry chatEntry, final long messageId) {
+    private static void goToActivity(FragmentActivity activity, final long roomId,
+                                     final long peerId, ChatEntry chatEntry, final long messageId) {
 
         switch (chatEntry) {
             case chat:
@@ -1169,7 +1191,8 @@ public class HelperUrl {
         }
     }
 
-    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId, final long peerId) {
+    public static void goToActivityFromFCM(FragmentActivity activity, final long roomId,
+                                           final long peerId) {
 
         if (roomId != FragmentChat.lastChatRoomId) {
             DbManager.getInstance().doRealmTask(realm -> {
@@ -1252,7 +1275,8 @@ public class HelperUrl {
 
     }
 
-    private static void goToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
+    private static void goToChat(FragmentActivity activity,
+                                 final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
         long id = user.getId();
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", id).equalTo("isDeleted", false).findFirst();
@@ -1294,7 +1318,8 @@ public class HelperUrl {
         }
     }
 
-    private static void addChatToDatabaseAndGoToChat(FragmentActivity activity, final ProtoGlobal.RegisteredUser user, final long roomId, final ChatEntry chatEntery) {
+    private static void addChatToDatabaseAndGoToChat(FragmentActivity activity,
+                                                     final ProtoGlobal.RegisteredUser user, final long roomId, final ChatEntry chatEntery) {
 
         closeDialogWaiting();
 
@@ -1318,7 +1343,8 @@ public class HelperUrl {
         });
     }
 
-    private static void goToRoom(FragmentActivity activity, String username, final ProtoGlobal.Room room, long messageId) {
+    private static void goToRoom(FragmentActivity activity, String username,
+                                 final ProtoGlobal.Room room, long messageId) {
         DbManager.getInstance().doRealmTask(realm -> {
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", room.getId()).findFirst();
 
@@ -1350,7 +1376,8 @@ public class HelperUrl {
         });
     }
 
-    private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity, final String username, final ProtoGlobal.Room room, long messageId) {
+    private static void addRoomToDataBaseAndGoToRoom(FragmentActivity activity,
+                                                     final String username, final ProtoGlobal.Room room, long messageId) {
         closeDialogWaiting();
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {

@@ -45,7 +45,7 @@ public class LastBillData {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         try {
-            Date mDate = sdf.parse(paymentDeadLine.replace("T", " ").replace("Z", " "));
+            Date mDate = sdf.parse(paymentDeadLine.replace("T", " ").replace("Z"," "));
             long timeInMilliseconds = mDate.getTime();
             return HelperCalander.checkHijriAndReturnTime(timeInMilliseconds / DateUtils.SECOND_IN_MILLIS);
         } catch (ParseException e) {

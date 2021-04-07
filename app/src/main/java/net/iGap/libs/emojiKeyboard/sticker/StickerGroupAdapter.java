@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.libs.emojiKeyboard.View.StickerGridView;
 import net.iGap.fragments.emoji.add.StickerAdapter;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.libs.emojiKeyboard.View.StickerGridView;
 
 import java.util.ArrayList;
 import java.util.List;

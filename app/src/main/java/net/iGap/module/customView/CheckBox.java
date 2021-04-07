@@ -22,8 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import net.iGap.R;
-import net.iGap.helper.LayoutCreator;
 import net.iGap.module.Theme;
+import net.iGap.helper.LayoutCreator;
 
 public class CheckBox extends View {
 
@@ -53,36 +53,36 @@ public class CheckBox extends View {
     private int checkOffset;
     private int color;
     private String checkedText;
-    private int checkResId = R.drawable.round_check;
+    private int checkResId = R.drawable.round_check ;
 
     private final static float progressBounceDiff = 0.2f;
 
     public CheckBox(Context context) {
-        this(context, null);
+        this(context , null);
     }
 
-    public CheckBox(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    public CheckBox(Context context , @Nullable AttributeSet attrs) {
+        this(context , attrs , 0);
     }
 
-    public CheckBox(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public CheckBox(Context context , @Nullable AttributeSet attrs , int defStyleAttr) {
+        super(context , attrs , defStyleAttr);
         init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public CheckBox(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+    public CheckBox(Context context , @Nullable AttributeSet attrs , int defStyleAttr , int defStyleRes) {
+        super(context , attrs , defStyleAttr , defStyleRes);
         init();
     }
 
     public CheckBox(Context context, int resId) {
         super(context);
-        checkResId = resId;
+        checkResId = resId ;
         init();
     }
 
-    private void init() {
+    private void init(){
         if (paint == null) {
             paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             eraser = new Paint(Paint.ANTI_ALIAS_FLAG);

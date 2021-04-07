@@ -19,13 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.adapter.news.NewsGroupAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsGrouplistFragBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.model.news.NewsGroup;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.model.news.NewsGroup;
+import net.iGap.adapter.news.NewsGroupAdapter;
 import net.iGap.viewmodel.news.NewsGroupListVM;
 
 import java.util.Objects;

@@ -14,6 +14,7 @@ import com.google.protobuf.ByteString;
 
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoFileUpload;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
 
 public class RequestFileUpload {

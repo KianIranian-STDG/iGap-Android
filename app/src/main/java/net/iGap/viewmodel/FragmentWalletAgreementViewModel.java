@@ -14,6 +14,7 @@ import android.text.Html;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
@@ -36,7 +37,7 @@ public class FragmentWalletAgreementViewModel extends BaseViewModel {
     public FragmentWalletAgreementViewModel(String mPhone, boolean isScan) {
         phone = mPhone;
         this.isScan = isScan;
-        new RequestInfoPage().infoPageAgreementDiscovery("WALLET_AGREEMENT", new RequestInfoPage.OnInfoPage() {
+        new RequestInfoPage().infoPageAgreementDiscovery(BuildConfig.WALLET_AGREEMENT, new RequestInfoPage.OnInfoPage() {
             @Override
             public void onInfo(String body) {
                 callbackTxtAgreement.set(Html.fromHtml(body).toString());

@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -84,7 +85,7 @@ public class CallManager {
 
     private static volatile CallManager instance = null;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private final String TAG = "iGapCall " + getClass().getSimpleName();
     private CallState currentSate;
 
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
@@ -235,7 +236,7 @@ public class CallManager {
             WebRTC.getInstance().setOfferLocalDescription();
             WebRTC.getInstance().setRemoteDesc(new SessionDescription(ANSWER, response.getCalledSdp()));
         });
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, true));
         if (CallService.getInstance() != null) {
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
         }
@@ -247,7 +248,7 @@ public class CallManager {
     public void makeAccept(String sdp) {
         isRinging = false;
         new RequestSignalingAccept().signalingAccept(sdp);
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, true));
         if (CallService.getInstance() != null) {
             CallService.getInstance().stopSoundAndVibrate();
             CallService.getInstance().playSoundWithRes(R.raw.igap_connect, false);
@@ -315,6 +316,7 @@ public class CallManager {
         iHoldCall = !builder.getResponse().getId().isEmpty();
         changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
         WebRTC.getInstance().toggleSound(!isCallHold);
+        WebRTC.getInstance().toggleCamera(!isCallHold);
     }
 
     public void holdCall(boolean state) {
@@ -576,7 +578,7 @@ public class CallManager {
 
     public void changeState(CallState callState) {
         currentSate = callState;
-        EventManager.getInstance().postEvent(EventManager.CALL_STATE_CHANGED, false);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, false));
         if (callState == CallState.CONNECTED) {
             if (callStartTime == 0) {
                 callStartTime = SystemClock.elapsedRealtime();
@@ -608,7 +610,7 @@ public class CallManager {
                 || "crosshatch".equals(Build.PRODUCT);    // Pixel 3 XL
     }
 
-    public boolean isMicMute() {
+    public boolean isMicEnable() {
         return isMicEnable;
     }
 
@@ -649,7 +651,6 @@ public class CallManager {
     }
 
     public static class MyPhoneStateListener extends PhoneStateListener {
-
         /**
          * in this function we observe phone's state changes. and we manage two things:
          * 1- manage music player state when phone state changes
@@ -718,11 +719,11 @@ public class CallManager {
     public static class MyPhoneStateService extends BroadcastReceiver {
         TelephonyManager telephony;
         private MyPhoneStateListener phoneListener;
-
         /**
          * use when start or finish ringing
          */
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             phoneListener = new MyPhoneStateListener();
             telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

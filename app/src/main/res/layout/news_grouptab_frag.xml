@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:orientation="vertical"
@@ -30,7 +30,6 @@
                     android:id="@+id/headerNews"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/groupImage"
                         android:layout_width="match_parent"
@@ -38,7 +37,7 @@
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/news_temp_banner"
-                        app:layout_collapseMode="parallax" />
+                        app:layout_collapseMode="parallax"/>
 
                     <View
                         android:layout_width="0dp"
@@ -47,7 +46,7 @@
                         app:layout_constraintTop_toTopOf="@+id/groupTitle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/groupTitle"
@@ -68,17 +67,16 @@
                         android:layout_marginBottom="@dimen/dp16"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <LinearLayout
                     android:id="@+id/Toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:minHeight="@dimen/toolbar_height"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>

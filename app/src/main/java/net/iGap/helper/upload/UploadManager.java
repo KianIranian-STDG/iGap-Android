@@ -15,6 +15,7 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.structs.MessageObject;
 import net.igap.video.compress.OnCompress;
 
 import java.io.File;
@@ -81,7 +82,8 @@ public class UploadManager {
                 message.getMessageType() == ProtoGlobal.RoomMessageType.STICKER ||
                 message.getMessageType() == ProtoGlobal.RoomMessageType.CONTACT
         ) {
-            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, message.getRoomId(), message);
+            MessageObject uploadMessage = MessageObject.create(message);
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(roomType, message.getRoomId(), uploadMessage);
             return;
         }
 
@@ -99,7 +101,7 @@ public class UploadManager {
                 @Override
                 public void onCompressProgress(String id, int percent) {
                     Log.d("bagi", "onCompressProgress" + percent);
-                    EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent));
                 }
 
                 @Override
@@ -108,15 +110,15 @@ public class UploadManager {
                     Log.d("bagi", "onCompressFinish" + message.getMessageId());
                     if (compress && compressFile.exists() && compressFile.length() < (new File(message.getAttachment().getLocalFilePath())).length()) {
                         compressFile.renameTo(CompletedCompressFile);
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
-
+                        message.attachment.size = CompletedCompressFile.length();
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, CompletedCompressFile.length()));
                         uploadMessageAndSend(roomType, message, ignoreCompress);
                     } else {
                         if (compressFile.exists()) {
                             compressFile.delete();
                         }
 
-                        EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100));
                         uploadMessageAndSend(roomType, message, true);
                     }
                 }
@@ -141,7 +143,7 @@ public class UploadManager {
             @Override
             public void onProgress(String id, int progress) {
                 Log.d("bagi", progress + "uploadMessageAndSend2");
-                EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, id, progress);
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, id, progress, message.attachment.size));
             }
 
             @Override
@@ -198,7 +200,7 @@ public class UploadManager {
             pendingUploadTasks.put(uploadTask.identity, uploadTask);
             mThreadPoolExecutor.execute(uploadTask);
             HelperSetAction.setActionFiles(message.getRoomId(), message.getMessageId(), HelperSetAction.getAction(message.getMessageType()), roomType);
-            EventManager.getInstance().postEvent(EventManager.ON_UPLOAD_PROGRESS, message.getMessageId() + "", 1);
+            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, message.getMessageId() + "", 1));
         }
     }
 

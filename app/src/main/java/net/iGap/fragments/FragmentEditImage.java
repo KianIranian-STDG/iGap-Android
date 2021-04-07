@@ -135,7 +135,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         rootView.setListener(this);
         View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
         keyboardContainer = view.findViewById(R.id.fl_chat_keyboardContainer);
-        paintTv = view.findViewById(R.id.txtPaintImage);
+        paintTv= view.findViewById(R.id.txtPaintImage);
         rootView.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         return rootView;
     }
@@ -310,7 +310,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             }
         });
         iconOk.setOnClickListener(v -> {
-
+            
             String path = itemGalleryList.get(viewPager.getCurrentItem()).getPath();
             String message = edtChat.getText().toString();
 

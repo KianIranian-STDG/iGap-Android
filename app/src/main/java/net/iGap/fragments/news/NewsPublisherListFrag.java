@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.iGap.R;
-import net.iGap.adapter.news.NewsPublisherAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsPublisherlistFragBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.model.news.NewsPublisher;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.model.news.NewsPublisher;
+import net.iGap.adapter.news.NewsPublisherAdapter;
 import net.iGap.viewmodel.news.NewsPublisherListVM;
 
 import java.util.List;

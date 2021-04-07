@@ -4,11 +4,11 @@ import android.util.Log;
 
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.apiService.ApiInitializer;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.model.popularChannel.ChildChannel;
 import net.iGap.model.popularChannel.ParentChannel;
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
 
 public class PopularChannelRepository {
 

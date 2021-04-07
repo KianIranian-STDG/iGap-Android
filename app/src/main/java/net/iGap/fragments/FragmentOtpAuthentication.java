@@ -40,7 +40,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.module.EditTextAdjustPan;
 import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.observers.interfaces.ToolbarListener;
-
 import org.jetbrains.annotations.NotNull;
 
 public abstract class FragmentOtpAuthentication extends BaseFragment implements ToolbarListener {

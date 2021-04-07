@@ -21,7 +21,7 @@ public class RegistrationViewModel extends ViewModel {
     private SingleLiveEvent<Boolean> goToRegisterPage = new SingleLiveEvent<>();
     private SingleLiveEvent<Boolean> loadFromBackStack = new SingleLiveEvent<>();
 
-    public RegistrationViewModel(boolean showPro, boolean isAddAccount) {
+    public RegistrationViewModel(boolean showPro,boolean isAddAccount) {
         repository = RegisterRepository.getInstance();
         grantPermission.setValue(true);
         this.showPro = showPro;
@@ -36,11 +36,11 @@ public class RegistrationViewModel extends ViewModel {
         return repository.getGoToMainPage();
     }
 
-    public SingleLiveEvent<Long> goToContactPage() {
+    public SingleLiveEvent<Long> goToContactPage(){
         return repository.getGoToSyncContactPageForNewUser();
     }
 
-    public SingleLiveEvent<Boolean> getExistUser() {
+    public SingleLiveEvent<Boolean> getExistUser(){
         return repository.getLoginExistUser();
     }
 
@@ -70,7 +70,7 @@ public class RegistrationViewModel extends ViewModel {
         if (backStackCount == 0) {
             if (showPro) {
                 goToNicknamePage.setValue(true);
-            } else if (isAddAccount) {
+            } else if(isAddAccount){
                 goToRegisterPage.setValue(true);
             } else {
                 goToIntroduction.setValue(true);

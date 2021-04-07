@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <import type="net.iGap.G" />
-
         <import type="net.iGap.module.Theme" />
 
     </data>
@@ -53,7 +53,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_percent="0.3" />
+                    app:layout_constraintWidth_percent="0.3"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/view"
@@ -69,7 +69,7 @@
                     android:layout_marginRight="@dimen/dp8"
                     app:layout_constraintBottom_toBottomOf="@+id/image"
                     app:layout_constraintRight_toRightOf="@+id/image"
-                    app:layout_constraintVertical_chainStyle="packed" />
+                    app:layout_constraintVertical_chainStyle="packed"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/myIconTextViewStyleGray"
@@ -86,7 +86,7 @@
                     android:textColor="@color/white"
                     app:layout_constraintTop_toTopOf="@+id/view"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintRight_toLeftOf="@+id/view" />
+                    app:layout_constraintRight_toLeftOf="@+id/view"/>
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -100,7 +100,7 @@
                     android:gravity="center|right"
                     android:layout_marginRight="@dimen/dp8"
                     app:layout_constraintTop_toTopOf="@+id/image"
-                    app:layout_constraintRight_toLeftOf="@+id/image" />
+                    app:layout_constraintRight_toLeftOf="@+id/image"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/date"
@@ -117,7 +117,7 @@
                     app:layout_constraintTop_toTopOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
-                    app:layout_constraintRight_toLeftOf="@+id/source" />
+                    app:layout_constraintRight_toLeftOf="@+id/source"/>
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -136,7 +136,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintBottom_toTopOf="@+id/title"
-                    app:layout_constraintVertical_chainStyle="packed" />
+                    app:layout_constraintVertical_chainStyle="packed"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/title"
@@ -156,7 +156,7 @@
                     app:layout_constraintRight_toRightOf="@+id/source"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rootTitle"
-                    app:layout_constraintBottom_toBottomOf="@+id/image" />
+                    app:layout_constraintBottom_toBottomOf="@+id/image"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

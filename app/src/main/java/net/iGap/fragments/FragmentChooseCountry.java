@@ -20,11 +20,11 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.structs.StructCountry;
-import net.iGap.observers.interfaces.ToolbarListener;
 
 import java.util.ArrayList;
 import java.util.Collections;

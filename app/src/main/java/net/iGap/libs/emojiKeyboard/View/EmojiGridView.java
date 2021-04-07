@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.LayoutCreator;
+import net.iGap.module.Theme;
 import net.iGap.libs.emojiKeyboard.adapter.EmojiAdapter;
 import net.iGap.libs.emojiKeyboard.struct.StructIGEmojiGroup;
-import net.iGap.module.Theme;
+import net.iGap.helper.LayoutCreator;
 
 public class EmojiGridView extends FrameLayout implements EmojiAdapter.Listener {
     private AppCompatTextView emojiGroupNameTv;

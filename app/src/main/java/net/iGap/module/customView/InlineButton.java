@@ -34,7 +34,7 @@ public class InlineButton extends FrameLayout {
         textView.setTextColor(getResources().getColor(R.color.whit_background));
         setTextSize(textView, R.dimen.standardTextSize);
         textView.setAllCaps(false);
-        textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         textView.setText("دکمه ی شیشه ای");
         textView.setGravity(Gravity.CENTER);
 

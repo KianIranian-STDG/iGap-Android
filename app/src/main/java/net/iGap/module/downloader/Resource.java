@@ -19,9 +19,7 @@ package net.iGap.module.downloader;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static net.iGap.module.downloader.Status.ERROR;
-import static net.iGap.module.downloader.Status.LOADING;
-import static net.iGap.module.downloader.Status.SUCCESS;
+import static net.iGap.module.downloader.Status.*;
 
 /**
  * A generic class that holds a value with its loading status.

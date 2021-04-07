@@ -21,6 +21,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
@@ -36,6 +37,7 @@ public class FragmentPaymentBill extends BaseFragment {
 
     private FragmentPaymentBillBinding billBinding;
     private FragmentPaymentBillViewModel viewModel;
+    private boolean isPolice = false;
 
     public static FragmentPaymentBill newInstance(int resTitleId) {
         return FragmentPaymentBill.newInstance(resTitleId, null, null);
@@ -70,7 +72,7 @@ public class FragmentPaymentBill extends BaseFragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                boolean isPolice = false;
+
                 String PID = null;
                 String BID = null;
                 if (getArguments() != null) {
@@ -95,6 +97,11 @@ public class FragmentPaymentBill extends BaseFragment {
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (isPolice) {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_FINE_BILL_PAGE);
+        } else {
+            HelperTracker.sendTracker(HelperTracker.TRACKER_SERVICE_BILL_PAGE);
+        }
 
         billBinding.fpbLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())

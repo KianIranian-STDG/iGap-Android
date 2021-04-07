@@ -22,10 +22,8 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.TimeUtils;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessageWalletTopup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,57 +46,57 @@ public class LogWalletTopup extends AbstractMessage<LogWalletTopup, LogWalletTop
     }
 
     @Override
-    public void bindView(final ViewHolder holder, List payloads) {
+    public void bindView(final ViewHolder holder, List payloads) {// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
         super.bindView(holder, payloads);
-        RealmRoomMessageWalletTopup realmRoomMessageWalletTopup = mMessage.getRoomMessageWallet().getRealmRoomMessageWalletTopup();
-        DbManager.getInstance().doRealmTask(realm -> {
-            String amount = String.valueOf(realmRoomMessageWalletTopup.getAmount());
-            String requesterNumber = (realmRoomMessageWalletTopup.getRequestMobileNumber());
-            String chargerNumber = (realmRoomMessageWalletTopup.getChargeMobileNumber());
-            String cardNumber = realmRoomMessageWalletTopup.getCardNumber();
-            String orderId = String.valueOf(realmRoomMessageWalletTopup.getOrderId());
-            String terminalNo = String.valueOf(realmRoomMessageWalletTopup.getTerminalNo());
-            String rrn = String.valueOf(realmRoomMessageWalletTopup.getRrn());
-            String traceNumber = String.valueOf(realmRoomMessageWalletTopup.getTraceNumber());
-            String persianCalender = HelperCalander.checkHijriAndReturnTime(realmRoomMessageWalletTopup.getRequestTime()) + " " + "-" + " " + TimeUtils.toLocal(realmRoomMessageWalletTopup.getRequestTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
 
-            if (HelperCalander.isPersianUnicode) {
-                amount = HelperCalander.convertToUnicodeFarsiNumber(amount);
-                requesterNumber = HelperCalander.convertToUnicodeFarsiNumber(requesterNumber);
-                chargerNumber = HelperCalander.convertToUnicodeFarsiNumber(chargerNumber);
-                cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
-                orderId = HelperCalander.convertToUnicodeFarsiNumber(orderId);
-                terminalNo = HelperCalander.convertToUnicodeFarsiNumber(terminalNo);
-                rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
-                traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
-                persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
-            }
 
-            holder.amount.setText(amount);
-            holder.requesterNumber.setText(requesterNumber);
-            holder.chargerNumber.setText(chargerNumber);
-            holder.cardNumber.setText(cardNumber);
-            holder.orderId.setText(orderId);
-            holder.terminalNo.setText(terminalNo);
-            holder.rrn.setText(rrn);
-            holder.traceNumber.setText(traceNumber);
-            holder.requestTime.setText(persianCalender);
+        String amount = String.valueOf(messageObject.wallet.topupObject.amount);
+        String requesterNumber = (messageObject.wallet.topupObject.requestMobileNumber);
+        String chargerNumber = (messageObject.wallet.topupObject.chargeMobileNumber);
+        String cardNumber = messageObject.wallet.topupObject.cardNumber;
+        String orderId = String.valueOf(messageObject.wallet.topupObject.orderId);
+        String terminalNo = String.valueOf(messageObject.wallet.topupObject.terminalNo);
+        String rrn = String.valueOf(messageObject.wallet.topupObject.rrn);
+        String traceNumber = String.valueOf(messageObject.wallet.topupObject.traceNumber);
+        String persianCalender = HelperCalander.checkHijriAndReturnTime(messageObject.wallet.topupObject.requestTime) + " " + "-" + " " + TimeUtils.toLocal(messageObject.wallet.topupObject.requestTime * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME);
 
-            switch (realmRoomMessageWalletTopup.getTopupType()) {
-                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_PREPAID_VALUE:
-                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_WOW_VALUE:
-                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_WIMAX_VALUE:
-                case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_POSTPAID_VALUE:
-                    holder.topUpType.setText(R.string.irancell);
-                    break;
-                case ProtoGlobal.RoomMessageWallet.Topup.Type.MCI_VALUE:
-                    holder.topUpType.setText(R.string.hamrahe_aval);
-                    break;
-                case ProtoGlobal.RoomMessageWallet.Topup.Type.RIGHTEL_VALUE:
-                    holder.topUpType.setText(R.string.ritel);
-                    break;
-            }
-        });
+        if (HelperCalander.isPersianUnicode) {
+            amount = HelperCalander.convertToUnicodeFarsiNumber(amount);
+            requesterNumber = HelperCalander.convertToUnicodeFarsiNumber(requesterNumber);
+            chargerNumber = HelperCalander.convertToUnicodeFarsiNumber(chargerNumber);
+            cardNumber = HelperCalander.convertToUnicodeFarsiNumber(cardNumber);
+            orderId = HelperCalander.convertToUnicodeFarsiNumber(orderId);
+            terminalNo = HelperCalander.convertToUnicodeFarsiNumber(terminalNo);
+            rrn = HelperCalander.convertToUnicodeFarsiNumber(rrn);
+            traceNumber = HelperCalander.convertToUnicodeFarsiNumber(traceNumber);
+            persianCalender = HelperCalander.convertToUnicodeFarsiNumber(persianCalender);
+        }
+
+        holder.amount.setText(amount);
+        holder.requesterNumber.setText(requesterNumber);
+        holder.chargerNumber.setText(chargerNumber);
+        holder.cardNumber.setText(cardNumber);
+        holder.orderId.setText(orderId);
+        holder.terminalNo.setText(terminalNo);
+        holder.rrn.setText(rrn);
+        holder.traceNumber.setText(traceNumber);
+        holder.requestTime.setText(persianCalender);
+
+        switch (messageObject.wallet.topupObject.topupType) {
+            case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_PREPAID_VALUE:
+            case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_WOW_VALUE:
+            case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_WIMAX_VALUE:
+            case ProtoGlobal.RoomMessageWallet.Topup.Type.IRANCELL_POSTPAID_VALUE:
+                holder.topUpType.setText(R.string.irancell);
+                break;
+            case ProtoGlobal.RoomMessageWallet.Topup.Type.MCI_VALUE:
+                holder.topUpType.setText(R.string.hamrahe_aval);
+                break;
+            case ProtoGlobal.RoomMessageWallet.Topup.Type.RIGHTEL_VALUE:
+                holder.topUpType.setText(R.string.ritel);
+                break;
+        }
+
     }
 
     @NotNull

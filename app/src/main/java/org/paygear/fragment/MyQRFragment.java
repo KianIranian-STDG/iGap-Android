@@ -84,9 +84,9 @@ public class MyQRFragment extends Fragment {
         LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
         lytToolbar.addView(toolbar.getView());
 
-        if (RaadApp.selectedMerchant == null) {
+        if (RaadApp.selectedMerchant==null) {
             toolbar.setDefaultTitle(getString(R.string.my_qr));
-        } else {
+        }else {
             if (RaadApp.selectedMerchant.getName() != null && !RaadApp.selectedMerchant.getName().equals("")) {
                 toolbar.setDefaultTitle(getString(R.string.qr) + " " + RaadApp.selectedMerchant.getName());
             } else {
@@ -130,9 +130,9 @@ public class MyQRFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (getActivity() instanceof NavigationBarActivity)
-            ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
-                    MyQRFragment.this, null, ScannerFragment.class);
+        if (getActivity() instanceof  NavigationBarActivity)
+        ((NavigationBarActivity) getActivity()).broadcastMessageToPreviousFragment(
+                MyQRFragment.this, null, ScannerFragment.class);
     }
 
     private Uri getImageUri(Bitmap inImage) {

@@ -104,9 +104,7 @@ public class ActivityRegistration extends ActivityEnhanced {
 
         viewModel.getGrantPermission().observe(this, isGrantPermission -> {
             if (isGrantPermission != null && isGrantPermission) {
-                if (new PermissionHelper(ActivityRegistration.this).grantReadAndRightStoragePermission()) {
-                    viewModel.startApp(getSupportFragmentManager().getBackStackEntryCount());
-                }
+                viewModel.startApp(getSupportFragmentManager().getBackStackEntryCount());
             }
         });
 

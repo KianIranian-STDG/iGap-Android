@@ -23,9 +23,9 @@ import net.iGap.adapter.items.popularChannel.PopularMoreChannelAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Channel;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.PopularMoreChannelViewModel;
 
 
@@ -153,8 +153,8 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag<PopularMoreChann
             }
         });
 
-        viewModel.getShowRetryView().observe(getViewLifecycleOwner(), isShow -> {
-            if (isShow != null) {
+        viewModel.getShowRetryView().observe(getViewLifecycleOwner(),isShow->{
+            if (isShow!=null){
                 view.findViewById(R.id.retryView).setVisibility(isShow ? View.VISIBLE : View.GONE);
             }
         });
@@ -177,8 +177,8 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag<PopularMoreChann
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (viewModel.getScale() != null) {
-            ((PopularChannelMoreSliderAdapter) slider.getAdapter()).setScale(viewModel.getScale());
+        if (viewModel.getScale()!= null) {
+            ((PopularChannelMoreSliderAdapter)slider.getAdapter()).setScale(viewModel.getScale());
         }
     }
 }

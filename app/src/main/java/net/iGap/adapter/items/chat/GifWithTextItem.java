@@ -22,12 +22,12 @@ import android.widget.LinearLayout;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.LocalFileType;
-import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;

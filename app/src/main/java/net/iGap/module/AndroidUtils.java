@@ -64,6 +64,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class AndroidUtils {
+    public static Pattern hashTagLink = Pattern.compile("[#]+[\\p{L}A-Za-z0-9۰-۹٠-٩-_]+\\b");
+    public static Pattern atSignLink = Pattern.compile("[@]+[A-za-z0-9]+\\b");
+    public static Pattern igapLink = Pattern.compile("(https?\\:\\/\\/)?(?i)(igap.net)/(.*)");
+    public static String igapResolve = "igap://resolve?";
+    public static Pattern botLink = Pattern.compile("^\\/\\w+");
+    public static Pattern webLink = Pattern.compile("([a-z]+)?(://)?([a-z0-9\\-.:]+(?<!igap))(\\.[a-z0-9]+)+/[A-Za-z0-9\\-/_]+");
+    public static Pattern webLink_with_port = Pattern.compile("([a-z]+)?(://)?([a-z\\d\\-.]+(?<!igap))(:\\d+/)(/)?[A-Za-z0-9\\-/_]*");
+    public static Pattern digitLink = Pattern.compile("^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$");
+    public static Pattern deepLink = Pattern.compile("(igap?://)([^:^/]*)(:\\d*)?(.*)?");
+    public static Pattern specialCharacter = Pattern.compile("^[^\\p{L}\\w!@#$%&*()\\-.\\\\,_+=|<>?{}/^\\]\\[~{}ًٌٍْ.َُِّ\\s]");
+    public static Pattern emojiPattern = Pattern.compile("^[^\\p{L}\\w!@#$%&*()\\-.\\\\,_+=|<>?{}/^\\]\\[~{}ًٌٍْ.َُِّ\\s]");
+
     private AndroidUtils() throws InstantiationException {
 
         throw new InstantiationException("This class is not for instantiation.");
@@ -174,12 +186,15 @@ public final class AndroidUtils {
      * @return correct local path/passed path
      */
     public static String suitablePath(String path) {
-        if (path.matches("\\w+?://")) {
-            return path;
-        } else {
-            String encoded = Uri.fromFile(new File(path)).toString();
-            return Uri.decode(encoded);
+        if (path != null) {
+            if (path.matches("\\w+?://")) {
+                return path;
+            } else {
+                String encoded = Uri.fromFile(new File(path)).toString();
+                return Uri.decode(encoded);
+            }
         }
+        return null;
     }
 
     public static String saveBitmap(Bitmap bmp) {
@@ -521,6 +536,10 @@ public final class AndroidUtils {
             hexStr.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
         }
         return hexStr.toString();
+    }
+
+    public static String getFilePathWithCashId(String cashId, String name, int messageType) {
+        return getFilePathWithCashId(cashId, name, ProtoGlobal.RoomMessageType.forNumber(messageType));
     }
 
     public static String getFilePathWithCashId(String cashId, String name, ProtoGlobal.RoomMessageType messageType) {

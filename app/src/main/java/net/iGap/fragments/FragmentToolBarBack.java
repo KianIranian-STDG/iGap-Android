@@ -51,7 +51,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         titleTextView = view.findViewById(R.id.title);
-        titleTextView.setTypeface(ResourcesCompat.getFont(titleTextView.getContext(), R.font.main_font));
+        titleTextView.setTypeface(ResourcesCompat.getFont(titleTextView.getContext() , R.font.main_font));
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
         menu_item1 = view.findViewById(R.id.menu_item1);
         menu_item1.setVisibility(View.GONE);

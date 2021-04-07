@@ -38,7 +38,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void removeAll() {
+    public void removeAll(){
         items.clear();
         notifyDataSetChanged();
     }
@@ -61,7 +61,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
         if (rowItem.backColor != 0) holder.imageView.setBackgroundResource(rowItem.backColor);
 
         if (rowItem.isFolderOrFile && (rowItem.image == R.drawable.ic_fm_image_small || rowItem.image == R.drawable.ic_fm_video_small)) {
-            if (rowItem.path.endsWith(".png")) holder.imageView.setImageResource(0);
+            if(rowItem.path.endsWith(".png")) holder.imageView.setImageResource(0);
             holder.imageView.setPadding(0, 0, 0, 0);
             ImageLoadingServiceInjector.inject().loadImage(holder.imageView, rowItem.path, rowItem.path.endsWith(".png") ? 0 : rowItem.image);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -71,13 +71,13 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
 
-        if (rowItem.nameStr == null) {
+        if(rowItem.nameStr == null) {
             try {
                 holder.txtTitle.setText(rowItem.name);
             } catch (Exception e) {
                 holder.txtTitle.setText(holder.imageView.getContext().getResources().getString(R.string.unknown));
             }
-        } else {
+        }else {
             holder.txtTitle.setText(rowItem.nameStr);
         }
 
@@ -97,15 +97,15 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
                 if (new File(item.path).isDirectory()) {
                     onItemClickListener.onFolderClicked(item.path, holder.getAdapterPosition());
                 } else {
-                    if (items.get(holder.getAdapterPosition()).isSelected) {
+                    if(items.get(holder.getAdapterPosition()).isSelected){
                         items.get(holder.getAdapterPosition()).isSelected = false;
-                    } else {
+                    }else {
                         items.get(holder.getAdapterPosition()).isSelected = true;
                     }
-                    onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition(), items.get(holder.getAdapterPosition()).isSelected);
+                    onItemClickListener.onFileClicked(item.path, holder.getAdapterPosition() , items.get(holder.getAdapterPosition()).isSelected);
                 }
             } else {
-                onItemClickListener.onGalleryClicked(item.name, item.path, holder.getAdapterPosition());
+                onItemClickListener.onGalleryClicked(item.name,item.path , holder.getAdapterPosition());
             }
         });
 
@@ -113,7 +113,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int arg1) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_layout_file_manager, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_layout_file_manager , parent, false));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -136,7 +136,7 @@ public class AdapterFileManager extends RecyclerView.Adapter<AdapterFileManager.
 
     public interface OnItemClickListenerExplorer {
 
-        void onFileClicked(String path, int position, boolean isSelected);
+        void onFileClicked(String path, int position , boolean isSelected);
 
         void onFolderClicked(String path, int position);
 

@@ -10,13 +10,15 @@
 
 package net.iGap.response;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserContactsGetList;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
+
+import io.realm.Realm;
 
 public class UserContactsGetListResponse extends MessageHandler {
 

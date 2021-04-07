@@ -8,8 +8,8 @@ import android.view.View;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import net.iGap.model.igasht.TicketQRCodeResponse;
 import net.iGap.repository.IGashtRepository;
+import net.iGap.model.igasht.TicketQRCodeResponse;
 
 public class IGashtBarcodeScannerViewModel extends BaseIGashtViewModel<TicketQRCodeResponse> {
 

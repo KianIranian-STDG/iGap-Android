@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="@{viewmodel.pageVisibility}"
-                    app:constraint_referenced_ids="blueScreen" />
+                    app:constraint_referenced_ids="blueScreen"/>
                 <View
                     android:id="@+id/title_back"
                     android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     app:layout_constraintTop_toBottomOf="@+id/rootTitle"
                     app:layout_constraintRight_toLeftOf="@+id/image"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                    app:layout_constraintLeft_toLeftOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/lead"
@@ -256,7 +256,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="@{viewmodel.viewVisibility}"
-                    app:constraint_referenced_ids="view_icon,view" />
+                    app:constraint_referenced_ids="view_icon,view"/>
 
                 <WebView
                     android:id="@+id/detail_WV"
@@ -509,7 +509,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/noDataError"
@@ -526,7 +526,7 @@
                     android:elevation="@dimen/dp4"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <ProgressBar
                     android:id="@+id/ProgressNewsV"
@@ -550,7 +550,7 @@
             android:minHeight="@dimen/toolbar_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

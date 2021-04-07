@@ -10,9 +10,10 @@
 
 package net.iGap.realm;
 
-import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.fragments.FragmentiGapMap;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 
 public class RealmGeoGetConfiguration extends RealmObject {

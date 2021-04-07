@@ -20,18 +20,18 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegistration;
 import net.iGap.databinding.FragmentBottomSheetDialogBinding;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.module.enums.CallState;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.viewmodel.controllers.CallManager;
 
 import org.paygear.RaadApp;
 
-public class AccountsDialog extends BaseBottomSheet implements EventListener {
+public class AccountsDialog extends BaseBottomSheet implements EventManager.EventDelegate {
 
     private AccountDialogListener mListener;
     private AvatarHandler mAvatarHandler;
@@ -50,14 +50,14 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.CALL_STATE_CHANGED, this);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentBottomSheetDialogBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_bottom_sheet_dialog, container, false);
-        EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CALL_STATE_CHANGED, this);
         this.binding = binding;
         binding.bottomSheetList.setAdapter(new AccountsDialogAdapter(mAvatarHandler, (isAssigned, id) -> {
             if (CallManager.getInstance().isUserInCall() || CallManager.getInstance().isCallAlive() || CallManager.getInstance().isRinging()) {
@@ -98,7 +98,7 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
             dismiss();
         } else {
             if (getActivity() != null) {
-
+                HelperTracker.sendTracker(HelperTracker.TRACKER_ADD_NEW_ACCOUNT);
                 new AccountHelper().addAccount();
                 RaadApp.onCreate(getContext());
                 // WebSocketClient.connectNewAccount();
@@ -116,15 +116,13 @@ public class AccountsDialog extends BaseBottomSheet implements EventListener {
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void receivedEvent(int id, int account, Object... args) {
+
         if (id == EventManager.CALL_STATE_CHANGED) {
-            G.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    binding.accountDialogProgressbar.setVisibility(View.GONE);
-                    if (CallManager.getInstance().getCurrentSate() == CallState.LEAVE_CALL || CallManager.getInstance().getCurrentSate() == CallState.REJECT) {
-                        checkForAssigning(isAssigned, userId);
-                    }
+            G.runOnUiThread(() -> {
+                binding.accountDialogProgressbar.setVisibility(View.GONE);
+                if (CallManager.getInstance().getCurrentSate() == CallState.LEAVE_CALL || CallManager.getInstance().getCurrentSate() == CallState.REJECT) {
+                    checkForAssigning(isAssigned, userId);
                 }
             });
 

@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -46,6 +47,10 @@ import androidx.lifecycle.Lifecycle;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.installreferrer.api.InstallReferrerClient;
+import com.android.installreferrer.api.InstallReferrerStateListener;
+import com.android.installreferrer.api.ReferrerDetails;
+import com.google.android.gms.analytics.CampaignTrackingReceiver;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -56,6 +61,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.fragments.CallSelectFragment;
 import net.iGap.fragments.FragmentChat;
@@ -65,6 +71,7 @@ import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.helper.CardToCardHelper;
@@ -84,6 +91,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.helper.ServiceContact;
 import net.iGap.model.PassCode;
+import net.iGap.model.payment.Payment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -99,13 +107,11 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.SubmitScoreDialog;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.network.RequestManager;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
-import net.iGap.observers.eventbus.socketMessages;
+import net.iGap.observers.eventbus.SocketMessages;
 import net.iGap.observers.interfaces.DataTransformerListener;
 import net.iGap.observers.interfaces.FinishActivity;
 import net.iGap.observers.interfaces.ITowPanModDesinLayout;
-import net.iGap.observers.interfaces.OnChatClearMessageResponse;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnGroupAvatarResponse;
 import net.iGap.observers.interfaces.OnMapRegisterState;
@@ -131,13 +137,15 @@ import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnChatClearMessageResponse/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, EventListener, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment/*, OnChatSendMessageResponse*/, OnGroupAvatarResponse, OnMapRegisterStateMain, RefreshWalletBalance, ToolbarListener, ProviderInstaller.ProviderInstallListener, EventManager.EventDelegate {
 
     public static final String openChat = "openChat";
     public static final String userId = "userId";
@@ -172,6 +180,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private int retryConnectToWallet = 0;
     public DataTransformerListener<Intent> dataTransformer;
     private BroadcastReceiver audioManagerReciver;
+    private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
 
     public static void setMediaLayout() {
         try {
@@ -274,7 +283,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (G.onAudioFocusChangeListener != null) {
                 G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
             }
-            EventManager.getInstance().removeEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
             try {
                 AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 
@@ -333,6 +342,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.isRestartActivity) {
             return;
+        }
+
+        if (intent.getAction() != null && intent.getAction().equals("net.iGap.payment")) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentByTag(PaymentFragment.class.getName());
+            if (fragment instanceof PaymentFragment) {
+                ((PaymentFragment) fragment).setPaymentResult(new Payment(
+                        intent.getStringExtra("status"),
+                        intent.getStringExtra("message"),
+                        intent.getStringExtra("order_id"),
+                        intent.getStringExtra("tax"),
+                        intent.getStringExtra("discount")
+                ));
+            }
         }
 
         new HelperGetDataFromOtherApp(this, intent);
@@ -467,7 +490,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
 //            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -575,7 +598,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             };
 
-            G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
             connectionState();
             new Thread(this::checkKeepMedia).start();
 
@@ -639,6 +662,62 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         GPSTracker.getGpsTrackerInstance().checkLocation();
 
         Log.wtf(this.getClass().getName(), "onCreate");
+        InstallReferrerClient referrerClient = InstallReferrerClient.newBuilder(this).build();
+        backgroundExecutor.execute(() -> getInstallReferrerFromClient(referrerClient));
+    }
+
+    void getInstallReferrerFromClient(InstallReferrerClient referrerClient) {
+
+        referrerClient.startConnection(new InstallReferrerStateListener() {
+            @Override
+            public void onInstallReferrerSetupFinished(int responseCode) {
+                switch (responseCode) {
+                    case InstallReferrerClient.InstallReferrerResponse.OK:
+                        ReferrerDetails response = null;
+                        try {
+                            response = referrerClient.getInstallReferrer();
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+                        final String referrerUrl = response.getInstallReferrer();
+
+
+                        // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
+                        trackInstallReferrer(referrerUrl);
+
+
+                        // End the connection
+                        referrerClient.endConnection();
+
+                        break;
+                    case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
+                        // API not available on the current Play Store app.
+                        break;
+                    case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
+                        // Connection couldn't be established.
+                        break;
+                }
+            }
+
+            @Override
+            public void onInstallReferrerServiceDisconnected() {
+
+            }
+        });
+    }
+
+    // Tracker for Classic GA (call this if you are using Classic GA only)
+    private void trackInstallReferrer(final String referrerUrl) {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                CampaignTrackingReceiver receiver = new CampaignTrackingReceiver();
+                Intent intent = new Intent("com.android.vending.INSTALL_REFERRER");
+                intent.putExtra("referrer", referrerUrl);
+                receiver.onReceive(getApplicationContext(), intent);
+            }
+        });
     }
 
     /**
@@ -862,9 +941,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (result.getContents() != null) {
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
                 }
-                break;
-            case kuknosRequestCodeQrCode:
-//              private code
                 break;
             case WALLET_REQUEST_CODE:
                 /*try {
@@ -1330,7 +1406,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             } else {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-//                  private code
+                    if (!(getSupportFragmentManager().findFragmentById(R.id.mainFrame) instanceof PaymentFragment)) {
+//                        List fragmentList = getSupportFragmentManager().getFragments();
+                        boolean handled = false;
+                        try {
+                            // because some of our fragments are NOT extended from BaseFragment
+//                            Log.wtf("amini", "onBackPressed: " + fragmentList.get(fragmentList.size() - 1).getClass().getName());
+                            Fragment frag = getSupportFragmentManager().findFragmentByTag(getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
+//                            Log.wtf("amini", "on back frag H " + frag.getClass().getName());
+                            handled = ((BaseFragment) frag).onBackPressed();
+//                            handled = ((BaseFragment) fragmentList.get(fragmentList.size() - 1)).onBackPressed();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (!handled) {
+                            super.onBackPressed();
+                        }
+                    }
                 } else {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                     if (fragment instanceof BottomNavigationFragment) {
@@ -1364,7 +1456,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         designLayout(chatLayoutMode.none);
 
-        G.clearMessagesUtil.setOnChatClearMessageResponse(this);
+
 //        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).setOnChatSendMessageResponseRoomList(this);
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
@@ -1446,11 +1538,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Log.wtf(this.getClass().getName(), "onPause");
     }
 
-
-    @Override
-    public void onChatClearMessage(final long roomId, long clearId) {
-        //empty
-    }
 
     @Override
     public void onUserInfoTimeOut() {
@@ -1624,7 +1711,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount) {
+    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount, String organName) {
         if (status == 0) {
             Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
             intent.putExtra("Type", "2");
@@ -1633,6 +1720,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (originalAmount > 0 && discountedAmount > 0) {
                 intent.putExtra("OriginalAmount", originalAmount);
                 intent.putExtra("DiscountedAmount", discountedAmount);
+                intent.putExtra("OrganName", organName);
             }
 
             startActivityForResult(intent, requestCodePaymentBill);
@@ -1688,35 +1776,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             });
         }
     }*/
-
-    @Override
-    public void receivedMessage(int id, Object... message) {
-
-        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
-            int response = (int) message[0];
-            switch (response) {
-                case socketMessages.SUCCESS:
-                    new Handler(getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            /*getUserCredit();*/
-                            retryConnectToWallet = 0;
-                        }
-                    });
-
-                    break;
-
-                case socketMessages.FAILED:
-                    if (retryConnectToWallet < 3) {
-                        new RequestWalletGetAccessToken().walletGetAccessToken();
-                        retryConnectToWallet++;
-                    }
-
-                    break;
-            }
-            // backthread
-        }
-    }
 
     private void isChinesPhone() {
         final SharedPreferences settings = getSharedPreferences("ProtectedApps", Context.MODE_PRIVATE);
@@ -1822,6 +1881,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(BottomNavigationFragment.class.getName());
         if (fragment instanceof BottomNavigationFragment) {
             ((BottomNavigationFragment) fragment).updateContacts();
+        }
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+
+        if (id == EventManager.ON_ACCESS_TOKEN_RECIVE) {
+            int response = (int) args[0];
+            switch (response) {
+                case SocketMessages.SUCCESS:
+                    new Handler(getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            /*getUserCredit();*/
+                            retryConnectToWallet = 0;
+                        }
+                    });
+
+                    break;
+
+                case SocketMessages.FAILED:
+                    if (retryConnectToWallet < 3) {
+                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        retryConnectToWallet++;
+                    }
+
+                    break;
+            }
+            // backthread
         }
     }
 

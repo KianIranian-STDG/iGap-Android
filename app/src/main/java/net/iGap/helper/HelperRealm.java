@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import net.iGap.module.accountManager.DbManager;
 
+import io.realm.Realm;
 import io.realm.RealmModel;
 
 /**

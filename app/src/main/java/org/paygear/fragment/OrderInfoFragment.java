@@ -3,6 +3,8 @@ package org.paygear.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
@@ -94,7 +93,7 @@ public class OrderInfoFragment extends Fragment {
         LinearLayout lytToolbar = view.findViewById(R.id.toolbarLayout);
         lytToolbar.addView(toolbar.getView());
 
-        RelativeLayout root = view.findViewById(R.id.rootView);
+        RelativeLayout root= view.findViewById(R.id.rootView);
         root.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         mOrderView = view.findViewById(R.id.order_view);
         showReceiptButton = view.findViewById(R.id.show_receipt_button);

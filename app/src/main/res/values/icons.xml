@@ -231,4 +231,7 @@
 
     <string name="bank_withdraw_ic">\ue9ad</string>
     <string name="bank_income_ic">\ue9ac</string>
+
+    <string name="ic_charge">\ue940</string>
+    <string name="ic_internet">\ue942</string>
 </resources>

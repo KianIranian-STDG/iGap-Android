@@ -98,9 +98,9 @@ public class FragmentRatingBar extends BaseFragment {
         }).build();
         View view = dialog.getView();
 
-        dialog.getTitleView().setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
-        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
-        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext(), R.font.main_font));
+        dialog.getTitleView().setTypeface(ResourcesCompat.getFont(dialog.getContext() , R.font.main_font));
+        dialog.getActionButton(DialogAction.NEGATIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext() , R.font.main_font));
+        dialog.getActionButton(DialogAction.POSITIVE).setTypeface(ResourcesCompat.getFont(dialog.getContext() , R.font.main_font));
 
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);

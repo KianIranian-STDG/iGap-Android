@@ -20,6 +20,7 @@ public class ChargeContactNumberAdapter extends RecyclerView.Adapter<ChargeConta
     private IOnItemClickListener onItemClickListener;
 
 
+
     public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }

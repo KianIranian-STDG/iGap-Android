@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_mediumAnimTime">
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:exitFadeDuration="@android:integer/config_mediumAnimTime">
     <!--<item android:state_pressed="true">
         <layer-list>
             <item>
@@ -24,8 +26,8 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/news_gray" />
-                    <corners android:radius="6dp" />
+                    <solid android:color="@color/news_gray"/>
+                    <corners android:radius="6dp"/>
                 </shape>
             </item>
         </layer-list>

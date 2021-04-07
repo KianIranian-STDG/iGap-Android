@@ -59,7 +59,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.7" />
+                    app:layout_constraintWidth_percent="0.7"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/billRecycler"
@@ -87,7 +87,7 @@
                     android:visibility="@{viewmodel.errorVisibility}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/billRecycler" />
+                    app:layout_constraintTop_toTopOf="@+id/billRecycler"/>
 
                 <ProgressBar
                     android:id="@+id/ProgressV"
@@ -112,7 +112,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

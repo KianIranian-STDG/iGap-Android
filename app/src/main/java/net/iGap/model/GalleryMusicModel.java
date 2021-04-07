@@ -4,9 +4,9 @@ import androidx.annotation.Nullable;
 
 public class GalleryMusicModel {
 
-    private int id;
-    private String title;
-    private String artist;
+    private int id ;
+    private String title ;
+    private String artist ;
     private String path;
 
     public int getId() {
@@ -43,7 +43,7 @@ public class GalleryMusicModel {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof GalleryMusicModel) {
+        if (obj instanceof GalleryMusicModel){
             return ((GalleryMusicModel) obj).getId() == this.id;
         }
         return super.equals(obj);

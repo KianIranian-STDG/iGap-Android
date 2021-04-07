@@ -94,7 +94,7 @@ public class FragmentCreateChannelViewModel extends ViewModel implements OnChann
     }
 
     public void onClickTxtInputLink() {
-        Log.wtf(this.getClass().getName(), "onClickTxtInputLink");
+        Log.wtf(this.getClass().getName(),"onClickTxtInputLink");
         if (channelType == R.id.privateChannel) {
             copyChannelLink.setValue(channelLink.get());
         }

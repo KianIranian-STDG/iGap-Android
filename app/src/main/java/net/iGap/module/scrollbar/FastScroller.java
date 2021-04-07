@@ -26,8 +26,8 @@ import com.mikepenz.fastadapter.IItem;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.module.Theme;
+import net.iGap.adapter.items.ContactItemGroup;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -10,10 +10,10 @@
 
 package net.iGap.realm;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AppUtils;
 import net.iGap.module.StringListParcelConverter;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;

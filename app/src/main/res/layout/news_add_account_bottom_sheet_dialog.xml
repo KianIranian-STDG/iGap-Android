@@ -68,7 +68,7 @@
                 android:inputType="text"
                 android:imeOptions="actionNext"
                 android:textColor="?attr/iGapTitleTextColor"
-                android:text="@={bottomSheetViewModel.author}" />
+                android:text="@={bottomSheetViewModel.author}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,7 +98,7 @@
                 android:inputType="textEmailAddress"
                 android:imeOptions="actionNext"
                 android:textColor="?attr/iGapTitleTextColor"
-                android:text="@={bottomSheetViewModel.email}" />
+                android:text="@={bottomSheetViewModel.email}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,7 +124,7 @@
                 android:paddingStart="@dimen/dp24"
                 android:paddingLeft="@dimen/dp24"
                 android:textColor="?attr/iGapTitleTextColor"
-                android:text="@={bottomSheetViewModel.comment}" />
+                android:text="@={bottomSheetViewModel.comment}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

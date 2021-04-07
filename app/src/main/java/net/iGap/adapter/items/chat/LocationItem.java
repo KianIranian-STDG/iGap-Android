@@ -31,6 +31,7 @@ import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
+import net.iGap.structs.LocationObject;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,36 +63,36 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         super.bindView(holder, payloads);
         holder.getChatBloke().setBackgroundResource(0);
         holder.mapPosition.setImageResource(R.drawable.map);
-        RealmRoomMessageLocation item = null;
+        LocationObject item = null;
 
-        if (mMessage.getForwardMessage() != null) {
-            if (mMessage.getForwardMessage().getLocation() != null) {
-                item = mMessage.getForwardMessage().getLocation();
+        if (messageObject.forwardedMessage != null) {
+            if (messageObject.forwardedMessage.location != null) {
+                item = messageObject.forwardedMessage.location;
             }
         } else {
-            if (mMessage.getLocation() != null) {
-                item = mMessage.getLocation();
+            if (messageObject.location != null) {
+                item = messageObject.location;
             }
         }
 
         if (item != null) {
-            String path = AppUtils.getLocationPath(item.getLocationLat(), item.getLocationLong());
+            String path = AppUtils.getLocationPath(item.lat, item.lan);
 
             if (new File(path).exists()) {
                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.mapPosition);
             } else {
-                RealmRoomMessageLocation finalItem1 = item;
-                FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), bitmap -> {
+                LocationObject finalItem1 = item;
+                FragmentMap.loadImageFromPosition(item.lat, item.lan, bitmap -> {
                     if (bitmap == null) {
                         holder.mapPosition.setImageResource(R.drawable.map);
                     } else {
                         holder.mapPosition.setImageBitmap(bitmap);
-                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
+                        AppUtils.saveMapToFile(bitmap, finalItem1.lat, finalItem1.lan);
                     }
                 });
             }
 
-            final RealmRoomMessageLocation finalItem = item;
+            final LocationObject finalItem = item;
             holder.mapPosition.setOnLongClickListener(getLongClickPerform(holder));
 
             holder.mapPosition.setOnClickListener(v -> {
@@ -105,8 +106,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                         @Override
                         public void Allow() {
                             G.handler.post(() -> {
-                                FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
-                                        RealmRoom.detectType(mMessage.getRoomId()).getNumber(), mMessage.getRoomId(), mMessage.getUserId() + "");
+                                FragmentMap fragment = FragmentMap.getInctance(finalItem.lat, finalItem.lan, FragmentMap.Mode.seePosition,
+                                        RealmRoom.detectType(messageObject.roomId).getNumber(), messageObject.roomId, messageObject.userId + "");
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             });
                         }

@@ -13,9 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructListOfContact;
 
 import java.util.List;

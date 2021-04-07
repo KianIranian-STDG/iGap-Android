@@ -11,9 +11,9 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 

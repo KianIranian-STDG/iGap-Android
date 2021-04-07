@@ -10,13 +10,15 @@
 
 package net.iGap.response;
 
+import androidx.annotation.NonNull;
+
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.LooperThreadHelper;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
@@ -25,6 +27,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactImport;
 import net.iGap.request.RequestUserInfo;
+
+import io.realm.Realm;
 
 public class UserInfoResponse extends MessageHandler {
 

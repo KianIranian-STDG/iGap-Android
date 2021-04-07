@@ -10,6 +10,7 @@ import net.iGap.api.ElecBillApi;
 import net.iGap.api.FavoriteChannelApi;
 import net.iGap.api.IgashtApi;
 import net.iGap.api.NewsApi;
+import net.iGap.api.PaymentApi;
 import net.iGap.api.StickerApi;
 
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class RetrofitFactory {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor);
         }
+
         builder.addInterceptor(new IgapRetrofitInterceptor());
 
         if (BuildConfig.DEBUG) {
@@ -62,6 +64,15 @@ public class RetrofitFactory {
                 .client(getHttpClient())
                 .build()
                 .create(FavoriteChannelApi.class);
+    }
+
+    public PaymentApi getPaymentRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(ApiStatic.PAYMENT_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(getHttpClient())
+                .build()
+                .create(PaymentApi.class);
     }
 
     public IgashtApi getIgashtRetrofit() {
@@ -137,4 +148,5 @@ public class RetrofitFactory {
                 .build()
                 .create(StickerApi.class);
     }
+
 }

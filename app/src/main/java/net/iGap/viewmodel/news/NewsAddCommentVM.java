@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
-import net.iGap.model.news.NewsDetail;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.news.DetailRepo;
+import net.iGap.model.news.NewsDetail;
 
 public class NewsAddCommentVM extends BaseAPIViewModel {
 

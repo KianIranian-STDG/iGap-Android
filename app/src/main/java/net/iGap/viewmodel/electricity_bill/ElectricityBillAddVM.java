@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.electricity_bill.ElectricityResponseModel;
 import net.iGap.observers.interfaces.ResponseCallback;
@@ -54,6 +55,7 @@ public class ElectricityBillAddVM extends BaseAPIViewModel {
     }
 
     public void addBill() {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_ADD_BILL_TO_LIST);
         progressVisibility.set(View.VISIBLE);
         if (!checkData()) {
             progressVisibility.set(View.GONE);

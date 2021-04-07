@@ -1,9 +1,8 @@
 
 package net.iGap.model.discoveryWeather;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 public class WeatherInfo {
 

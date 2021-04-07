@@ -13,6 +13,7 @@ import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.api.errorhandler.ErrorModel;
 import net.iGap.helper.HelperMobileBank;
 import net.iGap.helper.HelperNumerical;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.bill.BillInfo;
 import net.iGap.model.bill.Debit;
 import net.iGap.model.bill.MobileDebit;
@@ -172,7 +173,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
                 case MOBILE:
                 case PHONE:
                     MobileDebit temp2 = (MobileDebit) debit.getData();
-                    payBill(temp2.getLastTerm().getBillID(), temp2.getLastTerm().getPayID(), temp2.getLastTerm().getAmount());
+                    payBill(temp2.getLastTerm().getBillID(), temp2.getLastTerm().getPayID(), temp2.getLastTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.LAST_TERM_VALUE);
                     break;
             }
         } else {
@@ -180,11 +181,29 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
             progressVisibilityPay.set(View.VISIBLE);
             pay2BtnEnable.set(false);
             MobileDebit temp2 = (MobileDebit) debit.getData();
-            payBill(temp2.getMidTerm().getBillID(), temp2.getMidTerm().getPayID(), temp2.getMidTerm().getAmount());
+            payBill(temp2.getMidTerm().getBillID(), temp2.getMidTerm().getPayID(), temp2.getMidTerm().getAmount(), ProtoMplGetBillToken.MplGetBillToken.Type.MID_TERM_VALUE);
+        }
+        switch (info.getBillType()) {
+            case MOBILE:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_MOBILE_BILL_PAY);
+                break;
+            case PHONE:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_PHONE_BILL_PAY);
+                break;
+            case ELECTRICITY:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_ELECTRIC_BILL_PAY);
+                break;
+            case GAS:
+                HelperTracker.sendTracker(HelperTracker.TRACKER_GAS_BILL_PAY);
+                break;
         }
     }
 
     private void payBill(String billID, String payID, String price) {
+        payBill(billID, payID, price, ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
+    }
+
+    private void payBill(String billID, String payID, String price, int billType) {
 
         if (payID == null || payID.equals("") || payID.equals("null")) {
             errorM.setValue(new ErrorModel("", "001"));
@@ -213,7 +232,7 @@ public class ElectricityBillPayVM extends BaseAPIViewModel {
         };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
-        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID), ProtoMplGetBillToken.MplGetBillToken.Type.NONE_VALUE);
+        requestMplGetBillToken.mplGetBillToken(Long.parseLong(billID), Long.parseLong(payID), billType);
     }
 
     public void showBillImage() {

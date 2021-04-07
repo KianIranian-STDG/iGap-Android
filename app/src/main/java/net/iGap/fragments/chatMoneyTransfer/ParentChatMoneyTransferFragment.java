@@ -14,6 +14,9 @@ import androidx.fragment.app.FragmentTransaction;
 import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
+import net.iGap.fragments.payment.FragmentPaymentInternet;
+import net.iGap.fragments.payment.PaymentChargeFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperWallet;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.BaseBottomSheet;
@@ -31,6 +34,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     private long peerId;
     private boolean isWalletActive;
     private boolean isWalletRegister;
+    private String phoneNumber;
 
     public Delegate delegate;
 
@@ -43,6 +47,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
             peerId = getArguments().getLong("peerId", -1);
             isWalletActive = getArguments().getBoolean("isWalletActive", false);
             isWalletRegister = getArguments().getBoolean("isWalletRegister", false);
+            phoneNumber = getArguments().getString("phoneNumber", "");
         } else {
             if (getActivity() != null) {
                 getActivity().onBackPressed();
@@ -109,9 +114,7 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
         fragmentTransaction.replace(R.id.transferMoneyContainer, fragment, fragment.getClass().getName()).commit();
     }
 
-    public void loadGiftSticker() {
-        //    private code
-    }
+
 
     public void finishedCardToCard(String cardNum, String amountNum, String descriptionTv) {
         dismiss();
@@ -167,16 +170,24 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
                 .commit();
     }
 
-    public void loadStickerPackagePage() {
-//    private code
+    public void loadChargePayment() {
+        Fragment fragment = PaymentChargeFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber", phoneNumber);
+        bundle.putLong("peerId", peerId);
+        fragment.setArguments(bundle);
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        dismiss();
     }
 
-    public void loadStickerPackageItemPage(StructIGStickerGroup stickerGroup) {
-//    private code
-    }
-
-    public void loadStickerPackageItemDetailPage(StructIGSticker sticker) {
-//    private code
+    public void loadInternetPayment() {
+        Fragment fragment = FragmentPaymentInternet.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("phoneNumber", phoneNumber);
+        bundle.putLong("peerId", peerId);
+        fragment.setArguments(bundle);
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+        dismiss();
     }
 
     public void dismissDialog() {
@@ -188,8 +199,6 @@ public class ParentChatMoneyTransferFragment extends BaseBottomSheet {
     }
 
     public interface Delegate {
-        void onGiftStickerGetStartPayment(StructIGSticker structIGSticker, String paymentToke);
-
         void cardToCardClicked(String cardNum, String amountNum, String descriptionTv);
     }
 }

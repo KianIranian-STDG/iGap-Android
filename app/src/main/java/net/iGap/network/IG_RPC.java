@@ -2,17 +2,35 @@ package net.iGap.network;
 
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
+import net.iGap.proto.ProtoChannelAddMessageReaction;
 import net.iGap.proto.ProtoChannelAvatarAdd;
 import net.iGap.proto.ProtoChannelCreate;
 import net.iGap.proto.ProtoChannelDelete;
+import net.iGap.proto.ProtoChannelDeleteMessage;
+import net.iGap.proto.ProtoChannelEditMessage;
+import net.iGap.proto.ProtoChannelGetMessagesStats;
+import net.iGap.proto.ProtoChannelPinMessage;
+import net.iGap.proto.ProtoChannelUpdateReactionStatus;
+import net.iGap.proto.ProtoChannelUpdateSignature;
+import net.iGap.proto.ProtoChatClearMessage;
+import net.iGap.proto.ProtoChatDeleteMessage;
+import net.iGap.proto.ProtoChatEditMessage;
+import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoGroupClearMessage;
 import net.iGap.proto.ProtoGroupCreate;
+import net.iGap.proto.ProtoGroupDeleteMessage;
+import net.iGap.proto.ProtoGroupEditMessage;
+import net.iGap.proto.ProtoGroupPinMessage;
+import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoInfoConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class IG_RPC {
 
@@ -27,6 +45,244 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             minor = response.getMinorCode();
             major = response.getMajorCode();
+        }
+    }
+
+    public static class Group_Update_Status extends AbstractObject {
+        public static int actionId = 311;
+        public long roomId;
+        public long messageId;
+        public ProtoGlobal.RoomMessageStatus roomMessageStatus;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Group_Update_Status.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupUpdateStatus.GroupUpdateStatus.Builder builder = ProtoGroupUpdateStatus.GroupUpdateStatus.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setStatus(roomMessageStatus);
+            return builder;
+        }
+    }
+
+    public static class Res_Group_Update_Status extends AbstractObject {
+        public static int actionId = 30311;
+        public String updaterAuthorHash;
+        public long roomId;
+        public long messageId;
+        public long statusVersion;
+        public ProtoGlobal.RoomMessageStatus statusValue;
+
+        public static Res_Group_Update_Status deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Update_Status object = null;
+            try {
+                object = new Res_Group_Update_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupUpdateStatus.GroupUpdateStatusResponse response = ProtoGroupUpdateStatus.GroupUpdateStatusResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            updaterAuthorHash = response.getUpdaterAuthorHash();
+            statusValue = response.getStatus();
+            statusVersion = response.getStatusVersion();
+        }
+    }
+
+    public static class Chat_Update_Status extends AbstractObject {
+        public static int actionId = 202;
+        public long roomId;
+        public long messageId;
+        public ProtoGlobal.RoomMessageStatus roomMessageStatus;
+
+        @Override
+
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Chat_Update_Status.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatUpdateStatus.ChatUpdateStatus.Builder builder = ProtoChatUpdateStatus.ChatUpdateStatus.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setStatus(roomMessageStatus);
+            return builder;
+        }
+    }
+
+    public static class Res_Chat_Update_Status extends AbstractObject {
+        public static int actionId = 30202;
+        public String updaterAuthorHash;
+        public long roomId;
+        public long messageId;
+        public long statusVersion;
+        public ProtoGlobal.RoomMessageStatus statusValue;
+
+        public static Res_Chat_Update_Status deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Update_Status object = null;
+            try {
+                object = new Res_Chat_Update_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatUpdateStatus.ChatUpdateStatusResponse response = ProtoChatUpdateStatus.ChatUpdateStatusResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            updaterAuthorHash = response.getUpdaterAuthorHash();
+            statusValue = response.getStatus();
+            statusVersion = response.getStatusVersion();
+        }
+    }
+
+    public static class Group_Clear_History extends AbstractObject {
+        public static int actionId = 304;
+        public long roomId;
+        public long lastMessageId;
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Group_Clear_History.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupClearMessage.GroupClearMessage.Builder builder = ProtoGroupClearMessage.GroupClearMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setClearId(lastMessageId);
+
+            return builder;
+        }
+    }
+
+    public static class Res_Group_Clear_History extends AbstractObject {
+        public static int actionId = 30304;
+        public long roomId;
+        public long clearId;
+
+
+        public static Res_Group_Clear_History deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Clear_History object = null;
+            try {
+                object = new Res_Group_Clear_History();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupClearMessage.GroupClearMessageResponse response = ProtoGroupClearMessage.GroupClearMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            clearId = response.getClearId();
+        }
+    }
+
+    public static class Chat_Clear_History extends AbstractObject {
+        public static int actionId = 205;
+        public long roomId;
+        public long lastMessageId;
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return Res_Chat_Clear_History.deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatClearMessage.ChatClearMessage.Builder builder = ProtoChatClearMessage.ChatClearMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setClearId(lastMessageId);
+
+            return builder;
+        }
+    }
+
+    public static class Res_Chat_Clear_History extends AbstractObject {
+        public static int actionId = 30205;
+        public long roomId;
+        public long clearId;
+
+
+        public static Res_Chat_Clear_History deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Clear_History object = null;
+            try {
+                object = new Res_Chat_Clear_History();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatClearMessage.ChatClearMessageResponse response = ProtoChatClearMessage.ChatClearMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            clearId = response.getClearId();
         }
     }
 
@@ -404,4 +660,745 @@ public class IG_RPC {
         }
     }
 
+    public static class Chat_edit_message extends AbstractObject {
+        public static final int actionId = 203;
+
+        public long roomId;
+        public long messageId;
+        public String message;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Chat_Edit_Message().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatEditMessage.ChatEditMessage.Builder builder = ProtoChatEditMessage.ChatEditMessage.newBuilder();
+            builder.setMessage(message);
+            builder.setMessageId(messageId);
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Chat_Edit_Message extends AbstractObject {
+        public static final int actionId = 30203;
+
+        public String newMessage;
+        public long messageId;
+        public int messageType;
+        public long messageVersion;
+        public long roomId;
+
+        public Res_Chat_Edit_Message deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Edit_Message object = null;
+            try {
+                object = new Res_Chat_Edit_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatEditMessage.ChatEditMessageResponse response = ProtoChatEditMessage.ChatEditMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            newMessage = response.getMessage();
+            messageId = response.getMessageId();
+            messageType = response.getMessageTypeValue();
+            messageVersion = response.getMessageVersion();
+            roomId = response.getRoomId();
+        }
+    }
+
+
+    public static class Group_edit_message extends AbstractObject {
+        public static final int actionId = 325;
+
+        public long roomId;
+        public long messageId;
+        public String message;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Group_Edit_Message().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupEditMessage.GroupEditMessage.Builder builder = ProtoGroupEditMessage.GroupEditMessage.newBuilder();
+            builder.setMessage(message);
+            builder.setMessageId(messageId);
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Group_Edit_Message extends AbstractObject {
+        public static final int actionId = 30325;
+
+        public String newMessage;
+        public long messageId;
+        public int messageType;
+        public long messageVersion;
+        public long roomId;
+
+        public Res_Group_Edit_Message deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Edit_Message object = null;
+            try {
+                object = new Res_Group_Edit_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupEditMessage.GroupEditMessageResponse response = ProtoGroupEditMessage.GroupEditMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            newMessage = response.getMessage();
+            messageId = response.getMessageId();
+            messageType = response.getMessageTypeValue();
+            messageVersion = response.getMessageVersion();
+            roomId = response.getRoomId();
+        }
+    }
+
+    public static class Channel_edit_message extends AbstractObject {
+        public static final int actionId = 425;
+
+        public long roomId;
+        public long messageId;
+        public String message;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Edit_Message().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatEditMessage.ChatEditMessage.Builder builder = ProtoChatEditMessage.ChatEditMessage.newBuilder();
+            builder.setMessage(message);
+            builder.setMessageId(messageId);
+            builder.setRoomId(roomId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Edit_Message extends AbstractObject {
+        public static final int actionId = 30425;
+
+        public String newMessage;
+        public long messageId;
+        public int messageType;
+        public long messageVersion;
+        public long roomId;
+
+        public Res_Channel_Edit_Message deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Channel_Edit_Message object = null;
+            try {
+                object = new Res_Channel_Edit_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelEditMessage.ChannelEditMessageResponse response = ProtoChannelEditMessage.ChannelEditMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            newMessage = response.getMessage();
+            messageId = response.getMessageId();
+            messageType = response.getMessageTypeValue();
+            messageVersion = response.getMessageVersion();
+            roomId = response.getRoomId();
+        }
+    }
+
+    public static class Group_pin_message extends AbstractObject {
+        public static final int actionId = 326;
+
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Group_pin_message_response().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupPinMessage.GroupPinMessage.Builder builder = ProtoGroupPinMessage.GroupPinMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Group_pin_message_response extends AbstractObject {
+        public static final int actionId = 30326;
+
+        public ProtoGlobal.RoomMessage pinnedMessage;
+        public long roomId;
+
+        public Group_pin_message_response deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Group_pin_message_response object = null;
+            try {
+                object = new Group_pin_message_response();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupPinMessage.GroupPinMessageResponse response = ProtoGroupPinMessage.GroupPinMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            pinnedMessage = response.getPinnedMessage();
+            roomId = response.getRoomId();
+        }
+
+    }
+
+    public static class Channel_pin_message extends AbstractObject {
+        public static final int actionId = 427;
+
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Channel_pin_message_response().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelPinMessage.ChannelPinMessage.Builder builder = ProtoChannelPinMessage.ChannelPinMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Channel_pin_message_response extends AbstractObject {
+        public static final int actionId = 30427;
+
+        public ProtoGlobal.RoomMessage pinnedMessage;
+        public long roomId;
+
+        public Channel_pin_message_response deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Channel_pin_message_response object = null;
+            try {
+                object = new Channel_pin_message_response();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelPinMessage.ChannelPinMessageResponse response = ProtoChannelPinMessage.ChannelPinMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+
+            pinnedMessage = response.getPinnedMessage();
+            roomId = response.getRoomId();
+        }
+    }
+
+    public static class Channel_Delete_Message extends AbstractObject {
+
+        public static int actionId = 411;
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Delete_Message().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelDeleteMessage.ChannelDeleteMessage.Builder builder = ProtoChannelDeleteMessage.ChannelDeleteMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Delete_Message extends AbstractObject {
+
+        public static int actionId = 30411;
+        public long roomId;
+        public long messageId;
+        public long deleteVersion;
+
+        @Override
+
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Channel_Delete_Message object = null;
+            try {
+                object = new Res_Channel_Delete_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelDeleteMessage.ChannelDeleteMessageResponse response = ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            deleteVersion = response.getDeleteVersion();
+        }
+    }
+
+    public static class Chat_Delete_Message extends AbstractObject {
+
+        public static final int actionId = 204;
+        public long roomId;
+        public long messageId;
+        public boolean both;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Chat_Delete_Message().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatDeleteMessage.ChatDeleteMessage.Builder builder = ProtoChatDeleteMessage.ChatDeleteMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setBoth(both);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Chat_Delete_Message extends AbstractObject {
+        public static int actionId = 30204;
+        public long roomId;
+        public long messageId;
+        public long deleteVersion;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Chat_Delete_Message object = null;
+            try {
+                object = new Res_Chat_Delete_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatDeleteMessage.ChatDeleteMessageResponse response = ProtoChatDeleteMessage.ChatDeleteMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            deleteVersion = response.getDeleteVersion();
+        }
+    }
+
+    public static class Group_Delete_Message extends AbstractObject {
+
+        public static int actionId = 320;
+        public long roomId;
+        public long messageId;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Group_Delete_Message().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public Object getProtoObject() {
+            ProtoGroupDeleteMessage.GroupDeleteMessage.Builder builder = ProtoGroupDeleteMessage.GroupDeleteMessage.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            return builder;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Group_Delete_Message extends AbstractObject {
+
+        public static int actionId = 30320;
+        public long roomId;
+        public long messageId;
+        public long deleteVersion;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Group_Delete_Message object = null;
+            try {
+                object = new Res_Group_Delete_Message();
+                object.readParams(message);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoGroupDeleteMessage.GroupDeleteMessageResponse response = ProtoGroupDeleteMessage.GroupDeleteMessageResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            roomId = response.getRoomId();
+            messageId = response.getMessageId();
+            deleteVersion = response.getDeleteVersion();
+        }
+    }
+
+    public static class Channel_Add_Message_Reaction extends AbstractObject {
+
+        public static int actionId = 424;
+        public long roomId;
+        public long messageId;
+        public ProtoGlobal.RoomMessageReaction reaction;
+
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelAddMessageReaction.ChannelAddMessageReaction.Builder builder = ProtoChannelAddMessageReaction.ChannelAddMessageReaction.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setMessageId(messageId);
+            builder.setReaction(reaction);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Add_Message_Reaction().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Add_Message_Reaction extends AbstractObject {
+
+        public static int actionId = 30424;
+        public String reactionCounter;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse response = ProtoChannelAddMessageReaction.ChannelAddMessageReactionResponse.parseFrom(message);
+            resId = response.getResponse().getId();
+            reactionCounter = response.getReactionCounterLabel();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_Channel_Add_Message_Reaction object = null;
+            try {
+                object = new Res_Channel_Add_Message_Reaction();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Channel_Get_Message_Reaction extends AbstractObject {
+
+        public static int actionId = 423;
+        public long roomId;
+        public HashSet<Long> messageIds;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelGetMessagesStats.ChannelGetMessagesStats.Builder builder = ProtoChannelGetMessagesStats.ChannelGetMessagesStats.newBuilder();
+            builder.setRoomId(roomId);
+            builder.addAllMessageId(messageIds);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Get_Message_Reaction().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Res_Channel_Get_Message_Reaction extends AbstractObject {
+
+        public static int actionId;
+        public List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> states;
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+
+
+            }
+
+            Res_Channel_Get_Message_Reaction object = null;
+            try {
+                object = new Res_Channel_Get_Message_Reaction();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse response = ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.parseFrom(message);
+            states = response.getStatsList();
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+
+    }
+
+    public static class Channel_Update_Reaction_Status extends AbstractObject {
+        public int actionId = 426;
+        public long roomId;
+        public boolean reactionStatus;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatus.Builder builder = ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatus.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setReactionStatus(reactionStatus);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Update_Reaction_Status().deserializeResponse(constructor, message);
+        }
+
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Update_Reaction_Status extends AbstractObject {
+
+        public static int actionId = 30426;
+        public long roomId;
+        public boolean reactionStatus;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse response = ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse.parseFrom(message);
+            roomId = response.getRoomId();
+            reactionStatus = response.getReactionStatus();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message != null) {
+                return null;
+            }
+
+            Res_Channel_Update_Reaction_Status object = null;
+            try {
+                object = new Res_Channel_Update_Reaction_Status();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Channel_Update_Signature extends AbstractObject {
+
+        public int actionId = 422;
+        public long roomId;
+        public boolean signature;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChannelUpdateSignature.ChannelUpdateSignature.Builder builder = ProtoChannelUpdateSignature.ChannelUpdateSignature.newBuilder();
+            builder.setRoomId(roomId);
+            builder.setSignature(signature);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_Channel_Update_Signature().deserializeResponse(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_Channel_Update_Signature extends AbstractObject {
+
+        public static int actionId = 30422;
+        public long roomId;
+        public boolean signature;
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse response = ProtoChannelUpdateSignature.ChannelUpdateSignatureResponse.parseFrom(message);
+            roomId = response.getRoomId();
+            signature = response.getSignature();
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            if (constructor != actionId || message != null) {
+                return null;
+            }
+
+            Res_Channel_Update_Signature object = null;
+            try {
+                object = new Res_Channel_Update_Signature();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+            return object;
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
 }

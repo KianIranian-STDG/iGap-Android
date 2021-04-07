@@ -24,6 +24,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperSaveFile;
+import net.iGap.helper.HelperTracker;
 import net.iGap.model.LocationModel;
 import net.iGap.model.repository.ErrorWithWaitTime;
 import net.iGap.model.repository.RegisterRepository;
@@ -130,6 +131,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
             public void onSuccess(LocationModel data) {
                 isShowLoading.set(View.GONE);
                 callbackEdtCodeNumber.set("+" + data.getCountryCode());
+                RegisterRepository.getInstance().setCountryCode("+" + data.getCountryCode());
                 if (data.getPhoneMask().equals("")) {
                     edtPhoneNumberMask.set("##################");
                 } else {

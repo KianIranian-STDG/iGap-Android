@@ -8,7 +8,7 @@ import net.iGap.G;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.module.FileUtils;
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.observers.rx.IGSingleObserver;
 import net.iGap.observers.rx.ObserverViewModel;
@@ -69,7 +69,7 @@ public class RemoveStickerViewModel extends ObserverViewModel {
         }
     }
 
-    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup, OnResponse onResponse) {
+    public void removeStickerFromMySticker(StructIGStickerGroup stickerGroup, RequestDelegate onResponse) {
         repository.removeStickerGroupFromMyStickers(stickerGroup)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new IGSingleObserver<StructIGStickerGroup>(backgroundDisposable) {

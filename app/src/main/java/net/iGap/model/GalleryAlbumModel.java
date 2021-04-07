@@ -3,9 +3,9 @@ package net.iGap.model;
 
 public class GalleryAlbumModel {
 
-    private String id;
+    private String id ;
     private String caption = "";
-    private String cover;
+    private String cover ;
 
     public GalleryAlbumModel() {
     }

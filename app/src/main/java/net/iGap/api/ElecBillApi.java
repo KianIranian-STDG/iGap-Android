@@ -24,23 +24,23 @@ public interface ElecBillApi {
     @FormUrlEncoded
     @POST("add-bill")
     Call<ElectricityResponseModel<String>> addBill(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum,
-                                                   @Field("national_code") String userNID, @Field("email") String userEmail,
-                                                   @Field("bill_title") String billTitle, @Field("via_sms") boolean smsEnable,
-                                                   @Field("via_print") boolean printEnable, @Field("via_email") boolean emailEnable,
-                                                   @Field("via_app") boolean appEnable);
+                                           @Field("national_code") String userNID, @Field("email") String userEmail,
+                                           @Field("bill_title") String billTitle, @Field("via_sms") boolean smsEnable,
+                                           @Field("via_print") boolean printEnable, @Field("via_email") boolean emailEnable,
+                                           @Field("via_app") boolean appEnable);
 
     @FormUrlEncoded
     @POST("edit-bill")
     Call<ElectricityResponseModel<String>> editBill(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum,
-                                                    @Field("national_code") String userNID, @Field("email") String userEmail,
-                                                    @Field("bill_title") String billTitle, @Field("via_sms") boolean smsEnable,
-                                                    @Field("via_print") boolean printEnable, @Field("via_email") boolean emailEnable,
-                                                    @Field("via_app") boolean appEnable);
+                       @Field("national_code") String userNID, @Field("email") String userEmail,
+                       @Field("bill_title") String billTitle, @Field("via_sms") boolean smsEnable,
+                       @Field("via_print") boolean printEnable, @Field("via_email") boolean emailEnable,
+                       @Field("via_app") boolean appEnable);
 
     @FormUrlEncoded
     @POST("delete-bill")
     Call<ElectricityResponseModel<String>> deleteBill(@Field("bill_identifier") String billID, @Field("mobile_number") String mobileNum,
-                                                      @Field("national_code") String userNID);
+                        @Field("national_code") String userNID);
 
     @FormUrlEncoded
     @POST("get-bills")

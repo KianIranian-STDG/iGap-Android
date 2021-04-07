@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoChannelAddAdmin;
 
 public class RequestChannelAddAdmin {
@@ -28,7 +28,7 @@ public class RequestChannelAddAdmin {
         }
     }
 
-    public void channelAddAdmin(long roomId, long memberId, ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, OnResponse onResponse) {
+    public void channelAddAdmin(long roomId, long memberId, ProtoChannelAddAdmin.ChannelAddAdmin.AdminRights adminRights, RequestDelegate onResponse) {
         ProtoChannelAddAdmin.ChannelAddAdmin.Builder builder = ProtoChannelAddAdmin.ChannelAddAdmin.newBuilder();
         builder.setRoomId(roomId);
         builder.setMemberId(memberId);

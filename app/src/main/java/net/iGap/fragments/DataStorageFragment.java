@@ -24,8 +24,8 @@ import net.iGap.R;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.databinding.FragmentStorageDataBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.DataStorageViewModel;
 
 import static android.content.Context.MODE_PRIVATE;

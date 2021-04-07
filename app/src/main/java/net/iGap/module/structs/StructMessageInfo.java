@@ -37,6 +37,8 @@ import io.realm.RealmObjectChangeListener;
  * chat message struct info
  * used for chat messages
  */
+
+@Deprecated
 public class StructMessageInfo implements Parcelable {
 
     public boolean isSelected = false;
@@ -185,7 +187,7 @@ public class StructMessageInfo implements Parcelable {
                         return;
                     }
                     setAttachment(realm.copyFromRealm(realmAttachment));
-                    abstractMessage.onProgressFinish(holder, messageType);
+//                    abstractMessage.onProgressFinish(holder, messageType);
 
                     if (realmAttachment.isFileExistsOnLocalAndIsImage()) {
                         itemVHAbstractMessage.onLoadThumbnailFromLocal(holder, realmAttachment.getCacheId(), realmAttachment.getLocalFilePath(), LocalFileType.FILE);

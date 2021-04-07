@@ -21,7 +21,7 @@
         app:backgroundTint="@color/black"
         app:cornerRadius="3dp"
         android:textSize="@dimen/dp16"
-        android:text="..." />
+        android:text="..."/>
 
     <com.google.android.material.button.MaterialButton
         style="@style/iGapButton"
@@ -37,6 +37,6 @@
         android:textSize="@dimen/dp16"
         android:text="..."
         app:backgroundTint="@color/news_red"
-        app:cornerRadius="3dp" />
+        app:cornerRadius="3dp"/>
 
 </LinearLayout>

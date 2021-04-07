@@ -15,9 +15,9 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import net.iGap.module.Theme;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.Theme;
 import net.iGap.module.customView.StickerView;
 
 public class ScrollTabView extends HorizontalScrollView {

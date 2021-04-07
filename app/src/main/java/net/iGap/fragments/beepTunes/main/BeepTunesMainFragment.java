@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesLocalSongAdapter;
 import net.iGap.adapter.beepTunes.BeepTunesMainAdapter;
@@ -26,11 +28,9 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.PlayingSong;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmDownloadSong;
 
 import java.util.List;

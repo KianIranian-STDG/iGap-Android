@@ -18,8 +18,8 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentDataBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentDataViewModel;
 
 import org.jetbrains.annotations.NotNull;

@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProviders;
 import net.iGap.R;
 import net.iGap.databinding.FragmentIgashtBarcodeScanerBinding;
 import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.viewmodel.igasht.IGashtBarcodeScannerViewModel;
+import net.iGap.observers.interfaces.ToolbarListener;
 
 public class FragmentIgashtBarcodeScan extends IGashtBaseView<IGashtBarcodeScannerViewModel> {
 

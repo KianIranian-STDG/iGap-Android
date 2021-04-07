@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.adapter.news.NewsListAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.databinding.NewsListFragBinding;
 import net.iGap.helper.HelperFragment;
 import net.iGap.model.news.NewsApiArg;
 import net.iGap.model.news.NewsList;
+import net.iGap.adapter.news.NewsListAdapter;
 import net.iGap.module.PaginationScrollListener;
 import net.iGap.viewmodel.news.NewsListVM;
 

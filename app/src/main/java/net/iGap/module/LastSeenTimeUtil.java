@@ -14,10 +14,10 @@ import android.content.Context;
 import android.text.format.DateUtils;
 
 import net.iGap.Config;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 

@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.Theme;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Category;
 import net.iGap.model.popularChannel.Channel;
 import net.iGap.model.popularChannel.Datum;
 import net.iGap.model.popularChannel.ParentChannel;
 import net.iGap.model.popularChannel.Slide;
-import net.iGap.module.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PopularChannelHomeAdapter extends RecyclerView.Adapter {
     private String bannerScale;
     private SliderViewHolder sliderViewHolder;
 
-    public PopularChannelHomeAdapter(OnFavoriteChannelCallBack callBack) {
+    public PopularChannelHomeAdapter(OnFavoriteChannelCallBack callBack){
         this.callBack = callBack;
     }
 

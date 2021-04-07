@@ -13,9 +13,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 import net.iGap.R;
-import net.iGap.adapter.igahst.OrderedTicketListAdapter;
 import net.iGap.databinding.FragmentIgashtBuyTicketBinding;
 import net.iGap.viewmodel.igasht.IGashtBuyTicketViewModel;
+import net.iGap.adapter.igahst.OrderedTicketListAdapter;
 
 import java.util.ArrayList;
 

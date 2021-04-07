@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.adapter.items.popularChannel.PopularChannelHomeAdapter;
 import net.iGap.api.apiService.BaseAPIViewModel;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.fragments.beepTunes.main.SliderBannerImageLoadingService;
 import net.iGap.libs.bannerslider.BannerSlider;
 import net.iGap.model.popularChannel.Category;
@@ -14,7 +15,6 @@ import net.iGap.model.popularChannel.GoToChannel;
 import net.iGap.model.popularChannel.ParentChannel;
 import net.iGap.model.popularChannel.Slide;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.viewmodel.repository.PopularChannelRepository;
 
 public class PopularChannelHomeViewModel extends BaseAPIViewModel {
@@ -40,7 +40,7 @@ public class PopularChannelHomeViewModel extends BaseAPIViewModel {
 
             @Override
             public void onChannelClick(Channel channel) {
-                goToChannel.setValue(new GoToChannel(channel.getSlug(), channel.getmType().equals(Channel.TYPE_PRIVATE)));
+                goToChannel.setValue(new GoToChannel(channel.getSlug(),channel.getmType().equals(Channel.TYPE_PRIVATE)));
 
             }
 

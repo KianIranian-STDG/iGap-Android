@@ -51,7 +51,7 @@ public class TabletEmptyChatFragment extends Fragment {
 
     }
 
-    public void getChatBackground() {
+    public void getChatBackground(){
         String backGroundPath = getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE).getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
             File f = new File(backGroundPath);

@@ -25,6 +25,7 @@ import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.fragments.FragmentShowMember;
+import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.ShowCustomList;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
@@ -331,15 +332,17 @@ public class HelperFragment {
     }
 
     public void loadPayment(String title, String token, PaymentCallBack callBack) {
-//    private code
+        fragment = PaymentFragment.getInstance(title, token, callBack);
+        setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+        replace = false;
+        load();
     }
 
     public void loadPayment(String title, boolean valueAdded, String token, PaymentCallBack callBack) {
-//    private code
-    }
-
-    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, int mode) {
-//    private code
+        fragment = PaymentFragment.getInstance(title, valueAdded, token, callBack);
+        setAnimation(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+        replace = false;
+        load();
     }
 
     private boolean isRelatedToChat(String fragmentName) {

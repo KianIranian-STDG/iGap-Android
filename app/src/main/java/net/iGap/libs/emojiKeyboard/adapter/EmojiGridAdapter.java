@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.View.EmojiGridView;
 import net.iGap.libs.emojiKeyboard.struct.StructIGEmojiGroup;
+import net.iGap.helper.LayoutCreator;
 
 import java.util.ArrayList;
 import java.util.List;

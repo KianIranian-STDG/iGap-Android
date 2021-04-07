@@ -145,16 +145,22 @@ public class FileManagerChildViewModel extends BaseViewModel {
     }
 
     public void getFoldersSubItems(String folder, FolderResultCallback callback) {
+        boolean isLogDir = folder.endsWith("/logs") && Config.FILE_LOG_ENABLE;
+
         new Thread(() -> {
 
             File file = new File(folder);
             if (file.isDirectory()) {
                 String[] items = file.list();
-                for (String item : items) {
+                for (int i = 0; i < items.length; i++) {
+                    String item = items[i];
 
                     //ignore hidden and temp files
                     if (item.startsWith(".")) continue;
                     if (item.endsWith(".tmp")) continue;
+                    if (isLogDir && i == items.length - 1) {
+                        continue;
+                    }
 
                     String address = folder + "/" + item;
                     File subFile = new File(address);

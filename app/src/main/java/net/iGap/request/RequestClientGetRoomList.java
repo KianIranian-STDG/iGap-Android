@@ -10,6 +10,7 @@
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
@@ -40,7 +41,7 @@ public class RequestClientGetRoomList {
         IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset, identity);
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identityGetRoomList);
 
-        EventManager.getInstance().postEvent(EventManager.ROOM_LIST_CHANGED, true);
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ROOM_LIST_CHANGED, true));
 
         try {
 

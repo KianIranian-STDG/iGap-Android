@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.G;
 import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmMember;

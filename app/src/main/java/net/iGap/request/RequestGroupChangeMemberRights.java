@@ -10,12 +10,12 @@
 
 package net.iGap.request;
 
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoGroupChangeMemberRights;
 
 public class RequestGroupChangeMemberRights {
 
-    public void groupChangeMemberRights(long roomId, long memberId, ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, OnResponse onResponse) {
+    public void groupChangeMemberRights(long roomId, long memberId, ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, RequestDelegate onResponse) {
 
         ProtoGroupChangeMemberRights.GroupChangeMemberRights.Builder builder = ProtoGroupChangeMemberRights.GroupChangeMemberRights.newBuilder();
         builder.setRoomId(roomId);
@@ -30,7 +30,7 @@ public class RequestGroupChangeMemberRights {
         }
     }
 
-    public void groupChangeRights(long roomId, ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, OnResponse onResponse) {
+    public void groupChangeRights(long roomId, ProtoGroupChangeMemberRights.GroupChangeMemberRights.MemberRights memberRights, RequestDelegate onResponse) {
 
         ProtoGroupChangeMemberRights.GroupChangeMemberRights.Builder builder = ProtoGroupChangeMemberRights.GroupChangeMemberRights.newBuilder();
         builder.setRoomId(roomId);

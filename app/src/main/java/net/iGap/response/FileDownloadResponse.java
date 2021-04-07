@@ -128,17 +128,17 @@ public class FileDownloadResponse extends MessageHandler {
                 fileStruct.onStickerDownload.onError(fileStruct, majorCode, minorCode);
         } else {
 
-            RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
-            if (majorCode == 713 && (minorCode == 2 || minorCode == 5)) {
-                HelperLog.getInstance().setErrorLog(new Exception("error: " + identityFileDownload.cacheId
-                        + " offset: " + identityFileDownload.offset
-                        + " size: " + identityFileDownload.size
-                        + " typeDownload: " + identityFileDownload.typeDownload
-                        + " majorCode: " + majorCode
-                        + " minorCode: " + minorCode));
-            }
-            type = identityFileDownload.typeDownload;
-            RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
+        RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
+        if (majorCode == 713 && (minorCode == 2 || minorCode == 5)) {
+            HelperLog.getInstance().setErrorLog(new Exception("error: " + identityFileDownload.cacheId
+                    + " offset: " + identityFileDownload.offset
+                    + " size: " + identityFileDownload.size
+                    + " typeDownload: " + identityFileDownload.typeDownload
+                    + " majorCode: " + majorCode
+                    + " minorCode: " + minorCode));
+        }
+        type = identityFileDownload.typeDownload;
+        RequestFileDownload.downloadPending.remove(identityFileDownload.cacheId + "" + identityFileDownload.offset);
 
             if (type == RequestFileDownload.TypeDownload.FILE) {
                 if (G.onFileDownloadResponse != null) {

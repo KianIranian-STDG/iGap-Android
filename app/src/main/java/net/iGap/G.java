@@ -45,8 +45,6 @@ import net.iGap.helper.HelperTracker;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.ChatUpdateStatusUtil;
-import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StartupActions;
 import net.iGap.module.accountManager.AccountManager;
@@ -165,8 +163,6 @@ public class G extends ApplicationContext {
     public static long currentServerTime;
     public static long latestResponse = System.currentTimeMillis();
     public static long serverHeartBeatTiming = 60 * 1000;
-    public static ClearMessagesUtil clearMessagesUtil = new ClearMessagesUtil();
-    public static ChatUpdateStatusUtil chatUpdateStatusUtil = new ChatUpdateStatusUtil();
     public static ConnectionState connectionState;
     public static ConnectionState latestConnectionState;
     public static OnConnectionChangeState onConnectionChangeState;
@@ -192,7 +188,6 @@ public class G extends ApplicationContext {
     public static OnUserInfoResponse onUserInfoResponse;
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
-    public static OnClearChatHistory onClearChatHistory;
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
@@ -221,13 +216,8 @@ public class G extends ApplicationContext {
     public static OnStickerDownloaded onStickerDownloaded;
     public static OnStickerDownload onStickerDownload;
     public static OnUserInfoMyClient onUserInfoMyClient;
-    public static OnChannelAddMessageReaction onChannelAddMessageReaction;
-    public static OnChannelGetMessagesStats onChannelGetMessagesStats;
     public static OnChannelRemoveUsername onChannelRemoveUsername;
     public static OnChannelRevokeLink onChannelRevokeLink;
-    public static OnChannelUpdateSignature onChannelUpdateSignature;
-    public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatus;
-    public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
     public static OnClientResolveUsername onClientResolveUsername;
@@ -393,7 +383,7 @@ public class G extends ApplicationContext {
         //init account manager for handle multi account
 
         try {
-            Realm.init(this);
+            Realm.init(context);
         } catch (Exception e) {
             G.ISRealmOK = false;
         } catch (Error e) {
@@ -442,7 +432,7 @@ public class G extends ApplicationContext {
         if (Config.FILE_LOG_ENABLE) {
             FileLog.i("------------------- CLIENT INFO -------------------");
             FileLog.i("- account cunt ->       " + AccountManager.getInstance().getUserAccountList().size() + "                         -");
-            FileLog.i("- account cunt ->       " + AccountManager.getInstance().getCurrentUser().getId());
+            FileLog.i("- current account id ->       " + AccountManager.getInstance().getCurrentUser().getId());
             FileLog.i("---------------------------------------------------");
         }
 

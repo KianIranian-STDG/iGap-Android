@@ -10,6 +10,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.controllers.BaseController;
+import net.iGap.controllers.MessageController;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperClassNamePreparation;
@@ -17,7 +18,9 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AESCrypt;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.AppConfig;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnResponse;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
@@ -298,7 +301,7 @@ public class RequestManager extends BaseController {
                     }
                 } else {
                     if (actionId != 0) {
-                        getMessageController().onUpdate(object);
+                        MessageController.getInstance(AccountManager.selectedAccount).onUpdate(object);
                     }
                 }
             }
@@ -480,6 +483,7 @@ public class RequestManager extends BaseController {
 
     public void setUserLogin(boolean userLogin) {
         this.userLogin = userLogin;
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.USER_LOGIN_CHANGED));
     }
 
     public void setPullRequestQueueRunned(boolean runned) {

@@ -22,11 +22,13 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SerializationUtils;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnChatGetRoom;
 import net.iGap.proto.ProtoGlobal;
@@ -121,15 +123,16 @@ public class HelperLogMessage {
         String result = "";
 
         if (ProtoGlobal.RoomMessage.Author.parseFrom(log.author).hasUser()) {
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getUser().getUserId());
-            if (realmRegisteredInfo != null) {
-                result = " " + realmRegisteredInfo.getDisplayName() + " ";
+
+            result = MessageDataStorage.getInstance(AccountManager.selectedAccount).getDisplayNameWithUserId(ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getUser().getUserId());
+            if (result != null) {
+                result = " " + result + " ";
             } else {
                 logMessageUpdateList.put(ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getUser().getUserId(), log);
                 new RequestUserInfo().userInfoAvoidDuplicate(ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getUser().getUserId());
             }
         } else if (ProtoGlobal.RoomMessage.Author.parseFrom(log.author).hasRoom()) {
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getRoom().getRoomId()).findFirst();
+            RealmRoom realmRoom =  MessageDataStorage.getInstance(AccountManager.selectedAccount).getRoom(ProtoGlobal.RoomMessage.Author.parseFrom(log.author).getRoom().getRoomId());;
             if (realmRoom != null) {
                 result = " " + realmRoom.getTitle() + " ";
             } else {

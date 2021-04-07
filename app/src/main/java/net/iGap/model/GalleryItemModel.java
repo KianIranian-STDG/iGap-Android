@@ -4,8 +4,8 @@ import androidx.annotation.Nullable;
 
 public class GalleryItemModel {
 
-    private long id;
-    private String address;
+    private long id ;
+    private String address ;
 
     public long getId() {
         return id;
@@ -25,8 +25,8 @@ public class GalleryItemModel {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof GalleryItemModel) {
-            return ((GalleryItemModel) obj).getId() == this.id;
+        if (obj instanceof GalleryItemModel){
+            return ((GalleryItemModel) obj).getId() == this.id ;
         }
         return super.equals(obj);
     }

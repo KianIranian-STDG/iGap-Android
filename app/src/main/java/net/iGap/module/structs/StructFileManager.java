@@ -12,13 +12,13 @@ package net.iGap.module.structs;
 
 public class StructFileManager {
 
-    public int name;
+    public int name ;
     public String nameStr = null;
     public Integer image = null;
     public int backColor;
     public String path = "";
-    public int description;
-    public String descriptionStr;
+    public int description ;
+    public String descriptionStr ;
     public boolean isFolderOrFile;
     transient public boolean isSelected;
 }

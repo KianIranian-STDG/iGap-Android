@@ -146,7 +146,7 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="IGapTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+    <style name="IGapTabLayoutStyle" parent="Widget.MaterialComponents.TabLayout" >
         <item name="tabTextColor">?iGapTitleTextColor</item>
         <item name="tabIndicatorColor">@color/green</item>
         <item name="tabBackground">?rootBackgroundColor</item>
@@ -170,7 +170,7 @@
     <style name="iGapButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">?iGapButtonColor</item>
     </style>
-    z
+z
     <style name="mobileBankButton" parent="BaseIGapButtonStyle">
         <item name="backgroundTint">@color/brown</item>
     </style>
@@ -186,7 +186,7 @@
         <item name="strokeWidth">2dp</item>
         <item name="android:textColor">?iGapButtonTextColor</item>
         <item name="strokeColor">?iGapButtonTextColor</item>
-
+        
     </style>
 
     <style name="iGapButtonStroke" parent="BaseIGapStrokeButtonStyle">

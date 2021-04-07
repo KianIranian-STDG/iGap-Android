@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
-            app:layout_behavior="@string/top_sheet_behavior">
+            app:layout_behavior="net.iGap.module.dialog.topsheet.TopSheetBehavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

@@ -8,9 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.igasht.BaseIGashtResponse;
-import net.iGap.model.igasht.IGashtLocationItem;
-import net.iGap.model.igasht.IGashtProvince;
 import net.iGap.repository.IGashtRepository;
+import net.iGap.model.igasht.IGashtProvince;
+import net.iGap.model.igasht.IGashtLocationItem;
 
 import java.util.List;
 

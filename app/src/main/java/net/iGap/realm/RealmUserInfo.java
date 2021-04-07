@@ -286,6 +286,17 @@ public class RealmUserInfo extends RealmObject {
         });
     }
 
+    // Kuknos seed key save and get process
+
+    /*public static void updateKuknos(RealmKuknos kuknosM) {
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            if (realmUserInfo != null) {
+                realmUserInfo.setKuknosM(kuknosM);
+            }
+        });
+    }*/
+
     public boolean isWalletRegister() {
         return isWalletRegister;
     }

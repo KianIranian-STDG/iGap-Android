@@ -1,9 +1,8 @@
 
 package net.iGap.model.paymentPackage;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 public class GetFavoriteNumber {
 

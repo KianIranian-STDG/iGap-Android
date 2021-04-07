@@ -1,10 +1,13 @@
 package net.iGap.viewmodel.igasht;
 
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.model.igasht.IGashtLocationItem;
 import net.iGap.model.igasht.purchaseResponse;
 import net.iGap.repository.IGashtRepository;
@@ -72,7 +75,7 @@ public class IGashtLocationDetailViewModel extends BaseIGashtViewModel<purchaseR
     @Override
     public void onError(String error) {
         super.onError(error);
-        showMessage = false;
+        showMessage=false;
     }
 
     @Override

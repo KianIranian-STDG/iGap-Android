@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.model.AccountUser;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
@@ -57,6 +58,9 @@ public final class HelperLogout {
     public boolean logoutUser(AccountUser accountUser) {
         if (accountUser.isAssigned()) {
             logout();
+
+            MessageDataStorage.getInstance(AccountManager.selectedAccount).cleanUp();
+
             boolean tmp = AccountManager.getInstance().removeUser(accountUser);
             if (!tmp) {
                 clearPreferences();

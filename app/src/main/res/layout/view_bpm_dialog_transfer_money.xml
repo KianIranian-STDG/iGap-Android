@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lytRoot"
+    android:minWidth="@dimen/dp300"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/dp2"
+    android:paddingTop="@dimen/dp2"
+    android:paddingBottom="@dimen/dp2"
+    android:paddingRight="@dimen/dp14"
+    android:paddingLeft="@dimen/dp14"
+    android:layoutDirection="ltr">
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/rbCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        app:buttonTint="@color/brown" />
+
+    <TextView
+        android:id="@+id/tvType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/standardTextSize"
+        android:paddingLeft="@dimen/dp10"
+        android:paddingRight="@dimen/dp10"
+        android:textColor="?iGapTitleTextColor"
+        tools:text="حساب پارسیان" />
+
+</RelativeLayout>

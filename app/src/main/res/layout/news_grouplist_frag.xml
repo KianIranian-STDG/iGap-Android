@@ -1,6 +1,6 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Container"
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                     android:layout_marginEnd="@dimen/dp16"
                     app:layout_constraintTop_toBottomOf="@+id/Toolbar"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcGroup"
@@ -60,7 +60,7 @@
             android:minHeight="@dimen/toolbar_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ProgressBar
             android:id="@+id/ProgressV"
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHeight_percent="0.08" />
+            app:layout_constraintHeight_percent="0.08"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -42,7 +42,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         return fragment;
     }
 
-    public static FileManagerChildFragment newInstance(String type, String id) {
+    public static FileManagerChildFragment newInstance(String type , String id) {
         FileManagerChildFragment fragment = new FileManagerChildFragment();
         Bundle bundle = new Bundle();
         bundle.putString(FOLDER_NAME, type);
@@ -87,34 +87,34 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     private void setupRecyclerView() {
         if (mFolderName.equals(ROOT_FILE_MANAGER)) {
             setupListItems(mViewModel.getRootItems());
-        } else if (mFolderName.equals(FILE_MANAGER_IMAGE) || mFolderName.equals(FILE_MANAGER_VIDEO) || mFolderName.equals(FILE_MANAGER_MUSIC)) {
+        }else if(mFolderName.equals(FILE_MANAGER_IMAGE) || mFolderName.equals(FILE_MANAGER_VIDEO) || mFolderName.equals(FILE_MANAGER_MUSIC)){
             fillWithGalleryItems(mFolderName);
-        } else {
+        }else {
             fillFoldersItems(mFolderName);
         }
     }
 
-    private void fillWithGalleryItems(String type) {
+    private void fillWithGalleryItems(String type){
 
         String folder_id = null;
-        if (getArguments() != null) {
+        if(getArguments() != null){
             folder_id = getArguments().getString(GALLERY_FOLDER_ID);
         }
 
-        if (folder_id != null) {
-            if (type.equals(FILE_MANAGER_IMAGE)) {
-                FileManager.getFolderPhotosById(getContext(), folder_id, result -> {
+        if(folder_id != null){
+            if(type.equals(FILE_MANAGER_IMAGE)){
+                FileManager.getFolderPhotosById(getContext() , folder_id , result -> {
                     mViewModel.setItems(mViewModel.convertImageGalleryItems(result));
                     mViewModel.checkListHasSelectedBefore();
-                    if (getActivity() != null) {
+                    if(getActivity() != null){
                         getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
                     }
                 });
-            } else if (type.equals(FILE_MANAGER_VIDEO)) {
-                FileManager.getFolderVideosById(getContext(), folder_id, result -> {
+            }else if(type.equals(FILE_MANAGER_VIDEO)){
+                FileManager.getFolderVideosById(getContext() , folder_id , result -> {
                     mViewModel.setItems(mViewModel.convertVideoGalleryItems(result));
                     mViewModel.checkListHasSelectedBefore();
-                    if (getActivity() != null) {
+                    if(getActivity() != null){
                         getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
                     }
                 });
@@ -123,32 +123,32 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         }
 
         binding.loader.setVisibility(View.VISIBLE);
-        switch (type) {
+        switch (type){
             case FILE_MANAGER_IMAGE:
-                FileManager.getDevicePhotoFolders(getContext(), result -> {
+                FileManager.getDevicePhotoFolders(getContext() , result -> {
                     mViewModel.setItems(mViewModel.convertAlbumGalleryItems(result));
                     mViewModel.checkListHasSelectedBefore();
-                    if (getActivity() != null) {
+                    if(getActivity() != null){
                         getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
                     }
                 });
                 break;
 
             case FILE_MANAGER_VIDEO:
-                FileManager.getDeviceVideoFolders(getContext(), result -> {
+                FileManager.getDeviceVideoFolders(getContext() , result -> {
                     mViewModel.setItems(mViewModel.convertVideoAlbumGalleryItems(result));
                     mViewModel.checkListHasSelectedBefore();
-                    if (getActivity() != null) {
+                    if(getActivity() != null){
                         getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
                     }
                 });
                 break;
 
             case FILE_MANAGER_MUSIC:
-                FileManager.getDeviceMusics(getContext(), false, result -> {
+                FileManager.getDeviceMusics(getContext() , false , result -> {
                     mViewModel.setItems(mViewModel.convertMusicGalleryItems(result));
                     mViewModel.checkListHasSelectedBefore();
-                    if (getActivity() != null) {
+                    if(getActivity() != null){
                         getActivity().runOnUiThread(() -> setupListItems(mViewModel.getItems()));
                     }
                 });
@@ -162,7 +162,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
 
             //show loader
             binding.loader.setVisibility(View.VISIBLE);
-            mViewModel.getFoldersSubItems(folder, items -> {
+            mViewModel.getFoldersSubItems(folder , items -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         setupListItems(items);
@@ -178,7 +178,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         mAdapter = new AdapterFileManager(items, this);
         binding.rvItems.setAdapter(mAdapter);
 
-        if (items.size() == 0) {
+        if(items.size() == 0){
             binding.btnBack.setVisibility(View.VISIBLE);
             binding.lytNothing.setVisibility(View.VISIBLE);
         }
@@ -189,7 +189,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     void onSortClicked(Boolean sortByDate) {
-        if (mFolderName.equals(ROOT_FILE_MANAGER)) return;
+        if(mFolderName.equals(ROOT_FILE_MANAGER)) return;
         mViewModel.sortList(sortByDate);
         //mAdapter.removeAll();
         mAdapter.update(mViewModel.getItems());
@@ -200,7 +200,7 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
             binding.lytNothing.setVisibility(View.GONE);
             binding.rvItems.setVisibility(View.VISIBLE);
             mAdapter.update(mViewModel.getItems());
-            if (mViewModel.getItems().size() == 0) {
+            if(mViewModel.getItems().size() == 0){
                 binding.btnBack.setVisibility(View.VISIBLE);
                 binding.lytNothing.setVisibility(View.VISIBLE);
             }
@@ -230,10 +230,10 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     @Override
-    public void onFileClicked(String path, int position, boolean isSelected) {
-        if (isSelected) {
+    public void onFileClicked(String path, int position , boolean isSelected) {
+        if(isSelected){
             addItemToParentSelectedList(path);
-        } else {
+        }else {
             removeItemFromParentSelectedList(path);
         }
         mAdapter.notifyItemChanged(position);
@@ -251,10 +251,10 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     @Override
-    public void onGalleryClicked(int type, String path, int position) {
-        String tempType = null;
+    public void onGalleryClicked(int type , String path, int position) {
+        String tempType = null ;
 
-        switch (type) {
+        switch (type){
             case R.string.images:
                 tempType = FILE_MANAGER_IMAGE;
                 break;
@@ -268,24 +268,24 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
                 break;
         }
 
-        if (tempType != null) {
+        if(tempType != null) {
             closeSearch();
             FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(tempType);
-            if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+            if(getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
                 FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
                 parent.setToolbarIconVisibility(true);
                 parent.setToolbarSortIconVisibility(false);
-                parent.loadFragment(fragment, FileManagerChildFragment.class.getName());
+                parent.loadFragment(fragment , FileManagerChildFragment.class.getName());
             }
-        } else {
-            if (path != null) {
+        }else {
+            if(path != null){
                 closeSearch();
-                FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(mFolderName, path);
-                if (getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
+                FileManagerChildFragment fragment = FileManagerChildFragment.newInstance(mFolderName , path);
+                if(getParentFragment() != null && getParentFragment() instanceof FileManagerFragment) {
                     FileManagerFragment parent = ((FileManagerFragment) getParentFragment());
                     parent.setToolbarIconVisibility(true);
                     parent.setToolbarSortIconVisibility(false);
-                    parent.loadFragment(fragment, FileManagerChildFragment.class.getName());
+                    parent.loadFragment(fragment , FileManagerChildFragment.class.getName());
                 }
             }
         }

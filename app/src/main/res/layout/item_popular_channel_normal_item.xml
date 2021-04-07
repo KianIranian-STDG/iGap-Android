@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toTopOf="@id/tv_item_popular_rv_grid_linear"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circle_item_popular_rv_grid_linear"

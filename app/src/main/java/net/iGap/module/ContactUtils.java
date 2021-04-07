@@ -24,10 +24,10 @@ import androidx.annotation.Nullable;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;

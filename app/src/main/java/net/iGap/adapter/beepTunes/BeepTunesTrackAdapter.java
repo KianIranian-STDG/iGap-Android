@@ -13,14 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.observers.interfaces.OnTrackAdapter;
 import net.iGap.module.BeepTunesPlayerService;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
-import net.iGap.observers.interfaces.OnTrackAdapter;
 import net.iGap.realm.RealmDownloadSong;
 
 import java.io.IOException;

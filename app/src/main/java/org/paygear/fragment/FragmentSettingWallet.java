@@ -1,19 +1,18 @@
 package org.paygear.fragment;
 
 import android.content.DialogInterface;
+import androidx.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;

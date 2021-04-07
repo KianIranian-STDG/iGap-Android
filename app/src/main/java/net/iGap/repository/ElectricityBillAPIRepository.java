@@ -20,7 +20,7 @@ import net.iGap.realm.RealmElectricityBill;
 @Deprecated
 public class ElectricityBillAPIRepository {
 
-    private ElecBillApi apiService = new RetrofitFactory().getElecBillRetrofit();
+    private ElecBillApi apiService =  new RetrofitFactory().getElecBillRetrofit();
     private RealmElectricityBill realmRepo = new RealmElectricityBill();
     private String phone = null;
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/sliderTitle" />
+        app:layout_constraintBottom_toTopOf="@+id/sliderTitle"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/sliderTitle"
@@ -37,7 +38,7 @@
         android:layout_marginBottom="@dimen/dp32"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/sliderDesc" />
+        app:layout_constraintBottom_toTopOf="@+id/sliderDesc"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/sliderDesc"
@@ -58,6 +59,6 @@
         android:textColor="?attr/iGapTitleTextColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

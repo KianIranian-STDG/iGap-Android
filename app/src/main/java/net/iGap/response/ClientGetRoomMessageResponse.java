@@ -17,6 +17,8 @@ import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoomMessage;
 
+import io.realm.Realm;
+
 public class ClientGetRoomMessageResponse extends MessageHandler {
 
     public int actionId;

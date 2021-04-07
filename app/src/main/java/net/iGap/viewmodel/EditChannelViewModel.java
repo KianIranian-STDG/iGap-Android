@@ -11,28 +11,27 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.RoomController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.SingleLiveEvent;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChannelAvatarDelete;
 import net.iGap.observers.interfaces.OnChannelEdit;
-import net.iGap.observers.interfaces.OnChannelUpdateReactionStatus;
-import net.iGap.observers.interfaces.OnChannelUpdateSignature;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelEdit;
-import net.iGap.request.RequestChannelUpdateReactionStatus;
-import net.iGap.request.RequestChannelUpdateSignature;
 
 import java.util.ArrayList;
 
-public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, OnChannelUpdateReactionStatus {
+public class EditChannelViewModel extends BaseViewModel implements OnChannelAvatarDelete, EventManager.EventDelegate {
 
     public ObservableField<String> channelName = new ObservableField<>("");
     public ObservableField<String> channelDescription = new ObservableField<>("");
@@ -76,8 +75,12 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
     /*private AttachFile attachFile;*/
     private String pathSaveImage;
 
+
     public EditChannelViewModel(long roomId) {
         this.roomId = roomId;
+
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().addObserver(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
 
         G.onChannelAvatarDelete = this;
         /*G.onChannelAddMember = this;*/
@@ -150,10 +153,8 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
         if (role == ChannelChatRole.OWNER) {
             showLayoutReactStatus.set(View.VISIBLE);
-            G.onChannelUpdateReactionStatus = this;
         } else {
             showLayoutReactStatus.set(View.GONE);
-            G.onChannelUpdateReactionStatus = null;
         }
 
         /*try {
@@ -186,29 +187,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
             menuPopupVisibility.setValue(View.GONE);
         }*/
 
-        G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
-            @Override
-            public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
-                // handle realm to response class
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        isShowLoading.set(View.GONE);
-                    }
-                });
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                G.handler.post(() -> {
-                    if (isSignedMessage.get()) {
-                        isSignedMessage.set(false);
-                    } else {
-                        isSignedMessage.set(true);
-                    }
-                });
-            }
-        };
         /*attachFile = new AttachFile(G.fragmentActivity);*/
     }
 
@@ -253,11 +231,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     public void onSingedMessageCheckedChange(boolean state) {
         if (state != isSignedMessage.get()) {
-            if (state) {
-                new RequestChannelUpdateSignature().channelUpdateSignature(roomId, true);
-            } else {
-                new RequestChannelUpdateSignature().channelUpdateSignature(roomId, false);
-            }
+            RoomController.getInstance(AccountManager.selectedAccount).ChannelUpdateSignature(roomId, state);
             isShowLoading.set(View.VISIBLE);
         }
     }
@@ -268,7 +242,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     public void onReactionMessageCheckedChange(boolean state) {
         if (state != isReactionMessage.get()) {
-            new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, state);
+            RoomController.getInstance(AccountManager.selectedAccount).ChannelUpdateReactionStatus(roomId, state);
             isShowLoading.set(View.VISIBLE);
         }
     }
@@ -345,20 +319,6 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     }
 
-    @Override
-    public void OnChannelUpdateReactionStatusError() {
-        G.handler.post(() -> isShowLoading.set(View.GONE));
-    }
-
-    @Override
-    public void OnChannelUpdateReactionStatusResponse(long roomId, boolean status) {
-        G.handler.post(() -> {
-            if (roomId == EditChannelViewModel.this.roomId) {
-                isShowLoading.set(View.GONE);
-            }
-        });
-    }
-
     public void setPrivate(boolean aPrivate, String username) {
         isPrivate = aPrivate;
         showUsername.set(isPrivate ? View.GONE : View.VISIBLE);
@@ -379,5 +339,26 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     public MutableLiveData<Integer> getShowUploadProgressLiveData() {
         return showUploadProgressLiveData;
+    }
+
+    @Override
+    public void onDestroyViewModel() {
+        getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
+        getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_SIGNATURE, this);
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.CHANNEL_UPDATE_VOTE) {
+            long roomId = (long) args[0];
+            if (roomId == EditChannelViewModel.this.roomId) {
+                isShowLoading.set(View.GONE);
+            }
+        } else if (id == EventManager.CHANNEL_UPDATE_SIGNATURE) {
+            long roomId = (long) args[0];
+            if (roomId == EditChannelViewModel.this.roomId) {
+                isShowLoading.set(View.GONE);
+            }
+        }
     }
 }

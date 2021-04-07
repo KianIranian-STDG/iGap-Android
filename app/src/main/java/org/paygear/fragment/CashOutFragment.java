@@ -4,17 +4,16 @@ package org.paygear.fragment;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
+import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import net.iGap.R;
 import net.iGap.helper.HelperToolbar;
@@ -60,7 +59,7 @@ public class CashOutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cash_out, container, false);
+        View view =  inflater.inflate(R.layout.fragment_cash_out, container, false);
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

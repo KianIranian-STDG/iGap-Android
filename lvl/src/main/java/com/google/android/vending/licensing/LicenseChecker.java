@@ -81,8 +81,8 @@ public class LicenseChecker implements ServiceConnection {
     private final Queue<LicenseValidator> mPendingChecks = new LinkedList<LicenseValidator>();
 
     /**
-     * @param context          a Context
-     * @param policy           implementation of Policy
+     * @param context a Context
+     * @param policy implementation of Policy
      * @param encodedPublicKey Base64-encoded RSA public key
      * @throws IllegalArgumentException if encodedPublicKey is invalid
      */
@@ -277,9 +277,7 @@ public class LicenseChecker implements ServiceConnection {
         }
     }
 
-    /**
-     * Unbinds service if necessary and removes reference to it.
-     */
+    /** Unbinds service if necessary and removes reference to it. */
     private void cleanupService() {
         if (mService != null) {
             try {
@@ -305,9 +303,7 @@ public class LicenseChecker implements ServiceConnection {
         mHandler.getLooper().quit();
     }
 
-    /**
-     * Generates a nonce (number used once).
-     */
+    /** Generates a nonce (number used once). */
     private int generateNonce() {
         return RANDOM.nextInt();
     }

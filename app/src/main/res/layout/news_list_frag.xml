@@ -34,7 +34,7 @@
                     android:layout_marginEnd="@dimen/dp16"
                     app:layout_constraintTop_toBottomOf="@+id/Toolbar"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcGroup"
@@ -61,7 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHeight_percent="0.08" />
+            app:layout_constraintHeight_percent="0.08"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -52,8 +52,7 @@ public class DailNumberFragment extends Fragment {
                         if (getActivity() != null) {
                             getActivity().onBackPressed();
                         }
-                    }
-                });
+                    }});
 
         binding.toolbar.addView(t.getView());
     }

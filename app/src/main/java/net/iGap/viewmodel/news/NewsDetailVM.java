@@ -2,9 +2,6 @@ package net.iGap.viewmodel.news;
 
 import android.view.View;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.MutableLiveData;
-
 import net.iGap.R;
 import net.iGap.api.apiService.BaseAPIViewModel;
 import net.iGap.helper.HelperCalander;
@@ -16,6 +13,9 @@ import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.repository.news.DetailRepo;
 
 import java.util.List;
+
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.MutableLiveData;
 
 public class NewsDetailVM extends BaseAPIViewModel {
 

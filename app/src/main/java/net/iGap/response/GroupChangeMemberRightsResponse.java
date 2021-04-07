@@ -13,7 +13,7 @@ package net.iGap.response;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.GroupChatRole;
-import net.iGap.observers.interfaces.OnResponse;
+import net.iGap.observers.interfaces.RequestDelegate;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupChangeMemberRights;
 import net.iGap.realm.RealmRoom;
@@ -46,16 +46,16 @@ public class GroupChangeMemberRightsResponse extends MessageHandler {
             }
         });
 
-        if (identity instanceof OnResponse) {
-            ((OnResponse) identity).onReceived(message, null);
+        if (identity instanceof RequestDelegate) {
+            ((RequestDelegate) identity).onReceived(message, null);
         }
     }
 
     @Override
     public void error() {
         super.error();
-        if (identity instanceof OnResponse) {
-            ((OnResponse) identity).onReceived(null, message);
+        if (identity instanceof RequestDelegate) {
+            ((RequestDelegate) identity).onReceived(null, message);
         }
     }
 }

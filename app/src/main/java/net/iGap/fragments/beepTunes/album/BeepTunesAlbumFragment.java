@@ -27,13 +27,13 @@ import net.iGap.adapter.beepTunes.BeepTunesAlbumAdapter;
 import net.iGap.adapter.beepTunes.BeepTunesTrackAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
 import net.iGap.helper.ImageLoadingService;
+import net.iGap.observers.interfaces.OnTrackAdapter;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.api.beepTunes.Album;
 import net.iGap.module.api.beepTunes.DownloadSong;
 import net.iGap.module.api.beepTunes.PlayingSong;
 import net.iGap.module.api.beepTunes.Track;
-import net.iGap.observers.interfaces.OnTrackAdapter;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmDownloadSong;
 
 public class BeepTunesAlbumFragment extends BaseAPIViewFrag<AlbumViewModel> implements ToolbarListener {

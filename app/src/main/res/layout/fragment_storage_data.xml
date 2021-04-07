@@ -356,7 +356,7 @@
                     app:layout_constraintStart_toStartOf="@id/useSdkTitle"
                     app:layout_constraintEnd_toEndOf="@id/useSdk"
                     app:layout_constraintTop_toTopOf="@id/useSdkTitle"
-                    app:layout_constraintBottom_toBottomOf="@id/useSdkTitle" />
+                    app:layout_constraintBottom_toBottomOf="@id/useSdkTitle"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

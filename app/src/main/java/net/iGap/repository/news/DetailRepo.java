@@ -1,12 +1,12 @@
 package net.iGap.repository.news;
 
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.observers.interfaces.HandShakeCallback;
+import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.model.news.NewsApiArg;
 import net.iGap.model.news.NewsComment;
 import net.iGap.model.news.NewsDetail;
 import net.iGap.model.news.NewsList;
-import net.iGap.module.accountManager.DbManager;
-import net.iGap.observers.interfaces.HandShakeCallback;
-import net.iGap.observers.interfaces.ResponseCallback;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileGetEmail;
 

@@ -82,7 +82,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
             textView.setBackgroundColor(new Theme().getRootColor(textView.getContext()));
-            textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
             textView.setGravity(Gravity.START);
 
             return new ViewHolderTitle(textView);

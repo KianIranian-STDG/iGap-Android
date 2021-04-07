@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.helper.HelperClearMessage;
+
 import net.iGap.proto.ProtoChatClearMessage;
 
 public class ChatClearMessageResponse extends MessageHandler {
@@ -30,7 +30,6 @@ public class ChatClearMessageResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage = (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
-        HelperClearMessage.clearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId());
     }
 
     @Override

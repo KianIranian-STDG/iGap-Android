@@ -68,7 +68,7 @@ public class TextBadge extends FrameLayout {
     public void setText(String text) {
         if (HelperCalander.isPersianUnicode) {
             textView.setText(HelperCalander.convertToUnicodeFarsiNumber(text));
-            textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
         } else {
             textView.setText(text);
         }

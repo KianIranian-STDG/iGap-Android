@@ -2,11 +2,11 @@ package net.iGap.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
+import net.iGap.repository.CPayRepository;
 import net.iGap.model.cPay.RegisterPlaqueBodyModel;
 import net.iGap.model.cPay.RegisterPlaqueModel;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.repository.CPayRepository;
 
 public class FragmentCPayEditViewModel extends BaseCPayViewModel<RegisterPlaqueModel> {
 

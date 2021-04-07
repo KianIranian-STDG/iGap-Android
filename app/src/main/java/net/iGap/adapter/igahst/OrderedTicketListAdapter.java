@@ -9,8 +9,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.model.igasht.IGashtLocationService;
 import net.iGap.observers.interfaces.TicketListCountChangeListener;
+import net.iGap.model.igasht.IGashtLocationService;
 
 import java.util.List;
 

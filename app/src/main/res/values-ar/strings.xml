@@ -67,7 +67,6 @@
     <string name="verify_sms_message">Please enter verification code sent by sms</string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
-
     <string name="verify_invalid_code_message">مع الأسف إنّ رمز التأكيد غير صالح، من فضلك أدخل رمز التأكيد الصالح .</string>
 
     <string name="phone_number">"رقم الهاتف "</string>
@@ -1671,7 +1670,8 @@
 
     <string name="st_checkbox_delete">الحذف لــ</string>
 
-    <string name="st_desc_delete">هل أنت متأكد من حذف هذه %1$s الرسالة؟</string>
+    <string name="st_desc_delete">هل أنت متأكد أنك تريد حذف هذه الرسالة؟</string>
+    <string name="st_desc_deletes">هل أنت متأكد أنك تريد حذف هذه الرسائل؟</string>
 
     <string name="st_send_report">تمّ تسجيل ابلاغ اساءة الاستخدام بنجاح</string>
 
@@ -2664,4 +2664,5 @@
     <string name="Submitـomment">لعرض نتائج الاستطلاع ، يرجى تسجيل تصويتك أولاً!</string>
     <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
     <string name="share_file_link">مشاركة الرابط العام</string>
+    <string name="can_not_support_file">Can not support file</string>
 </resources>

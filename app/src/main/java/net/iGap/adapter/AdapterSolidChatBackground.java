@@ -19,6 +19,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
+import net.iGap.viewmodel.ChatBackgroundViewModel;
 
 import org.jetbrains.annotations.NotNull;
 

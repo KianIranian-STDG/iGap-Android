@@ -58,7 +58,7 @@ constructor(context: Context,
         //set the center of all circles to be center of the view
         center.set(w / 2f, h / 2f)
         maxRadius = w / 2f
-        initialRadius = /*(w / waveGap) +*/ w / 4f
+        initialRadius = /*(w / waveGap) +*/ w/4f
 
         //Create gradient after getting sizing information
         gradientPaint.shader = RadialGradient(

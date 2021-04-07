@@ -41,7 +41,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/image"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_chainStyle="packed"/>
 
             <net.iGap.module.RadiusImageView
                 android:id="@+id/image"
@@ -58,7 +58,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -102,7 +102,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/image1"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_chainStyle="packed"/>
 
             <net.iGap.module.RadiusImageView
                 android:id="@+id/image1"
@@ -119,7 +119,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category1"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -161,7 +161,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/image2"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintVertical_chainStyle="packed"/>
 
             <net.iGap.module.RadiusImageView
                 android:id="@+id/image2"
@@ -178,7 +178,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/category2"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

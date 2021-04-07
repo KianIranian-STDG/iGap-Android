@@ -24,7 +24,7 @@
             android:ellipsize="end"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/billValue" />
+            app:layout_constraintLeft_toRightOf="@+id/billValue"/>
 
         <View
             android:id="@+id/followUp"
@@ -39,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/billTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/billTitle"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/billValue"
@@ -57,7 +57,7 @@
             android:layout_marginRight="@dimen/dp8"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/billTitle" />
+            app:layout_constraintRight_toLeftOf="@+id/billTitle"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -47,9 +47,9 @@ import net.iGap.R;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
+import net.iGap.observers.interfaces.OnColorChangedListenerSelect;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ColorPiker;
-import net.iGap.observers.interfaces.OnColorChangedListenerSelect;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -140,7 +140,7 @@ public class ActivityPaint extends ActivityEnhanced {
             }
         });
 
-        tvEraser.setTypeface(ResourcesCompat.getFont(tvEraser.getContext(), R.font.font_icon_old));
+        tvEraser.setTypeface(ResourcesCompat.getFont(tvEraser.getContext() , R.font.font_icon_old));
 
         TextView tvPaint = (TextView) findViewById(R.id.textView_paintsize);
         tvPaint.setOnClickListener(new OnClickListener() {

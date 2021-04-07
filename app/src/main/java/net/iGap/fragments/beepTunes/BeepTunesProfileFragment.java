@@ -10,11 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.R;
+import net.iGap.module.dialog.BaseBottomSheet;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
-import net.iGap.module.accountManager.AccountManager;
-import net.iGap.module.dialog.BaseBottomSheet;
 
 public class BeepTunesProfileFragment extends BaseBottomSheet {
     public static final String SYNC_FRAGMENT = "syncSong";

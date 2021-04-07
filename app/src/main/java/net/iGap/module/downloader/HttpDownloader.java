@@ -5,8 +5,10 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import net.iGap.G;
 import net.iGap.controllers.BaseController;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 
 import java.util.ArrayList;
@@ -15,11 +17,12 @@ import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-class HttpDownloader extends BaseController implements IDownloader, Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> {
+class HttpDownloader extends BaseController implements IDownloader, Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>>, EventManager.EventDelegate {
     private static HttpDownloader[] instance = new HttpDownloader[AccountManager.MAX_ACCOUNT_COUNT];
     private Queue<HttpRequest> requestsQueue = new PriorityBlockingQueue<>();
     private List<HttpRequest> inProgressRequests = new ArrayList<>();
     private AtomicInteger inProgressCount = new AtomicInteger(0);
+    private boolean canStartDownload;
     private static final int MAX_DOWNLOAD = 3;
 
     public static HttpDownloader getInstance(int account) {
@@ -37,6 +40,9 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
 
     private HttpDownloader(int account) {
         super(account);
+        canStartDownload = getRequestManager().isUserLogin();
+
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.USER_LOGIN_CHANGED, this));
     }
 
     public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {
@@ -130,8 +136,13 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
     }
 
     private void scheduleNewDownload() {
-        if (inProgressCount.get() >= MAX_DOWNLOAD)
+        if (!canStartDownload) {
             return;
+        }
+
+        if (inProgressCount.get() >= MAX_DOWNLOAD) {
+            return;
+        }
 
         HttpRequest request = requestsQueue.poll();
         if (request == null)
@@ -154,6 +165,23 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
                 removeDownloadingRequestIfExist(arg.first);
                 scheduleNewDownload();
                 break;
+        }
+    }
+
+    public void setCanStartDownload(boolean canStartDownload) {
+        this.canStartDownload = canStartDownload;
+
+        if (canStartDownload) {
+            scheduleNewDownload();
+        }
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.USER_LOGIN_CHANGED) {
+            if (AccountManager.selectedAccount == currentAccount) {
+                setCanStartDownload(getRequestManager().isUserLogin());
+            }
         }
     }
 

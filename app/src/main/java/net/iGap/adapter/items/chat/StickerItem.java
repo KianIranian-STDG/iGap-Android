@@ -25,10 +25,12 @@ import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.repository.StickerRepository;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.List;
@@ -53,7 +55,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-        holder.image.setTag(structMessage.getAttachment().getToken());
+        holder.image.setTag(attachment.token);
         super.bindView(holder, payloads);
 
         holder.getChatBloke().setBackgroundResource(0);
@@ -63,26 +65,26 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             if (FragmentChat.isInSelectionMode) {
                 holder.itemView.performLongClick();
             } else {
-                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                if (messageObject.status == MessageObject.STATUS_SENDING) {
                     return;
                 }
-                if (mMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                    messageClickListener.onFailedMessageClick(v, structMessage, holder.getAdapterPosition());
+                if (messageObject.status == MessageObject.STATUS_FAILED) {
+                    messageClickListener.onFailedMessageClick(v, messageObject, holder.getAdapterPosition());
                 } else {
-                    messageClickListener.onOpenClick(v, structMessage, holder.getAdapterPosition());
+                    messageClickListener.onOpenClick(v, messageObject, holder.getAdapterPosition());
                 }
             }
         });
 
-        String path = StickerRepository.getInstance().getStickerPath(structMessage.getAttachment().getToken(), structMessage.getAttachment().getName());
+        String path = StickerRepository.getInstance().getStickerPath(attachment.token, attachment.name);
         if (new File(path).exists()) {
             G.imageLoader.displayImage(suitablePath(path), holder.image);
         } else {
-            EventManager.getInstance().addEventListener(EventManager.STICKER_DOWNLOAD, (id, message) -> {
+            EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_DOWNLOAD, (id, account, args) -> {
                 if (id == EventManager.STICKER_DOWNLOAD) {
 
-                    String filePath = (String) message[0];
-                    String fileToken = (String) message[1];
+                    String filePath = (String) args[0];
+                    String fileToken = (String) args[1];
 
                     if (holder.image.getTag().equals(fileToken)) {
                         G.handler.post(() -> {
@@ -92,8 +94,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
                 }
             });
 
-            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(structMessage.getAttachment().getCacheId(),
-                    structMessage.getAttachment().getToken(), structMessage.getAttachment().getSize(), path));
+            IGDownloadFile.getInstance().startDownload(new IGDownloadFileStruct(attachment.cacheId, attachment.token, attachment.size, path));
         }
 
         holder.image.setOnLongClickListener(getLongClickPerform(holder));

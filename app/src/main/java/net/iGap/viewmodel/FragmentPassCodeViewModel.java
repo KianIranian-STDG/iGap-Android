@@ -30,6 +30,7 @@ import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.andrognito.patternlockview.utils.PatternLockUtils;
 
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -42,7 +43,6 @@ import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;
 
 import java.util.List;

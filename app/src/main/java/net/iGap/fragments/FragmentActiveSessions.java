@@ -35,11 +35,11 @@ import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.observers.interfaces.OnUserSessionTerminate;
+import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructSessions;
-import net.iGap.observers.interfaces.OnUserSessionTerminate;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.request.RequestUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionTerminate;
 

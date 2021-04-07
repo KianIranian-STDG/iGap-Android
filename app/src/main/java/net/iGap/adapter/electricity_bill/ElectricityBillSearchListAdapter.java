@@ -65,10 +65,11 @@ public class ElectricityBillSearchListAdapter extends RecyclerView.Adapter<Elect
 
             if (HelperCalander.isPersianUnicode) {
                 billID.setText(HelperCalander.convertToUnicodeFarsiNumber(mData.get(position).getBillID()));
-            } else
+            }
+            else
                 billID.setText(mData.get(position).getBillID());
-            customerName.setText((mData.get(position).getCustomerName() == null ? "" : mData.get(position).getCustomerName())
-                    + " " + (mData.get(position).getCustomerFamily() == null ? "" : mData.get(position).getCustomerFamily()));
+            customerName.setText((mData.get(position).getCustomerName()==null? "":mData.get(position).getCustomerName())
+                    + " " + (mData.get(position).getCustomerFamily()==null? "" : mData.get(position).getCustomerFamily()));
             customerAddress.setText(mData.get(position).getServiceAddress());
             container.setOnClickListener(v -> clickListener.onClick(position));
 

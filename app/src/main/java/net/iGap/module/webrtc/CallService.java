@@ -70,7 +70,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
     private MediaPlayer player;
     private Vibrator vibrator;
     private SharedPreferences sharedPreferences;
-    //    private RealmRegisteredInfo info;
+//    private RealmRegisteredInfo info;
     private CallAudioManager audioManager = null;
     private CallAudioManager.AudioManagerEvents audioManagerEvents;
 
@@ -109,11 +109,14 @@ public class CallService extends Service implements CallManager.CallStateChange 
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.PHONE_STATE");
+        myPhoneStateService = new CallManager.MyPhoneStateService();
+        registerReceiver(myPhoneStateService, intentFilter);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
 
         if (instance != null) {
             return START_NOT_STICKY;
@@ -132,11 +135,6 @@ public class CallService extends Service implements CallManager.CallStateChange 
         instance = this;
         CallManager.getInstance().setOnCallStateChanged(this);
         initialAudioManager();
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.PHONE_STATE");
-        myPhoneStateService = new CallManager.MyPhoneStateService();
-        registerReceiver(myPhoneStateService, intentFilter);
 
         if (isIncoming) {
             playSoundAndVibration();
@@ -464,7 +462,8 @@ public class CallService extends Service implements CallManager.CallStateChange 
     public void onDestroy() {
         super.onDestroy();
 
-        unregisterReceiver(myPhoneStateService);
+        if (myPhoneStateService != null)
+            unregisterReceiver(myPhoneStateService);
 
         if (callStateChange != null)
             callStateChange.onCallStateChanged(CallState.LEAVE_CALL);

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -52,11 +53,9 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatDeleteInRoomList;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
-import net.iGap.observers.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.observers.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.observers.interfaces.OnDateChanged;
 import net.iGap.observers.interfaces.OnGroupDeleteInRoomList;
@@ -94,7 +93,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-public class FragmentMain extends BaseMainFragments implements ToolbarListener, EventListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseMainFragments implements ToolbarListener, OnVersionCallBack, OnSetActionInRoom, OnRemoveFragment, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged, EventManager.EventDelegate {
 
     private static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
 
@@ -258,9 +257,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             });
         }
 
-        EventManager.getInstance().addEventListener(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance().addEventListener(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance().addEventListener(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().addObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().addObserver(EventManager.ROOM_LIST_CHANGED, this);
 
         mRecyclerView = view.findViewById(R.id.cl_recycler_view_contact);
         mRecyclerView.setItemAnimator(null);
@@ -617,7 +616,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     }
 
     private void clearHistory(final long roomId, boolean exit) {
-        RealmRoomMessage.clearHistoryMessage(roomId);
+        getMessageController().clearHistoryMessage(roomId);
         if (exit)
             disableMultiSelect();
     }
@@ -675,10 +674,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         removeFromBaseFragment(fragment);
     }
 
-    @Override
-    public void onChatUpdateStatus(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-
-    }
 
     @Override
     public void onChatDelete(final long roomId) {
@@ -736,9 +731,9 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
     public void onDestroyView() {
         super.onDestroyView();
 
-        EventManager.getInstance().removeEventListener(EventManager.CALL_STATE_CHANGED, this);
-        EventManager.getInstance().removeEventListener(EventManager.EMOJI_LOADED, this);
-        EventManager.getInstance().removeEventListener(EventManager.ROOM_LIST_CHANGED, this);
+        getEventManager().removeObserver(EventManager.CALL_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
+        getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         mHelperToolbar.unRegisterTimerBroadcast();
 
     }
@@ -809,7 +804,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                     .content(R.string.deprecated)
                                     .contentGravity(GravityEnum.CENTER)
                                     .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive((dialog, which) -> {
-                                String url = "http://d.igap.net/update";
+                                String url = BuildConfig.UPDATE_LINK;
                                 Intent i = new Intent(Intent.ACTION_VIEW);
                                 i.setData(Uri.parse(url));
                                 startActivity(i);
@@ -844,7 +839,7 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
                                 .positiveText(R.string.startUpdate)
                                 .onPositive((dialog, which) -> {
                                     try {
-                                        String url = "http://d.igap.net/update";
+                                        String url =BuildConfig.UPDATE_LINK;
                                         Intent i = new Intent(Intent.ACTION_VIEW);
                                         i.setData(Uri.parse(url));
                                         startActivity(i);
@@ -1134,34 +1129,6 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
         }
     }
 
-    /**
-     * receive call state from event bus
-     * and change visibility of toolbar layout
-     */
-    @Override
-    public void receivedMessage(int id, Object... message) {
-
-        if (id == EventManager.CALL_STATE_CHANGED) {
-            if (message == null || message.length == 0) return;
-            boolean state = (boolean) message[0];
-            G.handler.post(() -> {
-                notifyChatRoomsList();
-                if (!mHelperToolbar.getmSearchBox().isShown())
-                    mHelperToolbar.animateSearchBox(false, 0, 0);
-                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
-                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
-                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
-            });
-        } else if (id == EventManager.EMOJI_LOADED) {
-            G.handler.post(this::invalidateViews);
-        } else if (id == EventManager.ROOM_LIST_CHANGED) {
-            G.runOnUiThread(() -> {
-                boolean show = (boolean) message[0];
-                changeRoomListProgress(show);
-            });
-        }
-    }
-
     public enum MainType {
         all, chat, group, channel
     }
@@ -1240,4 +1207,35 @@ public class FragmentMain extends BaseMainFragments implements ToolbarListener, 
             }
         }
     }
+
+    /**
+     * receive call state from event bus
+     * and change visibility of toolbar layout
+     */
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+
+        if (id == EventManager.CALL_STATE_CHANGED) {
+            if (args == null || args.length == 0) return;
+            boolean state = (boolean) args[0];
+            G.handler.post(() -> {
+                notifyChatRoomsList();
+                if (!mHelperToolbar.getmSearchBox().isShown())
+                    mHelperToolbar.animateSearchBox(false, 0, 0);
+                mHelperToolbar.getCallLayout().setVisibility(state ? View.VISIBLE : View.GONE);
+                if (MusicPlayer.chatLayout != null) MusicPlayer.chatLayout.setVisibility(View.GONE);
+                if (MusicPlayer.mainLayout != null) MusicPlayer.mainLayout.setVisibility(View.GONE);
+            });
+        } else if (id == EventManager.EMOJI_LOADED) {
+            G.handler.post(this::invalidateViews);
+        } else if (id == EventManager.ROOM_LIST_CHANGED) {
+            G.runOnUiThread(() -> {
+                boolean show = (boolean) args[0];
+                changeRoomListProgress(show);
+            });
+        }
+    }
+
+
 }

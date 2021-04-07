@@ -43,7 +43,7 @@ public class PaymentInternetPackageFragment extends BaseFragment {
     private static final String PARAM_SIM_TYPE = "PARAM_SIM_TYPE";
     private static final String PARAM_PHONE_NUMBER = "PARAM_PHONE_NUMBER";
     private static final String PARAM_PACKAGE_TYPE = "PARAM_PACKAGE_TYPE";
-    public static final int OFFSET = -20;
+    public static final int OFFSET =  -20;
 
     private PaymentInternetPackageViewModel viewModel;
     private InternetPackageAdapter suggestedAdapter;

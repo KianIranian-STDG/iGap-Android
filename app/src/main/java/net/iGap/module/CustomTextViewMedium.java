@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import net.iGap.G;
 import net.iGap.R;
 
 public class CustomTextViewMedium extends androidx.appcompat.widget.AppCompatTextView {
@@ -34,6 +35,6 @@ public class CustomTextViewMedium extends androidx.appcompat.widget.AppCompatTex
     }
 
     private void init(Context context) {
-        setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        setTypeface(ResourcesCompat.getFont(context , R.font.main_font));
     }
 }

@@ -29,7 +29,7 @@ public class HelperWallet {
     }
 
     public Intent goToWallet(Payment payment, Context context, Intent intent, String phoneNumber, boolean goToScanner) {
-        Intent intent1 = goToWallet(context, intent, phoneNumber, goToScanner);
+        Intent intent1 = goToWallet(context,intent,phoneNumber,goToScanner);
         intent1.putExtra("Payment", payment);
         intent1.putExtra("IsP2P", true);
         return intent1;

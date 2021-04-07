@@ -10,20 +10,29 @@
 
 package net.iGap.module;
 
+import com.google.gson.Gson;
+
 import net.iGap.G;
 import net.iGap.controllers.BaseController;
+import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.helper.FileLog;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.network.RequestManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestGroupSendMessage;
+import net.iGap.structs.AdditionalObject;
+import net.iGap.structs.MessageObject;
+
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
 
 /**
  * util for chat send messages
@@ -57,6 +66,10 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         super(currentAccount);
     }
 
+    public ChatSendMessageUtil newBuilder(int roomType, int messageType, long roomId) {
+        return newBuilder(ProtoGlobal.Room.Type.forNumber(roomType), ProtoGlobal.RoomMessageType.forNumber(messageType), roomId);
+    }
+
     public ChatSendMessageUtil newBuilder(ProtoGlobal.Room.Type roomType, ProtoGlobal.RoomMessageType messageType, long roomId) {
         this.roomType = roomType;
 
@@ -81,13 +94,13 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
-    public ChatSendMessageUtil additional(RealmAdditional realmAdditional) {
+    public ChatSendMessageUtil additional(AdditionalObject additionalObject) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
-            requestChatSendMessage.additionalData(realmAdditional);
+            requestChatSendMessage.additionalData(additionalObject);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-            requestGroupSendMessage.additionalData(realmAdditional);
+            requestGroupSendMessage.additionalData(additionalObject);
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-            requestChannelSendMessage.additionalData(realmAdditional);
+            requestChannelSendMessage.additionalData(additionalObject);
         }
         return this;
     }
@@ -103,58 +116,58 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         return this;
     }
 
-    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message) {
-        ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
-        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
-            builder.message(message.getMessage());
+    public ChatSendMessageUtil build(ProtoGlobal.Room.Type roomType, long roomId, MessageObject message) { // TODO: 1/13/21 MESSAGE_REFACTOR
+        ChatSendMessageUtil builder = newBuilder(roomType, ProtoGlobal.RoomMessageType.forNumber(message.messageType), roomId);
+        if (message.message != null && !message.message.isEmpty()) {
+            builder.message(message.message);
         }
-        if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
-            builder.attachment(message.getAttachment().getToken());
+        if (message.getAttachment() != null && message.getAttachment().token != null && !message.getAttachment().token.isEmpty()) {
+            builder.attachment(message.getAttachment().token);
         }
-        if (message.getRoomMessageContact() != null) {
-            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
+        if (message.contact != null) {
+            builder.contact(message.contact.firstName, message.contact.lastName, message.contact.phones.get(0));
         }
-        if (message.getLocation() != null) {
-            builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
-        }
-
-        if (message.getForwardMessage() != null) {
-            builder.forwardMessage(message.getForwardMessage().getRoomId(), message.getForwardMessage().getMessageId());
-        }
-        if (message.getReplyTo() != null) {
-            builder.replyMessage(message.getReplyTo().getMessageId());
-        }
-        if (message.getRealmAdditional() != null) {
-            builder.additional(message.getRealmAdditional());
+        if (message.location != null) {
+            builder.location(message.location.lat, message.location.lan);
         }
 
-        builder.sendMessage(Long.toString(message.getMessageId()));
+        if (message.forwardedMessage != null) {
+            builder.forwardMessage(message.forwardedMessage.roomId, message.forwardedMessage.id);
+        }
+        if (message.replayToMessage != null) {
+            builder.replyMessage(message.replayToMessage.id);
+        }
+        if (message.additional != null) {
+            builder.additional(message.additional);
+        }
+
+        builder.sendMessage(Long.toString(message.id));
         return this;
     }
 
-    public ChatSendMessageUtil buildForward(ProtoGlobal.Room.Type roomType, long roomId, RealmRoomMessage message, long forwardRoomId, long forwardMessageId) {
-        ChatSendMessageUtil builder = newBuilder(roomType, message.getMessageType(), roomId);
-        if (message.getMessage() != null && !message.getMessage().isEmpty()) {
-            builder.message(message.getMessage());
+    public ChatSendMessageUtil buildForward(int roomType, long roomId, MessageObject message, long forwardRoomId, long forwardMessageId) {
+        ChatSendMessageUtil builder = newBuilder(roomType, message.messageType, roomId);
+        if (message.message != null && !message.message.isEmpty()) {
+            builder.message(message.message);
         }
-        if (message.getAttachment() != null && message.getAttachment().getToken() != null && !message.getAttachment().getToken().isEmpty()) {
-            builder.attachment(message.getAttachment().getToken());
+        if (message.getAttachment() != null && message.getAttachment().token != null && !message.getAttachment().token.isEmpty()) {
+            builder.attachment(message.getAttachment().token);
         }
-        if (message.getRoomMessageContact() != null) {
-            builder.contact(message.getRoomMessageContact().getFirstName(), message.getRoomMessageContact().getLastName(), message.getRoomMessageContact().getPhones().get(0).getString());
+        if (message.contact != null) {
+            builder.contact(message.contact.firstName, message.contact.lastName, message.contact.phones.get(0)); // TODO: 1/5/21 MESSAGE_REFACTOR
         }
-        if (message.getLocation() != null) {
-            builder.location(message.getLocation().getLocationLat(), message.getLocation().getLocationLong());
+        if (message.location != null) {
+            builder.location(message.location.lat, message.location.lan);
         }
 
-        if (message.getForwardMessage() != null) {
+        if (message.forwardedMessage != null) {
             builder.forwardMessage(forwardRoomId, forwardMessageId);
         }
-        if (message.getReplyTo() != null) {
-            builder.replyMessage(message.getReplyTo().getMessageId());
+        if (message.replayToMessage != null) {
+            builder.replyMessage(message.replayToMessage.id);
         }
 
-        builder.sendMessage(Long.toString(message.getMessageId()));
+        builder.sendMessage(Long.toString(message.id));
         return this;
     }
 
@@ -283,6 +296,45 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         if (onChatSendMessageResponseChat != null) {
             onChatSendMessageResponseChat.onMessageUpdate(roomId, messageId, status, identity, roomMessage);
         }
+
+        if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
+
+            String userId = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                    return String.valueOf(realmRoom.getChatRoom().getPeerId());
+                }
+                return null;
+            });
+
+
+            if (sticker != null && userId != null) {
+                StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
+            }
+        } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
+
+            boolean roomIsMyCloud = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null)
+                    return realmRoom.getChatRoom().getPeerId() > 0 && realmRoom.getChatRoom().getPeerId() == AccountManager.getInstance().getCurrentUser().getId();
+                else
+                    return false;
+            });
+
+            String userId = DbManager.getInstance().doRealmTask(realm -> {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
+                if (realmRoom != null && realmRoom.getChatRoom() != null) {
+                    return String.valueOf(realmRoom.getChatRoom().getPeerId());
+                }
+                return null;
+            });
+
+            if (sticker != null && userId != null && !roomIsMyCloud) {
+                StickerRepository.getInstance().forwardSticker(sticker.getGiftId(), userId);
+            }
+        }
     }
 
     @Override
@@ -292,6 +344,15 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
         }
 
         onRoomMessageReceive(roomId, roomMessage, roomType);
+
+        if (roomMessage.getMessageType() == STICKER && roomMessage.getAdditionalData() != null && roomMessage.getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getAdditionalData(), StructIGSticker.class);
+            G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STICKER_CHANGED, sticker.getGroupId()));
+        } else if (roomMessage.getForwardFrom() != null && roomMessage.getForwardFrom().getMessageType() == STICKER && roomMessage.getForwardFrom().getAdditionalData() != null && roomMessage.getForwardFrom().getAdditionalType() == AdditionalType.GIFT_STICKER) {
+            StructIGSticker sticker = new Gson().fromJson(roomMessage.getForwardFrom().getAdditionalData(), StructIGSticker.class);
+            G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STICKER_CHANGED, sticker.getGroupId()));
+        }
+
     }
 
     private void onRoomMessageReceive(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
@@ -316,9 +377,9 @@ public class ChatSendMessageUtil extends BaseController implements OnChatSendMes
             // todo:please check in group and channel that user is joined
 
             if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
             } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+                getMessageController().sendUpdateStatus(roomType.getNumber(), roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED_VALUE);
             }
         }
     }

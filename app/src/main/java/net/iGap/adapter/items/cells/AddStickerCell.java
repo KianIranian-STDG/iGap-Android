@@ -18,12 +18,12 @@ import net.iGap.R;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.ProgressButton;
 import net.iGap.module.customView.StickerView;
-import net.iGap.observers.eventbus.EventListener;
 import net.iGap.observers.eventbus.EventManager;
 
-public class AddStickerCell extends FrameLayout implements EventListener {
+public class AddStickerCell extends FrameLayout implements EventManager.EventDelegate {
 
     private StickerView groupAvatarIv;
     private TextView groupNameTv;
@@ -86,13 +86,13 @@ public class AddStickerCell extends FrameLayout implements EventListener {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        EventManager.getInstance().addEventListener(EventManager.STICKER_CHANGED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STICKER_CHANGED, this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        EventManager.getInstance().removeEventListener(EventManager.STICKER_CHANGED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STICKER_CHANGED, this);
     }
 
     public void loadAvatar(StructIGStickerGroup stickerGroup) {
@@ -112,10 +112,11 @@ public class AddStickerCell extends FrameLayout implements EventListener {
     }
 
     @Override
-    public void receivedMessage(int id, Object... message) {
+    public void receivedEvent(int id, int account, Object... args) {
+
         if (id == EventManager.STICKER_CHANGED) {
-            String groupId = (String) message[0];
-            boolean isInUserList = (boolean) message[1];
+            String groupId = (String) args[0];
+            boolean isInUserList = (boolean) args[1];
 
             if (groupId.equals(stickerGroupId))
                 G.handler.post(() -> getButton().setMode(isInUserList ? 0 : 1));

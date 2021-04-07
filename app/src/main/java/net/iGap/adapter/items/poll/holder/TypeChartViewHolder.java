@@ -17,10 +17,10 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import net.iGap.R;
+import net.iGap.module.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.poll.PollAdapter;
 import net.iGap.helper.HelperCalander;
-import net.iGap.module.Theme;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

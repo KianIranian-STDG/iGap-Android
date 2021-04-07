@@ -5,5 +5,6 @@
             <solid android:color="@color/white" />
         </shape>
     </item>
-    <item android:drawable="@drawable/shape_toolbar_background_dark_gray"></item>
+    <item android:drawable="@drawable/shape_toolbar_background_dark_gray">
+    </item>
 </layer-list>
