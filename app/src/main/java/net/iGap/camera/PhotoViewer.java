@@ -113,6 +113,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private MaterialDesignTextView designTextView;
     private MaterialDesignTextView revertTextView;
     private MaterialDesignTextView emoji;
+    private MaterialDesignTextView keyboardEmoji;
     private TextView toolbarTitle;
     private TextView imageNumber;
     private MaterialDesignTextView setTextView;
@@ -255,7 +256,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         revertTextView.setGravity(Gravity.CENTER);
         revertTextView.setVisibility(View.GONE);
-        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 3, 0));
+        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 8, 0));
 
         countImageTextView = new TextView(context);
         countImageTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -263,7 +264,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         countImageTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         countImageTextView.setTextSize(22);
         countImageTextView.setTypeface(countImageTextView.getTypeface(), Typeface.BOLD);
-        toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 1, 0));
+        toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
         animateCheckBox = new AnimCheckBox(context);
         animateCheckBox.setBackground(context.getResources().getDrawable(R.drawable.background_check));
@@ -272,7 +273,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         animateCheckBox.setAnimDuration(100);
         animateCheckBox.setCorrectWidth(1);
         animateCheckBox.setUnCheckColor(context.getResources().getColor(R.color.background_checkbox_bottomSheet));
-        toolbarPanel.addView(animateCheckBox, LayoutCreator.createLinear(32, 32, Gravity.CENTER | Gravity.END | Gravity.RIGHT));
+        toolbarPanel.addView(animateCheckBox, LayoutCreator.createLinear(32, 32, Gravity.CENTER | Gravity.END | Gravity.RIGHT, 0, 0, 8, 0));
 
 
         toolbar.addView(toolbarPanel, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -311,13 +312,13 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         layoutCaption.setPadding(4, 0, 4, 0);
         bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
 
-        emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        emoji.setGravity(Gravity.CENTER);
-        emoji.setPadding(8, 0, 8, 8);
-        emoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
-        emoji.setTextColor(context.getResources().getColor(R.color.white));
-        emoji.setTextSize(26);
-        layoutCaption.addView(emoji, LayoutCreator.createLinear(52, 52, Gravity.CENTER));
+        keyboardEmoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        keyboardEmoji.setGravity(Gravity.CENTER);
+        keyboardEmoji.setPadding(8, 0, 8, 8);
+        keyboardEmoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
+        keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
+        keyboardEmoji.setTextSize(26);
+        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(52, 52, Gravity.CENTER));
 
         captionEditText = new EventEditText(context);
         captionEditText.setGravity(Gravity.BOTTOM);
@@ -349,6 +350,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         cropTextView.setGravity(Gravity.CENTER);
         cropTextView.setText(context.getString(R.string.md_crop_button));
+        cropTextView.setVisibility(View.GONE);
         cropTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(cropTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
 
@@ -363,6 +365,14 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         paintTextView.setText(context.getString(R.string.md_igap_paint));
         paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
+
+        emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        emoji.setGravity(Gravity.CENTER);
+        emoji.setPadding(8, 0, 8, 8);
+        emoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
+        emoji.setTextColor(context.getResources().getColor(R.color.white));
+        emoji.setTextSize(26);
+        cancelCropLayout.addView(emoji, LayoutCreator.createLinear(52, 52, Gravity.CENTER));
 
         addTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         addTextView.setGravity(Gravity.CENTER);
@@ -995,7 +1005,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
 
         if (event == KeyboardView.MODE_KEYBOARD) {
-            emoji.setText(getActivity().getString(R.string.md_emoticon_with_happy_face));
+            keyboardEmoji.setText(getActivity().getString(R.string.md_emoticon_with_happy_face));
             chatKeyBoardContainer.setVisibility(VISIBLE);
 
             if (keyboardHeight <= 0) {
@@ -1067,7 +1077,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
-        emoji.setText(drawableResourceId);
+        keyboardEmoji.setText(drawableResourceId);
     }
 
     private void createEmojiView() {
