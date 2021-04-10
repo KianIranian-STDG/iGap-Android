@@ -56,6 +56,8 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
+import net.iGap.fragments.filterImage.BitmapUtils;
+import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -68,6 +70,7 @@ import net.iGap.libs.emojiKeyboard.NotifyLinearLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
+import net.iGap.libs.photoEdit.FilterImageView;
 import net.iGap.libs.photoEdit.PhotoEditorView;
 import net.iGap.libs.photoEdit.ViewType;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -156,12 +159,19 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private Modes mode;
     private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
 
+    public static UpdateImage updateImage;
+    private Bitmap filteredImageBitmap;
+
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
         args.putString(PATH, path);
         PhotoViewer fragment = new PhotoViewer();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public interface UpdateImage {
+        void result(Bitmap path);
     }
 
     @SuppressLint("ResourceType")
@@ -244,6 +254,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         revertTextView.setText(context.getString(R.string.forward_icon));
         revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         revertTextView.setGravity(Gravity.CENTER);
+        revertTextView.setVisibility(View.GONE);
         toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 3, 0));
 
         countImageTextView = new TextView(context);
@@ -419,9 +430,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
             @Override
             public void onClick(View view) {
-                if (mode == Modes.PAINT) {
-                    textStickersParentView.setPaintMode(false, null);
-                } else if (mode == Modes.ADD_TEXT) {
+                if (mode == Modes.PAINT || mode == Modes.ADD_TEXT || mode == Modes.EMOJI || mode == Modes.FILTER) {
                     textStickersParentView.setPaintMode(false, null);
                 } else {
                     onAddTextShow();
@@ -435,16 +444,16 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode) -> {
                     FrameLayout rootView = new FrameLayout(getContext());
                     stickerBorder = new FrameLayout(getContext());
-//                    stickerBorder.setBackground(getResources().getDrawable(R.drawable.background_border));
+                    stickerBorder.setPadding(10, 10, 10, 10);
                     rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
 
                     textTv = new TextView(getContext());
                     textTv.setTextColor(colorCode);
                     textTv.setText(inputText);
-                    stickerBorder.addView(textTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+                    stickerBorder.addView(textTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 14, 14, 14, 14));
                     textTv.setGravity(Gravity.CENTER);
                     textTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
-                            14);
+                            35);
 
 
                     MultiTouchListener multiTouchListener = new MultiTouchListener(
@@ -492,21 +501,10 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             @Override
             public void onClick(View view) {
                 imageViewTouch.setVisibility(View.GONE);
-
-//                customPaintView.updateImageBitmap(BitmapFactory.decodeFile(path));
-//                zoomLayout.setVisibility(View.VISIBLE);
                 zoomLayout.setVisibility(VISIBLE);
                 textStickersParentView.setVisibility(View.VISIBLE);
-                if (mode == Modes.ADD_TEXT) {
+                if (mode == Modes.PAINT || mode == Modes.ADD_TEXT || mode == Modes.EMOJI || mode == Modes.FILTER) {
                     textStickersParentView.setPaintMode(true, null);
-                    //textStickersParentView.setPaintMode(false);
-                    //  Glide.with(getContext()).asDrawable().load(getFinalBitmapAfterAddText(textStickersParentView)).centerCrop().into(customPaintView.getSource());
-//                    textStickersParentView.setVisibility(View.GONE);
-                } else if (mode == Modes.PAINT) {
-                    textStickersParentView.setPaintMode(true, null);
-//                    textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(path));
-                    //  Glide.with(getContext()).asDrawable().load(new File(path)).centerCrop().into(textStickersParentView.getBitmapHolderImageView());
-//                customPaintView.getSource().setImageURI(Uri.parse(path));
                 } else {
                     textStickersParentView.setPaintMode(true, BitmapFactory.decodeFile(path));
                 }
@@ -528,14 +526,8 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         revertTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (onPaintChanged.getValue() != null) {
-//                    if (onPaintChanged.getValue() > 0) {
-//                       undo();
-//                    } else {
-//                        popBackStackFragment();
-//                    }
-//                }
-                undo();
+                boolean revert = undo();
+                revertTextView.setVisibility(revert ? VISIBLE : View.GONE);
             }
         });
         rippleView.setOnClickListener(new View.OnClickListener() {
@@ -550,9 +542,43 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mode == Modes.PAINT) {
+                    textStickersParentView.setPaintMode(false, null);
+                } else if (mode == Modes.ADD_TEXT) {
+                    textStickersParentView.setPaintMode(false, null);
+                } else {
+                    imageViewTouch.setVisibility(View.GONE);
+                    textStickersParentView.setPaintMode(false, BitmapFactory.decodeFile(path));
+                    zoomLayout.setVisibility(VISIBLE);
+                    textStickersParentView.setVisibility(View.VISIBLE);
+                }
+                mode = Modes.EMOJI;
                 EmojiDialogFrag emojiDialogFrag = new EmojiDialogFrag();
                 emojiDialogFrag.setEmojiListener(PhotoViewer.this::onEmojiClick);
                 emojiDialogFrag.show(getParentFragmentManager(), emojiDialogFrag.getTag());
+            }
+        });
+        editTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mode = Modes.FILTER;
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(path)).setReplace(false).load();
+            }
+        });
+        updateImage = new UpdateImage() {
+
+            @Override
+            public void result(Bitmap finalBitmap) {
+                filteredImageBitmap = finalBitmap;
+                textStickersParentView.updateImageBitmap(finalBitmap);
+            }
+        };
+        sendTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                path = BitmapUtils.insertImage(getActivity().getContentResolver(), filteredImageBitmap, System.currentTimeMillis() + "_profile.jpg", null);
+
             }
         });
     }
@@ -575,8 +601,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
     private void onAddTextShow() {
         imageViewTouch.setVisibility(View.GONE);
-        textStickersParentView.setPaintMode(false, null);
-        textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(this.path));
+        textStickersParentView.setPaintMode(false, BitmapFactory.decodeFile(this.path));
         zoomLayout.setVisibility(VISIBLE);
         textStickersParentView.setVisibility(View.VISIBLE);
 
@@ -633,6 +658,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         textStickersParentView.setVisibility(View.VISIBLE);
         textStickersParentView.addView(view, params);
         addedViews.add(view);
+        revertTextView.setVisibility(VISIBLE);
         updateViewsBordersVisibilityExcept(view);
     }
 
@@ -646,14 +672,11 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     }
 
     public void addEmoji(Typeface emojiTypeface, String emojiName) {
-        textStickersParentView.getmBrushDrawingView().setBrushDrawingMode(false);
-
         FrameLayout rootView = new FrameLayout(getContext());
-        FrameLayout stickerBorder = new FrameLayout(getContext());
-//                    stickerBorder.setBackground(getResources().getDrawable(R.drawable.background_border));
+        stickerBorder = new FrameLayout(getContext());
         rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
 
-        TextView textTv = new TextView(getContext());
+        textTv = new TextView(getContext());
         textTv.setTextColor(Color.BLACK);
         textTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
                 18);
@@ -767,6 +790,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             redoViews.remove(redoViews.size() - 1);
         }
         addedViews.add(brushDrawingView);
+        revertTextView.setVisibility(VISIBLE);
         onPaintChanged.setValue(addedViews.size());
     }
 
@@ -903,26 +927,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         });
     }
 
-    private class FilterImageTask extends AsyncTask<Filter, Integer, Bitmap> {
-        Bitmap filteredImage;
-
-        @Override
-        protected Bitmap doInBackground(Filter... filters) {
-            // applying the selected filter
-            filteredImage = BitmapFactory.decodeFile(path).copy(Bitmap.Config.ARGB_8888, true);
-            // preview filtered image
-            Bitmap bitmap = filters[0].processFilter(filteredImage);
-
-            return filteredImage.copy(Bitmap.Config.ARGB_8888, true);
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-
-            textStickersParentView.updateImageBitmap(bitmap);
-        }
-    }
 
     public boolean undo() {
         if (addedViews.size() > 0) {
@@ -1187,6 +1191,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
 
     enum Modes {
-        PAINT, ADD_TEXT
+        PAINT, ADD_TEXT, EMOJI, FILTER
     }
 }

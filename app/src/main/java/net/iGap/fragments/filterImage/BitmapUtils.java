@@ -18,6 +18,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.opengl.GLException;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.provider.MediaStore;
 
 import java.io.FileNotFoundException;
@@ -70,7 +71,9 @@ public class BitmapUtils {
                 // Wait until MINI_KIND thumbnail is generated.
                 Bitmap miniThumb = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MINI_KIND, null);
                 // This is for backward compatibility.
-                storeThumbnail(cr, miniThumb, id, 50F, 50F, MediaStore.Images.Thumbnails.MICRO_KIND);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    storeThumbnail(cr, miniThumb, id, 50F, 50F, MediaStore.Images.Thumbnails.MICRO_KIND);
+                }
             } else {
                 cr.delete(url, null, null);
                 url = null;
@@ -138,6 +141,7 @@ public class BitmapUtils {
             return null;
         }
     }
+
     public static Bitmap createBitmapFromGLSurface(GLSurfaceView glSurfaceView, GL10 gl) throws OutOfMemoryError {
         int x = 0, y = 0;
         int w = glSurfaceView.getWidth();

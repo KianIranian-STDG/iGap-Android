@@ -31,8 +31,8 @@ public class TextStickerView extends RelativeLayout {
 
     public TextStickerView(Context context, boolean isPaintMode) {
         super(context);
-        if (isPaintMode)
-            init(null);
+//        if (isPaintMode)
+        init(null);
     }
 
     public TextStickerView(Context context, AttributeSet attrs) {
@@ -49,15 +49,20 @@ public class TextStickerView extends RelativeLayout {
         //Setup image attributes
         if (bitmapHolderImageView == null) {
             bitmapHolderImageView = new FilterImageView(getContext());
-            RelativeLayout.LayoutParams imgSrcParam = new RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            imgSrcParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-            addView(bitmapHolderImageView, imgSrcParam);
+            imageViewParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            bitmapHolderImageView.setLayoutParams(imageViewParams);
+            bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            bitmapHolderImageView.setAdjustViewBounds(true);
+
+            bitmapHolderImageView.setDrawingCacheEnabled(true);
+            addView(bitmapHolderImageView, imageViewParams);
         }
-        bitmapHolderImageView.setId(imgSrcId);
-        bitmapHolderImageView.setAdjustViewBounds(true);
-        bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        bitmapHolderImageView.setDrawingCacheEnabled(true);
+//        bitmapHolderImageView.setId(imgSrcId);
+//        bitmapHolderImageView.setAdjustViewBounds(true);
+//        bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//        bitmapHolderImageView.setDrawingCacheEnabled(true);
 
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.PhotoEditorView);
@@ -68,32 +73,34 @@ public class TextStickerView extends RelativeLayout {
         }
 
         //Setup brush view
-        mBrushDrawingView = new BrushDrawingView(getContext());
+        if (mBrushDrawingView == null) {
+            mBrushDrawingView = new BrushDrawingView(getContext());
 //        mBrushDrawingView.setVisibility(GONE);
-        mBrushDrawingView.setId(brushSrcId);
-        //Align brush to the size of image view
-        RelativeLayout.LayoutParams brushParam = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        brushParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        brushParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
-        brushParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
+            mBrushDrawingView.setId(brushSrcId);
+            //Align brush to the size of image view
+            RelativeLayout.LayoutParams brushParam = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            brushParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            brushParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
+            brushParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
 
-        //Setup GLSurface attributes
-        mImageFilterView = new ImageFilterView(getContext());
-        mImageFilterView.setId(glFilterId);
-        mImageFilterView.setVisibility(GONE);
+            //Setup GLSurface attributes
+            mImageFilterView = new ImageFilterView(getContext());
+            mImageFilterView.setId(glFilterId);
+            mImageFilterView.setVisibility(GONE);
 
 
-        //Align brush to the size of image view
-        RelativeLayout.LayoutParams imgFilterParam = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        imgFilterParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        imgFilterParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
-        imgFilterParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
+            //Align brush to the size of image view
+            RelativeLayout.LayoutParams imgFilterParam = new RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            imgFilterParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            imgFilterParam.addRule(RelativeLayout.ALIGN_TOP, imgSrcId);
+            imgFilterParam.addRule(RelativeLayout.ALIGN_BOTTOM, imgSrcId);
 
-        addView(mImageFilterView, imgFilterParam);
-        //Add brush view
-        addView(mBrushDrawingView, brushParam);
+            addView(mImageFilterView, imgFilterParam);
+            //Add brush view
+            addView(mBrushDrawingView, brushParam);
+        }
     }
 
     public ImageView getBitmapHolderImageView() {
@@ -118,7 +125,7 @@ public class TextStickerView extends RelativeLayout {
         bitmapHolderImageView.setDrawingCacheEnabled(true);
         Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
 //        bitmapHolderImageView.setImageBitmap(bitmap);
-        addView(bitmapHolderImageView);
+        addView(bitmapHolderImageView,0);
     }
 
     void saveFilter(@NonNull final OnSaveBitmap onSaveBitmap) {
@@ -146,16 +153,20 @@ public class TextStickerView extends RelativeLayout {
     public void setPaintMode(boolean paintMode, Bitmap bitmap) {
         if (paintMode) {
             if (mBrushDrawingView != null) {
+                mBrushDrawingView.setVisibility(VISIBLE);
                 mBrushDrawingView.setBrushDrawingMode(true);
             }
             if (bitmap != null) {
-                init(null);
                 Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
             }
         } else {
+            if (bitmap != null) {
+                Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
+            }
             if (mBrushDrawingView != null) {
                 mBrushDrawingView.setBrushDrawingMode(false);
             }
+
         }
     }
 
