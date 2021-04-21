@@ -7363,7 +7363,7 @@ public class FragmentChat extends BaseFragment
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
         results = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).
-                    equalTo("readOnly", false).notEqualTo("id", mRoomId).findAll().sort(fieldNames, sort);
+                    equalTo("readOnly", false).findAll().sort(fieldNames, sort);
         });
 
         resultsContact = DbManager.getInstance().doRealmTask(realm -> {
