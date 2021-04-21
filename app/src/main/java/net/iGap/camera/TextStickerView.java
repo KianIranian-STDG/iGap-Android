@@ -16,9 +16,11 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.FilterImageView;
+import net.iGap.module.AndroidUtils;
 
 import java.io.File;
 
@@ -116,7 +118,7 @@ public class TextStickerView extends RelativeLayout {
 
         //Setup image attributes
         RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         imageViewParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
         bitmapHolderImageView.setLayoutParams(imageViewParams);
         bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -125,7 +127,7 @@ public class TextStickerView extends RelativeLayout {
         bitmapHolderImageView.setDrawingCacheEnabled(true);
         Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
 //        bitmapHolderImageView.setImageBitmap(bitmap);
-        addView(bitmapHolderImageView,0);
+        addView(bitmapHolderImageView, 0);
     }
 
     void saveFilter(@NonNull final OnSaveBitmap onSaveBitmap) {
@@ -161,7 +163,8 @@ public class TextStickerView extends RelativeLayout {
             }
         } else {
             if (bitmap != null) {
-                Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
+
+                  Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
             }
             if (mBrushDrawingView != null) {
                 mBrushDrawingView.setBrushDrawingMode(false);

@@ -16,6 +16,7 @@
     <item name="messageForwardContainer" type="id" />
     <item name="messageSenderName" type="id" />
 
+    <item name="textstickerView" type="id"/>
     <item name="mainContainer" type="id" />
     <item name="csliwt_layout_container_message" type="id" />
     <item name="thumbnail" type="id" />

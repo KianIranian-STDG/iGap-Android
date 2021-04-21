@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class MultiTouchListener implements View.OnTouchListener {
     private static final int INVALID_POINTER_ID = -1;
@@ -34,14 +37,16 @@ public class MultiTouchListener implements View.OnTouchListener {
     private OnGestureControl onGestureControl;
     boolean isTextPinchZoomable;
     private OnPhotoEditorListener onPhotoEditorListener;
+    private CustomViewPager viewPager2;
     private boolean isMoving = false;
 
-    public MultiTouchListener(@Nullable View deleteView, RelativeLayout parentView,
+    public MultiTouchListener(@Nullable View deleteView, CustomViewPager viewPager2, RelativeLayout parentView,
                               ImageView photoEditImageView,
                               OnPhotoEditorListener onPhotoEditorListener, Context context) {
         isTextPinchZoomable = true;
         scaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener(this));
         gestureListener = new GestureDetector(context, new GestureListener());
+        this.viewPager2 = viewPager2;
         this.deleteView = deleteView;
         this.parentView = parentView;
         this.photoEditImageView = photoEditImageView;
@@ -129,6 +134,7 @@ public class MultiTouchListener implements View.OnTouchListener {
                 activePointerId = event.getPointerId(0);
                 view.bringToFront();
                 firePhotoEditorSDKListener(view, true);
+                viewPager2.setPagingEnabled(false);
                 break;
             case MotionEvent.ACTION_MOVE:
                 int pointerIndexMove = event.findPointerIndex(activePointerId);
@@ -140,10 +146,12 @@ public class MultiTouchListener implements View.OnTouchListener {
                         adjustTranslation(view, currX - prevX, currY - prevY);
                     }
                 }
+                viewPager2.setPagingEnabled(false);
                 break;
             case MotionEvent.ACTION_CANCEL:
                 isMoving = false;
                 activePointerId = INVALID_POINTER_ID;
+                viewPager2.setPagingEnabled(true);
                 break;
             case MotionEvent.ACTION_UP:
                 activePointerId = INVALID_POINTER_ID;
@@ -154,6 +162,7 @@ public class MultiTouchListener implements View.OnTouchListener {
                     view.animate().translationY(0).translationY(0);
                 }
                 firePhotoEditorSDKListener(view, false);
+                viewPager2.setPagingEnabled(true);
                 break;
             case MotionEvent.ACTION_POINTER_UP:
                 isMoving = false;
@@ -165,6 +174,7 @@ public class MultiTouchListener implements View.OnTouchListener {
                     prevY = event.getY(newPointerIndex);
                     activePointerId = event.getPointerId(newPointerIndex);
                 }
+                viewPager2.setPagingEnabled(true);
                 break;
         }
         gestureListener.onTouchEvent(event);

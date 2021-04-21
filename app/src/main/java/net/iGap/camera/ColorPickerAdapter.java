@@ -69,7 +69,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
         }
 
         public void bindView(int color) {
-            colorPickerView.setBackgroundColor(color);
+            itemView.setBackgroundColor(color);
         }
 
     }
