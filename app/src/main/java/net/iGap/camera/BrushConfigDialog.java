@@ -74,7 +74,7 @@ public class BrushConfigDialog extends BottomSheetDialogFragment implements Seek
 
         rvColors = new ColorSeekBar(getContext());
         rvColors.setThumbBorderColor(Color.WHITE);
-        rvColors.setOutlineAmbientShadowColor(Color.WHITE);
+//        rvColors.setOutlineAmbientShadowColor(Color.WHITE);
         rootView.addView(rvColors, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, 8, 32, 8, 8));
 
         return rootView;

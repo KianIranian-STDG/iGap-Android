@@ -1,106 +1,76 @@
 package net.iGap.camera;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.bumptech.glide.Glide;
-import com.hanks.library.AnimateCheckBox;
-import com.zomato.photofilters.imageprocessors.Filter;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
-import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.BitmapUtils;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
-import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
-import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.NotifyLinearLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
-import net.iGap.libs.photoEdit.FilterImageView;
-import net.iGap.libs.photoEdit.PhotoEditorView;
-import net.iGap.libs.photoEdit.ViewType;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.model.GalleryItemModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.customView.EventEditText;
-import net.iGap.module.dialog.ChatAttachmentPopup;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnRotateImage;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import yogesh.firzen.mukkiasevaigal.M;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
@@ -110,6 +80,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private static final float MAX_PERCENT = 100;
     private static final float MAX_ALPHA = 255;
     private static final float INITIAL_WIDTH = 50;
+    private static final String SELECTED_PHOTOS = "selectedPhotos";
     private NotifyLinearLayout rootView;
     private CustomViewPager viewPager;
     private Toolbar toolbar;
@@ -151,12 +122,10 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private int emojiPadding;
     private ZoomLayout zoomLayout;
     private TextStickerView textStickersParentView;
-    private ImageViewTouch imageViewTouch;
     private List<View> addedViews;
     private List<View> redoViews;
     private FrameLayout stickerBorder;
     private TextView textTv;
-    private CustomPaintView customPaintView;
     private boolean isEraser = false;
     private float brushSize = INITIAL_WIDTH;
     private float brushAlpha = MAX_ALPHA;
@@ -165,7 +134,8 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private Modes mode;
     private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
     private HashMap<Integer, ZoomLayout> viewHolders = new HashMap<>();
-
+    public List<GalleryItemModel> selectedPhotos;
+    private int viewHolderPostion = 0;
     public static UpdateImage updateImage;
     private Bitmap filteredImageBitmap;
     private OnEditActions onEditActions;
@@ -173,6 +143,15 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
         args.putString(PATH, path);
+        PhotoViewer fragment = new PhotoViewer();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
+    public static PhotoViewer newInstance(ArrayList<GalleryItemModel> selectedPhotos) {
+        Bundle args = new Bundle();
+        args.putSerializable(SELECTED_PHOTOS, selectedPhotos);
         PhotoViewer fragment = new PhotoViewer();
         fragment.setArguments(args);
         return fragment;
@@ -288,15 +267,9 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
 
         viewPager = new CustomViewPager(context);
-//        viewPager.setVisibility(View.GONE);
 
 
         rootView.addView(viewPager, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, 0, 1F, Gravity.CENTER));
-
-        imageViewTouch = new ImageViewTouch(context);
-        imageViewTouch.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        imageViewTouch.setVisibility(View.GONE);
-        rootView.addView(imageViewTouch, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 0, 1F, Gravity.CENTER));
 
 
         bottomLayoutPanel = new LinearLayout(context);
@@ -401,6 +374,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         addedViews = new ArrayList<>();
         redoViews = new ArrayList<>();
         path = getArguments().getString(PATH);
+        selectedPhotos = (List<GalleryItemModel>) getArguments().getSerializable(SELECTED_PHOTOS);
         brushConfigDialog = new BrushConfigDialog();
         brushConfigDialog.setPropertiesChangeListener(this);
         if (!HelperPermission.grantedUseStorage()) {
@@ -424,7 +398,11 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         if (getActivity() != null) {
             emojiSharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.EMOJI, MODE_PRIVATE);
         }
-        openPhotoForEdit(path, null, false);
+        if (path != null) {
+            openPhotoForEdit(path, null, false);
+        } else {
+            openPhotoForEdit(selectedPhotos, null, false);
+        }
         captionEditText.setListener(new EventEditText.Listener() {
             @Override
             public void onInternalTouchEvent(MotionEvent event) {
@@ -438,11 +416,12 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             @Override
             public void onClick(View view) {
                 viewPager.setPagingEnabled(true);
-                textStickersParentView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 if (mode == Modes.PAINT || mode == Modes.ADD_TEXT || mode == Modes.EMOJI || mode == Modes.FILTER) {
                     textStickersParentView.setPaintMode(false, null);
                 } else {
-                    onAddTextShow();
+                    textStickersParentView.setPaintMode(false, null);
+                    autoScaleImageToFitBounds();
                 }
 
                 mode = Modes.ADD_TEXT;
@@ -474,13 +453,11 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             @Override
             public void onClick(View view) {
                 viewPager.setPagingEnabled(false);
-                textStickersParentView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
-                viewHolders.get(postioN).setVisibility(VISIBLE);
-                textStickersParentView.setVisibility(View.VISIBLE);
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 if (mode == Modes.PAINT || mode == Modes.ADD_TEXT || mode == Modes.EMOJI || mode == Modes.FILTER) {
                     textStickersParentView.setPaintMode(true, null);
                 } else {
-                    textStickersParentView.setPaintMode(true, BitmapFactory.decodeFile(path));
+                    textStickersParentView.setPaintMode(true, null);
                 }
                 mode = Modes.PAINT;
                 textStickersParentView.getmBrushDrawingView().setBrushViewChangeListener(PhotoViewer.this);
@@ -495,7 +472,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
             }
         });
-//        initStroke();
 
         revertTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -517,15 +493,13 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             @Override
             public void onClick(View view) {
                 viewPager.setPagingEnabled(true);
-                textStickersParentView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 if (mode == Modes.PAINT) {
                     textStickersParentView.setPaintMode(false, null);
                 } else if (mode == Modes.ADD_TEXT) {
                     textStickersParentView.setPaintMode(false, null);
                 } else {
-                    textStickersParentView.setPaintMode(false, BitmapFactory.decodeFile(path));
-                    viewHolders.get(postioN).setVisibility(VISIBLE);
-                    textStickersParentView.setVisibility(View.VISIBLE);
+                    textStickersParentView.setPaintMode(false, null);
                 }
                 mode = Modes.EMOJI;
                 EmojiDialogFrag emojiDialogFrag = new EmojiDialogFrag();
@@ -546,7 +520,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
             @Override
             public void result(Bitmap finalBitmap) {
-                textStickersParentView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 filteredImageBitmap = finalBitmap;
                 textStickersParentView.updateImageBitmap(finalBitmap);
             }
@@ -577,14 +551,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         return Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
     }
 
-    private void onAddTextShow() {
-        imageViewTouch.setVisibility(View.GONE);
-        textStickersParentView.setPaintMode(false, BitmapFactory.decodeFile(this.path));
-        zoomLayout.setVisibility(VISIBLE);
-        textStickersParentView.setVisibility(View.VISIBLE);
-
-        autoScaleImageToFitBounds();
-    }
 
     private void showTextEditDialog(final View rootView, String text, int colorCode) {
         TextEditorDialogFragment textEditorDialogFragment =
@@ -629,16 +595,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         }
     }
 
-    private void addViewToParent(View view) {
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        textStickersParentView.setVisibility(View.VISIBLE);
-        textStickersParentView.addView(view, params);
-        addedViews.add(view);
-        revertTextView.setVisibility(VISIBLE);
-        updateViewsBordersVisibilityExcept(view);
-    }
 
     private void updateViewsBordersVisibilityExcept(@Nullable View keepView) {
         for (View view : addedViews) {
@@ -658,7 +614,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         textTv.setTextColor(Color.BLACK);
         textTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
                 18);
-//        textTv.setGravity(Gravity.CENTER);
         textTv.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         stickerBorder.addView(textTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
 
@@ -671,7 +626,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
 
         onEditActions.addEmoji(rootView);
-        //addViewToParent(rootView);
     }
 
 
@@ -795,160 +749,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         void filter();
     }
 
-    private class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
-        private List<StructBottomSheet> structBottomSheets;
-
-        public ImagesAdapter(List<StructBottomSheet> structBottomSheets) {
-            this.structBottomSheets = structBottomSheets;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            ZoomLayout zoomLayout = new ZoomLayout(context);
-            zoomLayout.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
-//            zoomLayout.setVisibility(View.GONE);
-            TextStickerView textStickersParentView = new TextStickerView(context, false);
-            textStickersParentView.setDrawingCacheEnabled(true);
-            textStickersParentView.setId(R.id.textstickerView);
-//            textStickersParentView.setVisibility(View.GONE);
-            zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
-
-
-            return new ViewHolder(zoomLayout);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.onBind(itemGalleryList.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return structBottomSheets.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder implements PhotoViewer.OnEditActions, OnPhotoEditorListener {
-            private TextStickerView textStickerView;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                onEditActions = this;
-                textStickerView = itemView.findViewById(R.id.textstickerView);
-            }
-
-            public void onBind(StructBottomSheet structBottomSheet) {
-//                this.textStickerView = textStickersParentView;
-                if (structBottomSheet.path != null) {
-                    String oldPath = structBottomSheet.path;
-                    String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
-
-                    //check if old path available in selected list , replace new path with that
-                    if (!oldPath.equals(finalPath)) {
-                        StructBottomSheet item = textImageList.get(oldPath);
-                        if (item != null) {
-                            textImageList.remove(oldPath);
-                            textImageList.put(finalPath, item);
-                        }
-                    }
-                    structBottomSheet.path = finalPath;
-                    this.textStickerView.setPaintMode(false, BitmapFactory.decodeFile(finalPath));
-//                        textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(finalPath));
-                }
-            }
-
-            @Override
-            public void emoji() {
-
-            }
-
-            @Override
-            public void paint() {
-
-            }
-
-            @Override
-            public void addText(View view) {
-
-            }
-
-            @Override
-            public void addEmoji(View view) {
-                MultiTouchListener multiTouchListener = new MultiTouchListener(
-                        null, viewPager,
-                        this.textStickerView,
-                        this.textStickerView.getBitmapHolderImageView(),
-                        ViewHolder.this, getContext());
-
-                multiTouchListener.setOnGestureControl(new OnGestureControl() {
-                    boolean isDownAlready = false;
-
-                    @Override
-                    public void onClick() {
-                    }
-
-                    @Override
-                    public void onDown() {
-                    }
-
-                    @Override
-                    public void onLongClick() {
-                    }
-                });
-                view.setOnTouchListener(multiTouchListener);
-                addViewToParent(view);
-            }
-
-            @Override
-            public void filter() {
-
-            }
-
-            private void updateViewsBordersVisibilityExcept(@Nullable View keepView) {
-                for (View view : addedViews) {
-                    if (view != keepView) {
-                        stickerBorder.setBackgroundResource(0);
-                        stickerBorder.setTag(false);
-                    }
-                }
-            }
-
-            private void addViewToParent(View view) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                textStickerView.setVisibility(View.VISIBLE);
-                textStickerView.addView(view, params);
-                addedViews.add(view);
-                revertTextView.setVisibility(VISIBLE);
-                updateViewsBordersVisibilityExcept(view);
-            }
-
-            @Override
-            public void onAddViewListener(int numberOfAddedViews) {
-
-            }
-
-            @Override
-            public void onRemoveViewListener(int numberOfAddedViews) {
-
-            }
-
-            @Override
-            public void onStartViewChangeListener() {
-
-            }
-
-            @Override
-            public void onStopViewChangeListener() {
-
-            }
-        }
-
-
-    }
-
-    int postioN;
 
     private class AdapterViewPager extends PagerAdapter implements PhotoViewer.OnEditActions, OnPhotoEditorListener {
 
@@ -978,11 +778,9 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         public Object instantiateItem(ViewGroup container, final int position) {
 
             zoomLayout = new ZoomLayout(context);
-//            zoomLayout.setVisibility(View.GONE);
             textStickersParentView = new TextStickerView(context, false);
             textStickersParentView.setDrawingCacheEnabled(true);
             textStickersParentView.setId(R.id.textstickerView);
-//            textStickersParentView.setVisibility(View.GONE);
             zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
 
@@ -1001,7 +799,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 }
                 itemGalleryList.get(position).path = finalPath;
                 textStickersParentView.setPaintMode(false, BitmapFactory.decodeFile(finalPath));
-//                        textStickersParentView.updateImageBitmap(BitmapFactory.decodeFile(finalPath));
 
             }
 
@@ -1033,7 +830,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
         @Override
         public void addText(View rootView) {
-            TextStickerView textStickerView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+            TextStickerView textStickerView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
             MultiTouchListener multiTouchListener = new MultiTouchListener(
                     null, viewPager,
                     textStickerView,
@@ -1045,7 +842,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
                 @Override
                 public void onClick() {
-                    boolean isBackgroundVisible = stickerBorder.getTag() != null && (boolean) stickerBorder.getTag();
                     String textInput = textTv.getText().toString();
                     int currentTextColor = textTv.getCurrentTextColor();
                     showTextEditDialog(rootView, textInput, currentTextColor);
@@ -1053,15 +849,15 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
                 @Override
                 public void onDown() {
-                    boolean isBackgroundVisible = stickerBorder.getTag() != null && (boolean) stickerBorder.getTag();
-                    if (!isBackgroundVisible) {
-                        // stickerBorder.setBackgroundResource(R.drawable.background_border);
-                        stickerBorder.setTag(true);
-                        updateViewsBordersVisibilityExcept(rootView);
-                        isDownAlready = true;
-                    } else {
-                        isDownAlready = false;
-                    }
+//                    boolean isBackgroundVisible = stickerBorder.getTag() != null && (boolean) stickerBorder.getTag();
+//                    if (!isBackgroundVisible) {
+//                        // stickerBorder.setBackgroundResource(R.drawable.background_border);
+//                        stickerBorder.setTag(true);
+//                        updateViewsBordersVisibilityExcept(rootView);
+//                        isDownAlready = true;
+//                    } else {
+//                        isDownAlready = false;
+//                    }
                 }
 
                 @Override
@@ -1075,7 +871,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
         @Override
         public void addEmoji(View view) {
-            TextStickerView textStickerView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+            TextStickerView textStickerView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
             MultiTouchListener multiTouchListener = new MultiTouchListener(
                     null, viewPager,
                     textStickerView,
@@ -1091,6 +887,9 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
                 @Override
                 public void onDown() {
+                    if (mode == Modes.PAINT) {
+                        viewPager.setPagingEnabled(false);
+                    }
                 }
 
                 @Override
@@ -1117,7 +916,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
 
         private void addViewToParent(View view) {
-            TextStickerView textStickerView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+            TextStickerView textStickerView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
@@ -1149,113 +948,60 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         }
     }
 
+    public void openPhotoForEdit(List<GalleryItemModel> selectedPhotos, String message, boolean isSelected) {
+
+        if (itemGalleryList == null) {
+            itemGalleryList = new ArrayList<>();
+        }
+        for (GalleryItemModel items : selectedPhotos) {
+            StructBottomSheet item = new StructBottomSheet();
+            item.setId(itemGalleryList.size());
+            item.setPath(items.getAddress());
+            item.setText(message);
+            item.isSelected = isSelected;
+            itemGalleryList.add(0, item);
+            textImageList.put(path, item);
+        }
+        itemGalleryList.addAll(0, FragmentEditImage.itemGalleryList);
+        setUpViewPager();
+
+    }
 
     public void openPhotoForEdit(String path, String message, boolean isSelected) {
 
         this.path = path;
-        getAllShownImagesPath(getActivity(), new OnImagesGalleryPrepared() {
+        ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
             @Override
-            public void imagesList(ArrayList<StructBottomSheet> listOfAllImages) {
+            public void startProcess() {
+
+            }
+
+            @Override
+            public void success(String newPath) {
                 G.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (itemGalleryList == null) {
                             itemGalleryList = new ArrayList<>();
                         }
-                        itemGalleryList.addAll(listOfAllImages);
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setId(itemGalleryList.size());
+                        item.setPath(newPath);
+                        item.setText("");
+                        item.isSelected = isSelected;
+                        itemGalleryList.add(0, item);
+                        textImageList.put(path, item);
                         setUpViewPager();
                     }
                 });
 
             }
         });
-
-//        ImageHelper.correctRotateImage(path, true, new OnRotateImage() {
-//            @Override
-//            public void startProcess() {
-//
-//            }
-//
-//            @Override
-//            public void success(String newPath) {
-//                G.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (itemGalleryList == null) {
-//                            itemGalleryList = new ArrayList<>();
-//                        }
-//                        getAllShownImagesPath(getActivity(), new OnImagesGalleryPrepared() {
-//                            @Override
-//                            public void imagesList(ArrayList<StructBottomSheet> listOfAllImages) {
-//                                G.runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        itemGalleryList.addAll(0, listOfAllImages);
-//                                        setUpViewPager();
-//                                    }
-//                                });
-//
-//
-//                            }
-//                        });
-////                        StructBottomSheet item = new StructBottomSheet();
-////                        item.setId(itemGalleryList.size());
-////                        item.setPath(newPath);
-////                        item.setText("");
-////                        item.isSelected = isSelected;
-//
-//
-//                        //   G.imageLoader.displayImage(newPath, imageViewTouch);
-////                        Glide.with(getContext()).asDrawable().load(new File(newPath)).centerCrop().into(imageViewTouch);
-////                        imageViewTouch.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeFile(newPath),getSize(-1), getSize(-1), true));
-//                        //  imageViewTouch.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
-//                    }
-//                });
-//
-//            }
-//        });
     }
 
     public interface OnImagesGalleryPrepared {
         void imagesList(ArrayList<StructBottomSheet> listOfAllImages);
-    }
-
-    private void getAllShownImagesPath(Activity activity, OnImagesGalleryPrepared onImagesGalleryPrepared) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
-                Uri uri;
-                Cursor cursor;
-                int column_index_data;
-                String absolutePathOfImage;
-                uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-                String[] projection = {
-                        MediaStore.MediaColumns.DATA
-                };
-
-                cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC");
-
-                if (cursor != null) {
-                    column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
-                    while (cursor.moveToNext()) {
-                        absolutePathOfImage = cursor.getString(column_index_data);
-
-                        StructBottomSheet item = new StructBottomSheet();
-                        item.setId(listOfAllImages.size());
-                        item.setPath(absolutePathOfImage);
-                        item.isSelected = true;
-                        listOfAllImages.add(item);
-                        if (listOfAllImages.size() >= 100) break;
-                    }
-                    cursor.close();
-                    onImagesGalleryPrepared.imagesList(listOfAllImages);
-
-                }
-            }
-        }).start();
     }
 
     public boolean undo() {
@@ -1288,35 +1034,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private void setUpViewPager() {
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
-//        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (itemGalleryList.get(position).isSelected) {
-//                    animateCheckBox.setChecked(false);
-//                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-//                } else {
-//                    animateCheckBox.setChecked(true);
-//                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
-//                }
-//
-//                if (textImageList.containsKey(itemGalleryList.get(position).path)) {
-//                    captionEditText.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(position).path).getText(), captionEditText.getPaint().getFontMetricsInt()));
-//                } else {
-//                    captionEditText.setText("");
-//                }
-//                iconOkTextView.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                super.onPageScrollStateChanged(state);
-//            }
-//        });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -1325,7 +1042,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
             @Override
             public void onPageSelected(int position) {
-                postioN = position;
+                viewHolderPostion = position;
                 if (itemGalleryList.get(position).isSelected) {
                     animateCheckBox.setChecked(false);
                     animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
@@ -1505,7 +1222,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     }
 
     private void updateBrushParams() {
-        TextStickerView textStickerView = viewHolders.get(postioN).findViewById(R.id.textstickerView);
+        TextStickerView textStickerView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
         textStickerView.setBrushColor(brushColor);
         textStickerView.setBrushSize(brushSize);
         textStickerView.setStrokeAlpha(brushAlpha);

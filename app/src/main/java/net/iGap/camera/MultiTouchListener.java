@@ -155,12 +155,12 @@ public class MultiTouchListener implements View.OnTouchListener {
                 break;
             case MotionEvent.ACTION_UP:
                 activePointerId = INVALID_POINTER_ID;
-                if (deleteView != null && isViewInBounds(deleteView, x, y)) {
-                    if (onMultiTouchListener != null)
-                        onMultiTouchListener.onRemoveViewListener(view);
-                } else if (!isViewInBounds(photoEditImageView, x, y)) {
-                    view.animate().translationY(0).translationY(0);
-                }
+//                if (deleteView != null && isViewInBounds(deleteView, x, y)) {
+//                    if (onMultiTouchListener != null)
+//                        onMultiTouchListener.onRemoveViewListener(view);
+//                } else if (!isViewInBounds(photoEditImageView, x, y)) {
+//                    view.animate().translationY(0).translationY(0);
+//                }
                 firePhotoEditorSDKListener(view, false);
                 viewPager2.setPagingEnabled(true);
                 break;

@@ -3,14 +3,18 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +28,7 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.adapter.AdapterGalleryVideo;
+import net.iGap.camera.PhotoViewer;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -63,6 +68,9 @@ public class FragmentGallery extends BaseFragment {
     private boolean isReturnResultDirectly;
     private boolean isMusicSortedByDate = true;
     private static boolean canMultiSelected;
+    private View rootView;
+    ViewGroup lytToolbar;
+    RecyclerView rvGallery;
 
     public FragmentGallery() {
     }
@@ -111,6 +119,7 @@ public class FragmentGallery extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.rootView = view;
         if (getArguments() != null) {
             mGalleryMode = GalleryMode.valueOf(getArguments().getString(MODE_KEY));
             mFolderName = getArguments().getString(FOLDER_KEY, null);
@@ -129,9 +138,10 @@ public class FragmentGallery extends BaseFragment {
     }
 
     private void initToolbar(View view) {
-        ViewGroup lytToolbar = view.findViewById(R.id.toolbar);
+        lytToolbar = view.findViewById(R.id.toolbar);
         String toolbarTitle = "";
-        if (mGalleryMode == GalleryMode.PHOTO) {
+        if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.STORY) {
+            lytToolbar.setVisibility(View.VISIBLE);
             toolbarTitle = getString(R.string.gallery);
         } else if (mGalleryMode == GalleryMode.VIDEO) {
             toolbarTitle = getString(R.string.videos);
@@ -155,7 +165,7 @@ public class FragmentGallery extends BaseFragment {
                     @Override
                     public void onRightIconClickListener(View view) {
                         if (isSubFolder) {
-                            if (mGalleryMode == GalleryMode.PHOTO) {
+                            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.STORY) {
                                 checkPhotoMultiSelectAndSendToEdit();
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
@@ -188,7 +198,34 @@ public class FragmentGallery extends BaseFragment {
 
     private void initRecyclerView(View view) {
 
-        RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
+        rvGallery = view.findViewById(R.id.rv_gallery);
+
+        rvGallery.setOnTouchListener(new View.OnTouchListener() {
+            private float mLastX = 0, mLastY = 0;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        float deltaX = event.getX() - mLastX;
+                        float deltaY = event.getY() - mLastY;
+                        if (Math.abs(deltaY) > 20 && Math.abs(deltaY) > Math.abs(deltaX)) {
+
+                            rvGallery.getParent().getParent().getParent().getParent().requestDisallowInterceptTouchEvent(true);
+                        }
+                        mLastX = event.getX();
+                        mLastY = event.getY();
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                    case MotionEvent.ACTION_DOWN:
+                        rvGallery.getParent().getParent().getParent().getParent().requestDisallowInterceptTouchEvent(true);
+                    case MotionEvent.ACTION_UP:
+                        rvGallery.getParent().getParent().getParent().getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+                return false;
+            }
+        });
         switch (mGalleryMode) {
             case PHOTO:
             case STORY:
@@ -323,12 +360,13 @@ public class FragmentGallery extends BaseFragment {
                     openImageForEdit(path);
                 } else {
                     //open sub directory
-                    openGallerySubDirectory(GalleryMode.PHOTO, path, id);
+                    openGallerySubDirectory(mGalleryMode, path, id);
                 }
             }
 
             @Override
             public void onMultiSelect(int size) {
+                initToolbar(rootView);
                 handleUiWithMultiSelect(size);
             }
         });
@@ -451,9 +489,16 @@ public class FragmentGallery extends BaseFragment {
                 @Override
                 public void success(String newPath) {
                     G.handler.post(() -> {
+                        PhotoViewer photoViewer = PhotoViewer.newInstance(newPath);
                         FragmentEditImage.insertItemList(newPath, "", false);
-                        if (getActivity() != null)
-                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                        if (getActivity() != null) {
+                            if (mGalleryMode == GalleryMode.STORY) {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), photoViewer).setReplace(false).load();
+                            } else {
+                                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+                            }
+
+                        }
                     });
                 }
             });
@@ -484,7 +529,13 @@ public class FragmentGallery extends BaseFragment {
             popBackStackFragment();
             popBackStackFragment();
         });
-        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+        if (mGalleryMode == GalleryMode.STORY) {
+            PhotoViewer photoViewer = PhotoViewer.newInstance((ArrayList<GalleryItemModel>) selectedPhotos);
+            new HelperFragment(getActivity().getSupportFragmentManager(), photoViewer).setReplace(false).load();
+        } else {
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+        }
+
     }
 
     private void showNoItemInGallery(View rv, View view) {
@@ -512,7 +563,7 @@ public class FragmentGallery extends BaseFragment {
 
     private void handleUiWithMultiSelect(int size) {
         if (mHelperToolbar.getRightButton() != null) {
-            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
+            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO || mGalleryMode == GalleryMode.STORY) {
                 if (size > 0) {
                     mHelperToolbar.getRightButton().setText(R.string.md_send_button);
                 } else {
