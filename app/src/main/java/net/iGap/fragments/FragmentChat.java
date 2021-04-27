@@ -9329,7 +9329,6 @@ public class FragmentChat extends BaseFragment
 
                 if (mRoomId == roomId && mAdapter != null) {
                     mAdapter.updateMessageText(messageId, newMessage);
-                    removeEditedMessage();
                 }
             });
         } else if ((long) args[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
