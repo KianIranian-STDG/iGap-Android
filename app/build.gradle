@@ -852,6 +852,7 @@ dependencies {
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.65'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     implementation project(path: ':video')
+    implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
 }
 
 configurations.all {

@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import net.iGap.camera.CameraStoryFragment;
+import net.iGap.story.camera.CameraStoryFragment;
 
 public class StoryFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked {
     ViewPager2 viewPager2;

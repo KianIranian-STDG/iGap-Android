@@ -42,7 +42,7 @@ import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.camera.PhotoViewer;
+import net.iGap.story.camera.PhotoViewer;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.ImageHelper;

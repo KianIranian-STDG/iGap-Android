@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.StoryFragment;
 import net.iGap.activities.ActivityMain;
-import net.iGap.camera.CameraStoryFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;
 import net.iGap.fragments.populaChannel.PopularChannelHomeFragment;

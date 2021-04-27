@@ -6,13 +6,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import net.iGap.camera.CameraStoryFragment;
+import net.iGap.story.camera.CameraStoryFragment;
 import net.iGap.fragments.FragmentGallery;
-
-import java.io.IOException;
 
 public class CameraPagerAdapater extends FragmentStateAdapter {
     private CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked;

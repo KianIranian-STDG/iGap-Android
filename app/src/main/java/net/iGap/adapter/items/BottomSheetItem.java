@@ -20,11 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.camera.PhotoViewer;
-import net.iGap.fragments.FragmentEditImage;
-import net.iGap.helper.HelperFragment;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnPathAdapterBottomSheet;
@@ -44,11 +40,13 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
         this.mList = item;
         this.onPathAdapterBottomSheet = OnPathAdapterBottomSheet;
     }
+
     public BottomSheetItem(FragmentManager fm, StructBottomSheet item, OnPathAdapterBottomSheet OnPathAdapterBottomSheet) {
         this.mList = item;
         this.fm = fm;
         this.onPathAdapterBottomSheet = OnPathAdapterBottomSheet;
     }
+
     public StructBottomSheet getItem() {
         return mList;
     }
@@ -95,7 +93,7 @@ public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetIt
 
         holder.cr.setOnClickListener(v -> {
 
-             onPathAdapterBottomSheet.path(mList.getPath(), holder.checkBoxSelect.isChecked(), true, mList, mList.getId());
+            onPathAdapterBottomSheet.path(mList.getPath(), holder.checkBoxSelect.isChecked(), true, mList, mList.getId());
         });
     }
 
