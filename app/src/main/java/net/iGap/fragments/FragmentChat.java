@@ -9314,8 +9314,8 @@ public class FragmentChat extends BaseFragment
                     deleteSelectedMessageFromAdapter(messages);
 
                     if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
-                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
-                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
+                        MessageObject roomMessage = (MessageObject) mReplayLayout.getTag();
+                        if (roomMessage != null && messageId == roomMessage.id) {
                             clearReplyView();
                         }
                     }
