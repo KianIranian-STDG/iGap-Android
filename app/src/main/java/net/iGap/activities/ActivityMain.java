@@ -55,6 +55,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.huawei.hms.api.HuaweiApiAvailability;
 import com.top.lib.mpl.view.PaymentInitiator;
 
 import net.iGap.Config;
@@ -1018,18 +1019,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onProviderInstallFailed(int errorCode, Intent intent) {
         GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-        if (availability.isUserResolvableError(errorCode)) {
-            // Recoverable error. Show a dialog prompting the user to
-            // install/update/enable Google Play services.
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
-                    // The user chose not to take the recovery action
-                    onProviderInstallerNotAvailable();
-                });
+        int result = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context);
+        boolean isAvailable = (com.huawei.hms.api.ConnectionResult.SUCCESS == result);
+        if (!isAvailable) {
+            if (availability.isUserResolvableError(errorCode)) {
+                // Recoverable error. Show a dialog prompting the user to
+                // install/update/enable Google Play services.
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                    availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                        // The user chose not to take the recovery action
+                        onProviderInstallerNotAvailable();
+                    });
+                }
+            } else {
+                // Google Play services is not available.
+                onProviderInstallerNotAvailable();
             }
-        } else {
-            // Google Play services is not available.
-            onProviderInstallerNotAvailable();
         }
     }
 
