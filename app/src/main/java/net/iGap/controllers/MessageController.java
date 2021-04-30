@@ -300,7 +300,7 @@ public class MessageController extends BaseController implements EventManager.Ev
         }
 
         getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
-        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage));
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage,isUpdate));
 
     }
 

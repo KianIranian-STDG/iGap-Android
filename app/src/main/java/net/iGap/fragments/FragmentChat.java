@@ -9326,10 +9326,11 @@ public class FragmentChat extends BaseFragment
                 long roomId = (long) args[0];
                 long messageId = (long) args[1];
                 String newMessage = (String) args[2];
-
+                boolean isUpdate = (boolean) args[3];
                 if (mRoomId == roomId && mAdapter != null) {
                     mAdapter.updateMessageText(messageId, newMessage);
-                    removeEditedMessage();
+                    if (!isUpdate)
+                        removeEditedMessage();
                 }
             });
         } else if ((long) args[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
