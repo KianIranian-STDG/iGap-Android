@@ -589,6 +589,7 @@ public class FragmentChat extends BaseFragment
     @Nullable
     private RealmRoomAccess currentRoomAccess;
     private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
+    private boolean allowScrollToTop = true;
 
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
@@ -8303,9 +8304,10 @@ public class FragmentChat extends BaseFragment
                     recyclerView.addOnScrollListener(scrollListener);
 
 
-                    if (unreadCount > 0) {
+                    if (unreadCount > 0 && allowScrollToTop) {
                         recyclerView.scrollToPosition(0);
                     }
+                    allowScrollToTop = false;
                 }
             });
         });
