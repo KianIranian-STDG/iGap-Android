@@ -161,7 +161,7 @@ public class HttpUploader implements IUpload {
             if (!completedCompressFile.exists() && ignoreCompress()) {
                 if (pendingCompressTasks.containsKey(fileObject.messageId + ""))
                     return;
-                CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.message.attachment.localFilePath, savePathVideoCompress, new OnCompress() {
+                CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.path, savePathVideoCompress, new OnCompress() {
                     @Override
                     public void onCompressProgress(String id, int percent) {
                         G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent));
@@ -169,19 +169,23 @@ public class HttpUploader implements IUpload {
 
                     @Override
                     public void onCompressFinish(String id, boolean compress) {
-                        if (compress && compressFile.exists() && compressFile.length() < (new File(fileObject.message.attachment.localFilePath)).length()) {
-                            compressFile.renameTo(completedCompressFile);
-                            fileObject.file = completedCompressFile;
-                            fileObject.fileSize = completedCompressFile.length();
-                        } else {
-                            if (compressFile.exists()) {
+                        try {
+                            File originalFile = new File(fileObject.path);
+
+                            if (compress && compressFile.exists() && compressFile.length() < originalFile.length()) {
+                                compressFile.renameTo(completedCompressFile);
+                                fileObject.file = completedCompressFile;
+                                fileObject.fileSize = completedCompressFile.length();
+                            } else if (compressFile.exists()) {
                                 compressFile.delete();
                             }
-                        }
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
-                        pendingCompressTasks.remove(fileObject.messageId + "");
+                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
+                            pendingCompressTasks.remove(fileObject.messageId + "");
 
-                        startUpload(fileObject, completedCompressFile);
+                            startUpload(fileObject, completedCompressFile);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
 
