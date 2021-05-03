@@ -445,6 +445,7 @@ public class CallManager {
 
     public void endCall() {
         isUserInCall = false;
+        MusicPlayer.pauseSoundFromIGapCall = false;
         if (isRinging || isCallActive) {
             waitForEndCall = true;
             new RequestSignalingLeave().signalingLeave();

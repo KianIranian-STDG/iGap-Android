@@ -33,6 +33,9 @@
     //mo
     <!--toolbar-->
 
+    <!--    callStrip-->
+    <color name="call_strip_color">#673AB7</color>
+    <color name="call_strip_color_blue">#3F51B5</color>
     <!--<color name="toolbar_background">#00B0BF</color>-->
     <color name="toolbar_background">@color/green</color>
     <color name="toolbar_transparent">#bf000000</color>

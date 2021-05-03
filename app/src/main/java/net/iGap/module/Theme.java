@@ -412,6 +412,14 @@ public class Theme {
         return getColorFromAttr(context, R.attr.toolbarActionModeBackgroundColor);
     }
 
+    public int getCallStripColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapCallStripColor);
+    }
+
+    public int getCallStripColorBlue(Context context) {
+        return getColorFromAttr(context, R.attr.iGapCallStripColorBlue);
+    }
+
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
         TypedValue typedValue = new TypedValue();
         TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});

@@ -4619,7 +4619,6 @@ public class FragmentChat extends BaseFragment
     public void onPlayMusic(String messageId) {
 
         if (messageId != null && messageId.length() > 0) {
-
             try {
                 if (MusicPlayer.downloadNextMusic(messageId)) {
                     mAdapter.notifyDataSetChanged();
@@ -5888,7 +5887,7 @@ public class FragmentChat extends BaseFragment
     private void muteNotification(final long roomId) {
 
         isMuteNotification = !isMuteNotification;
-        getRoomController().clientMuteRoom(roomId,isMuteNotification);
+        getRoomController().clientMuteRoom(roomId, isMuteNotification);
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);

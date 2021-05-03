@@ -86,6 +86,8 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
+        <item name="iGapCallStripColor">@color/call_strip_color</item>
+        <item name="iGapCallStripColorBlue">@color/call_strip_color_blue</item>
 
         <item name="iGapBottomNavigationIconStart">#FFC6DA42</item>
         <item name="iGapBottomNavigationIconEnd">#FF50B452</item>

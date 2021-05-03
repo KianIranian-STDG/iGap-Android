@@ -134,6 +134,8 @@
     <attr name="iGapProfileStroke" format="reference" />
     <attr name="iGapProfileToolbar" format="reference" />
     <attr name="iGapTimerPinter" format="reference" />
+    <attr name="iGapCallStripColor" format="reference|color" />
+    <attr name="iGapCallStripColorBlue" format="reference|color" />
 
     <!--=======================custom theme=====================-->
 
@@ -231,6 +233,6 @@
         <attr name="yearRange" format="integer" />
         <attr name="displayDescription" format="boolean" />
     </declare-styleable>
-    <attr name="numberPickerTheme" format="reference"/>
+    <attr name="numberPickerTheme" format="reference" />
 
 </resources>

@@ -43,6 +43,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.activities.CallActivity;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
 import net.iGap.helper.AsyncTransaction;
@@ -254,7 +255,24 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         floatActionLayout.addView(addButton);
 
         mediaContainer = new FragmentMediaContainer(context, this);
-        layout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 36, Gravity.TOP | Gravity.LEFT, 0, -36, 0, 0));
+        mediaContainer.setListener(i -> {
+            switch (i) {
+                case FragmentMediaContainer.CALL_TAG:
+                    getActivity().startActivity(new Intent(getContext(), CallActivity.class));
+                    break;
+                case FragmentMediaContainer.MEDIA_TAG:
+                    if (!MusicPlayer.isVoice) {
+                        Intent intent = new Intent(context, ActivityMain.class);
+                        intent.putExtra(ActivityMain.openMediaPlyer, true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                    break;
+                case FragmentMediaContainer.PLAY_TAG:
+                    break;
+            }
+        });
+        layout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 39, Gravity.TOP | Gravity.LEFT, 0, -40, 0, 0));
 
         return fragmentView;
     }
@@ -847,7 +865,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         checkPassCodeVisibility();
 
         boolean canUpdate = false;
-
+        if (mediaContainer != null) {
+            mediaContainer.didLayoutChanged();
+        }
         if (G.isUpdateNotificaionColorMain) {
             canUpdate = true;
             G.isUpdateNotificaionColorMain = false;

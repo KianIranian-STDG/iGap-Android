@@ -102,9 +102,22 @@ public class BaseFragment extends SwipeBackFragment {
         });
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e("create", "onViewCreated: " );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("create", "onResume: " );
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.e("create", "onCreateView: " );
         View toolBar = createToolBar(context);
         View rootView = createView(context);
 

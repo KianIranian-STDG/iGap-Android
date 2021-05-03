@@ -1,25 +1,33 @@
 package net.iGap.messenger.ui.components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.palette.graphics.Palette;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.module.CircleImageView;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.webrtc.CallerInfo;
@@ -29,26 +37,106 @@ import net.iGap.viewmodel.controllers.CallManager;
 public class FragmentMediaContainer extends FrameLayout implements EventManager.EventDelegate {
     private ViewGroup fragmentView;
 
+    public static final int CALL_TAG = 1;
+    public static final int MEDIA_TAG = 2;
+    public static final int PLAY_TAG = 3;
+    private MediaContainerListener listener;
     private int currentMode;
 
-    private TextView titleTextView;
+    private FrameLayout callContainer;
+    private FrameLayout mediaContainer;
+    private AvatarHandler avatarHandler;
+
+    private TextView callerName;
+    private IconView callIconView;
+    private CircleImageView callerAvatar;
+
+    private TextView musicTitle;
     private IconView closeIconView;
     private IconView playIconView;
     private View shadowView;
     private float topPadding;
     private AnimatorSet animatorSet;
     private float backColor;
+    private boolean isRTL = G.isAppRtl;
+
+    private boolean needShowCall;
+    private boolean needShowMedia;
 
     public FragmentMediaContainer(@NonNull Context context, BaseFragment fragment) {
         super(context);
+        avatarHandler = new AvatarHandler();
         fragmentView = (ViewGroup) fragment.getFragmentView();
         fragmentView.setClipToPadding(false);
 
-        titleTextView = new TextView(context);
-        titleTextView.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
-        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        titleTextView.setTextColor(Theme.getInstance().getTitleTextColor(context));
-        addView(titleTextView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER | Gravity.LEFT, 64, 0, 0, 0));
+        mediaContainer = new FrameLayout(context);
+        mediaContainer.setTag(MEDIA_TAG);
+        mediaContainer.setOnClickListener(view -> listener.clickListener((Integer) mediaContainer.getTag()));
+
+        playIconView = new IconView(context);
+        playIconView.setTextColor(Color.WHITE);
+        playIconView.setGravity(Gravity.CENTER_VERTICAL);
+        playIconView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+        playIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        playIconView.setTag(PLAY_TAG);
+        playIconView.setOnClickListener(view -> {
+            listener.clickListener((Integer) playIconView.getTag());
+            if (MusicPlayer.isMusicPlyerEnable) {
+                playIconView.setText(MusicPlayer.mp.isPlaying() ? R.string.pause_icon : R.string.play_icon);
+                MusicPlayer.playAndPause();
+            }
+        });
+        mediaContainer.addView(playIconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.LEFT, 10, 0, 0, 0));
+
+
+        musicTitle = new TextView(context);
+        musicTitle.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        musicTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        musicTitle.setTextColor(Color.WHITE);
+        musicTitle.setGravity(Gravity.CENTER_VERTICAL);
+        mediaContainer.addView(musicTitle, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 45, 0, 0, 0));
+
+        closeIconView = new IconView(context);
+        closeIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        closeIconView.setText(R.string.close_icon);
+        closeIconView.setGravity(Gravity.CENTER_VERTICAL);
+        closeIconView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+        closeIconView.setOnClickListener(view -> {
+            if (MusicPlayer.isMusicPlyerEnable)
+                MusicPlayer.closeLayoutMediaPlayer();
+        });
+        mediaContainer.addView(closeIconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.RIGHT, 5, 0, 10, 0));
+
+        callContainer = new FrameLayout(context);
+        callContainer.setTag(CALL_TAG);
+
+        callIconView = new IconView(context);
+        callIconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        callIconView.setText(R.string.voice_call_icon);
+        callIconView.setTextColor(Color.WHITE);
+        callContainer.addView(callIconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, isRTL ? Gravity.RIGHT : Gravity.LEFT, isRTL ? 10 : 5, 0, isRTL ? 5 : 10, 0));
+
+        callerName = new TextView(context);
+        callerName.setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
+        callerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        callerName.setTextColor(Color.WHITE);
+        callerName.setGravity(Gravity.CENTER_VERTICAL);
+        callContainer.addView(callerName, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_HORIZONTAL, 0, 0, 0, 0));
+        callContainer.setOnClickListener(view -> listener.clickListener((Integer) callContainer.getTag()));
+
+        callerAvatar = new CircleImageView(context);
+        callContainer.addView(callerAvatar, LayoutCreator.createFrame(28, 28, isRTL ? Gravity.LEFT | Gravity.CENTER_VERTICAL : Gravity.RIGHT | Gravity.CENTER_VERTICAL, isRTL ? 5 : 10, 0, isRTL ? 10 : 5, 0));
+
+        addView(callContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+        addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
+    }
+
+    public void setListener(MediaContainerListener listener) {
+        this.listener = listener;
+    }
+
+    public interface MediaContainerListener {
+        void clickListener(int i);
     }
 
     @Override
@@ -60,6 +148,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         }
 
         didCallChange();
+        didMediaChanged();
     }
 
     @Override
@@ -75,39 +164,94 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
     public void receivedEvent(int id, int account, Object... args) {
         if (id == EventManager.CALL_STATE_CHANGED) {
             didCallChange();
+        } else if (id == EventManager.MEDIA_PLAYER_STATE_CHANGED) {
+            didMediaChanged();
         }
     }
 
-    private void didCallChange() {
-        boolean needShow = CallManager.getInstance().isCallAlive();
+    private void didMediaChanged() {
 
-        if (needShow) {
-            CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
-            if (callerInfo != null) {
-                titleTextView.setText(String.format("%s %s", callerInfo.name, callerInfo.lastName));
-                titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-//                setBackgroundColor();
+        needShowMedia = MusicPlayer.isMusicPlyerEnable;
 
-                final int from = Theme.getInstance().getToolbarBackgroundColor(getContext());
-                final int to = Theme.getInstance().getRootColor(getContext());
-
-
-                animatorSet = new AnimatorSet();
-                ObjectAnimator animator = ObjectAnimator.ofFloat(this, "backColor", from, to);
-
-                animator.setRepeatCount(ValueAnimator.INFINITE);
-                animator.setEvaluator(new ArgbEvaluator());
-
-                animatorSet.setDuration(5000);
-                animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
-                animatorSet.playTogether(animator);
-
-                setVisibility(VISIBLE);
+        if (!needShowCall) {
+            if (needShowMedia) {
+                musicTitle.setText(MusicPlayer.musicName);
+                playIconView.setText(!MusicPlayer.mp.isPlaying() ? R.string.play_icon : R.string.pause_icon);
+                if (!MusicPlayer.isVoice) {
+                    getMusicCoverBackgroundColor();
+                } else {
+                    mediaContainer.setBackgroundColor(Theme.getInstance().getSubTitleColor(getContext()));
+                }
+                callContainer.setVisibility(GONE);
+                mediaContainer.setVisibility(VISIBLE);
+                if (getVisibility() != VISIBLE)
+                    setVisibilityWithAnimation(this, true);
+            } else {
+                setVisibilityWithAnimation(this, false);
             }
         } else {
-            setBackgroundColor(Theme.getInstance().getRootColor(getContext()));
-            setVisibility(GONE);
+
         }
+    }
+
+
+
+    private void didCallChange() {
+
+        needShowCall = CallManager.getInstance().isCallAlive();
+
+        if (needShowCall) {
+            CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
+            if (callerInfo != null) {
+                mediaContainer.setVisibility(GONE);
+                callerName.setText(String.format("%s %s", callerInfo.name, callerInfo.lastName));
+                avatarHandler.getAvatar(new ParamWithInitBitmap(callerAvatar, callerInfo.userId).initBitmap(null).showMain());
+
+                final int from = Theme.getInstance().getCallStripColor(getContext());  // TODO: 5/1/21 These colors must change in future
+                final int to = Theme.getInstance().getCallStripColorBlue(getContext());
+
+                animateContainerColor(callContainer, from, to, 2000);
+                setVisibilityWithAnimation(this, needShowCall);
+            }
+        } else {
+            if (!MusicPlayer.isMusicPlyerEnable)
+                setVisibilityWithAnimation(this, false);
+            else {
+                setVisibility(VISIBLE);
+                mediaContainer.setVisibility(VISIBLE);
+            }
+        }
+    }
+    private void getMusicCoverBackgroundColor() {
+        if (MusicPlayer.mediaThumpnail != null) {
+            Palette.from(MusicPlayer.mediaThumpnail).generate(palette -> {
+                Palette.Swatch vibrantTo;
+                Palette.Swatch vibrantFrom;
+                if (palette != null) {
+                    vibrantTo = palette.getDominantSwatch();
+                    vibrantFrom = palette.getLightMutedSwatch();
+                    if (vibrantTo != null && vibrantFrom != null) {
+                        int to = vibrantTo.getRgb();
+                        int from = vibrantFrom.getRgb();
+                        animateContainerColor(mediaContainer, to, from, 10000);
+                    }
+                }
+
+            });
+        }
+    }
+    public void didLayoutChanged() {
+        didCallChange();
+        didMediaChanged();
+    }
+
+    private void animateContainerColor(View view, int colorFrom, int colorTo, int duration) {
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+        colorAnimator.setDuration(duration);
+        colorAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        colorAnimator.setInterpolator(new LinearInterpolator());
+        colorAnimator.addUpdateListener(animation -> view.setBackgroundColor((Integer) animation.getAnimatedValue()));
+        colorAnimator.start();
     }
 
     @Keep
@@ -127,5 +271,34 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         if (fragmentView != null) {
             fragmentView.setPadding(0, (int) value, 0, 0);
         }
+    }
+
+    private void setVisibilityWithAnimation(View view, boolean needShow) {
+        int viewHeight;
+        if (needShow)
+            viewHeight = view.getHeight();
+        else
+            viewHeight = -view.getHeight();
+
+        view.animate().translationY(viewHeight).setDuration(300).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                if (needShow) {
+                    view.setVisibility(VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (!needShow) {
+                    view.setVisibility(GONE);
+                }
+                view.setTranslationY(0);
+            }
+        });
+
+
     }
 }
