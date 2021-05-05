@@ -18,7 +18,6 @@ import android.widget.TextView;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.palette.graphics.Palette;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -191,7 +190,6 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
     }
 
 
-
     private void didCallChange() {
 
         needShowCall = CallManager.getInstance().isCallAlive();
@@ -218,24 +216,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
             }
         }
     }
-    private void getMusicCoverBackgroundColor() {
-        if (MusicPlayer.mediaThumpnail != null) {
-            Palette.from(MusicPlayer.mediaThumpnail).generate(palette -> {
-                Palette.Swatch vibrantTo;
-                Palette.Swatch vibrantFrom;
-                if (palette != null) {
-                    vibrantTo = palette.getDominantSwatch();
-                    vibrantFrom = palette.getDarkMutedSwatch();
-                    if (vibrantTo != null && vibrantFrom != null) {
-                        int to = vibrantTo.getRgb();
-                        int from = vibrantFrom.getRgb();
-                        animateContainerColor(mediaContainer, to, from, 10000);
-                    }
-                }
 
-            });
-        }
-    }
     public void didLayoutChanged() {
         didCallChange();
         didMediaChanged();
