@@ -6,10 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 
-public class CubeOutTransformer implements ViewPager.PageTransformer {
+public class PageTransformer implements ViewPager.PageTransformer {
     private float distanceMultiplier;
 
-    public CubeOutTransformer(int distanceMultiplier) {
+    public PageTransformer(int distanceMultiplier) {
         this.distanceMultiplier = distanceMultiplier;
     }
 

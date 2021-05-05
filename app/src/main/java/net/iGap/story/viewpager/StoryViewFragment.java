@@ -1,51 +1,52 @@
 package net.iGap.story.viewpager;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
-import com.bumptech.glide.util.Util;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheUtil;
+import com.google.android.exoplayer2.util.Util;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.DispatchQueue;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class StoryViewPagerFragment extends BaseFragment implements PageViewOperator {
+public class StoryViewFragment extends BaseFragment implements StoryDisplayFragment.PageViewOperator {
 
-    public static SparseIntArray progressState = new SparseIntArray();
-    private int prevDragPosition = 0;
+    public static SparseIntArray progressStateArray = new SparseIntArray();
+    private float prevDragPosition = 0;
     private int currentPage = 0;
-    private FixedViewPager viewPager;
+    private StoryViewPager viewPager;
     private StoryPagerAdapter pagerAdapter;
-    private ValueAnimator valueAnimator;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.story_fragment, container, false);
         viewPager = view.findViewById(R.id.viewPager);
-        valueAnimator = new ValueAnimator();
         new StoryDisplayFragment(this);
         setUpPager();
         return view;
     }
+
 
     private void setUpPager() {
         List<StoryUser> storyUserList = new ArrayList<>();
@@ -85,27 +86,15 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
                     stories1.add(story1);
                     storyUser.setStories(stories1);
                     break;
-                case 2:
-                    List<Story> stories2 = new ArrayList<>();
-                    Story story2 = new Story();
-                    storyUser.setUserName("Ali");
-                    storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/men/7.jpg");
-                    story2.setUrl("https://www.koko.org/wp-content/uploads/2019/08/Koko_signs_Love3full-200x300.jpg");
-                    story2.setStoryData(System.currentTimeMillis() - (1 * (24) * 60 * 60 * 1000));
-                    stories2.add(story2);
-                    storyUser.setStories(stories2);
-                    break;
             }
 
 
             storyUserList.add(storyUser);
         }
-        preLoadStories(storyUserList);
-
         pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
-        viewPager.setPageTransformer(true, new CubeOutTransformer(20));
+        viewPager.setPageTransformer(true, new PageTransformer(20));
 
         viewPager.addOnPageChangeListener(new PageChangeListener() {
             @Override
@@ -120,6 +109,8 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
                 currentPage = position;
             }
         });
+
+          preLoadStories(storyUserList);
     }
 
     private void preLoadStories(List<StoryUser> storyUserList) {
@@ -140,14 +131,13 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
     }
 
     private void preLoadVideos(List<String> videoList) {
-/*        for (String data : videoList) {
+       for (String data : videoList) {
             new DispatchQueue("videoListQue").postRunnable(() -> {
                 Uri dataUri = Uri.parse(data);
                 DataSpec dataSpec = new DataSpec(dataUri, 0, 500 * 1024, null);
                 DataSource dataSource = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), getString(R.string.app_name))).createDataSource();
                 CacheUtil.ProgressListener listener = (requestLength, bytesCached, newBytesCached) -> {
                     double downloadPercentage = (bytesCached * 100.0 / requestLength);
-                    Log.i("nazi", "downloadPercentage: " + downloadPercentage);
                 };
                 try {
                     CacheUtil.cache(
@@ -162,7 +152,8 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
                     e.printStackTrace();
                 }
             });
-        }*/
+        }
+
     }
 
     private void preLoadImages(List<String> imageList) {
@@ -174,9 +165,9 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
     }
 
     private void fakeDrag(boolean forward) {
-/*        if (prevDragPosition == 0 && viewPager.beginFakeDrag()) {
-            valueAnimator.ofInt(0, viewPager.getWidth());
-            valueAnimator.setDuration(1000);
+        if (prevDragPosition == 0 && viewPager.beginFakeDrag()) {
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, viewPager.getWidth());
+            valueAnimator.setDuration(200L);
             valueAnimator.setInterpolator(new FastOutLinearInInterpolator());
             valueAnimator.addListener(new Animator.AnimatorListener() {
                 @Override
@@ -209,14 +200,15 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
             });
             valueAnimator.addUpdateListener(animation -> {
                 if (!viewPager.isFakeDragging()) return;
-                int dragPosition = (int) valueAnimator.getAnimatedValue();
+                float dragPosition = (float) valueAnimator.getAnimatedValue();
                 float dragOffset = ((dragPosition - prevDragPosition) * (forward ? -1 : 1));
                 prevDragPosition = dragPosition;
                 viewPager.fakeDragBy(dragOffset);
             });
+
             valueAnimator.start();
 
-        }*/
+        }
 
     }
 
@@ -227,24 +219,21 @@ public class StoryViewPagerFragment extends BaseFragment implements PageViewOper
             try {
                 fakeDrag(false);
             } catch (Exception e) {
-                //NO OP
+                HelperLog.getInstance().setErrorLog(e);
             }
         }
     }
 
     @Override
     public void nextPageView() {
-        fakeDrag(true);
         if (viewPager.getCurrentItem() + 1 < (viewPager.getAdapter() != null ? viewPager.getAdapter().getCount() : 0)) {
             try {
                 fakeDrag(true);
             } catch (Exception e) {
-                //NO OP
+                HelperLog.getInstance().setErrorLog(e);
             }
         } else {
             //there is no next story
-            Toast.makeText(getContext(), "All stories displayed.", Toast.LENGTH_LONG).show();
         }
     }
-
 }

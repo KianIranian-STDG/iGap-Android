@@ -11,13 +11,13 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     private float startX = 0f;
     private float startY = 0f;
     private float touchDownTime = 0L;
-    private static int SWIPE_THRESHOLD = 100;
-    private static int SWIPE_VELOCITY_THRESHOLD = 100;
-    private static long CLICK_TIME_THRESHOLD = 200L;
-    private static long TOUCH_MOVE_THRESHOLD = 150L;
+    private static final int SWIPE_THRESHOLD = 100;
+    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+    private static final long CLICK_TIME_THRESHOLD = 200L;
+    private static final long TOUCH_MOVE_THRESHOLD = 150L;
 
     public OnSwipeTouchListener(Context context) {
-        gestureDetecto = new GestureDetector(context,new GestureListener());
+        gestureDetecto = new GestureDetector(context, new GestureListener());
     }
 
     @Override

@@ -87,7 +87,7 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
-import net.iGap.story.viewpager.StoryViewPagerFragment;
+import net.iGap.story.viewpager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.model.Card;
@@ -608,7 +608,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         FragmentStoryViews fragment = new FragmentStoryViews();
         new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();*/
 
-        StoryViewPagerFragment fragment = new StoryViewPagerFragment();
+        StoryViewFragment fragment = new StoryViewFragment();
         new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();
 
     }

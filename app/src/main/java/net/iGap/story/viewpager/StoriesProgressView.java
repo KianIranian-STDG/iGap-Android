@@ -37,16 +37,9 @@ public class StoriesProgressView extends LinearLayout {
     public StoriesProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(HORIZONTAL);
-        setBackgroundColor(Color.RED);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StoriesProgressView);
         storiesCount = typedArray.getInt(R.styleable.StoriesProgressView_progressCount, 0);
         typedArray.recycle();
-        bindViews();
-    }
-
-    public void setStoriesCountDebug(int storiesCount, int position) {
-        this.storiesCount = storiesCount;
-        this.position = position;
         bindViews();
     }
 
@@ -65,7 +58,7 @@ public class StoriesProgressView extends LinearLayout {
 
     private PausableProgressBar createProgressBar() {
         PausableProgressBar = new PausableProgressBar(getContext(), null, 0);
-        PausableProgressBar.setLayoutParams(LayoutCreator.createLinear(0,4, 1F));
+        PausableProgressBar.setLayoutParams(LayoutCreator.createLinear(0, 4, 1F));
         return PausableProgressBar;
     }
 
@@ -74,7 +67,6 @@ public class StoriesProgressView extends LinearLayout {
         view.setLayoutParams(LayoutCreator.createRelative(5, 4));
         return view;
     }
-
 
     private PausableProgressBar.Callback callback(int index) {
 
@@ -110,6 +102,12 @@ public class StoriesProgressView extends LinearLayout {
                 isSkipStart = false;
             }
         };
+    }
+
+    public void setStoriesCountDebug(int storiesCount, int position) {
+        this.storiesCount = storiesCount;
+        this.position = position;
+        bindViews();
     }
 
     public void setStoriesListener(StoriesListener storiesListener) {

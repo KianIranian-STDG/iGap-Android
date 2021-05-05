@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
-public class FixedViewPager extends ViewPager {
+public class StoryViewPager extends ViewPager {
 
-    public FixedViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public StoryViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
