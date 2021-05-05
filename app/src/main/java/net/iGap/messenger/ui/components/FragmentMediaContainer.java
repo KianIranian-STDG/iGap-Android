@@ -177,11 +177,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
             if (needShowMedia) {
                 musicTitle.setText(MusicPlayer.musicName);
                 playIconView.setText(!MusicPlayer.mp.isPlaying() ? R.string.play_icon : R.string.pause_icon);
-                if (!MusicPlayer.isVoice) {
-                    getMusicCoverBackgroundColor();
-                } else {
-                    mediaContainer.setBackgroundColor(Theme.getInstance().getSubTitleColor(getContext()));
-                }
+                mediaContainer.setBackgroundColor(Theme.getInstance().getSubTitleColor(getContext()));
                 callContainer.setVisibility(GONE);
                 mediaContainer.setVisibility(VISIBLE);
                 if (getVisibility() != VISIBLE)
@@ -229,7 +225,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
                 Palette.Swatch vibrantFrom;
                 if (palette != null) {
                     vibrantTo = palette.getDominantSwatch();
-                    vibrantFrom = palette.getLightMutedSwatch();
+                    vibrantFrom = palette.getDarkMutedSwatch();
                     if (vibrantTo != null && vibrantFrom != null) {
                         int to = vibrantTo.getRgb();
                         int from = vibrantFrom.getRgb();
@@ -280,7 +276,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         else
             viewHeight = -view.getHeight();
 
-        view.animate().translationY(viewHeight).setDuration(300).setListener(new AnimatorListenerAdapter() {
+        view.animate().translationY(viewHeight).setDuration(170).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
