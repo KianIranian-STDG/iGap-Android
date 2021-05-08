@@ -222,7 +222,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         previous.setOnTouchListener(touchListener);
         next.setOnTouchListener(touchListener);
 
-        storiesProgressView.setStoriesCountDebug(stories.size(), getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : -1);
+        storiesProgressView.setStoriesCountDebug(stories.size());
         storiesProgressView.setAllStoryDuration(4000L);
         storiesProgressView.setStoriesListener(this);
 

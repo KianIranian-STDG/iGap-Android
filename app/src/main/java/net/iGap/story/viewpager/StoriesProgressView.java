@@ -2,15 +2,12 @@ package net.iGap.story.viewpager;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 
@@ -26,7 +23,6 @@ public class StoriesProgressView extends LinearLayout {
 
     private int storiesCount = -1;
     private int current = -1;
-    private int position = -1;
     private boolean isSkipStart = false;
     private boolean isReverseStart = false;
     private boolean isComplete = false;
@@ -104,14 +100,13 @@ public class StoriesProgressView extends LinearLayout {
         };
     }
 
-    public void setStoriesCountDebug(int storiesCount, int position) {
+    public void setStoriesCountDebug(int storiesCount) {
         this.storiesCount = storiesCount;
-        this.position = position;
         bindViews();
     }
 
-    public void setStoriesListener(StoriesListener storiesListener) {
-        this.storiesListener = storiesListener;
+    public void setStoriesListener(StoriesListener storiesListene) {
+        storiesListener = storiesListene;
     }
 
     public void skip() {
