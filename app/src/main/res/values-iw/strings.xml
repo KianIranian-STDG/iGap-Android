@@ -926,7 +926,7 @@
     <string name="kuknos_Restore_Error_Snack">اولسون </string>
     <string name="kuknos_Restore_Error_empty_str">اؤز حسابیزین بازیابی کلمه لرینین زنجیرینی داخل ائدین</string>
     <string name="kuknos_Restore_Error_invalid_str">داخل ائدیلن زنجیرین اوزونلوغو کافی دییلدیر</string>
-    <string name="kuknos_Restore_Hint">مثال اوچون: دنیز، میز، کابل و ...</string>
+    <string name="kuknos_Restore_Hint">مثال اوچون: دنیز میز کابل و ...</string>
     <string name="kuknos_Restore_Message">بو کلمه لردن استفاده ائتمک ایله سیز اؤز حسابیزی یئنیدن بازیابی ائده بیلرسیز. </string>
     <string name="kuknos_Restore_Title">زحمت اولماسا اؤز حسابیزین بازیابی کلمه لرین داخل ائدین </string>
     <string name="kuknos_Restore_checkBtn">سونراکی </string>

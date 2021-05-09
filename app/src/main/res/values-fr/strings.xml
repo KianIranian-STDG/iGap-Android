@@ -1447,7 +1447,7 @@
     <string name="kuknos_Restore_Title"> veuillez entrer les mots de récupération de votre compte </string>
     <string name="kuknos_Restore_Message"> vous pouvez récupérer votre compte à l\'aide de ces mots </string>
     <string name="kuknos_Restore_Btn"> récupérer </string>
-    <string name="kuknos_Restore_Hint"> par exemple : mer , table, câble </string>
+    <string name="kuknos_Restore_Hint"> par exemple : mer table câble </string>
     <string name="kuknos_Restore_Error_empty_str"> veuillez entrer la chaine des mots de récupération de compte </string>
     <string name="kuknos_Restore_Error_invalid_str"> longueur de chaine entrée est insuffisante </string>
     <string name="kuknos_Restore_Error_Snack"> OK </string>

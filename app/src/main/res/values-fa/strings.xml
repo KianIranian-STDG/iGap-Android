@@ -1633,7 +1633,7 @@
     <string name="kuknos_Restore_Title">لطفا کلمات بازیابی حساب خود را وارد نمایید.</string>
     <string name="kuknos_Restore_Message">با استفاده از این کلمات، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
     <string name="kuknos_Restore_Btn">بازیابی</string>
-    <string name="kuknos_Restore_Hint">برای مثال: دریا، میز، کابل...</string>
+    <string name="kuknos_Restore_Hint">برای مثال: دریا میز کابل...</string>
     <string name="kuknos_Restore_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_Restore_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
     <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"دریافت پشتوانه \n فیزیکی %1$s"</string>
