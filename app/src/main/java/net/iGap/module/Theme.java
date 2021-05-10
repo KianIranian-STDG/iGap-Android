@@ -420,6 +420,10 @@ public class Theme {
         return getColorFromAttr(context, R.attr.iGapCallStripColorBlue);
     }
 
+    public int getMediaStripColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapMediaStripColor);
+    }
+
     private int getColorFromAttr(@NotNull Context context, int attrResId) {
         TypedValue typedValue = new TypedValue();
         TypedArray a = context.obtainStyledAttributes(typedValue.data, new int[]{attrResId});

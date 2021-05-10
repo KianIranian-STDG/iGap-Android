@@ -64,6 +64,8 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
 
     public FragmentMediaContainer(@NonNull Context context, BaseFragment fragment) {
         super(context);
+        setVisibility(GONE);
+
         avatarHandler = new AvatarHandler();
         fragmentView = (ViewGroup) fragment.getFragmentView();
         fragmentView.setClipToPadding(false);
@@ -176,7 +178,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
             if (needShowMedia) {
                 musicTitle.setText(MusicPlayer.musicName);
                 playIconView.setText(!MusicPlayer.mp.isPlaying() ? R.string.play_icon : R.string.pause_icon);
-                mediaContainer.setBackgroundColor(Theme.getInstance().getSubTitleColor(getContext()));
+                mediaContainer.setBackgroundColor(Theme.getInstance().getMediaStripColor(getContext()));
                 callContainer.setVisibility(GONE);
                 mediaContainer.setVisibility(VISIBLE);
                 if (getVisibility() != VISIBLE)
@@ -203,9 +205,10 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
 
                 final int from = Theme.getInstance().getCallStripColor(getContext());  // TODO: 5/1/21 These colors must change in future
                 final int to = Theme.getInstance().getCallStripColorBlue(getContext());
-
                 animateContainerColor(callContainer, from, to, 2000);
-                setVisibilityWithAnimation(this, needShowCall);
+                if (getVisibility() != VISIBLE) {
+                    setVisibilityWithAnimation(this, needShowCall);
+                }
             }
         } else {
             if (!MusicPlayer.isMusicPlyerEnable)

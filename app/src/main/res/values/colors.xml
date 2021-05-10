@@ -33,9 +33,20 @@
     //mo
     <!--toolbar-->
 
-    <!--    callStrip-->
-    <color name="call_strip_color">#673AB7</color>
-    <color name="call_strip_color_blue">#3F51B5</color>
+    <!--callStrip-->
+    <color name="call_strip_color">#2db6a6</color>
+    <color name="call_strip_color_blue">#4aca69</color>
+    <!--mediaStrip-->
+    <color name="media_strip_color_light">#46A829</color>
+    <color name="media_strip_color_red">#8C0E0E</color>
+    <color name="media_strip_color_pink">#DA6E6E</color>
+    <color name="media_strip_color_purple">#7E4370</color>
+    <color name="media_strip_color_blue">#0545BD</color>
+    <color name="media_strip_color_green">#8AAF4D</color>
+    <color name="media_strip_color_amber">#D8A613</color>
+    <color name="media_strip_color_orange">#EC7701</color>
+    <color name="media_strip_color_dark_gray">#26354A</color>
+    <color name="media_strip_color_dark">#404040</color>
     <!--<color name="toolbar_background">#00B0BF</color>-->
     <color name="toolbar_background">@color/green</color>
     <color name="toolbar_transparent">#bf000000</color>

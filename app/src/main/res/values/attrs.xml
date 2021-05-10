@@ -136,6 +136,7 @@
     <attr name="iGapTimerPinter" format="reference" />
     <attr name="iGapCallStripColor" format="reference|color" />
     <attr name="iGapCallStripColorBlue" format="reference|color" />
+    <attr name="iGapMediaStripColor" format="reference|color" />
 
     <!--=======================custom theme=====================-->
 

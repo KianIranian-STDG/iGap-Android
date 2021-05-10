@@ -24,7 +24,7 @@
         <item name="iGapLogoutButtonColor">@color/players_dark_background</item>
         <item name="iGapCardViewColor">@color/gray_6c</item>
         <item name="iGapEditTxtColor">@color/gray_6c</item>
-
+        <item name="iGapMediaStripColor">@color/media_strip_color_dark</item>
         <item name="iGapBottomNavigationIconStart">#FF50B452</item>
         <item name="iGapBottomNavigationIconEnd">#FFC6DA42</item>
 
@@ -88,6 +88,7 @@
         <item name="iGapEditTxtColor">#DBD9D9</item>
         <item name="iGapCallStripColor">@color/call_strip_color</item>
         <item name="iGapCallStripColorBlue">@color/call_strip_color_blue</item>
+        <item name="iGapMediaStripColor">@color/media_strip_color_light</item>
 
         <item name="iGapBottomNavigationIconStart">#FFC6DA42</item>
         <item name="iGapBottomNavigationIconEnd">#FF50B452</item>
@@ -169,6 +170,7 @@
 
         <item name="iGapLinkColor">#303F9F</item>
         <item name="iGapDefaultChatBackground">#ffcdd2</item>
+        <item name="iGapMediaStripColor">@color/media_strip_color_red</item>
     </style>
 
     <style name="iGapRedTheme" parent="BaseTheme.baseRedTheme">
@@ -201,6 +203,7 @@
         <item name="colorPrimaryDark">#f68787</item>
         <item name="toolbarBackgroundColor">#f68787</item>
         <item name="colorPrimaryLight">#ffcbca</item>
+        <item name="iGapMediaStripColor">@color/media_strip_color_pink</item>
 
         <item name="md_dark_theme">false</item>
 
@@ -278,7 +281,7 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
-
+        <item name="iGapMediaStripColor">@color/media_strip_color_purple</item>
         <item name="iGapBottomNavigationIconStart">#cc96ca</item>
         <item name="iGapBottomNavigationIconEnd">#aa5c9f</item>
 
@@ -343,7 +346,7 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
-
+        <item name="iGapMediaStripColor">@color/media_strip_color_blue</item>
         <item name="iGapBottomNavigationIconStart">#66b3ff</item>
         <item name="iGapBottomNavigationIconEnd">#207dff</item>
 
@@ -405,7 +408,7 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
-
+        <item name="iGapMediaStripColor">@color/media_strip_color_green</item>
         <item name="iGapBottomNavigationIconStart">#b5e663</item>
         <item name="iGapBottomNavigationIconEnd">#9dc756</item>
 
@@ -468,7 +471,7 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
-
+        <item name="iGapMediaStripColor">@color/media_strip_color_amber</item>
         <item name="iGapBottomNavigationIconStart">#f6d365</item>
         <item name="iGapBottomNavigationIconEnd">#f7be16</item>
 
@@ -531,7 +534,7 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
-
+        <item name="iGapMediaStripColor">@color/media_strip_color_orange</item>
 
         <item name="iGapBottomNavigationIconStart">#ff9d00</item>
         <item name="iGapBottomNavigationIconEnd">#ff8000</item>
@@ -599,6 +602,7 @@
         <item name="iGapLogoutButtonColor">@color/not_now_button_selected</item>
         <item name="iGapCardViewColor">@color/white</item>
         <item name="iGapEditTxtColor">#DBD9D9</item>
+        <item name="iGapMediaStripColor">@color/media_strip_color_dark_gray</item>
 
         <item name="iGapSendMessageBubbleColor">#eae6dc</item>
         <item name="iGapBottomNavigationIconStart">#7495b5</item>
