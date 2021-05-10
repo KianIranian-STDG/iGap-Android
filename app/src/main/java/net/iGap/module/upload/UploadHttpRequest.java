@@ -227,6 +227,7 @@ public class UploadHttpRequest {
 
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = secureRandom.generateSeed(16);
+        fileObject.auth = G.symmetricKeyString.getBytes();
 
         try (FileInputStream fileInputStream = new FileInputStream(fileObject.file); ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(iv)) {
             if (fileObject.offset > 0 && isResume) {
@@ -358,7 +359,7 @@ public class UploadHttpRequest {
         try {
             cipher = Cipher.getInstance("AES_256/CBC/PKCS5Padding");
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
-            SecretKey key2 = new SecretKeySpec(G.symmetricKeyString.getBytes(), "AES");
+            SecretKey key2 = new SecretKeySpec(fileObject.auth, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, key2, ivSpec);
 
         } catch (Exception e) {

@@ -202,87 +202,94 @@ public class HttpUploader implements IUpload {
     }
 
     private void startUpload(UploadObject fileObject, final File completedCompressFile) {
-        UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
-        if (existedRequest == null) {
-            existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
-
-                @Override
-                public void onUploadProgress(UploadObject fileObject) {
-                    FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
-                    if (fileObject.onUploadListener != null) {
-                        fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
-                    }
-                }
-
-                @Override
-                public void onUploadFinish(UploadObject fileObject) {
-                    HelperDataUsage.increaseUploadFiles(fileObject.messageType);
-                    HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
-                    FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
-                    UploadHttpRequest req = inProgressUploads.get(fileObject.key);
-                    if (req != null) {
-                        inProgressUploads.remove(fileObject.key);
-                        inProgressCount.decrementAndGet();
-                    }
-                    if (fileObject.messageObject != null) {
-                        if (completedCompressFile != null && completedCompressFile.exists()) {
-                            completedCompressFile.delete();
-                        }
-
-                        HelperSetAction.sendCancel(fileObject.messageId);
-
-                        DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
-
-                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.messageObject.roomId, fileObject.messageObject);
-                        } else if (fileObject.messageObject.replayToMessage == null) {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
-                                    .attachment(fileObject.fileToken)
-                                    .message(fileObject.messageObject.message)
-                                    .sendMessage(fileObject.messageId + "");
-                        } else {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
-                                    .replyMessage(fileObject.messageObject.replayToMessage.id)
-                                    .attachment(fileObject.fileToken)
-                                    .message(fileObject.messageObject.message)
-                                    .sendMessage(fileObject.messageObject.id + "");
+        if (fileObject.fileToken != null && completedCompressFile == null) {
+            sendMessage(fileObject);
+        } else {
+            UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
+            if (existedRequest == null) {
+                existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
+                    @Override
+                    public void onUploadProgress(UploadObject fileObject) {
+                        FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
+                        if (fileObject.onUploadListener != null) {
+                            fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
                         }
                     }
-                    if (fileObject.onUploadListener != null) {
-                        fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
+
+                    @Override
+                    public void onUploadFinish(UploadObject fileObject) {
+                        HelperDataUsage.increaseUploadFiles(fileObject.messageType);
+                        HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
+                        FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
+                        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
+                        if (req != null) {
+                            inProgressUploads.remove(fileObject.key);
+                            inProgressCount.decrementAndGet();
+                        }
+                        if (fileObject.messageObject != null) {
+                            if (completedCompressFile != null && completedCompressFile.exists()) {
+                                completedCompressFile.delete();
+                            }
+
+                            HelperSetAction.sendCancel(fileObject.messageId);
+
+                            DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
+                            sendMessage(fileObject);
+                        }
+                        if (fileObject.onUploadListener != null) {
+                            fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
+                        }
+                        scheduleNewUpload();
                     }
-                    scheduleNewUpload();
-                }
 
-                @Override
-                public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
-                    FileLog.i("UploadHttpRequest", "onUploadFail: " + fileObject.toString());
-                    long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
-                    HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
-                    Log.i(TAG, "onUploadFail: " + uploadedBytes);
-                    FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
-                    UploadHttpRequest req = inProgressUploads.get(fileObject.key);
-                    if (req != null) {
-                        inProgressUploads.remove(fileObject.key);
-                        inProgressCount.decrementAndGet();
+                    @Override
+                    public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
+                        long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
+                        HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
+                        FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
+                        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
+                        if (req != null) {
+                            inProgressUploads.remove(fileObject.key);
+                            inProgressCount.decrementAndGet();
+                        }
+
+                        scheduleNewUpload();
+
+                        if (inProgressCount.get() == 0)
+                            HelperSetAction.sendCancel(fileObject.messageId);
+
+                        makeFailed(fileObject.messageId);
+                        if (fileObject.onUploadListener != null) {
+                            fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
+                        }
                     }
+                });
 
-                    scheduleNewUpload();
+                uploadQueue.add(existedRequest);
+                scheduleNewUpload();
+            }
+        }
+    }
 
-                    if (inProgressCount.get() == 0)
-                        HelperSetAction.sendCancel(fileObject.messageId);
+    private void sendMessage(UploadObject fileObject) {
+        if (fileObject == null || fileObject.messageObject == null) {
+            return;
+        }
 
-                    makeFailed(fileObject.messageId);
-                    if (fileObject.onUploadListener != null) {
-                        Log.e("fgryhifhsufs", "onUploadFail: " + e);
-                        fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
-                    }
-                }
-            });
-
-            uploadQueue.add(existedRequest);
-            scheduleNewUpload();
+        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.messageObject.roomId, fileObject.messageObject);
+        } else if (fileObject.messageObject.replayToMessage == null) {
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
+                    .attachment(fileObject.fileToken)
+                    .message(fileObject.messageObject.message)
+                    .sendMessage(fileObject.messageId + "");
+        } else {
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
+                    .replyMessage(fileObject.messageObject.replayToMessage.id)
+                    .attachment(fileObject.fileToken)
+                    .message(fileObject.messageObject.message)
+                    .sendMessage(fileObject.messageObject.id + "");
         }
     }
 

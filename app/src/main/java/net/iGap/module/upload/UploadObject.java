@@ -27,6 +27,8 @@ public class UploadObject {
     public ProtoGlobal.Room.Type roomType;
     public OnUploadListener onUploadListener;
 
+    public byte[] auth;
+
     private UploadObject() {
 
     }
