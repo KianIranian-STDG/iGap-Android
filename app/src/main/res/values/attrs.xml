@@ -235,6 +235,10 @@
         <attr name="yearRange" format="integer" />
         <attr name="displayDescription" format="boolean" />
     </declare-styleable>
-    <attr name="numberPickerTheme" format="reference"/>
+    <attr name="numberPickerTheme" format="reference" />
+
+    <declare-styleable name="StoriesProgressView">
+        <attr name="progressCount" format="integer|reference" />
+    </declare-styleable>
 
 </resources>

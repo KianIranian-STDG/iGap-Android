@@ -26,7 +26,6 @@ import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.fragments.FragmentStoryViews;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
@@ -88,6 +87,7 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
+import net.iGap.story.viewpager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.model.Card;
@@ -604,8 +604,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }) != null) {
             goToShowAvatarPage.setValue(userInfo.getUserId());
         }*/
+/*
         FragmentStoryViews fragment = new FragmentStoryViews();
+        new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();*/
+
+        StoryViewFragment fragment = new StoryViewFragment();
         new HelperFragment(G.currentActivity.getSupportFragmentManager(), fragment).setReplace(true).load();
+
     }
 
     public void onAddImageClick() {
