@@ -1,19 +1,28 @@
 package net.iGap.camera;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -34,8 +43,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.palette.graphics.Palette;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -43,6 +53,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentEditImage;
+import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.filterImage.BitmapUtils;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
@@ -52,6 +63,7 @@ import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
+import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.NotifyLinearLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.photoEdit.BrushDrawingView;
@@ -75,13 +87,13 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
 
-public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.Listener,
+public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Listener,
         OnPhotoEditorListener, BrushConfigDialog.Properties, BrushViewChangeListener, EmojiDialogFrag.EmojiListener, FilterDialogFragment.FiltersListFragmentListener {
     private static final float MAX_PERCENT = 100;
     private static final float MAX_ALPHA = 255;
     private static final float INITIAL_WIDTH = 50;
     private static final String SELECTED_PHOTOS = "selectedPhotos";
-    private NotifyLinearLayout rootView;
+    private NotifyFrameLayout rootView;
     private CustomViewPager viewPager;
     private Toolbar toolbar;
     private LinearLayout toolbarPanel;
@@ -95,7 +107,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private MaterialDesignTextView setTextView;
     private MaterialDesignTextView iconOkTextView;
     private TextView countImageTextView;
-    private AnimCheckBox animateCheckBox;
     private LinearLayout bottomLayoutPanel;
     private LinearLayout layoutCaption;
     private EventEditText captionEditText;
@@ -131,7 +142,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     private float brushAlpha = MAX_ALPHA;
     private int brushColor = Color.WHITE;
     private BrushConfigDialog brushConfigDialog;
-    private Modes mode;
+    public static StoryModes mode;
     private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
     private HashMap<Integer, ZoomLayout> viewHolders = new HashMap<>();
     public List<GalleryItemModel> selectedPhotos;
@@ -139,6 +150,9 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
     public static UpdateImage updateImage;
     private Bitmap filteredImageBitmap;
     private OnEditActions onEditActions;
+    private ImageView pickerViewSendButton;
+    private int lastSizeChangeValue1;
+    private boolean lastSizeChangeValue2;
 
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
@@ -157,14 +171,17 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         return fragment;
     }
 
+
     public interface UpdateImage {
         void result(Bitmap path);
+
+        void resultWithPath(String path);
     }
 
     @SuppressLint("ResourceType")
     @Override
     public View createView(Context context) {
-        rootView = new NotifyLinearLayout(context) {
+        rootView = new NotifyFrameLayout(context) {
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
                 if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
@@ -180,7 +197,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         rootView.setListener(this);
         rootView.setBackgroundColor(context.getResources().getColor(R.color.black_register));
         rootView.setClickable(true);
-        rootView.setOrientation(LinearLayout.VERTICAL);
+        //  rootView.setOrientation(LinearLayout.VERTICAL);
 
         toolbar = new Toolbar(context);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -193,15 +210,21 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         }
         toolbar.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
 
-        toolbarPanel = new LinearLayout(context);
-        toolbarPanel.setOrientation(LinearLayout.HORIZONTAL);
+
+        viewPager = new CustomViewPager(context);
+        rootView.addView(viewPager, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+        cancelCropLayout = new LinearLayout(context);
+        cancelCropLayout.setOrientation(LinearLayout.HORIZONTAL);
+        cancelCropLayout.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack2));
+
 
         rippleView = new RippleView(context);
         rippleView.setCentered(true);
         rippleView.setRippleAlpha(200);
         rippleView.setRippleDuration(0);
         rippleView.setRipplePadding(5);
-        toolbarPanel.addView(rippleView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+        cancelCropLayout.addView(rippleView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
 
         designTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         designTextView.setText(context.getString(R.string.md_close_button));
@@ -209,86 +232,142 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         designTextView.setGravity(Gravity.CENTER);
         rippleView.addView(designTextView, LayoutCreator.createRelative(48, LayoutCreator.MATCH_PARENT));
 
-
-        toolbarTitle = new TextView(context);
-        toolbarTitle.setText(context.getString(R.string.photo));
-        toolbarTitle.setTextColor(context.getResources().getColor(R.color.whit_background));
-        toolbarTitle.setTextSize(16);
-        toolbarTitle.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-        toolbarTitle.setTypeface(toolbarTitle.getTypeface(), Typeface.BOLD);
-        toolbarPanel.addView(toolbarTitle, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
-
-        imageNumber = new TextView(context);
-        imageNumber.setGravity(Gravity.CENTER | Gravity.LEFT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            imageNumber.setTextAppearance(android.R.attr.textAppearanceMedium);
-        } else {
-            imageNumber.setTextAppearance(context, android.R.attr.textAppearanceMedium);
-        }
-        imageNumber.setTextColor(context.getResources().getColor(R.color.white));
-        imageNumber.setTextSize(18);
-        toolbarPanel.addView(imageNumber, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 1F));
-
-        setTextView = new MaterialDesignTextView(context);
-        setTextView.setGravity(Gravity.CENTER);
-        setTextView.setText(context.getString(R.string.check_icon));
-        setTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        setTextView.setTextSize(22);
-        setTextView.setVisibility(View.GONE);
-        toolbarPanel.addView(setTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
+        emptyView = new View(context);
+        cancelCropLayout.addView(emptyView, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
 
         revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         revertTextView.setText(context.getString(R.string.forward_icon));
         revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         revertTextView.setGravity(Gravity.CENTER);
         revertTextView.setVisibility(View.GONE);
-        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 8, 0));
+        cancelCropLayout.addView(revertTextView, LayoutCreator.createLinear(52, 52));
 
-        countImageTextView = new TextView(context);
-        countImageTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        countImageTextView.setText(context.getString(R.string.photo));
-        countImageTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        countImageTextView.setTextSize(22);
-        countImageTextView.setTypeface(countImageTextView.getTypeface(), Typeface.BOLD);
-        toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
+        cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        cropTextView.setGravity(Gravity.CENTER);
+        cropTextView.setText(context.getString(R.string.md_crop_button));
+        cropTextView.setVisibility(View.GONE);
+        cropTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        cancelCropLayout.addView(cropTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT));
 
-        animateCheckBox = new AnimCheckBox(context);
-        animateCheckBox.setBackground(context.getResources().getDrawable(R.drawable.background_check));
-        animateCheckBox.setCircleColor(R.attr.iGapButtonColor);
-        animateCheckBox.setLineColor(context.getResources().getColor(R.color.whit_background));
-        animateCheckBox.setAnimDuration(100);
-        animateCheckBox.setCorrectWidth(1);
-        animateCheckBox.setUnCheckColor(context.getResources().getColor(R.color.background_checkbox_bottomSheet));
-        toolbarPanel.addView(animateCheckBox, LayoutCreator.createLinear(32, 32, Gravity.CENTER | Gravity.END | Gravity.RIGHT, 0, 0, 8, 0));
+        editTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        editTextView.setGravity(Gravity.CENTER);
+        editTextView.setText(getString(R.string.md_igap_tune));
+        editTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        cancelCropLayout.addView(editTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
 
-        toolbar.addView(toolbarPanel, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        rootView.addView(toolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 60, Gravity.CENTER));
+        emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        emoji.setGravity(Gravity.CENTER);
+        emoji.setText(getString(R.string.md_emoticon_with_happy_face));
+        emoji.setTextColor(context.getResources().getColor(R.color.white));
+        emoji.setTextSize(26);
+        cancelCropLayout.addView(emoji, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
+
+        addTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        addTextView.setGravity(Gravity.CENTER);
+        addTextView.setBackground(context.getResources().getDrawable(R.drawable.ic_cam_text));
+        addTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        cancelCropLayout.addView(addTextView, LayoutCreator.createLinear(30, 30, 0, 0, 8, 0));
+
+        paintTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+        paintTextView.setGravity(Gravity.CENTER);
+        paintTextView.setText(getString(R.string.md_igap_paint));
+        paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+        cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
+
+        //  toolbar.addView(cancelCropLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        rootView.addView(cancelCropLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
 
 
-        viewPager = new CustomViewPager(context);
+//        toolbarPanel = new LinearLayout(context);
+//        toolbarPanel.setOrientation(LinearLayout.HORIZONTAL);
+//
+//        rippleView = new RippleView(context);
+//        rippleView.setCentered(true);
+//        rippleView.setRippleAlpha(200);
+//        rippleView.setRippleDuration(0);
+//        rippleView.setRipplePadding(5);
+//        toolbarPanel.addView(rippleView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
+//
+//        designTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
+//        designTextView.setText(context.getString(R.string.md_close_button));
+//        designTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+//        designTextView.setGravity(Gravity.CENTER);
+//        rippleView.addView(designTextView, LayoutCreator.createRelative(48, LayoutCreator.MATCH_PARENT));
+//
+//
+//        toolbarTitle = new TextView(context);
+//        toolbarTitle.setText(context.getString(R.string.photo));
+//        toolbarTitle.setTextColor(context.getResources().getColor(R.color.whit_background));
+//        toolbarTitle.setTextSize(16);
+//        toolbarTitle.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+//        toolbarTitle.setTypeface(toolbarTitle.getTypeface(), Typeface.BOLD);
+//        toolbarPanel.addView(toolbarTitle, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
+//
+//        imageNumber = new TextView(context);
+//        imageNumber.setGravity(Gravity.CENTER | Gravity.LEFT);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            imageNumber.setTextAppearance(android.R.attr.textAppearanceMedium);
+//        } else {
+//            imageNumber.setTextAppearance(context, android.R.attr.textAppearanceMedium);
+//        }
+//        imageNumber.setTextColor(context.getResources().getColor(R.color.white));
+//        imageNumber.setTextSize(18);
+//        toolbarPanel.addView(imageNumber, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 1F));
+//
+//        setTextView = new MaterialDesignTextView(context);
+//        setTextView.setGravity(Gravity.CENTER);
+//        setTextView.setText(context.getString(R.string.check_icon));
+//        setTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+//        setTextView.setTextSize(22);
+//        setTextView.setVisibility(View.GONE);
+//        toolbarPanel.addView(setTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
+//
+//
+//        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 8, 0));
+//
+//        countImageTextView = new TextView(context);
+//        countImageTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+//        countImageTextView.setText(context.getString(R.string.photo));
+//        countImageTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
+//        countImageTextView.setTextSize(22);
+//        countImageTextView.setTypeface(countImageTextView.getTypeface(), Typeface.BOLD);
+//        toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
+//
+//        animateCheckBox = new AnimCheckBox(context);
+//        animateCheckBox.setBackground(context.getResources().getDrawable(R.drawable.background_check));
+//        animateCheckBox.setCircleColor(R.attr.iGapButtonColor);
+//        animateCheckBox.setLineColor(context.getResources().getColor(R.color.whit_background));
+//        animateCheckBox.setAnimDuration(100);
+//        animateCheckBox.setCorrectWidth(1);
+//        animateCheckBox.setUnCheckColor(context.getResources().getColor(R.color.background_checkbox_bottomSheet));
+//        toolbarPanel.addView(animateCheckBox, LayoutCreator.createLinear(32, 32, Gravity.CENTER | Gravity.END | Gravity.RIGHT, 0, 0, 8, 0));
+//
 
-
-        rootView.addView(viewPager, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, 0, 1F, Gravity.CENTER));
+//
+//        toolbar.addView(toolbarPanel, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        rootView.addView(toolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
 
 
         bottomLayoutPanel = new LinearLayout(context);
         bottomLayoutPanel.setOrientation(LinearLayout.VERTICAL);
         bottomLayoutPanel.setBackgroundColor(context.getResources().getColor(R.color.colorEditImageBlack));
 
+
         layoutCaption = new LinearLayout(context);
         layoutCaption.setOrientation(LinearLayout.HORIZONTAL);
         layoutCaption.setMinimumHeight(48);
         layoutCaption.setPadding(4, 0, 4, 0);
-        bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+        bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
         keyboardEmoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         keyboardEmoji.setGravity(Gravity.CENTER);
         keyboardEmoji.setPadding(8, 0, 8, 8);
         keyboardEmoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
+        // keyboardEmoji.setBackground(context.getResources().getDrawable(R.drawable.ic_add_more_photo));
         keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
         keyboardEmoji.setTextSize(26);
-        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(52, 52, Gravity.CENTER));
+        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER));
 
         captionEditText = new EventEditText(context);
         captionEditText.setGravity(Gravity.BOTTOM);
@@ -300,7 +379,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         captionEditText.setHintTextColor(context.getResources().getColor(R.color.light_gray));
         captionEditText.setTextSize(14);
         captionEditText.setBackground(null);
-        layoutCaption.addView(captionEditText, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER_VERTICAL));
+        layoutCaption.addView(captionEditText, LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1, Gravity.CENTER));
 
         iconOkTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         iconOkTextView.setGravity(Gravity.BOTTOM);
@@ -315,55 +394,25 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
         bottomLayoutPanel.addView(chatKeyBoardContainer, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
 
-        cancelCropLayout = new LinearLayout(context);
-        cancelCropLayout.setOrientation(LinearLayout.HORIZONTAL);
-        cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        cropTextView.setGravity(Gravity.CENTER);
-        cropTextView.setText(context.getString(R.string.md_crop_button));
-        cropTextView.setVisibility(View.GONE);
-        cropTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        cancelCropLayout.addView(cropTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
-
-        editTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        editTextView.setGravity(Gravity.CENTER);
-        editTextView.setText(context.getString(R.string.md_igap_tune));
-        editTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        cancelCropLayout.addView(editTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
-
-        paintTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        paintTextView.setGravity(Gravity.CENTER);
-        paintTextView.setText(context.getString(R.string.md_igap_paint));
-        paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
-
-        emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        emoji.setGravity(Gravity.CENTER);
-        emoji.setPadding(8, 0, 8, 8);
-        emoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
-        emoji.setTextColor(context.getResources().getColor(R.color.white));
-        emoji.setTextSize(26);
-        cancelCropLayout.addView(emoji, LayoutCreator.createLinear(52, 52, Gravity.CENTER));
-
-        addTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        addTextView.setGravity(Gravity.CENTER);
-        addTextView.setBackground(context.getResources().getDrawable(R.drawable.text));
-        addTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-        cancelCropLayout.addView(addTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
-
-
-        emptyView = new View(context);
-        cancelCropLayout.addView(emptyView, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
+        pickerViewSendButton = new ImageView(context);
+        pickerViewSendButton.setScaleType(ImageView.ScaleType.CENTER);
+        pickerViewSendButton.setImageResource(R.drawable.attach_send);
+//        pickerViewSendButton.setBackground(createSimpleSelectorCircleDrawable(LayoutCreator.dp(40), 0xff4cb4f5, Build.VERSION.SDK_INT >= 21 ? 0x0f000000 : 0xff4cb4f5));
+//        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY));
+//        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(0xff4cb4f5, PorterDuff.Mode.MULTIPLY));
+        layoutCaption.addView(pickerViewSendButton, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 8, 0));
 
         sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         sendTextView.setGravity(Gravity.CENTER);
         sendTextView.setText(context.getString(R.string.md_send_button));
         sendTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         sendTextView.setVisibility(View.GONE);
-        cancelCropLayout.addView(sendTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
+        //  cancelCropLayout.addView(sendTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
 
-        bottomLayoutPanel.addView(cancelCropLayout, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
+        //     bottomLayoutPanel.addView(cancelCropLayout, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
 
-        rootView.addView(bottomLayoutPanel, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+
+        rootView.addView(bottomLayoutPanel, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         return rootView;
     }
@@ -417,14 +466,14 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             public void onClick(View view) {
                 viewPager.setPagingEnabled(true);
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                if (mode == Modes.PAINT || mode == Modes.ADD_TEXT || mode == Modes.EMOJI || mode == Modes.FILTER) {
-                    textStickersParentView.setPaintMode(false, null);
+                if (mode == StoryModes.PAINT || mode == StoryModes.ADD_TEXT || mode == StoryModes.EMOJI || mode == StoryModes.FILTER) {
+                    textStickersParentView.setPaintMode(false, "");
                 } else {
-                    textStickersParentView.setPaintMode(false, null);
+                    textStickersParentView.setPaintMode(false, "");
                     autoScaleImageToFitBounds();
                 }
 
-                mode = Modes.ADD_TEXT;
+                mode = StoryModes.ADD_TEXT;
 
 
                 TextEditorDialogFragment textEditorDialogFragment =
@@ -454,12 +503,12 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             public void onClick(View view) {
                 viewPager.setPagingEnabled(false);
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                if (mode == Modes.PAINT || mode == Modes.ADD_TEXT || mode == Modes.EMOJI || mode == Modes.FILTER) {
-                    textStickersParentView.setPaintMode(true, null);
+                if (mode == StoryModes.PAINT || mode == StoryModes.ADD_TEXT || mode == StoryModes.EMOJI || mode == StoryModes.FILTER) {
+                    textStickersParentView.setPaintMode(true, "");
                 } else {
-                    textStickersParentView.setPaintMode(true, null);
+                    textStickersParentView.setPaintMode(true, "");
                 }
-                mode = Modes.PAINT;
+                mode = StoryModes.PAINT;
                 textStickersParentView.getmBrushDrawingView().setBrushViewChangeListener(PhotoViewer.this);
                 String tag = brushConfigDialog.getTag();
 
@@ -494,14 +543,14 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             public void onClick(View view) {
                 viewPager.setPagingEnabled(true);
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                if (mode == Modes.PAINT) {
-                    textStickersParentView.setPaintMode(false, null);
-                } else if (mode == Modes.ADD_TEXT) {
-                    textStickersParentView.setPaintMode(false, null);
+                if (mode == StoryModes.PAINT) {
+                    textStickersParentView.setPaintMode(false, "");
+                } else if (mode == StoryModes.ADD_TEXT) {
+                    textStickersParentView.setPaintMode(false, "");
                 } else {
-                    textStickersParentView.setPaintMode(false, null);
+                    textStickersParentView.setPaintMode(false, "");
                 }
-                mode = Modes.EMOJI;
+                mode = StoryModes.EMOJI;
                 EmojiDialogFrag emojiDialogFrag = new EmojiDialogFrag();
                 emojiDialogFrag.setEmojiListener(PhotoViewer.this::onEmojiClick);
                 emojiDialogFrag.show(getParentFragmentManager(), emojiDialogFrag.getTag());
@@ -512,8 +561,8 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             @Override
             public void onClick(View view) {
                 viewPager.setPagingEnabled(true);
-                mode = Modes.FILTER;
-                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(path)).setReplace(false).load();
+                mode = StoryModes.FILTER;
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewHolderPostion).getPath())).setReplace(false).load();
             }
         });
         updateImage = new UpdateImage() {
@@ -523,6 +572,14 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 filteredImageBitmap = finalBitmap;
                 textStickersParentView.updateImageBitmap(finalBitmap);
+
+            }
+
+            @Override
+            public void resultWithPath(String path) {
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
+                filteredImageBitmap = BitmapFactory.decodeFile(path);
+                serFilterImage(path);
             }
         };
         sendTextView.setOnClickListener(new View.OnClickListener() {
@@ -533,6 +590,65 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
             }
         });
+        captionEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                showPopUPView(KeyboardView.MODE_EMOJI);
+            }
+        });
+        keyboardEmoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.STORY, () -> {
+                    Log.e("dlkfdlfd", "createFragment: ");
+                });
+                new HelperFragment(getParentFragmentManager(), fragment).setReplace(false).load();
+
+            }
+        });
+
+//        captionEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                StructBottomSheet item = new StructBottomSheet();
+//                item.setText(s.toString());
+//                item.setPath(itemGalleryList.get(viewHolderPostion).path);
+//                item.setId(itemGalleryList.get(viewHolderPostion).getId());
+//                textImageList.put(itemGalleryList.get(viewHolderPostion).path, item);
+//            }
+//        });
+    }
+
+    private void serFilterImage(String path) {
+
+        int po = (viewPager.getCurrentItem());
+
+        if (textImageList.containsKey(itemGalleryList.get(po).getPath())) {
+
+            String message = textImageList.get(itemGalleryList.get(po).getPath()).getText();
+            int id = textImageList.get(itemGalleryList.get(po).getPath()).getId();
+
+            textImageList.remove(itemGalleryList.get(po).getPath());
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(path);
+            item.setText(message);
+            item.setId(id);
+
+            textImageList.put(path, item);
+        }
+        itemGalleryList.get(po).setPath(path);
+
+
     }
 
     private Bitmap getFinalBitmapAfterAddText(View view) {
@@ -658,11 +774,16 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 chatKeyBoardContainer.setLayoutParams(layoutParams);
 
                 if (rootView != null) {
+                    emojiPadding = layoutParams.height;
                     rootView.requestLayout();
                 }
             }
         }
-
+        if (lastSizeChangeValue1 == keyboardSize && lastSizeChangeValue2 == land) {
+            return;
+        }
+        lastSizeChangeValue1 = keyboardSize;
+        lastSizeChangeValue2 = land;
 
         boolean oldValue = keyboardVisible;
         keyboardVisible = keyboardSize > 0;
@@ -749,6 +870,28 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         void filter();
     }
 
+    public static Drawable createSimpleSelectorCircleDrawable(int size, int defaultColor, int pressedColor) {
+        OvalShape ovalShape = new OvalShape();
+        ovalShape.resize(size, size);
+        ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
+        defaultDrawable.getPaint().setColor(defaultColor);
+        ShapeDrawable pressedDrawable = new ShapeDrawable(ovalShape);
+        if (Build.VERSION.SDK_INT >= 21) {
+            pressedDrawable.getPaint().setColor(0xffffffff);
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][]{StateSet.WILD_CARD},
+                    new int[]{pressedColor}
+            );
+            return new RippleDrawable(colorStateList, defaultDrawable, pressedDrawable);
+        } else {
+            pressedDrawable.getPaint().setColor(pressedColor);
+            StateListDrawable stateListDrawable = new StateListDrawable();
+            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+            stateListDrawable.addState(new int[]{android.R.attr.state_focused}, pressedDrawable);
+            stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
+            return stateListDrawable;
+        }
+    }
 
     private class AdapterViewPager extends PagerAdapter implements PhotoViewer.OnEditActions, OnPhotoEditorListener {
 
@@ -778,10 +921,11 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         public Object instantiateItem(ViewGroup container, final int position) {
 
             zoomLayout = new ZoomLayout(context);
+            //zoomLayout.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
             textStickersParentView = new TextStickerView(context, false);
             textStickersParentView.setDrawingCacheEnabled(true);
             textStickersParentView.setId(R.id.textstickerView);
-            zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+            zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
 
             if (itemGalleryList.get(position).path != null) {
@@ -798,7 +942,16 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                     }
                 }
                 itemGalleryList.get(position).path = finalPath;
-                textStickersParentView.setPaintMode(false, BitmapFactory.decodeFile(finalPath));
+                Palette p = Palette.from(BitmapFactory.decodeFile(finalPath)).generate();
+                GradientDrawable gd = new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[]{
+                                p.getLightMutedColor(0xFF616261), p.getMutedColor(0xFF616261), p.getDarkMutedColor(0xFF616261)});
+
+                zoomLayout.setBackground(gd);
+
+
+                textStickersParentView.setPaintMode(false, finalPath);
 
             }
 
@@ -826,6 +979,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
         @Override
         public void paint() {
+
         }
 
         @Override
@@ -887,7 +1041,7 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
 
                 @Override
                 public void onDown() {
-                    if (mode == Modes.PAINT) {
+                    if (mode == StoryModes.PAINT) {
                         viewPager.setPagingEnabled(false);
                     }
                 }
@@ -1043,16 +1197,19 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
             @Override
             public void onPageSelected(int position) {
                 viewHolderPostion = position;
-                if (itemGalleryList.get(position).isSelected) {
-                    animateCheckBox.setChecked(false);
-                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                } else {
-                    animateCheckBox.setChecked(true);
-                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
-                }
+//                if (itemGalleryList.get(position).isSelected) {
+//                    animateCheckBox.setChecked(false);
+//                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
+//                } else {
+//                    animateCheckBox.setChecked(true);
+//                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
+//                }
 
                 if (textImageList.containsKey(itemGalleryList.get(position).path)) {
                     captionEditText.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(position).path).getText(), captionEditText.getPaint().getFontMetricsInt()));
+//                    if (!textImageList.get(itemGalleryList.get(position).path).getText().isEmpty()){
+//                        captionEditText.setText(textImageList.get(itemGalleryList.get(position).path).getText());
+//                    }
                 } else {
                     captionEditText.setText("");
                 }
@@ -1093,7 +1250,6 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
                 emojiView.setVisibility(View.GONE);
             }
 
-            cancelCropLayout.setVisibility(View.GONE);
 
             if (rootView != null) {
                 rootView.requestLayout();
@@ -1266,8 +1422,4 @@ public class PhotoViewer extends BaseFragment implements NotifyLinearLayout.List
         return returnedEmoji;
     }
 
-
-    enum Modes {
-        PAINT, ADD_TEXT, EMOJI, FILTER
-    }
 }

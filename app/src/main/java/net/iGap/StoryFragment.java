@@ -11,8 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import net.iGap.camera.CameraStoryFragment;
+import net.iGap.fragments.FragmentGallery;
 
-public class StoryFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked {
+public class StoryFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked, FragmentGallery.OnRVScrolled {
     ViewPager2 viewPager2;
 
     @Nullable
@@ -23,13 +24,22 @@ public class StoryFragment extends Fragment implements CameraStoryFragment.OnGal
         viewPager2 = view.findViewById(R.id.pager);
         viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         viewPager2.setOffscreenPageLimit(2);
-        viewPager2.setAdapter(new CameraPagerAdapater(getActivity(),this::onGalleryIconClicked));
+        viewPager2.setAdapter(new CameraPagerAdapater(getActivity(), this::onGalleryIconClicked, this));
         return view;
     }
-
 
     @Override
     public void onGalleryIconClicked() {
         viewPager2.setCurrentItem(viewPager2.getCurrentItem() + 1);
+    }
+
+    @Override
+    public void scrolled(boolean isScrolled) {
+        viewPager2.setUserInputEnabled(isScrolled);
+    }
+
+    @Override
+    public void changeItem() {
+        viewPager2.setCurrentItem(viewPager2.getCurrentItem() - 1);
     }
 }

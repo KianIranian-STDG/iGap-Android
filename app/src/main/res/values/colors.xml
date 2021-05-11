@@ -96,6 +96,7 @@
 
 
     <color name="colorEditImageBlack">#87000000</color>
+    <color name="colorEditImageBlack2">#6F000000</color>
     <color name="launch_app_color">#f4f0e8</color>
 
     <color name="color_default_discovery_cards">#84ffffff</color>
@@ -185,7 +186,18 @@
     <color name="greenThem">#b5e663</color>
     <color name="redTheme">#c82121</color>
 
-
+    <array name="default_colors">
+        <item>#1d1d1d</item>
+        <item>#F2F3F4</item>
+        <item>#ba1c30</item>
+        <item>#db6917</item>
+        <item>#ebce2b</item>
+        <item>#5fa641</item>
+        <item>#96cde6</item>
+        <item>#463397</item>
+        <item>#91218c</item>
+        <item>#d32b1e</item>
+    </array>
     <!--Kelly's 22 contrast colors-->
     <color name="kelly_1">#F2F3F4</color>
     <color name="kelly_2">#1d1d1d</color>

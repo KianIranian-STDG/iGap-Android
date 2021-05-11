@@ -125,7 +125,30 @@ public class TextStickerView extends RelativeLayout {
         bitmapHolderImageView.setAdjustViewBounds(true);
 
         bitmapHolderImageView.setDrawingCacheEnabled(true);
-        Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
+        Glide.with(getContext()).asDrawable().load(bitmap).into(bitmapHolderImageView);
+
+//        bitmapHolderImageView.setImageBitmap(bitmap);
+        addView(bitmapHolderImageView, 0);
+    }
+
+    public void updateImageBitmap(String finalPath) {
+        if (bitmapHolderImageView != null) {
+            removeView(bitmapHolderImageView);
+        }
+
+        bitmapHolderImageView = new FilterImageView(getContext());
+
+        //Setup image attributes
+        RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        imageViewParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        bitmapHolderImageView.setLayoutParams(imageViewParams);
+        bitmapHolderImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        bitmapHolderImageView.setAdjustViewBounds(true);
+
+        bitmapHolderImageView.setDrawingCacheEnabled(true);
+        G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), bitmapHolderImageView);
+
 //        bitmapHolderImageView.setImageBitmap(bitmap);
         addView(bitmapHolderImageView, 0);
     }
@@ -164,7 +187,27 @@ public class TextStickerView extends RelativeLayout {
         } else {
             if (bitmap != null) {
 
-                  Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
+                Glide.with(getContext()).asDrawable().load(bitmap).centerCrop().into(bitmapHolderImageView);
+            }
+            if (mBrushDrawingView != null) {
+                mBrushDrawingView.setBrushDrawingMode(false);
+            }
+
+        }
+    }
+
+    public void setPaintMode(boolean paintMode, String finalPath) {
+        if (paintMode) {
+            if (mBrushDrawingView != null) {
+                mBrushDrawingView.setVisibility(VISIBLE);
+                mBrushDrawingView.setBrushDrawingMode(true);
+            }
+            if (!finalPath.isEmpty()) {
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), bitmapHolderImageView);
+            }
+        } else {
+            if (!finalPath.isEmpty()) {
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), bitmapHolderImageView);
             }
             if (mBrushDrawingView != null) {
                 mBrushDrawingView.setBrushDrawingMode(false);

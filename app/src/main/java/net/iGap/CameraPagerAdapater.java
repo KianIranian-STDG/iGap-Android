@@ -16,10 +16,12 @@ import java.io.IOException;
 
 public class CameraPagerAdapater extends FragmentStateAdapter {
     private CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked;
+    private FragmentGallery.OnRVScrolled onRVScrolled;
 
-    public CameraPagerAdapater(@NonNull FragmentActivity fragmentActivity, CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked) {
+    public CameraPagerAdapater(@NonNull FragmentActivity fragmentActivity, CameraStoryFragment.OnGalleryIconClicked onGalleryIconClicked, FragmentGallery.OnRVScrolled onRVScrolled) {
         super(fragmentActivity);
         this.onGalleryIconClicked = onGalleryIconClicked;
+        this.onRVScrolled = onRVScrolled;
     }
 
     @NonNull
@@ -29,7 +31,7 @@ public class CameraPagerAdapater extends FragmentStateAdapter {
             case 0:
                 return CameraStoryFragment.newInstance(onGalleryIconClicked);
             case 1:
-                Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.STORY, () -> {
+                Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.STORY,onRVScrolled, () -> {
                     Log.e("dlkfdlfd", "createFragment: ");
                 });
                 return fragment;

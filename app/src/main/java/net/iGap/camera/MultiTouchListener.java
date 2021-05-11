@@ -151,7 +151,9 @@ public class MultiTouchListener implements View.OnTouchListener {
             case MotionEvent.ACTION_CANCEL:
                 isMoving = false;
                 activePointerId = INVALID_POINTER_ID;
-                viewPager2.setPagingEnabled(true);
+                if (PhotoViewer.mode  != StoryModes.PAINT) {
+                    viewPager2.setPagingEnabled(true);
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 activePointerId = INVALID_POINTER_ID;
@@ -162,7 +164,9 @@ public class MultiTouchListener implements View.OnTouchListener {
 //                    view.animate().translationY(0).translationY(0);
 //                }
                 firePhotoEditorSDKListener(view, false);
-                viewPager2.setPagingEnabled(true);
+                if (PhotoViewer.mode != StoryModes.PAINT) {
+                    viewPager2.setPagingEnabled(true);
+                }
                 break;
             case MotionEvent.ACTION_POINTER_UP:
                 isMoving = false;
@@ -174,7 +178,9 @@ public class MultiTouchListener implements View.OnTouchListener {
                     prevY = event.getY(newPointerIndex);
                     activePointerId = event.getPointerId(newPointerIndex);
                 }
-                viewPager2.setPagingEnabled(true);
+                if (PhotoViewer.mode  != StoryModes.PAINT) {
+                    viewPager2.setPagingEnabled(true);
+                }
                 break;
         }
         gestureListener.onTouchEvent(event);

@@ -6,8 +6,10 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -44,6 +46,8 @@ public class TextEditorDialogFragment extends DialogFragment {
     private int colorCode;
     private InputMethodManager inputMethodManager;
     private OnTextEditorListener onTextEditorListener;
+    private VerticalSlideColorPicker verticalSlideColorPicker;
+    private boolean firstTime = false;
     private static final String EXTRA_INPUT_TEXT = "extra_input_text";
     private static final String EXTRA_COLOR_CODE = "extra_color_code";
 
@@ -99,6 +103,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         addTextEditTExt.setTextSize(40);
         addTextEditTExt.setSingleLine(false);
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        addTextEditTExt.setBackground(null);
         rootView.addView(addTextEditTExt, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
 
         doneTextView = new TextView(getContext());
@@ -111,10 +116,13 @@ public class TextEditorDialogFragment extends DialogFragment {
         rootView.addView(doneTextView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 20, 20, 20, 20));
 
 
-        colorPickerRecylerView = new RecyclerView(getContext());
-        colorPickerRecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        colorPickerRecylerView.setBackgroundColor(Color.BLACK);
-        rootView.addView(colorPickerRecylerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
+        verticalSlideColorPicker = new VerticalSlideColorPicker(getContext(), null);
+        rootView.addView(verticalSlideColorPicker, LayoutCreator.createFrame(13, 300, Gravity.TOP | Gravity.RIGHT, 0, 60, 20, 0));
+
+//        colorPickerRecylerView = new RecyclerView(getContext());
+//        colorPickerRecylerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+//        colorPickerRecylerView.setBackgroundColor(Color.BLACK);
+//        rootView.addView(colorPickerRecylerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
         return rootView;
     }
@@ -124,15 +132,38 @@ public class TextEditorDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getContext());
-
-        colorPickerAdapter.setOnColorPickerClickListener(colorCode -> {
+        this.colorCode = -855052;
+        addTextEditTExt.setTextColor(-855052);
+        verticalSlideColorPicker.setOnColorChangeListener(colorCode -> {
             this.colorCode = colorCode;
             addTextEditTExt.setTextColor(colorCode);
         });
+//        ColorPickerAdapter colorPickerAdapter = new ColorPickerAdapter(getContext());
+//        colorPickerAdapter.setOnColorPickerClickListener(colorCode -> {
+//            this.colorCode = colorCode;
+//            addTextEditTExt.setTextColor(colorCode);
+//        });
         addTextEditTExt.setFocusable(true);
-        colorPickerRecylerView.setAdapter(colorPickerAdapter);
+        // colorPickerRecylerView.setAdapter(colorPickerAdapter);
+        addTextEditTExt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (!firstTime) {
+                    addTextEditTExt.setTextColor(-855052);
+                    firstTime = true;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
         doneTextView.setOnClickListener(new View.OnClickListener() {
