@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,7 +27,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.components.IconView;
-import net.iGap.messenger.ui.components.SearchEditText;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 
@@ -116,6 +116,11 @@ public class ToolbarItem extends FrameLayout {
         }
     }
 
+    public ToolbarItem setCustomTypeFace(Typeface customTypeFace) {
+        iconView.setTypeface(customTypeFace);
+        return this;
+    }
+
     public void setIcon(int icon) {
         if (iconView != null) {
             iconView.setIcon(icon);
@@ -161,7 +166,7 @@ public class ToolbarItem extends FrameLayout {
         parentToolbarItem.addView(searchContainer, 0, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, 6, 0, 0, 0));
 
         searchContainer.setVisibility(GONE);
-        searchEditText = new androidx.appcompat.widget.AppCompatEditText(getContext()){
+        searchEditText = new androidx.appcompat.widget.AppCompatEditText(getContext()) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(widthMeasureSpec, MeasureSpec.EXACTLY), heightMeasureSpec);

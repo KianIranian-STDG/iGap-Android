@@ -135,7 +135,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private ToolbarItems toolbarItems;
     private ToolBarMenuSubItem clearHistoryItem;
     private ToolBarMenuSubItem markAsReadItem;
-    private ToolBarMenuSubItem leaveItem;
+    private ToolBarMenuSubItem readAllItem;
 
     private boolean floatingHidden;
     private float floatingButtonHideProgress;
@@ -478,13 +478,13 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         toolbarItems.setBackground(null);
 
         moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 52);
-        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.lock_icon, getResources().getString(R.string.clear_history));
-        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.lock_icon, getResources().getString(R.string.mark_as_unread));
-        leaveItem = moreItem.addSubItem(readAllTag, R.string.lock_icon, getResources().getString(R.string.read_all));
+        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.ic_clear_history, getResources().getString(R.string.clear_history));
+        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.ic_mark_as_read, getResources().getString(R.string.mark_as_unread));
+        readAllItem = moreItem.addSubItem(readAllTag, R.string.ic_mark_all_read, getResources().getString(R.string.read_all));
 
         deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.delete_icon, 52);
         muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.mute_icon, 52);
-        pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.location_pin_icon, 52);
+        pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.ic_pin_to_top_2, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icon_new));
 
         multiSelectCounter = new NumberTextView(toolbarItems.getContext());
         multiSelectCounter.setTextSize(18);
@@ -530,19 +530,24 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             return;
         }
 
-        DbManager.getInstance().doRealmTask(realm -> {
-            AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.are_you_sure))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive((dialog, which) -> {
+                    dialog.dismiss();
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        AsyncTransaction.executeTransactionWithLoading(getActivity(), realm, realm1 -> {
+                            if (unreadList.size() > 0) {
+                                for (RealmRoom room : unreadList) {
+                                    markAsRead(realm1, room.getType(), room.getId());
+                                }
+                            }
+                        }, () -> disableMultiSelect());
+                    });
 
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    disableMultiSelect();
-                }
-            });
-        });
+                })
+                .onNegative((dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void onItemClick(RoomListCell roomCell, RealmRoom room, int position) {
@@ -632,10 +637,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             pintItem.setVisibility(View.GONE);
         } else if (hasPinned) {
             pintItem.setVisibility(View.VISIBLE);
-            pintItem.setIcon(R.string.location_pin_icon);
+            pintItem.setIcon(R.string.ic_unpin);
         } else {
             pintItem.setVisibility(View.VISIBLE);
-            pintItem.setIcon(R.string.check_icon);
+            pintItem.setIcon(R.string.ic_pin_to_top_2);
         }
     }
 
