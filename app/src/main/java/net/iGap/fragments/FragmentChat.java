@@ -5617,7 +5617,7 @@ public class FragmentChat extends BaseFragment
      */
     private void clearAdapterItems() {
         mAdapter.clear();
-        recyclerView.removeAllViews();
+        G.runOnUiThread(() -> recyclerView.removeAllViews());
     }
 
     /**
