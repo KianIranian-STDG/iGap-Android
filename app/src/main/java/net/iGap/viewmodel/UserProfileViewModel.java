@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
@@ -26,6 +27,7 @@ import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.helper.AutoDarkModeSetter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperNumerical;
@@ -37,7 +39,6 @@ import net.iGap.module.CountryReader;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.SingleLiveEvent;
-import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructCountry;
@@ -215,7 +216,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
-        isDarkMode.set(G.themeColor == Theme.DARK);
+        isDarkMode.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, true));
         //set credit amount
 
         getUserCredit();
@@ -572,24 +573,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    public void onThemeClick(boolean isCheck) {
-        isDarkMode.set(!isCheck);
-        if (isDarkMode.get()) {
-            G.themeColor = Theme.DARK;
-            int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT);
-            sharedPreferences.edit().
-                    putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK).
-                    putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor).
-                    apply();
-        } else {
-            int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.DEFAULT);
-            G.themeColor = themeColor;
-            sharedPreferences.edit().putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor).apply();
-        }
-
+    public void onAutoDarkClicked() {
+        isDarkMode.set(!isDarkMode.get());
+        sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, isDarkMode.get()).apply();
+        Log.d("ADMS", "onAutoDarkClicked");
+        AutoDarkModeSetter.setStartingTheme();
         updateNewTheme.setValue(true);
-        if (G.twoPaneMode) {
-            updateTwoPaneView.setValue(true);
+        if(isDarkMode.get()){
+            Toast.makeText(G.context, R.string.auto_dark_mode_on_message, Toast.LENGTH_LONG).show();
         }
     }
 

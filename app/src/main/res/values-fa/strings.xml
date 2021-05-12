@@ -2243,4 +2243,7 @@
     <string name="refund_is_not_available">امکان بازخرید برای این توکن وجود ندارد</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
+    <string name="auto_dark_mode">تنظیم خودکار حالت تاریک</string>
+    <string name="auto_dark_mode_off_message">تنظیم خودکار حالت تاریک خاموش شد</string>
+    <string name="auto_dark_mode_on_message">حالت تاریک خودکار برنامه بر اساس تم گوشی تنظیم شد </string>
 </resources>

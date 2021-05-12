@@ -1665,4 +1665,7 @@
     <string name="location_list_tile">Поиск развлекательных центров</string>
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="auto_dark_mode">Автоматическая настройка темного режима</string>
+    <string name="auto_dark_mode_off_message">Автоматическая настройка темного режима отключена</string>
+    <string name="auto_dark_mode_on_message">Темный режим приложения назначен мобильной теме</string>
 </resources>

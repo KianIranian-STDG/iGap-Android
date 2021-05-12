@@ -131,6 +131,8 @@ public class SHP_SETTING {
     public static final String KEY_PROGRES_COLOR = "KEY_PROGRES_COLOR";
 
     public static final String KEY_OLD_THEME_COLOR = "KEY_OLD_THEME_COLOR";
+    public static final String KEY_USER_SELECTED_THEME_COLOR = "user_selected_theme_color";
+
     public static final String KEY_APP_BAR_COLOR_DARK = "KEY_APP_BAR_COLOR_DARK";
     public static final String KEY_NOTIFICATION_COLOR_DARK = "KEY_NOTIFICATION_COLOR_DARK";
     public static final String KEY_TOGGLE_BOTTON_COLOR_DARK = "KEY_TOGGLE_BOTTON_COLOR_DARK";
@@ -206,7 +208,7 @@ public class SHP_SETTING {
     public static final String EXCEED_CONTACTS_NUMBER = "EXCEED_CONTACTS_NUMBER";
     public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
     public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
-
+    public static final String KEY_AUTO_DARK_MODE = "key_auto_dark_mode";
 }
 
 
