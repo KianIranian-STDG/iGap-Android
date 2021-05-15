@@ -418,7 +418,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         AutoDarkModeSetter.setStartingTheme();
 
-
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
                 boolean haveOtherAccount = new AccountHelper().logoutAccount();
@@ -722,7 +721,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 CampaignTrackingReceiver receiver = new CampaignTrackingReceiver();
                 Intent intent = new Intent("com.android.vending.INSTALL_REFERRER");
                 intent.putExtra("referrer", referrerUrl);
-                receiver.onReceive(getApplicationContext(), intent);
+                receiver.  onReceive(getApplicationContext(), intent);
             }
         });
     }
