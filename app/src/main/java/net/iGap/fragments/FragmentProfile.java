@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,13 @@ public class FragmentProfile extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        /**
+         * check that if android version is less than 10, auto dark mode button be Gone
+         */
+        if(Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q){
+            binding.fupDarkModeGroup.setVisibility(View.GONE);
+        }
 
         viewModel.getGoToWalletPage().observe(getViewLifecycleOwner(), phoneNumber -> {
             if (getActivity() != null && phoneNumber != null) {
