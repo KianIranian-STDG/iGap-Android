@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,9 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
             }
             SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, false).apply();
-            Toast.makeText(G.context, R.string.auto_dark_mode_off_message, Toast.LENGTH_SHORT).show();
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Toast.makeText(G.context, R.string.auto_dark_mode_off_message, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
