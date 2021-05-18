@@ -250,7 +250,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
-            userId = userInfo.getUserId();
+            if (userInfo.getUserId() != 0)
+                userId = userInfo.getUserId();
 
             currentCredit.set(userInfo.getWalletAmount());
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
