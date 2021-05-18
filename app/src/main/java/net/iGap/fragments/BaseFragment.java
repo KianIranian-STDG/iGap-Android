@@ -12,6 +12,7 @@ package net.iGap.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,6 +41,7 @@ import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.downloader.Downloader;

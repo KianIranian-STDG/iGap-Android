@@ -75,6 +75,7 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.helper.AutoDarkModeSetter;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;
@@ -103,6 +104,8 @@ import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.StatusBarUtil;
+import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -413,6 +416,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            AutoDarkModeSetter.setStartingTheme();
+        }
 
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
@@ -1260,7 +1266,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 openActivityPassCode();
             }
             G.isFirstPassCode = false;
-
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(this, new Theme().getPrimaryDarkColor(this), 50);
         }
     }
 
