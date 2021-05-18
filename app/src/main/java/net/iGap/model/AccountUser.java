@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
+import net.iGap.G;
 import net.iGap.helper.HelperLog;
 import net.iGap.realm.RealmMigration;
 
@@ -141,6 +142,7 @@ public class AccountUser {
     private RealmConfiguration getConfiguration(String key) {
         byte[] mKey = Base64.decode(key, Base64.DEFAULT);
 
+        Realm.init(G.context);
         RealmConfiguration oldConfig = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
                 .schemaVersion(37)
                 .compactOnLaunch()
