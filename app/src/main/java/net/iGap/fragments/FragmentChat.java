@@ -5740,7 +5740,7 @@ public class FragmentChat extends BaseFragment
 
     private void checkAction() {
         final RealmRoom realmRoom = getRoom();
-        if (realmRoom != null && realmRoom.getActionState() != null) {
+        if (realmRoom != null && realmRoom.getActionState() != null && realmRoom.isValid()) {
             if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
                 txtLastSeen.setText(realmRoom.getActionState());
             } else if (chatType == CHAT) {
