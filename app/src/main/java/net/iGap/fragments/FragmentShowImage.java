@@ -10,6 +10,8 @@
 
 package net.iGap.fragments;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -48,6 +50,7 @@ import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.RoomObject;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.libs.swipeback.VerticalSwipeBackLayout;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -106,9 +109,16 @@ public class FragmentShowImage extends Fragment {
     private ProtoGlobal.RoomMessageType messageType;
     private ArrayList<TextureView> mTextureViewTmp = new ArrayList<>();
     private RealmRoom room;
+    private VerticalSwipeBackLayout mVerticalSwipeBackLayout;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mVerticalSwipeBackLayout = new VerticalSwipeBackLayout(getActivity());
     }
 
     @Nullable
@@ -131,7 +141,20 @@ public class FragmentShowImage extends Fragment {
         //}).interpolator(new FastOutSlowInInterpolator());
         //exitFragmentTransition.startExitListening(view.findViewById(R.id.rooShowImage));
 
-        return inflater.inflate(R.layout.activity_show_image, container, false);
+        View view =  inflater.inflate(R.layout.activity_show_image, container, false);
+        View fragmentView = mVerticalSwipeBackLayout.setFragment(this, view);
+        startingAnimation();
+        return fragmentView;
+    }
+
+    private void startingAnimation() {
+        View decorView = getActivity().getWindow().getDecorView();
+        ObjectAnimator scaleUpAnimation = ObjectAnimator.ofPropertyValuesHolder(decorView,
+                PropertyValuesHolder.ofFloat("scaleX", 0.0f, 1.0f),
+                PropertyValuesHolder.ofFloat("scaleY", 0.0f, 1.0f),
+                PropertyValuesHolder.ofFloat("alpha", 0.0f, 1.0f));
+        scaleUpAnimation.setDuration(150);
+        scaleUpAnimation.start();
     }
 
     @Override
