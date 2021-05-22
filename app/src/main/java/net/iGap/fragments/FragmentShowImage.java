@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -51,10 +52,13 @@ import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.HttpRequest;
+import net.iGap.module.downloader.IDownloader;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
@@ -74,7 +78,7 @@ import java.util.List;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class FragmentShowImage extends BaseFragment {
+public class FragmentShowImage extends Fragment {
 
     private static ArrayList<String> downloadedList = new ArrayList<>();
     public final String ROOM_ID = "roomId";
@@ -177,7 +181,7 @@ public class FragmentShowImage extends BaseFragment {
                 messageType = convertType(bundle.getString("TYPE"));
             }
             if (mRoomId == null) {
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
                 return false;
             }
 
@@ -188,7 +192,7 @@ public class FragmentShowImage extends BaseFragment {
 
             Log.i("mohammad", "getIntentData: after get list from database size -> " + mRealmList.size());
             if (mRealmList.size() < 1) {
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
                 return false;
             }
 
@@ -224,7 +228,7 @@ public class FragmentShowImage extends BaseFragment {
             return true;
         } else {
             if (G.fragmentActivity != null) {
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
             }
             return false;
         }
@@ -251,7 +255,7 @@ public class FragmentShowImage extends BaseFragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 Log.wtf(this.getClass().getName(), "on back");
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
             }
         });
 
@@ -822,7 +826,7 @@ public class FragmentShowImage extends BaseFragment {
                         ZoomableImageView.setZoomable(true);
                         rm.attachment.filePath = arg.data.getFilePath();
                         rm.attachment.token = arg.data.getToken();
-                        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
                         break;
                     case LOADING:
                         progress.withProgress(arg.data.getProgress());
@@ -1003,6 +1007,10 @@ public class FragmentShowImage extends BaseFragment {
         public int getAudioSessionId() {
             return 0;
         }
+    }
+
+    public IDownloader getDownloader() {
+        return Downloader.getInstance(AccountManager.selectedAccount);
     }
 
 
