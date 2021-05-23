@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
     android:clickable="true"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true">
 
     <FrameLayout
         android:id="@+id/Layout_showImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        tools:ignore="UselessParent">
 
         <TextureView
             android:id="@+id/textureView"
@@ -27,8 +30,14 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:visibility="visible" />
+            android:visibility="invisible"/>
 
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            tools:ignore="MissingClass" />
 
         <ImageView
             android:id="@+id/imgPlay"
