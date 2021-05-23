@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.StoryFragment;
+import net.iGap.story.StoryFragment;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;

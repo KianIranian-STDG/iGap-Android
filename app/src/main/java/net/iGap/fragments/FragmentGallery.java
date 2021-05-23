@@ -30,7 +30,7 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.adapter.AdapterGalleryVideo;
-import net.iGap.story.camera.PhotoViewer;
+import net.iGap.story.PhotoViewer;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -220,6 +220,7 @@ public class FragmentGallery extends BaseFragment {
 
     boolean checked = true;
     private VelocityTracker mVelocityTracker = null;
+
     private class OnSwipeTouchListener implements View.OnTouchListener {
         private final GestureDetector gestureDetector;
         Context context;
@@ -270,10 +271,10 @@ public class FragmentGallery extends BaseFragment {
                         }
                     } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffY > 0) {
-                            Log.e("dfldsjflsdjf", "onFling: " );
+                            Log.e("dfldsjflsdjf", "onFling: ");
                         } else {
                             rvGallery.getParent().requestDisallowInterceptTouchEvent(true);
-                            Log.e("dfldsjflsdjf", "onFling2: " );
+                            Log.e("dfldsjflsdjf", "onFling2: ");
                         }
                         result = true;
                     }
@@ -286,12 +287,40 @@ public class FragmentGallery extends BaseFragment {
 
 
     }
+
+    boolean isDraggable = false;
+
     private void initRecyclerView(View view) {
 
         rvGallery = view.findViewById(R.id.rv_gallery);
 
+        rvGallery.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (!rvGallery.canScrollVertically(-1)) {
+                    if (isDraggable == false) {
+                        recyclerView.getParent().requestDisallowInterceptTouchEvent(true);
+                        onRVScrolled.scrolled(false);
 
-    //    OnSwipeTouchListener swwi = new OnSwipeTouchListener(getContext(), rvGallery);
+                    }
+
+                } else {
+                    if (isDraggable == true) {
+                        recyclerView.getParent().requestDisallowInterceptTouchEvent(false);
+                        onRVScrolled.scrolled(true);
+                    }
+                }
+
+                isDraggable = !isDraggable;
+
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+        //    OnSwipeTouchListener swwi = new OnSwipeTouchListener(getContext(), rvGallery);
 
 
 //        rvGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {

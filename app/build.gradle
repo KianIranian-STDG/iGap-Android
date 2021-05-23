@@ -756,7 +756,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
 
     implementation project(path: ':lvl')
+    implementation "androidx.core:core:1.5.0"
     implementation 'com.mikepenz:fastadapter:3.2.5'
+    implementation 'androidx.media:media:1.2.1'
     implementation 'androidx.viewpager2:viewpager2:1.1.0-alpha01'
     implementation 'com.mikepenz:fastadapter-commons:3.2.5'
     implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.5'

@@ -61,7 +61,7 @@
             android:background="@drawable/story_top_shadow"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <net.iGap.story.viewpager.StoriesProgressView
+        <net.iGap.story.viewPager.StoriesProgressView
             android:id="@+id/storiesProgressView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
