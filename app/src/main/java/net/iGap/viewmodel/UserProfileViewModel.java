@@ -87,7 +87,7 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestWalletGetAccessToken;
-import net.iGap.story.viewpager.StoryViewFragment;
+import net.iGap.story.viewPager.StoryViewFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.paygear.model.Card;

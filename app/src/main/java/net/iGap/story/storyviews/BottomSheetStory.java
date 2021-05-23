@@ -11,14 +11,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.adapter.AdapterDrBot;
-import net.iGap.adapter.items.BottomSheetItem;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.messenger.ui.cell.TextCell;
 import net.iGap.module.customView.RecyclerListView;
