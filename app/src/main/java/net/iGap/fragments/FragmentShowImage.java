@@ -10,6 +10,8 @@
 
 package net.iGap.fragments;
 
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -26,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -47,13 +51,18 @@ import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.RoomObject;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.libs.swipeback.VerticalSwipeBackLayout;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.MusicPlayer;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.HttpRequest;
+import net.iGap.module.downloader.IDownloader;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
@@ -75,7 +84,7 @@ import java.util.List;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class FragmentShowImage extends BaseFragment {
+public class FragmentShowImage extends Fragment {
     private static final String TAG = "FragmentShowImage";
     private static final ArrayList<String> downloadedList = new ArrayList<>();
     public static FocusAudioListener focusAudioListener;
@@ -98,15 +107,35 @@ public class FragmentShowImage extends BaseFragment {
     private ProtoGlobal.RoomMessageType messageType;
     private RealmRoom room;
     private SimpleExoPlayer player;
+    private VerticalSwipeBackLayout mVerticalSwipeBackLayout;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mVerticalSwipeBackLayout = new VerticalSwipeBackLayout(getActivity());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_show_image, container, false);
+        View view =  inflater.inflate(R.layout.activity_show_image, container, false);
+        View fragmentView = mVerticalSwipeBackLayout.setFragment(this, view);
+        startingAnimation();
+        return fragmentView;
+    }
+
+    private void startingAnimation() {
+        View decorView = getActivity().getWindow().getDecorView();
+        ObjectAnimator scaleUpAnimation = ObjectAnimator.ofPropertyValuesHolder(decorView,
+                PropertyValuesHolder.ofFloat("scaleX", 0.0f, 1.0f),
+                PropertyValuesHolder.ofFloat("scaleY", 0.0f, 1.0f),
+                PropertyValuesHolder.ofFloat("alpha", 0.0f, 1.0f));
+        scaleUpAnimation.setDuration(150);
+        scaleUpAnimation.start();
     }
 
     @Override
@@ -144,7 +173,7 @@ public class FragmentShowImage extends BaseFragment {
                 messageType = convertType(bundle.getString("TYPE"));
             }
             if (mRoomId == null) {
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
                 return false;
             }
             Log.i(TAG, "getIntentData: before get list from database");
@@ -153,7 +182,7 @@ public class FragmentShowImage extends BaseFragment {
             });
             Log.i(TAG, "getIntentData: after get list from database size -> " + mRealmList.size());
             if (mRealmList.size() < 1) {
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
                 return false;
             }
             List<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
@@ -182,7 +211,7 @@ public class FragmentShowImage extends BaseFragment {
             return true;
         } else {
             if (G.fragmentActivity != null) {
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
             }
             return false;
         }
@@ -206,7 +235,7 @@ public class FragmentShowImage extends BaseFragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 Log.wtf(this.getClass().getName(), "on back");
-                popBackStackFragment();
+                getFragmentManager().popBackStackImmediate();
             }
         });
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
@@ -663,7 +692,7 @@ public class FragmentShowImage extends BaseFragment {
                         ZoomableImageView.setZoomable(true);
                         rm.attachment.filePath = arg.data.getFilePath();
                         rm.attachment.token = arg.data.getToken();
-                        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
                         break;
                     case LOADING:
                         progress.withProgress(arg.data.getProgress());
@@ -681,4 +710,9 @@ public class FragmentShowImage extends BaseFragment {
             container.removeView((View) object);
         }
     }
+
+    public IDownloader getDownloader() {
+        return Downloader.getInstance(AccountManager.selectedAccount);
+    }
+
 }
