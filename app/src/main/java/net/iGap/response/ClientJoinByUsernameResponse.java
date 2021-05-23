@@ -10,10 +10,11 @@
 
 package net.iGap.response;
 
+import net.iGap.controllers.RoomController;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientJoinByUsername;
-import net.iGap.request.RequestClientPinRoom;
 
 public class ClientJoinByUsernameResponse extends MessageHandler {
 
@@ -38,7 +39,7 @@ public class ClientJoinByUsernameResponse extends MessageHandler {
         } else if (identity instanceof Long) {
             long roomId = (long) identity;
             RealmRoom.joinRoom(roomId);
-            new RequestClientPinRoom().pinRoom(roomId, true);
+            RoomController.getInstance(AccountManager.selectedAccount).clientPinRoom(roomId, true);
         }
     }
 

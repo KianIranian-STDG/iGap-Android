@@ -2246,4 +2246,10 @@
     <string name="auto_dark_mode">تنظیم خودکار حالت تاریک</string>
     <string name="auto_dark_mode_off_message">تنظیم خودکار حالت تاریک خاموش شد</string>
     <string name="auto_dark_mode_on_message">حالت تاریک خودکار برنامه بر اساس تم گوشی تنظیم شد </string>
+
+    <string name="unmuted">اعلان صدا دار شد.</string>
+    <string name="muted">اعلان بی صدا شد.</string>
+    <string name="delete_selected_chat">آیا مطمئن هستید که می خواهید چت های انتخاب شده را حذف کنید؟</string>
+    <string name="leave_confirm">آیا مطمئن هستید که می خواهید %s را ترک کنید؟</string>
+    <string name="clear_selected_history"> آیا از پاک کردن تاریخچه %s اطمینان دارید؟</string>
 </resources>

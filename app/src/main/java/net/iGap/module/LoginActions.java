@@ -99,7 +99,6 @@ public class LoginActions {
         if (RequestManager.getInstance(AccountManager.selectedAccount).isSecure()) {
             DbManager.getInstance().doRealmTask(realm -> {
                 RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                Log.wtf(LoginActions.class.getName(), "bagi: ");
                 if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
                     if (userInfo != null) {
                         if (userInfo.getUserRegistrationState()) {

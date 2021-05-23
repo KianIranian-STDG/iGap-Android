@@ -61,6 +61,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnAudioFocusChangeListener;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
@@ -328,6 +329,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         } else {
             playSound();
         }
+        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.MEDIA_PLAYER_STATE_CHANGED, true);
     }
 
     public static void pauseSound() {
@@ -434,8 +436,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             HelperLog.getInstance().setErrorLog(e);
         }
         updateFastAdapter(MusicPlayer.messageId);
-
-
     }
 
     public static void stopSound() {
@@ -492,10 +492,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp != null) {
             mp.stop();
             updateFastAdapter(MusicPlayer.messageId);
-
         }
-
-
     }
 
     public static void nextMusic() {
@@ -675,6 +672,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             MusicPlayer.layoutTripMusic.setVisibility(View.GONE);
         }
         MusicPlayer.playerStateChangeListener.setValue(false);
+        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.MEDIA_PLAYER_STATE_CHANGED, false);
     }
 
     private static String getMusicName(long messageId, String name) {
@@ -748,7 +746,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
 
             if (isVoice) {
-                closeLayoutMediaPlayer();
+//                closeLayoutMediaPlayer();
             }
 
             updateFastAdapter(MusicPlayer.messageId);
@@ -881,6 +879,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             MusicPlayer.shearedMediaLayout.setVisibility(View.VISIBLE);
         }
 
+        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.MEDIA_PLAYER_STATE_CHANGED, true);
     }
 
     private static void OnCompleteMusic() {

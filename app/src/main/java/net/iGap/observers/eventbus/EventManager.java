@@ -32,6 +32,9 @@ public class EventManager {
     public static final int SOCKET_CONNECT_ERROR = eventId++;
     public static final int SOCKET_DISCONNECT = eventId++;
 
+    public static final int CONNECTION_STATE_CHANGED = eventId++;
+    public static final int MEDIA_PLAYER_STATE_CHANGED = eventId++;
+
     public static final int STICKER_DOWNLOAD = eventId++;
     public static final int EMOJI_LOADED = eventId++;
     public static final int IG_ERROR = eventId++;

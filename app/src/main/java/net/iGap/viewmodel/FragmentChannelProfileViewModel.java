@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.RoomController;
 import net.iGap.fragments.FragmentChannelProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
@@ -42,7 +43,6 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelAddAdmin;
 import net.iGap.request.RequestChannelAddModerator;
-import net.iGap.request.RequestChannelLeft;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -392,7 +392,7 @@ public class FragmentChannelProfileViewModel extends ViewModel
 
 
     public void leaveChannel() {
-        new RequestChannelLeft().channelLeft(roomId);
+        RoomController.getInstance(AccountManager.selectedAccount).channelLeft(roomId);
         showLoading.set(View.VISIBLE);
     }
 

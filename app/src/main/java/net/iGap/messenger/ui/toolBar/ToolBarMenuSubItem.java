@@ -10,6 +10,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
@@ -22,9 +24,7 @@ public class ToolBarMenuSubItem extends FrameLayout {
     private IconView iconView;
     private ImageView checkView;
 
-    //todo: this colors must fill with a correct them key.
     private int textColor;
-    private int iconColor;
     private int selectorColor;
 
     public ToolBarMenuSubItem(Context context) {
@@ -34,12 +34,13 @@ public class ToolBarMenuSubItem extends FrameLayout {
     public ToolBarMenuSubItem(Context context, boolean needCheck) {
         super(context);
         textColor = Theme.getInstance().getTitleTextColor(context);
-        iconColor = Theme.getInstance().getTitleTextColor(context);
-        selectorColor = Theme.getInstance().getSubTitleColor(context);
+        selectorColor = Theme.getInstance().getDividerColor(context);
         setBackground(Theme.createSelectorDrawable(selectorColor, 2));
         setPadding(LayoutCreator.dp(18), 0, LayoutCreator.dp(18), 0);
 
         iconView = new IconView(context);
+        iconView.setIconColor(textColor);
+        iconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon_new));
         addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT)));
 
         textView = new TextView(context);
@@ -48,6 +49,7 @@ public class ToolBarMenuSubItem extends FrameLayout {
         textView.setGravity(Gravity.LEFT);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextColor(textColor);
+        textView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         addView(textView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
 
@@ -97,9 +99,9 @@ public class ToolBarMenuSubItem extends FrameLayout {
         }
     }
 
-    public void setColors(int textColor, int iconColor) {
-        setTextColor(textColor);
-        setIconColor(iconColor);
+    public void setColors(int colors) {
+        setTextColor(colors);
+        setIconColor(colors);
     }
 
     public void setTextColor(int textColor) {
@@ -109,7 +111,7 @@ public class ToolBarMenuSubItem extends FrameLayout {
     }
 
     public void setIconColor(int iconColor) {
-        if (this.iconColor != iconColor) {
+        if (this.textColor != iconColor) {
             iconView.setIconColor(iconColor);
         }
     }
