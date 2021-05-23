@@ -963,6 +963,13 @@ dependencies {
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.65'
     //huawei
     implementation 'com.huawei.hms:base:5.0.5.300'
+    //exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.0'
+    implementation 'com.google.android.exoplayer:extension-ima:2.14.0'
+    implementation 'com.google.android.exoplayer:extension-mediasession:2.14.0'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     implementation project(path: ':video')
 }
