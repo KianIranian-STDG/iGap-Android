@@ -22,12 +22,10 @@ import com.google.android.exoplayer2.util.Util;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.DispatchQueue;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class StoryViewFragment extends BaseFragment implements StoryDisplayFragment.PageViewOperator {
 

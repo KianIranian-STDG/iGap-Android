@@ -1,6 +1,7 @@
 package net.iGap.story.viewpager;
 
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,14 +37,10 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.customView.EventEditText;
 
 import java.io.Serializable;
@@ -53,7 +48,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
     private static String EXTRA_POSITION = "EXTRA_POSITION";
@@ -83,6 +77,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private EventEditText edtChat;
     private ImageView storyImage;
     private FrameLayout tvSend;
+    private ConstraintLayout constraintLayout;
 
     public static StoryDisplayFragment newInstance(int position, StoryUser story) {
 
@@ -126,6 +121,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         edtChat = view.findViewById(R.id.et_chatRoom_writeMessage);
         storyImage = view.findViewById(R.id.story_image);
         tvSend = view.findViewById(R.id.chatRoom_send_container);
+        constraintLayout = view.findViewById(R.id.root_display);
         return view;
     }
 
@@ -134,10 +130,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storyDisplayVideo.setUseController(false);
         replayFrame.setOnClickListener(view1 -> reply(true));
         tvSend.setOnClickListener(view12 -> {
-            reply(false);
             closeKeyboard(view);
             resumeCurrentStory();
+            reply(false);
         });
+        getKeyboardState();
         updateStory();
         setUpUi();
     }
@@ -232,23 +229,41 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     }
 
-    private void reply(boolean isEdit) {
-        if (isEdit) {
-            llReplay.setVisibility(View.VISIBLE);
-            llAttach.setVisibility(View.VISIBLE);
-            replayFrame.setVisibility(View.GONE);
-            PausableScaleAnimation.isPaused = true;
-            pauseCurrentStory();
-            edtChat.requestFocus();
-            AndroidUtils.showKeyboard(edtChat);
-            setEdtChat();
+    /**
+     * replay layout clicked
+     */
+    private void reply(boolean visibility) {
+        if (visibility) {
+           openKeyBoard();
         } else {
-            llReplay.setVisibility(View.GONE);
-            llAttach.setVisibility(View.GONE);
-            replayFrame.setVisibility(View.VISIBLE);
+          closeKeyboard(edtChat);
         }
+
     }
 
+    /**
+     * detect keyboard is show or no
+     */
+    private void getKeyboardState() {
+
+        constraintLayout.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect rec = new Rect();
+            constraintLayout.getWindowVisibleDisplayFrame(rec);
+            int screenHeight = constraintLayout.getRootView().getHeight();
+            int keypadHeight = screenHeight - rec.bottom;
+
+            if (keypadHeight > screenHeight * 0.15) {
+                llReplay.setVisibility(View.VISIBLE);
+                llAttach.setVisibility(View.VISIBLE);
+                replayFrame.setVisibility(View.GONE);
+                setEdtChat();
+            } else {
+                llReplay.setVisibility(View.GONE);
+                llAttach.setVisibility(View.GONE);
+                replayFrame.setVisibility(View.VISIBLE);
+            }
+        });
+    }
 
     private void setEdtChat() {
         edtChat.addTextChangedListener(new TextWatcher() {
