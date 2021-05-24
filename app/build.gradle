@@ -860,7 +860,7 @@ dependencies {
     }
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:1.2.3-rc4'
+    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:1.2.6'
 
     //for adMob
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
