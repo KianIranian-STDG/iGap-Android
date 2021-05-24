@@ -13,12 +13,12 @@ package net.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 
-import net.iGap.module.accountManager.DbManager;
 import net.iGap.G;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperGetUserInfo;
 import net.iGap.helper.HelperLogMessage;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.OnGetUserInfo;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoError;
@@ -116,9 +116,6 @@ public class ClientGetRoomResponse extends MessageHandler {
                                             if (G.onClientGetRoomResponse != null) {
                                                 G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
                                             }
-                                            if (G.onClientGetRoomResponseRoomList != null) {
-                                                G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                                            }
                                         }
                                     });
                                 });
@@ -135,9 +132,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                         if (G.onClientGetRoomResponse != null) {
                             G.onClientGetRoomResponse.onClientGetRoomResponse(clientGetRoom.getRoom(), clientGetRoom, identityClientGetRoom);
                         }
-                        if (G.onClientGetRoomResponseRoomList != null) {
-                            G.onClientGetRoomResponseRoomList.onClientGetRoomResponse(clientGetRoom.getRoom().getId());
-                        }
+
                     }
                 }, 500);
             }

@@ -226,7 +226,8 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

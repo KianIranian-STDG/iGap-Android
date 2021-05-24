@@ -186,6 +186,7 @@ import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.ResendMessage;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
@@ -271,14 +272,12 @@ import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelUpdateDraft;
-import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -822,6 +821,10 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+        }
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
@@ -4622,7 +4625,6 @@ public class FragmentChat extends BaseFragment
     public void onPlayMusic(String messageId) {
 
         if (messageId != null && messageId.length() > 0) {
-
             try {
                 if (MusicPlayer.downloadNextMusic(messageId)) {
                     mAdapter.notifyDataSetChanged();
@@ -5885,14 +5887,14 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void deleteChat(final long chatId) {
-        new RequestChatDelete().chatDelete(chatId);
+    private void deleteChat(final long roomId) {
+        getRoomController().chatDeleteRoom(roomId);
     }
 
     private void muteNotification(final long roomId) {
 
         isMuteNotification = !isMuteNotification;
-        new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
+        getRoomController().clientMuteRoom(roomId, isMuteNotification);
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);

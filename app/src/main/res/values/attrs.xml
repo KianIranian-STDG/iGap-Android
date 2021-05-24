@@ -85,6 +85,7 @@
     <attr name="colorPrimaryLight" format="reference|color" />
     <attr name="colorAccentDark" format="reference|color" />
     <attr name="toolbarBackgroundColor" format="reference|color" />
+    <attr name="toolbarActionModeBackgroundColor" format="reference|color" />
     <!--general color-->
     <attr name="rootBackgroundColor" format="reference|color" />
     <attr name="iGapTitleTextColor" format="reference|color" />
@@ -133,6 +134,9 @@
     <attr name="iGapProfileStroke" format="reference" />
     <attr name="iGapProfileToolbar" format="reference" />
     <attr name="iGapTimerPinter" format="reference" />
+    <attr name="iGapCallStripColor" format="reference|color" />
+    <attr name="iGapCallStripColorBlue" format="reference|color" />
+    <attr name="iGapMediaStripColor" format="reference|color" />
 
     <!--=======================custom theme=====================-->
 
@@ -230,6 +234,6 @@
         <attr name="yearRange" format="integer" />
         <attr name="displayDescription" format="boolean" />
     </declare-styleable>
-    <attr name="numberPickerTheme" format="reference"/>
+    <attr name="numberPickerTheme" format="reference" />
 
 </resources>

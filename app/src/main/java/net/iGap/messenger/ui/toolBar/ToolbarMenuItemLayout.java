@@ -52,8 +52,8 @@ public class ToolbarMenuItemLayout extends FrameLayout {
     public ToolbarMenuItemLayout(@NonNull Context context) {
         super(context);
 
-        backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert).mutate();
-        setBackgroundColor(Theme.getInstance().getButtonSelectorBackground(context));
+        backgroundDrawable = getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
+        setBackgroundColor(Theme.getInstance().getRootColor(context));
 
         scrollView = new ScrollView(context);
         scrollView.setVerticalScrollBarEnabled(false);

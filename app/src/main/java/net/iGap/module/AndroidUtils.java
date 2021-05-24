@@ -29,11 +29,13 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ListView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -87,7 +89,24 @@ public final class AndroidUtils {
         display.getSize(size);
         return size.x;
     }
-
+    public static void clearDrawableAnimation(View view) {
+        if (Build.VERSION.SDK_INT < 21 || view == null) {
+            return;
+        }
+        Drawable drawable;
+        if (view instanceof ListView) {
+            drawable = ((ListView) view).getSelector();
+            if (drawable != null) {
+                drawable.setState(StateSet.NOTHING);
+            }
+        } else {
+            drawable = view.getBackground();
+            if (drawable != null) {
+                drawable.setState(StateSet.NOTHING);
+                drawable.jumpToCurrentState();
+            }
+        }
+    }
     public static String formatDuration(int timeMs) {
         int totalSeconds = timeMs / 1000;
 
@@ -428,7 +447,7 @@ public final class AndroidUtils {
         int unit = (!si ? 1000 : 1024);
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (!si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (!si ? "" : "i");
+        String pre = ("KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
