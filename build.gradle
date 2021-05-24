@@ -32,9 +32,6 @@ allprojects {
         maven {
             url 'https://dl.bintray.com/metrixorg/maven'
         }
-        maven { url 'https://dl.bintray.com/tapsellorg/maven' }
-        maven { url  "https://adcolony.bintray.com/AdColony" }
-        maven { url "https://chartboostmobile.bintray.com/Chartboost" }
     }
 }
 
