@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -36,11 +35,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -55,7 +50,6 @@ import net.iGap.libs.swipeback.VerticalSwipeBackLayout;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.MusicPlayer;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
@@ -257,7 +251,7 @@ public class FragmentShowImage extends Fragment {
     }
 
     private void initViewPager() {
-        AdapterViewPager mAdapter = new AdapterViewPager();
+        AdapterViewPager mAdapter = new AdapterViewPager(getContext());
         viewPager.setAdapter(mAdapter);
         viewPager.setCurrentItem(selectedFile);
         txtImageNumber.setText(MessageFormat.format("{0} {1} {2}", selectedFile + 1, G.fragmentActivity.getResources().getString(R.string.of), mFList.size()));
@@ -469,7 +463,7 @@ public class FragmentShowImage extends Fragment {
         private int index = 0;
         private List<Integer> videoPositions;
 
-        public AdapterViewPager() {
+        public AdapterViewPager(Context context) {
             player = new SimpleExoPlayer.Builder(context).build();
             videoPositions = new ArrayList<>();
         }
