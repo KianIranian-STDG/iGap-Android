@@ -123,7 +123,9 @@ public class Toolbar extends FrameLayout {
             subTitleTextView.setVisibility(toggleSearch ? INVISIBLE : VISIBLE);
         }
     }
-
+    public boolean isSearchFieldVisible() {
+        return isSearchBoxVisible;
+    }
     public interface ToolbarListener {
         void onItemClick(int i);
     }
