@@ -406,6 +406,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            AutoDarkModeSetter.setStartingTheme();
+        }
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
@@ -416,9 +419,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         detectDeviceType();
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            AutoDarkModeSetter.setStartingTheme();
-        }
 
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
