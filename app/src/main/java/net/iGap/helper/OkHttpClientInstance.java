@@ -4,6 +4,7 @@ import net.iGap.BuildConfig;
 
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -16,7 +17,8 @@ public class OkHttpClientInstance {
                 OkHttpClient.Builder builder = new OkHttpClient.Builder()
                         .connectTimeout(1, TimeUnit.MINUTES)
                         .writeTimeout(1, TimeUnit.MINUTES)
-                        .readTimeout(1, TimeUnit.MINUTES);
+                        .readTimeout(1, TimeUnit.MINUTES)
+                        .connectionPool(new ConnectionPool(5, 25, TimeUnit.SECONDS));
 
                 if (BuildConfig.DEBUG) {
                     HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
