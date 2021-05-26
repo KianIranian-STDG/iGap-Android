@@ -1391,21 +1391,19 @@ public class HelperUrl {
                             RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
                             realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
                         }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            if (room.getId() != FragmentChat.lastChatRoomId) {
-                                new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
-                            } else {
-                                try {
-                                    if (activity != null) {
-                                        activity.getSupportFragmentManager().popBackStack();
-                                        new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
-                                    }
-                                } catch (Exception e) {
-                                    HelperLog.getInstance().setErrorLog(e);
-                                    e.printStackTrace();
+                    }, () -> {
+                        boolean isParticipant = room.getIsParticipant();
+                        if (room.getId() != FragmentChat.lastChatRoomId) {
+                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(!isParticipant).setuserName(username).setMessageID(messageId).startActivity(activity);
+                        } else {
+                            try {
+                                if (activity != null) {
+                                    activity.getSupportFragmentManager().popBackStack();
+                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(!isParticipant).setuserName(username).setMessageID(messageId).startActivity(activity);
                                 }
+                            } catch (Exception e) {
+                                HelperLog.getInstance().setErrorLog(e);
+                                e.printStackTrace();
                             }
                         }
                     });
