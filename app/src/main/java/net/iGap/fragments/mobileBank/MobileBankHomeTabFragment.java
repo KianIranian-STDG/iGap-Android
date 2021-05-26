@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import net.iGap.R;
@@ -39,6 +41,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     private MobileBankHomeTabFragmentBinding binding;
     private HomeTabMode mode;
     private DialogParsian mDialogWait;
+    private BankHomeItemAdapter adapter;
 
     public static MobileBankHomeTabFragment newInstance(HomeTabMode mode) {
         MobileBankHomeTabFragment fragment = new MobileBankHomeTabFragment();
@@ -53,6 +56,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_home_tab_fragment, container, false);
         binding.setVm(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.progress.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         return binding.getRoot();
     }
 
@@ -77,6 +81,7 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
             viewModel.getNotificationStatus();
             setupRecyclerItems();
         }
+        NotificationItemClicked();
     }
 
     private void setupRecyclerItems() {
@@ -95,7 +100,8 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
                 break;
         }
 
-        BankHomeItemAdapter adapter = new BankHomeItemAdapter();
+
+        adapter = new BankHomeItemAdapter();
         adapter.setItems(items);
         adapter.setListener(this::handleItemsAdapterClick);
 
@@ -210,14 +216,33 @@ public class MobileBankHomeTabFragment extends BaseMobileBankFragment<MobileBank
     }
 
     private List<MobileBankHomeItemsModel> getServiceRecyclerItems() {
+        binding.rvItems.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         List<MobileBankHomeItemsModel> items = new ArrayList<>();
         items.add(new MobileBankHomeItemsModel(R.string.facilities, R.drawable.ic_mb_loan));
         items.add(new MobileBankHomeItemsModel(R.string.take_turn, R.drawable.ic_mb_take_turn));
-        if (viewModel.getNotificationMode().getValue() == 0)
+        if (viewModel.getNotificationMode().getValue() == 0) {
             items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_activeNotification, R.drawable.ic_mb_active_notif));
-        else if (viewModel.getNotificationMode().getValue() == 1)
+        } else if (viewModel.getNotificationMode().getValue() == 1) {
             items.add(new MobileBankHomeItemsModel(R.string.mobile_bank_deActiveNotification, R.drawable.ic_mb_deactive_notif));
+        }
+
         return items;
+    }
+
+
+    public void NotificationItemClicked() {
+        viewModel.getIsShowProgress().observe(getViewLifecycleOwner(), status -> {
+            if (status != null) {
+                int visibility = status == 0 ? View.VISIBLE : View.GONE;
+                boolean isSuccess = status == 1;
+                if (viewModel.getNotificationMode().getValue() == 0) {
+                    adapter.setItem(new MobileBankHomeItemsModel(isSuccess ? R.string.mobile_bank_deActiveNotification : R.string.mobile_bank_activeNotification, isSuccess ? R.drawable.ic_mb_deactive_notif : R.drawable.ic_mb_active_notif, visibility), 2);
+                } else if (viewModel.getNotificationMode().getValue() == 1) {
+                    adapter.setItem(new MobileBankHomeItemsModel(isSuccess ? R.string.mobile_bank_activeNotification : R.string.mobile_bank_deActiveNotification, isSuccess ? R.drawable.ic_mb_active_notif : R.drawable.ic_mb_deactive_notif, visibility), 2);
+                }
+            }
+        });
+
     }
 
     private void disableViewPagerIfNeed() {

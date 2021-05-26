@@ -40,6 +40,7 @@ public class MobileBankChequesBookListFragment extends BaseMobileBankFragment<Mo
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_cheques_book_list_fragment, container, false);
         binding.setVm(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.progress.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         return binding.getRoot();
     }
 
