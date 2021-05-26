@@ -1,7 +1,6 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
@@ -19,6 +18,7 @@ import net.iGap.module.downloader.FileIOExecutor;
 import net.iGap.module.upload.IUpload;
 import net.iGap.module.upload.UploadHttpRequest;
 import net.iGap.module.upload.UploadObject;
+import net.iGap.network.NetworkUtility;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -48,7 +48,7 @@ public class HttpUploader implements IUpload {
 
     private FileIOExecutor fileExecutors;
 
-    private static final int MAX_UPLOAD = 6;
+    private final int MAX_UPLOAD;
 
     private static final String TAG = "UploadHttpRequest";
 
@@ -78,7 +78,7 @@ public class HttpUploader implements IUpload {
                 TimeUnit.SECONDS,  // Sets the Time Unit for KEEP_ALIVE_TIME
                 new LinkedBlockingDeque<>());  // Work Queue
 
-
+        MAX_UPLOAD = NetworkUtility.getMaxConcurrency(G.context);
     }
 
     private void makeFailed(long messageId) {
@@ -102,7 +102,7 @@ public class HttpUploader implements IUpload {
 
     @Override
     public boolean isUploading(String messageId) {
-        return inProgressUploads.get(messageId) != null;
+        return findExistedRequest(messageId) != null;
     }
 
     @Override
@@ -306,11 +306,10 @@ public class HttpUploader implements IUpload {
         if (inProgressCount.get() >= MAX_UPLOAD || uploadQueue.size() == 0)
             return;
 
-        Log.i(TAG, "scheduleNewUpload inProgressCount: " + inProgressCount.get());
-
         UploadHttpRequest request = uploadQueue.poll();
-        if (request == null)
+        if (request == null){
             return;
+        }
 
         inProgressUploads.put(request.key, request);
         inProgressCount.incrementAndGet();

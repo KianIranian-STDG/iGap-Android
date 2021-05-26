@@ -2,6 +2,7 @@ package net.iGap.module.upload;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
@@ -245,7 +246,7 @@ public class UploadHttpRequest {
                     public void onProgress(long totalByte) {
                         if (cancelDownload.get() && isUploading) {
                             isUploading = false;
-                            error(new Exception("Download Canceled"), false);
+                            error(new Exception("Upload Canceled"), false);
                             return;
                         }
                         int progress = (int) ((totalByte * 100) / fileObject.file.length());
@@ -322,7 +323,7 @@ public class UploadHttpRequest {
     }
 
     private void error(Exception exception, boolean needReset) {
-        if (exception == null || cancelDownload.get()) {
+        if (exception == null) {
             return;
         }
 
