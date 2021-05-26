@@ -176,7 +176,15 @@ public class RoomController extends BaseController {
                 }
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
-                FileLog.e("Group Left -> Major" + e.major + "Minor" + e.minor);
+                FileLog.e("Group Left -> Major: " + e.major + " Minor: " + e.minor);
+                if (e.major == 337) {
+                    if (e.minor == 1 || e.minor == 4 || e.minor == 8) {
+                        RealmRoom.deleteRoom(roomId);
+                        if (G.onGroupLeft != null) {
+                            G.onGroupLeft.onGroupLeft(roomId, AccountManager.getInstance().getCurrentUser().getId());
+                        }
+                    }
+                }
             }
         });
     }
@@ -204,7 +212,20 @@ public class RoomController extends BaseController {
                 }
             } else {
                 IG_RPC.Error e = new IG_RPC.Error();
-                FileLog.e("Group Left -> Major" + e.major + "Minor" + e.minor);
+                FileLog.e("Channel Left -> Major: " + e.major + "Minor: " + e.minor);
+
+                if (e.major == 437) {
+                    if (e.minor == 1 || e.minor == 4 || e.minor == 8) {
+                        RealmRoom.deleteRoom(roomId);
+                        if (G.onChannelLeft != null) {
+                            G.onChannelLeft.onChannelLeft(roomId, AccountManager.getInstance().getCurrentUser().getId());
+                        }
+
+                        if (G.onChannelDeleteInRoomList != null) {
+                            G.onChannelDeleteInRoomList.onChannelDelete(roomId);
+                        }
+                    }
+                }
             }
         });
     }
