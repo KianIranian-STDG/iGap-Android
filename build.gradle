@@ -3,6 +3,7 @@
 buildscript {
     repositories {
         google()
+        //noinspection JcenterRepositoryObsolete
         jcenter()
         mavenCentral()
         maven { url 'https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java' }
@@ -27,11 +28,10 @@ allprojects {
     repositories {
         maven { url "https://jitpack.io" }
         google()
+        mavenCentral()
+        //noinspection JcenterRepositoryObsolete
         jcenter()
         maven { url "https://maven.google.com" }
-        maven {
-            url 'https://dl.bintray.com/metrixorg/maven'
-        }
     }
 }
 

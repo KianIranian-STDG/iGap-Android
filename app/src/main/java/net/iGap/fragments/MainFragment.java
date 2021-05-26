@@ -136,6 +136,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private ToolBarMenuSubItem clearHistoryItem;
     private ToolBarMenuSubItem markAsReadItem;
     private ToolBarMenuSubItem readAllItem;
+    private SearchFragment searchFragment;
 
     private boolean floatingHidden;
     private float floatingButtonHideProgress;
@@ -306,11 +307,11 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     public View createToolBar(Context context) {
         toolbar = new Toolbar(context);
         toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+        toolbar.setOnClickListener(view -> recyclerView.smoothScrollToPosition(0));
         ToolbarItems toolbarItems = toolbar.createToolbarItems();
         searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE)
                 .setIsSearchBox(true)
                 .setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
-                    SearchFragment searchFragment;
 
                     @Override
                     public void onSearchExpand() {
@@ -1157,6 +1158,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             return false;
         } else if (FragmentChat.mForwardMessages != null || HelperGetDataFromOtherApp.hasSharedData) {
             revertToolbarFromForwardMode();
+            return false;
+        } else if (toolbar.isSearchFieldVisible()) {
+            if (searchFragment != null) {
+                searchFragment.onSearchCollapsed();
+                toolbar.closeSearchBox(true);
+            }
             return false;
         } else {
             return true;
