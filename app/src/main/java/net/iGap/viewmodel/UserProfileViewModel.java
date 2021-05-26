@@ -576,7 +576,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     public void onAutoDarkClicked() {
         isDarkMode.set(!isDarkMode.get());
         sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, isDarkMode.get()).apply();
-        Log.d("ADMS", "onAutoDarkClicked");
         AutoDarkModeSetter.setStartingTheme();
         updateNewTheme.setValue(true);
         if(isDarkMode.get()){

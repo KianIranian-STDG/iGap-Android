@@ -2,6 +2,7 @@ package net.iGap.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.WelcomeFragment;
+import net.iGap.helper.AutoDarkModeSetter;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.module.accountManager.AccountHelper;
@@ -37,6 +39,9 @@ public class ActivityRegistration extends ActivityEnhanced {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         isOnGetPermission = true;
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            AutoDarkModeSetter.setStartingTheme();
+        }
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_registeration);
