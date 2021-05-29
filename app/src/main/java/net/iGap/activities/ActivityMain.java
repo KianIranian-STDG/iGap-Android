@@ -104,6 +104,7 @@ import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
@@ -406,6 +407,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            AutoDarkModeSetter.setStartingTheme();
+        }
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
@@ -415,10 +420,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         detectDeviceType();
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-            AutoDarkModeSetter.setStartingTheme();
-        }
 
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
@@ -1218,7 +1219,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setDialogFragmentSize();
         }
         super.onConfigurationChanged(newConfig);
+
+        /**
+         * check changing ui mode system
+         */
+        checkSystemUiModeChange(newConfig);
+
         G.rotationState = newConfig.orientation;
+
+        recreate();
+    }
+
+    private void checkSystemUiModeChange(Configuration newConfig) {
+        if(newConfig.uiMode == 17){  // 17 = light ui mode system number
+            sharedPreferences.edit()
+                    .putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 17).apply();
+        } else if(newConfig.uiMode == 33){  //33 = dark ui mode system number
+            sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 33).apply();
+        }
+        recreate();
     }
 
     private void setViewConfigurationChanged() {

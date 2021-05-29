@@ -21,6 +21,7 @@ import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.FragmentSyncRegisteredContacts;
 import net.iGap.fragments.WelcomeFragment;
+import net.iGap.helper.AutoDarkModeSetter;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.module.accountManager.AccountHelper;
@@ -37,6 +38,7 @@ public class ActivityRegistration extends ActivityEnhanced {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         isOnGetPermission = true;
+        AutoDarkModeSetter.setStartingTheme();
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_registeration);

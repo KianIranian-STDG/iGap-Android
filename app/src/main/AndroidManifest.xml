@@ -120,7 +120,7 @@
             tools:replace="screenOrientation" />
         <activity
             android:name=".activities.ActivityMain"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale|uiMode"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

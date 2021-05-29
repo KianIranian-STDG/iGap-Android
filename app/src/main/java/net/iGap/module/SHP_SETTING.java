@@ -209,6 +209,8 @@ public class SHP_SETTING {
     public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
     public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
     public static final String KEY_AUTO_DARK_MODE = "key_auto_dark_mode";
+    public static final String KEY_SYSTEM_UI_MODE = "key_system_ui_mode";
+
 }
 
 

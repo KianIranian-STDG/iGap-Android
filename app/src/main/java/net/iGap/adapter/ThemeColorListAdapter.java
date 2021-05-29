@@ -68,10 +68,10 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
                 callback.onItemClicked(selectedThemePosition, holder.getAdapterPosition());
             }
             SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, false).apply();
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, true)) {
                 Toast.makeText(G.context, R.string.auto_dark_mode_off_message, Toast.LENGTH_SHORT).show();
             }
+            sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, false).apply();
         });
     }
 
