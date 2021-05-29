@@ -29,7 +29,7 @@ public class ApiInitializer<T> {
                     try {
                         ErrorModel error = new ErrorHandler().getError(response.code(), response.errorBody().string());
                         if (error.getName().equals("001") && error.isNeedToRefresh()) {
-                            new RequestUserRefreshToken().RefreshUserToken(new OnRefreshToken() {
+                            new RequestUserRefreshToken().refreshUserToken(new OnRefreshToken() {
                                 @Override
                                 public void onRefreshToken(String token) {
                                     initAPI(retrofitCall.clone(), handShakeCallback, retrofitCallback);
