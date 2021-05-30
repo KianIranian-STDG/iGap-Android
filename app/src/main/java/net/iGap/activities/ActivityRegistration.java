@@ -1,6 +1,7 @@
 package net.iGap.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import net.iGap.fragments.WelcomeFragment;
 import net.iGap.helper.AutoDarkModeSetter;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.PermissionHelper;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.dialog.DefaultRoundDialog;
@@ -34,10 +36,12 @@ public class ActivityRegistration extends ActivityEnhanced {
     public static final String showProfile = "showProfile";
 
     private RegistrationViewModel viewModel;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         isOnGetPermission = true;
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         AutoDarkModeSetter.setStartingTheme();
         super.onCreate(savedInstanceState);
 
@@ -190,5 +194,21 @@ public class ActivityRegistration extends ActivityEnhanced {
         for (int i = t; i > 0; i--) {
             getSupportFragmentManager().popBackStackImmediate();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        checkSystemUiModeChange(newConfig);
+    }
+
+    private void checkSystemUiModeChange(Configuration newConfig) {
+        if(newConfig.uiMode == 17){  // 17 = light ui mode system number
+            sharedPreferences.edit()
+                    .putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 17).apply();
+        } else if(newConfig.uiMode == 33){  //33 = dark ui mode system number
+            sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 33).apply();
+        }
+        recreate();
     }
 }
