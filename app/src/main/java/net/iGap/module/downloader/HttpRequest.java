@@ -45,11 +45,12 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
     private int selector;
     private volatile boolean isDownloading;
     private volatile boolean isDownloaded;
-    private int priority = PRIORITY.PRIORITY_DEFAULT;
-    private AtomicBoolean cancelDownload = new AtomicBoolean(false);
-    private FileIOExecutor fileExecutors;
+    private final int priority = PRIORITY.PRIORITY_DEFAULT;
+    private final AtomicBoolean cancelDownload = new AtomicBoolean(false);
+    private final FileIOExecutor fileExecutors;
     private Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>> downloadStatusObserver;
     private Call call;
+    private int retryCount = 0;
 
     HttpRequest(int account, DownloadObject fileObject) {
         currentAccount = account;
@@ -71,6 +72,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
             return;
         }
+
         fileExecutors.execute(() -> download(TokenContainer.getInstance().getToken(), fileObject));
     }
 
@@ -79,7 +81,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         if (call != null) {
             call.cancel();
         }
-        onError(new Exception("download canceled"));
+        onError(new Exception("Download canceled"));
     }
 
     @WorkerThread
@@ -90,9 +92,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         OkHttpClient client = OkHttpClientInstance.getInstance();
 
         String fileToken = fileStruct.fileToken;
-
         String qParam = "?selector=" + fileStruct.selector;
-
         String url = BASE_URL + fileToken + qParam;
 
         Request.Builder builder = new Request.Builder()
@@ -103,7 +103,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             builder.addHeader("Range", "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize);
         }
 
-        FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize + " cashId: "  + fileStruct.mainCacheId);
+        FileLog.i("HttpRequest", "download Start with " + url + " range " + "bytes=" + fileStruct.offset + "-" + fileStruct.fileSize + " cashId: " + fileStruct.mainCacheId);
 
         Request request = builder.build();
         Response response = null;
@@ -112,36 +112,51 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             call = client.newCall(request);
             response = call.execute();
             if (response.body() == null) {
-                throw new Exception("body is null!");
+                throw new Exception("Download body is null!");
             }
-            InputStream inputStream = response.body().byteStream();
-            byte[] iv = new byte[16];
-            int i = inputStream.read(iv, 0, 16);// do not remove i :)
-            InputStream cipherInputStream = new CipherInputStream(inputStream, getCipher(iv, G.symmetricKey));
-            byte[] data = new byte[4096];
-            int count;
-            long downloaded = fileStruct.offset;
-            while ((count = cipherInputStream.read(data)) != -1) {
-                downloaded += count;
-                int t = (int) ((downloaded * 100) / fileStruct.fileSize);
-                if (fileStruct.progress < t) {
-                    fileStruct.progress = t;
-                    onProgress(fileStruct.progress);
+
+            if (response.isSuccessful()) {
+                InputStream inputStream = response.body().byteStream();
+                byte[] iv = new byte[16];
+                int i = inputStream.read(iv, 0, 16);// do not remove i :)
+                InputStream cipherInputStream = new CipherInputStream(inputStream, getCipher(iv, G.symmetricKey));
+                byte[] data = new byte[4096];
+                int count;
+                long downloaded = fileStruct.offset;
+                while ((count = cipherInputStream.read(data)) != -1) {
+                    downloaded += count;
+                    int t = (int) ((downloaded * 100) / fileStruct.fileSize);
+                    if (fileStruct.progress < t) {
+                        fileStruct.progress = t;
+                        onProgress(fileStruct.progress);
+                    }
+                    os.write(data, 0, count);
+                    if (cancelDownload.get()) {
+                        safelyCancelDownload();
+                        return;
+                    }
                 }
-                os.write(data, 0, count);
-                if (cancelDownload.get()) {
-                    safelyCancelDownload();
-                    return;
-                }
+                onDownloadCompleted();
+                cipherInputStream.close();
+            } else if (response.code() == 401) { //token is expired
+                refreshAccessTokenAndRetry();
+            } else {
+                onError(new Exception("Download is not successful!"));
             }
-            onDownloadCompleted();
-            cipherInputStream.close();
         } catch (Exception e) {
             onError(e);
         } finally {
             if (response != null && response.body() != null) {
                 response.body().close();
             }
+        }
+    }
+
+    private void refreshAccessTokenAndRetry() {
+        if (retryCount++ < 3) {
+            TokenContainer.getInstance().getRefreshToken(this::download);
+        } else {
+            onError(new Exception("Refreshing access token failed."));
         }
     }
 
