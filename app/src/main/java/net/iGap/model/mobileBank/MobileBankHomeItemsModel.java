@@ -1,27 +1,36 @@
 package net.iGap.model.mobileBank;
 
+import android.view.View;
+
 public class MobileBankHomeItemsModel {
     private int title;
     private int icon;
+    private int progressVisibility = View.GONE;
 
     public MobileBankHomeItemsModel(int title, int icon) {
         this.title = title;
         this.icon = icon;
     }
 
-    public int getTitle() {
-        return title;
+    public MobileBankHomeItemsModel(int title, int icon, int progressVisibility) {
+        this.title = title;
+        this.icon = icon;
+        this.progressVisibility = progressVisibility;
     }
 
-    public void setTitle(int title) {
-        this.title = title;
+    public int getTitle() {
+        return title;
     }
 
     public int getIcon() {
         return icon;
     }
 
-    public void setIcon(int icon) {
-        this.icon = icon;
+    public int getProgressVisibility() {
+        return progressVisibility;
+    }
+
+    public void setProgressVisibility(int progressVisibility) {
+        this.progressVisibility = progressVisibility;
     }
 }

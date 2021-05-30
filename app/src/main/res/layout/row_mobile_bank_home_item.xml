@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp60"
-    android:id="@+id/root"
-    app:cardBackgroundColor="?rootBackgroundColor"
-    app:cardElevation="@dimen/dp4"
-    app:cardCornerRadius="@dimen/dp6"
     android:layout_marginLeft="@dimen/dp8"
-    android:layout_marginRight="@dimen/dp8"
     android:layout_marginTop="@dimen/dp12"
+    android:layout_marginRight="@dimen/dp8"
     android:layout_marginBottom="@dimen/dp12"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    app:cardBackgroundColor="?rootBackgroundColor"
+    app:cardCornerRadius="@dimen/dp6"
+    app:cardElevation="@dimen/dp4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,24 +23,41 @@
             android:layout_width="@dimen/toolbar_icon_size"
             android:layout_height="@dimen/toolbar_icon_size"
             android:layout_margin="@dimen/dp16"
-            android:src="@drawable/ic_mb_balance"
             android:padding="@dimen/dp2"
+            android:src="@drawable/ic_mb_balance"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:singleLine="true"
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="@string/transfer_mony"
+            android:layout_margin="@dimen/dp10"
+            android:maxLines="2"
             android:textColor="@color/brown"
-            app:layout_constraintStart_toEndOf="@id/ivIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/ivIcon"
             app:layout_constraintBottom_toBottomOf="@id/ivIcon"
-            android:layout_margin="@dimen/dp10" />
+            app:layout_constraintEnd_toStartOf="@+id/frame_progress"
+            app:layout_constraintStart_toEndOf="@id/ivIcon"
+            app:layout_constraintTop_toTopOf="@id/ivIcon"
+            tools:text="@string/transfer_mony" />
+
+        <FrameLayout
+            android:id="@+id/frame_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
+
+            <ProgressBar
+                android:id="@+id/progress_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

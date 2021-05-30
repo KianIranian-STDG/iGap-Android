@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+
 import net.iGap.fragments.mobileBank.MobileBankHomeTabFragment;
 
 import java.util.List;

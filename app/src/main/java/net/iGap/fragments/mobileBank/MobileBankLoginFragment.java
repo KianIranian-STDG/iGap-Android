@@ -42,6 +42,7 @@ public class MobileBankLoginFragment extends BaseMobileBankFragment<MobileBankLo
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_login_fragment, container, false);
         binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(viewModel);
+        binding.loadingView.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         return binding.getRoot();
     }
 

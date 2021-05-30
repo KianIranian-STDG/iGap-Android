@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import net.iGap.fragments.mobileBank.MobileBankHomeTabFragment;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankCardModel;
 import net.iGap.model.mobileBank.BankHistoryModel;
@@ -22,13 +23,14 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
-public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryViewModel {
+ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryViewModel {
 
     private MutableLiveData<List<BankCardModel>> cardsData = new MutableLiveData<>();
     private MutableLiveData<List<BankAccountModel>> accountsData = new MutableLiveData<>();
     private SingleLiveEvent<String> takeTurnListener = new SingleLiveEvent<>();
     private MutableLiveData<String> balance = new MutableLiveData<>();
     private ObservableInt showRetry = new ObservableInt(View.GONE);
+    private MutableLiveData<Integer> isShowProgress = new MutableLiveData<>(View.GONE);
     public List<BankCardModel> cards;
     public List<BankAccountModel> accounts;
     private MobileBankHomeTabFragment.HomeTabMode mMode;
@@ -150,8 +152,8 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
                 });
     }
 
-    public void getTakeTurnFromParsianBranches(){
-        MobileBankRepository.getInstance().getTakeTurn(this , new ResponseCallback<BaseMobileBankResponse>() {
+    public void getTakeTurnFromParsianBranches() {
+        MobileBankRepository.getInstance().getTakeTurn(this, new ResponseCallback<BaseMobileBankResponse>() {
             @Override
             public void onSuccess(BaseMobileBankResponse data) {
                 takeTurnListener.postValue(data.getMessage());
@@ -189,22 +191,32 @@ public class MobileBankHomeTabViewModel extends BaseMobileBankMainAndHistoryView
     }
 
     public void toggleNotificationStatus(boolean activate) {
+        isShowProgress.setValue(0);
         MobileBankRepository.getInstance().changeNotifStatus(activate, this, new ResponseCallback<BaseMobileBankResponse>() {
             @Override
             public void onSuccess(BaseMobileBankResponse data) {
-                notificationMode.setValue((activate ? 1 : 0));
+                if (data != null) {
+                    isShowProgress.setValue(1);
+                    notificationMode.setValue((activate ? 1 : 0));
+                }
             }
 
             @Override
             public void onError(String error) {
-
+                isShowProgress.setValue(2);
+                HelperError.showSnackMessage(error, false);
             }
 
             @Override
             public void onFailed() {
-
+                isShowProgress.setValue(2);
+                HelperError.showSnackMessage("Connection Error", false);
             }
         });
+    }
+
+    public MutableLiveData<Integer> getIsShowProgress() {
+        return isShowProgress;
     }
 
     private String decimalFormatter(Double entry) {
