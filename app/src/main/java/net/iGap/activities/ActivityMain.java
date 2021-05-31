@@ -10,6 +10,7 @@
 
 package net.iGap.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -146,6 +147,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static net.iGap.G.context;
+import static net.iGap.G.handler;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
@@ -311,14 +313,32 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onNewIntent(intent);
         setIntent(intent);
         isOpenChatBeforeSheare = true;
-        checkIntent(intent);
-
-        if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
-            handleDeepLink(intent);
+        String[] Permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        boolean hasPermission = new PermissionHelper(this).hasPermissions(Permissions);
+        if (intent.getAction() != null && intent.getAction().equals("android.intent.action.SEND") && !intent.getType().equals("text/plain") && !hasPermission){
+            new MaterialDialog.Builder(this)
+                    .title(getString(R.string.shared_file))
+                    .titleColor(new Theme().getAccentColor(this))
+                    .titleGravity(GravityEnum.CENTER)
+                    .buttonsGravity(GravityEnum.CENTER)
+                    .content(getString(R.string.need_permission_description))
+                    .contentGravity(GravityEnum.CENTER)
+                    .positiveText(getString(R.string.create_permission))
+                    .positiveColor(new Theme().getAccentColor(this))
+                    .onPositive((dialog, which) -> handler.post(() -> new PermissionHelper(this).grantReadAndRightStoragePermission()))
+                    .negativeText(getString(R.string.cancel))
+                    .negativeColor(new Theme().getAccentColor(this))
+                    .onNegative((dialog, which) -> dialog.dismiss())
+                    .show();
         }
-
-        if (G.isFirstPassCode) {
-            openActivityPassCode();
+        else{
+            checkIntent(intent);
+            if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
+                handleDeepLink(intent);
+            }
+            if (G.isFirstPassCode) {
+                openActivityPassCode();
+            }
         }
     }
 

@@ -105,7 +105,7 @@ public class PermissionHelper {
         }
     }
 
-    private boolean hasPermissions(String... permissions) {
+    public boolean hasPermissions(String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && permissions != null) {
             for (String permission : permissions) {
                 if (ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
