@@ -1021,7 +1021,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         if (selectedRoomCount == 1) {
             CircleImageView imageView = new CircleImageView(context);
             AvatarHandler handler = new AvatarHandler();
-            handler.getAvatar(new ParamWithAvatarType(imageView, selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
+            RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo("id", selectedRoom.get(0)).findFirst();
+            });
+            handler.getAvatar(new ParamWithAvatarType(imageView, room.getOwnerId()).avatarType(room.getType() != ProtoGlobal.Room.Type.CHAT ? AvatarHandler.AvatarType.ROOM : AvatarHandler.AvatarType.USER).showMain(), true);
             frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
         }
 
@@ -1050,7 +1053,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         if (selectedRoomCount == 1) {
             RealmRoom realmRoom = getMessageDataStorage().getRoom(selectedRoom.get(0));
             String channelName = realmRoom.title;
-            confirmTextView.setText(String.format(getString(R.string.leave_confirm), channelName));
+            if (realmRoom.getType() == CHAT) {
+                confirmTextView.setText(getString(R.string.delete_chat_content));
+            } else {
+                confirmTextView.setText(String.format(getString(R.string.leave_confirm), channelName));
+            }
+
         } else {
             confirmTextView.setText(R.string.delete_selected_chat);
         }
@@ -1083,9 +1091,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         FrameLayout frameLayout = new FrameLayout(context);
 
         if (selectedRoomCount == 1) {
+            RealmRoom room = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo("id", selectedRoom.get(0)).findFirst();
+            });
             CircleImageView imageView = new CircleImageView(context);
             AvatarHandler handler = new AvatarHandler();
-            handler.getAvatar(new ParamWithAvatarType(imageView, selectedRoom.get(0)).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
+            handler.getAvatar(new ParamWithAvatarType(imageView, room.getOwnerId()).avatarType(AvatarHandler.AvatarType.ROOM).showMain(), true);
             frameLayout.addView(imageView, LayoutCreator.createFrame(55, 55, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 8, 8, 8, 8));
         }
 
