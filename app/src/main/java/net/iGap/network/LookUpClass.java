@@ -14,7 +14,7 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.fragments.FragmentShowImage;
+import net.iGap.fragments.FragmentShowContent;
 import net.iGap.helper.FileLog;
 
 import static net.iGap.G.forcePriorityActionId;
@@ -409,7 +409,7 @@ public class LookUpClass {
      */
     private static void fillImmovableClasses() {
         generalImmovableClasses.add(FragmentShowAvatars.class.getName());
-        generalImmovableClasses.add(FragmentShowImage.class.getName());
+        generalImmovableClasses.add(FragmentShowContent.class.getName());
     }
 
     /**

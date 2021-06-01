@@ -5976,7 +5976,7 @@ public class FragmentChat extends BaseFragment
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-            FragmentShowImage fragment = FragmentShowImage.newInstance();
+            FragmentShowContent fragment = FragmentShowContent.newInstance();
             Bundle bundle = new Bundle();
             bundle.putLong("RoomId", mRoomId);
             bundle.putInt("TYPE", messageObject.messageType);

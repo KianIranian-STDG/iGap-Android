@@ -1597,7 +1597,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         private void showImage(int position, View itemView) {
             if (getActivity() != null) {
                 long selectedFileToken = mList.get(position).messageId;
-                FragmentShowImage fragment = FragmentShowImage.newInstance();
+                FragmentShowContent fragment = FragmentShowContent.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putLong("RoomId", roomId);
                 bundle.putLong("SelectedImage", selectedFileToken);
@@ -1756,7 +1756,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             } else {
                 if (getActivity() != null) {
                     long selectedFileToken = mNewList.get(position).messageId;
-                    Fragment fragment = FragmentShowImage.newInstance();
+                    Fragment fragment = FragmentShowContent.newInstance();
                     Bundle bundle = new Bundle();
                     bundle.putLong("RoomId", roomId);
                     bundle.putLong("SelectedImage", selectedFileToken);
