@@ -2287,6 +2287,9 @@ Want to get it?</string>
     <string name="delete_selected_chat">Are you sure you want to delete selected chats?</string>
     <string name="leave_confirm">Are you sure you want to leave %s?</string>
     <string name="clear_selected_history">Are you sure you want to clear history of %s?</string>
+    <string name="shared_file">اشتراک گذاری فایل</string>
+    <string name="create_permission">ایجاد مجوز</string>
+    <string name="need_permission_description">اشتراک گذاری فایل نیازمند مجوز دسترسی حافظه می باشد لطفا بعد از ایجاد مجوز فایل مورد نظر را به اشتراک گذارید.</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>
