@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -68,6 +69,7 @@ import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
@@ -156,8 +158,15 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         isNeedResume = true;
     }
 
+
+
     @Override
     public View createView(Context context) {
+
+        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+        }
+
         fragmentView = new FrameLayout(context);
         FrameLayout layout = (FrameLayout) fragmentView;
 

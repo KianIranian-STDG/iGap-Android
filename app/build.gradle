@@ -478,6 +478,7 @@ dependencies {
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:1.2.6'
 
     //for adMob
+
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
 
     implementation project(path: ':lvl')
@@ -587,6 +588,14 @@ dependencies {
     implementation 'com.google.android.exoplayer:extension-mediasession:2.14.0'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
     implementation project(path: ':video')
+
+    //exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.14.0'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.14.0'
+    implementation 'com.google.android.exoplayer:extension-ima:2.14.0'
+    implementation 'com.google.android.exoplayer:extension-mediasession:2.14.0'
 }
 
 configurations.all {
