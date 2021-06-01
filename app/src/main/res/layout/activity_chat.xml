@@ -129,7 +129,7 @@
                 android:id="@+id/ac_ll_attach_text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:background="?attr/rootBackgroundColor"
+                android:background="#8046A829"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -146,7 +146,7 @@
                     android:singleLine="true"
                     android:text="New Text"
                     android:textColor="?attr/iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize" />
+                    android:textSize="@dimen/largeTextSize" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/ac_btn_cancel_sending_file"

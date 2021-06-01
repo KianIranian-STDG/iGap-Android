@@ -42,6 +42,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -104,6 +105,7 @@ import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
@@ -406,7 +408,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             AutoDarkModeSetter.setStartingTheme();
         }
         super.onCreate(savedInstanceState);
@@ -418,7 +421,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         detectDeviceType();
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
@@ -1218,7 +1220,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setDialogFragmentSize();
         }
         super.onConfigurationChanged(newConfig);
+
+        /**
+         * check changing ui mode system
+         */
+        checkSystemUiModeChange(newConfig);
+        AutoDarkModeSetter.setStartingTheme();
+        applyTheme();
+
         G.rotationState = newConfig.orientation;
+    }
+
+    private void applyTheme() {
+        getTheme().applyStyle(new Theme().getTheme(this), true);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment frg;
+        frg = fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
+    }
+
+    private void checkSystemUiModeChange(Configuration newConfig) {
+        if(newConfig.uiMode == 17){  // 17 = light ui mode system number
+            sharedPreferences.edit()
+                    .putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 17).apply();
+        } else if(newConfig.uiMode == 33){  //33 = dark ui mode system number
+            sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 33).apply();
+        }
+//        recreate();
     }
 
     private void setViewConfigurationChanged() {
@@ -2054,5 +2085,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ((TabletEmptyChatFragment) f).getChatBackground();
             }
         }
+    }
+
+    private void setThemeSetting() {
+        this.setTheme(new Theme().getTheme(this));
     }
 }

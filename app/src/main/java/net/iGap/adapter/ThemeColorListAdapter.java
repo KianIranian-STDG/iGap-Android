@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.model.ThemeModel;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
-import net.iGap.model.ThemeModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,8 +68,8 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
                 callback.onItemClicked(selectedThemePosition, holder.getAdapterPosition());
             }
             SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, false)) {
-                Toast.makeText(G.context, R.string.auto_dark_mode_off_message, Toast.LENGTH_LONG).show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, true)) {
+                Toast.makeText(G.context, R.string.auto_dark_mode_off_message, Toast.LENGTH_SHORT).show();
             }
             sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_AUTO_DARK_MODE, false).apply();
         });

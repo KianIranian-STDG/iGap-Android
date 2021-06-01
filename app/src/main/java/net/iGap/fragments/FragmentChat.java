@@ -675,6 +675,7 @@ public class FragmentChat extends BaseFragment
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         isNeedResume = true;
         G.locationListener = this;
 
@@ -821,10 +822,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
-        }
 
         imvSendButton = rootView.findViewById(R.id.btn_chatRoom_send);
 
