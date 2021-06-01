@@ -16,7 +16,9 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.StateSet;
 import android.util.TypedValue;
@@ -91,17 +93,12 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private NotifyFrameLayout rootView;
     private CustomViewPager viewPager;
     private Toolbar toolbar;
-    private LinearLayout toolbarPanel;
     private RippleView rippleView;
     private MaterialDesignTextView designTextView;
     private MaterialDesignTextView revertTextView;
     private MaterialDesignTextView emoji;
     private MaterialDesignTextView keyboardEmoji;
-    private TextView toolbarTitle;
-    private TextView imageNumber;
-    private MaterialDesignTextView setTextView;
     private MaterialDesignTextView iconOkTextView;
-    private TextView countImageTextView;
     private LinearLayout bottomLayoutPanel;
     private LinearLayout layoutCaption;
     private EventEditText captionEditText;
@@ -128,7 +125,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private int emojiPadding;
     private ZoomLayout zoomLayout;
     private TextStickerView textStickersParentView;
-    private List<View> addedViews;
+    private HashMap<Integer, List<View>> addedViews;
     private List<View> redoViews;
     private FrameLayout stickerBorder;
     private TextView textTv;
@@ -270,79 +267,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
-        //  toolbar.addView(cancelCropLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         rootView.addView(cancelCropLayout, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
-
-
-//        toolbarPanel = new LinearLayout(context);
-//        toolbarPanel.setOrientation(LinearLayout.HORIZONTAL);
-//
-//        rippleView = new RippleView(context);
-//        rippleView.setCentered(true);
-//        rippleView.setRippleAlpha(200);
-//        rippleView.setRippleDuration(0);
-//        rippleView.setRipplePadding(5);
-//        toolbarPanel.addView(rippleView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
-//
-//        designTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-//        designTextView.setText(context.getString(R.string.md_close_button));
-//        designTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-//        designTextView.setGravity(Gravity.CENTER);
-//        rippleView.addView(designTextView, LayoutCreator.createRelative(48, LayoutCreator.MATCH_PARENT));
-//
-//
-//        toolbarTitle = new TextView(context);
-//        toolbarTitle.setText(context.getString(R.string.photo));
-//        toolbarTitle.setTextColor(context.getResources().getColor(R.color.whit_background));
-//        toolbarTitle.setTextSize(16);
-//        toolbarTitle.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-//        toolbarTitle.setTypeface(toolbarTitle.getTypeface(), Typeface.BOLD);
-//        toolbarPanel.addView(toolbarTitle, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
-//
-//        imageNumber = new TextView(context);
-//        imageNumber.setGravity(Gravity.CENTER | Gravity.LEFT);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            imageNumber.setTextAppearance(android.R.attr.textAppearanceMedium);
-//        } else {
-//            imageNumber.setTextAppearance(context, android.R.attr.textAppearanceMedium);
-//        }
-//        imageNumber.setTextColor(context.getResources().getColor(R.color.white));
-//        imageNumber.setTextSize(18);
-//        toolbarPanel.addView(imageNumber, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 1F));
-//
-//        setTextView = new MaterialDesignTextView(context);
-//        setTextView.setGravity(Gravity.CENTER);
-//        setTextView.setText(context.getString(R.string.check_icon));
-//        setTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-//        setTextView.setTextSize(22);
-//        setTextView.setVisibility(View.GONE);
-//        toolbarPanel.addView(setTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, Gravity.RIGHT));
-//
-//
-//        toolbarPanel.addView(revertTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, 0, 0, 8, 0));
-//
-//        countImageTextView = new TextView(context);
-//        countImageTextView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-//        countImageTextView.setText(context.getString(R.string.photo));
-//        countImageTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
-//        countImageTextView.setTextSize(22);
-//        countImageTextView.setTypeface(countImageTextView.getTypeface(), Typeface.BOLD);
-//        toolbarPanel.addView(countImageTextView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
-//
-//        animateCheckBox = new AnimCheckBox(context);
-//        animateCheckBox.setBackground(context.getResources().getDrawable(R.drawable.background_check));
-//        animateCheckBox.setCircleColor(R.attr.iGapButtonColor);
-//        animateCheckBox.setLineColor(context.getResources().getColor(R.color.whit_background));
-//        animateCheckBox.setAnimDuration(100);
-//        animateCheckBox.setCorrectWidth(1);
-//        animateCheckBox.setUnCheckColor(context.getResources().getColor(R.color.background_checkbox_bottomSheet));
-//        toolbarPanel.addView(animateCheckBox, LayoutCreator.createLinear(32, 32, Gravity.CENTER | Gravity.END | Gravity.RIGHT, 0, 0, 8, 0));
-//
-
-//
-//        toolbar.addView(toolbarPanel, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        rootView.addView(toolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
-
 
         bottomLayoutPanel = new LinearLayout(context);
         bottomLayoutPanel.setOrientation(LinearLayout.VERTICAL);
@@ -359,7 +284,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         keyboardEmoji.setGravity(Gravity.CENTER);
         keyboardEmoji.setPadding(8, 0, 8, 8);
         keyboardEmoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
-        // keyboardEmoji.setBackground(context.getResources().getDrawable(R.drawable.ic_add_more_photo));
         keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
         keyboardEmoji.setTextSize(26);
         layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER));
@@ -392,9 +316,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         pickerViewSendButton = new ImageView(context);
         pickerViewSendButton.setScaleType(ImageView.ScaleType.CENTER);
         pickerViewSendButton.setImageResource(R.drawable.attach_send);
-//        pickerViewSendButton.setBackground(createSimpleSelectorCircleDrawable(LayoutCreator.dp(40), 0xff4cb4f5, Build.VERSION.SDK_INT >= 21 ? 0x0f000000 : 0xff4cb4f5));
-//        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(0xffffffff, PorterDuff.Mode.MULTIPLY));
-//        pickerViewSendButton.setColorFilter(new PorterDuffColorFilter(0xff4cb4f5, PorterDuff.Mode.MULTIPLY));
         layoutCaption.addView(pickerViewSendButton, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 8, 0));
 
         sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
@@ -402,10 +323,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         sendTextView.setText(context.getString(R.string.md_send_button));
         sendTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         sendTextView.setVisibility(View.GONE);
-        //  cancelCropLayout.addView(sendTextView, LayoutCreator.createLinear(52, 52, Gravity.RIGHT));
-
-        //     bottomLayoutPanel.addView(cancelCropLayout, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT));
-
 
         rootView.addView(bottomLayoutPanel, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
 
@@ -415,7 +332,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        addedViews = new ArrayList<>();
+        addedViews = new HashMap<>();
         redoViews = new ArrayList<>();
         path = getArguments().getString(PATH);
         selectedPhotos = (List<GalleryItemModel>) getArguments().getSerializable(SELECTED_PHOTOS);
@@ -523,6 +440,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         revertTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 boolean revert = undo();
                 revertTextView.setVisibility(revert ? VISIBLE : View.GONE);
             }
@@ -591,40 +509,43 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         captionEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                showPopUPView(KeyboardView.MODE_EMOJI);
+                if (isPopupShowing()) {
+                    keyboardEmoji.performClick();
+                }
             }
         });
         keyboardEmoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = FragmentGallery.newInstance(true, FragmentGallery.GalleryMode.STORY, () -> {
-                    Log.e("dlkfdlfd", "createFragment: ");
-                });
-                new HelperFragment(getParentFragmentManager(), fragment).setReplace(false).load();
+                if (!isPopupShowing()) {
+                    showPopUPView(KeyboardView.MODE_EMOJI);
+                } else {
+                    showPopUPView(KeyboardView.MODE_KEYBOARD);
+                }
 
             }
         });
 
-//        captionEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                StructBottomSheet item = new StructBottomSheet();
-//                item.setText(s.toString());
-//                item.setPath(itemGalleryList.get(viewHolderPostion).path);
-//                item.setId(itemGalleryList.get(viewHolderPostion).getId());
-//                textImageList.put(itemGalleryList.get(viewHolderPostion).path, item);
-//            }
-//        });
+        captionEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                StructBottomSheet item = new StructBottomSheet();
+                item.setText(s.toString());
+                item.setPath(itemGalleryList.get(viewHolderPostion).path);
+                item.setId(itemGalleryList.get(viewHolderPostion).getId());
+                textImageList.put(itemGalleryList.get(viewHolderPostion).path, item);
+            }
+        });
     }
 
     private void serFilterImage(String path) {
@@ -673,12 +594,12 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     private void editText(View view, String inputText, int colorCode) {
-        if (textTv != null && addedViews.contains(view) && !TextUtils.isEmpty(inputText)) {
+        if (textTv != null && addedViews.get(viewHolderPostion).contains(view) && !TextUtils.isEmpty(inputText)) {
             textTv.setText(inputText);
             textTv.setTextColor(colorCode);
             textStickersParentView.updateViewLayout(view, view.getLayoutParams());
-            int i = addedViews.indexOf(view);
-            if (i > -1) addedViews.set(i, view);
+            int i = addedViews.get(viewHolderPostion).indexOf(view);
+            if (i > -1) addedViews.get(viewHolderPostion).set(i, view);
         }
     }
 
@@ -711,7 +632,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
 
     private void updateViewsBordersVisibilityExcept(@Nullable View keepView) {
-        for (View view : addedViews) {
+        for (View view : addedViews.get(viewHolderPostion)) {
             if (view != keepView) {
                 stickerBorder.setBackgroundResource(0);
                 stickerBorder.setTag(false);
@@ -819,7 +740,14 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         if (redoViews.size() > 0) {
             redoViews.remove(redoViews.size() - 1);
         }
-        addedViews.add(brushDrawingView);
+        if (addedViews.get(viewHolderPostion) == null) {
+            List<View> views = new ArrayList<>();
+            views.add(brushDrawingView);
+            addedViews.put(viewHolderPostion, views);
+        } else {
+            addedViews.get(viewHolderPostion).add(brushDrawingView);
+        }
+
         revertTextView.setVisibility(VISIBLE);
         onPaintChanged.setValue(addedViews.size());
     }
@@ -827,7 +755,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     @Override
     public void onViewRemoved(BrushDrawingView brushDrawingView) {
         if (addedViews.size() > 0) {
-            View removeView = addedViews.remove(addedViews.size() - 1);
+            View removeView = addedViews.get(viewHolderPostion).remove(addedViews.get(viewHolderPostion).size() - 1);
             if (!(removeView instanceof BrushDrawingView)) {
                 textStickersParentView.removeView(removeView);
             }
@@ -940,13 +868,18 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     }
                 }
                 itemGalleryList.get(position).path = finalPath;
-                Palette p = Palette.from(BitmapFactory.decodeFile(finalPath)).generate();
-                GradientDrawable gd = new GradientDrawable(
-                        GradientDrawable.Orientation.TOP_BOTTOM,
-                        new int[]{
-                                p.getLightMutedColor(0xFF616261), p.getMutedColor(0xFF616261), p.getDarkMutedColor(0xFF616261)});
 
-                zoomLayout.setBackground(gd);
+                Palette.generateAsync(BitmapFactory.decodeFile(finalPath), new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(@Nullable Palette palette) {
+                        GradientDrawable gd = new GradientDrawable(
+                                GradientDrawable.Orientation.TOP_BOTTOM,
+                                new int[]{
+                                        palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
+
+                        zoomLayout.setBackground(gd);
+                    }
+                });
 
 
                 textStickersParentView.setPaintMode(false, finalPath);
@@ -957,6 +890,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             if (!viewHolders.containsKey(position)) {
                 container.addView(zoomLayout, 0);
                 viewHolders.put(position, zoomLayout);
+                List<View> views = new ArrayList<>();
+                addedViews.put(position, views);
                 return zoomLayout;
             } else {
                 return viewHolders.get(position);
@@ -1058,7 +993,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         }
 
         private void updateViewsBordersVisibilityExcept(@Nullable View keepView) {
-            for (View view : addedViews) {
+            for (View view : addedViews.get(viewHolderPostion)) {
                 if (view != keepView) {
                     stickerBorder.setBackgroundResource(0);
                     stickerBorder.setTag(false);
@@ -1074,7 +1009,13 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             textStickerView.setVisibility(View.VISIBLE);
             textStickerView.addView(view, params);
-            addedViews.add(view);
+            if (addedViews.get(viewHolderPostion) == null) {
+                List<View> views = new ArrayList<>();
+                views.add(view);
+                addedViews.put(viewHolderPostion, views);
+            } else {
+                addedViews.get(viewHolderPostion).add(view);
+            }
             revertTextView.setVisibility(VISIBLE);
             updateViewsBordersVisibilityExcept(view);
         }
@@ -1158,17 +1099,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     public boolean undo() {
         if (addedViews.size() > 0) {
-            View removeView = addedViews.get(addedViews.size() - 1);
+            View removeView = addedViews.get(viewHolderPostion).get(addedViews.get(viewHolderPostion).size() - 1);
             if (removeView instanceof BrushDrawingView) {
                 return textStickersParentView.getmBrushDrawingView() != null && textStickersParentView.getmBrushDrawingView().undo();
             } else {
-                addedViews.remove(addedViews.size() - 1);
+                addedViews.get(viewHolderPostion).remove(addedViews.get(viewHolderPostion).size() - 1);
                 textStickersParentView.removeView(removeView);
                 redoViews.add(removeView);
                 onPaintChanged.setValue(addedViews.size());
             }
         }
-        return addedViews.size() != 0;
+        return addedViews.get(viewHolderPostion).size() != 0;
     }
 
 
@@ -1195,19 +1136,16 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             @Override
             public void onPageSelected(int position) {
                 viewHolderPostion = position;
-//                if (itemGalleryList.get(position).isSelected) {
-//                    animateCheckBox.setChecked(false);
-//                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-//                } else {
-//                    animateCheckBox.setChecked(true);
-//                    animateCheckBox.setUnCheckColor(G.context.getResources().getColor(R.color.setting_items_value_color));
-//                }
-
+                if (addedViews.get(viewHolderPostion).isEmpty()) {
+                    revertTextView.setVisibility(View.GONE);
+                } else {
+                    revertTextView.setVisibility(VISIBLE);
+                }
                 if (textImageList.containsKey(itemGalleryList.get(position).path)) {
                     captionEditText.setText(EmojiManager.getInstance().replaceEmoji(textImageList.get(itemGalleryList.get(position).path).getText(), captionEditText.getPaint().getFontMetricsInt()));
-//                    if (!textImageList.get(itemGalleryList.get(position).path).getText().isEmpty()){
-//                        captionEditText.setText(textImageList.get(itemGalleryList.get(position).path).getText());
-//                    }
+                    if (!textImageList.get(itemGalleryList.get(position).path).getText().isEmpty()) {
+                        captionEditText.setText(textImageList.get(itemGalleryList.get(position).path).getText());
+                    }
                 } else {
                     captionEditText.setText("");
                 }
@@ -1284,7 +1222,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 emojiPadding = currentHeight;
                 rootView.requestLayout();
                 changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                bottomLayoutPanel.setVisibility(View.GONE);
             }
         } else {
             cancelCropLayout.setVisibility(VISIBLE);

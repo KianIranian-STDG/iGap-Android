@@ -10,10 +10,10 @@ buildscript {
     dependencies {
 
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath 'io.realm:realm-gradle-plugin:6.0.2'
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.gms:google-services:4.3.3'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.1.1'
         //  classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.3'
@@ -28,13 +28,8 @@ allprojects {
         maven { url "https://jitpack.io" }
         google()
         jcenter()
+        mavenCentral()
         maven { url "https://maven.google.com" }
-        maven {
-            url 'https://dl.bintray.com/metrixorg/maven'
-        }
-        maven { url 'https://dl.bintray.com/tapsellorg/maven' }
-        maven { url  "https://adcolony.bintray.com/AdColony" }
-        maven { url "https://chartboostmobile.bintray.com/Chartboost" }
     }
 }
 
@@ -43,8 +38,8 @@ ext {
 }
 
 project.ext {
-    protoMainVersion = "protoMain37"
-    protoBetaVersion = "protoBeta37"
+    protoMainVersion = "protoMain39"
+    protoBetaVersion = "protoBeta39"
 }
 
 task clean(type: Delete) {

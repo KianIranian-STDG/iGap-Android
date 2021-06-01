@@ -11,12 +11,19 @@ public class GalleryItemModel implements Serializable {
 
     private long id;
     private String address;
+    private String mediaType;
 
     public GalleryItemModel() {
 
     }
 
+    public String getMediaType() {
+        return mediaType;
+    }
 
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
 
     public long getId() {
         return id;
