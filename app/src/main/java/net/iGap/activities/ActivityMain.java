@@ -42,6 +42,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -408,7 +409,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             AutoDarkModeSetter.setStartingTheme();
         }
         super.onCreate(savedInstanceState);
@@ -1224,10 +1225,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          * check changing ui mode system
          */
         checkSystemUiModeChange(newConfig);
+        AutoDarkModeSetter.setStartingTheme();
+        applyTheme();
 
         G.rotationState = newConfig.orientation;
+    }
 
-        recreate();
+    private void applyTheme() {
+        getTheme().applyStyle(new Theme().getTheme(this), true);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment frg;
+        frg = fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
     }
 
     private void checkSystemUiModeChange(Configuration newConfig) {
@@ -1237,7 +1249,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if(newConfig.uiMode == 33){  //33 = dark ui mode system number
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 33).apply();
         }
-        recreate();
+//        recreate();
     }
 
     private void setViewConfigurationChanged() {
@@ -2073,5 +2085,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ((TabletEmptyChatFragment) f).getChatBackground();
             }
         }
+    }
+
+    private void setThemeSetting() {
+        this.setTheme(new Theme().getTheme(this));
     }
 }

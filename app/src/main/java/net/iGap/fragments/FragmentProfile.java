@@ -84,7 +84,7 @@ public class FragmentProfile extends BaseFragment {
         /**
          * check that if android version is less than 10, auto dark mode button be Gone
          */
-        if(Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.P){
             binding.fupDarkModeGroup.setVisibility(View.GONE);
         }
 
