@@ -109,7 +109,7 @@ public class FragmentShowAvatars extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_show_image, container, false);
+        return inflater.inflate(R.layout.fragment_show_content, container, false);
     }
 
     @Override
@@ -557,9 +557,8 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-
             LayoutInflater inflater = LayoutInflater.from(container.getContext());
-            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
+            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_or_video_sub_layout, container, false);
 
             final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
             zoomableImageView.setZoomable(false);
@@ -653,6 +652,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         private void loadImage(PhotoView img, String path) {
             G.imageLoader.displayImage(AndroidUtils.suitablePath(path), img);
+            img.setVisibility(View.VISIBLE);
         }
 
         private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
@@ -680,7 +680,6 @@ public class FragmentShowAvatars extends BaseFragment {
 
                 @Override
                 public void OnError(String token) {
-
                     G.currentActivity.runOnUiThread(() -> {
                         progress.withProgress(0);
                         progress.withDrawable(R.drawable.ic_download, true);

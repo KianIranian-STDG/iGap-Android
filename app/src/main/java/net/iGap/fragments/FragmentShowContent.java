@@ -78,7 +78,7 @@ import java.util.List;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class FragmentShowImage extends Fragment {
+public class FragmentShowContent extends Fragment {
     private static final String TAG = "FragmentShowImage";
     private static final ArrayList<String> downloadedList = new ArrayList<>();
     public static FocusAudioListener focusAudioListener;
@@ -103,8 +103,8 @@ public class FragmentShowImage extends Fragment {
     private SimpleExoPlayer player;
     private VerticalSwipeBackLayout mVerticalSwipeBackLayout;
 
-    public static FragmentShowImage newInstance() {
-        return new FragmentShowImage();
+    public static FragmentShowContent newInstance() {
+        return new FragmentShowContent();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class FragmentShowImage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.activity_show_image, container, false);
+        View view =  inflater.inflate(R.layout.fragment_show_content, container, false);
         View fragmentView = mVerticalSwipeBackLayout.setFragment(this, view);
         startingAnimation();
         return fragmentView;
@@ -481,7 +481,7 @@ public class FragmentShowImage extends Fragment {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_or_video_sub_layout, container, false);
             final TextureView mTextureView = layout.findViewById(R.id.textureView);
             final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
             final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);

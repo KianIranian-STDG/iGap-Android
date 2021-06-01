@@ -33,12 +33,12 @@
             app:rv_ripplePadding="5dp">
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/myIconTextViewStyle"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/back_icon"
-                style="@style/myIconTextViewStyle"
                 android:textColor="@android:color/white" />
         </net.iGap.libs.rippleeffect.RippleView>
 
@@ -48,10 +48,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center|left"
-            android:text="2 of 10"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/dp18" />
+            android:textSize="18sp"
+            tools:text="2 of 10" />
 
         <net.iGap.libs.rippleeffect.RippleView
             android:id="@+id/asi_ripple_menu"
@@ -64,12 +64,12 @@
             app:rv_ripplePadding="5dp">
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/myIconTextViewStyle"
                 android:layout_width="@dimen/dp52"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
                 android:text="@string/more_icon"
-                style="@style/myIconTextViewStyle"
                 android:textColor="@android:color/white" />
         </net.iGap.libs.rippleeffect.RippleView>
 
@@ -82,9 +82,9 @@
         android:layout_alignParentBottom="true"
         android:background="#55000000"
         android:layoutDirection="ltr"
-        android:paddingBottom="@dimen/dp4"
         android:paddingLeft="@dimen/dp32"
-        android:paddingRight="@dimen/dp32">
+        android:paddingRight="@dimen/dp32"
+        android:paddingBottom="@dimen/dp4">
 
         <TextView
             android:id="@+id/asi_txt_image_desc"
@@ -96,51 +96,51 @@
             android:paddingRight="0dp"
             android:textColor="@android:color/white"
             android:textSize="@dimen/standardTextSize"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/asi_btn_share"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0" />
 
         <TextView
             android:id="@+id/asi_txt_image_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="name"
             android:gravity="left"
             android:textColor="@android:color/white"
             android:textSize="@dimen/standardTextSize"
             android:visibility="visible"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_desc"
-            app:layout_constraintHorizontal_bias="0" />
+            tools:text="name" />
 
         <TextView
             android:id="@+id/asi_txt_image_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="time"
             android:gravity="left"
             android:textColor="@android:color/white"
             android:textSize="@dimen/standardTextSize"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_name"
-            app:layout_constraintHorizontal_bias="0" />
+            tools:text="time" />
 
         <TextView
             android:id="@+id/asi_txt_image_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="date"
             android:gravity="left"
             android:textColor="@android:color/white"
             android:textSize="@dimen/standardTextSize"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/asi_btn_share"
             app:layout_constraintTop_toBottomOf="@id/asi_txt_image_time"
-            app:layout_constraintHorizontal_bias="0" />
+            tools:text="date" />
 
         <TextView
             android:id="@+id/asi_btn_share"
