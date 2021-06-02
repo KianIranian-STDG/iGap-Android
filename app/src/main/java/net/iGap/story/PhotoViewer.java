@@ -276,9 +276,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         layoutCaption = new LinearLayout(context);
         layoutCaption.setOrientation(LinearLayout.HORIZONTAL);
-        layoutCaption.setMinimumHeight(60);
+        layoutCaption.setMinimumHeight(48);
         layoutCaption.setPadding(4, 0, 4, 0);
-        bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+        bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, 60, Gravity.CENTER));
 
         keyboardEmoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         keyboardEmoji.setGravity(Gravity.CENTER);
@@ -286,7 +286,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         keyboardEmoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
         keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
         keyboardEmoji.setTextSize(26);
-        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER,5,0,0,0));
+        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER, 5, 0, 0, 0));
 
         captionEditText = new EventEditText(context);
         captionEditText.setGravity(Gravity.BOTTOM);
@@ -316,7 +316,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         pickerViewSendButton = new ImageView(context);
         pickerViewSendButton.setScaleType(ImageView.ScaleType.CENTER);
         pickerViewSendButton.setImageResource(R.drawable.attach_send);
-        layoutCaption.addView(pickerViewSendButton, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 8, 0));
+        layoutCaption.addView(pickerViewSendButton, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
         sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         sendTextView.setGravity(Gravity.CENTER);
@@ -866,17 +866,28 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 }
                 itemGalleryList.get(position).path = finalPath;
 
-                Palette.generateAsync(BitmapFactory.decodeFile(finalPath), new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(@Nullable Palette palette) {
-                        GradientDrawable gd = new GradientDrawable(
-                                GradientDrawable.Orientation.TOP_BOTTOM,
-                                new int[]{
-                                        palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
 
-                        zoomLayout.setBackground(gd);
-                    }
-                });
+                if (position == 0) {
+                    Palette palette = Palette.from(BitmapFactory.decodeFile(finalPath)).generate();
+                    GradientDrawable gd = new GradientDrawable(
+                            GradientDrawable.Orientation.TOP_BOTTOM,
+                            new int[]{
+                                    palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
+
+                    zoomLayout.setBackground(gd);
+                } else {
+                    Palette.from(BitmapFactory.decodeFile(finalPath)).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(@Nullable Palette palette) {
+                            GradientDrawable gd = new GradientDrawable(
+                                    GradientDrawable.Orientation.TOP_BOTTOM,
+                                    new int[]{
+                                            palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
+
+                            zoomLayout.setBackground(gd);
+                        }
+                    });
+                }
 
 
                 textStickersParentView.setPaintMode(false, finalPath);

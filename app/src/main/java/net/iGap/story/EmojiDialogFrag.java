@@ -53,19 +53,13 @@ public class EmojiDialogFrag extends BottomSheetDialogFragment {
         }
     };
 
-    @SuppressLint("RestrictedApi")
+    @SuppressLint({"RestrictedApi", "ResourceType"})
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         rootView = new FrameLayout(getContext());
-        rootView.setBackgroundColor(Color.TRANSPARENT);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5);
-        rvEmoji = new RecyclerView(getContext());
-        rvEmoji.setLayoutManager(gridLayoutManager);
-        rootView.addView(rvEmoji, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 8, 8, 8, 8));
-
-
+        rootView.setBackgroundColor(Color.parseColor("#00000000"));
+        rootView.setBackgroundResource(getResources().getColor(android.R.color.transparent));
         dialog.setContentView(rootView);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) rootView.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = params.getBehavior();
@@ -74,6 +68,11 @@ public class EmojiDialogFrag extends BottomSheetDialogFragment {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
         ((View) rootView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5);
+        rvEmoji = new RecyclerView(getContext());
+        rvEmoji.setLayoutManager(gridLayoutManager);
+        rootView.addView(rvEmoji, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 8, 8, 8, 8));
+
 
         EmojiAdapter emojiAdapter = new EmojiAdapter();
         rvEmoji.setAdapter(emojiAdapter);

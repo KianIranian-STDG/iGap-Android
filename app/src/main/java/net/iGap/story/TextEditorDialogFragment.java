@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ public class TextEditorDialogFragment extends DialogFragment {
     private boolean firstTime = false;
     private static final String EXTRA_INPUT_TEXT = "extra_input_text";
     private static final String EXTRA_COLOR_CODE = "extra_color_code";
+    private int edtiTextSize=40;
 
     public static TextEditorDialogFragment newInstance(FragmentActivity appCompatActivity) {
         Bundle args = new Bundle();
@@ -92,7 +94,7 @@ public class TextEditorDialogFragment extends DialogFragment {
         addTextEditTExt.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         addTextEditTExt.setTextColor(getArguments() != null ? colorCode = getArguments().getInt(EXTRA_COLOR_CODE, Color.WHITE) : Color.WHITE);
         addTextEditTExt.setText(getArguments() != null ? getArguments().getString(EXTRA_INPUT_TEXT, "") : "");
-        addTextEditTExt.setTextSize(40);
+        addTextEditTExt.setTextSize(edtiTextSize);
         addTextEditTExt.setSingleLine(false);
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         addTextEditTExt.setBackground(null);
@@ -140,6 +142,9 @@ public class TextEditorDialogFragment extends DialogFragment {
                 if (!firstTime) {
                     addTextEditTExt.setTextColor(-855052);
                     firstTime = true;
+                }
+                if (charSequence.length() >= 17 && charSequence.length() <= 29) {
+                    addTextEditTExt.setTextSize(edtiTextSize--);
                 }
             }
 
