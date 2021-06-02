@@ -323,6 +323,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
+import static net.iGap.helper.HelperPermission.getStoragePermision;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -2060,7 +2061,7 @@ public class FragmentChat extends BaseFragment
         initAppbarSelected();
         getDraft();
         getUserInfo();
-        insertShearedData();
+        insertSharedData();
 
         if (structIGSticker != null) {
             G.handler.postDelayed(() -> sendStickerAsMessage(structIGSticker), 1000);
@@ -4987,7 +4988,7 @@ public class FragmentChat extends BaseFragment
     private void getStoragePermission(final String filePath, final String fileName) {
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         copyFileToDownload(filePath, fileName);
@@ -6490,8 +6491,7 @@ public class FragmentChat extends BaseFragment
      * *************************** sheared data ***************************
      */
 
-
-    private void insertShearedData() {
+    private void insertSharedData() {
         /**
          * run this method with delay , because client get local message with delay
          * for show messages with async changeState and before run getLocalMessage this shared
@@ -6503,68 +6503,91 @@ public class FragmentChat extends BaseFragment
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
+                    int permissionReadStorage = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
 
-                    boolean isOpenEditImageFragment = false;
-                    boolean isAllowToClearChatEditText = true;
-                    for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
-
-                        edtChat.setText(EmojiManager.getInstance().replaceEmoji(sharedData.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
-
-                        switch (sharedData.fileType) {
-                            case message:
-                                imvSendButton.performClick();
-                                break;
-                            case video:
-                                if (HelperGetDataFromOtherApp.sharedList.size() == 1) {
-                                    mainVideoPath = sharedData.address;
-                                    if (mainVideoPath == null) return;
-
-                                    if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
-                                        Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
-                                        intent.putExtra("PATH", mainVideoPath);
-                                        startActivityForResult(intent, AttachFile.request_code_trim_video);
-                                        isAllowToClearChatEditText = false;
-                                    } else {
-                                        sendMessage(request_code_VIDEO_CAPTURED, mainVideoPath);
-                                    }
-
-                                } else {
-                                    sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
+                    if (HelperGetDataFromOtherApp.sharedList.get(0).fileType != HelperGetDataFromOtherApp.FileType.message
+                            && permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
+                        try {
+                            getStoragePermision(getActivity(), new OnGetPermission() {
+                                @Override
+                                public void Allow() throws IOException {
+                                    sendSharedData(HelperGetDataFromOtherApp.sharedList);
                                 }
-                                break;
-                            case file:
-                                sendMessage(AttachFile.request_code_open_document, sharedData.address);
-                                break;
-                            case audio:
-                                sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
-                                break;
-                            case image:
-                                //maybe share data was more than one ... add to list then after for open edit image
-                                FragmentEditImage.insertItemList(sharedData.address, sharedData.message, false);
-                                isOpenEditImageFragment = true;
-                                //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
-                                break;
+
+                                @Override
+                                public void deny() {
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        if (isAllowToClearChatEditText) edtChat.setText("");
+                    } else {
+                        sendSharedData(HelperGetDataFromOtherApp.sharedList);
                     }
-
-                    if (isOpenEditImageFragment && getActivity() != null) {
-
-                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
-                        fragmentEditImage.setIsReOpenChatAttachment(false);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                    }
-
-                    HelperGetDataFromOtherApp.sharedList.clear();
-                    //update main room list ui after share done
-                    if (getActivity() instanceof ActivityMain) {
-                        ((ActivityMain) getActivity()).checkHasSharedData(false);
-                    }
-
                 }
             }
         }, 300);
+    }
+
+    private void sendSharedData(ArrayList<HelperGetDataFromOtherApp.SharedData> sharedList) {
+        boolean isOpenEditImageFragment = false;
+        boolean isAllowToClearChatEditText = true;
+
+        for (HelperGetDataFromOtherApp.SharedData sharedData : sharedList) {
+
+            edtChat.setText(EmojiManager.getInstance().replaceEmoji(sharedData.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
+
+            switch (sharedData.fileType) {
+                case message:
+                    imvSendButton.performClick();
+                    break;
+                case video:
+                    if (sharedList.size() == 1) {
+                        mainVideoPath = sharedData.address;
+                        if (mainVideoPath == null) return;
+
+                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                            Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
+                            intent.putExtra("PATH", mainVideoPath);
+                            startActivityForResult(intent, AttachFile.request_code_trim_video);
+                            isAllowToClearChatEditText = false;
+                        } else {
+                            sendMessage(request_code_VIDEO_CAPTURED, mainVideoPath);
+                        }
+
+                    } else {
+                        sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
+                    }
+                    break;
+                case file:
+                    sendMessage(AttachFile.request_code_open_document, sharedData.address);
+                    break;
+                case audio:
+                    sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
+                    break;
+                case image:
+                    //maybe share data was more than one ... add to list then after for open edit image
+                    FragmentEditImage.insertItemList(sharedData.address, sharedData.message, false);
+                    isOpenEditImageFragment = true;
+                    break;
+            }
+
+            if (isAllowToClearChatEditText) {
+                edtChat.setText("");
+            }
+        }
+
+        if (isOpenEditImageFragment && getActivity() != null) {
+            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
+            fragmentEditImage.setIsReOpenChatAttachment(false);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+        }
+
+        HelperGetDataFromOtherApp.sharedList.clear();
+        //update main room list ui after share done
+        if (getActivity() instanceof ActivityMain) {
+            ((ActivityMain) getActivity()).checkHasSharedData(false);
+        }
     }
 
     private void shearedLinkDataToOtherProgram(MessageObject messageObject) {
@@ -9131,7 +9154,7 @@ public class FragmentChat extends BaseFragment
                         exportChat();
                     } else {
                         try {
-                            HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
                                     exportChat();
