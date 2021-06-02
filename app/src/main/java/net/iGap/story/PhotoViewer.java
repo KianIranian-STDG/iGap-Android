@@ -276,7 +276,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         layoutCaption = new LinearLayout(context);
         layoutCaption.setOrientation(LinearLayout.HORIZONTAL);
-        layoutCaption.setMinimumHeight(48);
+        layoutCaption.setMinimumHeight(60);
         layoutCaption.setPadding(4, 0, 4, 0);
         bottomLayoutPanel.addView(layoutCaption, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
@@ -286,7 +286,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         keyboardEmoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
         keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
         keyboardEmoji.setTextSize(26);
-        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER));
+        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER,5,0,0,0));
 
         captionEditText = new EventEditText(context);
         captionEditText.setGravity(Gravity.BOTTOM);
@@ -442,7 +442,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             public void onClick(View view) {
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
                 boolean revert = undo();
-                revertTextView.setVisibility(revert ? VISIBLE : View.GONE);
+                revertTextView.setVisibility(addedViews.get(viewHolderPostion).size() > 0 ? View.VISIBLE : View.GONE);
             }
         });
         rippleView.setOnClickListener(new View.OnClickListener() {
@@ -737,9 +737,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     @Override
     public void onViewAdd(BrushDrawingView brushDrawingView) {
-        if (redoViews.size() > 0) {
-            redoViews.remove(redoViews.size() - 1);
-        }
         if (addedViews.get(viewHolderPostion) == null) {
             List<View> views = new ArrayList<>();
             views.add(brushDrawingView);
@@ -754,7 +751,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     @Override
     public void onViewRemoved(BrushDrawingView brushDrawingView) {
-        if (addedViews.size() > 0) {
+        if (addedViews.get(viewHolderPostion).size() > 0) {
             View removeView = addedViews.get(viewHolderPostion).remove(addedViews.get(viewHolderPostion).size() - 1);
             if (!(removeView instanceof BrushDrawingView)) {
                 textStickersParentView.removeView(removeView);
@@ -894,6 +891,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 addedViews.put(position, views);
                 return zoomLayout;
             } else {
+                container.removeView(viewHolders.get(position));
+                container.addView(viewHolders.get(position), 0);
                 return viewHolders.get(position);
             }
 
@@ -1098,7 +1097,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     public boolean undo() {
-        if (addedViews.size() > 0) {
+        if (addedViews.get(viewHolderPostion).size() > 0) {
             View removeView = addedViews.get(viewHolderPostion).get(addedViews.get(viewHolderPostion).size() - 1);
             if (removeView instanceof BrushDrawingView) {
                 return textStickersParentView.getmBrushDrawingView() != null && textStickersParentView.getmBrushDrawingView().undo();

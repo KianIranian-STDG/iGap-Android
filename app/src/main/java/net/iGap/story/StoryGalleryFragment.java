@@ -110,7 +110,7 @@ public class StoryGalleryFragment extends BaseFragment {
 
         toolbarView = new FrameLayout(context);
 
-        toolbarView.setVisibility(View.GONE);
+
         toolbarView.setBackgroundResource(new Theme().getToolbarDrawableSharpe(getContext()));
 
         backIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
@@ -269,7 +269,6 @@ public class StoryGalleryFragment extends BaseFragment {
 
 
         onRVScrolled.changeItem();
-        toolbarView.setVisibility(View.GONE);
         adapterGalleryPhoto.setMultiSelectState(false);
 
     }
