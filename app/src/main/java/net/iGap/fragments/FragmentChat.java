@@ -4751,7 +4751,7 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isFileExistInLocalStorage(messageObject)) {
-            if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE) {
+            if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE || roomMessageType == GIF_TEXT_VALUE) {
                 items.add(R.string.save_to_gallery);
             } else if (roomMessageType == AUDIO_VALUE || roomMessageType == VOICE_VALUE) {
                 items.add(R.string.save_to_Music);
@@ -5091,7 +5091,7 @@ public class FragmentChat extends BaseFragment
         if (new File(filepath).exists()) {
             if (messageType == VIDEO_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-            } else if (messageType == GIF_VALUE) {
+            } else if (messageType == GIF_VALUE || messageType == GIF_TEXT_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
             } else if (messageType == IMAGE_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
