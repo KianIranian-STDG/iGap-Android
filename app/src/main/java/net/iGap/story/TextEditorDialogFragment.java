@@ -19,6 +19,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -34,6 +35,7 @@ import net.iGap.helper.LayoutCreator;
 public class TextEditorDialogFragment extends DialogFragment {
     public static final String TAG = TextEditorDialogFragment.class.getSimpleName();
     private FrameLayout rootView;
+    private LinearLayout editTextRootView;
     private TextView doneTextView;
     private EditText addTextEditTExt;
     private int colorCode;
@@ -43,7 +45,7 @@ public class TextEditorDialogFragment extends DialogFragment {
     private boolean firstTime = false;
     private static final String EXTRA_INPUT_TEXT = "extra_input_text";
     private static final String EXTRA_COLOR_CODE = "extra_color_code";
-    private int edtiTextSize=40;
+    private int editTextSize = 40;
 
     public static TextEditorDialogFragment newInstance(FragmentActivity appCompatActivity) {
         Bundle args = new Bundle();
@@ -89,16 +91,25 @@ public class TextEditorDialogFragment extends DialogFragment {
         rootView.setBackgroundColor(Color.BLACK);
         rootView.setBackgroundColor(Color.TRANSPARENT);
 
+        editTextRootView = new LinearLayout(getContext());
+        editTextRootView.setOrientation(LinearLayout.HORIZONTAL);
+        rootView.addView(editTextRootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
+
+
+        verticalSlideColorPicker = new VerticalSlideColorPicker(getContext(), null);
+        editTextRootView.addView(verticalSlideColorPicker, LayoutCreator.createLinear(13, 300, Gravity.TOP | Gravity.RIGHT, 0, 60, 20, 0));
+
         addTextEditTExt = new EditText(getContext());
         addTextEditTExt.setGravity(Gravity.CENTER);
         addTextEditTExt.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         addTextEditTExt.setTextColor(getArguments() != null ? colorCode = getArguments().getInt(EXTRA_COLOR_CODE, Color.WHITE) : Color.WHITE);
         addTextEditTExt.setText(getArguments() != null ? getArguments().getString(EXTRA_INPUT_TEXT, "") : "");
-        addTextEditTExt.setTextSize(edtiTextSize);
+        addTextEditTExt.setTextSize(editTextSize);
         addTextEditTExt.setSingleLine(false);
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         addTextEditTExt.setBackground(null);
-        rootView.addView(addTextEditTExt, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
+        editTextRootView.addView(addTextEditTExt, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F, Gravity.CENTER, 5, 0, 5, 0));
+
 
         doneTextView = new TextView(getContext());
         doneTextView.setBackground(getResources().getDrawable(R.drawable.background_border));
@@ -108,10 +119,6 @@ public class TextEditorDialogFragment extends DialogFragment {
         doneTextView.setTextColor(Color.WHITE);
         doneTextView.setTextSize(16);
         rootView.addView(doneTextView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 20, 20, 20, 20));
-
-
-        verticalSlideColorPicker = new VerticalSlideColorPicker(getContext(), null);
-        rootView.addView(verticalSlideColorPicker, LayoutCreator.createFrame(13, 300, Gravity.TOP | Gravity.RIGHT, 0, 60, 20, 0));
 
 
         return rootView;
@@ -144,7 +151,7 @@ public class TextEditorDialogFragment extends DialogFragment {
                     firstTime = true;
                 }
                 if (charSequence.length() >= 17 && charSequence.length() <= 29) {
-                    addTextEditTExt.setTextSize(edtiTextSize--);
+                    addTextEditTExt.setTextSize(editTextSize--);
                 }
             }
 
