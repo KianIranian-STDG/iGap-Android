@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -144,6 +145,8 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private float floatingButtonHideProgress;
     private float floatingButtonTranslation;
     private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
+    private int firstVisibleItemPosition;
+    private int firstVisibleItemPositionOffset;
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -159,7 +162,6 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
 
-
     @Override
     public View createView(Context context) {
 
@@ -170,11 +172,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         fragmentView = new FrameLayout(context);
         FrameLayout layout = (FrameLayout) fragmentView;
 
-        recyclerView = new RecyclerView(context);
-        recyclerView.setItemAnimator(null);
-        recyclerView.setItemViewCacheSize(0);
-        recyclerView.setLayoutManager(layoutManager = new LinearLayoutManager(context));
-        recyclerView.setAdapter(roomListAdapter = new RoomListAdapter(getRoomController().getLiveRoomList(), avatarHandler, selectedRoom));
+        initRecyclerView(context);
         layout.addView(recyclerView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean scrollUpdated;
@@ -191,6 +189,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                View view = layoutManager.getChildAt(0);
+                if (firstVisibleItemPosition > 0 && view != null) {
+                    firstVisibleItemPositionOffset = view.getTop();
+                }
+
                 if (!ClientGetRoomListResponse.roomListFetched) {
                     if (mOffset > 0) {
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
@@ -285,6 +291,16 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         layout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 39, Gravity.TOP | Gravity.LEFT, 0, -40, 0, 0));
 
         return fragmentView;
+    }
+
+    private void initRecyclerView(Context context) {
+        recyclerView = new RecyclerView(context);
+        recyclerView.setItemAnimator(null);
+        recyclerView.setItemViewCacheSize(0);
+        recyclerView.setLayoutManager(layoutManager = new LinearLayoutManager(context));
+        recyclerView.setAdapter(roomListAdapter = new RoomListAdapter(getRoomController().getLiveRoomList(), avatarHandler, selectedRoom));
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        layoutManager.scrollToPositionWithOffset(firstVisibleItemPosition, firstVisibleItemPositionOffset);
     }
 
     private void onFloatActionClick() {
