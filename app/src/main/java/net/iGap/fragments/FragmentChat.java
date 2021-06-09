@@ -2959,6 +2959,15 @@ public class FragmentChat extends BaseFragment
         });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    G.imageLoader.resume();
+                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    G.imageLoader.pause();
+                }
+            }
+
+            @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int visibleItemCount = recyclerView.getLayoutManager().getChildCount();

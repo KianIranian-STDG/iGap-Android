@@ -42,7 +42,7 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
         super(account);
         canStartDownload = getRequestManager().isUserLogin();
 
-        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.USER_LOGIN_CHANGED, this));
+        G.runOnUiThread(() -> getEventManager().addObserver(EventManager.USER_LOGIN_CHANGED, this::receivedEvent));
     }
 
     public void download(@NonNull DownloadObject message, @NonNull ProtoFileDownload.FileDownload.Selector selector, int priority, @Nullable Observer<Resource<HttpRequest.Progress>> observer) {

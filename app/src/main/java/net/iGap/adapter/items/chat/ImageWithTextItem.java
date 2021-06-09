@@ -89,8 +89,8 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 //            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
-//        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-        Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
+        G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+//        Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
     }
 
     @Override
