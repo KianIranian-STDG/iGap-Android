@@ -7,24 +7,11 @@
     android:background="@android:color/black"
     android:layoutDirection="ltr">
 
-    <androidx.viewpager2.widget.ViewPager2
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/asi_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false" />
-
-    <ImageButton
-        android:id="@+id/imgPlay"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="fitXY"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/selector_play_pause_round" />
 
     <LinearLayout
         android:id="@+id/toolbarShowImage"
@@ -87,7 +74,5 @@
                 android:text="@string/more_icon"
                 android:textColor="@android:color/white" />
         </net.iGap.libs.rippleeffect.RippleView>
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
