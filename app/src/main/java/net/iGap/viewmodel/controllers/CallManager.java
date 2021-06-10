@@ -175,7 +175,7 @@ public class CallManager {
             }
         }
         if (CallService.getInstance() != null) {
-            CallService.getInstance().playSoundWithRes(R.raw.igap_signaling, true);
+            CallService.getInstance().playSoundWithRes(R.raw.igap_ringing, true);
         }
         setupCallerInfo(callPeerId);
 
@@ -221,7 +221,7 @@ public class CallManager {
     public void onRing() {
         G.handler.post(() -> changeState(CallState.RINGING));
         if (CallService.getInstance() != null) {
-            CallService.getInstance().playSoundWithRes(R.raw.igap_ringing, true);
+            CallService.getInstance().playSoundWithRes(R.raw.tone, true);
         }
     }
 

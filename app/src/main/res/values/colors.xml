@@ -68,6 +68,8 @@
     <color name="border_editText">#757575</color>
     <color name="black_register">#1a1a1a</color>
     <color name="whit_background">#ffffff</color>
+    <color name="voice_icon_color">#219E27</color>
+    <color name="video_icon_color">#17909F</color>
 
 
     <!--REGISTER PAGE-->

@@ -76,6 +76,8 @@
 
         <item name="rootBackgroundColor">@color/white</item>
         <item name="iGapTitleTextColor">@color/black_register</item>
+        <item name="iGapVoiceCallIconColor">@color/voice_icon_color</item>
+        <item name="iGapVideoCallIconColor">@color/video_icon_color</item>
         <item name="iGapSubtitleTextColor">@color/gray_5c</item>
         <item name="iGapPrimaryTextColor">@color/white</item>
         <item name="iGapDividerLine">@color/background_editText</item>
