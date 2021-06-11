@@ -21,7 +21,7 @@ public class VerticalSwipeBackLayout extends FrameLayout {
     private ViewDragHelper viewDragHelper;
     private Fragment fragment;
     private View contentView;
-    private final float VIEW_RELEASE_THRESHOLD = 0.6f;
+    private final float VIEW_RELEASE_THRESHOLD = 0.3f;
     float dragPercent;
 
     public VerticalSwipeBackLayout(@NonNull Context context) {
@@ -41,6 +41,7 @@ public class VerticalSwipeBackLayout extends FrameLayout {
 
     private void init() {
         viewDragHelper = ViewDragHelper.create(this, new DragHelper());
+        viewDragHelper.setMinVelocity(4000);
     }
 
     public View setFragment(Fragment fragment, View view) {
@@ -118,7 +119,7 @@ public class VerticalSwipeBackLayout extends FrameLayout {
 
             }
             invalidate();
-            if (dragPercent > 0.7) {
+            if (dragPercent > 0.8) {
                 if (fragment != null) {
                     fragment.getFragmentManager().popBackStackImmediate();
                 }

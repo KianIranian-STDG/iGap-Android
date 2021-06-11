@@ -12,30 +12,31 @@ package net.iGap.fragments;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.SparseArrayCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -61,6 +62,7 @@ import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmConstants;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
@@ -68,9 +70,8 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,30 +79,20 @@ import java.util.List;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-public class FragmentShowContent extends Fragment {
+public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private static final String TAG = "FragmentShowImage";
-    private static final ArrayList<String> downloadedList = new ArrayList<>();
-    public static FocusAudioListener focusAudioListener;
-    public final String ROOM_ID = "roomId";
-    public final String TYPE = "type";
-    public View appBarLayout;
-    private TextView txtImageNumber;
-    private TextView txtImageName;
-    private TextView txtImageDate;
-    private TextView txtImageTime;
-    private TextView txtImageDesc;
-    private LinearLayout toolbarShowImage;
-    private boolean isShowToolbar = true;
-    private ViewGroup ltImageName;
-    private ViewPager viewPager;
-    private boolean isFirstPlay = true;
+    private TextView contentNumberTv;
+    private ViewPager2 viewPager;
     private int selectedFile = 0;
-    private ArrayList<MessageObject> mFList = new ArrayList<>();
     private int lastOrientation = 0;
-    private ProtoGlobal.RoomMessageType messageType;
     private RealmRoom room;
-    private SimpleExoPlayer player;
     private VerticalSwipeBackLayout mVerticalSwipeBackLayout;
+    private SimpleExoPlayer exoPlayer;
+    private DefaultDataSourceFactory dataSourceFactory;
+    private SparseArrayCompat<WeakReference<PlayerView>> videos;
+    private ViewPager2.OnPageChangeCallback viewPagerListener;
+    private boolean initialViewPager = true;
+    private ImageButton imgPlay;
 
     public static FragmentShowContent newInstance() {
         return new FragmentShowContent();
@@ -111,12 +102,16 @@ public class FragmentShowContent extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mVerticalSwipeBackLayout = new VerticalSwipeBackLayout(getActivity());
+        exoPlayer = new SimpleExoPlayer.Builder(G.context).build();
+        dataSourceFactory = new DefaultDataSourceFactory(G.context);
+        videos = new SparseArrayCompat<>();
+        setPlayerListener();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_show_content, container, false);
+        View view = inflater.inflate(R.layout.fragment_show_content, container, false);
         View fragmentView = mVerticalSwipeBackLayout.setFragment(this, view);
         startingAnimation();
         return fragmentView;
@@ -135,8 +130,9 @@ public class FragmentShowContent extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getIntentData(this.getArguments())) {
-            initComponent(view);
+        ArrayList<MessageObject> messageObjects = getIntentData(this.getArguments());
+        if (messageObjects != null) {
+            initComponent(view, messageObjects);
         }
     }
 
@@ -148,221 +144,172 @@ public class FragmentShowContent extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        if (appBarLayout != null) {
-            appBarLayout.setVisibility(View.GONE);
-        }
-        super.onAttach(context);
+    private void setPlayerListener() {
+        exoPlayer.addListener(new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(int state) {
+                switch (state) {
+                    case Player.STATE_ENDED:
+                        exoPlayer.seekTo(0);
+                        exoPlayer.setPlayWhenReady(false);
+                        break;
+                    default:
+                        // nothing
+                }
+            }
+
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+               imgPlay.setActivated(isPlaying);
+            }
+        });
     }
 
-    private boolean getIntentData(Bundle bundle) {
+    private ArrayList<MessageObject> getIntentData(Bundle bundle) {
         if (getActivity() != null) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
-        if (bundle != null) { // get a list of image
-            Long mRoomId = bundle.getLong("RoomId");
-            Long selectedFileToken = bundle.getLong("SelectedImage");
-            if (bundle.getString("TYPE") != null) {
-                messageType = convertType(bundle.getString("TYPE"));
-            }
-            if (mRoomId == null) {
-                getFragmentManager().popBackStackImmediate();
-                return false;
-            }
-            Log.i(TAG, "getIntentData: before get list from database");
+        if (bundle != null) {
+            long mRoomId = bundle.getLong(RealmConstants.REALM_ROOM_ID, 0L);
+            long selectedFileToken = bundle.getLong(RealmConstants.REALM_SELECTED_IMAGE);
+            ArrayList<MessageObject> messageObjects = new ArrayList<>();
+
             RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
-                return RealmRoomMessage.findSorted(realm, mRoomId, "updateTime", Sort.ASCENDING);
+                return realm.where(RealmRoomMessage.class)
+                        .equalTo(RealmConstants.REALM_ROOM_ID, mRoomId)
+                        .in(RealmConstants.REALM_MESSAGE_TYPE, new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.IMAGE.toString()})
+                        .findAll()
+                        .sort(RealmConstants.REALM_UPDATE_TIME, Sort.ASCENDING);
             });
-            Log.i(TAG, "getIntentData: after get list from database size -> " + mRealmList.size());
+
             if (mRealmList.size() < 1) {
                 getFragmentManager().popBackStackImmediate();
-                return false;
+                return null;
             }
-            List<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.copyFromRealm(mRealmList);
-            });
-            //todo : remove for and handle it with query
-            for (RealmRoomMessage roomMessage : realmRoomMessages) {
-                Log.i(TAG, "--------------------------------------------------------");
-                if (RealmRoomMessage.isImageOrVideo(roomMessage, messageType)) {
-                    if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null) {
-                        Log.i(TAG, "start create");
-                        MessageObject messageObject = MessageObject.create(roomMessage);
-                        Log.i(TAG, "end create");
-                        mFList.add(messageObject);
-                    }
+
+            for (RealmRoomMessage roomMessage : mRealmList) {
+                messageObjects.add(MessageObject.create(roomMessage));
+            }
+
+            for (int i = messageObjects.size() - 1; i >= 0; i--) {
+                if (selectedFileToken == messageObjects.get(i).id) {
+                    selectedFile = i;
+                    break;
                 }
             }
-            if (selectedFileToken != null) {
-                for (int i = mFList.size() - 1; i >= 0; i--) {
-                    if (selectedFileToken == mFList.get(i).id) {
-                        selectedFile = i;
-                        break;
-                    }
-                }
-            }
-            return true;
+            return messageObjects;
         } else {
             if (G.fragmentActivity != null) {
                 getFragmentManager().popBackStackImmediate();
             }
-            return false;
+            return null;
         }
     }
 
-    private ProtoGlobal.RoomMessageType convertType(String type) {
-        if (type != null) {
-            if (type.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                return ProtoGlobal.RoomMessageType.VIDEO;
-            } else if (type.contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                return ProtoGlobal.RoomMessageType.IMAGE;
-            }
-        }
-        return null;
-    }
-
-    private void initComponent(View view) {
-        downloadedList.clear();
-        RippleView rippleBack = view.findViewById(R.id.asi_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+    private void initComponent(View view, ArrayList<MessageObject> messageObjects) {
+        RippleView rippleBackBtn = view.findViewById(R.id.asi_ripple_back);
+        rippleBackBtn.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                Log.wtf(this.getClass().getName(), "on back");
-                getFragmentManager().popBackStackImmediate();
+                G.fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
             }
         });
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
-        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage());
-        TextView btnShare = view.findViewById(R.id.asi_btn_share);
-        btnShare.setOnClickListener(v -> shareImage());
+        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage(messageObjects));
+
+        imgPlay = view.findViewById(R.id.imgPlay);
         viewPager = view.findViewById(R.id.asi_view_pager);
-        txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
-        ltImageName = view.findViewById(R.id.asi_layout_image_name);
-        txtImageName = view.findViewById(R.id.asi_txt_image_name);
-        txtImageDate = view.findViewById(R.id.asi_txt_image_date);
-        txtImageTime = view.findViewById(R.id.asi_txt_image_time);
-        txtImageDesc = view.findViewById(R.id.asi_txt_image_desc);
-        toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
+        contentNumberTv = view.findViewById(R.id.asi_txt_image_number);
+
         room = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo("id", mFList.get(selectedFile).roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", messageObjects.get(selectedFile).roomId).findFirst();
         });
-        initViewPager();
+
+        imgPlay.setOnClickListener(v -> {
+            if (exoPlayer.isPlaying()) {
+                exoPlayer.pause();
+            } else {
+                exoPlayer.setPlayWhenReady(true);
+            }
+        });
+
+        initViewPager(messageObjects);
     }
 
-    private void initViewPager() {
-        AdapterViewPager mAdapter = new AdapterViewPager(getContext());
+    private void initViewPager(ArrayList<MessageObject> messageObjects) {
+        ShowContentAdapter mAdapter = new ShowContentAdapter(this);
+        mAdapter.setMessageObjects(messageObjects);
+        setViewPagerListener(messageObjects, mAdapter);
         viewPager.setAdapter(mAdapter);
-        viewPager.setCurrentItem(selectedFile);
-        txtImageNumber.setText(MessageFormat.format("{0} {1} {2}", selectedFile + 1, G.fragmentActivity.getResources().getString(R.string.of), mFList.size()));
-        if (HelperCalander.isPersianUnicode) {
-            txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
-        }
-        if (selectedFile >= mFList.size()) {
-            return;
-        }
-        showImageInfo(mFList.get(selectedFile));
-        viewPager.setOnClickListener(view -> {
-        });
-        viewPager.setPageTransformer(false, (view, position) -> {
+        viewPager.setCurrentItem(selectedFile, false);
+        viewPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
 
-            final float normalizedPosition = Math.abs(Math.abs(position) - 1);
-            view.setScaleX(normalizedPosition / 2 + 0.5f);
-            view.setScaleY(normalizedPosition / 2 + 0.5f);
-        });
-    }
-
-    /**
-     * show image info, time , name , description
-     */
-    private void showImageInfo(MessageObject messageObject) {
-        if (messageObject == null || RealmUserInfo.getCurrentUserAuthorHash().equals("")) {
+        if (selectedFile >= messageObjects.size()) {
             return;
-        }
-        MessageObject realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(messageObject);
-        if (realmRoomMessageFinal != null && realmRoomMessageFinal.message != null && !realmRoomMessageFinal.message.isEmpty()) {
-            txtImageDesc.setText(EmojiManager.getInstance().replaceEmoji(realmRoomMessageFinal.message, txtImageDesc.getPaint().getFontMetricsInt()));
-            txtImageDesc.setVisibility(View.VISIBLE);
-        } else {
-            txtImageDesc.setVisibility(View.GONE);
-        }
-        RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-            return RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageFinal.userId);
-        });
-        if (realmRegisteredInfo != null) {
-            txtImageName.setText(realmRegisteredInfo.getDisplayName());
-        } else {
-            txtImageName.setText("");
-        }
-        if (realmRoomMessageFinal.authorHash != null && RealmUserInfo.getCurrentUserAuthorHash().equals(realmRoomMessageFinal.authorHash)) {
-            txtImageName.setText(R.string.you);
-        }
-        if (realmRoomMessageFinal.updateTime != 0) {
-            txtImageTime.setText(HelperCalander.getClocktime(realmRoomMessageFinal.updateTime, true));
-            txtImageDate.setText(HelperCalander.checkHijriAndReturnTime(realmRoomMessageFinal.updateTime / 1000));
-        }
-        if (HelperCalander.isPersianUnicode) {
-            txtImageName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageName.getText().toString()));
-            txtImageTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageTime.getText().toString()));
-            txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
         }
     }
 
-    public void popUpMenuShowImage() {
+    public void setViewPagerListener(ArrayList<MessageObject> messageObjects, ShowContentAdapter adapter) {
+        this.viewPagerListener = new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                selectedFile = position;
+                contentNumberTv.setText(MessageFormat.format("{0} {1} {2}", position + 1, G.fragmentActivity.getResources().getString(R.string.of), messageObjects.size()));
+
+                if (HelperCalander.isPersianUnicode) {
+                    contentNumberTv.setText(HelperCalander.convertToUnicodeFarsiNumber(contentNumberTv.getText().toString()));
+                }
+
+                if (exoPlayer != null) {
+                    exoPlayer.seekTo(0);
+                    exoPlayer.setPlayWhenReady(false);
+                }
+                imgPlay.setVisibility(View.GONE);
+
+                WeakReference<PlayerView> weakPlayerView = videos.get(position);
+                if (weakPlayerView != null) {
+                    String path = getFilePath(messageObjects.get(position));
+                    ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(path));
+                    exoPlayer.prepare(mediaSource);
+                    weakPlayerView.get().setPlayer(null);
+                    weakPlayerView.get().setPlayer(exoPlayer);
+                    weakPlayerView.get().hideController();
+                    exoPlayer.setPlayWhenReady(true);
+                }
+            }
+        };
+        viewPager.registerOnPageChangeCallback(viewPagerListener);
+    }
+
+    public void popUpMenuShowImage(ArrayList<MessageObject> messageObjects) {
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.save_to_gallery));
+        MessageObject messageObject = messageObjects.get(selectedFile);
+        ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             items.add(getString(R.string.share_video_file_2));
         } else {
             items.add(getString(R.string.share_image_2));
         }
         if (RoomObject.isRoomPublic(room)) {
-            if (MessageObject.canSharePublic(mFList.get(selectedFile))) {
+            if (MessageObject.canSharePublic(messageObjects.get(selectedFile))) {
                 items.add(getString(R.string.share_file_link));
             }
         }
         new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             if (items.get(position).equals(getString(R.string.save_to_gallery))) {
-                saveToGallery();
+                saveToGallery(messageObject);
             } else if (items.get(position).equals(getString(R.string.share_file_link))) {
-                shareMediaLink();
+                shareMediaLink(messageObject);
             } else {
-                shareImage();
+                shareContent(messageObject);
             }
         }).show();
     }
 
-    /**
-     * share Image and video
-     */
-    private void shareImage() {
-        MessageObject messageObject = null;
-        if (mFList.size() > viewPager.getCurrentItem())
-            messageObject = mFList.get(viewPager.getCurrentItem());
-        if (messageObject != null) {
-            messageObject = RealmRoomMessage.getFinalMessage(messageObject);
-            String path = getFilePath(viewPager.getCurrentItem());
-            File file = new File(path);
-            if (file.exists()) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                AppUtils.shareItem(intent, messageObject);
-                if (messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    intent.setType("video/*");
-                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));
-                } else {
-                    intent.setType("image/*");
-                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
-                }
-            } else {
-                HelperError.showSnackMessage(getString(R.string.file_not_download_yet), false);
-            }
-        }
-    }
 
-    private void shareMediaLink() {
-        MessageObject messageObject = null;
-        if (mFList.size() > viewPager.getCurrentItem())
-            messageObject = mFList.get(viewPager.getCurrentItem());
+    private void shareMediaLink(MessageObject messageObject) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         if (messageObject != null) {
@@ -371,15 +318,9 @@ public class FragmentShowContent extends Fragment {
         startActivity(Intent.createChooser(intent, G.context.getString(R.string.share_link_item_dialog)));
     }
 
-    /**
-     * share Image and video
-     */
-    private void saveToGallery() {
-        MessageObject messageObject = null;
-        if (mFList.size() > viewPager.getCurrentItem())
-            messageObject = mFList.get(viewPager.getCurrentItem());
+    private void saveToGallery(MessageObject messageObject) {
         if (messageObject != null) {
-            String path = getFilePath(viewPager.getCurrentItem());
+            String path = getFilePath(messageObject);
             int messageType;
             if (messageObject.forwardedMessage != null) {
                 messageType = messageObject.forwardedMessage.messageType;
@@ -397,13 +338,13 @@ public class FragmentShowContent extends Fragment {
         }
     }
 
-    public String getFilePath(int position) {
+    public String getFilePath(MessageObject messageObject) {
         String result = "";
-        AttachmentObject at = mFList.get(position).forwardedMessage != null ? mFList.get(position).forwardedMessage.attachment : mFList.get(position).attachment;
+        AttachmentObject at = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment : messageObject.attachment;
         if (at != null) {
             if (at.filePath != null) result = at.filePath;
         }
-        int messageType = mFList.get(position).forwardedMessage != null ? mFList.get(position).forwardedMessage.messageType : mFList.get(position).messageType;
+        int messageType = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
         if (result.length() < 1) {
             result = AndroidUtils.getFilePathWithCashId(at.cacheId, at.name, messageType);
         }
@@ -428,280 +369,264 @@ public class FragmentShowContent extends Fragment {
 
     @Override
     public void onDestroy() {
-        if (player != null)
-            player.release();
-        player = null;
+        if (exoPlayer != null)
+            exoPlayer.release();
+        exoPlayer = null;
         super.onDestroy();
+
         if (getActivity() != null) {
             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        focusAudioListener = null;
+    public void onPause() {
+        super.onPause();
+        if (exoPlayer != null && exoPlayer.isPlaying()) {
+            exoPlayer.setPlayWhenReady(false);
+        }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (player != null && player.isPlaying()) {
-            player.setPlayWhenReady(false);
-            boolean isLockScreen = true;
+    public void videoAttached(WeakReference<PlayerView> playerView, int position, boolean callPageSelected) {
+        videos.put(position, playerView);
+        if (initialViewPager || callPageSelected) {
+            viewPagerListener.onPageSelected(position);
+            initialViewPager = false;
         }
     }
 
-    public interface FocusAudioListener {
-        void audioPlay(boolean isPlay);
+    @Override
+    public void playButtonVisibility(int state) {
+        imgPlay.setVisibility(state);
     }
 
-    /**
-     * adapter for view pager
-     */
-    private class AdapterViewPager extends PagerAdapter {
-        private int index = 0;
-        private List<Integer> videoPositions;
+    private class ShowContentAdapter extends RecyclerView.Adapter<ShowContentAdapter.ViewHolder> {
+        private ArrayList<MessageObject> messageObjects = new ArrayList<>();
+        private ShowMediaListener mShowMediaListener;
 
-        public AdapterViewPager(Context context) {
-            player = new SimpleExoPlayer.Builder(context).build();
-            videoPositions = new ArrayList<>();
+        ShowContentAdapter(ShowMediaListener showMediaListener) {
+            mShowMediaListener = showMediaListener;
+        }
+
+        public void setMessageObjects(ArrayList<MessageObject> messageObjects) {
+            this.messageObjects = messageObjects;
+            notifyDataSetChanged();
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_content_layout, parent, false);
+            return new ViewHolder(view);
         }
 
         @Override
-        public int getCount() {
-            return mFList.size();
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            holder.bind(messageObjects, position);
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view.equals(object);
+        public int getItemCount() {
+            return messageObjects.size();
         }
 
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
-            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_or_video_sub_layout, container, false);
-            final TextureView mTextureView = layout.findViewById(R.id.textureView);
-            final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
-            final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
-            final PlayerView playerView = layout.findViewById(R.id.player_view);
-            zoomableImageView.setZoomable(false);
-            FrameLayout frameLayout = layout.findViewById(R.id.Layout_showImage);
-            frameLayout.setOnClickListener(v -> setPageViewState());
-            final MessageProgress progress = layout.findViewById(R.id.progress);
-            AppUtils.setProgresColor(progress.progressBar);
-            final MessageObject messageObject = RealmRoomMessage.getFinalMessage(mFList.get(position));
-            if (messageObject != null) {
-                if (HelperDownloadFile.getInstance().isDownLoading(messageObject.getAttachment().cacheId)) {
-                    progress.withDrawable(R.drawable.ic_cancel, true);
-                    startDownload(position, progress, zoomableImageView, imgPlay, mTextureView);
-                } else {
-                    progress.withDrawable(R.drawable.ic_download, true);
-                }
-                String path = getFilePath(position);
-                File file = new File(path);
-                if (player != null && player.isPlaying()) {
-                    player.setPlayWhenReady(false);
-                    player.seekTo(0);
-                }
-                if (file.exists()) {
-                    progress.setVisibility(View.GONE);
-                    ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path, true);
-                    zoomableImageView.setZoomable(true);
-                    zoomableImageView.setVisibility(View.VISIBLE);
-                    playerView.setVisibility(View.INVISIBLE);
-                    if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                        imgPlay.setVisibility(View.GONE);
+        class ViewHolder extends RecyclerView.ViewHolder {
+            private final PhotoView zoomableImageView;
+            private final PlayerView playerView;
+            private final MessageProgress progress;
+            private final TextView nameTv;
+            private final TextView dateTv;
+            private final TextView timeTv;
+            private final TextView descriptionTv;
+            private final ConstraintLayout mediaInfoCl;
+            private ProtoGlobal.RoomMessageType messageType;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                zoomableImageView = itemView.findViewById(R.id.sisl_touch_image_view);
+                zoomableImageView.setZoomable(false);
+
+                progress = itemView.findViewById(R.id.progress);
+                AppUtils.setProgresColor(progress.progressBar);
+
+                nameTv = itemView.findViewById(R.id.asi_txt_image_name);
+                dateTv = itemView.findViewById(R.id.asi_txt_image_date);
+                timeTv = itemView.findViewById(R.id.asi_txt_image_time);
+                descriptionTv = itemView.findViewById(R.id.asi_txt_image_desc);
+                mediaInfoCl = itemView.findViewById(R.id.asi_layout_image_name);
+                playerView = itemView.findViewById(R.id.player_view);
+            }
+
+            void bind(ArrayList<MessageObject> messageObjects, int position) {
+                final MessageObject messageObject = RealmRoomMessage.getFinalMessage(messageObjects.get(position));
+                if (messageObject != null) {
+                    if (HelperDownloadFile.getInstance().isDownLoading(messageObject.getAttachment().cacheId)) {
+                        progress.withDrawable(R.drawable.ic_cancel, true);
+                        startDownload(position, progress, zoomableImageView, messageObject);
                     } else {
-                        imgPlay.setVisibility(View.VISIBLE);
+                        progress.withDrawable(R.drawable.ic_download, true);
                     }
-                } else {
-                    imgPlay.setVisibility(View.GONE);
-                    path = getThumbnailPath(messageObject);
-                    zoomableImageView.setVisibility(View.VISIBLE);
-                    file = new File(path);
+
+                    String path = getFilePath(messageObject);
+                    File file = new File(path);
                     if (file.exists()) {
-                        ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
-                    } else if (messageObject.getAttachment() != null) {
-                        // if thumpnail not exist download it
-                        ProtoFileDownload.FileDownload.Selector selector = null;
-                        long fileSize = 0;
-                        if (messageObject.attachment.smallThumbnail != null) {
-                            selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
-                            fileSize = messageObject.attachment.smallThumbnail.size;
-                        } else if (messageObject.attachment.largeThumbnail != null) {
-                            selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
-                            fileSize = messageObject.attachment.largeThumbnail.size;
+                        progress.setVisibility(View.GONE);
+                        ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path, true);
+                        zoomableImageView.setZoomable(true);
+                        zoomableImageView.setVisibility(View.VISIBLE);
+
+                        if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
+                            mShowMediaListener.playButtonVisibility(View.GONE);
+                        } else {
+                            mShowMediaListener.playButtonVisibility(View.VISIBLE);
+                            zoomableImageView.setVisibility(View.INVISIBLE);
+                            playerView.setVisibility(View.VISIBLE);
+                            mShowMediaListener.videoAttached(new WeakReference(playerView), position, false);
                         }
-                        final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(messageObject.attachment.cacheId, messageObject.attachment.name, G.DIR_TEMP, true);
-                        if (selector != null && fileSize > 0) {
-                            HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType), System.currentTimeMillis() + "", messageObject.attachment.token, messageObject.attachment.publicUrl, messageObject.attachment.cacheId, messageObject.attachment.name, fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
-                                @Override
-                                public void OnProgress(final String path, int progress) {
-                                    if (progress == 100) {
-                                        G.currentActivity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
-                                            }
-                                        });
-                                    }
-                                }
-
-                                @Override
-                                public void OnError(String token) {
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-            progress.setOnClickListener(view -> {
-                String _cashID = mFList.get(position).forwardedMessage != null ? mFList.get(position).forwardedMessage.attachment.cacheId : mFList.get(position).attachment.cacheId;
-                if (HelperDownloadFile.getInstance().isDownLoading(_cashID)) {
-                    HelperDownloadFile.getInstance().stopDownLoad(_cashID);
-                } else {
-                    progress.withDrawable(R.drawable.ic_cancel, true);
-                    startDownload(position, progress, zoomableImageView, imgPlay, mTextureView);
-                }
-            });
-
-            zoomableImageView.setOnClickListener(view -> {
-                setPageViewState();
-            });
-
-            imgPlay.setOnClickListener(v -> {
-                int currentIndex = index;
-                String path = getFilePath(position);
-                boolean isExistsVideoPosition = false;
-                for (int i = 0; i < videoPositions.size(); i++) {
-                    if (videoPositions.get(i).equals(position)) {
-                        isExistsVideoPosition = true;
-                        currentIndex = i;
-                        break;
-                    }
-                }
-                if (!isExistsVideoPosition) {
-                    videoPositions.add(position);
-                    player.addMediaItem(index++, MediaItem.fromUri(path));
-                }
-                playerView.setPlayer(player);
-                playerView.hideController();
-                player.seekTo(currentIndex, 0);
-                zoomableImageView.setVisibility(View.INVISIBLE);
-                playerView.setVisibility(View.VISIBLE);
-                mTextureView.setVisibility(View.GONE);
-                imgPlay.setVisibility(View.INVISIBLE);
-                player.prepare();
-                player.play();
-            });
-
-            mTextureView.setOnClickListener(v -> setPageViewState());
-
-            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
-                    if (isFirstPlay) {
-                        if (mFList.get(position).messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || mFList.get(position).messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                            isFirstPlay = false;
-                        }
-                    }
-                    player.setPlayWhenReady(false);
-                    for (int i = 0; i < videoPositions.size(); i++) {
-                        if (videoPositions.get(i).equals(position)) {
-                            player.seekTo(i, 0);
-                            break;
-                        }
-                    }
-                }
-
-                @Override
-                public void onPageSelected(final int position) {
-                    txtImageNumber.setText(MessageFormat.format("{0} {1} {2}", position + 1, G.fragmentActivity.getResources().getString(R.string.of), mFList.size()));
-                    if (HelperCalander.isPersianUnicode) {
-                        txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
-                    }
-                    showImageInfo(mFList.get(position));
-                    if (mFList.get(position).forwardedMessage != null) {
-                        messageType = ProtoGlobal.RoomMessageType.forNumber(mFList.get(position).forwardedMessage.messageType);
                     } else {
-                        messageType = ProtoGlobal.RoomMessageType.forNumber(mFList.get(position).messageType);
+                        playerView.setVisibility(View.INVISIBLE);
+                        mShowMediaListener.playButtonVisibility(View.GONE);
+                        path = getThumbnailPath(messageObject);
+                        zoomableImageView.setVisibility(View.VISIBLE);
+                        file = new File(path);
+                        if (file.exists()) {
+                            ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
+                        } else if (messageObject.getAttachment() != null) {
+                            // if thumbnail does not exist then download it
+                            ProtoFileDownload.FileDownload.Selector selector = null;
+                            long fileSize = 0;
+
+                            if (messageObject.attachment.smallThumbnail != null) {
+                                selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                                fileSize = messageObject.attachment.smallThumbnail.size;
+                            } else if (messageObject.attachment.largeThumbnail != null) {
+                                selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                                fileSize = messageObject.attachment.largeThumbnail.size;
+                            }
+                            final String filePathTumpnail = AndroidUtils.getFilePathWithCashId(messageObject.attachment.cacheId, messageObject.attachment.name, G.DIR_TEMP, true);
+
+                            if (selector != null && fileSize > 0) {
+                                HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType), System.currentTimeMillis() + "", messageObject.attachment.token, messageObject.attachment.publicUrl, messageObject.attachment.cacheId, messageObject.attachment.name, fileSize, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+                                    @Override
+                                    public void OnProgress(final String path, int progress) {
+                                        if (progress == 100) {
+                                            G.currentActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void OnError(String token) {
+                                    }
+                                });
+                            }
+                        }
                     }
-                    if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                        imgPlay.setVisibility(View.GONE);
-                    }
                 }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
-                }
-            });
-
-            container.addView(layout);
-            return layout;
-        }
-
-        private void setPageViewState() {
-            if (isShowToolbar) {
-                toolbarShowImage.animate().setDuration(150).alpha(0F).start();
-                ltImageName.setVisibility(View.GONE);
-                ltImageName.animate().setDuration(150).alpha(0F).start();
-                toolbarShowImage.setVisibility(View.GONE);
-                isShowToolbar = false;
-            } else {
-                toolbarShowImage.animate().setDuration(150).alpha(1F).start();
-                toolbarShowImage.setVisibility(View.VISIBLE);
-                ltImageName.animate().setDuration(150).alpha(1F).start();
-                ltImageName.setVisibility(View.VISIBLE);
-                isShowToolbar = true;
-            }
-        }
-
-        private void startDownload(final int position, final MessageProgress progress, final PhotoView ZoomableImageView, final ImageView imgPlay, final TextureView mTextureView) {
-            final MessageObject rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
-            if (!downloadedList.contains(rm.attachment.token)) {
-                downloadedList.add(rm.attachment.cacheId);
-            }
-            progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
-                progress.withProgress(0);
-                progress.setVisibility(View.GONE);
-                ZoomableImageView.setZoomable(true);
-                if (rm.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || rm.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    imgPlay.setVisibility(View.VISIBLE);
-                }
-            }));
-            DownloadObject struct = DownloadObject.createForRoomMessage(rm);
-            if (struct == null) {
-                return;
-            }
-            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-            getDownloader().download(struct, selector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> G.runOnUiThread(() -> {
-                if (arg.data == null) {
+                // show content info
+                if (messageObject == null || RealmUserInfo.getCurrentUserAuthorHash().equals("")) {
                     return;
                 }
-                switch (arg.status) {
-                    case SUCCESS:
-                        ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, arg.data.getFilePath());
-                        ZoomableImageView.setZoomable(true);
-                        rm.attachment.filePath = arg.data.getFilePath();
-                        rm.attachment.token = arg.data.getToken();
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
-                        break;
-                    case LOADING:
-                        progress.withProgress(arg.data.getProgress());
-                        break;
-                    case ERROR:
-                        progress.withProgress(0);
-                        progress.withDrawable(R.drawable.ic_download, true);
-                        break;
+                MessageObject realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(messageObject);
+                if (realmRoomMessageFinal != null && realmRoomMessageFinal.message != null && !realmRoomMessageFinal.message.isEmpty()) {
+                    descriptionTv.setText(EmojiManager.getInstance().replaceEmoji(realmRoomMessageFinal.message, descriptionTv.getPaint().getFontMetricsInt()));
+                    descriptionTv.setVisibility(View.VISIBLE);
+                } else {
+                    descriptionTv.setVisibility(View.GONE);
                 }
-            }));
-        }
+                RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageFinal.userId);
+                });
+                if (realmRegisteredInfo != null) {
+                    nameTv.setText(realmRegisteredInfo.getDisplayName());
+                } else {
+                    nameTv.setText("");
+                }
+                if (realmRoomMessageFinal.authorHash != null && RealmUserInfo.getCurrentUserAuthorHash().equals(realmRoomMessageFinal.authorHash)) {
+                    nameTv.setText(R.string.you);
+                }
+                if (realmRoomMessageFinal.updateTime != 0) {
+                    timeTv.setText(HelperCalander.getClocktime(realmRoomMessageFinal.updateTime, true));
+                    dateTv.setText(HelperCalander.checkHijriAndReturnTime(realmRoomMessageFinal.updateTime / 1000));
+                }
+                if (HelperCalander.isPersianUnicode) {
+                    nameTv.setText(HelperCalander.convertToUnicodeFarsiNumber(nameTv.getText().toString()));
+                    timeTv.setText(HelperCalander.convertToUnicodeFarsiNumber(timeTv.getText().toString()));
+                    dateTv.setText(HelperCalander.convertToUnicodeFarsiNumber(dateTv.getText().toString()));
+                }
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, @NotNull Object object) {
-            container.removeView((View) object);
+                if (messageObject.forwardedMessage != null) {
+                    messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.forwardedMessage.messageType);
+                } else {
+                    messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
+                }
+                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                    mShowMediaListener.playButtonVisibility(View.GONE);
+                }
+
+                progress.setOnClickListener(view -> {
+                    String _cashID = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment.cacheId : messageObject.attachment.cacheId;
+                    if (HelperDownloadFile.getInstance().isDownLoading(_cashID)) {
+                        HelperDownloadFile.getInstance().stopDownLoad(_cashID);
+                    } else {
+                        progress.withDrawable(R.drawable.ic_cancel, true);
+                        startDownload(position, progress, zoomableImageView, messageObject);
+                    }
+                });
+
+                playerView.hideController();
+                playerView.setControllerVisibilityListener(visibility -> {
+                    mShowMediaListener.playButtonVisibility(visibility);
+                    mediaInfoCl.setVisibility(visibility);
+                });
+            }
+
+            private void startDownload(int position, final MessageProgress progress, final PhotoView ZoomableImageView, MessageObject messageObject) {
+                final MessageObject rm = RealmRoomMessage.getFinalMessage(messageObject);
+
+                boolean isVideo = rm.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || rm.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
+                progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
+                    progress.withProgress(0);
+                    progress.setVisibility(View.GONE);
+                    ZoomableImageView.setZoomable(true);
+                }));
+                DownloadObject struct = DownloadObject.createForRoomMessage(rm);
+                if (struct == null) {
+                    return;
+                }
+                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+                getDownloader().download(struct, selector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> G.runOnUiThread(() -> {
+                    if (arg.data == null) {
+                        return;
+                    }
+                    switch (arg.status) {
+                        case SUCCESS:
+                            ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, arg.data.getFilePath());
+                            ZoomableImageView.setZoomable(true);
+                            rm.attachment.filePath = arg.data.getFilePath();
+                            rm.attachment.token = arg.data.getToken();
+                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
+                            if (isVideo) {
+                                mShowMediaListener.videoAttached(new WeakReference(playerView), position, true);
+                                playerView.setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case LOADING:
+                            progress.withProgress(arg.data.getProgress());
+                            break;
+                        case ERROR:
+                            progress.withProgress(0);
+                            progress.withDrawable(R.drawable.ic_download, true);
+                            break;
+                    }
+                }));
+            }
         }
     }
 
@@ -709,4 +634,29 @@ public class FragmentShowContent extends Fragment {
         return Downloader.getInstance(AccountManager.selectedAccount);
     }
 
+    private void shareContent(MessageObject messageObject) {
+        if (messageObject != null) {
+            messageObject = RealmRoomMessage.getFinalMessage(messageObject);
+            String path = getFilePath(messageObject);
+            File file = new File(path);
+            if (file.exists()) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                AppUtils.shareItem(intent, messageObject);
+                if (messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
+                    intent.setType("video/*");
+                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_video_from_igap)));
+                } else {
+                    intent.setType("image/*");
+                    startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                }
+            } else {
+                HelperError.showSnackMessage(getString(R.string.file_not_download_yet), false);
+            }
+        }
+    }
+}
+
+interface ShowMediaListener {
+    void videoAttached(WeakReference<PlayerView> playerView, int position, boolean callPageSelected);
+    void playButtonVisibility(int state);
 }

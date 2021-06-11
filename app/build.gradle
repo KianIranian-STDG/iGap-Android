@@ -587,6 +587,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:extension-ima:2.14.0'
     implementation 'com.google.android.exoplayer:extension-mediasession:2.14.0'
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
     implementation project(path: ':video')
 }
 

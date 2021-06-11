@@ -258,6 +258,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmConstants;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -5985,9 +5986,9 @@ public class FragmentChat extends BaseFragment
 
             FragmentShowContent fragment = FragmentShowContent.newInstance();
             Bundle bundle = new Bundle();
-            bundle.putLong("RoomId", mRoomId);
-            bundle.putInt("TYPE", messageObject.messageType);
-            bundle.putLong("SelectedImage", messageObject.id);
+            bundle.putLong(RealmConstants.REALM_ROOM_ID, mRoomId);
+            bundle.putInt(RealmConstants.REALM_MESSAGE_TYPE, messageObject.messageType);
+            bundle.putLong(RealmConstants.REALM_SELECTED_IMAGE, messageObject.id);
             fragment.setArguments(bundle);
 
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();

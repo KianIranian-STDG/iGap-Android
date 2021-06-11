@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -109,7 +110,7 @@ public class FragmentShowAvatars extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_show_content, container, false);
+        return inflater.inflate(R.layout.fragment_show_avatars, container, false);
     }
 
     @Override
@@ -228,10 +229,6 @@ public class FragmentShowAvatars extends BaseFragment {
         viewPager = view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
-        txtImageName = view.findViewById(R.id.asi_txt_image_name);
-        ltImageName = view.findViewById(R.id.asi_layout_image_name);
-        ltImageName.setVisibility(View.GONE);
-
         toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
 
         initViewPager();
@@ -562,8 +559,6 @@ public class FragmentShowAvatars extends BaseFragment {
 
             final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
             zoomableImageView.setZoomable(false);
-            final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
-            imgPlay.setVisibility(View.GONE);
 
             final MessageProgress progress = layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
