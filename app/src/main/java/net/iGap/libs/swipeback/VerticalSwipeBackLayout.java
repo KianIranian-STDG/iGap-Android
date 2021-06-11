@@ -1,3 +1,4 @@
+
 package net.iGap.libs.swipeback;
 
 import android.content.Context;
@@ -116,7 +117,6 @@ public class VerticalSwipeBackLayout extends FrameLayout {
             if (dragPercent <= 0.5){
                 float newDrag = dragPercent < 0.9 ? dragPercent * 2 : dragPercent;
                 contentView.setBackgroundColor(Color.parseColor("#" + ConvertDecToHex.decToHex((int) (255 * (1 - newDrag))) + "000000"));
-
             }
             invalidate();
             if (dragPercent > 0.8) {
