@@ -28,6 +28,8 @@ public class MultiTouchListener implements View.OnTouchListener {
     private View deleteView;
     private ImageView photoEditImageView;
     private RelativeLayout parentView;
+    private String addedText;
+    private int colorCode;
 
     private OnMultiTouchListener onMultiTouchListener;
     private OnGestureControl onGestureControl;
@@ -38,13 +40,15 @@ public class MultiTouchListener implements View.OnTouchListener {
 
     public MultiTouchListener(@Nullable View deleteView, CustomViewPager viewPager2, RelativeLayout parentView,
                               ImageView photoEditImageView,
-                              OnPhotoEditorListener onPhotoEditorListener, Context context) {
+                              OnPhotoEditorListener onPhotoEditorListener, Context context, String addedText, int colorCode) {
         isTextPinchZoomable = true;
         scaleGestureDetector = new ScaleGestureDetector(new ScaleGestureListener(this));
         gestureListener = new GestureDetector(context, new GestureListener());
         this.viewPager2 = viewPager2;
         this.deleteView = deleteView;
         this.parentView = parentView;
+        this.addedText = addedText;
+        this.colorCode = colorCode;
         this.photoEditImageView = photoEditImageView;
         this.onPhotoEditorListener = onPhotoEditorListener;
         if (deleteView != null) {
@@ -147,7 +151,7 @@ public class MultiTouchListener implements View.OnTouchListener {
             case MotionEvent.ACTION_CANCEL:
                 isMoving = false;
                 activePointerId = INVALID_POINTER_ID;
-                if (PhotoViewer.mode  != StoryModes.PAINT) {
+                if (PhotoViewer.mode != StoryModes.PAINT) {
                     viewPager2.setPagingEnabled(true);
                 }
                 break;
@@ -174,7 +178,7 @@ public class MultiTouchListener implements View.OnTouchListener {
                     prevY = event.getY(newPointerIndex);
                     activePointerId = event.getPointerId(newPointerIndex);
                 }
-                if (PhotoViewer.mode  != StoryModes.PAINT) {
+                if (PhotoViewer.mode != StoryModes.PAINT) {
                     viewPager2.setPagingEnabled(true);
                 }
                 break;
@@ -252,6 +256,21 @@ public class MultiTouchListener implements View.OnTouchListener {
         }
     }
 
+    public String getAddedText() {
+        return addedText;
+    }
+
+    public int getColorCode() {
+        return colorCode;
+    }
+
+    public void setAddedText(String addedText) {
+        this.addedText = addedText;
+    }
+
+    public void setColorCode(int colorCode) {
+        this.colorCode = colorCode;
+    }
 
     public interface OnMultiTouchListener {
         void onRemoveViewListener(View removedView);

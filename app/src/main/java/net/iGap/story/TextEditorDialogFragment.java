@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -27,25 +28,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.module.downloader.HttpRequest;
 
 public class TextEditorDialogFragment extends DialogFragment {
     public static final String TAG = TextEditorDialogFragment.class.getSimpleName();
     private FrameLayout rootView;
-    private LinearLayout editTextRootView;
     private TextView doneTextView;
     private EditText addTextEditTExt;
     private int colorCode;
     private InputMethodManager inputMethodManager;
     private OnTextEditorListener onTextEditorListener;
     private VerticalSlideColorPicker verticalSlideColorPicker;
-    private boolean firstTime = false;
+    private LinearLayout editTextRootView;
+    private int editTextSize = 40;
+    private boolean firstTime = true;
     private static final String EXTRA_INPUT_TEXT = "extra_input_text";
     private static final String EXTRA_COLOR_CODE = "extra_color_code";
-    private int editTextSize = 40;
 
     public static TextEditorDialogFragment newInstance(FragmentActivity appCompatActivity) {
         Bundle args = new Bundle();
@@ -102,14 +105,13 @@ public class TextEditorDialogFragment extends DialogFragment {
         addTextEditTExt = new EditText(getContext());
         addTextEditTExt.setGravity(Gravity.CENTER);
         addTextEditTExt.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        addTextEditTExt.setBackground(null);
         addTextEditTExt.setTextColor(getArguments() != null ? colorCode = getArguments().getInt(EXTRA_COLOR_CODE, Color.WHITE) : Color.WHITE);
         addTextEditTExt.setText(getArguments() != null ? getArguments().getString(EXTRA_INPUT_TEXT, "") : "");
         addTextEditTExt.setTextSize(editTextSize);
         addTextEditTExt.setSingleLine(false);
         addTextEditTExt.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
-        addTextEditTExt.setBackground(null);
-        editTextRootView.addView(addTextEditTExt, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F, Gravity.CENTER, 5, 0, 5, 0));
-
+        editTextRootView.addView(addTextEditTExt, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER));
 
         doneTextView = new TextView(getContext());
         doneTextView.setBackground(getResources().getDrawable(R.drawable.background_border));
@@ -121,6 +123,9 @@ public class TextEditorDialogFragment extends DialogFragment {
         rootView.addView(doneTextView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 20, 20, 20, 20));
 
 
+        verticalSlideColorPicker = new VerticalSlideColorPicker(getContext(), null);
+        rootView.addView(verticalSlideColorPicker, LayoutCreator.createFrame(13, 300, Gravity.TOP | Gravity.RIGHT, 0, 60, 20, 0));
+
         return rootView;
     }
 
@@ -130,14 +135,33 @@ public class TextEditorDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        verticalSlideColorPicker.setOnColorChangeListener(colorCode -> {
-            if (colorCode != 0) {
-                this.colorCode = colorCode;
+        verticalSlideColorPicker.setOnColorChangeListener(new VerticalSlideColorPicker.OnColorChangeListener() {
+            @Override
+            public void onColorChange(int selectedColor) {
+                if (selectedColor != 0) {
+                    colorCode = selectedColor;
+                    addTextEditTExt.setTextColor(colorCode);
+                }
+
             }
-            addTextEditTExt.setTextColor(colorCode);
         });
 
+        addTextEditTExt.setFocusable(true);
 
+
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        doneTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputMethodManager.hideSoftInputFromWindow(addTextEditTExt.getWindowToken(), 0);
+                String inputText = addTextEditTExt.getText().toString();
+                if (!TextUtils.isEmpty(inputText) && onTextEditorListener != null) {
+                    onTextEditorListener.onDone(inputText, colorCode,addTextEditTExt.getWidth());
+                }
+                dismiss();
+            }
+        });
         addTextEditTExt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -146,13 +170,18 @@ public class TextEditorDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!firstTime) {
-                    addTextEditTExt.setTextColor(-855052);
+                if (charSequence.length() >= 17 && charSequence.length() <= 29 && firstTime) {
+                    addTextEditTExt.setTextSize(editTextSize--);
+                } else if (charSequence.length() >= 17 && charSequence.length() <= 29 && !firstTime) {
+                    addTextEditTExt.setTextSize(editTextSize++);
+                } else if (charSequence.length() > 29) {
+                    firstTime = false;
+                } else if (charSequence.length() == 0) {
+                    editTextSize = 40;
+                    addTextEditTExt.setTextSize(editTextSize);
                     firstTime = true;
                 }
-                if (charSequence.length() >= 17 && charSequence.length() <= 29) {
-                    addTextEditTExt.setTextSize(editTextSize--);
-                }
+
             }
 
             @Override
@@ -160,24 +189,6 @@ public class TextEditorDialogFragment extends DialogFragment {
 
             }
         });
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-        this.colorCode = -855052;
-        addTextEditTExt.setTextColor(-855052);
-
-        doneTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputMethodManager.hideSoftInputFromWindow(addTextEditTExt.getWindowToken(), 0);
-                String inputText = addTextEditTExt.getText().toString();
-                if (!TextUtils.isEmpty(inputText) && onTextEditorListener != null) {
-                    onTextEditorListener.onDone(inputText, colorCode);
-                }
-                dismiss();
-            }
-        });
-        addTextEditTExt.setFocusableInTouchMode(true);
-        addTextEditTExt.setFocusable(true);
         addTextEditTExt.requestFocus();
     }
 
@@ -186,6 +197,6 @@ public class TextEditorDialogFragment extends DialogFragment {
     }
 
     public interface OnTextEditorListener {
-        void onDone(String inputText, int colorCode);
+        void onDone(String inputText, int colorCode,int width);
     }
 }
