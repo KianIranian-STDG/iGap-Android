@@ -13,7 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import net.iGap.R;
 import net.iGap.fragments.FragmentGallery;
 
-public class StoryFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked, StoryGalleryFragment.OnRVScrolled {
+public class StoryPagerFragment extends Fragment implements CameraStoryFragment.OnGalleryIconClicked, StoryGalleryFragment.OnRVScrolled {
     ViewPager2 viewPager2;
 
     @Nullable

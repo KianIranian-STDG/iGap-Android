@@ -37,6 +37,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -234,9 +235,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
      */
     private void reply(boolean visibility) {
         if (visibility) {
-           openKeyBoard();
+            openKeyBoard();
         } else {
-          closeKeyboard(edtChat);
+            closeKeyboard(edtChat);
         }
 
     }

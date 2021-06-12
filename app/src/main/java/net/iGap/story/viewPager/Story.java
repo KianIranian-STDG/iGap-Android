@@ -1,10 +1,13 @@
 package net.iGap.story.viewPager;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 public class Story implements Serializable {
 
     private String url;
+    private Bitmap bitmap;
     private long storyData;
 
     public String getUrl() {
@@ -25,5 +28,13 @@ public class Story implements Serializable {
 
     public long getStoryData() {
         return storyData;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

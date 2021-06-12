@@ -2,6 +2,7 @@ package net.iGap.story.viewPager;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.SparseIntArray;
@@ -23,6 +24,8 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.HelperLog;
+import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.story.PhotoViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,23 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private int currentPage = 0;
     private StoryViewPager viewPager;
     private StoryPagerAdapter pagerAdapter;
+    private static final String ITEM_GALLERY_LIST = "itemGallryList";
+    private ArrayList<StructBottomSheet> itemGalleryList;
+    private Bitmap bitmap;
+
+    public static StoryViewFragment newInstance(ArrayList<StructBottomSheet> itemGalleryList) {
+        Bundle args = new Bundle();
+        //args.putSerializable(ITEM_GALLERY_LIST, itemGalleryList);
+        StoryViewFragment fragment = new StoryViewFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // itemGalleryList = getArguments().getParcelable(ITEM_GALLERY_LIST);
+    }
 
     @Nullable
     @Override
@@ -47,45 +67,21 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
 
 
     private void setUpPager() {
+        StoryUser storyUser = new StoryUser();
         List<StoryUser> storyUserList = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            StoryUser storyUser = new StoryUser();
-            switch (i) {
-                case 0:
-                    List<Story> stories = new ArrayList<>();
-                    storyUser.setUserName("Sahar");
-                    storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
-                    for (int j = 0; j < 3; j++) {
-                        Story story = new Story();
-                        switch (j) {
-                            case 0:
-                                story.setUrl("https://www.koko.org/wp-content/uploads/2019/08/koko_smoky_hat1_T-phone.jpg");
-                                break;
-                            case 1:
-                                story.setUrl("https://www.koko.org/wp-content/uploads/2019/08/koko_smoky_hat1_T-phone.jpg");
-                                break;
-                            case 2:
-                                story.setUrl("https://image.freepik.com/free-vector/shining-bokeh-overlay-background_1409-778.jpg");
-                                break;
-                        }
-                        story.setStoryData(System.currentTimeMillis() - (1 * (24 - j) * 60 * 60 * 1000));
-                        stories.add(story);
+        List<Story> stories = new ArrayList<>();
+        storyUser.setUserName("Sahar");
+        storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
+        for (int i = 0; i < itemGalleryList.size(); i++) {
 
-                    }
-                    storyUser.setStories(stories);
-                    break;
-                case 1:
-                    List<Story> stories1 = new ArrayList<>();
-                    Story story1 = new Story();
-                    storyUser.setUserName("Mary");
-                    storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/2.jpg");
-                    story1.setUrl("https://image.freepik.com/free-vector/shining-bokeh-overlay-background_1409-778.jpg");
-                    story1.setStoryData(System.currentTimeMillis() - (1 * (24) * 60 * 60 * 1000));
-                    stories1.add(story1);
-                    storyUser.setStories(stories1);
-                    break;
-            }
 
+            Story story = new Story();
+            story.setBitmap(bitmap);
+            story.setUrl(itemGalleryList.get(i).path);
+            story.setStoryData(System.currentTimeMillis() - (1 * (24 - i) * 60 * 60 * 1000));
+            stories.add(story);
+
+            storyUser.setStories(stories);
 
             storyUserList.add(storyUser);
         }
@@ -108,7 +104,15 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             }
         });
 
-          preLoadStories(storyUserList);
+        preLoadStories(storyUserList);
+    }
+
+    public void setItemGalleryList(ArrayList<StructBottomSheet> itemGalleryList) {
+        this.itemGalleryList = itemGalleryList;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     private void preLoadStories(List<StoryUser> storyUserList) {
@@ -129,7 +133,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     }
 
     private void preLoadVideos(List<String> videoList) {
-       for (String data : videoList) {
+        for (String data : videoList) {
             new DispatchQueue("videoListQue").postRunnable(() -> {
                 Uri dataUri = Uri.parse(data);
                 DataSpec dataSpec = new DataSpec(dataUri, 0, 500 * 1024, null);

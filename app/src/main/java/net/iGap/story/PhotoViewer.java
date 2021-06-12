@@ -14,11 +14,16 @@ import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.StateSet;
 import android.util.TypedValue;
@@ -30,10 +35,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +49,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.palette.graphics.Palette;
@@ -65,6 +74,7 @@ import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
+import net.iGap.libs.photoEdit.PhotoEditor;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.module.AndroidUtils;
@@ -75,11 +85,18 @@ import net.iGap.module.customView.EventEditText;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnRotateImage;
+import net.iGap.story.viewPager.StoryDisplayFragment;
+import net.iGap.story.viewPager.StoryViewFragment;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.VISIBLE;
@@ -145,6 +162,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private ImageView pickerViewSendButton;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
+    private ProgressBar progressBar;
+    private List<String> finalPaths;
+    private int counter = 0;
 
     public static PhotoViewer newInstance(String path) {
         Bundle args = new Bundle();
@@ -189,7 +209,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         rootView.setListener(this);
         rootView.setBackgroundColor(context.getResources().getColor(R.color.black_register));
         rootView.setClickable(true);
-        //  rootView.setOrientation(LinearLayout.VERTICAL);
+
 
         toolbar = new Toolbar(context);
         toolbar.setContentInsetStartWithNavigation(0);
@@ -318,6 +338,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         pickerViewSendButton.setImageResource(R.drawable.attach_send);
         layoutCaption.addView(pickerViewSendButton, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
+        progressBar = new ProgressBar(context);
+        progressBar.setVisibility(View.GONE);
+        layoutCaption.addView(progressBar, LayoutCreator.createLinear(40, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
+
         sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         sendTextView.setGravity(Gravity.CENTER);
         sendTextView.setText(context.getString(R.string.md_send_button));
@@ -338,6 +362,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         selectedPhotos = (List<GalleryItemModel>) getArguments().getSerializable(SELECTED_PHOTOS);
         brushConfigDialog = new BrushConfigDialog();
         brushConfigDialog.setPropertiesChangeListener(this);
+        mode = StoryModes.NONE;
         if (!HelperPermission.grantedUseStorage()) {
             try {
                 HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
@@ -390,21 +415,23 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
                 TextEditorDialogFragment textEditorDialogFragment =
                         TextEditorDialogFragment.newInstance(getActivity());
-                textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode) -> {
+                textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode, width) -> {
                     FrameLayout rootView = new FrameLayout(getContext());
                     stickerBorder = new FrameLayout(getContext());
                     stickerBorder.setPadding(10, 10, 10, 10);
                     rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
 
                     textTv = new TextView(getContext());
+                    //textTv.setEnabled(false);
                     textTv.setTextColor(colorCode);
                     textTv.setText(inputText);
-                    stickerBorder.addView(textTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 14, 14, 14, 14));
                     textTv.setGravity(Gravity.CENTER);
-                    textTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
-                            35);
+                    textTv.setTextSize(30);
+                    TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(textTv, 22, 30, 1,
+                            TypedValue.COMPLEX_UNIT_DIP);
+                    stickerBorder.addView(textTv, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 14, 14, 14, 14));
 
-                    onEditActions.addText(rootView);
+                    onEditActions.addText(rootView, inputText, colorCode);
 
                 });
             }
@@ -498,11 +525,16 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 serFilterImage(path);
             }
         };
-        sendTextView.setOnClickListener(new View.OnClickListener() {
+        pickerViewSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finalPaths = new ArrayList<>();
+                pickerViewSendButton.setVisibility(View.GONE);
+                progressBar.setVisibility(VISIBLE);
+                for (int i = 0; i < itemGalleryList.size(); i++) {
+                    new SaveBitmapAsync(itemGalleryList.get(i).path, viewHolders.get(i).findViewById(R.id.textstickerView)).execute();
+                }
 
-                path = BitmapUtils.insertImage(getActivity().getContentResolver(), filteredImageBitmap, System.currentTimeMillis() + "_profile.jpg", null);
 
             }
         });
@@ -548,6 +580,110 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         });
     }
 
+    private Bitmap getFinalBitmapAfterAddText(View view) {
+
+        Bitmap finalBitmap = Bitmap.createBitmap(view.getDrawingCache());
+        Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        int textStickerHeightCenterY = textStickersParentView.getHeight() / 2;
+        int textStickerWidthCenterX = textStickersParentView.getWidth() / 2;
+
+        int imageViewHeight = textStickersParentView.getBitmapHolderImageView().getHeight();
+        int imageViewWidth = textStickersParentView.getBitmapHolderImageView().getWidth();
+
+        view.setDrawingCacheEnabled(false);
+        // Crop actual image from textStickerView
+        return Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
+    }
+
+    public class SaveBitmapAsync extends AsyncTask<String, String, Exception> {
+        String imagePath;
+        TextStickerView textStickerView;
+
+        public SaveBitmapAsync(String imagePath, TextStickerView textStickerView) {
+            this.imagePath = imagePath;
+            this.textStickerView = textStickerView;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            textStickerView.setDrawingCacheEnabled(false);
+        }
+
+        @Override
+        protected Exception doInBackground(String... strings) {
+
+            try {
+
+                if (textStickerView != null && mode != StoryModes.NONE) {
+                    textStickerView.setDrawingCacheEnabled(true);
+                    Bitmap finalBitmap = Bitmap.createBitmap(textStickerView.getDrawingCache());
+                    Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                    int textStickerHeightCenterY = textStickerView.getHeight() / 2;
+                    int textStickerWidthCenterX = textStickerView.getWidth() / 2;
+
+                    int imageViewHeight = textStickerView.getBitmapHolderImageView().getHeight();
+                    int imageViewWidth = textStickerView.getBitmapHolderImageView().getWidth();
+                    Bitmap finalResultBitmap = Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
+                    this.imagePath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalResultBitmap, System.currentTimeMillis() + "edited_image.jpg", null);
+                }
+
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return e;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(Exception e) {
+            super.onPostExecute(e);
+            if (e == null) {
+                //Clear all views if its enabled in save settings
+                setCreatedFinalBitmap(imagePath);
+            } else {
+
+
+            }
+        }
+    }
+
+    private void setCreatedFinalBitmap(String path) {
+
+        int po = (viewPager.getCurrentItem());
+
+        if (textImageList.containsKey(itemGalleryList.get(po).getPath())) {
+
+            String message = textImageList.get(itemGalleryList.get(po).getPath()).getText();
+            int id = textImageList.get(itemGalleryList.get(po).getPath()).getId();
+
+            textImageList.remove(itemGalleryList.get(po).getPath());
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(path);
+            item.setText(message);
+            item.setId(id);
+
+            textImageList.put(path, item);
+        }
+
+
+        itemGalleryList.get(counter).setPath(path);
+        counter++;
+
+        if (counter == itemGalleryList.size()) {
+            Collections.sort(itemGalleryList);
+            StoryViewFragment storyViewFragment = StoryViewFragment.newInstance(itemGalleryList);
+            storyViewFragment.setItemGalleryList(itemGalleryList);
+            new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), PhotoViewer.this).popBackStack();
+            new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(true).load();
+
+        }
+
+    }
+
     private void serFilterImage(String path) {
 
         int po = (viewPager.getCurrentItem());
@@ -570,27 +706,15 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     }
 
-    private Bitmap getFinalBitmapAfterAddText(View view) {
 
-        Bitmap finalBitmap = Bitmap.createBitmap(view.getDrawingCache());
-        Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-        int textStickerHeightCenterY = textStickersParentView.getHeight() / 2;
-        int textStickerWidthCenterX = textStickersParentView.getWidth() / 2;
-
-        int imageViewHeight = textStickersParentView.getBitmapHolderImageView().getHeight();
-        int imageViewWidth = textStickersParentView.getBitmapHolderImageView().getWidth();
-
-        view.setDrawingCacheEnabled(false);
-        // Crop actual image from textStickerView
-        return Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
-    }
-
-
-    private void showTextEditDialog(final View rootView, String text, int colorCode) {
+    private void showTextEditDialog(final View rootView, MultiTouchListener multiTouchListener) {
         TextEditorDialogFragment textEditorDialogFragment =
-                TextEditorDialogFragment.newInstance(getActivity(), text, colorCode);
-        textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode1) -> editText(rootView, inputText, colorCode1));
+                TextEditorDialogFragment.newInstance(getActivity(), multiTouchListener.getAddedText(), multiTouchListener.getColorCode());
+        textEditorDialogFragment.setOnTextEditorListener((inputText, colorCode1, width) -> {
+            multiTouchListener.setColorCode(colorCode1);
+            multiTouchListener.setAddedText(inputText);
+            editText(rootView, inputText, colorCode1);
+        });
     }
 
     private void editText(View view, String inputText, int colorCode) {
@@ -758,6 +882,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             }
             onPaintChanged.setValue(addedViews.size());
             redoViews.add(removeView);
+            if (addedViews.get(viewHolderPostion).size() == 0) {
+                mode = StoryModes.NONE;
+            }
         }
     }
 
@@ -786,7 +913,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         void paint();
 
-        void addText(View view);
+        void addText(View view, String addedText, int colorCode);
 
         void addEmoji(View view);
 
@@ -843,15 +970,12 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
 
-            zoomLayout = new ZoomLayout(context);
-            //zoomLayout.setLayoutParams(LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
-            textStickersParentView = new TextStickerView(context, false);
-            textStickersParentView.setDrawingCacheEnabled(true);
-            textStickersParentView.setId(R.id.textstickerView);
-            zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
-
-
-            if (itemGalleryList.get(position).path != null) {
+            if (itemGalleryList.get(position).path != null && !viewHolders.containsKey(position)) {
+                zoomLayout = new ZoomLayout(context);
+                textStickersParentView = new TextStickerView(context, false);
+                textStickersParentView.setDrawingCacheEnabled(true);
+                textStickersParentView.setId(R.id.textstickerView);
+                zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
 
                 String oldPath = itemGalleryList.get(position).path;
                 String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
@@ -874,7 +998,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                             new int[]{
                                     palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
 
-                    zoomLayout.setBackground(gd);
+                    textStickersParentView.setBackground(gd);
                 } else {
                     Palette.from(BitmapFactory.decodeFile(finalPath)).generate(new Palette.PaletteAsyncListener() {
                         @Override
@@ -884,7 +1008,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                                     new int[]{
                                             palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
 
-                            zoomLayout.setBackground(gd);
+                            textStickersParentView.setBackground(gd);
                         }
                     });
                 }
@@ -892,8 +1016,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
                 textStickersParentView.setPaintMode(false, finalPath);
 
-            }
 
+            }
 
             if (!viewHolders.containsKey(position)) {
                 container.addView(zoomLayout, 0);
@@ -912,7 +1036,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         @Override
         public void destroyItem(ViewGroup containe, int position, Object object) {
-            //   container.removeView((View) object);
+
         }
 
         @Override
@@ -925,45 +1049,37 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         @Override
-        public void addText(View rootView) {
+        public void addText(View rootView, String addedText, int colorCode) {
             TextStickerView textStickerView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
             MultiTouchListener multiTouchListener = new MultiTouchListener(
                     null, viewPager,
                     textStickerView,
                     textStickerView.getBitmapHolderImageView(),
-                    AdapterViewPager.this, getContext());
+                    AdapterViewPager.this, getContext(), addedText, colorCode);
 
             multiTouchListener.setOnGestureControl(new OnGestureControl() {
                 boolean isDownAlready = false;
 
                 @Override
                 public void onClick() {
-                    String textInput = textTv.getText().toString();
-                    int currentTextColor = textTv.getCurrentTextColor();
-                    showTextEditDialog(rootView, textInput, currentTextColor);
+                    showTextEditDialog(rootView, multiTouchListener);
                 }
 
                 @Override
                 public void onDown() {
-//                    boolean isBackgroundVisible = stickerBorder.getTag() != null && (boolean) stickerBorder.getTag();
-//                    if (!isBackgroundVisible) {
-//                        // stickerBorder.setBackgroundResource(R.drawable.background_border);
-//                        stickerBorder.setTag(true);
-//                        updateViewsBordersVisibilityExcept(rootView);
-//                        isDownAlready = true;
-//                    } else {
-//                        isDownAlready = false;
-//                    }
+
                 }
 
                 @Override
                 public void onLongClick() {
                 }
             });
-            rootView.setOnTouchListener(multiTouchListener);
 
+            rootView.setOnTouchListener(multiTouchListener);
             addViewToParent(rootView);
+
         }
 
         @Override
@@ -973,7 +1089,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     null, viewPager,
                     textStickerView,
                     textStickerView.getBitmapHolderImageView(),
-                    AdapterViewPager.this, getContext());
+                    AdapterViewPager.this, getContext(), null, 0);
 
             multiTouchListener.setOnGestureControl(new OnGestureControl() {
                 boolean isDownAlready = false;
@@ -1117,6 +1233,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 textStickersParentView.removeView(removeView);
                 redoViews.add(removeView);
                 onPaintChanged.setValue(addedViews.size());
+                if (addedViews.get(viewHolderPostion).size() == 0) {
+                    mode = StoryModes.NONE;
+                }
             }
         }
         return addedViews.get(viewHolderPostion).size() != 0;

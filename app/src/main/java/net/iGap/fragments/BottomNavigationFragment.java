@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.story.StoryFragment;
+import net.iGap.story.StoryPagerFragment;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.news.NewsMainFrag;
@@ -151,9 +151,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case CALL_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
+                fragment = fragmentManager.findFragmentByTag(StoryPagerFragment.class.getName());
                 if (fragment == null) {
-                    fragment = new StoryFragment();
+                    fragment = new StoryPagerFragment();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();

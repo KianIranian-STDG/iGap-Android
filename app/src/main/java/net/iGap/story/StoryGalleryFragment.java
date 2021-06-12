@@ -78,7 +78,7 @@ public class StoryGalleryFragment extends BaseFragment {
     private MaterialDesignTextView backIcon;
     private MaterialDesignTextView sendIcon;
     private AppCompatTextView toolbarTitle;
-    private AdapterGalleryPhoto adapterGalleryPhoto;
+    private AdapterGallery adapterGalleryPhoto;
     private OnRVScrolled onRVScrolled;
     private Typeface tfMain;
 
@@ -153,7 +153,7 @@ public class StoryGalleryFragment extends BaseFragment {
         FileManager.getFolderPhotosById(getContext(), "-1", result -> {
             if (getActivity() == null) return;
             getActivity().runOnUiThread(() -> {
-                adapterGalleryPhoto = new AdapterGalleryPhoto(true);
+                adapterGalleryPhoto = new AdapterGallery(true);
                 adapterGalleryPhoto.setMultiState(true);
                 adapterGalleryPhoto.setPhotosItem(result);
                 adapterGalleryPhoto.setListener(new GalleryItemListener() {
@@ -361,8 +361,14 @@ public class StoryGalleryFragment extends BaseFragment {
 
                     viewHolderGallery.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
                         if (isChecked) {
-                            if (!mSelectedPhotos.contains(photosItem.get(viewHolderGallery.getAdapterPosition())))
+                            if (mSelectedPhotos.size() == 10) {
+                                Toast.makeText(getContext(), "نمی توانید بیش از ۱۰ مورد رسانه را به اشتراک بگذارید", Toast.LENGTH_LONG).show();
+                                viewHolderGallery.check.setChecked(false);
+                            } else if (!mSelectedPhotos.contains(photosItem.get(viewHolderGallery.getAdapterPosition()))) {
                                 mSelectedPhotos.add(photosItem.get(viewHolderGallery.getAdapterPosition()));
+                            }
+
+
                         } else {
                             mSelectedPhotos.remove(photosItem.get(viewHolderGallery.getAdapterPosition()));
                         }
@@ -480,11 +486,11 @@ public class StoryGalleryFragment extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (photosItem.get(position).getMediaType().equals("1")) {
-                return 0;
-            } else if (photosItem.get(position).getMediaType().equals("3")) {
-                return 1;
-            }
+//            if (photosItem.get(position).getMediaType().equals("1")) {
+//                return 0;
+//            } else if (photosItem.get(position).getMediaType().equals("3")) {
+//                return 1;
+//            }
             return 0;
         }
 
