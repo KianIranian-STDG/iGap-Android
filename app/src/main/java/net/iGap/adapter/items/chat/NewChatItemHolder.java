@@ -163,8 +163,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
 
         /*channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);*/
-
-        set.constrainWidth(signatureTv.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainWidth(signatureTv.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainHeight(signatureTv.getId(), LayoutCreator.dp(20));
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
