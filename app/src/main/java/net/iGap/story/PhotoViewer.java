@@ -157,13 +157,11 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     public List<GalleryItemModel> selectedPhotos;
     private int viewHolderPostion = 0;
     public static UpdateImage updateImage;
-    private Bitmap filteredImageBitmap;
     private OnEditActions onEditActions;
     private ImageView pickerViewSendButton;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
     private ProgressBar progressBar;
-    private List<String> finalPaths;
     private int counter = 0;
 
     public static PhotoViewer newInstance(String path) {
@@ -422,7 +420,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
 
                     textTv = new TextView(getContext());
-                    //textTv.setEnabled(false);
                     textTv.setTextColor(colorCode);
                     textTv.setText(inputText);
                     textTv.setGravity(Gravity.CENTER);
@@ -513,7 +510,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             @Override
             public void result(Bitmap finalBitmap) {
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                filteredImageBitmap = finalBitmap;
                 textStickersParentView.updateImageBitmap(finalBitmap);
 
             }
@@ -521,14 +517,12 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             @Override
             public void resultWithPath(String path) {
                 textStickersParentView = viewHolders.get(viewHolderPostion).findViewById(R.id.textstickerView);
-                filteredImageBitmap = BitmapFactory.decodeFile(path);
                 serFilterImage(path);
             }
         };
         pickerViewSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finalPaths = new ArrayList<>();
                 pickerViewSendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(VISIBLE);
                 for (int i = 0; i < itemGalleryList.size(); i++) {
@@ -580,21 +574,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         });
     }
 
-    private Bitmap getFinalBitmapAfterAddText(View view) {
-
-        Bitmap finalBitmap = Bitmap.createBitmap(view.getDrawingCache());
-        Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-        int textStickerHeightCenterY = textStickersParentView.getHeight() / 2;
-        int textStickerWidthCenterX = textStickersParentView.getWidth() / 2;
-
-        int imageViewHeight = textStickersParentView.getBitmapHolderImageView().getHeight();
-        int imageViewWidth = textStickersParentView.getBitmapHolderImageView().getWidth();
-
-        view.setDrawingCacheEnabled(false);
-        // Crop actual image from textStickerView
-        return Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
-    }
 
     public class SaveBitmapAsync extends AsyncTask<String, String, Exception> {
         String imagePath;
@@ -920,28 +899,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         void filter();
     }
 
-    public static Drawable createSimpleSelectorCircleDrawable(int size, int defaultColor, int pressedColor) {
-        OvalShape ovalShape = new OvalShape();
-        ovalShape.resize(size, size);
-        ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
-        defaultDrawable.getPaint().setColor(defaultColor);
-        ShapeDrawable pressedDrawable = new ShapeDrawable(ovalShape);
-        if (Build.VERSION.SDK_INT >= 21) {
-            pressedDrawable.getPaint().setColor(0xffffffff);
-            ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{StateSet.WILD_CARD},
-                    new int[]{pressedColor}
-            );
-            return new RippleDrawable(colorStateList, defaultDrawable, pressedDrawable);
-        } else {
-            pressedDrawable.getPaint().setColor(pressedColor);
-            StateListDrawable stateListDrawable = new StateListDrawable();
-            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
-            stateListDrawable.addState(new int[]{android.R.attr.state_focused}, pressedDrawable);
-            stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
-            return stateListDrawable;
-        }
-    }
 
     private class AdapterViewPager extends PagerAdapter implements PhotoViewer.OnEditActions, OnPhotoEditorListener {
 
@@ -1219,9 +1176,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         });
     }
 
-    public interface OnImagesGalleryPrepared {
-        void imagesList(ArrayList<StructBottomSheet> listOfAllImages);
-    }
 
     public boolean undo() {
         if (addedViews.get(viewHolderPostion).size() > 0) {
@@ -1417,11 +1371,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         chatKeyBoardContainer.addView(emojiView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.BOTTOM));
     }
 
-    private void initStroke() {
-        textStickersParentView.setBrushSize(INITIAL_WIDTH);
-        textStickersParentView.setBrushColor(Color.WHITE);
-        textStickersParentView.setStrokeAlpha(MAX_ALPHA);
-    }
 
     @Override
     public void onColorChanged(int colorCode) {
@@ -1466,24 +1415,5 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         AndroidUtils.hideKeyboard(captionEditText);
     }
 
-    private ArrayList<String> getEmojis(Context context) {
-        ArrayList<String> convertedEmojiList = new ArrayList<>();
-        String[] emojiList = context.getResources().getStringArray(R.array.photo_editor_emoji);
-        for (String emojiUnicode : emojiList) {
-            convertedEmojiList.add(convertEmoji(emojiUnicode));
-        }
-        return convertedEmojiList;
-    }
-
-    private static String convertEmoji(String emoji) {
-        String returnedEmoji;
-        try {
-            int convertEmojiToInt = Integer.parseInt(emoji.substring(2), 16);
-            returnedEmoji = new String(Character.toChars(convertEmojiToInt));
-        } catch (NumberFormatException e) {
-            returnedEmoji = "";
-        }
-        return returnedEmoji;
-    }
 
 }
