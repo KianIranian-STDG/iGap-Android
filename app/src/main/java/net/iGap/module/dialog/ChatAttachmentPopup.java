@@ -96,7 +96,7 @@ public class ChatAttachmentPopup {
     private View privacyView;
     private int mChatBoxHeight;
     private int mMessagesLayoutHeight;
-    private Activity activity;
+
     private SharedPreferences emojiSharedPreferences;
 
 
@@ -129,11 +129,6 @@ public class ChatAttachmentPopup {
 
     public ChatAttachmentPopup setFragmentActivity(FragmentActivity fa) {
         this.mFrgActivity = fa;
-        return this;
-    }
-
-    public ChatAttachmentPopup setActivity(Activity activity) {
-        this.activity = activity;
         return this;
     }
 
@@ -408,8 +403,8 @@ public class ChatAttachmentPopup {
         onPathAdapterBottomSheet = (path, isCheck, isEdit, mList, id) -> {
 
             if (isEdit) {
-                new HelperFragment(mFrgActivity.getSupportFragmentManager(), PhotoViewer.newInstance(path)).setReplace(false).load();
                 dismiss();
+                new HelperFragment(mFrgActivity.getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
             } else {
                 if (isCheck) {
                     StructBottomSheet item = new StructBottomSheet();
@@ -705,7 +700,7 @@ public class ChatAttachmentPopup {
 
     private void loadItemsToRecycler() {
         for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-            addItemToRecycler(new BottomSheetItem(mFrgActivity.getSupportFragmentManager(), FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
+            addItemToRecycler(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i), onPathAdapterBottomSheet).withIdentifier(100 + i));
         }
         if (FragmentEditImage.itemGalleryList.size() >= MAX_COUNT_OF_IMAGE) {
             addItemToRecycler(new AdapterPopupOpenGallery(() -> {
