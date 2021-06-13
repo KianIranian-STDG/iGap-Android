@@ -33,6 +33,7 @@ import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperTracker;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -105,6 +106,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        HelperTracker.sendTracker(HelperTracker.TRACKER_DISCOVERY_PAGE);
         page = getArguments().getInt("page");
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

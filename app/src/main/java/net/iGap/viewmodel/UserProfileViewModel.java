@@ -32,6 +32,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.module.CountryListComparator;
@@ -535,6 +536,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onInviteFriendsClick() {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
         shareInviteLink.setValue(BuildConfig.INVITE_FRIEND_LINK);
     }
 
