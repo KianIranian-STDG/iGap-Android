@@ -1,15 +1,10 @@
 package net.iGap.fragments;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -30,7 +25,6 @@ import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterGalleryMusic;
 import net.iGap.adapter.AdapterGalleryPhoto;
 import net.iGap.adapter.AdapterGalleryVideo;
-import net.iGap.story.PhotoViewer;
 import net.iGap.helper.FileManager;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -58,8 +52,6 @@ public class FragmentGallery extends BaseFragment {
     private final String ID_KEY = "ID";
     private final String RETURN_DIRECTLY_KEY = "RETURN_DIRECT";
     private final String LISTENER_KEY = "LISTENER";
-    private static final int SWIPE_THRESHOLD = 100;
-    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
     private AdapterGalleryPhoto mGalleryPhotoAdapter;
     private AdapterGalleryVideo mGalleryVideoAdapter;
@@ -68,14 +60,10 @@ public class FragmentGallery extends BaseFragment {
     private boolean isSubFolder = false;
     private HelperToolbar mHelperToolbar;
     private GalleryFragmentListener mGalleryListener;
-    private OnRVScrolled onRVScrolled;
     private GalleryMode mGalleryMode;
     private boolean isReturnResultDirectly;
     private boolean isMusicSortedByDate = true;
     private static boolean canMultiSelected;
-    private View rootView;
-    ViewGroup lytToolbar;
-    RecyclerView rvGallery;
 
     public FragmentGallery() {
     }
@@ -116,17 +104,6 @@ public class FragmentGallery extends BaseFragment {
         return fragment;
     }
 
-    public static FragmentGallery newInstance(boolean canMultiSelect, GalleryMode mode, OnRVScrolled onRVScrolled, GalleryFragmentListener listener) {
-        FragmentGallery fragment = new FragmentGallery();
-        fragment.onRVScrolled = onRVScrolled;
-        Bundle bundle = new Bundle();
-        bundle.putString(fragment.MODE_KEY, mode.name());
-        bundle.putSerializable(fragment.LISTENER_KEY, listener);
-        canMultiSelected = canMultiSelect;
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_gallery, container, false);
@@ -135,7 +112,6 @@ public class FragmentGallery extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.rootView = view;
         if (getArguments() != null) {
             mGalleryMode = GalleryMode.valueOf(getArguments().getString(MODE_KEY));
             mFolderName = getArguments().getString(FOLDER_KEY, null);
@@ -144,20 +120,14 @@ public class FragmentGallery extends BaseFragment {
             mFolderId = getArguments().getString(ID_KEY, null);
             isSubFolder = getArguments().getBoolean(SUB_FOLDER_KEY, false);
         }
-        if (mGalleryMode == GalleryMode.STORY) {
-            ViewGroup lytToolbar = view.findViewById(R.id.toolbar);
-            lytToolbar.setVisibility(View.GONE);
-        } else {
-            initToolbar(view);
-        }
+        initToolbar(view);
         initRecyclerView(view);
     }
 
     private void initToolbar(View view) {
-        lytToolbar = view.findViewById(R.id.toolbar);
+        ViewGroup lytToolbar = view.findViewById(R.id.toolbar);
         String toolbarTitle = "";
-        if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.STORY) {
-            lytToolbar.setVisibility(View.VISIBLE);
+        if (mGalleryMode == GalleryMode.PHOTO) {
             toolbarTitle = getString(R.string.gallery);
         } else if (mGalleryMode == GalleryMode.VIDEO) {
             toolbarTitle = getString(R.string.videos);
@@ -181,7 +151,7 @@ public class FragmentGallery extends BaseFragment {
                     @Override
                     public void onRightIconClickListener(View view) {
                         if (isSubFolder) {
-                            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.STORY) {
+                            if (mGalleryMode == GalleryMode.PHOTO) {
                                 checkPhotoMultiSelectAndSendToEdit();
                             } else {
                                 checkVideoMultiSelectAndSendToEdit();
@@ -212,235 +182,11 @@ public class FragmentGallery extends BaseFragment {
         lytToolbar.addView(mHelperToolbar.getView());
     }
 
-    public interface OnRVScrolled {
-        void scrolled(boolean isScrolled);
-
-        void changeItem();
-    }
-
-    boolean checked = true;
-    private VelocityTracker mVelocityTracker = null;
-
-    private class OnSwipeTouchListener implements View.OnTouchListener {
-        private final GestureDetector gestureDetector;
-        Context context;
-
-        public OnSwipeTouchListener(Context ctx, View mainView) {
-            gestureDetector = new GestureDetector(ctx, new GestureListener());
-            mainView.setOnTouchListener(this);
-            context = ctx;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            return gestureDetector.onTouchEvent(event);
-        }
-
-        public class GestureListener extends
-                GestureDetector.SimpleOnGestureListener {
-            private static final int SWIPE_THRESHOLD = 100;
-            private static final int SWIPE_VELOCITY_THRESHOLD = 100;
-
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return true;
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                boolean result = false;
-                float diffY = 0;
-                float diffX = 0;
-                try {
-                    if (e1 != null) {
-                        diffY = e2.getY() - e1.getY();
-                        diffX = e2.getX() - e1.getX();
-                    } else {
-                        diffY = e2.getY();
-                        diffX = e2.getX();
-                    }
-
-                    if (Math.abs(diffX) > Math.abs(diffY)) {
-                        if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                            if (diffX > 0) {
-
-                            } else {
-
-                            }
-                            result = true;
-                        }
-                    } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY > 0) {
-                            Log.e("dfldsjflsdjf", "onFling: ");
-                        } else {
-                            rvGallery.getParent().requestDisallowInterceptTouchEvent(true);
-                            Log.e("dfldsjflsdjf", "onFling2: ");
-                        }
-                        result = true;
-                    }
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-                return result;
-            }
-        }
-
-
-    }
-
-    boolean isDraggable = false;
-
     private void initRecyclerView(View view) {
 
-        rvGallery = view.findViewById(R.id.rv_gallery);
-
-        rvGallery.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (!rvGallery.canScrollVertically(-1)) {
-                    if (isDraggable == false) {
-                        recyclerView.getParent().requestDisallowInterceptTouchEvent(true);
-                        onRVScrolled.scrolled(false);
-
-                    }
-
-                } else {
-                    if (isDraggable == true) {
-                        recyclerView.getParent().requestDisallowInterceptTouchEvent(false);
-                        onRVScrolled.scrolled(true);
-                    }
-                }
-
-                isDraggable = !isDraggable;
-
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-        //    OnSwipeTouchListener swwi = new OnSwipeTouchListener(getContext(), rvGallery);
-
-
-//        rvGallery.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-//            @Override
-//            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent event) {
-//                GridLayoutManager layoutManager = GridLayoutManager.class.cast(rv.getLayoutManager());
-//                int index = event.getActionIndex();
-//                int action = event.getActionMasked();
-//                int pointerId = event.getPointerId(index);
-//                float diffY = 0;
-//                float diffX = 0;
-//                boolean result = false;
-//                switch (action) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        if (mVelocityTracker == null) {
-//                            // Retrieve a new VelocityTracker object to watch the
-//                            // velocity of a motion.
-//                            mVelocityTracker = VelocityTracker.obtain();
-//                        } else {
-//                            // Reset the velocity tracker back to its initial state.
-//                            mVelocityTracker.clear();
-//                        }
-//                        // Add a user's movement to the tracker.
-//                        mVelocityTracker.addMovement(event);
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        mVelocityTracker.addMovement(event);
-//                        // When you want to determine the velocity, call
-//                        // computeCurrentVelocity(). Then call getXVelocity()
-//                        // and getYVelocity() to retrieve the velocity for each pointer ID.
-//                        mVelocityTracker.computeCurrentVelocity(100);
-//                        // Log velocity of pixels per second
-//                        // Best practice to use VelocityTrackerCompat where possible.
-//
-//                        diffY = event.getY();
-//                        diffX = event.getX();
-//
-//
-//                        if (Math.abs(diffX) > Math.abs(diffY)) {
-//                            if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(mVelocityTracker.getXVelocity(pointerId)) > SWIPE_VELOCITY_THRESHOLD) {
-//                                if (diffX > 0) {
-//
-//                                } else {
-//
-//                                }
-//                                result = true;
-//                            }
-//                        } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(mVelocityTracker.getYVelocity(pointerId)) > SWIPE_VELOCITY_THRESHOLD) {
-//                            if (diffY > 0) {
-//                                //onSwipeBottom();
-//
-//                                Log.e("fdfsf", "onTouchEvent: " );
-//                            } else {
-//                                // onSwipeTop();
-//                                Log.e("fdfsf", "onToucddhEvent: " );
-//                            }
-//                            result = true;
-//                        }
-//
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                    case MotionEvent.ACTION_CANCEL:
-//                        // Return a VelocityTracker object back to be re-used by others.
-////                        mVelocityTracker.recycle();
-//                        break;
-//                }
-//                return false;
-//            }
-//
-//            @Override
-//            public void onTouchEvent(RecyclerView rv, MotionEvent event) {
-//
-////                    case MotionEvent.ACTION_MOVE:
-////                    case MotionEvent.ACTION_DOWN:
-////                        rv.getParent().requestDisallowInterceptTouchEvent(true);
-////                        onRVScrolled.scrolled(false);
-////                        break;
-////                    case MotionEvent.ACTION_CANCEL:
-////                        if (layoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-////                            rv.getParent().requestDisallowInterceptTouchEvent(true);
-////                            onRVScrolled.scrolled(false);
-////                        }
-////                        break;
-//
-//            }
-//
-//
-//            @Override
-//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//
-//            }
-//        });
-//        rvGallery.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-//
-//                }
-//            }
-//
-//
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                GridLayoutManager layoutManager = GridLayoutManager.class.cast(recyclerView.getLayoutManager());
-//                Log.e("dfasfa", "onScrolled: " + dy);
-//                if (dy < 0 && layoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-//                    recyclerView.getParent().requestDisallowInterceptTouchEvent(false);
-//                    onRVScrolled.scrolled(true);
-//                    //   onRVScrolled.changeItem();
-//                } else if (dy > 0) {
-//                    recyclerView.getParent().requestDisallowInterceptTouchEvent(true);
-//                    onRVScrolled.scrolled(false);
-//                }
-//            }
-//        });
+        RecyclerView rvGallery = view.findViewById(R.id.rv_gallery);
         switch (mGalleryMode) {
             case PHOTO:
-            case STORY:
                 rvGallery.setLayoutManager(new GridLayoutManager(rvGallery.getContext(), isSubFolder ? 3 : 2));
                 setupGalleryWithPhotoAdapter(view, rvGallery);
                 break;
@@ -572,13 +318,12 @@ public class FragmentGallery extends BaseFragment {
                     openImageForEdit(path);
                 } else {
                     //open sub directory
-                    openGallerySubDirectory(mGalleryMode, path, id);
+                    openGallerySubDirectory(GalleryMode.PHOTO, path, id);
                 }
             }
 
             @Override
             public void onMultiSelect(int size) {
-                initToolbar(rootView);
                 handleUiWithMultiSelect(size);
             }
         });
@@ -701,16 +446,9 @@ public class FragmentGallery extends BaseFragment {
                 @Override
                 public void success(String newPath) {
                     G.handler.post(() -> {
-                        PhotoViewer photoViewer = PhotoViewer.newInstance(newPath);
                         FragmentEditImage.insertItemList(newPath, "", false);
-                        if (getActivity() != null) {
-                            if (mGalleryMode == GalleryMode.STORY) {
-                                new HelperFragment(getActivity().getSupportFragmentManager(), photoViewer).setReplace(false).load();
-                            } else {
-                                new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                            }
-
-                        }
+                        if (getActivity() != null)
+                            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
                     });
                 }
             });
@@ -741,13 +479,7 @@ public class FragmentGallery extends BaseFragment {
             popBackStackFragment();
             popBackStackFragment();
         });
-        if (mGalleryMode == GalleryMode.STORY) {
-            PhotoViewer photoViewer = PhotoViewer.newInstance((ArrayList<GalleryItemModel>) selectedPhotos);
-            new HelperFragment(getActivity().getSupportFragmentManager(), photoViewer).setReplace(false).load();
-        } else {
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-        }
-
+        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
     }
 
     private void showNoItemInGallery(View rv, View view) {
@@ -775,7 +507,7 @@ public class FragmentGallery extends BaseFragment {
 
     private void handleUiWithMultiSelect(int size) {
         if (mHelperToolbar.getRightButton() != null) {
-            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO || mGalleryMode == GalleryMode.STORY) {
+            if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
                 if (size > 0) {
                     mHelperToolbar.getRightButton().setText(R.string.md_send_button);
                 } else {
@@ -827,7 +559,7 @@ public class FragmentGallery extends BaseFragment {
     }
 
     public enum GalleryMode {
-        PHOTO, VIDEO, MUSIC, STORY
+        PHOTO, VIDEO, MUSIC
     }
 
 }
