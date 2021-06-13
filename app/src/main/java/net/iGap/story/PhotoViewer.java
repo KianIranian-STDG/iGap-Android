@@ -143,6 +143,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private ZoomLayout zoomLayout;
     private TextStickerView textStickersParentView;
     private HashMap<Integer, List<View>> addedViews;
+    private HashMap<Integer, StoryModes> modes;
     private List<View> redoViews;
     private FrameLayout stickerBorder;
     private TextView textTv;
@@ -355,12 +356,14 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         addedViews = new HashMap<>();
+        modes = new HashMap<>();
         redoViews = new ArrayList<>();
         path = getArguments().getString(PATH);
         selectedPhotos = (List<GalleryItemModel>) getArguments().getSerializable(SELECTED_PHOTOS);
         brushConfigDialog = new BrushConfigDialog();
         brushConfigDialog.setPropertiesChangeListener(this);
         mode = StoryModes.NONE;
+        modes.put(viewHolderPostion, StoryModes.NONE);
         if (!HelperPermission.grantedUseStorage()) {
             try {
                 HelperPermission.getStoragePermision(getContext(), new OnGetPermission() {
@@ -386,6 +389,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             openPhotoForEdit(path, null, false);
         } else {
             openPhotoForEdit(selectedPhotos, null, false);
+            for (int i = 0; i < itemGalleryList.size(); i++) {
+                modes.put(i, StoryModes.NONE);
+            }
         }
         captionEditText.setListener(new EventEditText.Listener() {
             @Override
@@ -409,7 +415,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 }
 
                 mode = StoryModes.ADD_TEXT;
-
+                modes.put(viewHolderPostion, StoryModes.ADD_TEXT);
 
                 TextEditorDialogFragment textEditorDialogFragment =
                         TextEditorDialogFragment.newInstance(getActivity());
@@ -445,6 +451,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     textStickersParentView.setPaintMode(true, "");
                 }
                 mode = StoryModes.PAINT;
+                modes.put(viewHolderPostion, StoryModes.PAINT);
                 textStickersParentView.getmBrushDrawingView().setBrushViewChangeListener(PhotoViewer.this);
                 String tag = brushConfigDialog.getTag();
 
@@ -491,6 +498,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     textStickersParentView.setPaintMode(false, "");
                 }
                 mode = StoryModes.EMOJI;
+                modes.put(viewHolderPostion, StoryModes.EMOJI);
                 EmojiDialogFrag emojiDialogFrag = new EmojiDialogFrag();
                 emojiDialogFrag.setEmojiListener(PhotoViewer.this::onEmojiClick);
                 emojiDialogFrag.show(getParentFragmentManager(), emojiDialogFrag.getTag());
@@ -502,6 +510,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             public void onClick(View view) {
                 viewPager.setPagingEnabled(true);
                 mode = StoryModes.FILTER;
+                modes.put(viewHolderPostion, StoryModes.FILTER);
                 new HelperFragment(getActivity().getSupportFragmentManager(), FragmentFilterImage.newInstance(itemGalleryList.get(viewHolderPostion).getPath())).setReplace(false).load();
             }
         });
@@ -526,7 +535,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 pickerViewSendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(VISIBLE);
                 for (int i = 0; i < itemGalleryList.size(); i++) {
-                    new SaveBitmapAsync(itemGalleryList.get(i).path, viewHolders.get(i).findViewById(R.id.textstickerView)).execute();
+                    new SaveBitmapAsync(itemGalleryList.get(i).path, viewHolders.get(i).findViewById(R.id.textstickerView), modes.get(i)).execute();
                 }
 
 
@@ -572,16 +581,19 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 textImageList.put(itemGalleryList.get(viewHolderPostion).path, item);
             }
         });
+
     }
 
 
     public class SaveBitmapAsync extends AsyncTask<String, String, Exception> {
         String imagePath;
         TextStickerView textStickerView;
+        StoryModes mode;
 
-        public SaveBitmapAsync(String imagePath, TextStickerView textStickerView) {
+        public SaveBitmapAsync(String imagePath, TextStickerView textStickerView, StoryModes mode) {
             this.imagePath = imagePath;
             this.textStickerView = textStickerView;
+            this.mode = mode;
         }
 
         @Override
@@ -594,18 +606,22 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         protected Exception doInBackground(String... strings) {
 
             try {
+                textStickerView.setDrawingCacheEnabled(true);
+                Bitmap finalBitmap = Bitmap.createBitmap(textStickerView.getDrawingCache());
+                Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+                int textStickerHeightCenterY = textStickerView.getHeight() / 2;
+                int textStickerWidthCenterX = textStickerView.getWidth() / 2;
 
-                if (textStickerView != null && mode != StoryModes.NONE) {
-                    textStickerView.setDrawingCacheEnabled(true);
-                    Bitmap finalBitmap = Bitmap.createBitmap(textStickerView.getDrawingCache());
-                    Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
-                    int textStickerHeightCenterY = textStickerView.getHeight() / 2;
-                    int textStickerWidthCenterX = textStickerView.getWidth() / 2;
+                int imageViewHeight = textStickerView.getBitmapHolderImageView().getHeight();
+                int imageViewWidth = textStickerView.getBitmapHolderImageView().getWidth();
+                Bitmap finalResultBitmap = Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
 
-                    int imageViewHeight = textStickerView.getBitmapHolderImageView().getHeight();
-                    int imageViewWidth = textStickerView.getBitmapHolderImageView().getWidth();
-                    Bitmap finalResultBitmap = Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
+                if (textStickerView != null && this.mode != StoryModes.NONE) {
                     this.imagePath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalResultBitmap, System.currentTimeMillis() + "edited_image.jpg", null);
+                } else if (this.mode == StoryModes.NONE) {
+                    File imageFile = new File(this.imagePath);
+                    FileOutputStream fileOutputStream = new FileOutputStream(imageFile, false);
+                    finalResultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                 }
 
                 return null;
@@ -863,6 +879,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             redoViews.add(removeView);
             if (addedViews.get(viewHolderPostion).size() == 0) {
                 mode = StoryModes.NONE;
+                modes.put(viewHolderPostion, StoryModes.NONE);
             }
         }
     }
@@ -1189,6 +1206,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 onPaintChanged.setValue(addedViews.size());
                 if (addedViews.get(viewHolderPostion).size() == 0) {
                     mode = StoryModes.NONE;
+                    modes.put(viewHolderPostion, StoryModes.NONE);
                 }
             }
         }
