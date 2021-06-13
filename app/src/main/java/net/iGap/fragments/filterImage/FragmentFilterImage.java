@@ -157,8 +157,11 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
 
                                         path = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
-                                        if (FragmentEditImage.updateImage != null && path != null) {
-                                            FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path.toString())));
+                                        if (FragmentEditImage.updateImage != null) {
+                                            final String finalPath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                                            if (finalPath != null) {
+                                                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(finalPath)));
+                                            }
                                         }
                                         if (PhotoViewer.updateImage != null && path != null) {
                                             PhotoViewer.updateImage.result(finalImage);
@@ -197,8 +200,11 @@ public class FragmentFilterImage extends BaseFragment implements FiltersListFrag
                 String stringUrl = null;    /* value to be returned */
 
                 path = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                if (FragmentEditImage.updateImage != null && path != null) {
-                    FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path.toString())));
+                if (FragmentEditImage.updateImage != null) {
+                    final String finalPath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                    if (finalPath != null) {
+                        FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(finalPath)));
+                    }
                 }
                 if (PhotoViewer.updateImage != null && path != null) {
                     PhotoViewer.updateImage.result(finalImage);
