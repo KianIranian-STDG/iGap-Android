@@ -46,6 +46,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperToolbar;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
@@ -248,6 +249,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
                     @Override
                     public void Allow() {
+                        HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
                         new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load();
                     }
 
