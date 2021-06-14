@@ -346,7 +346,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void checkIntent(Intent intent) {
-
+        int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
+        if (activeAccountCount == 0){
+            finish();
+        }
         if (G.isRestartActivity) {
             return;
         }
