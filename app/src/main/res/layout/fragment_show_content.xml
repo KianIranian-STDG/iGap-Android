@@ -27,7 +27,7 @@
         app:srcCompat="@drawable/selector_play_pause_round" />
 
     <LinearLayout
-        android:id="@+id/toolbarShowImage"
+        android:id="@+id/toolbarShowContent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="#55000000"
