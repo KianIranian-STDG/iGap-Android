@@ -1,11 +1,15 @@
 package net.iGap.helper;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -357,5 +361,14 @@ public class HelperFragment {
                 fragmentName.equals(FragmentContactsProfile.class.getName()) || fragmentName.equals(ShowCustomList.class.getName()) ||
                 fragmentName.equals(FragmentShearedMedia.class.getName()) || fragmentName.equals(FragmentEditImage.class.getName()) ||
                 fragmentName.equals(FragmentShowMember.class.getName()) || fragmentName.equals(FragmentGallery.class.getName());
+    }
+
+    public static void reAttachFragment(FragmentActivity fragmentActivity, Fragment fragment) {
+        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(fragment);
+        ft.attach(fragment).commit();
     }
 }

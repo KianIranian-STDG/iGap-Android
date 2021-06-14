@@ -109,7 +109,7 @@ public class GoToChatActivity {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
                     fragmentChatBackStack(activity);
-                    new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+                    new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(true).load();
                 }
             }).onNegative((dialog, which) -> {
                 HelperGetDataFromOtherApp.hasSharedData = false;
@@ -128,7 +128,7 @@ public class GoToChatActivity {
                 FragmentChat fragmentChat = new FragmentChat();
                 fragmentChat.setArguments(getBundle());
                 fragmentChatBackStack(activity);
-                new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+                new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(true).load();
             }).onNegative((dialog, which) -> {
                 FragmentChat.structIGSticker = null;
 
@@ -181,7 +181,7 @@ public class GoToChatActivity {
                 Log.wtf(this.getClass().getName(), "loadChatFragment");
             }
         } else {
-            new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(false).load();
+            new HelperFragment(activity.getSupportFragmentManager(), fragmentChat).setReplace(true).load();
         }
     }
 

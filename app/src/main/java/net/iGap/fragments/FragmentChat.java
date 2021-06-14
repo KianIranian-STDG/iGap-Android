@@ -37,6 +37,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -677,6 +678,9 @@ public class FragmentChat extends BaseFragment
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
+        }
 
         isNeedResume = true;
         G.locationListener = this;
@@ -917,9 +921,7 @@ public class FragmentChat extends BaseFragment
 
                     edtChat.setText("");
                 }
-
             }
-
         }
     }
 
@@ -1082,7 +1084,7 @@ public class FragmentChat extends BaseFragment
                     e.printStackTrace();
                 }
             }
-        }, Config.LOW_START_PAGE_TIME);
+        }, 500);
 
         mRoomIdStatic = mRoomId;
         lastChatRoomId = mRoomId;
@@ -2755,7 +2757,6 @@ public class FragmentChat extends BaseFragment
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setItemViewCacheSize(20);
-
 
         if (realmRoom != null && !realmRoom.getReadOnly()) {
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -5991,7 +5992,7 @@ public class FragmentChat extends BaseFragment
             bundle.putLong(RealmConstants.REALM_SELECTED_IMAGE, messageObject.id);
             fragment.setArguments(bundle);
 
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setTag(FragmentShowContent.class.getName()).setReplace(false).load();
         }
     }
 
@@ -6054,8 +6055,6 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-
-
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
@@ -6077,7 +6076,6 @@ public class FragmentChat extends BaseFragment
         super.onConfigurationChanged(newConfig);
 
         if (mAttachmentPopup != null && mAttachmentPopup.isShowing) mAttachmentPopup.updateHeight();
-
     }
 
     /**

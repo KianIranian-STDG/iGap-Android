@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +90,13 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
             });
         }
 
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+            getActivity().getTheme().applyStyle(new Theme().getTheme(getActivity()), true);
+            HelperFragment.reAttachFragment(G.fragmentActivity, this);
     }
 
     @Override
