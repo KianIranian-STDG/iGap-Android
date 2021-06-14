@@ -35,6 +35,7 @@ public class SHP_SETTING {
     public static final String KEY_KEYBOARD_HEIGHT_LAND = "keyboard_height_land";
     public static final String KEY_PLAY_SOUND_IN_CHAT = "play_sound_in_chat";
     public static final String KEY_THEME_DARK = "KEY_THEME_DARK";
+    public static final String KEY_IS_DARK_BUTTON_SELECTED = "key_ia_dark_button_selected";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
     public static final String KEY_AUTO_ROTATE = "KEY_AUTO_ROTATE";
@@ -131,7 +132,6 @@ public class SHP_SETTING {
     public static final String KEY_PROGRES_COLOR = "KEY_PROGRES_COLOR";
 
     public static final String KEY_OLD_THEME_COLOR = "KEY_OLD_THEME_COLOR";
-    public static final String KEY_USER_SELECTED_THEME_COLOR = "user_selected_theme_color";
 
     public static final String KEY_APP_BAR_COLOR_DARK = "KEY_APP_BAR_COLOR_DARK";
     public static final String KEY_NOTIFICATION_COLOR_DARK = "KEY_NOTIFICATION_COLOR_DARK";
@@ -208,8 +208,6 @@ public class SHP_SETTING {
     public static final String EXCEED_CONTACTS_NUMBER = "EXCEED_CONTACTS_NUMBER";
     public static final String REGISTER_NUMBER = "REGISTER_USER_NUMBER";
     public static final String REGISTER_USERNAME = "REGISTER_USERNAME";
-    public static final String KEY_AUTO_DARK_MODE = "key_auto_dark_mode";
-    public static final String KEY_SYSTEM_UI_MODE = "key_system_ui_mode";
 
 }
 

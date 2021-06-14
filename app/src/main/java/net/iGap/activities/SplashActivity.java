@@ -21,14 +21,9 @@ import net.iGap.realm.RealmUserInfo;
 
 public class SplashActivity extends ActivityEnhanced {
 
-    public static final int LIGHT_SYSTEM_UI_NUMBER = 17;
-    public static final int DARK_SYSTEM_UI_NUMBER = 33;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        setFirstStartingTheme(sharedPreferences);
 
         if (Config.FILE_LOG_ENABLE) {
             FileLog.i("Splash activity on create");
@@ -81,16 +76,6 @@ public class SplashActivity extends ActivityEnhanced {
                 startActivity(intent);
                 finish();
             }
-        }
-    }
-
-    private void setFirstStartingTheme(SharedPreferences sharedPreferences) {
-        int configUiMode = getResources().getConfiguration().uiMode;
-        if(configUiMode == LIGHT_SYSTEM_UI_NUMBER){  // light mode
-            sharedPreferences.edit()
-                    .putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, LIGHT_SYSTEM_UI_NUMBER).apply();
-        } else if(configUiMode == DARK_SYSTEM_UI_NUMBER){ //dark mode
-            sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, DARK_SYSTEM_UI_NUMBER).apply();
         }
     }
 

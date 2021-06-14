@@ -2290,6 +2290,7 @@ Want to get it?</string>
     <string name="shared_file">اشتراک گذاری فایل</string>
     <string name="create_permission">ایجاد مجوز</string>
     <string name="need_permission_description">اشتراک گذاری فایل نیازمند مجوز دسترسی حافظه می باشد لطفا بعد از ایجاد مجوز فایل مورد نظر را به اشتراک گذارید.</string>
+    <string name="dark_mode_off">Dark mode off</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>

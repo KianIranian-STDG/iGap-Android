@@ -382,7 +382,7 @@
             android:layout_toEndOf="@id/fup_btn_dark_view_handler_view"
             android:layout_toRightOf="@id/fup_btn_dark_view_handler_view"
             android:gravity="center_vertical"
-            android:text="@string/auto_dark_mode"
+            android:text="@string/st_dark_theme"
             android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_mode"
@@ -406,17 +406,11 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp8"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{()->viewModel.onAutoDarkClicked()}"
+            android:onClick="@{()->viewModel.onDarkModeClicked()}"
             app:layout_constraintBottom_toBottomOf="@id/fup_btn_dark_view_handler_view"
             app:layout_constraintEnd_toEndOf="@id/fup_btn_invite_friends"
             app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
             app:layout_constraintTop_toBottomOf="@id/fup_btn_nearBy" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/fup_dark_mode_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="darkTheme,fup_btn_dark_mode, darkThemeTitle, fup_btn_dark_view_handler_view" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/fup_btn_faq_view_handler_view"
