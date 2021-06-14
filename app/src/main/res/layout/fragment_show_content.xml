@@ -27,7 +27,7 @@
         app:srcCompat="@drawable/selector_play_pause_round" />
 
     <LinearLayout
-        android:id="@+id/toolbarShowContent"
+        android:id="@+id/toolbarShowImage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="#55000000"
@@ -35,8 +35,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+        android:orientation="horizontal">
 
         <net.iGap.libs.rippleeffect.RippleView
             android:id="@+id/asi_ripple_back"

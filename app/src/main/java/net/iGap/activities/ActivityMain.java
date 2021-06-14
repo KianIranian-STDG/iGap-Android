@@ -10,6 +10,7 @@
 
 package net.iGap.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -73,7 +74,6 @@ import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentSetting;
-import net.iGap.fragments.FragmentShowContent;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
@@ -106,6 +106,7 @@ import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
@@ -144,11 +145,11 @@ import org.paygear.fragment.PaymentHistoryFragment;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static net.iGap.G.context;
+import static net.iGap.G.handler;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
@@ -1232,23 +1233,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void applyTheme() {
         getTheme().applyStyle(new Theme().getTheme(this), true);
-       FragmentManager fragmentManager = getSupportFragmentManager();
-//        Fragment frg;
-//        frg = fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
-//        FragmentTransaction ft = fragmentManager.beginTransaction();
-//        ft.detach(frg);
-//        ft.attach(frg);
-//        ft.commit();
-
-        ArrayList<Fragment> fragmentArray = (ArrayList<Fragment>) getSupportFragmentManager().getFragments();
-        Fragment fragment = fragmentArray.get(fragmentArray.size() -1);
-        if (!fragment.getTag().equals(FragmentShowContent.class.getName())) {
-         //   Fragment bottomNavFragment = fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.detach(fragment);
-            ft.attach(fragment);
-            ft.commit();
-        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment frg;
+        frg = fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
     }
 
     private void checkSystemUiModeChange(Configuration newConfig) {
@@ -1258,6 +1249,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else if(newConfig.uiMode == 33){  //33 = dark ui mode system number
             sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 33).apply();
         }
+//        recreate();
     }
 
     private void setViewConfigurationChanged() {
