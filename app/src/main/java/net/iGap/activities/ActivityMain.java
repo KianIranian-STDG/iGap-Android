@@ -346,7 +346,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void checkIntent(Intent intent) {
-
         if (G.isRestartActivity) {
             return;
         }
@@ -537,7 +536,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeSheare = false;
-            checkIntent(getIntent());
+
+            int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
+            if (activeAccountCount == 0){
+               finish();
+            }
+            else {
+                checkIntent(getIntent());
+            }
 
             initComponent();
 
