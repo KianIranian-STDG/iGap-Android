@@ -10,7 +10,6 @@
 
 package net.iGap.activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -77,7 +76,6 @@ import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.TabletEmptyChatFragment;
 import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.helper.AutoDarkModeSetter;
 import net.iGap.helper.CardToCardHelper;
 import net.iGap.helper.DirectPayHelper;
 import net.iGap.helper.FileLog;
@@ -106,7 +104,6 @@ import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
@@ -149,7 +146,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static net.iGap.G.context;
-import static net.iGap.G.handler;
 import static net.iGap.G.isSendContact;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CALL;
 import static net.iGap.fragments.BottomNavigationFragment.DEEP_LINK_CHAT;
@@ -408,9 +404,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            AutoDarkModeSetter.setStartingTheme();
-        }
+
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
@@ -1227,36 +1221,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         super.onConfigurationChanged(newConfig);
 
-        /**
-         * check changing ui mode system
-         */
-        checkSystemUiModeChange(newConfig);
-        AutoDarkModeSetter.setStartingTheme();
-        applyTheme();
-
         G.rotationState = newConfig.orientation;
     }
 
-    private void applyTheme() {
-        getTheme().applyStyle(new Theme().getTheme(this), true);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment frg;
-        frg = fragmentManager.findFragmentByTag(BottomNavigationFragment.class.getName());
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.detach(frg);
-        ft.attach(frg);
-        ft.commit();
-    }
-
-    private void checkSystemUiModeChange(Configuration newConfig) {
-        if(newConfig.uiMode == 17){  // 17 = light ui mode system number
-            sharedPreferences.edit()
-                    .putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 17).apply();
-        } else if(newConfig.uiMode == 33){  //33 = dark ui mode system number
-            sharedPreferences.edit().putInt(SHP_SETTING.KEY_SYSTEM_UI_MODE, 33).apply();
-        }
-//        recreate();
-    }
 
     private void setViewConfigurationChanged() {
         if (G.twoPaneMode) {
