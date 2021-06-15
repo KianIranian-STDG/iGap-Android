@@ -15,6 +15,7 @@
     <string name="kuknos_rial_max_buy">"Maksimum izin verilen"</string>
     <string name="kuknos_rial_min_buy">"İzin verilen minimum"</string>
     <string name="kuknos_rial_price_of_day">"Günün fiyatı"</string>
+    <string name="stories">çîrokan</string>
     <string name="kuknos_edit_info_sending_info">"Bilgi gönderiliyor ..."</string>
     <string name="kuknos_receipt_bill">"Geri ödeme makbuzu"</string>
     <string name="kuknos_edit_info_empty_sheba">"Gece alanı boş olamaz"</string>

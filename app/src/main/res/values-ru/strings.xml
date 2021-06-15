@@ -15,6 +15,7 @@
     <string name="pu_desc_profileUser">Введите свое имя и выберите свою фотографию пользователя</string>
     <string name="pu_nikname_profileUser">Имя</string>
     <string name="pu_Lets_Go">Продолжение</string>
+    <string name="stories">рассказы</string>
     <string name="kuknos_receipt_bill">"Квитанция о возмещении"</string>
     <string name="kuknos_edit_info_sending_info">"Отправка информации ..."</string>
     <string name="kuknos_edit_info_saved_successfully">"Информация успешно сохранена"</string>

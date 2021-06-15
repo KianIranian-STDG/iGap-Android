@@ -1260,6 +1260,7 @@
     <string name="payable_price">مبلغ پرداختی</string>
     <string name="qr_not_detected">نماد قابل شناسایی نیست</string>
     <string name="price_rial">مبلغ (ریال)</string>
+    <string name="stories">"داستان ها"</string>
     <string name="amount_must_be_greater_10000">مبلغ باید بیشتر از 10000 ریال باشد</string>
     <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
     <string name="payment_history">تاریخچه تراکنش‌ها</string>

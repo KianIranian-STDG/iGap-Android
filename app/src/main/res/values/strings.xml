@@ -1421,6 +1421,7 @@ Want to get it?</string>
     <string name="personalAccountType">Personal</string>
     <string name="taxiAccountType">Driver</string>
     <string name="shopAccountType">Shop</string>
+    <string name="stories">Stories</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="IBAN">IBAN</string>

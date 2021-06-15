@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,14 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("fakshfashdf", "onCreate2: ");
         // itemGalleryList = getArguments().getParcelable(ITEM_GALLERY_LIST);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("fakshfashdf", "onDestroy2: ");
     }
 
     @Nullable
@@ -60,6 +68,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.story_fragment, container, false);
         viewPager = view.findViewById(R.id.viewPager);
+        Log.e("fakshfashdf", "onCreateView2: ");
         new StoryDisplayFragment(this);
         setUpPager();
         return view;

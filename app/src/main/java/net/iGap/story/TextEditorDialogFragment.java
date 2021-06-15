@@ -46,7 +46,7 @@ public class TextEditorDialogFragment extends DialogFragment {
     private VerticalSlideColorPicker verticalSlideColorPicker;
     private LinearLayout editTextRootView;
     private int editTextSize = 40;
-    private boolean firstTime = true;
+    int typingState = 0;
     private static final String EXTRA_INPUT_TEXT = "extra_input_text";
     private static final String EXTRA_COLOR_CODE = "extra_color_code";
 
@@ -157,7 +157,7 @@ public class TextEditorDialogFragment extends DialogFragment {
                 inputMethodManager.hideSoftInputFromWindow(addTextEditTExt.getWindowToken(), 0);
                 String inputText = addTextEditTExt.getText().toString();
                 if (!TextUtils.isEmpty(inputText) && onTextEditorListener != null) {
-                    onTextEditorListener.onDone(inputText, colorCode,addTextEditTExt.getWidth());
+                    onTextEditorListener.onDone(inputText, colorCode, addTextEditTExt.getWidth());
                 }
                 dismiss();
             }
@@ -170,17 +170,25 @@ public class TextEditorDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() >= 17 && charSequence.length() <= 29 && firstTime) {
-                    addTextEditTExt.setTextSize(editTextSize--);
-                } else if (charSequence.length() >= 17 && charSequence.length() <= 29 && !firstTime) {
-                    addTextEditTExt.setTextSize(editTextSize++);
-                } else if (charSequence.length() > 29) {
-                    firstTime = false;
-                } else if (charSequence.length() == 0) {
-                    editTextSize = 40;
-                    addTextEditTExt.setTextSize(editTextSize);
-                    firstTime = true;
+                if (typingState > charSequence.length()) {
+                    if (charSequence.length() >= 17 && charSequence.length() <= 29) {
+                        addTextEditTExt.setTextSize(editTextSize++);
+                    }
+                    if (charSequence.length() == 0) {
+                        editTextSize = 40;
+                        addTextEditTExt.setTextSize(editTextSize);
+                    }
+                } else {
+                    if (charSequence.length() >= 17 && charSequence.length() <= 29) {
+                        addTextEditTExt.setTextSize(editTextSize--);
+                    }
+                    if (charSequence.length() == 0) {
+                        editTextSize = 40;
+                        addTextEditTExt.setTextSize(editTextSize);
+                    }
                 }
+                typingState = charSequence.length();
+
 
             }
 
@@ -197,6 +205,6 @@ public class TextEditorDialogFragment extends DialogFragment {
     }
 
     public interface OnTextEditorListener {
-        void onDone(String inputText, int colorCode,int width);
+        void onDone(String inputText, int colorCode, int width);
     }
 }

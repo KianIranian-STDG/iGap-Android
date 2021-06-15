@@ -3,6 +3,7 @@ package net.iGap.story;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -192,6 +193,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     @SuppressLint("ResourceType")
     @Override
     public View createView(Context context) {
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         rootView = new NotifyFrameLayout(context) {
             @Override
             public boolean dispatchKeyEventPreIme(KeyEvent event) {
@@ -426,6 +431,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     rootView.addView(stickerBorder, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER, 8, 8, 8, 8));
 
                     textTv = new TextView(getContext());
+                    textTv.setId(R.id.story_added_text);
                     textTv.setTextColor(colorCode);
                     textTv.setText(inputText);
                     textTv.setGravity(Gravity.CENTER);
@@ -535,7 +541,66 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 pickerViewSendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(VISIBLE);
                 for (int i = 0; i < itemGalleryList.size(); i++) {
-                    new SaveBitmapAsync(itemGalleryList.get(i).path, viewHolders.get(i).findViewById(R.id.textstickerView), modes.get(i)).execute();
+                    if (viewHolders.get(i) != null) {
+                        reservedView = viewHolders.get(i);
+                        new SaveBitmapAsync(itemGalleryList.get(i).path, viewHolders.get(i).findViewById(R.id.textstickerView), modes.get(i)).execute();
+                    }
+//                    else {
+//                        zoomLayout = new ZoomLayout(context);
+//
+//
+//                        textStickersParentView = new TextStickerView(context, false);
+//                        textStickersParentView.setDrawingCacheEnabled(true);
+//                        textStickersParentView.setId(R.id.textstickerView);
+//                        zoomLayout.addView(textStickersParentView);
+//                        textStickersParentView.setDrawingCacheEnabled(true);
+//
+//
+//                        textStickersParentView.measure(View.MeasureSpec.makeMeasureSpec(viewPager.getMeasuredWidth(), View.MeasureSpec.EXACTLY),
+//                                View.MeasureSpec.makeMeasureSpec(viewPager.getMeasuredHeight(), View.MeasureSpec.EXACTLY));
+//                        textStickersParentView.layout(0, 0, viewPager.getMeasuredWidth(),  viewPager.getMeasuredHeight());
+//
+//                        textStickersParentView.buildDrawingCache(true);
+//                        Bitmap b = Bitmap.createBitmap(textStickersParentView.getDrawingCache());
+//                        textStickersParentView.setDrawingCacheEnabled(false);
+//
+//                        if (itemGalleryList.get(i).path != null && !viewHolders.containsKey(i)) {
+//
+//
+//                            String oldPath = itemGalleryList.get(i).path;
+//                            String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
+//
+//                            //check if old path available in selected list , replace new path with that
+//                            if (!oldPath.equals(finalPath)) {
+//                                StructBottomSheet item = textImageList.get(oldPath);
+//                                if (item != null) {
+//                                    textImageList.remove(oldPath);
+//                                    textImageList.put(finalPath, item);
+//                                }
+//                            }
+//                            itemGalleryList.get(i).path = finalPath;
+//
+//
+//                            textStickersParentView.setPaintMode(false, finalPath);
+//
+//                            int posFor = i;
+//                            Palette.from(BitmapFactory.decodeFile(itemGalleryList.get(i).getPath())).generate(new Palette.PaletteAsyncListener() {
+//                                @Override
+//                                public void onGenerated(@Nullable Palette palette) {
+//                                    GradientDrawable gd = new GradientDrawable(
+//                                            GradientDrawable.Orientation.TOP_BOTTOM,
+//                                            new int[]{
+//                                                    palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
+//
+//                                    textStickersParentView.setBackground(gd);
+//                                    new SaveBitmapAsync(itemGalleryList.get(posFor).path, textStickersParentView, modes.get(posFor)).execute();
+//                                }
+//                            });
+//
+//
+//                        }
+//
+//                    }
                 }
 
 
@@ -584,6 +649,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
     }
 
+    ZoomLayout reservedView;
 
     public class SaveBitmapAsync extends AsyncTask<String, String, Exception> {
         String imagePath;
@@ -606,8 +672,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         protected Exception doInBackground(String... strings) {
 
             try {
+                Bitmap finalBitmap = null;
                 textStickerView.setDrawingCacheEnabled(true);
-                Bitmap finalBitmap = Bitmap.createBitmap(textStickerView.getDrawingCache());
+                finalBitmap = Bitmap.createBitmap(textStickerView.getDrawingCache());
                 Bitmap resultBitmap = finalBitmap.copy(Bitmap.Config.ARGB_8888, true);
                 int textStickerHeightCenterY = textStickerView.getHeight() / 2;
                 int textStickerWidthCenterX = textStickerView.getWidth() / 2;
@@ -626,6 +693,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
                 return null;
             } catch (Exception e) {
+                Log.e("dflkwsjflksdjfkldsjf", "doInBackground: " + e.getMessage());
                 e.printStackTrace();
                 return e;
             }
@@ -664,7 +732,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             textImageList.put(path, item);
         }
 
-
+        Log.e("gdfgdfgdfg", " "+path);
         itemGalleryList.get(counter).setPath(path);
         counter++;
 
@@ -713,9 +781,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     }
 
     private void editText(View view, String inputText, int colorCode) {
-        if (textTv != null && addedViews.get(viewHolderPostion).contains(view) && !TextUtils.isEmpty(inputText)) {
-            textTv.setText(inputText);
-            textTv.setTextColor(colorCode);
+        if (view.findViewById(R.id.story_added_text) != null && addedViews.get(viewHolderPostion).contains(view) && !TextUtils.isEmpty(inputText)) {
+            ((TextView) view.findViewById(R.id.story_added_text)).setText(inputText);
+            ((TextView) view.findViewById(R.id.story_added_text)).setTextColor(colorCode);
             textStickersParentView.updateViewLayout(view, view.getLayoutParams());
             int i = addedViews.get(viewHolderPostion).indexOf(view);
             if (i > -1) addedViews.get(viewHolderPostion).set(i, view);
@@ -943,13 +1011,13 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-
+            zoomLayout = new ZoomLayout(context);
+            textStickersParentView = new TextStickerView(context, false);
+            textStickersParentView.setDrawingCacheEnabled(true);
+            textStickersParentView.setId(R.id.textstickerView);
+            zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
             if (itemGalleryList.get(position).path != null && !viewHolders.containsKey(position)) {
-                zoomLayout = new ZoomLayout(context);
-                textStickersParentView = new TextStickerView(context, false);
-                textStickersParentView.setDrawingCacheEnabled(true);
-                textStickersParentView.setId(R.id.textstickerView);
-                zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
 
                 String oldPath = itemGalleryList.get(position).path;
                 String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
@@ -965,37 +1033,30 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 itemGalleryList.get(position).path = finalPath;
 
 
-                if (position == 0) {
-                    Palette palette = Palette.from(BitmapFactory.decodeFile(finalPath)).generate();
-                    GradientDrawable gd = new GradientDrawable(
-                            GradientDrawable.Orientation.TOP_BOTTOM,
-                            new int[]{
-                                    palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
-
-                    textStickersParentView.setBackground(gd);
-                } else {
-                    Palette.from(BitmapFactory.decodeFile(finalPath)).generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(@Nullable Palette palette) {
-                            GradientDrawable gd = new GradientDrawable(
-                                    GradientDrawable.Orientation.TOP_BOTTOM,
-                                    new int[]{
-                                            palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
-
-                            textStickersParentView.setBackground(gd);
-                        }
-                    });
-                }
-
-
                 textStickersParentView.setPaintMode(false, finalPath);
 
 
             }
 
             if (!viewHolders.containsKey(position)) {
-                container.addView(zoomLayout, 0);
+                Log.e("kdfjsklfjskdfj", "instantiateItem: " + position);
+
+
                 viewHolders.put(position, zoomLayout);
+                Palette.from(BitmapFactory.decodeFile(itemGalleryList.get(position).getPath())).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(@Nullable Palette palette) {
+                        GradientDrawable gd = new GradientDrawable(
+                                GradientDrawable.Orientation.TOP_BOTTOM,
+                                new int[]{
+                                        palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
+
+                        viewHolders.get(position).findViewById(R.id.textstickerView).setBackground(gd);
+                    }
+                });
+
+
+                container.addView(zoomLayout, 0);
                 List<View> views = new ArrayList<>();
                 addedViews.put(position, views);
                 return zoomLayout;
@@ -1228,6 +1289,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     private void setUpViewPager() {
         mAdapter = new AdapterViewPager(itemGalleryList);
         viewPager.setAdapter(mAdapter);
+        viewPager.setOffscreenPageLimit(itemGalleryList.size());
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

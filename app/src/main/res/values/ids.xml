@@ -25,6 +25,7 @@
     <item name="csla_btn_play_music" type="id" />
     <item name="csla_seekBar1" type="id" />
     <item name="csla_txt_timer" type="id" />
+    <item name="story_added_text" type="id" />
     <item name="duration" type="id" />
     <item name="cslum_txt_unread_message" type="id" />
     <item name="cslt_txt_time_date" type="id" />

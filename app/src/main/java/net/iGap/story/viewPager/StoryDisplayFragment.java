@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -100,6 +101,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_story_display, container, false);
         assert getArguments() != null;
+        Log.e("fakshfashdf", "onCreateView: " + counter);
         position = getArguments().getInt(EXTRA_POSITION);
         storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
         stories = storyUser.getStories();
@@ -128,6 +130,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.e("fakshfashdf", "onViewCreated: " + counter);
         storyDisplayVideo.setUseController(false);
         replayFrame.setOnClickListener(view1 -> reply(true));
         tvSend.setOnClickListener(view12 -> {
@@ -296,12 +299,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onStart() {
         super.onStart();
+        Log.e("fakshfashdf", "onStart: " + counter);
         counter = restorePosition();
+        Log.e("fakshfashdf", "onStart2: " + restorePosition());
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("fakshfashdf", "onResume: " + counter);
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
         onResumeCalled = true;
         if (stories.get(counter).isVideo() && !onVideoPrepared) {
@@ -461,7 +467,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e("fakshfashdf", "onDestroy: " + counter);
         simpleExoPlayer.release();
+        counter = 0;
+        savePosition(counter);
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
     }
 }
