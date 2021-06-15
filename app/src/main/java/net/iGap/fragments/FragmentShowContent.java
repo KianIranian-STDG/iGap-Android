@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -93,6 +94,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private ViewPager2.OnPageChangeCallback viewPagerListener;
     private boolean initialViewPager = true;
     private ImageButton imgPlay;
+    private LinearLayout toolbarLl;
 
     public static FragmentShowContent newInstance() {
         return new FragmentShowContent();
@@ -102,8 +104,8 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mVerticalSwipeBackLayout = new VerticalSwipeBackLayout(getActivity());
-        exoPlayer = new SimpleExoPlayer.Builder(G.context).build();
-        dataSourceFactory = new DefaultDataSourceFactory(G.context);
+        exoPlayer = new SimpleExoPlayer.Builder(getActivity()).build();
+        dataSourceFactory = new DefaultDataSourceFactory(getActivity());
         videos = new SparseArrayCompat<>();
         setPlayerListener();
     }
@@ -160,7 +162,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
-               imgPlay.setActivated(isPlaying);
+                imgPlay.setActivated(isPlaying);
             }
         });
     }
@@ -174,10 +176,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             long selectedFileToken = bundle.getLong(RealmConstants.REALM_SELECTED_IMAGE);
             ArrayList<MessageObject> messageObjects = new ArrayList<>();
 
+            String[] mediaType = new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString(), ProtoGlobal.RoomMessageType.IMAGE.toString(), ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()};
             RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoomMessage.class)
                         .equalTo(RealmConstants.REALM_ROOM_ID, mRoomId)
-                        .in(RealmConstants.REALM_MESSAGE_TYPE, new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.IMAGE.toString()})
+                        .in(RealmConstants.REALM_MESSAGE_TYPE, mediaType)
                         .findAll()
                         .sort(RealmConstants.REALM_UPDATE_TIME, Sort.ASCENDING);
             });
@@ -220,6 +223,8 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         imgPlay = view.findViewById(R.id.imgPlay);
         viewPager = view.findViewById(R.id.asi_view_pager);
         contentNumberTv = view.findViewById(R.id.asi_txt_image_number);
+        toolbarLl = view.findViewById(R.id.toolbarShowContent);
+
 
         room = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo("id", messageObjects.get(selectedFile).roomId).findFirst();
@@ -397,9 +402,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     }
 
     @Override
-    public void playButtonVisibility(int state) {
+    public void setPlayBtnAndToolbarVisibility(int state) {
         imgPlay.setVisibility(state);
+        toolbarLl.setVisibility(state);
     }
+
 
     private class ShowContentAdapter extends RecyclerView.Adapter<ShowContentAdapter.ViewHolder> {
         private ArrayList<MessageObject> messageObjects = new ArrayList<>();
@@ -477,16 +484,16 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         zoomableImageView.setVisibility(View.VISIBLE);
 
                         if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                            mShowMediaListener.playButtonVisibility(View.GONE);
+                            mShowMediaListener.setPlayBtnAndToolbarVisibility(View.GONE);
                         } else {
-                            mShowMediaListener.playButtonVisibility(View.VISIBLE);
+                            mShowMediaListener.setPlayBtnAndToolbarVisibility(View.VISIBLE);
                             zoomableImageView.setVisibility(View.INVISIBLE);
                             playerView.setVisibility(View.VISIBLE);
                             mShowMediaListener.videoAttached(new WeakReference(playerView), position, false);
                         }
                     } else {
                         playerView.setVisibility(View.INVISIBLE);
-                        mShowMediaListener.playButtonVisibility(View.GONE);
+                        mShowMediaListener.setPlayBtnAndToolbarVisibility(View.GONE);
                         path = getThumbnailPath(messageObject);
                         zoomableImageView.setVisibility(View.VISIBLE);
                         file = new File(path);
@@ -567,7 +574,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
                 }
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mShowMediaListener.playButtonVisibility(View.GONE);
+                    mShowMediaListener.setPlayBtnAndToolbarVisibility(View.GONE);
                 }
 
                 progress.setOnClickListener(view -> {
@@ -582,7 +589,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
                 playerView.hideController();
                 playerView.setControllerVisibilityListener(visibility -> {
-                    mShowMediaListener.playButtonVisibility(visibility);
+                    mShowMediaListener.setPlayBtnAndToolbarVisibility(visibility);
                     mediaInfoCl.setVisibility(visibility);
                 });
             }
@@ -658,5 +665,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
 interface ShowMediaListener {
     void videoAttached(WeakReference<PlayerView> playerView, int position, boolean callPageSelected);
-    void playButtonVisibility(int state);
+
+    void setPlayBtnAndToolbarVisibility(int state);
 }

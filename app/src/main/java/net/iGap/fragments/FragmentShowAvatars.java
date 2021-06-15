@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -229,7 +227,7 @@ public class FragmentShowAvatars extends BaseFragment {
         viewPager = view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
-        toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
+        toolbarShowImage = view.findViewById(R.id.toolbarShowContent);
 
         initViewPager();
     }

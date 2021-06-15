@@ -17,7 +17,8 @@
         android:layoutDirection="ltr"
         android:paddingLeft="@dimen/dp32"
         android:paddingRight="@dimen/dp32"
-        android:paddingBottom="50dp">
+        android:paddingBottom="50dp"
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/asi_txt_image_desc"
