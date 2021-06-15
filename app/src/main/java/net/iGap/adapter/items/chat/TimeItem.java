@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,6 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     @Override
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
-
         setTextIfNeeded(holder.text);
     }
 
@@ -98,6 +98,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             LinearLayout.LayoutParams layout_270 = new LinearLayout.LayoutParams(0, 2, 1);
             vew_147.setLayoutParams(layout_270);
             linearLayout_33.addView(vew_147);
+            linearLayout_33.setOnClickListener(null);
 
             ((ViewGroup) itemView).addView(linearLayout_33);
 
