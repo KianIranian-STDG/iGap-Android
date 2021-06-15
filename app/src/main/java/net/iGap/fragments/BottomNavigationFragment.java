@@ -32,6 +32,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.dialog.account.AccountsDialog;
 import net.iGap.observers.interfaces.OnUnreadChange;
+import net.iGap.story.liststories.StoryFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,9 +152,9 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case CALL_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(StoryPagerFragment.class.getName());
+                fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
                 if (fragment == null) {
-                    fragment = new StoryPagerFragment();
+                    fragment = new StoryFragment();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();

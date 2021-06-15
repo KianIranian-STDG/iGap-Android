@@ -2246,4 +2246,21 @@
     <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
     <string name="remove_follower">حذف دنبال کننده</string>
     <string name="hide_story">پنهان کردن استوری</string>
+
+    <string name="stories_setting">تنظیمات داستان</string>
+    <string name="hide_story_from">پنهان کردن داستان</string>
+    <string name="story_replies">مجوز پاسخ ها و واکنش ها به داستان</string>
+    <string name="story_saving">ذخیره سازی</string>
+    <string name="story_sharing">اشتراک گذاری </string>
+    <string name="hide_specific_people">داستان و فیلم های زنده خود را از افراد خاص پنهان کنید.</string>
+    <string name="react_story">انتخاب کنید چه کسی می تواند به داستان شما پاسخ دهد و به او واکنش نشان دهد.</string>
+    <string name="people_feed_post">افراد دیگر می توانند پست های خبرمایه شما را به داستان های خود اضافه کنند.</string>
+    <string name="show_username"> نام کاربری شما همیشه با ارسال شما نشان داده می شود.</string>
+    <string name="allow_share_story">به دیگران اجازه دهید عکس ها و فیلم های داستان شما را به عنوان پیام به اشتراک بگذارند</string>
+    <string name="save_gallery">ذخیره در گالری</string>
+    <string name="resharing_story">به اشتراک گذاشتن مجدد داستان ها</string>
+    <string name="allow_sharing">مجوز اشتراک گذاری</string>
+    <string name="everyone">همه</string>
+    <string name="follower">افرادی که آنها را دنبال می کنید</string>
+    <string name="off">خاموش</string>
 </resources>

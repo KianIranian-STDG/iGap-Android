@@ -197,5 +197,15 @@ z
     <style name="primaryIconTextViewStyle" parent="baseFontIcon">
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
     </style>
-
+    <declare-styleable name="ImageLoadingViewAttr">
+        <attr name="rotate_duration" format="integer" />
+        <attr name="circle_duration" format="integer" />
+        <attr name="start_color" format="color" />
+        <attr name="end_color" format="color" />
+        <attr name="status" >
+            <enum name="loading" value="0" />
+            <enum name="clicked" value="1" />
+            <enum name="unclicked" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

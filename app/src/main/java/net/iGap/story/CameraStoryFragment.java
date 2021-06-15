@@ -50,6 +50,7 @@ import net.iGap.observers.interfaces.OnGetPermission;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class CameraStoryFragment extends BaseFragment {
@@ -326,7 +327,7 @@ public class CameraStoryFragment extends BaseFragment {
                     ImageHelper.correctRotateImage(finalCameraFile.getAbsolutePath(), true);
                     FragmentEditImage.insertItemList(finalCameraFile.getAbsolutePath(), true);
                     if (getActivity() != null) {
-                        new HelperFragment(getActivity().getSupportFragmentManager(), FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
+                        new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.newInstance(finalCameraFile.getAbsolutePath())).setReplace(false).load();
                     }
                 });
 
@@ -390,6 +391,13 @@ public class CameraStoryFragment extends BaseFragment {
         } else {
             Toast.makeText(getContext(), "دستگاه شما دارای دوربین نمی باشد!", Toast.LENGTH_LONG).show();
         }
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), CameraStoryFragment.this).popBackStack();
+            }
+        });
 
     }
 
