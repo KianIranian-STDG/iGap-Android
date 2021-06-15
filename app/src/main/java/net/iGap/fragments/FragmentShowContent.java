@@ -75,6 +75,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.RealmResults;
@@ -176,30 +177,34 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             long selectedFileToken = bundle.getLong(RealmConstants.REALM_SELECTED_IMAGE);
             ArrayList<MessageObject> messageObjects = new ArrayList<>();
 
-            String[] mediaType = new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString(), ProtoGlobal.RoomMessageType.IMAGE.toString(), ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()};
-            RealmResults<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomMessage.class)
+            String[] messageType = new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()
+                    , ProtoGlobal.RoomMessageType.IMAGE.toString(), ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()};
+            List<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.copyFromRealm(realm.where(RealmRoomMessage.class)
                         .equalTo(RealmConstants.REALM_ROOM_ID, mRoomId)
-                        .in(RealmConstants.REALM_MESSAGE_TYPE, mediaType)
+                        .in(RealmConstants.REALM_MESSAGE_TYPE, messageType)
+                        .or()
+                        //get forwarded messages
+                        .equalTo(RealmConstants.REALM_ROOM_ID, mRoomId)
+                        .isNotNull(RealmConstants.REALM_FORWARD_MESSAGE)
                         .findAll()
-                        .sort(RealmConstants.REALM_UPDATE_TIME, Sort.ASCENDING);
+                        .sort(RealmConstants.REALM_UPDATE_TIME, Sort.ASCENDING));
             });
 
-            if (mRealmList.size() < 1) {
-                getFragmentManager().popBackStackImmediate();
-                return null;
-            }
-
             for (RealmRoomMessage roomMessage : mRealmList) {
+                if (roomMessage.forwardMessage != null && !Arrays.asList(messageType).contains(roomMessage.forwardMessage.messageType)) {
+                    continue;
+                }
+
                 messageObjects.add(MessageObject.create(roomMessage));
             }
-
             for (int i = messageObjects.size() - 1; i >= 0; i--) {
                 if (selectedFileToken == messageObjects.get(i).id) {
                     selectedFile = i;
                     break;
                 }
             }
+
             return messageObjects;
         } else {
             if (G.fragmentActivity != null) {
@@ -271,16 +276,21 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     exoPlayer.setPlayWhenReady(false);
                 }
                 imgPlay.setVisibility(View.GONE);
+                toolbarLl.setVisibility(View.GONE);
 
-                WeakReference<PlayerView> weakPlayerView = videos.get(position);
-                if (weakPlayerView != null) {
-                    String path = getFilePath(messageObjects.get(position));
-                    ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(path));
-                    exoPlayer.prepare(mediaSource);
-                    weakPlayerView.get().setPlayer(null);
-                    weakPlayerView.get().setPlayer(exoPlayer);
-                    weakPlayerView.get().hideController();
-                    exoPlayer.setPlayWhenReady(true);
+                try {
+                    WeakReference<PlayerView> weakPlayerView = videos.get(position);
+                    if (weakPlayerView != null) {
+                        String path = getFilePath(messageObjects.get(position));
+                        ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(path));
+                        exoPlayer.prepare(mediaSource);
+                        weakPlayerView.get().setPlayer(null);
+                        weakPlayerView.get().setPlayer(exoPlayer);
+                        weakPlayerView.get().hideController();
+                        exoPlayer.setPlayWhenReady(true);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -312,7 +322,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             }
         }).show();
     }
-
 
     private void shareMediaLink(MessageObject messageObject) {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -402,8 +411,12 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     }
 
     @Override
-    public void setPlayBtnAndToolbarVisibility(int state) {
+    public void setPlayButtonVisibility(int state) {
         imgPlay.setVisibility(state);
+    }
+
+    @Override
+    public void setToolbarVisibility(int state) {
         toolbarLl.setVisibility(state);
     }
 
@@ -484,16 +497,16 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         zoomableImageView.setVisibility(View.VISIBLE);
 
                         if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                            mShowMediaListener.setPlayBtnAndToolbarVisibility(View.GONE);
+                            mShowMediaListener.setPlayButtonVisibility(View.GONE);
                         } else {
-                            mShowMediaListener.setPlayBtnAndToolbarVisibility(View.VISIBLE);
+                            mShowMediaListener.setPlayButtonVisibility(View.VISIBLE);
                             zoomableImageView.setVisibility(View.INVISIBLE);
                             playerView.setVisibility(View.VISIBLE);
                             mShowMediaListener.videoAttached(new WeakReference(playerView), position, false);
                         }
                     } else {
                         playerView.setVisibility(View.INVISIBLE);
-                        mShowMediaListener.setPlayBtnAndToolbarVisibility(View.GONE);
+                        mShowMediaListener.setPlayButtonVisibility(View.GONE);
                         path = getThumbnailPath(messageObject);
                         zoomableImageView.setVisibility(View.VISIBLE);
                         file = new File(path);
@@ -574,7 +587,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
                 }
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mShowMediaListener.setPlayBtnAndToolbarVisibility(View.GONE);
+                    mShowMediaListener.setPlayButtonVisibility(View.GONE);
                 }
 
                 progress.setOnClickListener(view -> {
@@ -589,8 +602,22 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
                 playerView.hideController();
                 playerView.setControllerVisibilityListener(visibility -> {
-                    mShowMediaListener.setPlayBtnAndToolbarVisibility(visibility);
+                    mShowMediaListener.setPlayButtonVisibility(visibility);
+                    mShowMediaListener.setToolbarVisibility(visibility);
                     mediaInfoCl.setVisibility(visibility);
+                });
+
+                zoomableImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mediaInfoCl.getVisibility() == View.VISIBLE) {
+                            mediaInfoCl.setVisibility(View.GONE);
+                            mShowMediaListener.setToolbarVisibility(View.GONE);
+                        } else {
+                            mediaInfoCl.setVisibility(View.VISIBLE);
+                            mShowMediaListener.setToolbarVisibility(View.VISIBLE);
+                        }
+                    }
                 });
             }
 
@@ -666,5 +693,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 interface ShowMediaListener {
     void videoAttached(WeakReference<PlayerView> playerView, int position, boolean callPageSelected);
 
-    void setPlayBtnAndToolbarVisibility(int state);
+    void setPlayButtonVisibility(int state);
+
+    void setToolbarVisibility(int state);
 }
