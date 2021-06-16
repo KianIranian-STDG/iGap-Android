@@ -118,14 +118,15 @@
                 android:id="@+id/countryCode"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:gravity="bottom"
+                android:gravity="center"
                 android:onClick="@{() -> viewModel.onCountryCodeClick()}"
                 android:paddingBottom="6dp"
                 android:text="@{viewModel.referralCountryCodeObservableField}"
                 android:textColor="?iGapTitleTextColor"
                 app:layout_constraintBottom_toBottomOf="@id/referralView"
-                app:layout_constraintEnd_toEndOf="@id/name"
-                app:layout_constraintTop_toTopOf="@id/referralView" />
+                app:layout_constraintLeft_toLeftOf="@id/name"
+                app:layout_constraintTop_toTopOf="@id/referralView"
+                app:layout_constraintRight_toLeftOf="@id/referralView"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/referralView"
@@ -136,14 +137,15 @@
                 android:textColorHint="?iGapHintTextColor"
                 app:errorEnabled="@{viewModel.showReferralErrorLiveData}"
                 app:errorText="@{viewModel.referralError}"
-                app:layout_constraintEnd_toStartOf="@id/countryCode"
-                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintRight_toRightOf="@id/name"
+                app:layout_constraintLeft_toRightOf="@id/countryCode"
                 app:layout_constraintTop_toBottomOf="@id/email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/referralEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:enabled="@{viewModel.referralEnableLiveData}"
                     android:inputType="phone"
                     android:text="@={viewModel.referralNumberObservableField}"

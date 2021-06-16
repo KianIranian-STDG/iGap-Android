@@ -1864,5 +1864,6 @@
     <string name="location_list_tile">Rechercher des centres de divertissement</string>
     <string name="share_file_link">Partager le lien public</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="waiting_dialog_reason_text">Nombre de tentatives excessif</string>
 
 </resources>
