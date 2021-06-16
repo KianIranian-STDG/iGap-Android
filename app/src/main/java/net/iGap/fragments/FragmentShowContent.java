@@ -10,8 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -78,7 +76,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.realm.RealmResults;
 import io.realm.Sort;
 
 public class FragmentShowContent extends Fragment implements ShowMediaListener {
@@ -116,26 +113,16 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_show_content, container, false);
         View fragmentView = mVerticalSwipeBackLayout.setFragment(this, view);
-        startingAnimation();
         return fragmentView;
-    }
-
-    private void startingAnimation() {
-        View decorView = getActivity().getWindow().getDecorView();
-        ObjectAnimator scaleUpAnimation = ObjectAnimator.ofPropertyValuesHolder(decorView,
-                PropertyValuesHolder.ofFloat("scaleX", 0.0f, 1.0f),
-                PropertyValuesHolder.ofFloat("scaleY", 0.0f, 1.0f),
-                PropertyValuesHolder.ofFloat("alpha", 0.0f, 1.0f));
-        scaleUpAnimation.setDuration(150);
-        scaleUpAnimation.start();
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ArrayList<MessageObject> messageObjects = getIntentData(this.getArguments());
-        if (messageObjects != null) {
-            initComponent(view, messageObjects);
+
+        List<RealmRoomMessage> roomMessages = getRoomMediaMessages(this.getArguments());
+        if (roomMessages != null) {
+            initComponent(view, roomMessages);
         }
     }
 
@@ -168,7 +155,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         });
     }
 
-    private ArrayList<MessageObject> getIntentData(Bundle bundle) {
+    private List<RealmRoomMessage> getRoomMediaMessages(Bundle bundle) {
         if (getActivity() != null) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
@@ -191,21 +178,20 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         .sort(RealmConstants.REALM_UPDATE_TIME, Sort.ASCENDING));
             });
 
-            for (RealmRoomMessage roomMessage : mRealmList) {
-                if (roomMessage.forwardMessage != null && !Arrays.asList(messageType).contains(roomMessage.forwardMessage.messageType)) {
-                    continue;
+            for (int i = 0; i < mRealmList.size(); i++) {
+                if (mRealmList.get(i).forwardMessage != null && !Arrays.asList(messageType).contains(mRealmList.get(i).forwardMessage.messageType)) {
+                    mRealmList.remove(i);
                 }
-
-                messageObjects.add(MessageObject.create(roomMessage));
             }
-            for (int i = messageObjects.size() - 1; i >= 0; i--) {
-                if (selectedFileToken == messageObjects.get(i).id) {
+
+            for (int i = mRealmList.size() - 1; i >= 0; i--) {
+                if (selectedFileToken == mRealmList.get(i).messageId) {
                     selectedFile = i;
                     break;
                 }
             }
 
-            return messageObjects;
+            return mRealmList;
         } else {
             if (G.fragmentActivity != null) {
                 getFragmentManager().popBackStackImmediate();
@@ -214,7 +200,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         }
     }
 
-    private void initComponent(View view, ArrayList<MessageObject> messageObjects) {
+    private void initComponent(View view, List<RealmRoomMessage> roomMessages) {
         RippleView rippleBackBtn = view.findViewById(R.id.asi_ripple_back);
         rippleBackBtn.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -223,7 +209,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             }
         });
         RippleView rippleMenu = view.findViewById(R.id.asi_ripple_menu);
-        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage(messageObjects));
+        rippleMenu.setOnRippleCompleteListener(rippleView -> popUpMenuShowImage(roomMessages.get(selectedFile)));
 
         imgPlay = view.findViewById(R.id.imgPlay);
         viewPager = view.findViewById(R.id.asi_view_pager);
@@ -232,7 +218,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
 
         room = DbManager.getInstance().doRealmTask(realm -> {
-            return realm.where(RealmRoom.class).equalTo("id", messageObjects.get(selectedFile).roomId).findFirst();
+            return realm.where(RealmRoom.class).equalTo("id", roomMessages.get(selectedFile).roomId).findFirst();
         });
 
         imgPlay.setOnClickListener(v -> {
@@ -243,29 +229,30 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             }
         });
 
-        initViewPager(messageObjects);
+        initViewPager(roomMessages);
     }
 
-    private void initViewPager(ArrayList<MessageObject> messageObjects) {
+    private void initViewPager(List<RealmRoomMessage> roomMessages) {
         ShowContentAdapter mAdapter = new ShowContentAdapter(this);
-        mAdapter.setMessageObjects(messageObjects);
-        setViewPagerListener(messageObjects, mAdapter);
+        mAdapter.setRoomMessages(roomMessages);
+        setViewPagerListener(roomMessages);
         viewPager.setAdapter(mAdapter);
         viewPager.setCurrentItem(selectedFile, false);
         viewPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
 
-        if (selectedFile >= messageObjects.size()) {
+        if (selectedFile >= roomMessages.size()) {
             return;
         }
     }
 
-    public void setViewPagerListener(ArrayList<MessageObject> messageObjects, ShowContentAdapter adapter) {
+    public void setViewPagerListener(List<RealmRoomMessage> roomMessages) {
+
         this.viewPagerListener = new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 selectedFile = position;
-                contentNumberTv.setText(MessageFormat.format("{0} {1} {2}", position + 1, G.fragmentActivity.getResources().getString(R.string.of), messageObjects.size()));
+                contentNumberTv.setText(MessageFormat.format("{0} {1} {2}", position + 1, G.fragmentActivity.getResources().getString(R.string.of), roomMessages.size()));
 
                 if (HelperCalander.isPersianUnicode) {
                     contentNumberTv.setText(HelperCalander.convertToUnicodeFarsiNumber(contentNumberTv.getText().toString()));
@@ -281,7 +268,9 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 try {
                     WeakReference<PlayerView> weakPlayerView = videos.get(position);
                     if (weakPlayerView != null) {
-                        String path = getFilePath(messageObjects.get(position));
+                        MessageObject messageObject = MessageObject.create(roomMessages.get(position));
+                        MessageObject finalMessageObject = RealmRoomMessage.getFinalMessage(messageObject);
+                        String path = getFilePath(finalMessageObject);
                         ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(path));
                         exoPlayer.prepare(mediaSource);
                         weakPlayerView.get().setPlayer(null);
@@ -297,10 +286,10 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         viewPager.registerOnPageChangeCallback(viewPagerListener);
     }
 
-    public void popUpMenuShowImage(ArrayList<MessageObject> messageObjects) {
+    public void popUpMenuShowImage(RealmRoomMessage roomMessage) {
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.save_to_gallery));
-        MessageObject messageObject = messageObjects.get(selectedFile);
+        MessageObject messageObject = MessageObject.create(roomMessage);
         ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
             items.add(getString(R.string.share_video_file_2));
@@ -308,7 +297,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             items.add(getString(R.string.share_image_2));
         }
         if (RoomObject.isRoomPublic(room)) {
-            if (MessageObject.canSharePublic(messageObjects.get(selectedFile))) {
+            if (MessageObject.canSharePublic(messageObject)) {
                 items.add(getString(R.string.share_file_link));
             }
         }
@@ -422,15 +411,15 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
 
     private class ShowContentAdapter extends RecyclerView.Adapter<ShowContentAdapter.ViewHolder> {
-        private ArrayList<MessageObject> messageObjects = new ArrayList<>();
-        private ShowMediaListener mShowMediaListener;
+        private List<RealmRoomMessage> roomMessages = new ArrayList<>();
+        private ShowMediaListener mShowContentListener;
 
-        ShowContentAdapter(ShowMediaListener showMediaListener) {
-            mShowMediaListener = showMediaListener;
+        ShowContentAdapter(ShowMediaListener showContentListener) {
+            mShowContentListener = showContentListener;
         }
 
-        public void setMessageObjects(ArrayList<MessageObject> messageObjects) {
-            this.messageObjects = messageObjects;
+        public void setRoomMessages(List<RealmRoomMessage> roomMessages) {
+            this.roomMessages = roomMessages;
             notifyDataSetChanged();
         }
 
@@ -443,12 +432,12 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.bind(messageObjects, position);
+            holder.bind(roomMessages, position);
         }
 
         @Override
         public int getItemCount() {
-            return messageObjects.size();
+            return roomMessages.size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -478,12 +467,13 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 playerView = itemView.findViewById(R.id.player_view);
             }
 
-            void bind(ArrayList<MessageObject> messageObjects, int position) {
-                final MessageObject messageObject = RealmRoomMessage.getFinalMessage(messageObjects.get(position));
+            void bind(List<RealmRoomMessage> roomMessages, int position) {
+                MessageObject message = MessageObject.create(roomMessages.get(position));
+                final MessageObject messageObject = RealmRoomMessage.getFinalMessage(message);
                 if (messageObject != null) {
                     if (HelperDownloadFile.getInstance().isDownLoading(messageObject.getAttachment().cacheId)) {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, zoomableImageView, messageObject);
+                        startDownload(position, progress, zoomableImageView, roomMessages);
                     } else {
                         progress.withDrawable(R.drawable.ic_download, true);
                     }
@@ -497,16 +487,18 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         zoomableImageView.setVisibility(View.VISIBLE);
 
                         if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                            mShowMediaListener.setPlayButtonVisibility(View.GONE);
+                            mShowContentListener.setPlayButtonVisibility(View.GONE);
+                            playerView.setVisibility(View.GONE);
+                            mShowContentListener.setPlayButtonVisibility(View.GONE);
                         } else {
-                            mShowMediaListener.setPlayButtonVisibility(View.VISIBLE);
+                            mShowContentListener.setPlayButtonVisibility(View.VISIBLE);
                             zoomableImageView.setVisibility(View.INVISIBLE);
                             playerView.setVisibility(View.VISIBLE);
-                            mShowMediaListener.videoAttached(new WeakReference(playerView), position, false);
+                            mShowContentListener.videoAttached(new WeakReference(playerView), position, false);
                         }
                     } else {
                         playerView.setVisibility(View.INVISIBLE);
-                        mShowMediaListener.setPlayButtonVisibility(View.GONE);
+                        mShowContentListener.setPlayButtonVisibility(View.GONE);
                         path = getThumbnailPath(messageObject);
                         zoomableImageView.setVisibility(View.VISIBLE);
                         file = new File(path);
@@ -553,27 +545,26 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 if (messageObject == null || RealmUserInfo.getCurrentUserAuthorHash().equals("")) {
                     return;
                 }
-                MessageObject realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(messageObject);
-                if (realmRoomMessageFinal != null && realmRoomMessageFinal.message != null && !realmRoomMessageFinal.message.isEmpty()) {
-                    descriptionTv.setText(EmojiManager.getInstance().replaceEmoji(realmRoomMessageFinal.message, descriptionTv.getPaint().getFontMetricsInt()));
+                if (messageObject != null && messageObject.message != null && !messageObject.message.isEmpty()) {
+                    descriptionTv.setText(EmojiManager.getInstance().replaceEmoji(messageObject.message, descriptionTv.getPaint().getFontMetricsInt()));
                     descriptionTv.setVisibility(View.VISIBLE);
                 } else {
                     descriptionTv.setVisibility(View.GONE);
                 }
                 RealmRegisteredInfo realmRegisteredInfo = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmRegisteredInfo.getRegistrationInfo(realm, realmRoomMessageFinal.userId);
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, messageObject.userId);
                 });
                 if (realmRegisteredInfo != null) {
                     nameTv.setText(realmRegisteredInfo.getDisplayName());
                 } else {
                     nameTv.setText("");
                 }
-                if (realmRoomMessageFinal.authorHash != null && RealmUserInfo.getCurrentUserAuthorHash().equals(realmRoomMessageFinal.authorHash)) {
+                if (messageObject.authorHash != null && RealmUserInfo.getCurrentUserAuthorHash().equals(messageObject.authorHash)) {
                     nameTv.setText(R.string.you);
                 }
-                if (realmRoomMessageFinal.updateTime != 0) {
-                    timeTv.setText(HelperCalander.getClocktime(realmRoomMessageFinal.updateTime, true));
-                    dateTv.setText(HelperCalander.checkHijriAndReturnTime(realmRoomMessageFinal.updateTime / 1000));
+                if (messageObject.updateTime != 0) {
+                    timeTv.setText(HelperCalander.getClocktime(messageObject.updateTime, true));
+                    dateTv.setText(HelperCalander.checkHijriAndReturnTime(messageObject.updateTime / 1000));
                 }
                 if (HelperCalander.isPersianUnicode) {
                     nameTv.setText(HelperCalander.convertToUnicodeFarsiNumber(nameTv.getText().toString()));
@@ -587,7 +578,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
                 }
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mShowMediaListener.setPlayButtonVisibility(View.GONE);
+                    mShowContentListener.setPlayButtonVisibility(View.GONE);
                 }
 
                 progress.setOnClickListener(view -> {
@@ -596,14 +587,14 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         HelperDownloadFile.getInstance().stopDownLoad(_cashID);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, zoomableImageView, messageObject);
+                        startDownload(position, progress, zoomableImageView, roomMessages);
                     }
                 });
 
                 playerView.hideController();
                 playerView.setControllerVisibilityListener(visibility -> {
-                    mShowMediaListener.setPlayButtonVisibility(visibility);
-                    mShowMediaListener.setToolbarVisibility(visibility);
+                    mShowContentListener.setPlayButtonVisibility(visibility);
+                    mShowContentListener.setToolbarVisibility(visibility);
                     mediaInfoCl.setVisibility(visibility);
                 });
 
@@ -612,25 +603,24 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     public void onClick(View v) {
                         if (mediaInfoCl.getVisibility() == View.VISIBLE) {
                             mediaInfoCl.setVisibility(View.GONE);
-                            mShowMediaListener.setToolbarVisibility(View.GONE);
+                            mShowContentListener.setToolbarVisibility(View.GONE);
                         } else {
                             mediaInfoCl.setVisibility(View.VISIBLE);
-                            mShowMediaListener.setToolbarVisibility(View.VISIBLE);
+                            mShowContentListener.setToolbarVisibility(View.VISIBLE);
                         }
                     }
                 });
             }
 
-            private void startDownload(int position, final MessageProgress progress, final PhotoView ZoomableImageView, MessageObject messageObject) {
-                final MessageObject rm = RealmRoomMessage.getFinalMessage(messageObject);
-
-                boolean isVideo = rm.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || rm.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
+            private void startDownload(int position, final MessageProgress progress, final PhotoView ZoomableImageView, final List<RealmRoomMessage> roomMessages) {
+                final MessageObject messageObject = RealmRoomMessage.getFinalMessage(MessageObject.create(roomMessages.get(position)));
+                boolean isVideo = messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
                 progress.withOnProgress(() -> G.currentActivity.runOnUiThread(() -> {
                     progress.withProgress(0);
                     progress.setVisibility(View.GONE);
                     ZoomableImageView.setZoomable(true);
                 }));
-                DownloadObject struct = DownloadObject.createForRoomMessage(rm);
+                DownloadObject struct = DownloadObject.createForRoomMessage(messageObject);
                 if (struct == null) {
                     return;
                 }
@@ -643,11 +633,16 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         case SUCCESS:
                             ImageLoadingServiceInjector.inject().loadImage(ZoomableImageView, arg.data.getFilePath());
                             ZoomableImageView.setZoomable(true);
-                            rm.attachment.filePath = arg.data.getFilePath();
-                            rm.attachment.token = arg.data.getToken();
-                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, rm));
+
+                            RealmRoomMessage realmRoomMessage = roomMessages.get(position);
+                            if (roomMessages.get(position).getForwardMessage() != null) {
+                                realmRoomMessage = roomMessages.get(position).getForwardMessage();
+                            }
+                            realmRoomMessage.attachment.localFilePath = arg.data.getFilePath();
+                            realmRoomMessage.attachment.token = arg.data.getToken();
+                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, messageObject));
                             if (isVideo) {
-                                mShowMediaListener.videoAttached(new WeakReference(playerView), position, true);
+                                mShowContentListener.videoAttached(new WeakReference(playerView), position, true);
                                 playerView.setVisibility(View.VISIBLE);
                             }
                             break;
