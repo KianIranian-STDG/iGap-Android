@@ -1864,7 +1864,5 @@
     <string name="location_list_tile">Rechercher des centres de divertissement</string>
     <string name="share_file_link">Partager le lien public</string>
     <string name="can_not_support_file">Can not support file</string>
-    <string name="auto_dark_mode">Réglage automatique du mode sombre</string>
-    <string name="auto_dark_mode_off_message">Le réglage automatique du mode sombre est désactivé</string>
-    <string name="auto_dark_mode_on_message">Mode sombre de lapplication attribué au thème mobile</string>
+
 </resources>

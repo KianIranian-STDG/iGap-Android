@@ -1930,6 +1930,5 @@
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">Can not support file</string>
-    <string name="auto_dark_mode">Auto Dark Mode</string>
-    <string name="auto_dark_mode_off_message">تنظیم خودکار حالت تاریک خاموش شد</string>
+
 </resources>
