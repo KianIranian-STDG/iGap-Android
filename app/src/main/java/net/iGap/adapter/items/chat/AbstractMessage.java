@@ -1932,6 +1932,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     attachment.filePath = downloadedMessage.attachment.filePath;
                     attachment.token = downloadedMessage.attachment.token;
                     ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(downloadedMessage.messageType);
+                    onProgressFinish(holder,downloadedMessage.attachment,messageType.getNumber());
                     loadImageOrThumbnail(messageType);
                 }
             });

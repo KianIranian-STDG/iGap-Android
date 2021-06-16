@@ -11,18 +11,10 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/Layout_showImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         tools:ignore="UselessParent">
-
-        <TextureView
-            android:id="@+id/textureView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:visibility="gone" />
 
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/sisl_touch_image_view"
