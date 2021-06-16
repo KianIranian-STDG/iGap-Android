@@ -221,8 +221,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         //set credit amount
 
         getUserCredit();
-        isDarkMode.set(sharedPreferences.getBoolean(SHP_SETTING.KEY_IS_DARK_BUTTON_SELECTED, false));
-
+        isDarkMode.set(G.themeColor == Theme.DARK);
 
         //set user info text gravity
         if (!G.isAppRtl) {
@@ -577,10 +576,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    public void onDarkModeClicked() {
-        isDarkMode.set(!isDarkMode.get());
+    public void onDarkModeClicked(boolean isChecked) {
+        isDarkMode.set(!isChecked);
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_IS_DARK_BUTTON_SELECTED, isDarkMode.get()).apply();
         if (isDarkMode.get()) {
             G.themeColor = Theme.DARK;
             int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT);

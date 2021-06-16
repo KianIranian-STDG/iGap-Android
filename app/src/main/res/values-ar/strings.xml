@@ -2665,7 +2665,5 @@
     <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
-    <string name="auto_dark_mode">تفعيل وضع التعتيم التلقائي</string>
-    <string name="auto_dark_mode_off_message">تم إيقاف إعداد الوضع المظلم التلقائي</string>
-    <string name="auto_dark_mode_on_message">الوضع المظلم للتطبيق مخصص لخلفية الهاتف المحمول</string>
+
 </resources>
