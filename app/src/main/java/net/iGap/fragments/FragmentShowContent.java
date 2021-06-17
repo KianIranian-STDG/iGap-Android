@@ -74,6 +74,7 @@ import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import io.realm.Sort;
@@ -161,14 +162,13 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         if (bundle != null) {
             long mRoomId = bundle.getLong(RealmConstants.REALM_ROOM_ID, 0L);
             long selectedFileToken = bundle.getLong(RealmConstants.REALM_SELECTED_IMAGE);
-            ArrayList<MessageObject> messageObjects = new ArrayList<>();
 
-            String[] messageType = new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()
+            String[] messageTypeImageVideo = new String[]{ProtoGlobal.RoomMessageType.VIDEO.toString(), ProtoGlobal.RoomMessageType.VIDEO_TEXT.toString()
                     , ProtoGlobal.RoomMessageType.IMAGE.toString(), ProtoGlobal.RoomMessageType.IMAGE_TEXT.toString()};
-            List<RealmRoomMessage> mRealmList = DbManager.getInstance().doRealmTask(realm -> {
+            List<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.copyFromRealm(realm.where(RealmRoomMessage.class)
                         .equalTo(RealmConstants.REALM_ROOM_ID, mRoomId)
-                        .in(RealmConstants.REALM_MESSAGE_TYPE, messageType)
+                        .in(RealmConstants.REALM_MESSAGE_TYPE, messageTypeImageVideo)
                         .or()
                         //get forwarded messages
                         .equalTo(RealmConstants.REALM_ROOM_ID, mRoomId)
@@ -177,24 +177,23 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         .sort(RealmConstants.REALM_UPDATE_TIME, Sort.ASCENDING));
             });
 
-            for (int i = 0; i < mRealmList.size(); i++) {
-                if (mRealmList.get(i).forwardMessage != null && !Arrays.asList(messageType).contains(mRealmList.get(i).forwardMessage.messageType)) {
-                    mRealmList.remove(i);
+            List messageTypesList = Arrays.asList(messageTypeImageVideo);
+            ArrayList<RealmRoomMessage> roomMessagesImageVideo = new ArrayList<>(realmRoomMessages);
+            for (RealmRoomMessage roomMessageObj: realmRoomMessages) {
+                if (roomMessageObj.forwardMessage != null && !messageTypesList.contains(roomMessageObj.forwardMessage.messageType)) {
+                    roomMessagesImageVideo.remove(roomMessageObj);
                 }
             }
 
-            for (int i = mRealmList.size() - 1; i >= 0; i--) {
-                if (selectedFileToken == mRealmList.get(i).messageId) {
+            for (int i = roomMessagesImageVideo.size() - 1; i >= 0; i--) {
+                if (selectedFileToken == roomMessagesImageVideo.get(i).messageId) {
                     selectedFile = i;
                     break;
                 }
             }
 
-            return mRealmList;
+            return roomMessagesImageVideo;
         } else {
-            if (G.fragmentActivity != null) {
-                getFragmentManager().popBackStackImmediate();
-            }
             return null;
         }
     }
