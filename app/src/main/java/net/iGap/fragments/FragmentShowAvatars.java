@@ -227,7 +227,7 @@ public class FragmentShowAvatars extends BaseFragment {
         viewPager = view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
-        toolbarShowImage = view.findViewById(R.id.toolbarShowContent);
+        toolbarShowImage = view.findViewById(R.id.showAvatarToolbar);
 
         initViewPager();
     }
@@ -555,7 +555,7 @@ public class FragmentShowAvatars extends BaseFragment {
             LayoutInflater inflater = LayoutInflater.from(container.getContext());
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_or_video_sub_layout, container, false);
 
-            final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            final PhotoView zoomableImageView = layout.findViewById(R.id.showContentImageView);
             zoomableImageView.setZoomable(false);
 
             final MessageProgress progress = layout.findViewById(R.id.progress);
