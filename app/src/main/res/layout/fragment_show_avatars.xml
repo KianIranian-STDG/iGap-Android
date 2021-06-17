@@ -14,7 +14,7 @@
         android:clipToPadding="false" />
 
     <LinearLayout
-        android:id="@+id/toolbarShowContent"
+        android:id="@+id/showAvatarToolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:background="#55000000"
