@@ -79,7 +79,6 @@ import java.util.List;
 import io.realm.Sort;
 
 public class FragmentShowContent extends Fragment implements ShowMediaListener {
-    private static final String TAG = "FragmentShowImage";
     private TextView contentNumberTv;
     private ViewPager2 viewPager;
     private int selectedFile = 0;
@@ -453,8 +452,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
-                zoomableImageView = itemView.findViewById(R.id.sisl_touch_image_view);
-                zoomableImageView.setZoomable(false);
+                zoomableImageView = itemView.findViewById(R.id.showContentImageView);
 
                 progress = itemView.findViewById(R.id.progress);
                 AppUtils.setProgresColor(progress.progressBar);
@@ -464,7 +462,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 timeTv = itemView.findViewById(R.id.asi_txt_image_time);
                 descriptionTv = itemView.findViewById(R.id.asi_txt_image_desc);
                 mediaInfoCl = itemView.findViewById(R.id.asi_layout_image_name);
-                playerView = itemView.findViewById(R.id.player_view);
+                playerView = itemView.findViewById(R.id.showContentPlayerView);
             }
 
             void bind(List<RealmRoomMessage> roomMessages, int position) {
@@ -483,24 +481,16 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     if (file.exists()) {
                         progress.setVisibility(View.GONE);
                         ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path, true);
-                        zoomableImageView.setZoomable(true);
-                        zoomableImageView.setVisibility(View.VISIBLE);
 
                         if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                            mShowContentListener.setPlayButtonVisibility(View.GONE);
-                            playerView.setVisibility(View.GONE);
-                            mShowContentListener.setPlayButtonVisibility(View.GONE);
+                            showImageView();
                         } else {
-                            mShowContentListener.setPlayButtonVisibility(View.VISIBLE);
-                            zoomableImageView.setVisibility(View.INVISIBLE);
-                            playerView.setVisibility(View.VISIBLE);
+                            showPlayerView();
                             mShowContentListener.videoAttached(new WeakReference(playerView), position, false);
                         }
                     } else {
-                        playerView.setVisibility(View.INVISIBLE);
-                        mShowContentListener.setPlayButtonVisibility(View.GONE);
+                        showImageView();
                         path = getThumbnailPath(messageObject);
-                        zoomableImageView.setVisibility(View.VISIBLE);
                         file = new File(path);
                         if (file.exists()) {
                             ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path);
@@ -539,13 +529,12 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                             }
                         }
                     }
+                } else {
+                    return;
                 }
 
                 // show content info
-                if (messageObject == null || RealmUserInfo.getCurrentUserAuthorHash().equals("")) {
-                    return;
-                }
-                if (messageObject != null && messageObject.message != null && !messageObject.message.isEmpty()) {
+                if (messageObject.message != null && !messageObject.message.isEmpty()) {
                     descriptionTv.setText(EmojiManager.getInstance().replaceEmoji(messageObject.message, descriptionTv.getPaint().getFontMetricsInt()));
                     descriptionTv.setVisibility(View.VISIBLE);
                 } else {
@@ -570,15 +559,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     nameTv.setText(HelperCalander.convertToUnicodeFarsiNumber(nameTv.getText().toString()));
                     timeTv.setText(HelperCalander.convertToUnicodeFarsiNumber(timeTv.getText().toString()));
                     dateTv.setText(HelperCalander.convertToUnicodeFarsiNumber(dateTv.getText().toString()));
-                }
-
-                if (messageObject.forwardedMessage != null) {
-                    messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.forwardedMessage.messageType);
-                } else {
-                    messageType = ProtoGlobal.RoomMessageType.forNumber(messageObject.messageType);
-                }
-                if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
-                    mShowContentListener.setPlayButtonVisibility(View.GONE);
                 }
 
                 progress.setOnClickListener(view -> {
@@ -655,6 +635,18 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                             break;
                     }
                 }));
+            }
+
+            private void showImageView() {
+                playerView.setVisibility(View.GONE);
+                mShowContentListener.setPlayButtonVisibility(View.GONE);
+                zoomableImageView.setVisibility(View.VISIBLE);
+            }
+
+            private void showPlayerView() {
+                playerView.setVisibility(View.VISIBLE);
+                mShowContentListener.setPlayButtonVisibility(View.VISIBLE);
+                zoomableImageView.setVisibility(View.GONE);
             }
         }
     }
