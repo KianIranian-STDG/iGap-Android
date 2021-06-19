@@ -224,7 +224,7 @@
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
             android:excludeFromRecents="true"
             android:screenOrientation="locked"
-            android:launchMode="singleTask" />
+            android:launchMode="singleInstance" />
         <activity
             android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.Launcher"
