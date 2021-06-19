@@ -36,7 +36,7 @@
     <string name="rg_Select_Country">Select your Country</string>
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
-    <string name="verify_socket_message">Please enter verification code sent by iGap to \n %1$s</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap to</string>
     <string name="verify_sms_message">Please enter verification code sent by sms </string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
