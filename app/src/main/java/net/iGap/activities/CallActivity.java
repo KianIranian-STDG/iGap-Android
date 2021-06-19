@@ -691,13 +691,8 @@ public class CallActivity extends ActivityEnhanced implements CallManager.CallSt
             } else if (state == CallState.DISCONNECTED) {
                 finish();
             } else if (state == CallState.NOT_ANSWERED) {
-                if(isVideoCall()) {
-                    statusTextView.setText(getResources().getString(R.string.not_answered_video_call));
-                } else {
-                    statusTextView.setText(getResources().getString(R.string.not_answered_voice_call));
-                }
+                statusTextView.setText(getResources().getString(R.string.not_answerd_call));
                 notAnswered();
-
             } else if (state == CallState.DISCONNECTING) {
                 statusTextView.setText(getResources().getString(R.string.disconnecting));
             } else if (state == CallState.INCAMING_CALL) {
