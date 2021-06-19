@@ -186,7 +186,6 @@ import net.iGap.module.MyLinearLayoutManager;
 import net.iGap.module.ResendMessage;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
-import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
@@ -7220,7 +7219,7 @@ public class FragmentChat extends BaseFragment
                                 }
 
                                 getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-                                deleteSelectedMessageFromAdapter(messageIds);
+                                //deleteSelectedMessageFromAdapter(messageIds);
 
                             })
                             .checkBoxPrompt(textCheckBox, false, null)
@@ -7236,7 +7235,7 @@ public class FragmentChat extends BaseFragment
 
                                 bothDeleteMessageId = null;
                                 getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-                                deleteSelectedMessageFromAdapter(messageIds);
+                                //deleteSelectedMessageFromAdapter(messageIds);
 
                             }).show();
                 }
@@ -9337,7 +9336,7 @@ public class FragmentChat extends BaseFragment
             long messageId = (long) args[1];
             boolean update = (boolean) args[2];
 
-            if (roomId == mRoomId && update) {
+            if (roomId == mRoomId) {
                 G.runOnUiThread(() -> {
                     if (mAdapter == null) {
                         return;
@@ -9349,7 +9348,7 @@ public class FragmentChat extends BaseFragment
 
                     if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
                         MessageObject roomMessage = (MessageObject) mReplayLayout.getTag();
-                        if (roomMessage != null && messageId == roomMessage.id) {
+                        if (roomMessage != null && messageId == roomMessage.id && update) {
                             clearReplyView();
                         }
                     }
