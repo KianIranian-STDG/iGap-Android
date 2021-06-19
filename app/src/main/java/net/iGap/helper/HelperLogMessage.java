@@ -212,13 +212,17 @@ public class HelperLogMessage {
                 break;
             case MISSED_VOICE_CALL:
                 if (RealmUserInfo.getCurrentUserAuthorHash().equals(author.getHash())) {
-                    messageID = R.string.not_answerd_call;
+                    messageID = R.string.not_answered_voice_call;
                 } else {
                     messageID = R.string.MISSED_VOICE_CALL;
                 }
                 break;
             case MISSED_VIDEO_CALL:
-                messageID = R.string.MISSED_VIDEO_CALL;
+                if (RealmUserInfo.getCurrentUserAuthorHash().equals(author.getHash())) {
+                    messageID = R.string.not_answered_video_call;
+                } else {
+                    messageID = R.string.MISSED_VIDEO_CALL;
+                }
                 break;
             case MISSED_SCREEN_SHARE:
                 messageID = R.string.MISSED_SCREEN_SHARE;

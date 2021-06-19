@@ -1195,7 +1195,7 @@
     <string name="ladies_charge">شارژ بانوان</string>
     <string name="normal_error">can\&apos;t do it please try later</string>
     <string name="not_answer">جوابسیز </string>
-    <string name="not_answerd_call">"الدن گئتمیش تماس"</string>
+    <string name="not_answered_voice_call">"الدن گئتمیش تماس"</string>
     <string name="not_exist_activities">سیزین سابقه لر لیستیز بوشدور</string>
     <string name="not_found_message">بو پیغام موجود دییلدیر</string>
     <string name="not_success">ناموفق</string>
