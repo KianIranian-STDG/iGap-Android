@@ -754,7 +754,7 @@
     <string name="busy">occupé</string>
     <string name="invalid_email_token">le code de confirmation d\'E-mail est invalide</string>
     <string name="invalid_question_token">votre réponse est invalide</string>
-    <string name="not_answerd_call">appel d\'audio manqué</string>
+    <string name="not_answered_voice_call">appel d\'audio manqué</string>
     <string name="recorded_by">enregistré par</string>
     <string name="Login_with_QrCode">se connecter par QR</string>
     <string name="Input_device_specification">appareil bien connecté</string>
