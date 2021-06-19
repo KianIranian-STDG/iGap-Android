@@ -618,7 +618,10 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                                 realmRoomMessage = roomMessages.get(position).getForwardMessage();
                             }
                             realmRoomMessage.attachment.localFilePath = arg.data.getFilePath();
+                            messageObject.attachment.filePath = arg.data.getFilePath();
                             realmRoomMessage.attachment.token = arg.data.getToken();
+                            messageObject.attachment.token = arg.data.getToken();
+
                             G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, messageObject));
                             if (isVideo) {
                                 mShowContentListener.videoAttached(new WeakReference(playerView), position, true);
