@@ -837,6 +837,7 @@ Want to get it?</string>
     <string name="invalid_email_token">"Your email token is invalid"</string>
     <string name="invalid_question_token">"Your answer is invalid"</string>
 
+    <string name="not_answerd_call">"Voice Call Cancelled"</string>
     <string name="not_answered_voice_call">"Voice Call Cancelled"</string>
     <string name="not_answered_video_call">"Video Call Cancelled"</string>
     <string name="recorded_by">Recorded By</string>
