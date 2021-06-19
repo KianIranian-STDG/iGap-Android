@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -21,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
@@ -30,8 +28,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.android.gms.tasks.Task;
 
 import net.iGap.R;
@@ -46,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class FragmentActivation extends BaseFragment implements ProviderInstaller.ProviderInstallListener{
+public class FragmentActivation extends BaseFragment{
 
     private final static String TAG = FragmentActivation.class.getName();
 
@@ -71,7 +67,7 @@ public class FragmentActivation extends BaseFragment implements ProviderInstalle
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        startSMSListener();
 
         binding.timerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -221,9 +217,7 @@ public class FragmentActivation extends BaseFragment implements ProviderInstalle
             SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
             Task<Void> task = client.startSmsRetriever();
             task.addOnSuccessListener(aVoid -> Log.e(TAG, "sms API successfully started   "));
-            task.addOnFailureListener(e -> {
-                Log.e(TAG, "sms Fail to start API   ");
-            });
+            task.addOnFailureListener(e -> { Log.e(TAG, "sms Fail to start API   ");});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -433,15 +427,5 @@ public class FragmentActivation extends BaseFragment implements ProviderInstalle
         binding.activationCodeEditText4.setText("");
         binding.activationCodeEditText5.setText("");
         binding.activationCodeEditText1.requestFocus();
-    }
-
-    @Override
-    public void onProviderInstalled() {
-        startSMSListener();
-    }
-
-    @Override
-    public void onProviderInstallFailed(int errorCode, Intent intent) {
-        Log.i(TAG,"onProviderInstallFailed");
     }
 }
