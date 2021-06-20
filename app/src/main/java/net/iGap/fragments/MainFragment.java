@@ -624,11 +624,13 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
     private void checkSelectedRoom() {
+
         boolean hasMute = false;
         boolean hasUnMute = false;
-
         boolean hasPinned = false;
         boolean hasUnPin = false;
+        boolean hasChanel = false;
+
         for (int i = 0; i < selectedRoom.size(); i++) {
             Long roomId = selectedRoom.get(i);
             RealmRoom room = getMessageDataStorage().getRoom(roomId);
@@ -647,6 +649,15 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             } else {
                 hasUnPin = true;
             }
+            if(room.getType() == CHANNEL){
+                hasChanel = true;
+            }
+        }
+
+        if(hasChanel){
+            clearHistoryItem.setVisibility(View.GONE);
+        } else {
+            clearHistoryItem.setVisibility(View.VISIBLE);
         }
 
         if (hasMute && hasUnMute) {
