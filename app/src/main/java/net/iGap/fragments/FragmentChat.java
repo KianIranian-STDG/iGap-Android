@@ -165,6 +165,8 @@ import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -390,6 +392,7 @@ public class FragmentChat extends BaseFragment
     public static ArrayList<String> listPathString;
     private static List<StructBottomSheet> contacts;
     private boolean isPaused;
+    private net.iGap.messenger.ui.toolBar.Toolbar mToolbar;
 
     public static StructIGSticker structIGSticker;
 
@@ -710,6 +713,11 @@ public class FragmentChat extends BaseFragment
 
         rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
 
+        mToolbar = new Toolbar(context);
+        mToolbar.setTitle("Mohammad Mirdar");
+        mToolbar.setSubTitle("Last Seen 10:55");
+        mToolbar.setBackIcon(new BackDrawable(false));
+        rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60));
         notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         keyboardContainer = rootView.findViewById(R.id.fl_chat_keyboardContainer);
@@ -742,7 +750,6 @@ public class FragmentChat extends BaseFragment
         getEventManager().addObserver(EventManager.CHAT_UPDATE_STATUS, this);
         if (twoPaneMode)
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
-
         return attachToSwipeBack(notifyFrameLayout);
     }
 
@@ -858,9 +865,9 @@ public class FragmentChat extends BaseFragment
             currentRoomAccess.addChangeListener(roomAccessChangeListener);
         }
 
+        mToolbar.addAvatar(getRoom(),new AvatarHandler());
         setupIntentReceiverForGetDataInTwoPanMode();
-
-
+        mHelperToolbar.getRootView().setVisibility(View.GONE);
     }
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {

@@ -22,8 +22,15 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithInitBitmap;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.Theme;
+import net.iGap.realm.RealmRoom;
+
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 
 public class Toolbar extends FrameLayout {
     public static final int SEARCH_TAG = 1020;
@@ -40,6 +47,9 @@ public class Toolbar extends FrameLayout {
     private boolean actionItemsVisible;
     private AnimatorSet actionModeAnimation;
     private boolean titleIsFontIcon;
+    private CircleImageView circleImageView;
+    private AvatarHandler avatarHandler;
+    private RealmRoom realmRoom;
 
     public Toolbar(@NonNull Context context) {
         super(context);
@@ -54,6 +64,15 @@ public class Toolbar extends FrameLayout {
         titleTextView.setText(title);
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
+    }
+
+    public void addAvatar(RealmRoom item, AvatarHandler avatarHandler) {
+        if (circleImageView == null) {
+            circleImageView = new CircleImageView(getContext());
+        }
+        this.avatarHandler = avatarHandler;
+        this.realmRoom = item;
+        addView(circleImageView);
     }
 
     public void setTitle(@StringRes int title) {
@@ -123,9 +142,11 @@ public class Toolbar extends FrameLayout {
             subTitleTextView.setVisibility(toggleSearch ? INVISIBLE : VISIBLE);
         }
     }
+
     public boolean isSearchFieldVisible() {
         return isSearchBoxVisible;
     }
+
     public interface ToolbarListener {
         void onItemClick(int i);
     }
@@ -202,17 +223,20 @@ public class Toolbar extends FrameLayout {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int actionBarHeight = getCurrentActionBarHeight();
         int actionBarHeightSpec = MeasureSpec.makeMeasureSpec(actionBarHeight, MeasureSpec.EXACTLY);
-        int titleLeft;
+        int titleLeft = 0;
 
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), actionBarHeight);
-
         if (backIcon != null && backIcon.getVisibility() != GONE) {
             backIcon.measure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(54), MeasureSpec.EXACTLY), backIcon.getMeasuredHeight());
-            titleLeft = LayoutCreator.dp(64); // 56 icon width + 8 margin
+            titleLeft += LayoutCreator.dp(62); // 54 icon width + 8 margin
         } else {
-            titleLeft = LayoutCreator.dp(16);
+            titleLeft += LayoutCreator.dp(16);
         }
 
+        if (circleImageView != null && circleImageView.getVisibility() != GONE) {
+            circleImageView.measure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(54), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(LayoutCreator.dp(54), MeasureSpec.EXACTLY));
+            titleLeft = LayoutCreator.dp(62);
+        }
         int menuWidth = 0;
         if (items != null && items.getVisibility() != GONE) {
             if (isSearchBoxVisible) {
@@ -250,15 +274,20 @@ public class Toolbar extends FrameLayout {
             }
             measureChildWithMargins(child, menuWidth, 0, MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY), 0);
         }
+
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int titleLeft;
         int titleTop;
+
+        int avatarLeft;
+        int avatarTop = 10;
+
         if (backIcon != null && backIcon.getVisibility() != GONE) {
             backIcon.layout(0, 0, backIcon.getMeasuredWidth(), getMeasuredHeight());
-            titleLeft = LayoutCreator.dp(64); // 56 icon with + 8 margin
+            titleLeft = LayoutCreator.dp(62); // 54 icon width + 8 margin
             if (backIcon.getDrawable() == null) {
                 titleLeft = LayoutCreator.dp(16);
             }
@@ -266,6 +295,10 @@ public class Toolbar extends FrameLayout {
             titleLeft = LayoutCreator.dp(16);
         }
 
+        if (circleImageView != null && circleImageView.getVisibility() != GONE) {
+            circleImageView.layout(titleLeft, avatarTop, titleLeft + circleImageView.getMeasuredWidth(), circleImageView.getMeasuredWidth() - avatarTop);
+            titleLeft += LayoutCreator.dp(62);// 54 icon width + 54 avatar width + 8 margin.
+        }
 
         if (titleTextView != null && titleTextView.getVisibility() != GONE) {
             int titleTextHeight = titleTextView.getMeasuredHeight();
@@ -334,6 +367,17 @@ public class Toolbar extends FrameLayout {
                     childTop = lp.topMargin;
             }
             child.layout(childLeft, childTop, childLeft + width, childTop + height);
+        }
+        if (realmRoom != null && avatarHandler != null) {
+            long idForGetAvatar;
+            if (realmRoom.getType() == CHAT) {
+                idForGetAvatar = realmRoom.getChatRoom().getPeerId();
+            } else {
+                idForGetAvatar = realmRoom.getId();
+            }
+            avatarHandler.getAvatar(new ParamWithInitBitmap(circleImageView, idForGetAvatar)
+                    .initBitmap(HelperImageBackColor.drawAlphabetOnPicture((int)
+                            getContext().getResources().getDimension(R.dimen.dp32), realmRoom.getInitials(), realmRoom.getColor())));
         }
     }
 
