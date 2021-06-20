@@ -127,56 +127,41 @@
                     app:layout_constraintStart_toStartOf="@id/notification"
                     app:layout_constraintTop_toBottomOf="@id/dataAndStorage" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/languageTitle"
-                    android:layout_width="0dp"
+
+                <LinearLayout
+                    android:id="@+id/languageContainer"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onLanguageClick()}"
+                    android:orientation="horizontal"
                     android:layout_marginTop="8dp"
-                    android:onClick="@{()->viewModel.onLanguageClick()}"
                     android:paddingLeft="@dimen/dp18"
                     android:paddingTop="@dimen/dp10"
                     android:paddingRight="@dimen/dp18"
                     android:paddingBottom="@dimen/dp10"
-                    android:text="@string/language"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize"
-                    app:layout_constraintEnd_toStartOf="@id/language"
-                    app:layout_constraintStart_toStartOf="@id/notification"
-                    app:layout_constraintTop_toBottomOf="@id/line2" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onLanguageClick()}"
-                    android:paddingLeft="@dimen/dp18"
-                    android:paddingTop="@dimen/dp10"
-                    android:paddingRight="@dimen/dp18"
-                    android:paddingBottom="@dimen/dp10"
-                    android:text="@{viewModel.currentLanguage}"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="@dimen/smallTextSize"
-                    app:layout_constraintBottom_toBottomOf="@id/languageTitle"
-                    app:layout_constraintEnd_toEndOf="@id/notification"
-                    app:layout_constraintStart_toEndOf="@id/languageTitle"
-                    app:layout_constraintTop_toTopOf="@id/languageTitle" />
+                    app:layout_constraintEnd_toStartOf="@id/chatSetting"
+                    app:layout_constraintStart_toStartOf="@id/chatSetting"
+                    app:layout_constraintTop_toBottomOf="@id/line2">
 
-                <!--<android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/deleteAccount"
-                    android:textColor="?iGapTitleTextColor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:layout_marginBottom="@dimen/dp16"
-                    android:background="?attr/selectableItemBackground"
-                    android:onClick="@{()->viewModel.onDeleteAccountClick()}"
-                    android:padding="4dp"
-                    android:text="@string/delete_account"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="@id/name"
-                    app:layout_constraintRight_toRightOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/logout" />-->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/languageTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/language"
+                        android:textColor="?iGapTitleTextColor"
+                        android:textSize="@dimen/standardTextSize" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.currentLanguage}"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="@dimen/smallTextSize" />
+
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/logout"
@@ -194,7 +179,7 @@
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toEndOf="@id/notification"
                     app:layout_constraintStart_toStartOf="@id/notification"
-                    app:layout_constraintTop_toBottomOf="@id/language" />
+                    app:layout_constraintTop_toBottomOf="@id/languageContainer" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

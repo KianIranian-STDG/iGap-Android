@@ -619,6 +619,7 @@
                 <androidx.constraintlayout.widget.Group
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->viewModel.onClickDefaultVideo()}"
                     app:layout_constraintBottom_toBottomOf="@id/openDefaultPlayerTitle"
                     app:layout_constraintEnd_toEndOf="@id/openDefaultPlayer"
