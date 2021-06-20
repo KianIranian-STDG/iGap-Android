@@ -562,9 +562,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
                 progress.setOnClickListener(view -> {
                     String _cashID = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment.cacheId : messageObject.attachment.cacheId;
-                    if (HelperDownloadFile.getInstance().isDownLoading(_cashID)) {
-                        HelperDownloadFile.getInstance().stopDownLoad(_cashID);
-                    } else {
+                    int currentAccount = AccountManager.selectedAccount;
+                    if (Downloader.getInstance(currentAccount).isDownloading(_cashID)) {
+                        progress.withDrawable(R.drawable.ic_download, true);
+                        Downloader.getInstance(currentAccount).cancelDownload(_cashID);
+                    }else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, zoomableImageView, roomMessages);
                     }
