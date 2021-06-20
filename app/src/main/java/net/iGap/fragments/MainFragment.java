@@ -629,7 +629,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         boolean hasUnMute = false;
         boolean hasPinned = false;
         boolean hasUnPin = false;
-        boolean hasChanel = false;
+        boolean hasChannel = false;
 
         for (int i = 0; i < selectedRoom.size(); i++) {
             Long roomId = selectedRoom.get(i);
@@ -650,11 +650,11 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 hasUnPin = true;
             }
             if(room.getType() == CHANNEL){
-                hasChanel = true;
+                hasChannel = true;
             }
         }
 
-        if(hasChanel){
+        if(hasChannel){
             clearHistoryItem.setVisibility(View.GONE);
         } else {
             clearHistoryItem.setVisibility(View.VISIBLE);
