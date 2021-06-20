@@ -44,6 +44,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.customView.EventEditText;
+import net.iGap.story.ExpandableTextView;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -80,6 +81,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private ImageView storyImage;
     private FrameLayout tvSend;
     private ConstraintLayout constraintLayout;
+    private ExpandableTextView expandableTextView;
 
     public static StoryDisplayFragment newInstance(int position, StoryUser story) {
 
@@ -124,6 +126,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storyImage = view.findViewById(R.id.story_image);
         tvSend = view.findViewById(R.id.chatRoom_send_container);
         constraintLayout = view.findViewById(R.id.root_display);
+        expandableTextView =  view.findViewById(R.id.caption_text_sub_view);
         return view;
     }
 
@@ -260,8 +263,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 replayFrame.setVisibility(View.GONE);
                 setEdtChat();
             } else {
-                llReplay.setVisibility(View.GONE);
-                llAttach.setVisibility(View.GONE);
+                llReplay.setVisibility(View.INVISIBLE);
+                llAttach.setVisibility(View.INVISIBLE);
                 replayFrame.setVisibility(View.VISIBLE);
             }
         });

@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/root_display"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.exoplayer2.ui.PlayerView
@@ -115,12 +115,35 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/caption_text_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/ll_replay_story"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <net.iGap.story.ExpandableTextView
+                android:id="@+id/caption_text_sub_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ll_replay_story"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/layout_attach_story"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -130,8 +153,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingRight="@dimen/dp16"
-                android:paddingLeft="@dimen/dp4">
+                android:paddingLeft="@dimen/dp4"
+                android:paddingRight="@dimen/dp16">
 
                 <TextView
                     android:id="@+id/replyFrom"
@@ -168,7 +191,7 @@
                 android:layout_gravity="top"
                 android:layout_marginRight="@dimen/dp4"
                 android:padding="@dimen/dp8"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY" />
 
         </LinearLayout>
 
@@ -178,7 +201,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -299,10 +322,10 @@
                 android:text="@string/md_downwards_arrow"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp32"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textView4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/textView4"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -312,10 +335,10 @@
                 android:text="@string/replay"
                 android:textColor="@color/white"
                 android:textSize="@dimen/standardTextSize"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/frame_story_replay"
                 app:layout_constraintStart_toStartOf="@+id/frame_story_replay"
-                app:layout_constraintTop_toBottomOf="@+id/frame_story_replay"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@+id/frame_story_replay" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
