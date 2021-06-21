@@ -128,7 +128,7 @@ public class HelperMessageResponse {
             ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).onMessageUpdate(roomId, roomMessage.getMessageId(), roomMessage.getStatus(), identity, roomMessage);
         }
 
-        if ((roomMessage.getAuthor().getUser().getUserId() == AccountManager.getInstance().getCurrentUser().getId()) && roomMessage.getAttachment() != null) {
+        if ((roomMessage.getAuthor().getUser().getUserId() == AccountManager.getInstance().getCurrentUser().getId() || roomMessage.getAuthor().getUser().getUserId() == 0) && roomMessage.getAttachment() != null) {
             G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPLETED, roomMessage.getMessageType(), roomMessage.getMessageId(), roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getToken()));
         }
     }
