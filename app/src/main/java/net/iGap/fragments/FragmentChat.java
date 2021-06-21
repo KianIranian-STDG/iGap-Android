@@ -714,9 +714,8 @@ public class FragmentChat extends BaseFragment
         rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
 
         mToolbar = new Toolbar(context);
-        mToolbar.setTitle("Mohammad Mirdar");
-        mToolbar.setSubTitle("Last Seen 10:55");
         mToolbar.setBackIcon(new BackDrawable(false));
+        mToolbar.addVerifiedChannelsIcon();
         rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60));
         notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
@@ -865,7 +864,7 @@ public class FragmentChat extends BaseFragment
             currentRoomAccess.addChangeListener(roomAccessChangeListener);
         }
 
-        mToolbar.addAvatar(getRoom(),new AvatarHandler());
+        mToolbar.addAvatar(getRoom(), new AvatarHandler());
         setupIntentReceiverForGetDataInTwoPanMode();
         mHelperToolbar.getRootView().setVisibility(View.GONE);
     }
@@ -1050,14 +1049,14 @@ public class FragmentChat extends BaseFragment
                                 final String finalMembers = members;
                                 if (finalMembers != null) {
                                     if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
-                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                                        mToolbar.setSubTitle(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                                     } else {
-                                        txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                                        mToolbar.setSubTitle(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                                     }
                                     //    avi.setVisibility(View.GONE);
 
                                     if (HelperCalander.isPersianUnicode)
-                                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                        mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
                                 }
                             } else {
                                 RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
@@ -1077,7 +1076,7 @@ public class FragmentChat extends BaseFragment
                         if (txtName == null) {
                             txtName = mHelperToolbar.getTextViewChatUserName();
                         }
-                        txtName.setText(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
+                        mToolbar.setTitle(EmojiManager.getInstance().replaceEmoji(room.getTitle(), txtName.getPaint().getFontMetricsInt()));
                         checkToolbarNameSize();
                     }
                 });
@@ -1733,9 +1732,9 @@ public class FragmentChat extends BaseFragment
                 if (groupParticipantsCountLabel != null) {
 
                     if (HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                        mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                     } else {
-                        txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                        mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                     }
                     // avi.setVisibility(View.GONE);
 
@@ -1756,14 +1755,14 @@ public class FragmentChat extends BaseFragment
         }
 
         if (title != null) {
-            txtName.setText(EmojiManager.getInstance().replaceEmoji(title, txtName.getPaint().getFontMetricsInt()));
+            mToolbar.setTitle(EmojiManager.getInstance().replaceEmoji(title, txtName.getPaint().getFontMetricsInt()));
         }
         /**
          * change english number to persian number
          */
         if (HelperCalander.isPersianUnicode) {
-            txtName.setText(EmojiManager.getInstance().replaceEmoji(txtName.getText().toString(), txtName.getPaint().getFontMetricsInt()));
-            txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+            mToolbar.setTitle(EmojiManager.getInstance().replaceEmoji(txtName.getText().toString(), txtName.getPaint().getFontMetricsInt()));
+            mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
         }
 
         /**
@@ -1892,43 +1891,43 @@ public class FragmentChat extends BaseFragment
 
     private void checkConnection(String action) {
         if (action != null && !isBot) {
-            txtLastSeen.setText(action);
+            mToolbar.setSubTitle(action);
         } else {
 
             if (chatType == CHAT) {
                 if (isCloudRoom) {
-                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                    mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
                     goneCallButtons();
                 } else if (isBot) {
-                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
+                    mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.bot));
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, userTime, true, false));
+                            mToolbar.setSubTitle(LastSeenTimeUtil.computeTime(mToolbar.getContext(), chatPeerId, userTime, true, false));
                         } else {
-                            txtLastSeen.setText(userStatus);
+                            mToolbar.setSubTitle(userStatus);
                         }
                     }
                 }
             } else if (chatType == GROUP) {
                 if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                    mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                 } else {
-                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                    mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                 }
 
             } else if (chatType == CHANNEL) {
                 if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                    mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                 } else {
-                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                    mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                 }
 
             }
         }
 
         if (HelperCalander.isPersianUnicode) {
-            txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+            mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
         }
 
     }
@@ -5446,32 +5445,32 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void run() {
                     if (action != null && !isBot) {
-                        txtLastSeen.setText(action);
+                        mToolbar.setSubTitle(action);
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
-                            txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                            mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
                             goneCallButtons();
                         } else if (isBot) {
-                            txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
+                            mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.bot));
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, userTime, true, false));
+                                    mToolbar.setSubTitle(LastSeenTimeUtil.computeTime(mToolbar.getContext(), chatPeerId, userTime, true, false));
                                 } else {
-                                    txtLastSeen.setText(userStatus);
+                                    mToolbar.setSubTitle(userStatus);
                                 }
                             }
                         }
                     } else if (chatType == GROUP) {
                         if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                            mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                         } else {
-                            txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                            mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                         }
                     }
                     // change english number to persian number
                     if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                        mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
                 }
             });
         }
@@ -5491,14 +5490,14 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 if (chatType == CHAT && userIdR == chatPeerId && userId != userIdR) { // userId != userIdR means that , this isn't update status for own user
-                    txtLastSeen.setText(showLastSeen);
+                    mToolbar.setSubTitle(showLastSeen);
                     //  avi.setVisibility(View.GONE);
                     //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                    //    //mToolbar.setSubTitleDirection(View.TEXT_DIRECTION_LTR);
                     //}
                     // change english number to persian number
                     if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                        mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
                 }
             }
         });
@@ -5700,28 +5699,28 @@ public class FragmentChat extends BaseFragment
                     userStatus = status;
                     userTime = time;
                     if (isCloudRoom) {
-                        txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                        mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
                         goneCallButtons();
                         //  avi.setVisibility(View.GONE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                        //    //mToolbar.setSubTitleDirection(View.TEXT_DIRECTION_LTR);
                         //}
                     } else if (isBot) {
-                        txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
+                        mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.bot));
                     } else {
                         if (status != null && txtLastSeen != null) {
                             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, time, true, false));
+                                mToolbar.setSubTitle(LastSeenTimeUtil.computeTime(mToolbar.getContext(), chatPeerId, time, true, false));
                             } else {
-                                txtLastSeen.setText(status);
+                                mToolbar.setSubTitle(status);
                             }
                             // avi.setVisibility(View.GONE);
                             //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                            //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                            //    //mToolbar.setSubTitleDirection(View.TEXT_DIRECTION_LTR);
                             //}
                             // change english number to persian number
                             if (HelperCalander.isPersianUnicode)
-                                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
 
                             checkAction();
                         }
@@ -5758,30 +5757,30 @@ public class FragmentChat extends BaseFragment
         final RealmRoom realmRoom = getRoom();
         if (realmRoom != null && realmRoom.getActionState() != null && realmRoom.isValid()) {
             if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
-                txtLastSeen.setText(realmRoom.getActionState());
+                mToolbar.setSubTitle(realmRoom.getActionState());
             } else if (chatType == CHAT) {
                 if (isCloudRoom) {
-                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                    mToolbar.setSubTitle(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
                     goneCallButtons();
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(txtLastSeen.getContext(), chatPeerId, userTime, true, false));
+                            mToolbar.setSubTitle(LastSeenTimeUtil.computeTime(mToolbar.getContext(), chatPeerId, userTime, true, false));
                         } else {
-                            txtLastSeen.setText(userStatus);
+                            mToolbar.setSubTitle(userStatus);
                         }
                     }
                 }
             } else if (chatType == GROUP) {
                 if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                    mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                 } else {
-                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                    mToolbar.setSubTitle(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                 }
             }
 //              change english number to persian number
             if (HelperCalander.isPersianUnicode)
-                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                mToolbar.setSubTitle(convertToUnicodeFarsiNumber(mToolbar.getSubTitleText()));
 
         }
     }

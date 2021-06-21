@@ -48,15 +48,15 @@ public class Toolbar extends FrameLayout {
     private AnimatorSet actionModeAnimation;
     private boolean titleIsFontIcon;
     private CircleImageView circleImageView;
-    private AvatarHandler avatarHandler;
-    private RealmRoom realmRoom;
+    private TextView muteIcon;
+    private TextView verifiedChannelsIcon;
 
     public Toolbar(@NonNull Context context) {
         super(context);
         setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(context));
     }
 
-    public void setTitle(String title) {
+    public void setTitle(CharSequence title) {
         if (titleTextView == null) {
             createTitleTextView();
         }
@@ -70,9 +70,34 @@ public class Toolbar extends FrameLayout {
         if (circleImageView == null) {
             circleImageView = new CircleImageView(getContext());
         }
-        this.avatarHandler = avatarHandler;
-        this.realmRoom = item;
+
+        long idForGetAvatar;
+        if (item.getType() == CHAT) {
+            idForGetAvatar = item.getChatRoom().getPeerId();
+        } else {
+            idForGetAvatar = item.getId();
+        }
+        avatarHandler.getAvatar(new ParamWithInitBitmap(circleImageView, idForGetAvatar)
+                .initBitmap(HelperImageBackColor.drawAlphabetOnPicture((int)
+                        getContext().getResources().getDimension(R.dimen.dp40), item.getInitials(), item.getColor())));
+
         addView(circleImageView);
+    }
+
+    public TextView addVerifiedChannelsIcon() {
+        if (verifiedChannelsIcon == null)
+            createVerifiedIcon();
+        verifiedChannelsIcon.setVisibility(VISIBLE);
+        addView(verifiedChannelsIcon);
+        return verifiedChannelsIcon;
+    }
+
+    private void createVerifiedIcon() {
+        verifiedChannelsIcon = new TextView(getContext());
+        verifiedChannelsIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
+        verifiedChannelsIcon.setText(R.string.verify_icon);
+        verifiedChannelsIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        verifiedChannelsIcon.setTextColor(getContext().getResources().getColor(R.color.verify_color));
     }
 
     public void setTitle(@StringRes int title) {
@@ -98,6 +123,7 @@ public class Toolbar extends FrameLayout {
             createSubtitleTextView();
         }
         subTitleTextView.setText(subTitle);
+        subTitleTextView.requestLayout();
     }
 
     public void setBackIcon(Drawable drawable) {
@@ -209,7 +235,7 @@ public class Toolbar extends FrameLayout {
         }
 
         subTitleTextView = new TextView(getContext());
-        subTitleTextView.setTextColor(Theme.getInstance().getTitleTextColor(getContext()));
+        subTitleTextView.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
         subTitleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
         subTitleTextView.setGravity(Gravity.LEFT);
         subTitleTextView.setSingleLine();
@@ -234,8 +260,8 @@ public class Toolbar extends FrameLayout {
         }
 
         if (circleImageView != null && circleImageView.getVisibility() != GONE) {
-            circleImageView.measure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(54), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(LayoutCreator.dp(54), MeasureSpec.EXACTLY));
-            titleLeft = LayoutCreator.dp(62);
+            circleImageView.measure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(50), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(LayoutCreator.dp(50), MeasureSpec.EXACTLY));
+            titleLeft = LayoutCreator.dp(58);
         }
         int menuWidth = 0;
         if (items != null && items.getVisibility() != GONE) {
@@ -253,8 +279,8 @@ public class Toolbar extends FrameLayout {
             if (titleTextView != null && titleTextView.getVisibility() != GONE) {
                 if (subTitleTextView != null && subTitleTextView.getVisibility() != GONE) {
                     if (!titleIsFontIcon)
-                        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
-                    subTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                    subTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
                 } else {
                     if (!titleIsFontIcon)
                         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
@@ -264,12 +290,15 @@ public class Toolbar extends FrameLayout {
             if (subTitleTextView != null && subTitleTextView.getVisibility() != GONE) {
                 subTitleTextView.measure(MeasureSpec.makeMeasureSpec(textWidth, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST));
             }
+            if (verifiedChannelsIcon != null && verifiedChannelsIcon.getVisibility() != GONE) {
+                verifiedChannelsIcon.measure(MeasureSpec.makeMeasureSpec(LayoutCreator.dp(12), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(LayoutCreator.dp(12), MeasureSpec.EXACTLY));
+            }
         }
 
         for (int i = 0, count = getChildCount(); i < count; i++) {
             final View child = getChildAt(i);
 
-            if (child.getVisibility() == GONE || child == backIcon || child == titleTextView || child == subTitleTextView || child == items) {
+            if (child.getVisibility() == GONE || child == backIcon || child == titleTextView || child == subTitleTextView || child == items || child == circleImageView || child == verifiedChannelsIcon) {
                 continue;
             }
             measureChildWithMargins(child, menuWidth, 0, MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY), 0);
@@ -280,14 +309,13 @@ public class Toolbar extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int titleLeft;
-        int titleTop;
-
-        int avatarLeft;
-        int avatarTop = 10;
+        int titleTop = 0;
+        int avatarTop;
+        int verifyLeft = 0;
 
         if (backIcon != null && backIcon.getVisibility() != GONE) {
             backIcon.layout(0, 0, backIcon.getMeasuredWidth(), getMeasuredHeight());
-            titleLeft = LayoutCreator.dp(62); // 54 icon width + 8 margin
+            titleLeft = LayoutCreator.dp(58); // 54 icon width + 8 margin
             if (backIcon.getDrawable() == null) {
                 titleLeft = LayoutCreator.dp(16);
             }
@@ -296,7 +324,8 @@ public class Toolbar extends FrameLayout {
         }
 
         if (circleImageView != null && circleImageView.getVisibility() != GONE) {
-            circleImageView.layout(titleLeft, avatarTop, titleLeft + circleImageView.getMeasuredWidth(), circleImageView.getMeasuredWidth() - avatarTop);
+            avatarTop = getMeasuredHeight() / 2 - (circleImageView.getMeasuredHeight() / 2);
+            circleImageView.layout(titleLeft, avatarTop, titleLeft + circleImageView.getMeasuredWidth(), circleImageView.getMeasuredWidth() + avatarTop);
             titleLeft += LayoutCreator.dp(62);// 54 icon width + 54 avatar width + 8 margin.
         }
 
@@ -310,13 +339,17 @@ public class Toolbar extends FrameLayout {
             }
 
             titleTextView.layout(titleLeft, titleTop, titleLeft + titleTextView.getMeasuredWidth(), titleTop + titleTextHeight);
+            verifyLeft = titleLeft + titleTextView.getMeasuredWidth() + LayoutCreator.dp(5);
         }
 
         if (subTitleTextView != null && subTitleTextView.getVisibility() != GONE) {
             int textTop = getMeasuredHeight() / 2 + (getMeasuredHeight() / 2 - subTitleTextView.getMeasuredHeight()) / 2 - LayoutCreator.dp(4);
             subTitleTextView.layout(titleLeft, textTop, titleLeft + subTitleTextView.getMeasuredWidth(), textTop + subTitleTextView.getMeasuredHeight());
         }
-
+        if (verifiedChannelsIcon != null && verifiedChannelsIcon.getVisibility() != GONE) {
+            int verifyTop = titleTop + (titleTextView.getMeasuredHeight() / 2 - verifiedChannelsIcon.getMeasuredHeight() / 2);
+            verifiedChannelsIcon.layout(verifyLeft, verifyTop, verifyLeft + verifiedChannelsIcon.getMeasuredWidth(), verifiedChannelsIcon.getMeasuredHeight() + verifyTop);
+        }
         if (items != null) {
             int menuLeft = isSearchBoxVisible ? LayoutCreator.dp(64) : getMeasuredWidth() - items.getMeasuredWidth();
             items.layout(menuLeft, 0, menuLeft + items.getMeasuredWidth(), items.getMeasuredHeight());
@@ -325,7 +358,7 @@ public class Toolbar extends FrameLayout {
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
-            if (child.getVisibility() == GONE || child == titleTextView || child == subTitleTextView || child == items || child == backIcon) {
+            if (child.getVisibility() == GONE || child == titleTextView || child == subTitleTextView || child == items || child == backIcon || child == circleImageView || child == verifiedChannelsIcon) {
                 continue;
             }
 
@@ -367,17 +400,6 @@ public class Toolbar extends FrameLayout {
                     childTop = lp.topMargin;
             }
             child.layout(childLeft, childTop, childLeft + width, childTop + height);
-        }
-        if (realmRoom != null && avatarHandler != null) {
-            long idForGetAvatar;
-            if (realmRoom.getType() == CHAT) {
-                idForGetAvatar = realmRoom.getChatRoom().getPeerId();
-            } else {
-                idForGetAvatar = realmRoom.getId();
-            }
-            avatarHandler.getAvatar(new ParamWithInitBitmap(circleImageView, idForGetAvatar)
-                    .initBitmap(HelperImageBackColor.drawAlphabetOnPicture((int)
-                            getContext().getResources().getDimension(R.dimen.dp32), realmRoom.getInitials(), realmRoom.getColor())));
         }
     }
 
@@ -425,6 +447,12 @@ public class Toolbar extends FrameLayout {
         } else {
             return LayoutCreator.dp(60);
         }
+    }
+
+    public String getSubTitleText() {
+        if (subTitleTextView != null)
+            return subTitleTextView.getText().toString();
+        return "";
     }
 
     public void showActionToolbar() {
