@@ -96,6 +96,7 @@
         android:layout_marginEnd="56dp"
         android:layout_marginRight="56dp"
         android:hint="9xxxxxxxxx"
+        android:inputType="phone"
         android:maxLength="18"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
