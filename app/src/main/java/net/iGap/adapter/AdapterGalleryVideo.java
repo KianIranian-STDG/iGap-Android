@@ -11,10 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import net.iGap.R;
 import net.iGap.model.GalleryVideoModel;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.interfaces.GalleryItemListener;
 
 import java.io.File;
@@ -124,9 +123,7 @@ public class AdapterGalleryVideo extends RecyclerView.Adapter<AdapterGalleryVide
         });
 
         //load image
-        Glide.with(holder.image.getContext())
-                .load(Uri.fromFile(new File(videosItem.get(position).getPath())))
-                .into(holder.image);
+        ImageLoadingServiceInjector.inject().loadImage(holder.image, Uri.fromFile(new File(videosItem.get(position).getPath())).toString());
 
     }
 
