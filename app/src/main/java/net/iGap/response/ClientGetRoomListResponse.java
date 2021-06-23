@@ -12,7 +12,7 @@ package net.iGap.response;
 
 import net.iGap.Config;
 import net.iGap.G;
-import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.MainFragment;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.module.BotInit;
 import net.iGap.module.accountManager.AccountManager;
@@ -52,11 +52,11 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
         boolean fromLogin = false;
         if (identity.isFromLogin) {
-            FragmentMain.mOffset = 0;
+            MainFragment.mOffset = 0;
             fromLogin = true;
         }
 
-        if (FragmentMain.mOffset == 0) {
+        if (MainFragment.mOffset == 0) {
             BotInit.checkDrIgap();
         }
 
@@ -70,7 +70,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
         if (!RequestManager.getInstance(AccountManager.selectedAccount).isUserLogin()) {
             RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
             sendClientCondition();
-        } else if (fromLogin || FragmentMain.mOffset == 0) {
+        } else if (fromLogin || MainFragment.mOffset == 0) {
             if (G.clientConditionGlobal != null) {
                 new RequestClientCondition().clientCondition(G.clientConditionGlobal);
             } else {
@@ -78,7 +78,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
             }
         }
 
-        FragmentMain.mOffset += clientGetRoomListResponse.getRoomsCount();
+        MainFragment.mOffset += clientGetRoomListResponse.getRoomsCount();
         isPendingGetRoomList = false;
         if (clientGetRoomListResponse.getRoomsCount() == 0) {
             roomListFetched = true;

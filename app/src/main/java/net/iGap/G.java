@@ -238,10 +238,7 @@ public class G extends ApplicationContext {
     public static OnContactsGetList onContactsGetList;
     public static OnMapUsersGet onMapUsersGet;
     public static OnPinedMessage onPinedMessage;
-    public static OnChatDeleteInRoomList onChatDeleteInRoomList;
-    public static OnGroupDeleteInRoomList onGroupDeleteInRoomList;
     public static OnChannelDeleteInRoomList onChannelDeleteInRoomList;
-    public static OnClientGetRoomResponseRoomList onClientGetRoomResponseRoomList;
     public static OnReport onReport;
     public static OnPhoneContact onPhoneContact;
     public static OnContactFetchForServer onContactFetchForServer;

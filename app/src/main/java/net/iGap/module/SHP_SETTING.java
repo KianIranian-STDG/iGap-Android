@@ -35,6 +35,7 @@ public class SHP_SETTING {
     public static final String KEY_KEYBOARD_HEIGHT_LAND = "keyboard_height_land";
     public static final String KEY_PLAY_SOUND_IN_CHAT = "play_sound_in_chat";
     public static final String KEY_THEME_DARK = "KEY_THEME_DARK";
+    public static final String KEY_IS_DARK_BUTTON_SELECTED = "key_ia_dark_button_selected";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
     public static final String KEY_AUTO_ROTATE = "KEY_AUTO_ROTATE";
@@ -131,6 +132,7 @@ public class SHP_SETTING {
     public static final String KEY_PROGRES_COLOR = "KEY_PROGRES_COLOR";
 
     public static final String KEY_OLD_THEME_COLOR = "KEY_OLD_THEME_COLOR";
+
     public static final String KEY_APP_BAR_COLOR_DARK = "KEY_APP_BAR_COLOR_DARK";
     public static final String KEY_NOTIFICATION_COLOR_DARK = "KEY_NOTIFICATION_COLOR_DARK";
     public static final String KEY_TOGGLE_BOTTON_COLOR_DARK = "KEY_TOGGLE_BOTTON_COLOR_DARK";

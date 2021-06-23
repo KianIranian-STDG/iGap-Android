@@ -201,7 +201,6 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
                 UserStatusController.getInstance().setOffline();
             }
         }
-
     }
 
     private void makeDirectoriesIfNotExist() {
@@ -278,7 +277,5 @@ public abstract class ActivityEnhanced extends AppCompatActivity {
         new HelperFragment(getSupportFragmentManager()).removeAll(false);
 
         this.recreate();
-
     }
-
 }

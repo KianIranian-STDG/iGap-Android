@@ -16,15 +16,12 @@ import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import io.realm.net_iGap_realm_RealmChannelExtraRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmChannelExtraRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmChannelExtra.class})
 public class RealmChannelExtra extends RealmObject {
 
     private long messageId;

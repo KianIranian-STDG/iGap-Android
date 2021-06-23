@@ -51,11 +51,9 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmRoomMessageRealmProxy;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 
-@Parcel(implementations = {net_iGap_realm_RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class})
 public class RealmRoomMessage extends RealmObject {
     @PrimaryKey
     public long messageId;

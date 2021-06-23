@@ -12,14 +12,11 @@ package net.iGap.realm;
 
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmThumbnailRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmThumbnailRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmThumbnail.class})
 public class RealmThumbnail extends RealmObject {
     @PrimaryKey
     public long id;

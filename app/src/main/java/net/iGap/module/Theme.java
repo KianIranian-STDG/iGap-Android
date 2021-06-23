@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.util.StateSet;
@@ -265,6 +266,29 @@ public class Theme {
         }
     }
 
+    public static Drawable createSimpleSelectorCircleDrawable(int size, int defaultColor, int pressedColor) {
+        OvalShape ovalShape = new OvalShape();
+        ovalShape.resize(size, size);
+        ShapeDrawable defaultDrawable = new ShapeDrawable(ovalShape);
+        defaultDrawable.getPaint().setColor(defaultColor);
+        ShapeDrawable pressedDrawable = new ShapeDrawable(ovalShape);
+        if (Build.VERSION.SDK_INT >= 21) {
+            pressedDrawable.getPaint().setColor(0xffffffff);
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][]{StateSet.WILD_CARD},
+                    new int[]{pressedColor}
+            );
+            return new RippleDrawable(colorStateList, defaultDrawable, pressedDrawable);
+        } else {
+            pressedDrawable.getPaint().setColor(pressedColor);
+            StateListDrawable stateListDrawable = new StateListDrawable();
+            stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, pressedDrawable);
+            stateListDrawable.addState(new int[]{android.R.attr.state_focused}, pressedDrawable);
+            stateListDrawable.addState(StateSet.WILD_CARD, defaultDrawable);
+            return stateListDrawable;
+        }
+    }
+
     public List<ThemeModel> getThemeList() {
         List<ThemeModel> themeModelList = new ArrayList<>();
         themeModelList.add(new ThemeModel(DEFAULT, R.string.default_theme_title));
@@ -378,6 +402,26 @@ public class Theme {
 
     public int getSendReplayUserColor(Context context) {
         return getColorFromAttr(context, R.attr.iGapSendReplayColor);
+    }
+
+    public int getToolbarBackgroundColor(Context context) {
+        return getColorFromAttr(context, R.attr.toolbarBackgroundColor);
+    }
+
+    public int getToolbarActionModeBackgroundColor(Context context) {
+        return getColorFromAttr(context, R.attr.toolbarActionModeBackgroundColor);
+    }
+
+    public int getCallStripColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapCallStripColor);
+    }
+
+    public int getCallStripColorBlue(Context context) {
+        return getColorFromAttr(context, R.attr.iGapCallStripColorBlue);
+    }
+
+    public int getMediaStripColor(Context context) {
+        return getColorFromAttr(context, R.attr.iGapMediaStripColor);
     }
 
     private int getColorFromAttr(@NotNull Context context, int attrResId) {

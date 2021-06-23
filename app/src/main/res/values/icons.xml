@@ -234,4 +234,10 @@
 
     <string name="ic_charge">\ue940</string>
     <string name="ic_internet">\ue942</string>
+
+    <string name="ic_mark_all_read">\ueb5a</string>
+    <string name="ic_mark_as_read">\ueb5b</string>
+    <string name="ic_clear_history">\ueb58</string>
+    <string name="ic_pin_to_top_2">\ueb5c</string>
+    <string name="ic_unpin">\ue900</string>
 </resources>

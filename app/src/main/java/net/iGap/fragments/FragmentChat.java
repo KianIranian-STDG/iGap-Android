@@ -255,6 +255,7 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
+import net.iGap.realm.RealmConstants;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -269,14 +270,12 @@ import net.iGap.realm.RealmString;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.repository.StickerRepository;
 import net.iGap.request.RequestChannelUpdateDraft;
-import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetFavoriteMenu;
 import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
-import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
@@ -322,6 +321,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static net.iGap.G.twoPaneMode;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
+import static net.iGap.helper.HelperPermission.getStoragePermision;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_pic_audi;
@@ -587,6 +587,7 @@ public class FragmentChat extends BaseFragment
     @Nullable
     private RealmRoomAccess currentRoomAccess;
     private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
+    private boolean allowScrollToTop = true;
 
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
@@ -673,6 +674,7 @@ public class FragmentChat extends BaseFragment
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         isNeedResume = true;
         G.locationListener = this;
 
@@ -2057,7 +2059,7 @@ public class FragmentChat extends BaseFragment
         initAppbarSelected();
         getDraft();
         getUserInfo();
-        insertShearedData();
+        insertSharedData();
 
         if (structIGSticker != null) {
             G.handler.postDelayed(() -> sendStickerAsMessage(structIGSticker), 1000);
@@ -2608,7 +2610,7 @@ public class FragmentChat extends BaseFragment
                         String[] split = messageOne.split(",");
                         Double latitude = Double.parseDouble(split[0]);
                         Double longitude = Double.parseDouble(split[1]);
-                        FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                        FragmentMap fragment = FragmentMap.getInstance(latitude, longitude, FragmentMap.Mode.sendPosition);
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
                     }
                 } catch (Exception e) {
@@ -2955,6 +2957,15 @@ public class FragmentChat extends BaseFragment
             }
         });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    G.imageLoader.resume();
+                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    G.imageLoader.pause();
+                }
+            }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -3681,14 +3692,50 @@ public class FragmentChat extends BaseFragment
                         bundle.putLong("peerId", chatPeerId);
                         bundle.putString("phoneNumber", phoneNumber);
                         fragment.setArguments(bundle);
-                        fragment.setDelegate((cardNum, amountNum, descriptionTv) -> {
-                            sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
+                        fragment.setDelegate(new ParentChatMoneyTransferFragment.Delegate() {
+                            @Override
+                            public void onGiftStickerGetStartPayment(StructIGSticker structIGSticker, String paymentToken) {
 
-                            ll_attach_text.setVisibility(View.GONE);
-                            edtChat.setFilters(new InputFilter[]{});
-                            edtChat.setText("");
+/*                                if (paymentToken == null) {
+                                    Toast.makeText(getContext(), getString(R.string.wallet_error_server), Toast.LENGTH_LONG).show();
+                                    return;
+                                }
 
-                            clearReplyView();
+                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager()).loadPayment(getString(R.string.gift_sticker_title), paymentToken, result -> {
+                                    if (result.isSuccess()) {
+                                        Toast.makeText(getActivity(), getString(R.string.successful_payment), Toast.LENGTH_LONG).show();
+
+                                        BuyGiftStickerCompletedBottomSheet bottomSheet = BuyGiftStickerCompletedBottomSheet.getInstance(structIGSticker);
+                                        bottomSheet.setDelegate(new BuyGiftStickerCompletedBottomSheet.Delegate() {
+                                            @Override
+                                            public void onNegativeButton(StructIGSticker structIGSticker) {
+                                                new HelperFragment(FragmentChat.this.getActivity().getSupportFragmentManager(), FragmentSettingAddStickers.newInstance()).setReplace(false).load();
+                                            }
+
+                                            @Override
+                                            public void onPositiveButton(StructIGSticker structIGSticker) {
+                                                sendStickerAsMessage(structIGSticker);
+                                            }
+                                        });
+
+                                        bottomSheet.show(FragmentChat.this.getActivity().getSupportFragmentManager(), null);
+                                    } else {
+                                        Toast.makeText(getActivity(), getString(R.string.unsuccessful_payment), Toast.LENGTH_LONG).show();
+                                    }
+                                });*/
+
+                            }
+
+                            @Override
+                            public void cardToCardClicked(String cardNum, String amountNum, String descriptionTv) {
+                                sendNewMessageCardToCard(amountNum, cardNum, descriptionTv);
+
+                                ll_attach_text.setVisibility(View.GONE);
+                                edtChat.setFilters(new InputFilter[]{});
+                                edtChat.setText("");
+
+                                clearReplyView();
+                            }
                         });
                         fragment.show(getActivity().getSupportFragmentManager(), "PaymentFragment");
                     }
@@ -4583,7 +4630,6 @@ public class FragmentChat extends BaseFragment
     public void onPlayMusic(String messageId) {
 
         if (messageId != null && messageId.length() > 0) {
-
             try {
                 if (MusicPlayer.downloadNextMusic(messageId)) {
                     mAdapter.notifyDataSetChanged();
@@ -4713,7 +4759,7 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isFileExistInLocalStorage(messageObject)) {
-            if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE) {
+            if (roomMessageType == IMAGE_VALUE || roomMessageType == VIDEO_VALUE || roomMessageType == GIF_VALUE || roomMessageType == GIF_TEXT_VALUE) {
                 items.add(R.string.save_to_gallery);
             } else if (roomMessageType == AUDIO_VALUE || roomMessageType == VOICE_VALUE) {
                 items.add(R.string.save_to_Music);
@@ -4949,7 +4995,7 @@ public class FragmentChat extends BaseFragment
     private void getStoragePermission(final String filePath, final String fileName) {
         if (!HelperPermission.grantedUseStorage()) {
             try {
-                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         copyFileToDownload(filePath, fileName);
@@ -5053,7 +5099,7 @@ public class FragmentChat extends BaseFragment
         if (new File(filepath).exists()) {
             if (messageType == VIDEO_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-            } else if (messageType == GIF_VALUE) {
+            } else if (messageType == GIF_VALUE || messageType == GIF_TEXT_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
             } else if (messageType == IMAGE_VALUE) {
                 HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
@@ -5578,7 +5624,7 @@ public class FragmentChat extends BaseFragment
      */
     private void clearAdapterItems() {
         mAdapter.clear();
-        recyclerView.removeAllViews();
+        G.runOnUiThread(() -> recyclerView.removeAllViews());
     }
 
     /**
@@ -5701,7 +5747,7 @@ public class FragmentChat extends BaseFragment
 
     private void checkAction() {
         final RealmRoom realmRoom = getRoom();
-        if (realmRoom != null && realmRoom.getActionState() != null) {
+        if (realmRoom != null && realmRoom.getActionState() != null && realmRoom.isValid()) {
             if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
                 txtLastSeen.setText(realmRoom.getActionState());
             } else if (chatType == CHAT) {
@@ -5846,14 +5892,14 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void deleteChat(final long chatId) {
-        new RequestChatDelete().chatDelete(chatId);
+    private void deleteChat(final long roomId) {
+        getRoomController().chatDeleteRoom(roomId);
     }
 
     private void muteNotification(final long roomId) {
 
         isMuteNotification = !isMuteNotification;
-        new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
+        getRoomController().clientMuteRoom(roomId, isMuteNotification);
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
@@ -5935,11 +5981,11 @@ public class FragmentChat extends BaseFragment
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-            FragmentShowImage fragment = FragmentShowImage.newInstance();
+            FragmentShowContent fragment = FragmentShowContent.newInstance();
             Bundle bundle = new Bundle();
-            bundle.putLong("RoomId", mRoomId);
-            bundle.putInt("TYPE", messageObject.messageType);
-            bundle.putLong("SelectedImage", messageObject.id);
+            bundle.putLong(RealmConstants.REALM_ROOM_ID, mRoomId);
+            bundle.putInt(RealmConstants.REALM_MESSAGE_TYPE, messageObject.messageType);
+            bundle.putLong(RealmConstants.REALM_SELECTED_IMAGE, messageObject.id);
             fragment.setArguments(bundle);
 
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
@@ -6100,10 +6146,14 @@ public class FragmentChat extends BaseFragment
 
         MessageObject messageObject = MessageObject.create(roomMessage);
 
+        if (structIGSticker.isGiftSticker()) {
+          //  mAdapter.add(new GiftStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject));
+        } else {
             if (structIGSticker.getType() == StructIGSticker.ANIMATED_STICKER)
                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject));
             else
                 mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject));
+        }
 
         scrollToEnd();
 
@@ -6448,8 +6498,7 @@ public class FragmentChat extends BaseFragment
      * *************************** sheared data ***************************
      */
 
-
-    private void insertShearedData() {
+    private void insertSharedData() {
         /**
          * run this method with delay , because client get local message with delay
          * for show messages with async changeState and before run getLocalMessage this shared
@@ -6461,68 +6510,91 @@ public class FragmentChat extends BaseFragment
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
+                    int permissionReadStorage = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
 
-                    boolean isOpenEditImageFragment = false;
-                    boolean isAllowToClearChatEditText = true;
-                    for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
-
-                        edtChat.setText(EmojiManager.getInstance().replaceEmoji(sharedData.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
-
-                        switch (sharedData.fileType) {
-                            case message:
-                                imvSendButton.performClick();
-                                break;
-                            case video:
-                                if (HelperGetDataFromOtherApp.sharedList.size() == 1) {
-                                    mainVideoPath = sharedData.address;
-                                    if (mainVideoPath == null) return;
-
-                                    if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
-                                        Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
-                                        intent.putExtra("PATH", mainVideoPath);
-                                        startActivityForResult(intent, AttachFile.request_code_trim_video);
-                                        isAllowToClearChatEditText = false;
-                                    } else {
-                                        sendMessage(request_code_VIDEO_CAPTURED, mainVideoPath);
-                                    }
-
-                                } else {
-                                    sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
+                    if (HelperGetDataFromOtherApp.sharedList.get(0).fileType != HelperGetDataFromOtherApp.FileType.message
+                            && permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
+                        try {
+                            getStoragePermision(getActivity(), new OnGetPermission() {
+                                @Override
+                                public void Allow() throws IOException {
+                                    sendSharedData(HelperGetDataFromOtherApp.sharedList);
                                 }
-                                break;
-                            case file:
-                                sendMessage(AttachFile.request_code_open_document, sharedData.address);
-                                break;
-                            case audio:
-                                sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
-                                break;
-                            case image:
-                                //maybe share data was more than one ... add to list then after for open edit image
-                                FragmentEditImage.insertItemList(sharedData.address, sharedData.message, false);
-                                isOpenEditImageFragment = true;
-                                //sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
-                                break;
+
+                                @Override
+                                public void deny() {
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-
-                        if (isAllowToClearChatEditText) edtChat.setText("");
+                    } else {
+                        sendSharedData(HelperGetDataFromOtherApp.sharedList);
                     }
-
-                    if (isOpenEditImageFragment && getActivity() != null) {
-
-                        FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
-                        fragmentEditImage.setIsReOpenChatAttachment(false);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
-                    }
-
-                    HelperGetDataFromOtherApp.sharedList.clear();
-                    //update main room list ui after share done
-                    if (getActivity() instanceof ActivityMain) {
-                        ((ActivityMain) getActivity()).checkHasSharedData(false);
-                    }
-
                 }
             }
         }, 300);
+    }
+
+    private void sendSharedData(ArrayList<HelperGetDataFromOtherApp.SharedData> sharedList) {
+        boolean isOpenEditImageFragment = false;
+        boolean isAllowToClearChatEditText = true;
+
+        for (HelperGetDataFromOtherApp.SharedData sharedData : sharedList) {
+
+            edtChat.setText(EmojiManager.getInstance().replaceEmoji(sharedData.message, edtChat.getPaint().getFontMetricsInt(), LayoutCreator.dp(22), false));
+
+            switch (sharedData.fileType) {
+                case message:
+                    imvSendButton.performClick();
+                    break;
+                case video:
+                    if (sharedList.size() == 1) {
+                        mainVideoPath = sharedData.address;
+                        if (mainVideoPath == null) return;
+
+                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                            Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
+                            intent.putExtra("PATH", mainVideoPath);
+                            startActivityForResult(intent, AttachFile.request_code_trim_video);
+                            isAllowToClearChatEditText = false;
+                        } else {
+                            sendMessage(request_code_VIDEO_CAPTURED, mainVideoPath);
+                        }
+
+                    } else {
+                        sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
+                    }
+                    break;
+                case file:
+                    sendMessage(AttachFile.request_code_open_document, sharedData.address);
+                    break;
+                case audio:
+                    sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
+                    break;
+                case image:
+                    //maybe share data was more than one ... add to list then after for open edit image
+                    FragmentEditImage.insertItemList(sharedData.address, sharedData.message, false);
+                    isOpenEditImageFragment = true;
+                    break;
+            }
+
+            if (isAllowToClearChatEditText) {
+                edtChat.setText("");
+            }
+        }
+
+        if (isOpenEditImageFragment && getActivity() != null) {
+            FragmentEditImage fragmentEditImage = FragmentEditImage.newInstance(null, true, false, FragmentEditImage.itemGalleryList.size() - 1);
+            fragmentEditImage.setIsReOpenChatAttachment(false);
+            new HelperFragment(getActivity().getSupportFragmentManager(), fragmentEditImage).setReplace(false).load();
+        }
+
+        HelperGetDataFromOtherApp.sharedList.clear();
+        //update main room list ui after share done
+        if (getActivity() instanceof ActivityMain) {
+            ((ActivityMain) getActivity()).checkHasSharedData(false);
+        }
     }
 
     private void shearedLinkDataToOtherProgram(MessageObject messageObject) {
@@ -7145,7 +7217,7 @@ public class FragmentChat extends BaseFragment
                                 }
 
                                 getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-                                deleteSelectedMessageFromAdapter(messageIds);
+                                //deleteSelectedMessageFromAdapter(messageIds);
 
                             })
                             .checkBoxPrompt(textCheckBox, false, null)
@@ -7161,7 +7233,7 @@ public class FragmentChat extends BaseFragment
 
                                 bothDeleteMessageId = null;
                                 getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
-                                deleteSelectedMessageFromAdapter(messageIds);
+                                //deleteSelectedMessageFromAdapter(messageIds);
 
                             }).show();
                 }
@@ -7321,7 +7393,7 @@ public class FragmentChat extends BaseFragment
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
         results = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoom.class).equalTo("keepRoom", false).equalTo("isDeleted", false).
-                    equalTo("readOnly", false).notEqualTo("id", mRoomId).findAll().sort(fieldNames, sort);
+                    equalTo("readOnly", false).findAll().sort(fieldNames, sort);
         });
 
         resultsContact = DbManager.getInstance().doRealmTask(realm -> {
@@ -8007,7 +8079,13 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case STICKER_VALUE:
-                       if (messageObject.getAttachment() != null && messageObject.getAttachment().name != null && messageObject.getAttachment().isAnimatedSticker()) {
+                        /*    if (messageObject.getAdditional() != null && messageObject.getAdditional().type == AdditionalType.GIFT_STICKER) {
+                        if (!addTop) {
+                                mAdapter.add(new GiftStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new GiftStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
+                            }
+                        } else*/ if (messageObject.getAttachment() != null && messageObject.getAttachment().name != null && messageObject.getAttachment().isAnimatedSticker()) {
                             if (!addTop) {
                                 mAdapter.add(new AnimatedStickerItem(mAdapter, chatType, this).setMessage(messageObject).withIdentifier(identifier));
                             } else {
@@ -8255,9 +8333,10 @@ public class FragmentChat extends BaseFragment
                     recyclerView.addOnScrollListener(scrollListener);
 
 
-                    if (unreadCount > 0) {
+                    if (unreadCount > 0 && allowScrollToTop) {
                         recyclerView.scrollToPosition(0);
                     }
+                    allowScrollToTop = false;
                 }
             });
         });
@@ -9082,7 +9161,7 @@ public class FragmentChat extends BaseFragment
                         exportChat();
                     } else {
                         try {
-                            HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
                                     exportChat();
@@ -9174,7 +9253,7 @@ public class FragmentChat extends BaseFragment
                 String[] split = message.split(",");
                 Double latitude = Double.parseDouble(split[0]);
                 Double longitude = Double.parseDouble(split[1]);
-                FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
+                FragmentMap fragment = FragmentMap.getInstance(latitude, longitude, FragmentMap.Mode.sendPosition);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
         } catch (Exception e) {
@@ -9255,7 +9334,7 @@ public class FragmentChat extends BaseFragment
             long messageId = (long) args[1];
             boolean update = (boolean) args[2];
 
-            if (roomId == mRoomId && update) {
+            if (roomId == mRoomId) {
                 G.runOnUiThread(() -> {
                     if (mAdapter == null) {
                         return;
@@ -9266,8 +9345,8 @@ public class FragmentChat extends BaseFragment
                     deleteSelectedMessageFromAdapter(messages);
 
                     if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
-                        RealmRoomMessage roomMessage = (RealmRoomMessage) mReplayLayout.getTag();
-                        if (roomMessage != null && messageId == roomMessage.getMessageId()) {
+                        MessageObject roomMessage = (MessageObject) mReplayLayout.getTag();
+                        if (roomMessage != null && messageId == roomMessage.id && update) {
                             clearReplyView();
                         }
                     }
@@ -9278,10 +9357,11 @@ public class FragmentChat extends BaseFragment
                 long roomId = (long) args[0];
                 long messageId = (long) args[1];
                 String newMessage = (String) args[2];
-
+                boolean isUpdate = (boolean) args[3];
                 if (mRoomId == roomId && mAdapter != null) {
                     mAdapter.updateMessageText(messageId, newMessage);
-                    removeEditedMessage();
+                    if (!isUpdate)
+                        removeEditedMessage();
                 }
             });
         } else if ((long) args[0] == mRoomId && id == EventManager.ON_PINNED_MESSAGE) {
@@ -9375,23 +9455,23 @@ public class FragmentChat extends BaseFragment
             hashList.clear();
 
             for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
-//                if (mAdapter.getItem(i).mMessage != null) {
-//
-//                    if (messageId.length() > 0) {
-//                        if ((mAdapter.getItem(i).mMessage.getMessageId() + "").equals(messageId)) {
-//                            currentHashPosition = hashList.size();
-//                            lastMessageId = messageId;
-//                            mAdapter.getItem(i).structMessage.isSelected = true;
-//                            mAdapter.notifyItemChanged(i);
-//                        }
-//                    }
-//
-//                    String mText = mAdapter.getItem(i).mMessage.getForwardMessage() != null ? mAdapter.getItem(i).mMessage.getForwardMessage().getMessage() : mAdapter.getItem(i).mMessage.getMessage();
-//
-//                    if (mText.toLowerCase().contains(hashString)) {
-//                        hashList.add(mAdapter.getItem(i).mMessage.getMessageId() + "");
-//                    }
-//                }
+                if (mAdapter.getItem(i).messageObject != null) {
+
+                    if (messageId.length() > 0) {
+                        if ((mAdapter.getItem(i).messageObject.id + "").equals(messageId)) {
+                            currentHashPosition = hashList.size();
+                            lastMessageId = messageId;
+                            mAdapter.getItem(i).messageObject.isSelected = true;
+                            mAdapter.notifyItemChanged(i);
+                        }
+                    }
+
+                    String mText = mAdapter.getItem(i).messageObject.forwardedMessage != null ? mAdapter.getItem(i).messageObject.forwardedMessage.message : mAdapter.getItem(i).messageObject.message;
+
+                    if (mText.toLowerCase().contains(hashString)) {
+                        hashList.add(mAdapter.getItem(i).messageObject.id + "");
+                    }
+                }
             }
 
             if (messageId.length() == 0) {

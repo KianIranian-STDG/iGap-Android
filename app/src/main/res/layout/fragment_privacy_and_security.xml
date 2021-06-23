@@ -173,14 +173,16 @@
                         android:text="@string/Block_Users"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:background="?attr/selectableItemBackground"/>
 
                     <LinearLayout
                         android:id="@+id/stps_ll_who_can_see_my_avatar"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickSeeMyAvatar}"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"
@@ -215,8 +217,7 @@
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickInviteChannel}"
                         android:orientation="horizontal"
-
-                        >
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"
@@ -251,7 +252,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickInviteGroup}"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"
@@ -286,7 +288,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickVoiceCall}"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"
@@ -320,7 +323,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickVideoCall}"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"
@@ -354,7 +358,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickSeeLastSeen}"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"
@@ -423,7 +428,8 @@
                         android:text="@string/Security"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:background="?attr/selectableItemBackground"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -456,7 +462,8 @@
                         android:text="@string/two_step_pass_code"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:background="?attr/selectableItemBackground"/>
 
                     <TextView
                         android:id="@+id/stps_twoStepVerification"
@@ -470,7 +477,8 @@
                         android:text="@string/two_step_verification"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:background="?attr/selectableItemBackground"/>
 
                     <TextView
                         android:id="@+id/stps_activitySessions"
@@ -484,7 +492,8 @@
                         android:text="@string/Active_Sessions"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/standardTextSize"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:background="?attr/selectableItemBackground"/>
                 </LinearLayout>
 
                 <View
@@ -511,14 +520,16 @@
                         android:text="@string/Account_Self_destruction"
                         android:textColor="?iGapTitleTextColor"
                         android:textSize="@dimen/largeTextSize"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:background="?attr/selectableItemBackground"/>
 
                     <LinearLayout
                         android:id="@+id/stps_layout_Self_destruction"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp40"
                         android:onClick="@{fragmentPrivacyAndSecurityViewModel::onClickSelfDestruction}"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
 
                         <TextView
                             android:layout_width="0dp"

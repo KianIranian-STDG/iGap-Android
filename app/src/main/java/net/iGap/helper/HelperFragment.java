@@ -23,7 +23,7 @@ import net.iGap.fragments.FragmentGallery;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.fragments.FragmentShowAvatars;
-import net.iGap.fragments.FragmentShowImage;
+import net.iGap.fragments.FragmentShowContent;
 import net.iGap.fragments.FragmentShowMember;
 import net.iGap.fragments.PaymentFragment;
 import net.iGap.fragments.ShowCustomList;
@@ -298,7 +298,7 @@ public class HelperFragment {
         }
 
         if (G.twoPaneMode) {
-            if (fragmentClassName.equals(FragmentShowImage.class.getName()) || fragmentClassName.equals(FragmentShowAvatars.class.getName())) {
+            if (fragmentClassName.equals(FragmentShowContent.class.getName()) || fragmentClassName.equals(FragmentShowAvatars.class.getName())) {
                 /*if (G.isLandscape) {*/
                 if (G.iTowPanModDesinLayout != null) {
                     G.iTowPanModDesinLayout.setBackChatVisibility(true);
@@ -344,6 +344,11 @@ public class HelperFragment {
         replace = false;
         load();
     }
+
+/*    public void loadActiveGiftStickerCard(StructIGSticker structIGSticker, View.OnClickListener sendOtherListener, int mode) {
+        MainGiftStickerCardFragment fragment = MainGiftStickerCardFragment.getInstance(structIGSticker, sendOtherListener, mode);
+        fragment.show(fragmentManager, "gift sticker card");
+    }*/
 
     private boolean isRelatedToChat(String fragmentName) {
         return fragmentName.equals(FragmentChannelProfile.class.getName()) || fragmentName.equals(EditChannelFragment.class.getName()) ||

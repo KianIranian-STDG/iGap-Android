@@ -84,6 +84,7 @@ import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmConstants;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientCountRoomHistory;
@@ -1597,11 +1598,11 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         private void showImage(int position, View itemView) {
             if (getActivity() != null) {
                 long selectedFileToken = mList.get(position).messageId;
-                FragmentShowImage fragment = FragmentShowImage.newInstance();
+                FragmentShowContent fragment = FragmentShowContent.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putLong("RoomId", roomId);
-                bundle.putLong("SelectedImage", selectedFileToken);
-                bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
+                bundle.putLong(RealmConstants.REALM_ROOM_ID, roomId);
+                bundle.putLong(RealmConstants.REALM_SELECTED_IMAGE, selectedFileToken);
+                bundle.putString(RealmConstants.REALM_MESSAGE_TYPE, ProtoGlobal.RoomMessageType.IMAGE.toString());
                 fragment.setArguments(bundle);
                 new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
             }
@@ -1756,7 +1757,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
             } else {
                 if (getActivity() != null) {
                     long selectedFileToken = mNewList.get(position).messageId;
-                    Fragment fragment = FragmentShowImage.newInstance();
+                    Fragment fragment = FragmentShowContent.newInstance();
                     Bundle bundle = new Bundle();
                     bundle.putLong("RoomId", roomId);
                     bundle.putLong("SelectedImage", selectedFileToken);

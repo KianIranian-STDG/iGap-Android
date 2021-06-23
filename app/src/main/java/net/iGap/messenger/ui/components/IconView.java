@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
 
-import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -17,14 +16,19 @@ public class IconView extends AppCompatTextView {
         setGravity(Gravity.CENTER);
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
         setTextColor(0xffffffff);
-        setTypeface(ResourcesCompat.getFont(context, R.font.font_icon_new));
+        setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
     }
 
     public void setIconColor(int color) {
         setTextColor(color);
     }
 
-    public void setIcon(@StringRes int icon) {
-        setText(getContext().getResources().getText(icon));
+    public void setIcon(int icon) {
+        try {
+            getResources().getDrawable(icon);
+            setBackgroundDrawable(getResources().getDrawable(icon));
+        } catch (RuntimeException e) {
+            setText(getResources().getText(icon));
+        }
     }
 }

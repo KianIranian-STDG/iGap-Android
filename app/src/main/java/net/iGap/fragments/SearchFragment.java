@@ -12,6 +12,7 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,11 +41,9 @@ import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.IClientSearchUserName;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoClientSearchUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
@@ -63,10 +64,9 @@ import java.util.TimerTask;
 import io.realm.Case;
 import io.realm.RealmResults;
 
-public class SearchFragment extends BaseFragment implements ToolbarListener {
+public class SearchFragment extends BaseFragment {
 
     private FastAdapter fastAdapter;
-    private EditText edtSearch;
     private ArrayList<StructSearch> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
@@ -75,7 +75,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     private long index = 500;
     private String preventRepeatSearch = "";
     private ContentLoadingProgressBar loadingProgressBar;
-    private HelperToolbar toolbar;
     private static final String SEARCH_TXT = "searchText";
     private static final String SEARCH_AUTO = "isSearchAuto";
     private String searchTxt;
@@ -104,10 +103,9 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.search_fragment_layout, container, false);
+    public View createView(Context context) {
+        return LayoutInflater.from(context).inflate(R.layout.search_fragment_layout, null, true);
     }
 
     @Override
@@ -117,8 +115,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         initComponent(view);
         initRecycleView();
         if (searchTxt != null) {
-            toolbar.getEditTextSearch().setText(searchTxt);
-            toolbar.getEditTextSearch().setSelection(toolbar.getEditTextSearch().getText().toString().length());
             startOrReStartSearchTimer();
         }
     }
@@ -127,21 +123,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
         index = 500;
 
-
-        toolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setSearchBoxShown(true, true)
-                .setListener(this);
-
-        ViewGroup layoutToolbar = view.findViewById(R.id.sfl_layout_toolbar);
-        layoutToolbar.addView(toolbar.getView());
-
-        edtSearch = toolbar.getEditTextSearch();
-
-        toolbar.resizeSearchBoxWithAnimation(true, true);
 
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         imvNothingFound = view.findViewById(R.id.sfl_imv_nothing_found);
@@ -174,8 +155,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
                     SearchItem si = (SearchItem) currentItem;
                     goToRoom(si.item.id, si.item.type, si.item.messageId, si.item.userName);
 
-                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
+                   hideKeyboard();
                 }
 
                 return false;
@@ -187,6 +167,22 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         recyclerView.setAdapter(fastAdapter);
     }
 
+    public void onTextChanged(String text) {
+        if (text != null) {
+            searchTxt = text;
+        }
+        if (text.trim().length() < 2) {
+            cancelSearchTimer();
+            fillList("");
+            preventRepeatSearch = "";
+            return;
+        }
+        startOrReStartSearchTimer();
+    }
+
+    public void onOpenSearchKeyboard() {
+
+    }
     private void fillList(String text) {
 
         itemAdapter.clear();
@@ -272,7 +268,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
     }
 
     private void fillAfterResponse() {
-        String text = edtSearch.getText().toString();
+        String text = searchTxt;
         if (text.startsWith("@")) {
             fillListItemAtsign(text.substring(1));
 
@@ -395,7 +391,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRoom> results;
 
-            if (edtSearch.getText().toString().startsWith("@")) {
+            if (searchTxt.startsWith("@")) {
                 results = realm.where(RealmRoom.class).beginGroup().contains("channelRoom.username", text, Case.INSENSITIVE).or().contains("groupRoom.username", text, Case.INSENSITIVE).endGroup().equalTo("type", "GROUP", Case.INSENSITIVE).findAll();
 
             } else {
@@ -405,7 +401,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
             if (results != null) {
 
                 if (results.size() > 0)
-                    addHeader(edtSearch.getContext().getString(R.string.Groups));
+                    addHeader(getContext().getString(R.string.Groups));
 
 
                 for (RealmRoom realmRoom : results) {
@@ -445,7 +441,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRoom> results;
 
-            if (edtSearch.getText().toString().startsWith("@")) {
+            if (searchTxt.startsWith("@")) {
                 results = realm.where(RealmRoom.class).beginGroup().contains("channelRoom.username", text, Case.INSENSITIVE).or().contains("groupRoom.username", text, Case.INSENSITIVE).endGroup().equalTo("type", "CHANNEL", Case.INSENSITIVE).findAll();
 
             } else {
@@ -493,7 +489,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRegisteredInfo> results;
 
-            if (edtSearch.getText().toString().startsWith("@")) {
+            if (searchTxt.startsWith("@")) {
                 results = realm.where(RealmRegisteredInfo.class).contains("username", text, Case.INSENSITIVE).equalTo("isBot", true).findAll();
 
             } else {
@@ -529,7 +525,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmRegisteredInfo> results;
 
-            if (edtSearch.getText().toString().startsWith("@")) {
+            if (searchTxt.startsWith("@")) {
                 results = realm.where(RealmRegisteredInfo.class).contains("username", text, Case.INSENSITIVE).equalTo("isBot", false).findAll();
 
             } else {
@@ -565,7 +561,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         DbManager.getInstance().doRealmTask(realm -> {
             final RealmResults<RealmContacts> results;
 
-            if (edtSearch.getText().toString().startsWith("@")) {
+            if (searchTxt.startsWith("@")) {
                 results = realm.where(RealmContacts.class).contains("username", text, Case.INSENSITIVE).findAll();
 
             } else {
@@ -709,6 +705,12 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
     }
 
+    public void onSearchCollapsed() {
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out);
+        fragmentTransaction.detach(this).commit();
+    }
+
 
     //*********************************************************************************************
 
@@ -731,40 +733,6 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
         public SearchType type = SearchType.header;
     }
 
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
-    }
-
-    @Override
-    public void onSearchClickListener(View view) {
-        if (getContext() != null) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
-        }
-
-    }
-
-    @Override
-    public void onBtnClearSearchClickListener(View view) {
-        cancelSearchTimer();
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
-    }
-
-    @Override
-    public void onSearchTextChangeListener(View view, String text) {
-        if (text.trim().length() < 2) {
-            cancelSearchTimer();
-            fillList("");
-            preventRepeatSearch = "";
-            return;
-        }
-        startOrReStartSearchTimer();
-    }
 
     private Timer mTimerSearch;
     private TimerTask mTimerTaskSearch;
@@ -783,7 +751,7 @@ public class SearchFragment extends BaseFragment implements ToolbarListener {
 
                     //search after 0.5 sec
                     if (mSearchCurrentTime > 0) {
-                        String text = toolbar.getEditTextSearch().getText().toString().trim();
+                        String text = searchTxt.trim();
                         G.handler.post(() -> fillList(text));
                         cancelSearchTimer();
                     } else {

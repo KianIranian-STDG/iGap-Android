@@ -67,7 +67,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
             if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet ||
                     item instanceof LogWalletCardToCard || item instanceof CardToCardItem ||
-                  /*  item instanceof GiftStickerItem ||*/ item instanceof LogWalletTopup ||
+                   /* item instanceof GiftStickerItem ||*/ item instanceof LogWalletTopup ||
                     item instanceof LogWalletBill) {
                 if (item.isSelected()) v.performLongClick();
             } else {

@@ -16,16 +16,13 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.StringListParcelConverter;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmRoomMessageContactRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmRoomMessageContactRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageContact.class})
 public class RealmRoomMessageContact extends RealmObject {
 
     private String firstName;

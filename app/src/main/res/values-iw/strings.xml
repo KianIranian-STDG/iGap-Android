@@ -926,7 +926,7 @@
     <string name="kuknos_Restore_Error_Snack">اولسون </string>
     <string name="kuknos_Restore_Error_empty_str">اؤز حسابیزین بازیابی کلمه لرینین زنجیرینی داخل ائدین</string>
     <string name="kuknos_Restore_Error_invalid_str">داخل ائدیلن زنجیرین اوزونلوغو کافی دییلدیر</string>
-    <string name="kuknos_Restore_Hint">مثال اوچون: دنیز، میز، کابل و ...</string>
+    <string name="kuknos_Restore_Hint">مثال اوچون: دنیز میز کابل و ...</string>
     <string name="kuknos_Restore_Message">بو کلمه لردن استفاده ائتمک ایله سیز اؤز حسابیزی یئنیدن بازیابی ائده بیلرسیز. </string>
     <string name="kuknos_Restore_Title">زحمت اولماسا اؤز حسابیزین بازیابی کلمه لرین داخل ائدین </string>
     <string name="kuknos_Restore_checkBtn">سونراکی </string>
@@ -1195,7 +1195,9 @@
     <string name="ladies_charge">شارژ بانوان</string>
     <string name="normal_error">can\&apos;t do it please try later</string>
     <string name="not_answer">جوابسیز </string>
-    <string name="not_answerd_call">"الدن گئتمیش تماس"</string>
+    <string name="not_answerd_call">الدن گئتمیش تماس</string>
+    <string name="not_answered_voice_call">الدن گئتمیش تماس</string>
+    <string name="not_answered_video_call">الدن گئتمیش تماس</string>
     <string name="not_exist_activities">سیزین سابقه لر لیستیز بوشدور</string>
     <string name="not_found_message">بو پیغام موجود دییلدیر</string>
     <string name="not_success">ناموفق</string>
@@ -1930,4 +1932,5 @@
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">Can not support file</string>
+
 </resources>

@@ -2,6 +2,7 @@ package net.iGap.module.upload;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
@@ -227,6 +228,7 @@ public class UploadHttpRequest {
 
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = secureRandom.generateSeed(16);
+        fileObject.auth = G.symmetricKeyString.getBytes();
 
         try (FileInputStream fileInputStream = new FileInputStream(fileObject.file); ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(iv)) {
             if (fileObject.offset > 0 && isResume) {
@@ -244,7 +246,7 @@ public class UploadHttpRequest {
                     public void onProgress(long totalByte) {
                         if (cancelDownload.get() && isUploading) {
                             isUploading = false;
-                            error(new Exception("Download Canceled"), false);
+                            error(new Exception("Upload Canceled"), false);
                             return;
                         }
                         int progress = (int) ((totalByte * 100) / fileObject.file.length());
@@ -321,7 +323,7 @@ public class UploadHttpRequest {
     }
 
     private void error(Exception exception, boolean needReset) {
-        if (exception == null || cancelDownload.get()) {
+        if (exception == null) {
             return;
         }
 
@@ -358,7 +360,7 @@ public class UploadHttpRequest {
         try {
             cipher = Cipher.getInstance("AES_256/CBC/PKCS5Padding");
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
-            SecretKey key2 = new SecretKeySpec(G.symmetricKeyString.getBytes(), "AES");
+            SecretKey key2 = new SecretKeySpec(fileObject.auth, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, key2, ivSpec);
 
         } catch (Exception e) {

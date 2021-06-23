@@ -288,6 +288,15 @@ public class RealmUserInfo extends RealmObject {
 
     // Kuknos seed key save and get process
 
+/*
+    public RealmKuknos getKuknosM() {
+        return kuknosM;
+    }
+
+    public void setKuknosM(RealmKuknos kuknosM) {
+        this.kuknosM = kuknosM;
+    }*/
+
     /*public static void updateKuknos(RealmKuknos kuknosM) {
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
@@ -296,6 +305,32 @@ public class RealmUserInfo extends RealmObject {
             }
         });
     }*/
+
+    public void createKuknos() {
+/*        if (kuknosM == null) {
+            new Thread(() -> {
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.setKuknosM(realm.createObject(RealmKuknos.class));
+                    }
+                });
+            }).start();
+        }*/
+    }
+
+    public void deleteKuknos() {
+/*        if (kuknosM != null) {
+            new Thread(() -> {
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+                    if (realmUserInfo != null) {
+                        realmUserInfo.getKuknosM().deleteFromRealm();
+                    }
+                });
+            }).start();
+        }*/
+    }
 
     public boolean isWalletRegister() {
         return isWalletRegister;

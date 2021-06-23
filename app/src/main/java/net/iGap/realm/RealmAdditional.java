@@ -3,14 +3,11 @@ package net.iGap.realm;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmAdditionalRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmAdditionalRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAdditional.class})
 public class RealmAdditional extends RealmObject {
 
     @PrimaryKey

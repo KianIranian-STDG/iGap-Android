@@ -12,13 +12,10 @@ package net.iGap.realm;
 
 import net.iGap.helper.HelperString;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import io.realm.net_iGap_realm_RealmStringRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmStringRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmString.class})
 public class RealmString extends RealmObject {
 
     private String string;

@@ -21,7 +21,6 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,9 +30,7 @@ import io.realm.RealmObject;
 import io.realm.RealmResults;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class})
 public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey

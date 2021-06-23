@@ -8,6 +8,20 @@
     android:padding="@dimen/dp16">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp8"
+        android:gravity="center"
+        android:text="@string/waiting_dialog_reason_text"
+        android:textColor="?attr/iGapTitleTextColor"
+        android:textSize="@dimen/dp18"
+        app:layout_constraintBottom_toTopOf="@id/textRemindTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textRemindTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +33,9 @@
         app:layout_constraintBottom_toTopOf="@id/remindTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/textReason" />
+
+
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/remindTime"

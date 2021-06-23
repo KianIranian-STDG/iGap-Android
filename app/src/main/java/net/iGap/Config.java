@@ -68,4 +68,19 @@ public class Config {
             + "iJInT4E6DcmgAVYu5jFMWJDTEuurOQZ1W4nbmGyoY1bZXaFoiMPfzy72VIddkoHg\n"
             + "mwIDAQAB\n"
             + "-----END PUBLIC KEY-----\n";
+
+    public static final String PUBLIC_PARSIAN_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"
+            + "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAydD3W4bmOaInos80eMOj\n"
+            + "qcEJc/P4tdSJCnQg5Snfl3LZ3iMUHV5ly+cpJKUtWPrTo4afEQdTtZhlsa465GET\n"
+            + "HWuQGMGg45NpieM75hOP4B7U7ZNlyaIzJzdIbkIYzdRinELhC0XbRLLG5hNRT/E3\n"
+            + "Iy+Odxp6XXui4dk7pMA7DnSeGsFMWf61pbXt06ue/nSC41VJKS5KXkNbPtafzGq6\n"
+            + "BjKnQxlvKH9O9RClZXr8ymxj4F7Ja3PxW//lDGGwgd3Zfq1aJMDaqmeXKEagOLfn\n"
+            + "eoKJr2TzH/fUp0N6p3dWo7tw/E50CgHaO7Cqrzk2h9bgnsbQiIyVLMwAtW3TBEQf\n"
+            + "b+bwafeVKAbMAj9wauJZuREGo0fNCpSo/MQWe4bH3AZmVH4b00idD04obuHDyDSx\n"
+            + "E9ID20SdTEAEv98/zqTXscOZz0WdPSJHlkkiO+Kmc92mJRAn+lSTlPsepUyG0qCt\n"
+            + "uJgm87qHQSyQXI0LqCaUm0WqsIIO1yFNZjJuQMO5V/i2SBzV6yRFehFWH8vfrfIG\n"
+            + "FX7bj+cYugj6FTZogns8/ISHTR2njWcxSj3scKvbgvpOIpA7ZAtiyf2RRt9Ove9z\n"
+            + "yUjIvBbfDBzvd4D4mAnF96OtRLJmgIZWQrgiKv7LjCyV3r/uaYV3wXuvIWHxcsXY\n"
+            + "+IAhoaxUiu3JEBGeOx4xs3sCAwEAAQ==\n"
+            + "-----END PUBLIC KEY-----\n";
 }

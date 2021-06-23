@@ -110,7 +110,7 @@ public class FragmentIgapSearch extends BaseFragment {
         loadingProgressBar = view.findViewById(R.id.sfl_progress_loading);
         loadingProgressBar.getIndeterminateDrawable().setColorFilter(new Theme().getAccentColor(getContext()), PorterDuff.Mode.SRC_IN);
 
-        edtSearch = view.findViewById(R.id.sfl_edt_search);
+//        edtSearch = view.findViewById(R.id.sfl_edt_search);
 
         edtSearch.setInputType(InputType.TYPE_CLASS_TEXT);
 
@@ -193,7 +193,7 @@ public class FragmentIgapSearch extends BaseFragment {
         });
         */
 
-        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
+//        btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +201,7 @@ public class FragmentIgapSearch extends BaseFragment {
                 edtSearch.setSelection(1);
             }
         });
-        rippleDown = view.findViewById(R.id.sfl_ripple_done);
+//        rippleDown = view.findViewById(R.id.sfl_ripple_done);
         rippleDown.setEnabled(false);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override

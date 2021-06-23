@@ -753,6 +753,8 @@
     <string name="invalid_email_token">Код подтверждения адреса электронной почты неверен</string>
     <string name="invalid_question_token">Ваш ответ неверен</string>
     <string name="not_answerd_call">Пропущенный голосовой звонок</string>
+    <string name="not_answered_voice_call">Пропущенный голосовой звонок</string>
+    <string name="not_answered_video_call">Пропущенный голосовой звонок</string>
     <string name="recorded_by">Записано при поддержке</string>
     <string name="Login_with_QrCode">Войти с помощью QR</string>
     <string name="Input_device_specification">Успешный вход в систему устройства</string>
@@ -1665,4 +1667,6 @@
     <string name="location_list_tile">Поиск развлекательных центров</string>
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
+
 </resources>

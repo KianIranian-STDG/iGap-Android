@@ -1498,7 +1498,9 @@
 
     <string name="invalid_question_token">"ردّكم غير صحيح"</string>
 
-    <string name="not_answerd_call">"الاتصال الصوتي الفائت"</string>
+    <string name="not_answerd_call">الاتصال الفائت</string>
+    <string name="not_answered_voice_call">الاتصال الصوتي الفائت</string>
+    <string name="not_answered_video_call">الاتصال فيديو الفائت</string>
 
     <string name="recorded_by">"المسجّل بواسطة " </string>
 
@@ -2665,4 +2667,6 @@
     <string name="location_list_tile">ابحث عن مراكز الترفيه</string>
     <string name="share_file_link">مشاركة الرابط العام</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
+
 </resources>

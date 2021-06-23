@@ -13,13 +13,10 @@ package net.iGap.realm;
 import net.iGap.observers.interfaces.RealmMoneyTransfer;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import io.realm.net_iGap_realm_RealmRoomMessageWalletPaymentRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletPaymentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWalletPayment.class})
 public class RealmRoomMessageWalletPayment extends RealmObject implements RealmMoneyTransfer {
 
     private long fromUserId;

@@ -33,6 +33,20 @@
     //mo
     <!--toolbar-->
 
+    <!--callStrip-->
+    <color name="call_strip_color">#2db6a6</color>
+    <color name="call_strip_color_blue">#4aca69</color>
+    <!--mediaStrip-->
+    <color name="media_strip_color_light">#46A829</color>
+    <color name="media_strip_color_red">#8C0E0E</color>
+    <color name="media_strip_color_pink">#DA6E6E</color>
+    <color name="media_strip_color_purple">#7E4370</color>
+    <color name="media_strip_color_blue">#0545BD</color>
+    <color name="media_strip_color_green">#8AAF4D</color>
+    <color name="media_strip_color_amber">#D8A613</color>
+    <color name="media_strip_color_orange">#EC7701</color>
+    <color name="media_strip_color_dark_gray">#26354A</color>
+    <color name="media_strip_color_dark">#404040</color>
     <!--<color name="toolbar_background">#00B0BF</color>-->
     <color name="toolbar_background">@color/green</color>
     <color name="toolbar_transparent">#bf000000</color>
@@ -54,6 +68,8 @@
     <color name="border_editText">#757575</color>
     <color name="black_register">#1a1a1a</color>
     <color name="whit_background">#ffffff</color>
+    <color name="voice_icon_color">#219E27</color>
+    <color name="video_icon_color">#17909F</color>
 
 
     <!--REGISTER PAGE-->
@@ -106,7 +122,9 @@
     <color name="bottomSheetHeaderLineDark">@color/toolbar_search_box_dark_bg</color>
     <color name="setting_items_value_color">#41B120</color>
     <color name="colorToolbarBackgroundEnd">#FF5EBC45</color>
+    <color name="colorToolbarActionModeBackgroundEnd">#7CBA6C</color>
     <color name="colorToolbarBackgroundStart">#B9E244</color>
+    <color name="colorToolbarActionModeBackgroundStart">#BEDD65</color>
     <color name="toolbar_search_box_bg">#F6F6F9</color>
     <color name="notification_badge">#5ebc45</color>
 
@@ -139,7 +157,7 @@
 
     <color name="voice_round">#468da7</color>
     <color name="navigation_dark_mode_bg">#555857</color>
-
+    <color name="ToolbarDarkActionModeBackgroundEnd">#555857</color>
     <color name="voice_item">#468ba7</color>
     <color name="voice_item_dark">#5D92A7</color>
     <color name="colorWhite">#fff</color>

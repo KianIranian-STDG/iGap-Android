@@ -13,12 +13,10 @@ package net.iGap.realm;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmRoomMessageWalletRealmProxy;
 
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.BILL;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.CARD_TO_CARD;
@@ -26,7 +24,6 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.MONEY_TRANSFER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.PAYMENT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageWallet.Type.TOPUP;
 
-@Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWallet.class})
 public class RealmRoomMessageWallet extends RealmObject {
 
     @PrimaryKey

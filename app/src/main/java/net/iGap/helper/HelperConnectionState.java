@@ -20,7 +20,9 @@ import net.iGap.activities.ActivityEnterPassCode;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.activities.ActivityRegistration;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.viewmodel.controllers.CallManager;
 
 /**
@@ -40,6 +42,7 @@ public class HelperConnectionState {
         if (HelperCheckInternetConnection.hasNetwork()) {
             if (G.onConnectionChangeState != null) {
                 G.onConnectionChangeState.onChangeState(connectionState);
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CONNECTION_STATE_CHANGED, connectionState));
             }
             if (G.onConnectionChangeStateChat != null) {
                 G.onConnectionChangeStateChat.onChangeState(connectionState);
@@ -49,6 +52,7 @@ public class HelperConnectionState {
         } else {
             if (G.onConnectionChangeState != null) {
                 G.onConnectionChangeState.onChangeState(ConnectionState.WAITING_FOR_NETWORK);
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CONNECTION_STATE_CHANGED, ConnectionState.WAITING_FOR_NETWORK));
             }
             if (G.onConnectionChangeStateChat != null) {
                 G.onConnectionChangeStateChat.onChangeState(ConnectionState.WAITING_FOR_NETWORK);

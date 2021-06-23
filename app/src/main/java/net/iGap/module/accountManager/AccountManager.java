@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import net.iGap.G;
-import net.iGap.fragments.FragmentMain;
+import net.iGap.fragments.MainFragment;
 import net.iGap.helper.FileLog;
 import net.iGap.model.AccountUser;
 import net.iGap.network.RequestManager;
@@ -262,7 +262,7 @@ public class AccountManager {
     public void clearSomeStaticValue() {
         ClientGetRoomListResponse.roomListFetched = false;
         RequestClientGetRoomList.isPendingGetRoomList = false;
-        FragmentMain.mOffset = 0;
+        MainFragment.mOffset = 0;
         G.serverHashContact = null;
         G.selectedCard = null;
         G.nationalCode = null;

@@ -10,14 +10,11 @@
 
 package net.iGap.realm;
 
-import org.parceler.Parcel;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.net_iGap_realm_RealmNotificationRoomMessageRealmProxy;
 
-@Parcel(implementations = {net_iGap_realm_RealmNotificationRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmNotificationRoomMessage.class})
 public class RealmNotificationRoomMessage extends RealmObject {
     @PrimaryKey
     public long messageId;
