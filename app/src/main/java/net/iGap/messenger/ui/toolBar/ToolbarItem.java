@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -226,6 +227,26 @@ public class ToolbarItem extends FrameLayout {
         parentToolbarItem.parentToolbar.onSearchVisibilityChanged(toggleSearch(true));
     }
 
+    public EditText getSearchEditText() {
+        return searchEditText;
+    }
+    public void setSearchFieldText(String text) {
+        if (searchEditText == null) {
+            return;
+        }
+        searchEditText.setText(text);
+        if (!TextUtils.isEmpty(text)) {
+            searchEditText.setSelection(text.length());
+        }
+    }
+    public void removeAllSubItems() {
+        if (toolbarMenuItemLayout != null) {
+            ScrollView scrollView = (ScrollView) toolbarMenuItemLayout.getChildAt(0);
+            LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+            linearLayout.removeAllViews();
+        }
+    }
+
     public ToolBarMenuSubItem addSubItem(int id, int icon, CharSequence text) {
         createPopupLayout();
         ToolBarMenuSubItem item = new ToolBarMenuSubItem(getContext());
@@ -287,7 +308,7 @@ public class ToolbarItem extends FrameLayout {
 
     public void togglePopup() {
         //todo: more conditions should add to this if statement.
-        if (toolbarMenuItemLayout == null || parentToolbarItem != null && parentToolbarItem.parentToolbar != null && !parentToolbarItem.isActionMode) {
+        if (toolbarMenuItemLayout == null || parentToolbarItem != null && parentToolbarItem.parentToolbar != null && parentToolbarItem.isActionMode && !parentToolbarItem.parentToolbar.isActionModeShowed()) {
             return;
         }
 
@@ -400,19 +421,21 @@ public class ToolbarItem extends FrameLayout {
         if (searchContainer == null) {
             return false;
         }
-        if (searchContainer.getVisibility() == VISIBLE) {
+        if (searchContainer.getTag() != null) {
+            searchContainer.setTag(null);
             searchContainer.setVisibility(GONE);
 //            searchClearButton.setVisibility(GONE);
             searchEditText.clearFocus();
+            setVisibility(VISIBLE);
             if (listener != null) {
                 listener.onSearchCollapse();
             }
             if (openKeyboard) {
                 AndroidUtils.hideKeyboard(searchEditText);
             }
-            setVisibility(VISIBLE);
             return false;
         } else {
+            searchContainer.setTag(1);
             searchContainer.setVisibility(VISIBLE);
 //            searchClearButton.setVisibility(VISIBLE);
             searchContainer.setAlpha(1f);

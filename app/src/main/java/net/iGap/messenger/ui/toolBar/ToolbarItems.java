@@ -38,6 +38,7 @@ public class ToolbarItems extends LinearLayout {
             ToolbarItem toolbarItem = (ToolbarItem) v;
             if (toolbarItem.hasSubMenu()) {
                 toolbarItem.togglePopup();
+                parentToolbar.listener.onItemClick((Integer) toolbarItem.getTag());
             } else if (toolbarItem.isSearchBox()) {
                 parentToolbar.onSearchVisibilityChanged(toolbarItem.toggleSearch(true));
             } else {

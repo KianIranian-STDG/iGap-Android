@@ -1,6 +1,7 @@
 package net.iGap.messenger.ui.toolBar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;

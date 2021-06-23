@@ -37,6 +37,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -67,6 +68,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
@@ -167,6 +169,9 @@ import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
 import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
+import net.iGap.model.ChatMoreItem;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -593,6 +598,29 @@ public class FragmentChat extends BaseFragment
     private RealmRoomAccess currentRoomAccess;
     private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
     private boolean allowScrollToTop = true;
+    ToolbarItem moreItem;
+    ToolbarItem callItem;
+    ToolbarItem searchFieldItem;
+    TextView verifiedIcon;
+    TextView muteIcon;
+    AppCompatImageView avatarItem;
+    SearchFragment searchFragment;
+    EditText searchEditText;
+    private final int moreTag = 1;
+    private final int voiceCallTag = 2;
+    private final int videoCallTag = 3;
+    private final int searchItem = 4;
+    private final int clearHistoryItem = 5;
+    private final int deleteItem = 6;
+    private final int unMuteItem = 7;
+    private final int muteItem = 8;
+    private final int chatToGroupItem = 9;
+    private final int exportChatItem = 10;
+    private final int cleanUpItem = 11;
+    private final int reportItem = 12;
+    private final int sendMoneyItem = 13;
+    private final int stopItem = 14;
+    private final int searchFieldTag = 15;
 
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
@@ -714,8 +742,183 @@ public class FragmentChat extends BaseFragment
         rootView = (FrameLayout) inflater.inflate(R.layout.activity_chat, container, false);
 
         mToolbar = new Toolbar(context);
+
+        searchFieldItem = mToolbar.addItem(searchFieldTag, R.string.search_icon, Theme.getInstance().getTitleTextColor(getContext())).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
+            @Override
+            public void onSearchExpand() {
+                layoutMute.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onTextChanged(EditText editText) {
+                String text = editText.getText().toString();
+                if (text.length() > 0 && !text.startsWith("#")) {
+                    if (!initHash) {
+                        initHash = true;
+                        initHashView();
+                    }
+                    searchHash.setHashString(editText.getText().toString());
+                    searchHash.setPosition("");
+                    ll_navigateHash.setVisibility(View.VISIBLE);
+                    viewAttachFile.setVisibility(View.GONE);
+                } else if (text.startsWith("#") && text.length() < 2) {
+                    searchFragment = SearchFragment.newInstance(text, true);
+                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.chatContainer, searchFragment).commit();
+                    ll_navigateHash.setVisibility(View.GONE);
+                    txtFloatingTime.setVisibility(View.GONE);
+                    hideKeyboardView();
+                    openSearchBox(null);
+                } else if (text.startsWith("#") && text.length() > 1) {
+                    if (searchFragment != null && searchFragment.isAdded()) {
+                        searchFragment.onTextChanged(editText.getText().toString());
+                    }
+                } else {
+                    if (searchFragment != null && searchFragment.isAdded()) {
+                        searchFragment.onSearchCollapsed();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onSearchCollapse() {
+                if (muteIcon != null) {
+                    muteIcon.setVisibility(View.VISIBLE);
+                }
+                if (verifiedIcon != null) {
+                    verifiedIcon.setVisibility(View.VISIBLE);
+                }
+                if (avatarItem != null) {
+                    avatarItem.setVisibility(View.VISIBLE);
+                }
+                if (searchFragment != null) {
+                    searchFragment.onSearchCollapsed();
+                }
+                goneSearchHashFooter();
+                hideKeyboardView();
+                searchFieldItem.setVisibility(View.GONE);
+                Log.e(TAG, "onSearchCollapse: " + searchFieldItem.getVisibility());
+            }
+        });
+        searchFieldItem.setVisibility(View.GONE);
+        mToolbar.setListener(i -> {
+            switch (i) {
+                case searchItem:
+                    initLayoutSearchNavigation();
+                    if (!initHash) {
+                        initHash = true;
+                        initHashView();
+                    }
+                    openSearchBox(null);
+                    showPopup(KeyboardView.MODE_KEYBOARD);
+                    G.handler.postDelayed(() -> editTextRequestFocus(searchEditText), 200);
+                    break;
+                case moreTag:
+                    createMoreItems();
+                    break;
+                case clearHistoryItem:
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            clearHistory(mRoomId);
+                        }
+                    }).negativeText(R.string.no).show();
+                    break;
+                case deleteItem:
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            deleteChat(mRoomId);
+                        }
+                    }).negativeText(R.string.no).show();
+
+                    break;
+                case muteItem:
+                case unMuteItem:
+                    muteNotification(mRoomId);
+                    break;
+                case chatToGroupItem:
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //finish();
+                            finishChat();
+                            dialog.dismiss();
+                            G.handler.post(() -> G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId));
+                        }
+                    }).show();
+                    break;
+                case cleanUpItem:
+                    resetMessagingValue();
+                    setDownBtnGone();
+                    setCountNewMessageZero();
+                    DbManager.getInstance().doRealmTask(realm -> {
+                        RealmRoomMessage.ClearAllMessageRoomAsync(realm, mRoomId, new Realm.Transaction.OnSuccess() {
+                            @Override
+                            public void onSuccess() {
+                                recyclerView.addOnScrollListener(scrollListener);
+                                saveMessageIdPositionState(0);
+                                /**
+                                 * get history from server
+                                 */
+                                topMore = true;
+                                getOnlineMessage(0, UP);
+                            }
+                        });
+                    });
+                    break;
+                case reportItem:
+                    dialogReport(false, 0);
+                    break;
+                case sendMoneyItem:
+                    showPaymentDialog();
+                    break;
+                case exportChatItem:
+                    if (HelperPermission.grantedUseStorage()) {
+                        exportChat();
+                    } else {
+                        try {
+                            getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                @Override
+                                public void Allow() {
+                                    exportChat();
+                                }
+
+                                @Override
+                                public void deny() {
+                                    Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case stopItem:
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            //   onSelectRoomMenu("txtClearHistory", mRoomId);
+                            closeWebViewForSpecialUrlChat(true);
+                            //  popBackStackFragment();
+
+                        }
+                    }).negativeText(R.string.no).show();
+                    break;
+            }
+        });
+        searchEditText = searchFieldItem.getSearchEditText();
         mToolbar.setBackIcon(new BackDrawable(false));
-        mToolbar.addVerifiedChannelsIcon();
+
+        verifiedIcon = mToolbar.addVerifiedChannelsIcon();
+        muteIcon = mToolbar.addMuteIcon();
+        ToolbarItems toolbarItems = mToolbar.createToolbarItems();
+        toolbarItems.setBackground(null);
+
+        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 48);
+        callItem = toolbarItems.addItemWithWidth(voiceCallTag, R.string.voice_call_icon, 48);
+
+        createActionMode();
         rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60));
         notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
@@ -750,6 +953,33 @@ public class FragmentChat extends BaseFragment
         if (twoPaneMode)
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
         return attachToSwipeBack(notifyFrameLayout);
+    }
+
+    private void openSearchBox(String text) {
+        if (!mToolbar.isSearchFieldVisible()) {
+            if (avatarItem != null) {
+                avatarItem.setVisibility(View.GONE);
+            }
+            if (muteIcon != null) {
+                muteIcon.setVisibility(View.GONE);
+            }
+            if (verifiedIcon != null) {
+                verifiedIcon.setVisibility(View.GONE);
+            }
+            if (searchFieldItem != null) {
+                searchFieldItem.openSearchBox();
+            }
+        }
+        if (text != null) {
+            searchFieldItem.setSearchFieldText(text);
+        }
+    }
+
+    private void createActionMode() {
+        if (mToolbar.isInActionMode(null))
+            return;
+
+
     }
 
     public void exportChat() {
@@ -864,7 +1094,8 @@ public class FragmentChat extends BaseFragment
             currentRoomAccess.addChangeListener(roomAccessChangeListener);
         }
 
-        mToolbar.addAvatar(getRoom(), new AvatarHandler());
+
+        avatarItem = mToolbar.addAvatar(getRoom(), new AvatarHandler());
         setupIntentReceiverForGetDataInTwoPanMode();
         mHelperToolbar.getRootView().setVisibility(View.GONE);
     }
@@ -1644,7 +1875,7 @@ public class FragmentChat extends BaseFragment
         txtName = mHelperToolbar.getTextViewChatUserName();
         txtLastSeen = mHelperToolbar.getTextViewChatSeenStatus();
         imvUserPicture = mHelperToolbar.getUserAvatarChat();
-        txtVerifyRoomIcon = mHelperToolbar.getChatVerify();
+        txtVerifyRoomIcon = mToolbar.getVerifiedIcon();
         txtVerifyRoomIcon.setVisibility(View.GONE);
 
         //set layout direction to views
@@ -1775,7 +2006,7 @@ public class FragmentChat extends BaseFragment
         }
 
         viewAttachFile = rootView.findViewById(R.id.layout_attach_file);
-        iconMute = mHelperToolbar.getChatMute();
+        iconMute = mToolbar.getMuteIcon();
         iconMute.setVisibility(realmRoom.getMute() ? View.VISIBLE : View.GONE);
         isMuteNotification = realmRoom.getMute();
         isChatReadOnly = realmRoom.getReadOnly();
@@ -1803,7 +2034,128 @@ public class FragmentChat extends BaseFragment
                 new RequestSignalingGetConfiguration().signalingGetConfiguration();
             }
         }
+        createMoreItems();
         manageExtraLayout();
+    }
+
+    private void createMoreItems() {
+        List<ChatMoreItem> moreItems = new ArrayList<>();
+        ChatMoreItem search = new ChatMoreItem(searchItem, R.string.search_icon, R.string.search);
+        ChatMoreItem clearHistory = new ChatMoreItem(clearHistoryItem, R.string.ic_clear_history, R.string.clear_history);
+        ChatMoreItem deleteChat = new ChatMoreItem(deleteItem, R.string.ic_clear_history, R.string.delete);
+        ChatMoreItem unMuteNotification = new ChatMoreItem(unMuteItem, R.string.unmute_icon, R.string.unmute);
+        ChatMoreItem muteNotification = new ChatMoreItem(muteItem, R.string.mute_icon, R.string.mute);
+        ChatMoreItem chatToGroup = new ChatMoreItem(chatToGroupItem, R.string.ic_clear_history, R.string.chat_to_group);
+        ChatMoreItem cleanUp = new ChatMoreItem(cleanUpItem, R.string.ic_clear_history, R.string.clean_up);
+        ChatMoreItem exportChat = new ChatMoreItem(exportChatItem, R.string.ic_clear_history, R.string.export_chat);
+        ChatMoreItem report = new ChatMoreItem(reportItem, R.string.ic_clear_history, R.string.report);
+        ChatMoreItem mSendMoney = new ChatMoreItem(sendMoneyItem, R.string.financial_send_money_icon, R.string.SendMoney);
+        ChatMoreItem stop = new ChatMoreItem(stopItem, R.string.ic_clear_history, R.string.stop);
+
+        moreItems.add(search);
+        moreItems.add(clearHistory);
+        moreItems.add(deleteChat);
+        if (!isCloudRoom) {
+            if (isMuteNotification)
+                moreItems.add(unMuteNotification);
+            else
+                moreItems.add(muteNotification);
+            moreItems.add(chatToGroup);
+        }
+
+        moreItems.add(cleanUp);
+        moreItems.add(exportChat);
+
+        if (chatType == CHAT) {
+            if (!isChatReadOnly && !blockUser && !isBot) {
+            } else {
+                moreItems.remove(chatToGroup);
+                moreItems.remove(exportChat);
+            }
+        } else {
+            moreItems.remove(deleteChat);
+            moreItems.remove(chatToGroup);
+
+            if (chatType == GROUP && isPublicGroup) {
+                moreItems.remove(clearHistory);
+            }
+
+            if (chatType == CHANNEL) {
+                moreItems.remove(clearHistory);
+                moreItems.remove(exportChat);
+            }
+            if (channelRole != ChannelChatRole.OWNER || groupRole != GroupChatRole.OWNER || isNotJoin) {
+                moreItems.add(report);
+            } else {
+                moreItems.remove(report);
+            }
+        }
+
+        RealmRoom realmRoom1 = getRoom();
+        if (realmRoom1 != null) {
+
+                /*if (realmRoom.getMute()) {
+                    txtMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.unmute_notification));
+                    iconMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
+                } else {
+                    txtMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.mute_notification));
+                    iconMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
+                }*/
+        } else {
+            moreItems.remove(clearHistory);
+            moreItems.remove(deleteChat);
+            if (!isMuteNotification)
+                moreItems.remove(muteNotification);
+            else
+                moreItems.remove(unMuteNotification);
+            moreItems.remove(chatToGroup);
+            moreItems.remove(cleanUp);
+        }
+
+        if (isNotJoin) {
+            moreItems.remove(clearHistory);
+            if (!isMuteNotification)
+                moreItems.remove(muteNotification);
+            else
+                moreItems.remove(unMuteNotification);
+            moreItems.remove(cleanUp);
+        }
+
+        if (RealmRoom.isNotificationServices(mRoomId)) {
+            moreItems.remove(report);
+        }
+
+        if (RealmRoom.isBot(chatPeerId)) {
+            moreItems.remove(deleteChat);
+        }
+
+
+        if ((chatType == CHAT) && !isCloudRoom && !isBot && !RealmRoom.isNotificationServices(mRoomId)) {
+            moreItems.add(mSendMoney);
+        } else {
+            moreItems.remove(mSendMoney);
+        }
+
+        if (isBot) {
+            if (webViewChatPage != null) {
+                moreItems.remove(search);
+                moreItems.remove(clearHistory);
+                moreItems.remove(deleteChat);
+                if (!isMuteNotification)
+                    moreItems.remove(muteNotification);
+                else
+                    moreItems.remove(unMuteNotification);
+                moreItems.remove(chatToGroup);
+                moreItems.remove(cleanUp);
+                moreItems.remove(mSendMoney);
+                moreItems.remove(exportChat);
+                moreItems.add(stop);
+            }
+        }
+        moreItem.removeAllSubItems();
+        for (ChatMoreItem item : moreItems) {
+            moreItem.addSubItem(item.getItemTagNumber(), item.getIcon(), getContext().getString(item.getItemTitle()));
+        }
     }
 
     private void removeStartButton() {
@@ -2664,7 +3016,7 @@ public class FragmentChat extends BaseFragment
 
     private void initComponent() {
 
-        iconMute = mHelperToolbar.getChatMute();
+        iconMute = mToolbar.getMuteIcon();
 
         final RealmRoom realmRoom = getRoom();
 
@@ -6726,17 +7078,11 @@ public class FragmentChat extends BaseFragment
         hashListener = new OnComplete() {
             @Override
             public void complete(boolean result, String text, String messageId) {
-                if (ll_Search != null && ll_Search.getVisibility() == View.VISIBLE && !text.startsWith("#")) {
-                    if (!initHash) {
-                        initHash = true;
-                        initHashView();
-                    }
-                    searchHash.setHashString(text);
-                    searchHash.setPosition(messageId);
-                    ll_navigateHash.setVisibility(View.VISIBLE);
-                    viewAttachFile.setVisibility(View.GONE);
-                } else if (text.startsWith("#")) {
-                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.ac_ll_parent, SearchFragment.newInstance(text, true)).commit();
+                if (text.startsWith("#")) {
+                    searchFragment = SearchFragment.newInstance(text, true);
+                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.chatContainer, searchFragment).commit();
+                    txtFloatingTime.setVisibility(View.GONE);
+                    openSearchBox(text);
                 }
 
 //                if (chatType == CHANNEL || chatType == GROUP) {
@@ -6770,7 +7116,9 @@ public class FragmentChat extends BaseFragment
         searchHash = new SearchHash();
 
         btnHashLayoutClose = rootView.findViewById(R.id.ac_btn_hash_close);
-        btnHashLayoutClose.setOnClickListener(v -> goneSearchBox(v));
+        btnHashLayoutClose.setOnClickListener(v -> {
+            mToolbar.closeSearchBox(true);
+        });
 
         btnUpHash.setOnClickListener(view -> searchHash.upHash());
 
@@ -7314,60 +7662,62 @@ public class FragmentChat extends BaseFragment
             return true;
         });
 
-        edtSearchMessage.setListener(event -> {
-            if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
-                showPopup(KeyboardView.MODE_KEYBOARD);
-                openKeyboardInternal();
+        searchEditText.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                layoutMute.setVisibility(View.GONE);
+                FragmentChat.this.showPopup(KeyboardView.MODE_KEYBOARD);
+                FragmentChat.this.openKeyboardInternal();
             }
+            return false;
         });
 
-        edtSearchMessage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
-
-                if (charSequence.length() > 0) {
-                    if (FragmentChat.hashListener != null) {
-                        FragmentChat.hashListener.complete(true, charSequence.toString(), "");
-                    }
-                } else {
-                    goneSearchHashFooter();
-                }
-                //mAdapter.filter(charSequence);
-                //
-                //new Handler().postDelayed(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        messageCounter = mAdapter.getAdapterItemCount();
-                //
-                //        if (messageCounter > 0) {
-                //            selectedPosition = messageCounter - 1;
-                //            recyclerView.scrollToPosition(selectedPosition);
-                //
-                //            if (charSequence.length() > 0) {
-                //                selectMessage(selectedPosition);
-                //                txtMessageCounter.setText(messageCounter + " " + getString(of) + " " + messageCounter);
-                //            } else {
-                //                txtMessageCounter.setText("0 " + getString(of) + " 0");
-                //            }
-                //        } else {
-                //            txtMessageCounter.setText("0 " + getString(of) + " " + messageCounter);
-                //            selectedPosition = 0;
-                //        }
-                //    }
-                //}, 600);
-                //
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
+//        edtSearchMessage.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(final CharSequence charSequence, int i, int i1, int i2) {
+//
+//                if (charSequence.length() > 0) {
+//                    if (FragmentChat.hashListener != null) {
+//                        FragmentChat.hashListener.complete(true, charSequence.toString(), "");
+//                    }
+//                } else {
+//                    goneSearchHashFooter();
+//                }
+//                //mAdapter.filter(charSequence);
+//                //
+//                //new Handler().postDelayed(new Runnable() {
+//                //    @Override
+//                //    public void run() {
+//                //        messageCounter = mAdapter.getAdapterItemCount();
+//                //
+//                //        if (messageCounter > 0) {
+//                //            selectedPosition = messageCounter - 1;
+//                //            recyclerView.scrollToPosition(selectedPosition);
+//                //
+//                //            if (charSequence.length() > 0) {
+//                //                selectMessage(selectedPosition);
+//                //                txtMessageCounter.setText(messageCounter + " " + getString(of) + " " + messageCounter);
+//                //            } else {
+//                //                txtMessageCounter.setText("0 " + getString(of) + " 0");
+//                //            }
+//                //        } else {
+//                //            txtMessageCounter.setText("0 " + getString(of) + " " + messageCounter);
+//                //            selectedPosition = 0;
+//                //        }
+//                //    }
+//                //}, 600);
+//                //
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
     }
 
     private void goneSearchBox(View view) {

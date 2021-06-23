@@ -14,7 +14,7 @@
     <!-- igap_forward  -->
     <!-- igap_forward  -->
     <!-- igap_chevron-right  -->
-    <string name="md_refresh_button">\uf0e8</string> <!-- igap_cached  -->
+    <string name="md_refresh_button">\uea7b</string> <!-- igap_cached  -->
     <!-- igap_information-outline  -->
     <string name="md_back_arrow">\uf141</string> <!-- igap_chevron-left  -->
     <!-- igap_chevron-right  -->
