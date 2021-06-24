@@ -606,6 +606,7 @@ public class FragmentChat extends BaseFragment
     AppCompatImageView avatarItem;
     SearchFragment searchFragment;
     EditText searchEditText;
+    ImageView backIcon;
     private final int moreTag = 1;
     private final int voiceCallTag = 2;
     private final int videoCallTag = 3;
@@ -746,7 +747,15 @@ public class FragmentChat extends BaseFragment
         searchFieldItem = mToolbar.addItem(searchFieldTag, R.string.search_icon, Theme.getInstance().getTitleTextColor(getContext())).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
-                layoutMute.setVisibility(View.GONE);
+                if (layoutMute != null) {
+                    layoutMute.setVisibility(View.GONE);
+                }
+                if (viewAttachFile != null) {
+                    viewAttachFile.setVisibility(View.GONE);
+                }
+                if (pinedMessageLayout != null) {
+                    pinedMessageLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -762,8 +771,10 @@ public class FragmentChat extends BaseFragment
                     ll_navigateHash.setVisibility(View.VISIBLE);
                     viewAttachFile.setVisibility(View.GONE);
                 } else if (text.startsWith("#") && text.length() < 2) {
-                    searchFragment = SearchFragment.newInstance(text, true);
-                    getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.chatContainer, searchFragment).commit();
+                    if (searchFragment == null) {
+                        searchFragment = SearchFragment.newInstance(text, true);
+                    }
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.chatContainer, searchFragment).commit();
                     ll_navigateHash.setVisibility(View.GONE);
                     txtFloatingTime.setVisibility(View.GONE);
                     hideKeyboardView();
@@ -777,7 +788,6 @@ public class FragmentChat extends BaseFragment
                         searchFragment.onSearchCollapsed();
                     }
                 }
-
             }
 
             @Override
@@ -791,9 +801,13 @@ public class FragmentChat extends BaseFragment
                 if (avatarItem != null) {
                     avatarItem.setVisibility(View.VISIBLE);
                 }
+                if (pinedMessageLayout != null) {
+                    pinedMessageLayout.setVisibility(View.VISIBLE);
+                }
                 if (searchFragment != null) {
                     searchFragment.onSearchCollapsed();
                 }
+
                 goneSearchHashFooter();
                 hideKeyboardView();
                 searchFieldItem.setVisibility(View.GONE);
@@ -801,8 +815,27 @@ public class FragmentChat extends BaseFragment
             }
         });
         searchFieldItem.setVisibility(View.GONE);
+        mToolbar.setOnClickListener(view -> goToProfile());
         mToolbar.setListener(i -> {
             switch (i) {
+                case -1:
+                    if (webViewChatPage != null) {
+                        closeWebViewForSpecialUrlChat(false);
+                        return;
+                    }
+
+                    hideKeyboard();
+
+                    if (G.twoPaneMode) {
+                        if (getActivity() instanceof ActivityMain) {
+                            ((ActivityMain) getActivity()).goToTabletEmptyPage();
+                        }
+                    } else {
+                        if (!mToolbar.isSearchFieldVisible()) {
+                            popBackStackFragment();
+                        }
+                    }
+                    break;
                 case searchItem:
                     initLayoutSearchNavigation();
                     if (!initHash) {
@@ -812,6 +845,23 @@ public class FragmentChat extends BaseFragment
                     openSearchBox(null);
                     showPopup(KeyboardView.MODE_KEYBOARD);
                     G.handler.postDelayed(() -> editTextRequestFocus(searchEditText), 200);
+                    break;
+                case voiceCallTag:
+                    if (CallManager.getInstance().getCallPeerId() == chatPeerId) {
+                        Intent activityIntent = new Intent(getActivity(), CallActivity.class);
+                        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(activityIntent);
+                    } else if (!CallManager.getInstance().isCallAlive()) {
+                        CallSelectFragment selectFragment = CallSelectFragment.getInstance(chatPeerId, false, null);
+                        if (getFragmentManager() != null)
+                            selectFragment.show(getFragmentManager(), null);
+
+                        if (keyboardViewVisible) {
+                            hideKeyboard();
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "NOT ALLOWED", Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case moreTag:
                     createMoreItems();
@@ -2011,7 +2061,8 @@ public class FragmentChat extends BaseFragment
         isMuteNotification = realmRoom.getMute();
         isChatReadOnly = realmRoom.getReadOnly();
         //gone video , voice button call then if status was ok visible them
-        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+//        mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+        callItem.setVisibility(View.GONE);
 
         if (isChatReadOnly) {
             viewAttachFile.setVisibility(View.GONE);
@@ -2024,10 +2075,12 @@ public class FragmentChat extends BaseFragment
 
             if (callConfig != null) {
                 if (callConfig.isVoice_calling()) {
-                    mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+//                    mHelperToolbar.getSecondRightButton().setVisibility(View.VISIBLE);
+                    callItem.setVisibility(View.VISIBLE);
 
                 } else {
-                    mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
+                    callItem.setVisibility(View.VISIBLE);
+//                    mHelperToolbar.getSecondRightButton().setVisibility(View.GONE);
                 }
 
             } else {
@@ -2754,8 +2807,8 @@ public class FragmentChat extends BaseFragment
                 mAdapter.deselect();
             } else if (topFragmentIsChat() && keyboardView != null && keyboardViewVisible) {
                 hideKeyboardView();
-            } else if (ll_Search != null && ll_Search.isShown()) {
-                goneSearchBox(edtSearchMessage);
+            } else if (mToolbar.isSearchFieldVisible()) {
+                mToolbar.closeSearchBox(true);
             } else if (ll_navigateHash != null && ll_navigateHash.isShown()) {
                 goneSearchHashFooter();
             } else if (isEditMessage) {

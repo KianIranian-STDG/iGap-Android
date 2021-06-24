@@ -219,11 +219,11 @@ public class Toolbar extends FrameLayout {
         backIcon = new ImageView(getContext());
         backIcon.setScaleType(ImageView.ScaleType.CENTER);
         backIcon.setOnClickListener(v -> {
-            if (isSearchBoxVisible) {
-                closeSearchBox();
-            }
             if (listener != null) {
                 listener.onItemClick(-1);
+            }
+            if (isSearchBoxVisible) {
+                closeSearchBox();
             }
         });
         addView(backIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT));
