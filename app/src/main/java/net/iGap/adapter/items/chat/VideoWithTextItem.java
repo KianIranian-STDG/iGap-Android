@@ -89,6 +89,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         if (fileType == LocalFileType.THUMBNAIL) {
             G.imageLoader.displayImage(suitablePath(localPath), holder.image);
 //            Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
+ //           ImageLoadingServiceInjector.inject().loadImage(holder.image, suitablePath(localPath));
         } else {
             AppUtils.setProgresColor(holder.progress.progressBar);
             holder.progress.setVisibility(View.VISIBLE);

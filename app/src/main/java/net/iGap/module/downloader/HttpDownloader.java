@@ -161,6 +161,7 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
 
         switch (arg.second) {
             case DOWNLOADED:
+
             case NOT_DOWNLOADED:
                 removeDownloadingRequestIfExist(arg.first);
                 scheduleNewDownload();
