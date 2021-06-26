@@ -1,6 +1,9 @@
 package net.iGap.fragments;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -168,6 +171,7 @@ import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.messenger.ui.toolBar.ToolbarItem;
 import net.iGap.messenger.ui.toolBar.ToolbarItems;
@@ -439,7 +443,6 @@ public class FragmentChat extends BaseFragment
     //  private MaterialDesignTextView btnReplaySelected;
     private MaterialDesignTextView btnCancelSendingFile;
     private CircleImageView imvUserPicture;
-    private TextView txtVerifyRoomIcon;
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private RealmRoom managedRoom;
@@ -622,6 +625,20 @@ public class FragmentChat extends BaseFragment
     private final int sendMoneyItem = 13;
     private final int stopItem = 14;
     private final int searchFieldTag = 15;
+    private final int deleteMessageTag = 16;
+    private final int forwardMessageTag = 17;
+    private final int copyMessageTag = 18;
+    private final int replyMessageTag = 19;
+    private boolean isSearchVisible;
+    private ToolbarItems toolbarItems;
+    private ToolbarItem deleteMessageItem;
+    private ToolbarItem forwardMessageItem;
+    private ToolbarItem copyMessageItem;
+    private ToolbarItem replyMessageItem;
+    private NumberTextView multiSelectCounter;
+    private int selectCounter = 8;
+    private ArrayList<View> actionModeViews = new ArrayList<>();
+
 
     public static boolean allowResendMessage(long messageId) {
         if (resentedMessageId == null) {
@@ -756,6 +773,7 @@ public class FragmentChat extends BaseFragment
                 if (pinedMessageLayout != null) {
                     pinedMessageLayout.setVisibility(View.GONE);
                 }
+                isSearchVisible = true;
             }
 
             @Override
@@ -768,15 +786,21 @@ public class FragmentChat extends BaseFragment
                     }
                     searchHash.setHashString(editText.getText().toString());
                     searchHash.setPosition("");
-                    ll_navigateHash.setVisibility(View.VISIBLE);
-                    viewAttachFile.setVisibility(View.GONE);
-                } else if (text.startsWith("#") && text.length() < 2) {
-                    if (searchFragment == null) {
-                        searchFragment = SearchFragment.newInstance(text, true);
+                    if (ll_navigateHash != null) {
+                        ll_navigateHash.setVisibility(View.GONE);
                     }
+                    if (viewAttachFile != null) {
+                        viewAttachFile.setVisibility(View.GONE);
+                    }
+                } else if (text.startsWith("#") && text.length() < 2) {
+                    searchFragment = SearchFragment.newInstance(mRoomId, text, true);
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.chatContainer, searchFragment).commit();
-                    ll_navigateHash.setVisibility(View.GONE);
-                    txtFloatingTime.setVisibility(View.GONE);
+                    if (ll_navigateHash != null) {
+                        ll_navigateHash.setVisibility(View.GONE);
+                    }
+                    if (txtFloatingTime != null) {
+                        txtFloatingTime.setVisibility(View.GONE);
+                    }
                     hideKeyboardView();
                     openSearchBox(null);
                 } else if (text.startsWith("#") && text.length() > 1) {
@@ -793,10 +817,15 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onSearchCollapse() {
                 if (muteIcon != null) {
-                    muteIcon.setVisibility(View.VISIBLE);
+                    muteIcon.setVisibility(getRoom().getMute() ? View.VISIBLE : View.GONE);
                 }
                 if (verifiedIcon != null) {
-                    verifiedIcon.setVisibility(View.VISIBLE);
+                    RealmChannelRoom channelRoom = getRoom().getChannelRoom();
+                    boolean isVerified = false;
+                    if (channelRoom != null) {
+                        isVerified = channelRoom.isVerified();
+                    }
+                    verifiedIcon.setVisibility(isVerified ? View.VISIBLE : View.GONE);
                 }
                 if (avatarItem != null) {
                     avatarItem.setVisibility(View.VISIBLE);
@@ -811,7 +840,8 @@ public class FragmentChat extends BaseFragment
                 goneSearchHashFooter();
                 hideKeyboardView();
                 searchFieldItem.setVisibility(View.GONE);
-                Log.e(TAG, "onSearchCollapse: " + searchFieldItem.getVisibility());
+                isSearchVisible = false;
+                Log.e(TAG, "onSearchCollapse: " + (muteIcon.getVisibility() == View.GONE ? "Gone" : "Visible"));
             }
         });
         searchFieldItem.setVisibility(View.GONE);
@@ -819,6 +849,10 @@ public class FragmentChat extends BaseFragment
         mToolbar.setListener(i -> {
             switch (i) {
                 case -1:
+                    if (mToolbar.isActionModeShowed()) {
+                        mAdapter.deselect();
+                        return;
+                    }
                     if (webViewChatPage != null) {
                         closeWebViewForSpecialUrlChat(false);
                         return;
@@ -955,6 +989,84 @@ public class FragmentChat extends BaseFragment
                         }
                     }).negativeText(R.string.no).show();
                     break;
+                case copyMessageTag:
+                    copySelectedItemTextToClipboard();
+                    break;
+                case forwardMessageTag:
+                    // forward selected messages to room list for selecting room
+                    if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
+                        onForwardClick(null);
+                    }
+                    break;
+                case replyMessageTag:
+                    if (mAdapter != null && !mAdapter.getSelectedItems().isEmpty() && mAdapter.getSelectedItems().size() == 1) {
+                        reply(mAdapter.getSelectedItems().iterator().next().messageObject, false);
+                    }
+                    break;
+                case deleteMessageTag:
+                    messageIds = new ArrayList<>();
+                    bothDeleteMessageId = new ArrayList<>();
+
+                    G.handler.post(() -> {
+                        for (final AbstractMessage item : mAdapter.getSelectedItems()) {
+
+                            if (mAdapter.getSelectedItems().size() == 1) {
+                                confirmAndDeleteMessage(item.messageObject, true);
+                                return;
+                            }
+
+                            try {
+                                if (item != null && item.messageObject != null) {
+                                    Long messageId = item.messageObject.id;
+                                    messageIds.add(messageId);
+                                    boolean bothDelete = RealmRoomMessage.isBothDelete(item.messageObject.getUpdateOrCreateTime());
+                                    if (bothDelete)
+                                        bothDeleteMessageId.add(messageId);
+                                }
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if (chatType == CHAT && !isCloudRoom && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().messageObject.userId == AccountManager.getInstance().getCurrentUser().getId()) {
+
+                            String delete;
+                            String textCheckBox = getContext().getResources().getString(R.string.st_checkbox_delete) + " " + title;
+                            delete = getContext().getResources().getString(R.string.st_desc_deletes);
+
+                            new MaterialDialog.Builder(getContext())
+                                    .content(delete)
+                                    .title(R.string.message)
+                                    .positiveText(R.string.ok)
+                                    .negativeText(R.string.cancel)
+                                    .onPositive((dialog, which) -> {
+                                        if (!dialog.isPromptCheckBoxChecked()) {
+                                            bothDeleteMessageId = null;
+                                        }
+
+                                        getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+                                        //deleteSelectedMessageFromAdapter(messageIds);
+
+                                    })
+                                    .checkBoxPrompt(textCheckBox, false, null)
+                                    .show();
+
+                        } else {
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(R.string.message)
+                                    .content(getActivity().getResources().getString(R.string.st_desc_deletes))
+                                    .positiveText(R.string.ok)
+                                    .negativeText(R.string.cancel)
+                                    .onPositive((dialog, which) -> {
+
+                                        bothDeleteMessageId = null;
+                                        getMessageController().deleteSelectedMessage(chatType.getNumber(), mRoomId, messageIds, bothDeleteMessageId);
+                                        //deleteSelectedMessageFromAdapter(messageIds);
+
+                                    }).show();
+                        }
+                    });
+                    break;
             }
         });
         searchEditText = searchFieldItem.getSearchEditText();
@@ -1006,7 +1118,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void openSearchBox(String text) {
-        if (!mToolbar.isSearchFieldVisible()) {
+        if (!isSearchVisible) {
             if (avatarItem != null) {
                 avatarItem.setVisibility(View.GONE);
             }
@@ -1029,6 +1141,25 @@ public class FragmentChat extends BaseFragment
         if (mToolbar.isInActionMode(null))
             return;
 
+        toolbarItems = mToolbar.createActionToolbar(null);
+        toolbarItems.setBackground(null);
+
+        deleteMessageItem = toolbarItems.addItemWithWidth(deleteMessageTag, R.string.delete_icon, 52);
+        forwardMessageItem = toolbarItems.addItemWithWidth(forwardMessageTag, R.string.forward_icon, 52);
+        copyMessageItem = toolbarItems.addItemWithWidth(copyMessageTag, R.string.copy_icon, 52);
+        replyMessageItem = toolbarItems.addItemWithWidth(replyMessageTag, R.string.reply_icon, 52);
+
+        multiSelectCounter = new NumberTextView(toolbarItems.getContext());
+        multiSelectCounter.setTextSize(18);
+        multiSelectCounter.setTypeface(ResourcesCompat.getFont(toolbarItems.getContext(), R.font.main_font_bold));
+        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTag(selectCounter);
+        toolbarItems.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
+
+        actionModeViews.add(deleteMessageItem);
+        actionModeViews.add(forwardMessageItem);
+        actionModeViews.add(copyMessageItem);
+        actionModeViews.add(replyMessageItem);
 
     }
 
@@ -1143,7 +1274,6 @@ public class FragmentChat extends BaseFragment
 
             currentRoomAccess.addChangeListener(roomAccessChangeListener);
         }
-
 
         avatarItem = mToolbar.addAvatar(getRoom(), new AvatarHandler());
         setupIntentReceiverForGetDataInTwoPanMode();
@@ -1925,8 +2055,7 @@ public class FragmentChat extends BaseFragment
         txtName = mHelperToolbar.getTextViewChatUserName();
         txtLastSeen = mHelperToolbar.getTextViewChatSeenStatus();
         imvUserPicture = mHelperToolbar.getUserAvatarChat();
-        txtVerifyRoomIcon = mToolbar.getVerifiedIcon();
-        txtVerifyRoomIcon.setVisibility(View.GONE);
+        verifiedIcon.setVisibility(View.GONE);
 
         //set layout direction to views
 
@@ -1981,7 +2110,7 @@ public class FragmentChat extends BaseFragment
                     }
 
                     if (realmRegisteredInfo.isVerified()) {
-                        txtVerifyRoomIcon.setVisibility(View.VISIBLE);
+                        verifiedIcon.setVisibility(View.VISIBLE);
                     }
                 } else {
                     /**
@@ -2001,7 +2130,7 @@ public class FragmentChat extends BaseFragment
                     groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
                     showVoteChannel = realmRoom.getChannelRoom().isReactionStatus();
                     if (realmRoom.getChannelRoom().isVerified()) {
-                        txtVerifyRoomIcon.setVisibility(View.VISIBLE);
+                        verifiedIcon.setVisibility(View.VISIBLE);
                     }
                     roomIsPublic = !realmRoom.getChannelRoom().isPrivate();
                 }
@@ -3068,8 +3197,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initComponent() {
-
-        iconMute = mToolbar.getMuteIcon();
 
         final RealmRoom realmRoom = getRoom();
 
@@ -4599,8 +4726,33 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) { // TODO: 12/28/20  MESSAGE_REFACTOR
         if (selectedCount > 0) {
-            FragmentChat.isInSelectionMode = true;
             //toolbar.setVisibility(View.GONE);
+            if (!isInSelectionMode) {
+                if (avatarItem != null) {
+                    avatarItem.setVisibility(View.GONE);
+                }
+                if (muteIcon != null) {
+                    muteIcon.setVisibility(View.GONE);
+                }
+                if (verifiedIcon != null) {
+                    verifiedIcon.setVisibility(View.GONE);
+                }
+                createActionMode();
+                mToolbar.showActionToolbar();
+                AnimatorSet animatorSet = new AnimatorSet();
+                ArrayList<Animator> animators = new ArrayList<>();
+                for (int a = 0; a < actionModeViews.size(); a++) {
+                    View view = actionModeViews.get(a);
+                    view.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
+                    animators.add(ObjectAnimator.ofFloat(view, View.SCALE_Y, 0.1f, 1.0f));
+                }
+                animatorSet.playTogether(animators);
+                animatorSet.setDuration(180);
+                animatorSet.start();
+            }
+            multiSelectCounter.setNumber(selectedCount, true);
+            FragmentChat.isInSelectionMode = true;
+
             mBtnReplySelected.setVisibility(View.VISIBLE);
             mBtnDeleteSelected.setVisibility(View.VISIBLE);
 
@@ -4629,47 +4781,65 @@ public class FragmentChat extends BaseFragment
                 if (realmRoom != null) {
                     if (chatType == CHANNEL) {
                         if (channelRole == ChannelChatRole.MEMBER) {
-                            mBtnReplySelected.setVisibility(View.INVISIBLE);
-                            mBtnDeleteSelected.setVisibility(View.GONE);
+                            replyMessageItem.setVisibility(View.GONE);
+                            deleteMessageItem.setVisibility(View.GONE);
                             isAllSenderId = false;
                         }
 
                         if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.messageObject.authorHash)) {  // if message dose'nt belong to owner
                             if (currentRoomAccess != null && currentRoomAccess.isCanDeleteMessage()) {
-                                mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                                deleteMessageItem.setVisibility(View.VISIBLE);
                             } else {
-                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                deleteMessageItem.setVisibility(View.GONE);
                             }
                         } else {
-                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                            deleteMessageItem.setVisibility(View.VISIBLE);
                         }
                     } else if (chatType == GROUP) {
 
                         if (!RealmUserInfo.getCurrentUserAuthorHash().equals(message.messageObject.authorHash)) {  // if message dose'nt belong to owner
                             if (currentRoomAccess != null && currentRoomAccess.isCanDeleteMessage()) {
-                                mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                                deleteMessageItem.setVisibility(View.VISIBLE);
                             } else {
-                                mBtnDeleteSelected.setVisibility(View.GONE);
+                                deleteMessageItem.setVisibility(View.GONE);
                             }
                         } else {
-                            mBtnDeleteSelected.setVisibility(View.VISIBLE);
+                            deleteMessageItem.setVisibility(View.VISIBLE);
                         }
                     } else if (realmRoom.getReadOnly()) {
-                        mBtnReplySelected.setVisibility(View.INVISIBLE);
+                        replyMessageItem.setVisibility(View.GONE);
                     }
                 }
             }
 
             if (!isAllSenderId) {
-                mBtnDeleteSelected.setVisibility(View.GONE);
+                deleteMessageItem.setVisibility(View.GONE);
             }
 
 
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.GONE);
-            ll_AppBarSelected.setVisibility(View.VISIBLE);
+//            ll_AppBarSelected.setVisibility(View.VISIBLE);
             showPopup(-1);
         } else {
+            if (isInSelectionMode) {
+                mToolbar.hideActionToolbar();
+                if (avatarItem != null) {
+                    avatarItem.setVisibility(View.VISIBLE);
+                }
+                if (muteIcon != null) {
+                    muteIcon.setVisibility(getRoom().getMute() ? View.VISIBLE : View.GONE);
+                }
+                if (verifiedIcon != null) {
+                    RealmChannelRoom channelRoom = getRoom().getChannelRoom();
+                    boolean verified = false;
+                    if (channelRoom != null) {
+                        verified = channelRoom.isVerified();
+                    }
+                    verifiedIcon.setVisibility(verified ? View.VISIBLE : View.GONE);
+                }
+            }
             FragmentChat.isInSelectionMode = false;
+
             if (isPinAvailable) pinedMessageLayout.setVisibility(View.VISIBLE);
             ll_AppBarSelected.setVisibility(View.GONE);
         }

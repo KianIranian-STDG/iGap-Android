@@ -12,16 +12,11 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.FragmentTransaction;
@@ -78,6 +73,7 @@ public class SearchFragment extends BaseFragment {
     private static final String SEARCH_TXT = "searchText";
     private static final String SEARCH_AUTO = "isSearchAuto";
     private String searchTxt;
+    private long roomId;
 
     public static SearchFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -95,11 +91,22 @@ public class SearchFragment extends BaseFragment {
         return fragment;
     }
 
+    public static SearchFragment newInstance(long roomId, String searchText, boolean searchAuto) {
+        Bundle bundle = new Bundle();
+        SearchFragment fragment = new SearchFragment();
+        bundle.putString(SEARCH_TXT, searchText);
+        bundle.putBoolean(SEARCH_AUTO, searchAuto);
+        bundle.putLong("roomId", roomId);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments().getBoolean(SEARCH_AUTO, false)) {
             searchTxt = getArguments().getString(SEARCH_TXT);
+            roomId = getArguments().getLong("roomId");
         }
     }
 
@@ -155,7 +162,7 @@ public class SearchFragment extends BaseFragment {
                     SearchItem si = (SearchItem) currentItem;
                     goToRoom(si.item.id, si.item.type, si.item.messageId, si.item.userName);
 
-                   hideKeyboard();
+                    hideKeyboard();
                 }
 
                 return false;
@@ -183,6 +190,7 @@ public class SearchFragment extends BaseFragment {
     public void onOpenSearchKeyboard() {
 
     }
+
     private void fillList(String text) {
 
         itemAdapter.clear();
@@ -325,7 +333,12 @@ public class SearchFragment extends BaseFragment {
             if (!text.startsWith("#")) {
                 text = "#" + text;
             }
-            final RealmResults<RealmRoomMessage> results = realm.where(RealmRoomMessage.class).equalTo("hasMessageLink", true).contains("message", text, Case.INSENSITIVE).equalTo("edited", false).isNotEmpty("message").findAll();
+            RealmResults<RealmRoomMessage> results;
+            if (roomId != 0) {
+                results = realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).equalTo("hasMessageLink", true).contains("message", text, Case.INSENSITIVE).equalTo("edited", false).isNotEmpty("message").findAll();
+            } else {
+                results = realm.where(RealmRoomMessage.class).equalTo("hasMessageLink", true).contains("message", text, Case.INSENSITIVE).equalTo("edited", false).isNotEmpty("message").findAll();
+            }
 
             if (results != null && results.size() > 0) {
 

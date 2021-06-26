@@ -8,8 +8,10 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -89,6 +91,7 @@ public class Toolbar extends FrameLayout {
     public TextView addMuteIcon() {
         if (muteIcon == null)
             createMuteIcon();
+        muteIcon.setVisibility(GONE);
         addView(muteIcon);
         return muteIcon;
     }
@@ -149,6 +152,18 @@ public class Toolbar extends FrameLayout {
             createBackButtonImage();
         }
         backIcon.setImageDrawable(drawable);
+        backIcon.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(-1);
+            }
+            if (isSearchBoxVisible) {
+                closeSearchBox();
+            }
+        });
+        if (drawable instanceof BackDrawable) {
+            BackDrawable backDrawable = (BackDrawable) drawable;
+            backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        }
     }
 
     public void setBackIcon(@StringRes int iconRes) {
@@ -218,14 +233,7 @@ public class Toolbar extends FrameLayout {
         }
         backIcon = new ImageView(getContext());
         backIcon.setScaleType(ImageView.ScaleType.CENTER);
-        backIcon.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(-1);
-            }
-            if (isSearchBoxVisible) {
-                closeSearchBox();
-            }
-        });
+
         addView(backIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT));
     }
 
@@ -468,6 +476,18 @@ public class Toolbar extends FrameLayout {
             public void setBackgroundColor(int color) {
                 super.setBackgroundColor(actionModeColor = color);
             }
+
+            @Override
+            public boolean onTouchEvent(MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    float x = event.getX();
+                    float y = event.getY();
+                    if (x < backIcon.getWidth()) {
+                        return false;
+                    }
+                }
+                return true;
+            }
         };
 
         actionItems.isActionMode = true;
@@ -606,7 +626,7 @@ public class Toolbar extends FrameLayout {
         if (backIcon != null) {
             Drawable drawable = backIcon.getDrawable();
             if (drawable instanceof BackDrawable) {
-                ((BackDrawable) drawable).setRotation(1, true);
+                ((BackDrawable) drawable).setRotation(0, true);
             }
         }
     }
