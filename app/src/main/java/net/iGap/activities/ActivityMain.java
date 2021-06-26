@@ -532,10 +532,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             isOpenChatBeforeSheare = false;
 
             int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
-            if (activeAccountCount == 0){
-               finish();
-            }
-            else {
+            if (activeAccountCount == 0) {
+                finish();
+            } else {
                 checkIntent(getIntent());
             }
 
@@ -677,44 +676,47 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     void getInstallReferrerFromClient(InstallReferrerClient referrerClient) {
-
-        referrerClient.startConnection(new InstallReferrerStateListener() {
-            @Override
-            public void onInstallReferrerSetupFinished(int responseCode) {
-                switch (responseCode) {
-                    case InstallReferrerClient.InstallReferrerResponse.OK:
-                        ReferrerDetails response = null;
-                        try {
-                            response = referrerClient.getInstallReferrer();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                            return;
-                        }
-                        final String referrerUrl = response.getInstallReferrer();
-
-
-                        // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
-                        trackInstallReferrer(referrerUrl);
+        try {
+            referrerClient.startConnection(new InstallReferrerStateListener() {
+                @Override
+                public void onInstallReferrerSetupFinished(int responseCode) {
+                    switch (responseCode) {
+                        case InstallReferrerClient.InstallReferrerResponse.OK:
+                            ReferrerDetails response = null;
+                            try {
+                                response = referrerClient.getInstallReferrer();
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+                            final String referrerUrl = response.getInstallReferrer();
 
 
-                        // End the connection
-                        referrerClient.endConnection();
+                            // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
+                            trackInstallReferrer(referrerUrl);
 
-                        break;
-                    case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
-                        // API not available on the current Play Store app.
-                        break;
-                    case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
-                        // Connection couldn't be established.
-                        break;
+
+                            // End the connection
+                            referrerClient.endConnection();
+
+                            break;
+                        case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
+                            // API not available on the current Play Store app.
+                            break;
+                        case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
+                            // Connection couldn't be established.
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onInstallReferrerServiceDisconnected() {
-
-            }
-        });
+                @Override
+                public void onInstallReferrerServiceDisconnected() {
+                }
+            });
+        } catch (Exception ex) {
+            //This is always due to permission exception. Log it and move on.
+            ex.printStackTrace();
+        }
     }
 
     // Tracker for Classic GA (call this if you are using Classic GA only)
