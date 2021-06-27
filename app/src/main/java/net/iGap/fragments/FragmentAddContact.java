@@ -58,7 +58,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
 
 public class FragmentAddContact extends BaseFragment implements ToolbarListener, OnUserContactEdit {
@@ -292,8 +291,8 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setDefaultTitle(toolbarTitle)
                 .setLogoShown(true)
                 .setListener(this);

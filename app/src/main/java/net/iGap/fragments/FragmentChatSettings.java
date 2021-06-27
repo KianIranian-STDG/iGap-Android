@@ -82,7 +82,7 @@ public class FragmentChatSettings extends BaseFragment {
         binding.fcsLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.chat_setting))
                 .setListener(new ToolbarListener() {

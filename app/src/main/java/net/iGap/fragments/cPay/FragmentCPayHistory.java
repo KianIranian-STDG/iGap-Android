@@ -87,7 +87,7 @@ public class FragmentCPayHistory extends BaseFragment implements ToolbarListener
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.c_pay_title))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(this);
 
         binding.fchToolbar.addView(toolbar.getView());

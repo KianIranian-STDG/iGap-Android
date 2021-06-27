@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp10"
             android:layout_marginRight="@dimen/dp10"
-            android:text="@string/down_arrow_icon"
+            android:text="@string/icon_chevron_Down"
             android:textSize="@dimen/largeTextSize"
             android:visibility="@{vm.isDefaultDeposit? View.GONE : View.VISIBLE , default = gone}"
             app:layout_constraintBottom_toBottomOf="@id/spDeposits"

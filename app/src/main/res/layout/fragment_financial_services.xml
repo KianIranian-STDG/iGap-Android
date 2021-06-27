@@ -181,7 +181,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center"
-                    android:text="@string/md_add_plus_button"
+                    android:text="@string/icon_add"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="@color/white"
                     android:textSize="32sp"

@@ -439,12 +439,12 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             if (rootView != null) {
                 emojiPadding = currentHeight;
                 rootView.requestLayout();
-                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                changeEmojiButtonImageResource(R.string.icon_keyboard);
                 rootSend.setVisibility(View.GONE);
                 onWindowSizeChanged();
             }
         } else if (show == KeyboardView.MODE_KEYBOARD) {
-            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+            changeEmojiButtonImageResource(R.string.icon_emoji_smile);
 
             keyboardContainer.setVisibility(VISIBLE);
 

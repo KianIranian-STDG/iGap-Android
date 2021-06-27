@@ -35,7 +35,7 @@
             android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/check_icon"
+            android:text="@string/icon_sent"
             style="@style/myIconToolbarStyle"
             android:textColor="@color/white"
             android:visibility="gone" />
@@ -69,7 +69,7 @@
             android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/check_icon"
+            android:text="@string/icon_sent"
             style="@style/myIconToolbarStyle"
             android:textColor="@color/white"
             android:visibility="gone" />
@@ -104,7 +104,7 @@
             android:background="@color/tick_background_color"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/check_icon"
+            android:text="@string/icon_sent"
             style="@style/myIconToolbarStyle"
             android:textColor="@color/white"
             android:visibility="gone" />

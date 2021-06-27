@@ -1542,7 +1542,6 @@ Want to get it?</string>
     <string name="str_frag_sync_contactWelcome">Welcome to iGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
-    <string name="download_icon">\ue933</string>
     <string name="igasht_title">آیگشت</string>
     <string name="igasht_choose_province_title">Select the city you want</string>
     <string name="igasht_buy_ticket_title">Buy tickets</string>

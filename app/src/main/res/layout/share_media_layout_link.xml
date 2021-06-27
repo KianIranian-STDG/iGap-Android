@@ -16,7 +16,7 @@
         android:background="@drawable/background_multi_select_light"
         android:gravity="center"
         android:scaleType="centerCrop"
-        android:text="@string/attach_icon"
+        android:text="@string/icon_attach"
         android:textColor="@color/shared_media_music_list_icon_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

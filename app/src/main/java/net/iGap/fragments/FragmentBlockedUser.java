@@ -68,7 +68,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.Block_Users))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

@@ -145,7 +145,7 @@ public class RoomListCell extends FrameLayout {
             if (!roomVerified) {
                 verifyIconTv = new FontIconTextView(getContext());
                 verifyIconTv.setTextColor(getContext().getResources().getColor(R.color.verify_color));
-                verifyIconTv.setText(R.string.verify_icon);
+                verifyIconTv.setText(R.string.icon_blue_badge);
                 setTextSize(verifyIconTv, R.dimen.standardTextSize);
                 addView(verifyIconTv);
                 roomVerified = true;
@@ -172,7 +172,7 @@ public class RoomListCell extends FrameLayout {
         if (room.getMute()) {
             if (!isMute) {
                 muteIconTv = new FontIconTextView(getContext());
-                muteIconTv.setText(R.string.mute_icon);
+                muteIconTv.setText(R.string.icon_mute);
                 muteIconTv.setGravity(Gravity.RIGHT);
                 muteIconTv.setTextColor(Theme.getInstance().getSendMessageTextColor(getContext()));
                 setTextSize(muteIconTv, R.dimen.dp13);
@@ -196,9 +196,9 @@ public class RoomListCell extends FrameLayout {
             }
 
             if (room.getType() == ProtoGlobal.Room.Type.CHANNEL)
-                chatIconTv.setText(R.string.channel_main_icon);
+                chatIconTv.setText(R.string.icon_channel);
             else if (room.getType() == ProtoGlobal.Room.Type.GROUP)
-                chatIconTv.setText(R.string.group_icon);
+                chatIconTv.setText(R.string.icon_contacts);
 
         } else if (haveChatIcon) {
             removeView(chatIconTv);

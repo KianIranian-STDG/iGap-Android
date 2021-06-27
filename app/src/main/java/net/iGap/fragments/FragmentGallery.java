@@ -137,7 +137,7 @@ public class FragmentGallery extends BaseFragment {
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setIGapLogoCheck(false)
                 .setDefaultTitle(isSubFolder ? mFolderName : toolbarTitle)
@@ -171,9 +171,9 @@ public class FragmentGallery extends BaseFragment {
 
         if (!isReturnResultDirectly) {
             if (mGalleryMode == GalleryMode.MUSIC) {
-                mHelperToolbar.setRightIcons(R.string.more_icon);
+                mHelperToolbar.setRightIcons(R.string.icon_other_vertical_dots);
             } else if (isSubFolder) {
-                mHelperToolbar.setRightIcons(R.string.edit_icon);
+                mHelperToolbar.setRightIcons(R.string.icon_new_conversation);
             }
         }
 
@@ -206,13 +206,13 @@ public class FragmentGallery extends BaseFragment {
         if (mHelperToolbar.getRightButton() != null) {
             if (mGalleryMode == GalleryMode.PHOTO) {
                 if (mGalleryPhotoAdapter != null && mGalleryPhotoAdapter.getMultiSelectState()) {
-                    mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                    mHelperToolbar.getRightButton().setText(R.string.icon_new_conversation);
                     mGalleryPhotoAdapter.setMultiSelectState(!mGalleryPhotoAdapter.getMultiSelectState());
                     return;
                 }
             } else if (mGalleryMode == GalleryMode.VIDEO) {
                 if (mGalleryVideoAdapter != null && mGalleryVideoAdapter.getMultiSelectState()) {
-                    mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+                    mHelperToolbar.getRightButton().setText(R.string.icon_new_conversation);
                     mGalleryVideoAdapter.setMultiSelectState(!mGalleryVideoAdapter.getMultiSelectState());
                     return;
                 }
@@ -232,11 +232,11 @@ public class FragmentGallery extends BaseFragment {
     private void checkPhotoMultiSelectAndSendToEdit() {
         if (mGalleryPhotoAdapter == null) return;
         if (mGalleryPhotoAdapter.getMultiSelectState()) {
-            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+            mHelperToolbar.getRightButton().setText(R.string.icon_new_conversation);
             if (mGalleryPhotoAdapter.getSelectedPhotos().size() > 0)
                 sendSelectedPhotos(mGalleryPhotoAdapter.getSelectedPhotos());
         } else {
-            mHelperToolbar.getRightButton().setText(R.string.close_icon);
+            mHelperToolbar.getRightButton().setText(R.string.icon_close);
         }
         mGalleryPhotoAdapter.setMultiSelectState(!mGalleryPhotoAdapter.getMultiSelectState());
     }
@@ -244,7 +244,7 @@ public class FragmentGallery extends BaseFragment {
     private void checkVideoMultiSelectAndSendToEdit() {
         if (mGalleryVideoAdapter == null) return;
         if (mGalleryVideoAdapter.getMultiSelectState()) {
-            mHelperToolbar.getRightButton().setText(R.string.edit_icon);
+            mHelperToolbar.getRightButton().setText(R.string.icon_new_conversation);
             if (mGalleryVideoAdapter.getSelectedVideos().size() > 0) {
                 List<String> videos = new ArrayList<>();
                 for (GalleryVideoModel video : mGalleryVideoAdapter.getSelectedVideos()) {
@@ -257,7 +257,7 @@ public class FragmentGallery extends BaseFragment {
                 }
             }
         } else {
-            mHelperToolbar.getRightButton().setText(R.string.close_icon);
+            mHelperToolbar.getRightButton().setText(R.string.icon_close);
         }
         mGalleryVideoAdapter.setMultiSelectState(!mGalleryVideoAdapter.getMultiSelectState());
     }
@@ -508,9 +508,9 @@ public class FragmentGallery extends BaseFragment {
         if (mHelperToolbar.getRightButton() != null) {
             if (mGalleryMode == GalleryMode.PHOTO || mGalleryMode == GalleryMode.VIDEO) {
                 if (size > 0) {
-                    mHelperToolbar.getRightButton().setText(R.string.md_send_button);
+                    mHelperToolbar.getRightButton().setText(R.string.icon_send);
                 } else {
-                    mHelperToolbar.getRightButton().setText(R.string.close_icon);
+                    mHelperToolbar.getRightButton().setText(R.string.icon_close);
                 }
             }
         }

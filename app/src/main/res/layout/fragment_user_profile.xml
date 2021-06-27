@@ -58,7 +58,7 @@
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
                     android:onClick="@{()->viewModel.onEditProfileClick()}"
-                    android:text="@string/edit_icon"
+                    android:text="@string/icon_new_conversation"
                     android:visibility="@{viewModel.editProfileIcon}"
                     app:layout_anchor="@id/toolbar_layout_collapse"
                     app:layout_collapseMode="pin" />
@@ -71,7 +71,7 @@
                     android:layout_gravity="start"
                     android:layout_margin="8dp"
                     android:onClick="@{()->viewModel.onCheckClick()}"
-                    android:text="@string/check_icon"
+                    android:text="@string/icon_sent"
                     android:visibility="@{viewModel.checkProfileShow}"
                     app:layout_anchor="@id/toolbar_layout_collapse"
                     app:layout_collapseMode="pin" />
@@ -84,7 +84,7 @@
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
                     android:onClick="@{()->viewModel.onCancelClick()}"
-                    android:text="@string/close_icon"
+                    android:text="@string/icon_close"
                     android:visibility="@{viewModel.cancelProfileShow}"
                     app:layout_anchor="@id/toolbar_layout_collapse"
                     app:layout_collapseMode="pin" />
@@ -135,7 +135,7 @@
                 android:layout_height="35dp"
                 android:background="?attr/iGapAvatarBackground"
                 android:onClick="@{()->viewModel.onAddImageClick()}"
-                android:text="@string/add_icon_without_circle_font"
+                android:text="@string/icon_add"
                 android:visibility="@{viewModel.showAddAvatarButton}"
                 app:layout_constraintBottom_toBottomOf="@id/fup_user_image"
                 app:layout_constraintEnd_toEndOf="@id/fup_user_image"

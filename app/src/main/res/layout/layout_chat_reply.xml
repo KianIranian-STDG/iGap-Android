@@ -14,7 +14,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text="@string/reply_icon"
+        android:text="@string/icon_reply"
         android:textSize="@dimen/dp18" />
 
     <ImageView
@@ -66,6 +66,6 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp2"
         android:layout_marginRight="@dimen/dp2"
-        android:text="@string/close_icon" />
+        android:text="@string/icon_close" />
 
 </LinearLayout>

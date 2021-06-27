@@ -48,13 +48,13 @@ public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
         }
 
         if (item.getScore() > 0) {
-            image.setText(R.string.md_igap_arrow_up_thick);
+            image.setText(R.string.icon_upload);
             image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.green));
         } else if (item.getScore() < 0) {
-            image.setText(R.string.md_igap_arrow_down_thick);
+            image.setText(R.string.icon_download);
             image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.red));
         } else {
-            image.setText(R.string.md_igap_minus);
+            image.setText(R.string.icon_delete_minus);
             image.setTextColor(ContextCompat.getColor(image.getContext(), R.color.gray));
         }
     }

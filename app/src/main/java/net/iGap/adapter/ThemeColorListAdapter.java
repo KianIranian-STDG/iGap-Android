@@ -1,14 +1,10 @@
 package net.iGap.adapter;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -16,10 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.ThemeModel;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.Theme;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +50,7 @@ public class ThemeColorListAdapter extends RecyclerView.Adapter<ThemeColorListAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (selectedThemePosition != -1) {
-            holder.checkTheme.setText(selectedThemePosition == position ? R.string.check_icon : R.string.empty_error_message);
+            holder.checkTheme.setText(selectedThemePosition == position ? R.string.icon_sent : R.string.empty_error_message);
         } else {
             holder.checkTheme.setText(R.string.empty_error_message);
         }

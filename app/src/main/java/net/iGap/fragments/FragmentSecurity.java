@@ -57,8 +57,8 @@ public class FragmentSecurity extends BaseFragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.two_step_verification_title))
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

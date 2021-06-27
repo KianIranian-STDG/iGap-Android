@@ -43,7 +43,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityPaint;
 import net.iGap.fragments.FileManagerFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -308,44 +307,6 @@ public class AttachFile {
 
     public void dispatchTakePictureIntent() throws IOException {
         dispatchTakePictureIntent(null);
-    }
-
-    //*************************************************************************************************************
-
-    /**
-     * open page paint
-     *
-     * @throws IOException
-     */
-
-    public void requestPaint(final Fragment fragment) throws IOException {
-
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(context, ActivityPaint.class);
-
-                if (fragment != null) {
-                    fragment.startActivityForResult(intent, request_code_paint);
-                } else {
-                    ((Activity) context).startActivityForResult(intent, request_code_paint);
-                }
-
-
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
-                }
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
-    public void requestPaint() throws IOException {
-        requestPaint(null);
     }
 
     //*************************************************************************************************************

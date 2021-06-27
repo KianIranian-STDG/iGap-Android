@@ -44,7 +44,7 @@
                 android:layout_height="@dimen/dp44"
                 android:background="@drawable/shape_file_manager_file_bg"
                 style="@style/myIconToolbarStyle"
-                android:text="@string/back_icon"
+                android:text="@string/icon_back"
                 android:layout_marginTop="@dimen/dp6"/>
 
         </LinearLayout>

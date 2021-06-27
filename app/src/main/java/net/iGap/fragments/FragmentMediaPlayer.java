@@ -318,9 +318,9 @@ public class FragmentMediaPlayer extends BaseFragment {
                 holder.messageProgress.setVisibility(View.GONE);
 
                 if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (messageRoomMessagesList.id)) {
-                    holder.iconPlay.setText(R.string.pause_icon);
+                    holder.iconPlay.setText(R.string.icon_pause);
                 } else {
-                    holder.iconPlay.setText(R.string.play_icon);
+                    holder.iconPlay.setText(R.string.icon_play);
                 }
                 //holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
                 MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();

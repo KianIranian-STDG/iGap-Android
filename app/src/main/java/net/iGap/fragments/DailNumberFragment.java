@@ -44,7 +44,7 @@ public class DailNumberFragment extends Fragment {
 
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

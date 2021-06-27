@@ -48,7 +48,7 @@
                         android:layout_width="@dimen/dp48"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/md_close_button"
+                        android:text="@string/icon_close"
                         android:textColor="@color/whit_background" />
                 </net.iGap.libs.rippleeffect.RippleView>
 
@@ -69,7 +69,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="right"
                     android:gravity="center"
-                    android:text="@string/check_icon"
+                    android:text="@string/icon_sent"
                     android:textColor="@color/whit_background"
                     android:textSize="@dimen/dp22"
                     android:visibility="gone" />
@@ -133,7 +133,7 @@
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingBottom="@dimen/dp8"
-                android:text="@string/md_emoticon_with_happy_face"
+                android:text="@string/icon_emoji_smile"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp26" />
 
@@ -165,7 +165,7 @@
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingBottom="@dimen/dp8"
-                android:text="@string/check_icon"
+                android:text="@string/icon_sent"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp26"
                 android:visibility="gone" />
@@ -192,7 +192,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:text="@string/md_crop_button"
+                android:text="@string/icon_crop_picture"
                 android:textColor="@color/whit_background" />
 
             <net.iGap.module.MaterialDesignTextView
@@ -202,7 +202,7 @@
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:text="@string/md_igap_tune"
+                android:text="@string/icon_edit_picture"
                 android:textColor="@color/whit_background" />
 
             <net.iGap.module.MaterialDesignTextView
@@ -212,7 +212,7 @@
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:text="@string/md_igap_paint"
+                android:text="@string/icon_edit"
                 android:textColor="@color/whit_background" />
 
             <View
@@ -228,7 +228,7 @@
                 android:layout_height="@dimen/dp52"
                 android:layout_gravity="right"
                 android:gravity="center"
-                android:text="@string/md_send_button"
+                android:text="@string/icon_send"
                 android:textColor="@color/whit_background"
                 android:visibility="gone" />
         </LinearLayout>

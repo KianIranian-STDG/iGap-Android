@@ -50,12 +50,12 @@
     </style>
 
     <style name="TextIconAppearance.all" parent="android:TextAppearance">
-        <item name="fontFamily">@font/font_icon_old</item>
+        <item name="fontFamily">@font/font_icons</item>
         <item name="android:textSize">@dimen/dp22</item>
     </style>
 
     <style name="TextIconAppearance_toolbar" parent="android:TextAppearance">
-        <item name="fontFamily">@font/font_icon_old</item>
+        <item name="fontFamily">@font/font_icons</item>
         <item name="android:textSize">@dimen/dp22</item>
     </style>
 
@@ -117,7 +117,7 @@
     </style>
 
     <style name="baseFontIcon">
-        <item name="fontFamily">@font/font_icon</item>
+        <item name="fontFamily">@font/font_icons</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/dp22</item>
     </style>

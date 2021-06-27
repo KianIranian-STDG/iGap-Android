@@ -20,7 +20,7 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
     private MutableLiveData<Boolean> goToLocationDetail = new MutableLiveData<>();
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
     //    private MutableLiveData<Boolean> addToFavorite = new MutableLiveData<>();
-    private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
+    private ObservableInt selectIcon = new ObservableInt(R.string.icon_chevron_Down);
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
 
     private IGashtRepository repository;
@@ -99,9 +99,9 @@ public class IGashtLocationViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     public void onProvinceTextChange(String s) {
         if (s.length() > 0) {
-            selectIcon.set(R.string.close_icon);
+            selectIcon.set(R.string.icon_close);
         } else {
-            selectIcon.set(R.string.down_arrow_icon);
+            selectIcon.set(R.string.icon_chevron_Down);
         }
     }
 

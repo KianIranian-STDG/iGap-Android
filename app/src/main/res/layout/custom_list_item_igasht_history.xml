@@ -13,7 +13,7 @@
         android:layout_height="48dp"
         android:background="@drawable/shape_igasht_yellow"
         android:padding="@dimen/dp4"
-        android:text="@string/scan_qr_code_icon"
+        android:text="@string/icon_QR_code"
         android:textColor="@color/white"
         android:textSize="28dp"
         app:layout_constraintBottom_toBottomOf="parent"

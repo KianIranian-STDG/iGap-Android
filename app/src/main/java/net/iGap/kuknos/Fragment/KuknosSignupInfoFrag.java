@@ -83,7 +83,7 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -215,7 +215,7 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
                 } else if (integer == 1) {
                     // success
                     usernameStateVisibility(true);
-                    binding.fragKuknosSICheckIcon.setText(getString(R.string.valid_icon));
+                    binding.fragKuknosSICheckIcon.setText(getString(R.string.icon_valid));
                     binding.fragKuknosSICheckIcon.setTextColor(getResources().getColor(R.color.green));
                     binding.fragKuknosSICheckUsername.setText(getString(R.string.kuknos_SignupInfo_ValidUsername));
                     binding.fragKuknosSICheckUsername.setTextColor(getResources().getColor(R.color.green));
@@ -223,7 +223,7 @@ public class KuknosSignupInfoFrag extends BaseAPIViewFrag<KuknosSignupInfoVM> {
                 } else if (integer == 2) {
                     // error
                     usernameStateVisibility(true);
-                    binding.fragKuknosSICheckIcon.setText(getString(R.string.error_icon));
+                    binding.fragKuknosSICheckIcon.setText(getString(R.string.icon_error));
                     binding.fragKuknosSICheckIcon.setTextColor(getResources().getColor(R.color.red));
                     binding.fragKuknosSICheckUsername.setText(getString(R.string.kuknos_SignupInfo_errorUsernameInvalid));
                     binding.fragKuknosSICheckUsername.setTextColor(getResources().getColor(R.color.red));

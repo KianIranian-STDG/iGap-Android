@@ -88,10 +88,6 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".activities.ActivityPaint"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
         <activity
             android:name=".activities.ActivityEnterPassCode"
             android:configChanges="keyboard|orientation|screenSize|locale"

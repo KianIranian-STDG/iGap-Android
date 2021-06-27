@@ -36,7 +36,7 @@ public class MaterialDesignTextView extends AppCompatTextView {
     }
 
     private void init() {
-        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         setText(getText());
     }
 }

@@ -71,7 +71,7 @@ public class MobileBankChequesListFragment extends BaseMobileBankFragment<Mobile
                 .setRoundBackground(false)
                 .setDefaultTitle(getString(R.string.cheque))
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

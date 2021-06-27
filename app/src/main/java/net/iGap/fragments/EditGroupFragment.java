@@ -98,8 +98,8 @@ public class EditGroupFragment extends BaseFragment implements FragmentEditImage
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setDefaultTitle(G.context.getResources().getString(R.string.tab_edit))
                 .setListener(new ToolbarListener() {
                     @Override

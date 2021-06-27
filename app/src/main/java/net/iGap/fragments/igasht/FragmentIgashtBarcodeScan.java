@@ -51,7 +51,7 @@ public class FragmentIgashtBarcodeScan extends IGashtBaseView<IGashtBarcodeScann
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
