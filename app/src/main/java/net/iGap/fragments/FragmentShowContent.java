@@ -121,7 +121,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         super.onViewCreated(view, savedInstanceState);
 
         List<RealmRoomMessage> roomMessages = getRoomMediaMessages(this.getArguments());
-        if (roomMessages != null) {
+        if (roomMessages != null && roomMessages.size() > 0) {
             initComponent(view, roomMessages);
         }
     }
