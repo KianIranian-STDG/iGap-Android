@@ -5291,7 +5291,7 @@ public class FragmentChat extends BaseFragment
         } else {
             mForwardMessages = new ArrayList<>(Arrays.asList(message));
         }
-
+        hideKeyboard();
         initAttachForward(isMessage);
         itemAdapterBottomSheetForward();
     }
