@@ -106,8 +106,7 @@ public final class StartupActions {
 
                             RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
                                     .greaterThan("messageId", 0)
-                                    .lessThan("createTime", time)
-                                    .limit(100).findAll();
+                                    .lessThan("createTime", time).findAll();
 
                             for (RealmRoomMessage var : realmRoomMessages)
                                 var.removeFromRealm(realm);

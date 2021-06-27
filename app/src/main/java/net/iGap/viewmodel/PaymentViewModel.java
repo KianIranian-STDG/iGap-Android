@@ -226,7 +226,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             showRetryView.set(View.GONE);
             showLoadingView.set(View.GONE);
             showMainView.set(View.VISIBLE);
-            showDiscountCoupon.set(View.VISIBLE);
+            showDiscountCoupon.set(View.GONE);
             showButtons.set(View.INVISIBLE);
             showPaymentErrorMessage.set(View.VISIBLE);
             showPaymentStatus.set(View.VISIBLE);

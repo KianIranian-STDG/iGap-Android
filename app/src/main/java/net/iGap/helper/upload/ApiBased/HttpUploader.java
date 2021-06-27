@@ -1,7 +1,6 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
@@ -19,6 +18,7 @@ import net.iGap.module.downloader.FileIOExecutor;
 import net.iGap.module.upload.IUpload;
 import net.iGap.module.upload.UploadHttpRequest;
 import net.iGap.module.upload.UploadObject;
+import net.iGap.network.NetworkUtility;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -48,7 +48,7 @@ public class HttpUploader implements IUpload {
 
     private FileIOExecutor fileExecutors;
 
-    private static final int MAX_UPLOAD = 6;
+    private final int MAX_UPLOAD;
 
     private static final String TAG = "UploadHttpRequest";
 
@@ -78,7 +78,7 @@ public class HttpUploader implements IUpload {
                 TimeUnit.SECONDS,  // Sets the Time Unit for KEEP_ALIVE_TIME
                 new LinkedBlockingDeque<>());  // Work Queue
 
-
+        MAX_UPLOAD = NetworkUtility.getMaxConcurrency(G.context);
     }
 
     private void makeFailed(long messageId) {
@@ -102,7 +102,7 @@ public class HttpUploader implements IUpload {
 
     @Override
     public boolean isUploading(String messageId) {
-        return inProgressUploads.get(messageId) != null;
+        return findExistedRequest(messageId) != null;
     }
 
     @Override
@@ -161,7 +161,7 @@ public class HttpUploader implements IUpload {
             if (!completedCompressFile.exists() && ignoreCompress()) {
                 if (pendingCompressTasks.containsKey(fileObject.messageId + ""))
                     return;
-                CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.message.attachment.localFilePath, savePathVideoCompress, new OnCompress() {
+                CompressTask compressTask = new CompressTask(fileObject.messageId + "", fileObject.path, savePathVideoCompress, new OnCompress() {
                     @Override
                     public void onCompressProgress(String id, int percent) {
                         G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, percent));
@@ -169,19 +169,23 @@ public class HttpUploader implements IUpload {
 
                     @Override
                     public void onCompressFinish(String id, boolean compress) {
-                        if (compress && compressFile.exists() && compressFile.length() < (new File(fileObject.message.attachment.localFilePath)).length()) {
-                            compressFile.renameTo(completedCompressFile);
-                            fileObject.file = completedCompressFile;
-                            fileObject.fileSize = completedCompressFile.length();
-                        } else {
-                            if (compressFile.exists()) {
+                        try {
+                            File originalFile = new File(fileObject.path);
+
+                            if (compress && compressFile.exists() && compressFile.length() < originalFile.length()) {
+                                compressFile.renameTo(completedCompressFile);
+                                fileObject.file = completedCompressFile;
+                                fileObject.fileSize = completedCompressFile.length();
+                            } else if (compressFile.exists()) {
                                 compressFile.delete();
                             }
-                        }
-                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
-                        pendingCompressTasks.remove(fileObject.messageId + "");
+                            G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_COMPRESS, id, 100, fileObject.fileSize));
+                            pendingCompressTasks.remove(fileObject.messageId + "");
 
-                        startUpload(fileObject, completedCompressFile);
+                            startUpload(fileObject, completedCompressFile);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 });
 
@@ -198,87 +202,94 @@ public class HttpUploader implements IUpload {
     }
 
     private void startUpload(UploadObject fileObject, final File completedCompressFile) {
-        UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
-        if (existedRequest == null) {
-            existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
-
-                @Override
-                public void onUploadProgress(UploadObject fileObject) {
-                    FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
-                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
-                    if (fileObject.onUploadListener != null) {
-                        fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
-                    }
-                }
-
-                @Override
-                public void onUploadFinish(UploadObject fileObject) {
-                    HelperDataUsage.increaseUploadFiles(fileObject.messageType);
-                    HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
-                    FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
-                    UploadHttpRequest req = inProgressUploads.get(fileObject.key);
-                    if (req != null) {
-                        inProgressUploads.remove(fileObject.key);
-                        inProgressCount.decrementAndGet();
-                    }
-                    if (fileObject.messageObject != null) {
-                        if (completedCompressFile != null && completedCompressFile.exists()) {
-                            completedCompressFile.delete();
-                        }
-
-                        HelperSetAction.sendCancel(fileObject.messageId);
-
-                        DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
-
-                        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.messageObject.roomId, fileObject.messageObject);
-                        } else if (fileObject.messageObject.replayToMessage == null) {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
-                                    .attachment(fileObject.fileToken)
-                                    .message(fileObject.messageObject.message)
-                                    .sendMessage(fileObject.messageId + "");
-                        } else {
-                            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
-                                    .replyMessage(fileObject.messageObject.replayToMessage.id)
-                                    .attachment(fileObject.fileToken)
-                                    .message(fileObject.messageObject.message)
-                                    .sendMessage(fileObject.messageObject.id + "");
+        if (fileObject.fileToken != null && completedCompressFile == null) {
+            sendMessage(fileObject);
+        } else {
+            UploadHttpRequest existedRequest = findExistedRequest(fileObject.key);
+            if (existedRequest == null) {
+                existedRequest = new UploadHttpRequest(fileObject, new UploadHttpRequest.UploadDelegate() {
+                    @Override
+                    public void onUploadProgress(UploadObject fileObject) {
+                        FileLog.i("HttpUploader " + fileObject.fileToken + " progress -> " + fileObject.progress);
+                        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_UPLOAD_PROGRESS, fileObject.key, fileObject.progress, fileObject.fileSize));
+                        if (fileObject.onUploadListener != null) {
+                            fileObject.onUploadListener.onProgress(String.valueOf(fileObject.messageId), fileObject.progress);
                         }
                     }
-                    if (fileObject.onUploadListener != null) {
-                        fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
+
+                    @Override
+                    public void onUploadFinish(UploadObject fileObject) {
+                        HelperDataUsage.increaseUploadFiles(fileObject.messageType);
+                        HelperDataUsage.progressUpload(fileObject.fileSize, fileObject.messageType);
+                        FileLog.i("HttpUploader onUploadFinish " + fileObject.fileToken);
+                        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
+                        if (req != null) {
+                            inProgressUploads.remove(fileObject.key);
+                            inProgressCount.decrementAndGet();
+                        }
+                        if (fileObject.messageObject != null) {
+                            if (completedCompressFile != null && completedCompressFile.exists()) {
+                                completedCompressFile.delete();
+                            }
+
+                            HelperSetAction.sendCancel(fileObject.messageId);
+
+                            DbManager.getInstance().doRealmTransaction(realm -> RealmAttachment.updateToken(fileObject.messageId, fileObject.fileToken));
+                            sendMessage(fileObject);
+                        }
+                        if (fileObject.onUploadListener != null) {
+                            fileObject.onUploadListener.onFinish(String.valueOf(fileObject.messageId), fileObject.fileToken);
+                        }
+                        scheduleNewUpload();
                     }
-                    scheduleNewUpload();
-                }
 
-                @Override
-                public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
-                    FileLog.i("UploadHttpRequest", "onUploadFail: " + fileObject.toString());
-                    long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
-                    HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
-                    Log.i(TAG, "onUploadFail: " + uploadedBytes);
-                    FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
-                    UploadHttpRequest req = inProgressUploads.get(fileObject.key);
-                    if (req != null) {
-                        inProgressUploads.remove(fileObject.key);
-                        inProgressCount.decrementAndGet();
+                    @Override
+                    public void onUploadFail(UploadObject fileObject, @Nullable Exception e) {
+                        long uploadedBytes = ((fileObject.fileSize / 100) * fileObject.progress);
+                        HelperDataUsage.progressUpload(uploadedBytes, fileObject.messageType);
+                        FileLog.e("HttpUploader onUploadFail " + fileObject.fileToken, e);
+                        UploadHttpRequest req = inProgressUploads.get(fileObject.key);
+                        if (req != null) {
+                            inProgressUploads.remove(fileObject.key);
+                            inProgressCount.decrementAndGet();
+                        }
+
+                        scheduleNewUpload();
+
+                        if (inProgressCount.get() == 0)
+                            HelperSetAction.sendCancel(fileObject.messageId);
+
+                        makeFailed(fileObject.messageId);
+                        if (fileObject.onUploadListener != null) {
+                            fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
+                        }
                     }
+                });
 
-                    scheduleNewUpload();
+                uploadQueue.add(existedRequest);
+                scheduleNewUpload();
+            }
+        }
+    }
 
-                    if (inProgressCount.get() == 0)
-                        HelperSetAction.sendCancel(fileObject.messageId);
+    private void sendMessage(UploadObject fileObject) {
+        if (fileObject == null || fileObject.messageObject == null) {
+            return;
+        }
 
-                    makeFailed(fileObject.messageId);
-                    if (fileObject.onUploadListener != null) {
-                        Log.e("fgryhifhsufs", "onUploadFail: " + e);
-                        fileObject.onUploadListener.onError(String.valueOf(fileObject.messageId));
-                    }
-                }
-            });
-
-            uploadQueue.add(existedRequest);
-            scheduleNewUpload();
+        if (fileObject.messageType == ProtoGlobal.RoomMessageType.STICKER || fileObject.messageType == ProtoGlobal.RoomMessageType.CONTACT) {
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).build(fileObject.roomType, fileObject.messageObject.roomId, fileObject.messageObject);
+        } else if (fileObject.messageObject.replayToMessage == null) {
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
+                    .attachment(fileObject.fileToken)
+                    .message(fileObject.messageObject.message)
+                    .sendMessage(fileObject.messageId + "");
+        } else {
+            ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).newBuilder(fileObject.roomType, fileObject.messageType, fileObject.messageObject.roomId)
+                    .replyMessage(fileObject.messageObject.replayToMessage.id)
+                    .attachment(fileObject.fileToken)
+                    .message(fileObject.messageObject.message)
+                    .sendMessage(fileObject.messageObject.id + "");
         }
     }
 
@@ -295,11 +306,10 @@ public class HttpUploader implements IUpload {
         if (inProgressCount.get() >= MAX_UPLOAD || uploadQueue.size() == 0)
             return;
 
-        Log.i(TAG, "scheduleNewUpload inProgressCount: " + inProgressCount.get());
-
         UploadHttpRequest request = uploadQueue.poll();
-        if (request == null)
+        if (request == null){
             return;
+        }
 
         inProgressUploads.put(request.key, request);
         inProgressCount.incrementAndGet();

@@ -1498,7 +1498,9 @@
 
     <string name="invalid_question_token">"ردّكم غير صحيح"</string>
 
-    <string name="not_answerd_call">"الاتصال الصوتي الفائت"</string>
+    <string name="not_answerd_call">الاتصال الفائت</string>
+    <string name="not_answered_voice_call">الاتصال الصوتي الفائت</string>
+    <string name="not_answered_video_call">الاتصال فيديو الفائت</string>
 
     <string name="recorded_by">"المسجّل بواسطة " </string>
 
@@ -1732,7 +1734,6 @@
     <string name="pined_message">دبوس</string>
     <string name="all_member">جميع الأعضاء</string>
     <string name="this_page">ههذه الصفحة</string>
-    <string name="stories">قصص</string>
     <string name="disable">معاق</string>
     <string name="scheduled">تخطيط: </string>
     <string name="from_theme">من:</string>
@@ -2668,4 +2669,6 @@
     <string name="can_not_support_file">Can not support file</string>
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
+    <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
+
 </resources>

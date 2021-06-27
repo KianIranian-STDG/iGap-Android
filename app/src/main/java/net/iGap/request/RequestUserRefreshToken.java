@@ -5,7 +5,7 @@ import net.iGap.proto.ProtoUserRefreshToken;
 
 public class RequestUserRefreshToken {
 
-    public void RefreshUserToken(OnRefreshToken refreshToken) {
+    public void refreshUserToken(OnRefreshToken refreshToken) {
         ProtoUserRefreshToken.UserRefreshToken.Builder builder = ProtoUserRefreshToken.UserRefreshToken.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(156, builder, refreshToken);

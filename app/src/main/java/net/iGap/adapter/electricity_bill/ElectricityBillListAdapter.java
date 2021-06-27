@@ -169,11 +169,11 @@ public class ElectricityBillListAdapter extends RecyclerView.Adapter<Electricity
                         if (HelperCalander.isPersianUnicode) {
                             billPrice.setText(HelperCalander.convertToUnicodeFarsiNumber(df.format(Integer.parseInt(debit.getTotalGasBillDebt())))
                                     + " " + context.getResources().getString(R.string.rial));
-                            billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getSubscriptionCode()));
+                            billID.setText(HelperCalander.convertToUnicodeFarsiNumber(bill.get(position).getBillID()));
                         } else {
                             billPrice.setText(df.format(Integer.parseInt(debit.getTotalGasBillDebt()))
                                     + " " + context.getResources().getString(R.string.rial));
-                            billID.setText(bill.get(position).getSubscriptionCode());
+                            billID.setText(bill.get(position).getBillID());
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

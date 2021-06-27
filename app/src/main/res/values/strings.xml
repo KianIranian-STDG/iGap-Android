@@ -36,7 +36,7 @@
     <string name="rg_Select_Country">Select your Country</string>
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
-    <string name="verify_socket_message">Please enter verification code sent by iGap to \n %1$s</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap to</string>
     <string name="verify_sms_message">Please enter verification code sent by sms </string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
@@ -837,7 +837,9 @@ Want to get it?</string>
     <string name="invalid_email_token">"Your email token is invalid"</string>
     <string name="invalid_question_token">"Your answer is invalid"</string>
 
-    <string name="not_answerd_call">"Voice Call Cancelled"</string>
+    <string name="not_answerd_call">Call Cancelled</string>
+    <string name="not_answered_voice_call">Voice Call Cancelled</string>
+    <string name="not_answered_video_call">Video Call Cancelled</string>
     <string name="recorded_by">Recorded By</string>
     <string name="Login_with_QrCode">Login With QR Scan</string>
     <string name="Input_device_specification">Device login success</string>
@@ -1421,7 +1423,6 @@ Want to get it?</string>
     <string name="personalAccountType">Personal</string>
     <string name="taxiAccountType">Driver</string>
     <string name="shopAccountType">Shop</string>
-    <string name="stories">Stories</string>
 
     <string name="default_sheba_number">Default IBAN number</string>
     <string name="IBAN">IBAN</string>
@@ -2295,48 +2296,16 @@ Want to get it?</string>
     <string name="off">Off</string>
     <string name="stories_setting">Story Setting</string>
     <string name="can_not_support_file">Can not support file</string>
-    <string name="remove_follower">Remove Follower</string>
-    <string name="hide_story">Hide Your Story</string>
-    <string-array name="photo_editor_emoji">
 
-        <!-- Smiles -->
-        <item>u+1f604</item>
-        <item>u+1f603</item>
-        <item>u+1f600</item>
-        <item>u+1f60a</item>
-        <item>u+263a</item>
-        <item>u+1f609</item>
-        <item>u+1f60d</item>
-        <item>u+1f618</item>
-        <item>u+1f61a</item>
-        <item>u+1f617</item>
-        <item>u+1f619</item>
-        <item>u+1f61c</item>
-        <item>u+1f61d</item>
-        <item>u+1f61b</item>
-        <item>u+1f633</item>
-        <item>u+1f601</item>
-        <item>u+1f614</item>
-        <item>u+1f60c</item>
-        <item>u+1f612</item>
-        <item>u+1f61e</item>
-        <item>u+1f623</item>
-        <item>u+1f622</item>
-        <item>u+1f602</item>
-        <item>u+1f62d</item>
-        <item>u+1f62a</item>
-        <item>u+1f625</item>
-        <item>u+1f630</item>
-        <item>u+1f605</item>
-        <item>u+1f613</item>
-        <item>u+1f629</item>
-        <item>u+1f62b</item>
-        <item>u+1f628</item>
-        <item>u+1f631</item>
-        <item>u+1f620</item>
-        <item>u+1f621</item>
-        <item>u+1f624</item>
-
+    <string name="unmuted">Notification UnMuted</string>
+    <string name="muted">Notification Muted</string>
+    <string name="delete_selected_chat">Are you sure you want to delete selected chats?</string>
+    <string name="leave_confirm">Are you sure you want to leave %s?</string>
+    <string name="clear_selected_history">Are you sure you want to clear history of %s?</string>
+    <string name="shared_file">اشتراک گذاری فایل</string>
+    <string name="create_permission">ایجاد مجوز</string>
+    <string name="need_permission_description">اشتراک گذاری فایل نیازمند مجوز دسترسی حافظه می باشد لطفا بعد از ایجاد مجوز فایل مورد نظر را به اشتراک گذارید.</string>
+    <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
         <!--People -->
         <item>u+1f616</item>
         <item>u+1f606</item>

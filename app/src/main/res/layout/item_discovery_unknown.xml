@@ -2,14 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/unknown_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/discovery_margin"
+        android:padding="@dimen/dp24"
         android:foreground="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="?attr/iGapCardViewColor"
         app:cardCornerRadius="@dimen/discovery_radius"
         app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +27,7 @@
             android:layout_margin="@dimen/dp12"
             android:gravity="center"
             android:text="@string/unknown_type"
-            android:textColor="@color/black90"
+            android:textColor="?iGapTitleTextColor"
             android:textSize="@dimen/dp14" />
 
     </androidx.cardview.widget.CardView>

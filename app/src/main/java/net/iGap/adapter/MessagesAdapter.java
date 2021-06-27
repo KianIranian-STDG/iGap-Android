@@ -33,11 +33,9 @@ import net.iGap.adapter.items.chat.LogWalletBill;
 import net.iGap.adapter.items.chat.LogWalletCardToCard;
 import net.iGap.adapter.items.chat.LogWalletTopup;
 import net.iGap.adapter.items.chat.TimeItem;
-import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.module.AppUtils;
-import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnChatMessageRemove;
 import net.iGap.observers.interfaces.OnChatMessageSelectionChanged;
@@ -210,7 +208,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
      *                           mainMessageId is new messageId that created and messageId is for message
      *                           that forwarded to another chats
      */
-    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction, long forwardedMessageId) {
+    public void updateVote(long roomId, long messageId, String vote, ProtoGlobal.RoomMessageReaction reaction) {
 
         List<Item> items = getAdapterItems();
         for (Item messageInfo : items) {
@@ -221,7 +219,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                  */
 
                 // TODO: 5/16/20 must change vote structure
-                if (messageInfo.messageObject.id == messageId && (forwardedMessageId != 0 || messageInfo.messageObject.roomId == roomId)) {
+                if (messageInfo.messageObject.id == messageId && messageInfo.messageObject.roomId == roomId) {
                     int pos = items.indexOf(messageInfo);// TODO: 12/29/20 MESSAGE_REFACTOR_NEED_TEST
                     if (messageInfo.messageObject.channelExtraObject != null) {
                         if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
@@ -269,7 +267,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         try {
             return getAdapterItem(position).messageObject.getUpdateOrCreateTime();
         } catch (Exception e) {
-            FileLog.e(e);
         }
         return 0;
 

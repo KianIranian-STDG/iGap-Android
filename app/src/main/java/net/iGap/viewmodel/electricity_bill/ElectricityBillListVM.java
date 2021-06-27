@@ -165,6 +165,9 @@ public class ElectricityBillListVM extends BaseAPIViewModel {
             public void onSuccess(ElectricityResponseModel<ServiceDebit> data) {
                 Map<BillList.Bill, Debit> tmp = mMapData.getValue();
                 data.getData().setLoading(false);
+                if (data.getData().getBillID() != null) {
+                    dataModel.setBillID(data.getData().getBillID());
+                }
                 tmp.put(dataModel, new Debit<>(data.getData()));
                 mMapData.setValue(tmp);
             }

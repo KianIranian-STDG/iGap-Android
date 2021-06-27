@@ -1,10 +1,14 @@
 package net.iGap.adapter;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -12,9 +16,11 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import net.iGap.G;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.model.ThemeModel;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 
 import org.jetbrains.annotations.NotNull;
 

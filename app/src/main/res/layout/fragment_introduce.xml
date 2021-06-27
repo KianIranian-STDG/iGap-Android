@@ -13,46 +13,49 @@
         android:id="@+id/ai_layout_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintHeight_default="percent"
         style="@style/IGapRootViewStyle">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/int_viewPager_introduce"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/viewPagerIndicator"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.65"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <net.iGap.module.CustomCircleImage
             android:id="@+id/viewPagerIndicator"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp28"
+            android:layout_height="0dp"
             android:layout_marginLeft="@dimen/dp28"
-            android:layout_marginTop="@dimen/dp10"
-            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginBottom="16dp"
             android:layoutDirection="ltr"
-            app:layout_constraintBottom_toTopOf="@id/int_btnStart"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/int_viewPager_introduce" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/int_btnStart"
             style="@style/iGapButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp16"
+            android:layout_marginTop="16dp"
             android:onClick="@{()->viewModel.onStartClick()}"
             android:text="@string/btn_start_page6"
-            app:layout_constraintBottom_toTopOf="@id/changeLanguage"
+            app:layout_constraintHeight_percent="0.05"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewPagerIndicator"
             app:layout_constraintWidth_percent=".6" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/changeLanguage"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:onClick="@{()->viewModel.onLanguageChangeClick()}"
             android:paddingLeft="@dimen/dp15"
@@ -62,6 +65,7 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/int_btnStart"
             app:textAllCaps="false" />
 
         <androidx.appcompat.widget.AppCompatTextView

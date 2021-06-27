@@ -43,6 +43,7 @@ public class MobileBankBottomSheetFragment extends BaseBottomSheet {
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_bottom_sheet_fragment, container, false);
         binding.setVm(mViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.progress.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         return binding.getRoot();
     }
 

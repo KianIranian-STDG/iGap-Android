@@ -30,7 +30,6 @@ import net.iGap.observers.interfaces.IMessageItem;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessageLocation;
 import net.iGap.structs.LocationObject;
 
 import org.jetbrains.annotations.NotNull;
@@ -106,7 +105,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                         @Override
                         public void Allow() {
                             G.handler.post(() -> {
-                                FragmentMap fragment = FragmentMap.getInctance(finalItem.lat, finalItem.lan, FragmentMap.Mode.seePosition,
+                                FragmentMap fragment = FragmentMap.getInstance(finalItem.lat, finalItem.lan, FragmentMap.Mode.seePosition,
                                         RealmRoom.detectType(messageObject.roomId).getNumber(), messageObject.roomId, messageObject.userId + "");
                                 new HelperFragment(activity.getSupportFragmentManager(), fragment).setReplace(false).load();
                             });

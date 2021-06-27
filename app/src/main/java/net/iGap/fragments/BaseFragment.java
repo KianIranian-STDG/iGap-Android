@@ -12,6 +12,7 @@ package net.iGap.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,6 +41,7 @@ import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.module.ChatSendMessageUtil;
+import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.downloader.Downloader;
@@ -68,7 +70,7 @@ public class BaseFragment extends SwipeBackFragment {
 
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
-        hideKeyboard();
+//        hideKeyboard();
     }
 
     @Override
@@ -102,9 +104,22 @@ public class BaseFragment extends SwipeBackFragment {
         });
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e("create", "onViewCreated: " );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("create", "onResume: " );
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.e("create", "onCreateView: " );
         View toolBar = createToolBar(context);
         View rootView = createView(context);
 
@@ -116,7 +131,7 @@ public class BaseFragment extends SwipeBackFragment {
             FrameLayout frameLayout = new FrameLayout(context);
             frameLayout.setBackgroundColor(Theme.getInstance().getRootColor(context));
             frameLayout.addView(toolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP, 0, 0, 0, 0));
-            frameLayout.addView(fragmentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, 54, 0, 0));
+            frameLayout.addView(fragmentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, 60, 0, 0));
 
             rootView = frameLayout;
         }
@@ -160,6 +175,10 @@ public class BaseFragment extends SwipeBackFragment {
     public void addFragment(Fragment fragment) {
         if (getActivity() != null)
             new HelperFragment(getActivity().getSupportFragmentManager()).setFragment(fragment).setReplace(false).load();
+    }
+
+    public View getFragmentView() {
+        return fragmentView;
     }
 
     public Dialog showDialog(Dialog dialog, final Dialog.OnDismissListener onDismissListener) {

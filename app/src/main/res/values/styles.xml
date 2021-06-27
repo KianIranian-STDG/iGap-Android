@@ -212,4 +212,28 @@ z
     <declare-styleable name="ExpandableTextView">
         <attr name="trimLength" format="integer"/>
     </declare-styleable>
+    <style name="ExoMediaButton.Play">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Pause">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Previous">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Next">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.FastForward">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ExoMediaButton.Rewind">
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>

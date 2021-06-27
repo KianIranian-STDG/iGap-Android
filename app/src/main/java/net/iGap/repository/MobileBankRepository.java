@@ -5,7 +5,6 @@ import net.iGap.api.apiService.ApiInitializer;
 import net.iGap.api.apiService.MobileBankApiInitializer;
 import net.iGap.api.apiService.RetrofitFactory;
 import net.iGap.api.errorhandler.ErrorModel;
-import net.iGap.helper.HelperLog;
 import net.iGap.model.mobileBank.BankAccountModel;
 import net.iGap.model.mobileBank.BankBlockCheque;
 import net.iGap.model.mobileBank.BankCardBalance;
@@ -119,14 +118,15 @@ public class MobileBankRepository {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
             if (realmUserInfo != null) {
                 String token = realmUserInfo.getPushNotificationToken();
-                if (token != null && token.length() > 0) {
-                    if (activate)
-                        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.activateNotification(getAccessToken(), token), callback, responseCallback);
-                    else
-                        new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.deactivateNotification(getAccessToken(), token), callback, responseCallback);
-                } else {
+                if (token == null)
+                    token = "FCM_Token_is_Empty";
+                if (activate)
+                    new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.activateNotification(getAccessToken(), token), callback, responseCallback);
+                else
+                    new MobileBankApiInitializer<BaseMobileBankResponse>().initAPI(bankApi.deactivateNotification(getAccessToken(), token), callback, responseCallback);
+                /*} else {
                     HelperLog.getInstance().setErrorLog(new Exception("FCM Token is Empty!" + token));
-                }
+                }*/
             }
         });
     }

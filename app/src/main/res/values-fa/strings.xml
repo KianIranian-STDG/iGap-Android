@@ -836,7 +836,10 @@
     <string name="invalid_email_token">"کد تأیید پست الکترونیکی نادرست است"</string>
     <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
-    <string name="not_answerd_call">"تماس صوتی از دست رفته"</string>
+    <string name="not_answerd_call">تماس ناموفق</string>
+    <string name="not_answered_voice_call">تماس صوتی ناموفق</string>
+    <string name="not_answered_video_call">تماس تصویری ناموفق</string>
+
     <string name="recorded_by">"ضبط شده توسط " </string>
 
     <string name="Login_with_QrCode">ورود با اسکن بارکد</string>
@@ -1260,7 +1263,6 @@
     <string name="payable_price">مبلغ پرداختی</string>
     <string name="qr_not_detected">نماد قابل شناسایی نیست</string>
     <string name="price_rial">مبلغ (ریال)</string>
-    <string name="stories">"داستان ها"</string>
     <string name="amount_must_be_greater_10000">مبلغ باید بیشتر از 10000 ریال باشد</string>
     <string name="amount_not_valid">مبلغ را صحیح وارد کنید</string>
     <string name="payment_history">تاریخچه تراکنش‌ها</string>
@@ -1634,7 +1636,7 @@
     <string name="kuknos_Restore_Title">لطفا کلمات بازیابی حساب خود را وارد نمایید.</string>
     <string name="kuknos_Restore_Message">با استفاده از این کلمات، شما میتوانید حساب خود را مجددا بازیابی نمایید.</string>
     <string name="kuknos_Restore_Btn">بازیابی</string>
-    <string name="kuknos_Restore_Hint">برای مثال: دریا، میز، کابل...</string>
+    <string name="kuknos_Restore_Hint">برای مثال: دریا میز کابل...</string>
     <string name="kuknos_Restore_Error_empty_str">زنجیره کلمات بازیابی حساب خود را وارد کنید.</string>
     <string name="kuknos_Restore_Error_invalid_str">طول زنجیره وارد شده کافی نمیباشد.</string>
     <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"دریافت پشتوانه \n فیزیکی %1$s"</string>
@@ -2263,4 +2265,12 @@
     <string name="everyone">همه</string>
     <string name="follower">افرادی که آنها را دنبال می کنید</string>
     <string name="off">خاموش</string>
+
+
+    <string name="unmuted">اعلان صدا دار شد.</string>
+    <string name="muted">اعلان بی صدا شد.</string>
+    <string name="delete_selected_chat">آیا مطمئن هستید که می خواهید چت های انتخاب شده را حذف کنید؟</string>
+    <string name="leave_confirm">آیا مطمئن هستید که می خواهید %s را ترک کنید؟</string>
+    <string name="clear_selected_history"> آیا از پاک کردن تاریخچه %s اطمینان دارید؟</string>
+    <string name="waiting_dialog_reason_text">تلاش بیش از حد</string>
 </resources>

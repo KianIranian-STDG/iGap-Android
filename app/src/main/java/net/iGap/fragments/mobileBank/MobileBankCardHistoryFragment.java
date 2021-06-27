@@ -76,6 +76,7 @@ public class MobileBankCardHistoryFragment extends BaseMobileBankFragment<Mobile
 
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_history, container, false);
         binding.setViewModel(viewModel);
+        binding.ProgressV.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         binding.setLifecycleOwner(this);
 
         return attachToSwipeBack(binding.getRoot());

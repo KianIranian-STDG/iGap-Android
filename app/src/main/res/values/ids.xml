@@ -19,6 +19,7 @@
 
     <item name="textstickerView" type="id"/>
     <item name="mainContainer" type="id" />
+    <item name="mainFragmentView" type="id"/>
     <item name="csliwt_layout_container_message" type="id" />
     <item name="thumbnail" type="id" />
     <item name="cslv_txt_author" type="id" />

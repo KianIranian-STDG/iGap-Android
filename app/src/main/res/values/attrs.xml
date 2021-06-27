@@ -90,9 +90,12 @@
     <attr name="colorPrimaryLight" format="reference|color" />
     <attr name="colorAccentDark" format="reference|color" />
     <attr name="toolbarBackgroundColor" format="reference|color" />
+    <attr name="toolbarActionModeBackgroundColor" format="reference|color" />
     <!--general color-->
     <attr name="rootBackgroundColor" format="reference|color" />
     <attr name="iGapTitleTextColor" format="reference|color" />
+    <attr name="iGapVoiceCallIconColor" format="reference|color"/>
+    <attr name="iGapVideoCallIconColor" format="reference|color"/>
     <attr name="iGapSubtitleTextColor" format="reference|color" />
     <attr name="iGapPrimaryTextColor" format="reference|color" />
     <attr name="iGapDividerLine" format="reference|color" />
@@ -138,6 +141,9 @@
     <attr name="iGapProfileStroke" format="reference" />
     <attr name="iGapProfileToolbar" format="reference" />
     <attr name="iGapTimerPinter" format="reference" />
+    <attr name="iGapCallStripColor" format="reference|color" />
+    <attr name="iGapCallStripColorBlue" format="reference|color" />
+    <attr name="iGapMediaStripColor" format="reference|color" />
 
     <!--=======================custom theme=====================-->
 

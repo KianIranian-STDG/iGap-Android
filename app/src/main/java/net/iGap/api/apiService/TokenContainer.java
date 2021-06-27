@@ -61,8 +61,8 @@ public class TokenContainer {
 
     }
 
-    void getRefreshToken(Delegate delegate) {
-        new RequestUserRefreshToken().RefreshUserToken(new OnRefreshToken() {
+    public void getRefreshToken(Delegate delegate) {
+        new RequestUserRefreshToken().refreshUserToken(new OnRefreshToken() {
             @Override
             public void onRefreshToken(String token) {
                 updateToken(token, true);

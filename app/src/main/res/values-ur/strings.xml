@@ -755,6 +755,8 @@
     <string name="invalid_email_token">کۆدی پەسەندی پۆستی ئەلەکترۆنیکی هەڵەیە</string>
     <string name="invalid_question_token">وەڵامی تۆ هەڵەیە</string>
     <string name="not_answerd_call">پێوەندیی دەنگیی ناسەرکەوتوو</string>
+    <string name="not_answered_voice_call">پێوەندیی دەنگیی ناسەرکەوتوو</string>
+    <string name="not_answered_video_call">پێوەندیی دەنگیی ناسەرکەوتوو</string>
     <string name="recorded_by">تۆمارکراو لە لایەن</string>
     <string name="Login_with_QrCode">چوونەژوورەوە بە کیووئاڕ</string>
     <string name="Input_device_specification">چوونەژوورەوەی سەرکەوتووانە بۆ نێو ئامێر</string>
@@ -1441,7 +1443,7 @@
     <string name="kuknos_Restore_Title">تکایە وشەکان بۆ دەستخستنەوەی حسابەکەت بنووسە</string>
     <string name="kuknos_Restore_Message">بە کەڵک وەرگرتن لەم وشانە، دەتوانی دیسان حسابەکەت بە دەست بخەیتەوە</string>
     <string name="kuknos_Restore_Btn">دەستخستنەوە</string>
-    <string name="kuknos_Restore_Hint">بۆ نموونە: دەریا، مێز، کێبڵ ...</string>
+    <string name="kuknos_Restore_Hint">بۆ نموونە: دەریا مێز کێبڵ ...</string>
     <string name="kuknos_Restore_Error_empty_str">زنجیرەی وشەکانی دەستخستنەوەی حسابەکەت بنووسە.</string>
     <string name="kuknos_Restore_Error_invalid_str">درێژیی ئەم زنجیرەی نووسراوە، بەس نییە.</string>
     <string name="kuknos_Restore_Error_Snack">باشە</string>

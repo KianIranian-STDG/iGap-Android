@@ -2,7 +2,9 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.BuildConfig;
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentProfileBinding;
 import net.iGap.helper.GoToChatActivity;
@@ -31,8 +32,9 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.HelperWallet;
-import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
+import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.viewmodel.UserProfileViewModel;
 
 import org.paygear.WalletActivity;

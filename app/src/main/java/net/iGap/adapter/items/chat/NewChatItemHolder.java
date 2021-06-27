@@ -21,12 +21,12 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import net.iGap.R;
-import net.iGap.module.Theme;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.FontIconTextView;
+import net.iGap.module.Theme;
 
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER_VERTICAL;
@@ -163,7 +163,6 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
 
         /*channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);*/
-
         set.constrainWidth(signatureTv.getId(), ConstraintSet.MATCH_CONSTRAINT);
         set.constrainHeight(signatureTv.getId(), LayoutCreator.dp(20));
 

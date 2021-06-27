@@ -42,6 +42,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -55,6 +56,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.huawei.hms.api.HuaweiApiAvailability;
 import com.top.lib.mpl.view.PaymentInitiator;
 
 import net.iGap.Config;
@@ -102,6 +104,8 @@ import net.iGap.module.GPSTracker;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.StatusBarUtil;
+import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountHelper;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -140,9 +144,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import ir.tapsell.plus.TapsellPlus;
-import ir.tapsell.sdk.TapsellAdActivity;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -311,11 +312,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setIntent(intent);
         isOpenChatBeforeSheare = true;
         checkIntent(intent);
-
         if (intent.getExtras() != null && intent.getExtras().getString(DEEP_LINK) != null) {
             handleDeepLink(intent);
         }
-
         if (G.isFirstPassCode) {
             openActivityPassCode();
         }
@@ -343,7 +342,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void checkIntent(Intent intent) {
-
         if (G.isRestartActivity) {
             return;
         }
@@ -405,6 +403,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
         super.onCreate(savedInstanceState);
 
         if (Config.FILE_LOG_ENABLE) {
@@ -414,7 +414,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         detectDeviceType();
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         G.logoutAccount.observe(this, isLogout -> {
             if (isLogout != null && isLogout) {
@@ -531,7 +530,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             isOpenChatBeforeSheare = false;
-            checkIntent(getIntent());
+
+            int activeAccountCount = AccountManager.getInstance().getActiveAccountCount();
+            if (activeAccountCount == 0){
+               finish();
+            }
+            else {
+                checkIntent(getIntent());
+            }
 
             initComponent();
 
@@ -782,6 +788,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(() -> {
                     G.connectionState = ConnectionState.UPDATING;
                     G.connectionStateMutableLiveData.postValue(ConnectionState.UPDATING);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CONNECTION_STATE_CHANGED, ConnectionState.UPDATING));
                 });
             }
 
@@ -794,6 +801,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (G.connectionState == ConnectionState.UPDATING) {
                     G.onConnectionChangeState.onChangeState(ConnectionState.IGAP);
                     G.connectionStateMutableLiveData.postValue(ConnectionState.IGAP);
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CONNECTION_STATE_CHANGED, ConnectionState.IGAP));
                 }
             }
         };
@@ -1021,18 +1029,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onProviderInstallFailed(int errorCode, Intent intent) {
         GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-        if (availability.isUserResolvableError(errorCode)) {
-            // Recoverable error. Show a dialog prompting the user to
-            // install/update/enable Google Play services.
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
-                    // The user chose not to take the recovery action
-                    onProviderInstallerNotAvailable();
-                });
+        int result = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(context);
+        boolean isAvailable = (com.huawei.hms.api.ConnectionResult.SUCCESS == result);
+        if (!isAvailable) {
+            if (availability.isUserResolvableError(errorCode)) {
+                // Recoverable error. Show a dialog prompting the user to
+                // install/update/enable Google Play services.
+                if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                    availability.showErrorDialogFragment(this, errorCode, ERROR_DIALOG_REQUEST_CODE, dialog -> {
+                        // The user chose not to take the recovery action
+                        onProviderInstallerNotAvailable();
+                    });
+                }
+            } else {
+                // Google Play services is not available.
+                onProviderInstallerNotAvailable();
             }
-        } else {
-            // Google Play services is not available.
-            onProviderInstallerNotAvailable();
         }
     }
 
@@ -1208,8 +1220,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setDialogFragmentSize();
         }
         super.onConfigurationChanged(newConfig);
+
         G.rotationState = newConfig.orientation;
     }
+
 
     private void setViewConfigurationChanged() {
         if (G.twoPaneMode) {
@@ -1258,7 +1272,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 openActivityPassCode();
             }
             G.isFirstPassCode = false;
-
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setColor(this, new Theme().getPrimaryDarkColor(this), 50);
         }
     }
 
@@ -1549,6 +1565,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             });
         }
         Log.wtf(this.getClass().getName(), "onPause");
+
+        // Stop using gps for nearby when app is on background
+        GPSTracker.getGpsTrackerInstance().stopUsingGPS();
     }
 
 
@@ -1724,7 +1743,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount) {
+    public void onBillToken(int status, String token, int expireTime, String message, int originalAmount, int discountedAmount, String organName) {
         if (status == 0) {
             Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
             intent.putExtra("Type", "2");
@@ -1733,6 +1752,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (originalAmount > 0 && discountedAmount > 0) {
                 intent.putExtra("OriginalAmount", originalAmount);
                 intent.putExtra("DiscountedAmount", discountedAmount);
+                intent.putExtra("OrganName", organName);
             }
 
             startActivityForResult(intent, requestCodePaymentBill);
@@ -2038,5 +2058,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 ((TabletEmptyChatFragment) f).getChatBackground();
             }
         }
+    }
+
+    private void setThemeSetting() {
+        this.setTheme(new Theme().getTheme(this));
     }
 }

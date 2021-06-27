@@ -62,7 +62,6 @@ import net.iGap.proto.ProtoChannelCheckUsername;
 import net.iGap.proto.ProtoGroupGetMemberList;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelCheckUsername;
-import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChannelRemoveUsername;
 import net.iGap.request.RequestChannelRevokeLink;
 import net.iGap.request.RequestChannelUpdateUsername;
@@ -654,7 +653,7 @@ public class EditChannelFragment extends BaseFragment implements FragmentEditIma
                         }
 
                     } else {
-                        new RequestChannelLeft().channelLeft(viewModel.roomId);
+                        getRoomController().channelLeft(viewModel.roomId);
                     }
                     binding.loading.setVisibility(View.VISIBLE);
                 }).negativeText(R.string.no).show();

@@ -1,5 +1,6 @@
 package net.iGap.viewmodel;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
@@ -31,6 +33,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperNumerical;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTracker;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.module.CountryListComparator;
@@ -216,11 +219,10 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void init() {
-        isDarkMode.set(G.themeColor == Theme.DARK);
         //set credit amount
 
         getUserCredit();
-
+        isDarkMode.set(G.themeColor == Theme.DARK);
 
         //set user info text gravity
         if (!G.isAppRtl) {
@@ -251,7 +253,8 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
     private void updateUserInfoUI() {
         if (checkValidationForRealm(userInfo)) {
-            userId = userInfo.getUserId();
+            if (userInfo.getUserId() != 0)
+                userId = userInfo.getUserId();
 
             currentCredit.set(userInfo.getWalletAmount());
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
@@ -534,6 +537,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onInviteFriendsClick() {
+        HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
         shareInviteLink.setValue(BuildConfig.INVITE_FRIEND_LINK);
     }
 
@@ -573,8 +577,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         }
     }
 
-    public void onThemeClick(boolean isCheck) {
-        isDarkMode.set(!isCheck);
+    public void onDarkModeClicked(boolean isChecked) {
+        isDarkMode.set(!isChecked);
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         if (isDarkMode.get()) {
             G.themeColor = Theme.DARK;
             int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DEFAULT);

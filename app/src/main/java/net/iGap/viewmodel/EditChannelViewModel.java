@@ -231,7 +231,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     public void onSingedMessageCheckedChange(boolean state) {
         if (state != isSignedMessage.get()) {
-            RoomController.getInstance(AccountManager.selectedAccount).ChannelUpdateSignature(roomId, state);
+            RoomController.getInstance(AccountManager.selectedAccount).channelUpdateSignature(roomId, state);
             isShowLoading.set(View.VISIBLE);
         }
     }
@@ -242,7 +242,7 @@ public class EditChannelViewModel extends BaseViewModel implements OnChannelAvat
 
     public void onReactionMessageCheckedChange(boolean state) {
         if (state != isReactionMessage.get()) {
-            RoomController.getInstance(AccountManager.selectedAccount).ChannelUpdateReactionStatus(roomId, state);
+            RoomController.getInstance(AccountManager.selectedAccount).channelUpdateReactionStatus(roomId, state);
             isShowLoading.set(View.VISIBLE);
         }
     }

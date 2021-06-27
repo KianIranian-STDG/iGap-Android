@@ -755,7 +755,9 @@
     <string name="busy">occupé</string>
     <string name="invalid_email_token">le code de confirmation d\'E-mail est invalide</string>
     <string name="invalid_question_token">votre réponse est invalide</string>
-    <string name="not_answerd_call">appel d\'audio manqué</string>
+    <string name="not_answerd_call">appel manqué</string>
+    <string name="not_answered_voice_call">appel d\'audio manqué</string>
+    <string name="not_answered_video_call">appel d\'audio manqué</string>
     <string name="recorded_by">enregistré par</string>
     <string name="Login_with_QrCode">se connecter par QR</string>
     <string name="Input_device_specification">appareil bien connecté</string>
@@ -1448,7 +1450,7 @@
     <string name="kuknos_Restore_Title"> veuillez entrer les mots de récupération de votre compte </string>
     <string name="kuknos_Restore_Message"> vous pouvez récupérer votre compte à l\'aide de ces mots </string>
     <string name="kuknos_Restore_Btn"> récupérer </string>
-    <string name="kuknos_Restore_Hint"> par exemple : mer , table, câble </string>
+    <string name="kuknos_Restore_Hint"> par exemple : mer table câble </string>
     <string name="kuknos_Restore_Error_empty_str"> veuillez entrer la chaine des mots de récupération de compte </string>
     <string name="kuknos_Restore_Error_invalid_str"> longueur de chaine entrée est insuffisante </string>
     <string name="kuknos_Restore_Error_Snack"> OK </string>
@@ -1865,6 +1867,8 @@
     <string name="location_list_tile">Rechercher des centres de divertissement</string>
     <string name="share_file_link">Partager le lien public</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="waiting_dialog_reason_text">Nombre de tentatives excessif</string>
+
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
 </resources>

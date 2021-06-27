@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.RoomController;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentShearedMedia;
 import net.iGap.helper.HelperCalander;
@@ -29,8 +30,6 @@ import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestClientMuteRoom;
-import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestUserInfo;
@@ -270,7 +269,7 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
     }
 
     public void onNotificationCheckChange() {
-        new RequestClientMuteRoom().muteRoom(roomId, !isUnMuteNotification.get());
+        RoomController.getInstance(currentAccount).clientMuteRoom(roomId, !isUnMuteNotification.get());
     }
 
     public void onInviteLinkClick() {
@@ -336,6 +335,35 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
             showRequestError.setValue(R.string.wallet_error_server);
         }
     }
+
+    public void sendRequestRevokeGroupUsername() {
+        if (getRequestManager().isUserLogin()) {
+            showProgressBar();
+
+                new RequestGroupRevokeLink().groupRevokeLink(roomId, new OnGroupRevokeLink() {
+                    @Override
+                    public void onGroupRevokeLink(long roomId, String inviteLink, String inviteToken) {
+                        hideProgressBar();
+                        G.handler.post(() -> FragmentGroupProfileViewModel.this.inviteLink.set(inviteLink));
+                    }
+
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
+                        hideProgressBar();
+                    }
+
+                    @Override
+                    public void onTimeOut() {
+                        hideProgressBar();
+                        G.handler.post(() -> showRequestError.setValue(R.string.time_out));
+                    }
+                });
+
+        } else {
+            showRequestError.setValue(R.string.wallet_error_server);
+        }
+    }
+
 
     //type: 1=image 2=video 3=audio 4=voice 5=gif 6=file 7=link
     public void onClickGroupShearedMedia(int type) {
@@ -433,7 +461,8 @@ public class FragmentGroupProfileViewModel extends BaseViewModel {
             }
         };
 
-        new RequestGroupLeft().groupLeft(roomId);
+        RoomController.getInstance(currentAccount).groupLeft(roomId);
+
     }
 
     private void showProgressBar() {

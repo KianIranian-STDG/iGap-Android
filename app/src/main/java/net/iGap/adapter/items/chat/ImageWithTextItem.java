@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -88,6 +90,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 //            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
 //                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
         G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+//        Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
     }
 
     @Override

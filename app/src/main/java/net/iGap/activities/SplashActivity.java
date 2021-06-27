@@ -1,7 +1,10 @@
 package net.iGap.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -10,6 +13,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.FileLog;
+import net.iGap.module.SHP_SETTING;
+import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.realm.RealmUserInfo;

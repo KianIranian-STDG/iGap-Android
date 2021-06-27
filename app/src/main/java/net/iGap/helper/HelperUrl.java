@@ -95,7 +95,7 @@ public class HelperUrl {
 
     private static final String IGAP_LINK_PATTERN = "([https]+?\\:\\/\\/?igap.net\\/.*)";
     private static final String IGAP_DEEP_LINK_PATTERN = "((?:igap?:\\/\\/)(?:[^:^\\/]*)(?::\\d*)?(?:.*)?)";
-    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?:[a-zA-Z0-9\\&\\.\\/\\?\\:@\\-_+=#])*)";
+    private static final String WEB_LINK = "((?:(?:http|https)\\:\\/\\/)?[a-zA-Z0-9\\.\\/\\?\\:@\\-_=#]+\\.(?!\\s|[\\u0600-\\u06FF]|\\.|$)(?:[a-zA-Z0-9\\u0600-\\u06FF\\u2000-\\u200F\\&\\.\\/\\?\\:@\\-_+=#])*)";
     private static final String BOT_LINK = "(\\/\\w+)";
     private static final String IGAP_RESOLVE = "(igap://resolve?)";
     private static final String IGAP_DIGIT_LINK = "(\\s*(?:\\+?(?:\\d{1,3}))?(?:[-. (]*(?:\\d{3})[-. )]*)?(?:(?:\\d{3})[-. ]*(?:\\d{2,4})(?:[-.x ]*(?:\\d+))?)\\s*$)";
@@ -1391,21 +1391,19 @@ public class HelperUrl {
                             RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, realm);
                             realmRoom1.setDeleted(true);                            // if in chat activity join to room set deleted goes to false
                         }
-                    }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                            if (room.getId() != FragmentChat.lastChatRoomId) {
-                                new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
-                            } else {
-                                try {
-                                    if (activity != null) {
-                                        activity.getSupportFragmentManager().popBackStack();
-                                        new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity(activity);
-                                    }
-                                } catch (Exception e) {
-                                    HelperLog.getInstance().setErrorLog(e);
-                                    e.printStackTrace();
+                    }, () -> {
+                        boolean isParticipant = room.getIsParticipant();
+                        if (room.getId() != FragmentChat.lastChatRoomId) {
+                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(!isParticipant).setuserName(username).setMessageID(messageId).startActivity(activity);
+                        } else {
+                            try {
+                                if (activity != null) {
+                                    activity.getSupportFragmentManager().popBackStack();
+                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(!isParticipant).setuserName(username).setMessageID(messageId).startActivity(activity);
                                 }
+                            } catch (Exception e) {
+                                HelperLog.getInstance().setErrorLog(e);
+                                e.printStackTrace();
                             }
                         }
                     });

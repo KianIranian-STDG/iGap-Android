@@ -42,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class FragmentActivation extends BaseFragment {
+public class FragmentActivation extends BaseFragment{
 
     private final static String TAG = FragmentActivation.class.getName();
 
@@ -217,7 +217,7 @@ public class FragmentActivation extends BaseFragment {
             SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
             Task<Void> task = client.startSmsRetriever();
             task.addOnSuccessListener(aVoid -> Log.e(TAG, "sms API successfully started   "));
-            task.addOnFailureListener(e -> Log.e(TAG, "sms Fail to start API   "));
+            task.addOnFailureListener(e -> { Log.e(TAG, "sms Fail to start API   ");});
         } catch (Exception e) {
             e.printStackTrace();
         }

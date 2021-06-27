@@ -218,7 +218,8 @@
         </activity>
         <activity
             android:name=".activities.ActivityRegistration"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:configChanges="uiMode"/>
         <activity
             android:name=".activities.CallActivity"
             android:configChanges="keyboard|keyboardHidden|screenSize|locale"
@@ -227,7 +228,8 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".activities.SplashActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

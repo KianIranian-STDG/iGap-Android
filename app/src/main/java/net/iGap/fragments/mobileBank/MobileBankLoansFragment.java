@@ -35,6 +35,7 @@ public class MobileBankLoansFragment extends BaseMobileBankFragment<MobileBankLo
         binding = DataBindingUtil.inflate(inflater, R.layout.mobile_bank_loans_fragment, container, false);
         binding.setVm(viewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
+        binding.progress.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         return binding.getRoot();
     }
 

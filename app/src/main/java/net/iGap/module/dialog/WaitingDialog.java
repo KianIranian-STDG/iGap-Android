@@ -38,6 +38,7 @@ public class WaitingDialog extends AlertDialog {
             public void onFinish() {
                 if (timerTextView != null) {
                     timerTextView.setText("00:00");
+                    dismiss();
                 }
             }
         };

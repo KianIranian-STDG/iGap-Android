@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -84,7 +85,7 @@ public class CallManager {
 
     private static volatile CallManager instance = null;
 
-    private String TAG = "iGapCall " + getClass().getSimpleName();
+    private final String TAG = "iGapCall " + getClass().getSimpleName();
     private CallState currentSate;
 
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
@@ -174,7 +175,7 @@ public class CallManager {
             }
         }
         if (CallService.getInstance() != null) {
-            CallService.getInstance().playSoundWithRes(R.raw.igap_signaling, true);
+            CallService.getInstance().playSoundWithRes(R.raw.igap_ringing, true);
         }
         setupCallerInfo(callPeerId);
 
@@ -220,7 +221,7 @@ public class CallManager {
     public void onRing() {
         G.handler.post(() -> changeState(CallState.RINGING));
         if (CallService.getInstance() != null) {
-            CallService.getInstance().playSoundWithRes(R.raw.igap_ringing, true);
+            CallService.getInstance().playSoundWithRes(R.raw.tone, true);
         }
     }
 
@@ -315,6 +316,7 @@ public class CallManager {
         iHoldCall = !builder.getResponse().getId().isEmpty();
         changeState(isCallHold ? CallState.ON_HOLD : CallState.CONNECTED);
         WebRTC.getInstance().toggleSound(!isCallHold);
+        WebRTC.getInstance().toggleCamera(!isCallHold);
     }
 
     public void holdCall(boolean state) {
@@ -444,6 +446,7 @@ public class CallManager {
 
     public void endCall() {
         isUserInCall = false;
+        MusicPlayer.pauseSoundFromIGapCall = false;
         if (isRinging || isCallActive) {
             waitForEndCall = true;
             new RequestSignalingLeave().signalingLeave();
@@ -649,7 +652,6 @@ public class CallManager {
     }
 
     public static class MyPhoneStateListener extends PhoneStateListener {
-
         /**
          * in this function we observe phone's state changes. and we manage two things:
          * 1- manage music player state when phone state changes
@@ -718,11 +720,11 @@ public class CallManager {
     public static class MyPhoneStateService extends BroadcastReceiver {
         TelephonyManager telephony;
         private MyPhoneStateListener phoneListener;
-
         /**
          * use when start or finish ringing
          */
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             phoneListener = new MyPhoneStateListener();
             telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

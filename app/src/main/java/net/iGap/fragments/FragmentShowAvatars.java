@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,7 +108,7 @@ public class FragmentShowAvatars extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_show_image, container, false);
+        return inflater.inflate(R.layout.fragment_show_avatars, container, false);
     }
 
     @Override
@@ -228,11 +227,7 @@ public class FragmentShowAvatars extends BaseFragment {
         viewPager = view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = view.findViewById(R.id.asi_txt_image_number);
-        txtImageName = view.findViewById(R.id.asi_txt_image_name);
-        ltImageName = view.findViewById(R.id.asi_layout_image_name);
-        ltImageName.setVisibility(View.GONE);
-
-        toolbarShowImage = view.findViewById(R.id.toolbarShowImage);
+        toolbarShowImage = view.findViewById(R.id.showAvatarToolbar);
 
         initViewPager();
     }
@@ -557,14 +552,11 @@ public class FragmentShowAvatars extends BaseFragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-
             LayoutInflater inflater = LayoutInflater.from(container.getContext());
-            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, container, false);
+            final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_or_video_sub_layout, container, false);
 
-            final PhotoView zoomableImageView = layout.findViewById(R.id.sisl_touch_image_view);
+            final PhotoView zoomableImageView = layout.findViewById(R.id.showContentImageView);
             zoomableImageView.setZoomable(false);
-            final ImageView imgPlay = layout.findViewById(R.id.imgPlay);
-            imgPlay.setVisibility(View.GONE);
 
             final MessageProgress progress = layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
@@ -653,6 +645,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         private void loadImage(PhotoView img, String path) {
             G.imageLoader.displayImage(AndroidUtils.suitablePath(path), img);
+            img.setVisibility(View.VISIBLE);
         }
 
         private void startDownload(int position, final MessageProgress progress, final PhotoView zoomableImageView) {
@@ -680,7 +673,6 @@ public class FragmentShowAvatars extends BaseFragment {
 
                 @Override
                 public void OnError(String token) {
-
                     G.currentActivity.runOnUiThread(() -> {
                         progress.withProgress(0);
                         progress.withDrawable(R.drawable.ic_download, true);

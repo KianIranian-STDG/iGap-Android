@@ -3,7 +3,9 @@ package net.iGap.adapter.mobileBank;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +31,11 @@ public class BankHomeItemAdapter extends RecyclerView.Adapter<BankHomeItemAdapte
         notifyDataSetChanged();
     }
 
+    public void setItem(MobileBankHomeItemsModel item, int position) {
+        this.items.set(position, item);
+        notifyItemChanged(position);
+    }
+
     @NonNull
     @Override
     public ViewHolderItems onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,9 +44,14 @@ public class BankHomeItemAdapter extends RecyclerView.Adapter<BankHomeItemAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderItems holder, int position) {
+        if (position == 2) {
+            holder.frameLayout.setVisibility(View.VISIBLE);
+        }
+
+        holder.root.setOnClickListener(v -> listener.onItemClicked(holder.getAdapterPosition(), items.get(holder.getAdapterPosition()).getTitle()));
         holder.tvTitle.setText(items.get(position).getTitle());
         holder.ivIcon.setImageResource(items.get(position).getIcon());
-        holder.root.setOnClickListener(v -> listener.onItemClicked(holder.getAdapterPosition(), items.get(holder.getAdapterPosition()).getTitle()));
+        holder.progressBar.setVisibility(items.get(position).getProgressVisibility());
     }
 
     @Override
@@ -52,12 +64,17 @@ public class BankHomeItemAdapter extends RecyclerView.Adapter<BankHomeItemAdapte
         private TextView tvTitle;
         private ImageView ivIcon;
         private View root;
+        private FrameLayout frameLayout;
+        private ProgressBar progressBar;
 
         ViewHolderItems(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             ivIcon = itemView.findViewById(R.id.ivIcon);
             root = itemView.findViewById(R.id.root);
+            frameLayout = itemView.findViewById(R.id.frame_progress);
+            progressBar = itemView.findViewById(R.id.progress_notification);
+            progressBar.getIndeterminateDrawable().setColorFilter(0XFFB6774E, android.graphics.PorterDuff.Mode.MULTIPLY);
         }
     }
 

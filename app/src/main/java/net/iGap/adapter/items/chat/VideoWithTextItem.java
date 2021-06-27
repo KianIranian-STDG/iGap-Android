@@ -21,6 +21,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -86,6 +88,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
         if (fileType == LocalFileType.THUMBNAIL) {
             G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+//            Glide.with(holder.getContext()).asDrawable().load(suitablePath(localPath)).into(holder.image);
         } else {
             AppUtils.setProgresColor(holder.progress.progressBar);
             holder.progress.setVisibility(View.VISIBLE);

@@ -53,7 +53,7 @@ import java.util.Set;
 
 public class WebRTC {
 
-    private static String TAG = "iGapCall WebRTC ";
+    private static final String TAG = "iGapCall WebRTC ";
 
     private static final String VIDEO_TRACK_ID = "ARDAMSv0";
     private static final int VIDEO_RESOLUTION_WIDTH = 1920;
@@ -100,6 +100,15 @@ public class WebRTC {
         }
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(isEnable);
+        }
+    }
+
+    public void toggleCamera(boolean isEnable) {
+        if (mediaStream == null) {
+            return;
+        }
+        for (VideoTrack videoTrack : mediaStream.videoTracks) {
+            videoTrack.setEnabled(isEnable);
         }
     }
 
@@ -154,20 +163,20 @@ public class WebRTC {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
             VideoSource videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer.isScreencast());
             SurfaceTextureHelper surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", getEglBaseContext());
-            videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
-            videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
-            VideoTrack videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
-            videoTrackFromCamera.setEnabled(true);
-
-            videoTrackFromCamera.addSink(videoFrame -> {
-                if (frameListener != null)
-                    frameListener.onLocalFrame(videoFrame);
-//                if (G.onVideoCallFrame != null) {
-//                    G.onVideoCallFrame.onPeerFrame(videoFrame);
-//                }
-            });
-
-            mediaStream.addTrack(videoTrackFromCamera);
+            if (surfaceTextureHelper != null) {
+                videoCapturer.initialize(surfaceTextureHelper, G.context, videoSource.getCapturerObserver());
+                videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
+                VideoTrack videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
+                videoTrackFromCamera.setEnabled(true);
+                videoTrackFromCamera.addSink(videoFrame -> {
+                    if (frameListener != null)
+                        frameListener.onLocalFrame(videoFrame);
+//              if (G.onVideoCallFrame != null) {
+//                   G.onVideoCallFrame.onPeerFrame(videoFrame);
+//              }
+                });
+                mediaStream.addTrack(videoTrackFromCamera);
+            }
         }
     }
 
@@ -346,7 +355,6 @@ public class WebRTC {
             addAudioTrack(mediaStream);
             addVideoTrack(mediaStream);
             peerConnection.addStream(mediaStream);
-
         }
 
         return peerConnection;
