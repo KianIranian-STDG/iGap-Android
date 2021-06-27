@@ -16,7 +16,7 @@ import java.util.List;
 public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtResponse<IGashtProvince>> {
 
     private ObservableField<String> backgroundImageUrl = new ObservableField<>("");
-    private ObservableInt selectIcon = new ObservableInt(R.string.down_arrow_icon);
+    private ObservableInt selectIcon = new ObservableInt(R.string.icon_chevron_Down);
     private MutableLiveData<List<IGashtProvince>> provinceList = new MutableLiveData<>();
     private MutableLiveData<Boolean> goToShowLocationListPage = new MutableLiveData<>();
     private MutableLiveData<Boolean> clearEditText = new MutableLiveData<>();
@@ -73,9 +73,9 @@ public class IGashtProvinceViewModel extends BaseIGashtViewModel<BaseIGashtRespo
 
     public void onProvinceSearchTextChange(String s) {
         if (s.length() > 0) {
-            selectIcon.set(R.string.close_icon);
+            selectIcon.set(R.string.icon_close);
         } else {
-            selectIcon.set(R.string.down_arrow_icon);
+            selectIcon.set(R.string.icon_chevron_Down);
         }
     }
 

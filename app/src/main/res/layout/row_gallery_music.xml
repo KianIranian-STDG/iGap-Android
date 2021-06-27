@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         style="@style/myIconToolbarStyle"
-        android:text="@string/music_icon"
+        android:text="@string/icon_music"
         android:includeFontPadding="false"
         app:layout_constraintLeft_toLeftOf="@id/play_bg"
         app:layout_constraintRight_toRightOf="@id/play_bg"

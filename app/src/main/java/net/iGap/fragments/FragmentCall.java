@@ -115,11 +115,11 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.edit_icon)
-                .setRightIcons(R.string.add_icon_without_circle_font)
+                .setLeftIcon(R.string.icon_new_conversation)
+                .setRightIcons(R.string.icon_add)
                 .setFragmentActivity(getActivity())
-                .setPassCodeVisibility(true, R.string.unlock_icon)
-                .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                .setPassCodeVisibility(true, R.string.icon_unlock)
+                .setScannerVisibility(true, R.string.icon_QR_code)
                 .setLogoShown(true)
                 .setListener(this);
 
@@ -408,7 +408,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         if (!state) {
 
             mIsMultiSelectEnable = false;
-            mHelperToolbar.setLeftIcon(R.string.edit_icon);
+            mHelperToolbar.setLeftIcon(R.string.icon_new_conversation);
 
             mFiltersLayout.setVisibility(View.VISIBLE);
             mMultiSelectLayout.setVisibility(View.GONE);
@@ -423,7 +423,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         } else {
 
             mIsMultiSelectEnable = true;
-            mHelperToolbar.setLeftIcon(R.string.back_icon);
+            mHelperToolbar.setLeftIcon(R.string.icon_back);
 
             mFiltersLayout.setVisibility(View.GONE);
             mMultiSelectLayout.setVisibility(View.VISIBLE);
@@ -558,31 +558,31 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
                 case OUTGOING:
-                    viewHolder.icon.setText(R.string.voice_call_made_icon);
+                    viewHolder.icon.setText(R.string.icon_voice_call);
                     viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
                     break;
                 case MISSED:
-                    viewHolder.icon.setText(R.string.voice_call_missed_icon);
+                    viewHolder.icon.setText(R.string.icon_missed_call);
                     viewHolder.icon.setTextColor(getResources().getColor(R.color.red));
                     viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.red));
                     viewHolder.timeDuration.setText(R.string.miss);
                     break;
                 case CANCELED:
-                    viewHolder.icon.setText(R.string.voice_call_made_icon);
+                    viewHolder.icon.setText(R.string.icon_voice_call);
                     viewHolder.icon.setTextColor(getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.green));
                     viewHolder.timeDuration.setText(R.string.not_answer);
                     break;
                 case INCOMING:
-                    viewHolder.icon.setText(R.string.voice_call_received_icon);
+                    viewHolder.icon.setText(R.string.icon_incoming_call);
                     viewHolder.icon.setTextColor(getResources().getColor(R.color.colorPrimary));
                     viewHolder.timeDuration.setTextColor(getResources().getColor(R.color.colorPrimary));
                     break;
             }
 
             if (ProtoSignalingOffer.SignalingOffer.Type.valueOf(item.getType()) == VIDEO_CALLING) {
-                viewHolder.icon.setText(R.string.video_call_icon);
+                viewHolder.icon.setText(R.string.icon_video_call);
             }
 
 

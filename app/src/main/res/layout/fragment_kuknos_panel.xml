@@ -267,7 +267,7 @@
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
                         android:gravity="center"
-                        android:text="@string/setting_icon"
+                        android:text="@string/icon_settings_lines"
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -314,7 +314,7 @@
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
                         android:gravity="center"
-                        android:text="@string/add_icon_without_circle_font"
+                        android:text="@string/icon_add"
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -361,7 +361,7 @@
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
                         android:gravity="center"
-                        android:text="@string/cloud_icon"
+                        android:text="@string/icon_cloud_space"
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -409,7 +409,7 @@
                         android:layout_marginTop="@dimen/dp15"
                         android:layout_marginBottom="@dimen/dp15"
                         android:gravity="center"
-                        android:text="@string/invite_icon"
+                        android:text="@string/icon_add_contact"
                         android:textSize="35dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView

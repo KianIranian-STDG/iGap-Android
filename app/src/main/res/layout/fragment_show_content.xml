@@ -53,7 +53,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
-                android:text="@string/back_icon"
+                android:text="@string/icon_back"
                 android:textColor="@android:color/white" />
         </net.iGap.libs.rippleeffect.RippleView>
 
@@ -84,7 +84,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:gravity="center"
-                android:text="@string/more_icon"
+                android:text="@string/icon_other_vertical_dots"
                 android:textColor="@android:color/white" />
         </net.iGap.libs.rippleeffect.RippleView>
 

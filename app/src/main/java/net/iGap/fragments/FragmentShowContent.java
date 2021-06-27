@@ -562,9 +562,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
                 progress.setOnClickListener(view -> {
                     String _cashID = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.attachment.cacheId : messageObject.attachment.cacheId;
-                    if (HelperDownloadFile.getInstance().isDownLoading(_cashID)) {
-                        HelperDownloadFile.getInstance().stopDownLoad(_cashID);
-                    } else {
+                    int currentAccount = AccountManager.selectedAccount;
+                    if (Downloader.getInstance(currentAccount).isDownloading(_cashID)) {
+                        progress.withDrawable(R.drawable.ic_download, true);
+                        Downloader.getInstance(currentAccount).cancelDownload(_cashID);
+                    }else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, zoomableImageView, roomMessages);
                     }
@@ -618,7 +620,10 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                                 realmRoomMessage = roomMessages.get(position).getForwardMessage();
                             }
                             realmRoomMessage.attachment.localFilePath = arg.data.getFilePath();
+                            messageObject.attachment.filePath = arg.data.getFilePath();
                             realmRoomMessage.attachment.token = arg.data.getToken();
+                            messageObject.attachment.token = arg.data.getToken();
+
                             G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.ON_FILE_DOWNLOAD_COMPLETED, messageObject));
                             if (isVideo) {
                                 mShowContentListener.videoAttached(new WeakReference(playerView), position, true);

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -190,7 +191,6 @@ public class SearchFragment extends BaseFragment {
     public void onOpenSearchKeyboard() {
 
     }
-
     private void fillList(String text) {
 
         itemAdapter.clear();

@@ -676,44 +676,47 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     void getInstallReferrerFromClient(InstallReferrerClient referrerClient) {
-
-        referrerClient.startConnection(new InstallReferrerStateListener() {
-            @Override
-            public void onInstallReferrerSetupFinished(int responseCode) {
-                switch (responseCode) {
-                    case InstallReferrerClient.InstallReferrerResponse.OK:
-                        ReferrerDetails response = null;
-                        try {
-                            response = referrerClient.getInstallReferrer();
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
-                            return;
-                        }
-                        final String referrerUrl = response.getInstallReferrer();
-
-
-                        // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
-                        trackInstallReferrer(referrerUrl);
+        try {
+            referrerClient.startConnection(new InstallReferrerStateListener() {
+                @Override
+                public void onInstallReferrerSetupFinished(int responseCode) {
+                    switch (responseCode) {
+                        case InstallReferrerClient.InstallReferrerResponse.OK:
+                            ReferrerDetails response = null;
+                            try {
+                                response = referrerClient.getInstallReferrer();
+                            } catch (RemoteException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+                            final String referrerUrl = response.getInstallReferrer();
 
 
-                        // End the connection
-                        referrerClient.endConnection();
+                            // TODO: If you're using GTM, call trackInstallReferrerforGTM instead.
+                            trackInstallReferrer(referrerUrl);
 
-                        break;
-                    case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
-                        // API not available on the current Play Store app.
-                        break;
-                    case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
-                        // Connection couldn't be established.
-                        break;
+
+                            // End the connection
+                            referrerClient.endConnection();
+
+                            break;
+                        case InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED:
+                            // API not available on the current Play Store app.
+                            break;
+                        case InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE:
+                            // Connection couldn't be established.
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onInstallReferrerServiceDisconnected() {
-
-            }
-        });
+                @Override
+                public void onInstallReferrerServiceDisconnected() {
+                }
+            });
+        } catch (Exception ex) {
+            //This is always due to permission exception. Log it and move on.
+            ex.printStackTrace();
+        }
     }
 
     // Tracker for Classic GA (call this if you are using Classic GA only)
@@ -1544,7 +1547,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (isLock) {
                 iconLock.setText(getResources().getString(R.string.md_igap_lock));
             } else {
-                iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+                iconLock.setText(getResources().getString(R.string.icon_lock));
             }
         } else {
             iconLock.setVisibility(View.GONE);

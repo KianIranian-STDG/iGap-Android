@@ -113,7 +113,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         eyeIconTv = new FontIconTextView(itemView.getContext());
         eyeIconTv.setId(R.id.ll_chatItem_viewIcon);
-        eyeIconTv.setText(R.string.eye_icon);
+        eyeIconTv.setText(R.string.icon_eye);
         eyeIconTv.setTextColor(otherColor);
         setTextSize(eyeIconTv, R.dimen.standardTextSize);
 
@@ -148,13 +148,13 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         chatBloke.setPadding(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
 
         voteUpIv = new FontIconTextView(itemView.getContext());
-        voteUpIv.setText(R.string.heart_icon);
+        voteUpIv.setText(R.string.icon_heart);
         voteUpIv.setGravity(BOTTOM);
         voteUpIv.setTextColor(otherColor);
         setTextSize(voteUpIv, R.dimen.standardTextSize);
 
         voteDownIv = new FontIconTextView(itemView.getContext());
-        voteDownIv.setText(R.string.dislike_icon);
+        voteDownIv.setText(R.string.icon_dislike);
         voteDownIv.setGravity(BOTTOM);
         voteDownIv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         voteDownIv.setTextColor(otherColor);

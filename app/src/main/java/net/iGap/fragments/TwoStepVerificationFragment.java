@@ -64,7 +64,7 @@ public class TwoStepVerificationFragment extends BaseFragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLeftIcon(R.string.empty_error_message)
-                .setRightIcons(R.string.check_icon)
+                .setRightIcons(R.string.icon_sent)
                 .setLogoShown(true)
                 .setShowConnectionState(false)
                 .setDefaultTitle(getString(R.string.two_step_verification_title))

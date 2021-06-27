@@ -124,7 +124,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="@string/check_icon"
+                                android:text="@string/icon_sent"
                                 android:textColor="?iGapTitleTextColor"
                                 android:textSize="25dp" />
 
@@ -133,7 +133,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="@string/copy_icon"
+                                android:text="@string/icon_copy"
                                 android:textColor="?iGapTitleTextColor"
                                 android:textSize="20dp" />
 
@@ -143,7 +143,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
-                                android:text="@string/history_icon"
+                                android:text="@string/icon_time"
                                 android:textColor="?iGapTitleTextColor"
                                 android:textSize="20dp" />
 

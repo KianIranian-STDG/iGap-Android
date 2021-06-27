@@ -16,7 +16,7 @@
         android:layout_height="@dimen/dp52"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
-        android:text="@string/md_emoticon_with_happy_face"
+        android:text="@string/icon_emoji_smile"
         android:layout_gravity="bottom" />
 
 
@@ -45,7 +45,7 @@
         android:layout_width="@dimen/dp48"
         android:layout_height="@dimen/dp48"
         android:padding="@dimen/dp8"
-        android:text="@string/md_bot"
+        android:text="@string/icon_robot"
         android:visibility="gone" />
 
     <FrameLayout
@@ -62,7 +62,7 @@
             android:layout_width="@dimen/dp44"
             android:layout_height="@dimen/dp44"
             android:padding="@dimen/dp8"
-            android:text="@string/md_send_button"
+            android:text="@string/icon_send"
             android:layout_gravity="center"
             android:visibility="gone" />
 
@@ -92,7 +92,7 @@
             android:layout_height="@dimen/dp44"
             android:layout_gravity="center_vertical"
             android:padding="@dimen/dp8"
-            android:text="@string/financial_send_money_icon"
+            android:text="@string/icon_send_money"
             android:visibility="gone" />
 
         <net.iGap.module.MaterialDesignTextView
@@ -101,7 +101,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:padding="@dimen/dp8"
-            android:text="@string/md_attachment_clip"
+            android:text="@string/icon_attach"
             android:layout_gravity="top" />
 
         <net.iGap.module.MaterialDesignTextView
@@ -110,7 +110,7 @@
             android:layout_width="@dimen/dp52"
             android:layout_height="@dimen/dp52"
             android:padding="@dimen/dp8"
-            android:text="@string/md_voice_message_microphone_button"
+            android:text="@string/icon_microphone"
             android:layout_gravity="top" />
 
     </LinearLayout>

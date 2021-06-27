@@ -186,7 +186,7 @@
                             android:layout_marginStart="@dimen/dp8"
                             android:layout_marginLeft="@dimen/dp8"
                             android:gravity="center"
-                            android:text="@string/scan_qr_code_icon"
+                            android:text="@string/icon_QR_code"
                             android:textSize="@dimen/dp48"
                             android:onClick="@{()->fragment.onQRScanBtnClick()}"
                             android:background="?attr/selectableItemBackgroundBorderless"

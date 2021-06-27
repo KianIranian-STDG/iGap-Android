@@ -708,8 +708,8 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.igap_nearby))
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_other_vertical_dots)
                 .setListener(this);
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fm_layout_toolbar);
@@ -869,7 +869,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
             prgWaitingSendMessage = view.findViewById(R.id.prgWaitSendMessage);
             txtSendMessageGps = view.findViewById(R.id.txtSendMessageGps);
-            txtSendMessageGps.setText(R.string.close_icon);
+            txtSendMessageGps.setText(R.string.icon_close);
             G.onGeoCommentResponse = new OnGeoCommentResponse() {
                 @Override
                 public void commentResponse() {
@@ -883,7 +883,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                             txtSendMessageGps.setVisibility(View.GONE);
                         }
                         prgWaitingSendMessage.setVisibility(View.GONE);
-                        txtSendMessageGps.setText(R.string.close_icon);
+                        txtSendMessageGps.setText(R.string.icon_close);
                         edtMessageGps.setEnabled(true);
                     });
                 }
@@ -894,7 +894,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         prgWaitingSendMessage.setVisibility(View.GONE);
-                        txtSendMessageGps.setText(R.string.close_icon);
+                        txtSendMessageGps.setText(R.string.icon_close);
                         edtMessageGps.setEnabled(true);
                     });
                 }
@@ -906,7 +906,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                         public void run() {
 
                             txtSendMessageGps.setVisibility(View.VISIBLE);
-                            txtSendMessageGps.setText(R.string.close_icon);
+                            txtSendMessageGps.setText(R.string.icon_close);
                             prgWaitingSendMessage.setVisibility(View.GONE);
                             edtMessageGps.setEnabled(true);
                         }
@@ -917,7 +917,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
             txtSendMessageGps.setOnClickListener(v -> {
 
 
-                if (txtSendMessageGps.getText().toString().contains(G.fragmentActivity.getResources().getString(R.string.close_icon))) {
+                if (txtSendMessageGps.getText().toString().contains(G.fragmentActivity.getResources().getString(R.string.icon_close))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Clear_Status).content(R.string.Clear_Status_desc).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -925,7 +925,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                             new RequestGeoUpdateComment().updateComment("");
                             edtMessageGps.setText("");
                             txtSendMessageGps.setVisibility(View.GONE);
-                            txtSendMessageGps.setText(R.string.close_icon);
+                            txtSendMessageGps.setText(R.string.icon_close);
 
                         }
                     }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative((dialog, which) -> {
@@ -958,10 +958,10 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
 
                         if (!txtComment.equals(s.toString())) {
                             txtSendMessageGps.setVisibility(View.VISIBLE);
-                            txtSendMessageGps.setText(R.string.check_icon);
+                            txtSendMessageGps.setText(R.string.icon_sent);
                         } else {
                             txtSendMessageGps.setVisibility(View.VISIBLE);
-                            txtSendMessageGps.setText(R.string.close_icon);
+                            txtSendMessageGps.setText(R.string.icon_close);
                         }
                     } else {
                         txtSendMessageGps.setVisibility(View.GONE);
@@ -1481,7 +1481,7 @@ public class FragmentiGapMap extends BaseFragment implements ToolbarListener, On
                 txtComment = comment;
                 if (AccountManager.getInstance().getCurrentUser().getId() == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
-                    txtSendMessageGps.setText(R.string.close_icon);
+                    txtSendMessageGps.setText(R.string.icon_close);
                 } else {
                     txtSendMessageGps.setVisibility(View.GONE);
                 }

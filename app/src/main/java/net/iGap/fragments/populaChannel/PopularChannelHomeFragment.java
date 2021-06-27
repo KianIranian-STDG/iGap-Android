@@ -64,7 +64,7 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag<PopularChannelHo
                 })
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.popular_channel))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .getView());
 
 

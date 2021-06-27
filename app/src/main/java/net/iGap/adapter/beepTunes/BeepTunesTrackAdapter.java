@@ -106,10 +106,10 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
 
             if (realmDownloadSong != null) {
                 track.setInStorage(true);
-                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
+                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.icon_music));
             } else {
                 track.setInStorage(false);
-                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.play_icon));
+                songPrwTv.setText(itemView.getContext().getResources().getString(R.string.icon_play));
             }
 
             RotateAnimation rotate = new RotateAnimation(
@@ -120,7 +120,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
 
             if (track.isInStorage()) {
                 if (track.getId() == BeepTunesPlayerService.playingSongId) {
-                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
+                    songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_pause));
                 } else {
                     songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_play));
                 }
@@ -145,7 +145,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
                     onTrackAdapter.onPlayClick(realmDownloadSong, playingSong -> {
                         if (playingSong.getSongId() == realmDownloadSong.getId())
                             if (playingSong.isPlay()) {
-                                songActionTv.setText(itemView.getContext().getResources().getString(R.string.pause_icon));
+                                songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_pause));
                             } else {
                                 songActionTv.setText(itemView.getContext().getResources().getString(R.string.icon_beeptunes_play));
                             }
@@ -175,7 +175,7 @@ public class BeepTunesTrackAdapter extends RecyclerView.Adapter<BeepTunesTrackAd
 
                                     if (downloadSong.getId().equals(track.getId())) {
                                         rotate.cancel();
-                                        songPrwTv.setText(itemView.getContext().getResources().getString(R.string.music_icon));
+                                        songPrwTv.setText(itemView.getContext().getResources().getString(R.string.icon_music));
                                     }
 
                                     progressBar.setVisibility(View.GONE);

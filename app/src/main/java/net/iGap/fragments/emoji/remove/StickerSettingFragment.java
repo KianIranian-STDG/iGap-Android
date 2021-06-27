@@ -38,7 +38,7 @@ public class StickerSettingFragment extends ObserverFragment<RemoveStickerViewMo
         LinearLayout linearLayout = rootView.findViewById(R.id.ll_stickerSetting_toolBar);
 
         HelperToolbar helperToolbar = HelperToolbar.create()
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getResources().getString(R.string.sticker_setting))
                 .setListener(new ToolbarListener() {

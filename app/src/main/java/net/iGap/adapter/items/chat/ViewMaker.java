@@ -453,7 +453,7 @@ public class ViewMaker {
 
         MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(context);
         fcsl_txt_icon.setId(R.id.fcsl_txt_icon);
-        fcsl_txt_icon.setText(R.string.md_call_made);
+        fcsl_txt_icon.setText(R.string.icon_single_contact);
         fcsl_txt_icon.setTextColor(ContextCompat.getColor(context, R.color.green));
         setTextSize(fcsl_txt_icon, R.dimen.dp18);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

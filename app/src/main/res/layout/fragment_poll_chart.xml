@@ -39,7 +39,7 @@
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/retry_icon"
+        android:text="@string/icon_retry"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textSize="@dimen/dp22"
         android:visibility="gone"

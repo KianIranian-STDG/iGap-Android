@@ -131,7 +131,7 @@ public class Toolbar extends FrameLayout {
         titleTextView.setGravity(Gravity.LEFT);
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 64);
         titleTextView.setTextColor(0xffffffff);
-        titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
+        titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         titleTextView.setText(title);
     }
 

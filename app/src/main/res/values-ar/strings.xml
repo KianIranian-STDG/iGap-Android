@@ -1498,7 +1498,9 @@
 
     <string name="invalid_question_token">"ردّكم غير صحيح"</string>
 
-    <string name="not_answerd_call">"الاتصال الصوتي الفائت"</string>
+    <string name="not_answerd_call">الاتصال الفائت</string>
+    <string name="not_answered_voice_call">الاتصال الصوتي الفائت</string>
+    <string name="not_answered_video_call">الاتصال فيديو الفائت</string>
 
     <string name="recorded_by">"المسجّل بواسطة " </string>
 

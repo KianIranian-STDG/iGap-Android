@@ -70,7 +70,7 @@ public class CashOutFragment extends Fragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(isCashOut ? R.string.cashout_taxi : R.string.charge_paygear))
                 .setListener(new ToolbarListener() {
                     @Override

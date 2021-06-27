@@ -836,7 +836,10 @@
     <string name="invalid_email_token">"کد تأیید پست الکترونیکی نادرست است"</string>
     <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
-    <string name="not_answerd_call">"تماس صوتی از دست رفته"</string>
+    <string name="not_answerd_call">تماس ناموفق</string>
+    <string name="not_answered_voice_call">تماس صوتی ناموفق</string>
+    <string name="not_answered_video_call">تماس تصویری ناموفق</string>
+
     <string name="recorded_by">"ضبط شده توسط " </string>
 
     <string name="Login_with_QrCode">ورود با اسکن بارکد</string>

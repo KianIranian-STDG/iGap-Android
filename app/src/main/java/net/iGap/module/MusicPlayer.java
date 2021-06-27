@@ -267,9 +267,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             txt_music_time.setText(musicTime);
 
             if (MusicPlayer.mp.isPlaying()) {
-                btnPlayMusic.setText(context.getString(R.string.pause_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_pause));
             } else {
-                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_play));
             }
         }
 
@@ -346,7 +346,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             stopTimer();
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_play));
             }
 
             if (!isShowMediaPlayer) {
@@ -405,7 +405,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.pause_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_pause));
             }
 
             if (!isShowMediaPlayer) {
@@ -460,7 +460,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_play));
             }
 
             musicProgress = 0;
@@ -499,7 +499,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 if (isVoice) { // avoid from return to first voice
                     if (btnPlayMusic != null) {
-                        btnPlayMusic.setText(context.getString(R.string.play_icon));
+                        btnPlayMusic.setText(context.getString(R.string.icon_play));
                     }
                     stopSound();
                     closeLayoutMediaPlayer();
@@ -582,7 +582,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     if (selectedMedia >= mediaList.size()) {
                         if (isVoice) { // avoid from return to first voice
                             if (btnPlayMusic != null) {
-                                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                                btnPlayMusic.setText(context.getString(R.string.icon_play));
                             }
                             stopSound();
                             closeLayoutMediaPlayer();
@@ -801,7 +801,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
-            btnPlayMusic.setText(context.getString(R.string.pause_icon));
+            btnPlayMusic.setText(context.getString(R.string.icon_pause));
             txt_music_name.setText(musicName);
 
             if (isVoice) {

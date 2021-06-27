@@ -147,7 +147,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
                 break;
             case CALL_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
@@ -155,7 +155,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = FragmentCall.newInstance(true);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
                 break;
             case CHAT_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(MainFragment.class.getName());
@@ -163,7 +163,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = MainFragment.newInstance();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
                 break;
             case DISCOVERY_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(DiscoveryFragment.class.getName());
@@ -175,7 +175,7 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                 if (crawlerStruct != null && !crawlerStruct.isWorkDone()) {
                     ((DiscoveryFragment) fragment).setNeedToCrawl(true);
                 }
-                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
                 break;
             case PROFILE_FRAGMENT:
                 fragment = fragmentManager.findFragmentByTag(FragmentUserProfile.class.getName());
@@ -183,15 +183,18 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
                     fragment = new FragmentUserProfile();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
-                fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
+                replaceFragment(fragmentTransaction, fragment, fragment.getClass().getName());
                 break;
         }
+    }
+
+    void replaceFragment(FragmentTransaction ft, Fragment fragment, String tag) {
+        ft.replace(R.id.viewpager, fragment, tag).commitAllowingStateLoss();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        G.onUnreadChange = null;
     }
 
     @Override

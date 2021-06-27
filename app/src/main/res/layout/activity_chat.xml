@@ -102,7 +102,7 @@
                         android:layout_marginTop="@dimen/dp12"
                         android:background="?attr/iGapAvatarBackground"
                         android:gravity="center"
-                        android:text="@string/md_downwards_arrow"
+                        android:text="@string/icon_chevron_Down"
                         android:textColor="@color/white" />
 
                 </FrameLayout>
@@ -156,7 +156,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/dp8"
                     android:background="@null"
-                    android:text="@string/md_close_button" />
+                    android:text="@string/icon_close" />
             </LinearLayout>
 
             <LinearLayout
@@ -177,7 +177,7 @@
                     android:background="@null"
                     android:gravity="center"
                     android:rotation="180"
-                    android:text="@string/down_arrow_icon"
+                    android:text="@string/icon_chevron_Down"
                     android:textSize="@dimen/dp20" />
 
                 <TextView
@@ -200,7 +200,7 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="@string/down_arrow_icon"
+                    android:text="@string/icon_chevron_Down"
                     android:textSize="@dimen/dp20" />
 
                 <LinearLayout
@@ -216,7 +216,7 @@
                         android:layout_height="match_parent"
                         android:background="@null"
                         android:gravity="center"
-                        android:text="@string/md_close_button"
+                        android:text="@string/icon_close"
                         android:textColor="?attr/iGapTitleTextColor" />
 
 
@@ -303,7 +303,7 @@
                     android:layout_marginRight="@dimen/dp10"
                     android:gravity="center"
                     android:paddingBottom="@dimen/dp6"
-                    android:text="@string/mute_icon"
+                    android:text="@string/icon_mute"
                     android:textColor="?iGapPrimaryTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -389,7 +389,7 @@
                             android:layout_marginLeft="@dimen/multi_select_icon_margin"
                             android:layout_marginRight="@dimen/multi_select_icon_margin"
                             android:gravity="center"
-                            android:text="@string/delete_icon"
+                            android:text="@string/icon_Delete"
                             android:textColor="@color/red"
                             android:textSize="@dimen/multi_select_icon_size"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -404,7 +404,7 @@
                             android:layout_marginLeft="@dimen/multi_select_icon_margin"
                             android:layout_marginRight="@dimen/multi_select_icon_margin"
                             android:gravity="center"
-                            android:text="@string/forward_icon"
+                            android:text="@string/icon_forward"
                             android:textSize="@dimen/multi_select_icon_size"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_delete" />
@@ -418,7 +418,7 @@
                             android:layout_marginLeft="@dimen/multi_select_icon_margin"
                             android:layout_marginRight="@dimen/multi_select_icon_margin"
                             android:gravity="center"
-                            android:text="@string/copy_icon"
+                            android:text="@string/icon_copy"
                             android:textSize="@dimen/multi_select_icon_size"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_forward" />
@@ -432,7 +432,7 @@
                             android:layout_marginLeft="@dimen/multi_select_icon_margin"
                             android:layout_marginRight="@dimen/multi_select_icon_margin"
                             android:gravity="center"
-                            android:text="@string/reply_icon"
+                            android:text="@string/icon_reply"
                             android:textSize="@dimen/multi_select_icon_size"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/ac_layout_selected_btn_copy" />
@@ -503,7 +503,7 @@
                             android:layout_width="@dimen/toolbar_icon_size"
                             android:layout_height="match_parent"
                             android:background="@null"
-                            android:text="@string/md_close_button" />
+                            android:text="@string/icon_close" />
                     </net.iGap.libs.rippleeffect.RippleView>
 
                 </LinearLayout>

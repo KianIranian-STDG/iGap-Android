@@ -115,7 +115,7 @@ public class FragmentCPayEdit extends BaseAPIViewFrag<FragmentCPayEditViewModel>
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.c_pay_title))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(this);
 
         binding.fceToolbar.addView(toolbar.getView());

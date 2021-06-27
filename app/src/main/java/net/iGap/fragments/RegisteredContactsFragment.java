@@ -170,19 +170,19 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     .setContext(getContext())
                     .setLogoShown(true)
                     .setLifecycleOwner(getViewLifecycleOwner())
-                    .setLeftIcon(R.string.edit_icon)
-                    .setRightIcons(R.string.add_icon_without_circle_font)
+                    .setLeftIcon(R.string.icon_new_conversation)
+                    .setRightIcons(R.string.icon_add)
                     .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true, R.string.unlock_icon)
-                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                    .setPassCodeVisibility(true, R.string.icon_unlock)
+                    .setScannerVisibility(true, R.string.icon_QR_code)
                     .setSearchBoxShown(true);
         } else {
             mHelperToolbar = HelperToolbar.create()
                     .setContext(getContext())
                     .setLifecycleOwner(getViewLifecycleOwner())
                     .setLogoShown(true)
-                    .setLeftIcon(R.string.back_icon)
-                    .setRightIcons(R.string.add_icon_without_circle_font)
+                    .setLeftIcon(R.string.icon_back)
+                    .setRightIcons(R.string.icon_add)
                     .setSearchBoxShown(true);
         }
 

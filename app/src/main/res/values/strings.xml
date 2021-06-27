@@ -36,7 +36,7 @@
     <string name="rg_Select_Country">Select your Country</string>
     <string name="Re_dialog_verify_number_part1">You have entered this number :</string>
     <string name="Re_dialog_verify_number_part2">Tap OK if this entered phone number is correct or simply modify it if wrong.</string>
-    <string name="verify_socket_message">Please enter verification code sent by iGap to \n %1$s</string>
+    <string name="verify_socket_message">Please enter verification code sent by iGap to</string>
     <string name="verify_sms_message">Please enter verification code sent by sms </string>
     <string name="verify_call_message">Please enter verification code sent by call</string>
     <string name="verify_sms_socket_message">Please enter verification code sent by sms and iGap</string>
@@ -837,7 +837,9 @@ Want to get it?</string>
     <string name="invalid_email_token">"Your email token is invalid"</string>
     <string name="invalid_question_token">"Your answer is invalid"</string>
 
-    <string name="not_answerd_call">"Voice Call Cancelled"</string>
+    <string name="not_answerd_call">Call Cancelled</string>
+    <string name="not_answered_voice_call">Voice Call Cancelled</string>
+    <string name="not_answered_video_call">Video Call Cancelled</string>
     <string name="recorded_by">Recorded By</string>
     <string name="Login_with_QrCode">Login With QR Scan</string>
     <string name="Input_device_specification">Device login success</string>
@@ -1540,7 +1542,6 @@ Want to get it?</string>
     <string name="str_frag_sync_contactWelcome">Welcome to iGap</string>
     <string name="str_frag_sync_skipBtn">Get Started</string>
     <string name="str_frag_sync_error">Something went wrong. Please try again.</string>
-    <string name="download_icon">\ue933</string>
     <string name="igasht_title">آیگشت</string>
     <string name="igasht_choose_province_title">Select the city you want</string>
     <string name="igasht_buy_ticket_title">Buy tickets</string>

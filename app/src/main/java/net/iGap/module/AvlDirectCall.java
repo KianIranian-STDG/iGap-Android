@@ -27,7 +27,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 
@@ -154,9 +153,9 @@ public class AvlDirectCall extends LinearLayout {
         LinearLayoutCompat.LayoutParams lp = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(lp);
         textView.setPadding(0, -(ViewMaker.i_Dp(R.dimen.dp6)), 0, -(ViewMaker.i_Dp(R.dimen.dp6)));
-        textView.setText(R.string.md_expand_arrow);
+        textView.setText(R.string.icon_chevron_up);
         textView.setVisibility(INVISIBLE);
-        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.font_icon));
+        textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.font_icons));
 
 
         return textView;

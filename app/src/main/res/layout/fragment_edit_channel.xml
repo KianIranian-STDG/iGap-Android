@@ -88,7 +88,7 @@
                     android:layout_marginRight="16dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                    android:text="@string/md_emoticon_with_happy_face"
+                    android:text="@string/icon_emoji_smile"
                     android:textSize="@dimen/standardIconSize"
                     app:layout_constraintBottom_toBottomOf="@+id/channelNameEditText"
                     app:layout_constraintEnd_toEndOf="parent"

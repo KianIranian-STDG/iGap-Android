@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.PermissionHelper;
 import net.iGap.kuknos.Model.Parsian.KuknosBalance;
-import net.iGap.kuknos.Model.Parsian.KuknosRefundModel;
 import net.iGap.kuknos.viewmodel.KuknosPanelVM;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.DbManager;
@@ -92,7 +90,7 @@ public class KuknosPanelFrag extends BaseAPIViewFrag<KuknosPanelVM> {
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

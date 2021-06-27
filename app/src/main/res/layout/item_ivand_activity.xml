@@ -14,7 +14,7 @@
         style="@style/baseFontIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/md_show_more_button"
+        android:text="@string/icon_other_vertical_dots"
         app:layout_constraintBottom_toBottomOf="@id/score"
         app:layout_constraintEnd_toEndOf="@id/score"
         app:layout_constraintStart_toEndOf="@id/txt_score"

@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.Long.parseLong;
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED_VALUE;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
@@ -99,10 +100,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                 switch (messageOne) {
                     case PLAY:
-                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
                         break;
                     case PAUSE:
-                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_pause));
                         break;
                     case UPDATE:
                         if (result) {
@@ -149,7 +150,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                 return;
 
             if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
-                messageClickListener.onVoiceListenedStatus(holder.mType.getNumber(), holder.mRoomId, parseLong(holder.mMessageID), LISTENED_VALUE);
+                if (holder.roomType.getNumber() != CHANNEL_VALUE) {
+                    messageClickListener.onVoiceListenedStatus(holder.roomType.getNumber(), holder.mRoomId, parseLong(holder.mMessageID), LISTENED_VALUE);
+                }
                 RealmClientCondition.addOfflineListen(holder.mRoomId, parseLong(holder.mMessageID));
             }
 
@@ -200,7 +203,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         super.bindView(holder, payloads);
 
         int messageType = messageObject.isForwarded() ? messageObject.forwardedMessage.messageType : messageObject.messageType;
-        holder.mType = type;
+        holder.roomType = type;
         AppUtils.rightFileThumbnailIcon(holder.thumbnail, messageObject.messageType, null);
 
         holder.mRoomId = messageObject.roomId;
@@ -232,14 +235,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_pause));
                 } else {
-                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
                 }
             }
         } else {
             holder.waveView.setProgress(0);
-            holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+            holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
         }
 
 
@@ -288,7 +291,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         private String mMessageID = "";
         private String mTimeMusic = "";
         private long mRoomId;
-        private ProtoGlobal.Room.Type mType;
+        private ProtoGlobal.Room.Type roomType;
         private ConstraintLayout rootView;
         private ConstraintSet set;
         private AudioWave waveView;
@@ -314,7 +317,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
-            btnPlayMusic.setText(R.string.play_icon);
+            btnPlayMusic.setText(R.string.icon_play);
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
             txt_Timer = new AppCompatTextView(view.getContext());
