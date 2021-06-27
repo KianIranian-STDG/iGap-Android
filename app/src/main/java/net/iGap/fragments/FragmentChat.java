@@ -40,7 +40,6 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -761,7 +760,7 @@ public class FragmentChat extends BaseFragment
 
         mToolbar = new Toolbar(context);
 
-        searchFieldItem = mToolbar.addItem(searchFieldTag, R.string.search_icon, Theme.getInstance().getTitleTextColor(getContext())).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
+        searchFieldItem = mToolbar.addItem(searchFieldTag, R.string.icon_search, Theme.getInstance().getTitleTextColor(getContext())).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 if (layoutMute != null) {
@@ -1076,8 +1075,8 @@ public class FragmentChat extends BaseFragment
         ToolbarItems toolbarItems = mToolbar.createToolbarItems();
         toolbarItems.setBackground(null);
 
-        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 48);
-        callItem = toolbarItems.addItemWithWidth(voiceCallTag, R.string.voice_call_icon, 48);
+        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.icon_other_vertical_dots, 48);
+        callItem = toolbarItems.addItemWithWidth(voiceCallTag, R.string.icon_voice_call, 48);
 
         createActionMode();
         rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60));
@@ -1143,10 +1142,10 @@ public class FragmentChat extends BaseFragment
         toolbarItems = mToolbar.createActionToolbar(null);
         toolbarItems.setBackground(null);
 
-        deleteMessageItem = toolbarItems.addItemWithWidth(deleteMessageTag, R.string.delete_icon, 52);
-        forwardMessageItem = toolbarItems.addItemWithWidth(forwardMessageTag, R.string.forward_icon, 52);
-        copyMessageItem = toolbarItems.addItemWithWidth(copyMessageTag, R.string.copy_icon, 52);
-        replyMessageItem = toolbarItems.addItemWithWidth(replyMessageTag, R.string.reply_icon, 52);
+        deleteMessageItem = toolbarItems.addItemWithWidth(deleteMessageTag, R.string.icon_delete, 52);
+        forwardMessageItem = toolbarItems.addItemWithWidth(forwardMessageTag, R.string.icon_forward, 52);
+        copyMessageItem = toolbarItems.addItemWithWidth(copyMessageTag, R.string.icon_copy, 52);
+        replyMessageItem = toolbarItems.addItemWithWidth(replyMessageTag, R.string.icon_reply, 52);
 
         multiSelectCounter = new NumberTextView(toolbarItems.getContext());
         multiSelectCounter.setTextSize(18);
@@ -2220,17 +2219,17 @@ public class FragmentChat extends BaseFragment
 
     private void createMoreItems() {
         List<ChatMoreItem> moreItems = new ArrayList<>();
-        ChatMoreItem search = new ChatMoreItem(searchItem, R.string.search_icon, R.string.search);
-        ChatMoreItem clearHistory = new ChatMoreItem(clearHistoryItem, R.string.ic_clear_history, R.string.clear_history);
-        ChatMoreItem deleteChat = new ChatMoreItem(deleteItem, R.string.ic_clear_history, R.string.delete);
-        ChatMoreItem unMuteNotification = new ChatMoreItem(unMuteItem, R.string.unmute_icon, R.string.unmute);
-        ChatMoreItem muteNotification = new ChatMoreItem(muteItem, R.string.mute_icon, R.string.mute);
-        ChatMoreItem chatToGroup = new ChatMoreItem(chatToGroupItem, R.string.ic_clear_history, R.string.chat_to_group);
-        ChatMoreItem cleanUp = new ChatMoreItem(cleanUpItem, R.string.ic_clear_history, R.string.clean_up);
-        ChatMoreItem exportChat = new ChatMoreItem(exportChatItem, R.string.ic_clear_history, R.string.export_chat);
-        ChatMoreItem report = new ChatMoreItem(reportItem, R.string.ic_clear_history, R.string.report);
-        ChatMoreItem mSendMoney = new ChatMoreItem(sendMoneyItem, R.string.financial_send_money_icon, R.string.SendMoney);
-        ChatMoreItem stop = new ChatMoreItem(stopItem, R.string.ic_clear_history, R.string.stop);
+        ChatMoreItem search = new ChatMoreItem(searchItem, R.string.icon_search, R.string.search);
+        ChatMoreItem clearHistory = new ChatMoreItem(clearHistoryItem, R.string.icon_clearing, R.string.clear_history);
+        ChatMoreItem deleteChat = new ChatMoreItem(deleteItem, R.string.icon_delete, R.string.delete);
+        ChatMoreItem unMuteNotification = new ChatMoreItem(unMuteItem, R.string.icon_speaker, R.string.unmute);
+        ChatMoreItem muteNotification = new ChatMoreItem(muteItem, R.string.icon_mute, R.string.mute);
+        ChatMoreItem chatToGroup = new ChatMoreItem(chatToGroupItem, R.string.icon_convert_chat_to_group, R.string.chat_to_group);
+        ChatMoreItem cleanUp = new ChatMoreItem(cleanUpItem, R.string.icon_clear_history, R.string.clean_up);
+        ChatMoreItem exportChat = new ChatMoreItem(exportChatItem, R.string.icon_export_chat, R.string.export_chat);
+        ChatMoreItem report = new ChatMoreItem(reportItem, R.string.icon_danger, R.string.report);
+        ChatMoreItem mSendMoney = new ChatMoreItem(sendMoneyItem, R.string.icon_send_money, R.string.SendMoney);
+        ChatMoreItem stop = new ChatMoreItem(stopItem, R.string.icon_delete_minus, R.string.stop);
 
         moreItems.add(search);
         moreItems.add(clearHistory);

@@ -389,7 +389,7 @@
                             android:layout_marginLeft="@dimen/multi_select_icon_margin"
                             android:layout_marginRight="@dimen/multi_select_icon_margin"
                             android:gravity="center"
-                            android:text="@string/icon_Delete"
+                            android:text="@string/icon_delete"
                             android:textColor="@color/red"
                             android:textSize="@dimen/multi_select_icon_size"
                             app:layout_constraintBottom_toBottomOf="parent"

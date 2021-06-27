@@ -507,7 +507,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.icon_mark_as_read, getResources().getString(R.string.mark_as_unread));
         readAllItem = moreItem.addSubItem(readAllTag, R.string.icon_mark_all_read, getResources().getString(R.string.read_all));
 
-        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.icon_Delete, 52);
+        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.icon_delete, 52);
         muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.icon_mute, 52);
         pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.icon_pin_to_top, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icons));
 

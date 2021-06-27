@@ -100,8 +100,8 @@ public class Toolbar extends FrameLayout {
         if (muteIcon != null)
             return;
         muteIcon = new TextView(getContext());
-        muteIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
-        muteIcon.setText(R.string.mute_icon);
+        muteIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
+        muteIcon.setText(R.string.icon_mute);
         muteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         muteIcon.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
     }
@@ -115,8 +115,8 @@ public class Toolbar extends FrameLayout {
 
     private void createVerifiedIcon() {
         verifiedChannelsIcon = new TextView(getContext());
-        verifiedChannelsIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
-        verifiedChannelsIcon.setText(R.string.verify_icon);
+        verifiedChannelsIcon.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
+        verifiedChannelsIcon.setText(R.string.icon_blue_badge);
         verifiedChannelsIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         verifiedChannelsIcon.setTextColor(getContext().getResources().getColor(R.color.verify_color));
     }
