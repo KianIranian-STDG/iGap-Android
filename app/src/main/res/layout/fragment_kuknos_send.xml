@@ -132,7 +132,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{()->viewmodel.QrcodeScan()}"
-                    android:text="@string/scan_qr_code_icon"
+                    android:text="@string/icon_QR_code"
                     android:textSize="30dp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragKuknosSWalletAddressHolder"
                     app:layout_constraintEnd_toEndOf="@+id/fragKuknosSTextHolder"

@@ -21,7 +21,7 @@
             android:id="@+id/imgQrCode"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:text="@string/scan_qr_code_icon"
+            android:text="@string/icon_QR_code"
             style="@style/myIconTextViewStyle" />
 
         <TextView

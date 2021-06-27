@@ -79,7 +79,7 @@ public class MobileBankTransferCTCStepOneFragment extends BaseMobileBankFragment
                 .setContext(getContext())
                 .setRoundBackground(false)
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

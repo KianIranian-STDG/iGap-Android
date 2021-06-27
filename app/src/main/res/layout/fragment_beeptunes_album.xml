@@ -59,7 +59,7 @@
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:layoutDirection="ltr"
-                        android:text="@string/back_icon"
+                        android:text="@string/icon_back"
                         android:textColor="@color/white"
                         android:textSize="24dp" />
 
@@ -211,7 +211,7 @@
             android:layout_height="56dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/play_icon"
+            android:text="@string/icon_play"
             android:textColor="@color/white"
             android:textSize="45dp"
             android:visibility="invisible" />

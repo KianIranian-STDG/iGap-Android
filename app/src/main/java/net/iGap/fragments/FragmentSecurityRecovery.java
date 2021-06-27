@@ -75,8 +75,8 @@ public class FragmentSecurityRecovery extends BaseFragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.recovery_Password))
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setLogoShown(true)
                 .setShowConnectionState(false)
                 .setListener(new ToolbarListener() {

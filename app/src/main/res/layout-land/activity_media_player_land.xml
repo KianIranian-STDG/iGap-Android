@@ -119,7 +119,7 @@
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
-                                android:text="@string/back_icon"
+                                android:text="@string/icon_back"
                                 android:textAppearance="@style/TextIconAppearance_toolbar" />
                         </net.iGap.libs.rippleeffect.RippleView>
 
@@ -169,7 +169,7 @@
                                 android:layout_height="match_parent"
                                 android:background="@null"
                                 android:gravity="center"
-                                android:text="@string/more_icon"
+                                android:text="@string/icon_other_vertical_dots"
                                 android:textAppearance="@style/TextIconAppearance_toolbar" />
                         </net.iGap.libs.rippleeffect.RippleView>
 
@@ -263,7 +263,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPreviousMusic}"
-                    android:text="@string/player_previous_icon"
+                    android:text="@string/icon_fast_backward"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textSize="@dimen/dp22"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -281,7 +281,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnPlayMusic}"
-                    android:text="@{fragmentMediaPlayerViewModel.callBackBtnPlayMusic , default = @string/play_icon}"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackBtnPlayMusic , default = @string/icon_play}"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="@color/toolbar_player_base_color"
                     android:textSize="@dimen/dp36"
@@ -299,7 +299,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnForwardMusic}"
-                    android:text="@string/player_next_icon"
+                    android:text="@string/icon_fast_forward"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textSize="@dimen/dp22"
                     app:layout_constraintBottom_toBottomOf="@id/ml_btn_Previous_music"
@@ -316,7 +316,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnReplayMusic}"
-                    android:text="@{fragmentMediaPlayerViewModel.callBackBtnReplayMusic , default = @string/retry_icon}"
+                    android:text="@{fragmentMediaPlayerViewModel.callBackBtnReplayMusic , default = @string/icon_retry}"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="@{fragmentMediaPlayerViewModel.btnReplayMusicColor , default = @android:color/white}"
                     android:textSize="@dimen/dp24"
@@ -348,7 +348,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:gravity="center"
                     android:onClick="@{fragmentMediaPlayerViewModel::onClickBtnShuffelMusic}"
-                    android:text="@string/player_shuffle_icon"
+                    android:text="@string/icon_shuffle_player"
                     android:textAppearance="@style/TextIconAppearance.all"
                     android:textColor="@{fragmentMediaPlayerViewModel.btnShuffelMusicColor , default =@android:color/white }"
                     android:textSize="@dimen/dp20"

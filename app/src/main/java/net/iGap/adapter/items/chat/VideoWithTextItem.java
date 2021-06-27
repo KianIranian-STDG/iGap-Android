@@ -21,8 +21,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
@@ -145,7 +143,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             more.setId(R.id.more);
             //more.setBackgroundResource(R.drawable.bg_message_image_time);
             more.setGravity(Gravity.CENTER);
-            more.setText(R.string.horizontal_more_icon);
+            more.setText(R.string.icon_other_horizontal_dots);
             setTextSize(more, R.dimen.largeTextSize);
             more.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
             more.setPadding(i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp8), i_Dp(R.dimen.dp12), i_Dp(R.dimen.dp8));

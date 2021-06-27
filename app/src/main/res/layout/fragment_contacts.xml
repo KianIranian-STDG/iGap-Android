@@ -39,7 +39,7 @@
             android:layout_marginEnd="@dimen/dp4"
             android:layout_marginRight="@dimen/dp4"
             android:gravity="center"
-            android:text="@string/close_icon"
+            android:text="@string/icon_close"
             android:textSize="@dimen/dp22" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/dp4"
-            android:text="@string/delete_icon"
+            android:text="@string/icon_Delete"
             android:textSize="@dimen/dp22" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -72,7 +72,7 @@
             android:layout_margin="@dimen/dp4"
             android:layout_toStartOf="@id/fc_selected_mode_btn_delete"
             android:layout_toLeftOf="@id/fc_selected_mode_btn_delete"
-            android:text="@string/share_icon"
+            android:text="@string/icon_share"
             android:textSize="@dimen/dp22"
             android:visibility="gone" />
 
@@ -83,7 +83,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/invite_icon"
+        android:text="@string/icon_add_contact"
         app:layout_constraintBottom_toBottomOf="@id/inviteFriendsTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_inviteFriend"
         app:layout_constraintTop_toTopOf="@id/inviteFriendsTitle" />
@@ -123,7 +123,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/channel_icon"
+        android:text="@string/icon_new_channel"
         app:layout_constraintBottom_toBottomOf="@id/newChannelTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_channel"
         app:layout_constraintTop_toTopOf="@id/newChannelTitle" />
@@ -163,7 +163,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/group_icon"
+        android:text="@string/icon_contacts"
         app:layout_constraintBottom_toBottomOf="@id/newGroupTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_group"
         app:layout_constraintTop_toTopOf="@id/newGroupTitle" />
@@ -203,7 +203,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/secret_chat_icon"
+        android:text="@string/icon_secret_chat"
         app:layout_constraintBottom_toBottomOf="@id/secretChatTitle"
         app:layout_constraintEnd_toStartOf="@id/secretChatTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_btn_secret_chat"
@@ -243,7 +243,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/group_icon"
+        android:text="@string/icon_contacts"
         app:layout_constraintBottom_toBottomOf="@id/newGroupCallTitle"
         app:layout_constraintEnd_toStartOf="@id/newGroupCallTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_new_group_call"
@@ -283,7 +283,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/invite_icon"
+        android:text="@string/icon_add_contact"
         app:layout_constraintBottom_toBottomOf="@id/addContactTitle"
         app:layout_constraintEnd_toStartOf="@id/addContactTitle"
         app:layout_constraintStart_toStartOf="@id/menu_layout_add_new_contact"
@@ -323,7 +323,7 @@
         style="@style/myIconTextViewStyle"
         android:layout_width="@dimen/contact_icon_size"
         android:layout_height="@dimen/contact_icon_size"
-        android:text="@string/dial_number_icon"
+        android:text="@string/icon_dial"
         app:layout_constraintBottom_toBottomOf="@id/dialNumberTitle"
         app:layout_constraintEnd_toStartOf="@id/dialNumberTitle"
         app:layout_constraintHorizontal_chainStyle="packed"

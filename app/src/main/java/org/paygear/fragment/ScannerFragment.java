@@ -136,8 +136,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.scan_qr_code_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_QR_code)
                 .setDefaultTitle(getString(R.string.scanner))
                 .setListener(new ToolbarListener() {
                     @Override

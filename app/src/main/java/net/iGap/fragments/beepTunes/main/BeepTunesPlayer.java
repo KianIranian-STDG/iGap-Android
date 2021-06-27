@@ -82,9 +82,9 @@ public class BeepTunesPlayer extends BaseFragment {
                 songArtIv.setImageBitmap(playingSong.getBitmap());
                 backgroundIv.setImageBitmap(playingSong.getBitmap());
                 if (playingSong.isPlay()) {
-                    playTv.setText(getContext().getResources().getString(R.string.pause_icon));
+                    playTv.setText(getContext().getResources().getString(R.string.icon_pause));
                 } else {
-                    playTv.setText(getContext().getResources().getString(R.string.play_icon));
+                    playTv.setText(getContext().getResources().getString(R.string.icon_play));
                 }
 
 //                realmDownloadSongs = DbManager.getInstance().getUiRealm().copyFromRealm(DbManager.getInstance().getUiRealm().where(RealmDownloadSong.class)

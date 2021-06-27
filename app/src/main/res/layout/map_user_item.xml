@@ -85,7 +85,7 @@
                 android:layout_gravity="end"
                 android:gravity="center"
                 android:rotation="270"
-                android:text="@string/down_arrow_icon"
+                android:text="@string/icon_chevron_Down"
                 android:textStyle="bold" />
 
         </LinearLayout>

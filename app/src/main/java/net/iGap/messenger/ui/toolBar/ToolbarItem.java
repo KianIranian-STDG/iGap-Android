@@ -203,9 +203,9 @@ public class ToolbarItem extends FrameLayout {
         searchContainer.addView(searchEditText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.MATCH_PARENT, Gravity.CENTER_VERTICAL, 6, 0, 48, 0));
         searchClearButton = new TextView(getContext());
         searchClearButton.setTextSize(22);
-        searchClearButton.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
+        searchClearButton.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         searchClearButton.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
-        searchClearButton.setText(R.string.close_icon);
+        searchClearButton.setText(R.string.icon_close);
         searchClearButton.setVisibility(GONE);
         searchClearButton.setGravity(Gravity.CENTER);
 

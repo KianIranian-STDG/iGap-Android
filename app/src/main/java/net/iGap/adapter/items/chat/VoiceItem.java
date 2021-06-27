@@ -100,10 +100,10 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                 switch (messageOne) {
                     case PLAY:
-                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
                         break;
                     case PAUSE:
-                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
+                        holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_pause));
                         break;
                     case UPDATE:
                         if (result) {
@@ -235,14 +235,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.pause_icon));
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_pause));
                 } else {
-                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+                    holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
                 }
             }
         } else {
             holder.waveView.setProgress(0);
-            holder.btnPlayMusic.setText(holder.getResources().getString(R.string.play_icon));
+            holder.btnPlayMusic.setText(holder.getResources().getString(R.string.icon_play));
         }
 
 
@@ -317,7 +317,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
-            btnPlayMusic.setText(R.string.play_icon);
+            btnPlayMusic.setText(R.string.icon_play);
             setTextSize(btnPlayMusic, R.dimen.dp36);
 
             txt_Timer = new AppCompatTextView(view.getContext());

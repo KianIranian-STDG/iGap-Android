@@ -46,7 +46,7 @@ public class FragmentMediaPlayerViewModel {
     public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00}");
     public ObservableField<String> callBackTxtMusicInfo = new ObservableField<>("");
     public ObservableField<String> callBackTxtMusicTime = new ObservableField<>(G.context.getResources().getString(R.string.music_time));
-    public ObservableField<String> callBackBtnReplayMusic = new ObservableField<>(G.context.getResources().getString(R.string.md_synchronization_arrows));
+    public ObservableField<String> callBackBtnReplayMusic = new ObservableField<>(G.context.getResources().getString(R.string.icon_beeptunes_sync));
     public ObservableInt txtMusicInfoVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt imgRepeadOneVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt imgMusicPicture = new ObservableInt(View.VISIBLE);
@@ -104,14 +104,14 @@ public class FragmentMediaPlayerViewModel {
             public void complete(boolean result, String messageOne, final String MessageTow) {
 
                 if (messageOne.equals("play")) {
-                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.play_icon));
+                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.icon_play));
 
                     if (rippleVisualizerView != null) {
                         rippleVisualizerView.setEnabled(false);
                         rippleVisualizerView.pauseVisualizer();
                     }
                 } else if (messageOne.equals("pause")) {
-                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.pause_icon));
+                    callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.icon_pause));
 
                     if (rippleVisualizerView != null) {
                         rippleVisualizerView.setEnabled(true);
@@ -231,9 +231,9 @@ public class FragmentMediaPlayerViewModel {
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
-                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.pause_icon));
+                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.icon_pause));
             } else {
-                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.play_icon));
+                callBackBtnPlayMusic.set(G.fragmentActivity.getResources().getString(R.string.icon_play));
             }
 
             if (MusicPlayer.mediaThumpnail != null) {
@@ -263,15 +263,15 @@ public class FragmentMediaPlayerViewModel {
 
     private void setReplayButton() {
         if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.noRepeat.toString())) {
-            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
+            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.icon_retry));
             btnReplayMusicColor.set(Color.GRAY);
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.repeatAll.toString())) {
-            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
+            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.icon_retry));
             btnReplayMusicColor.set(R.attr.iGapTitleTextColor);
             imgRepeadOneVisibility.set(View.GONE);
         } else if (MusicPlayer.repeatMode.equals(MusicPlayer.RepeatMode.oneRpeat.toString())) {
-            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.retry_icon));
+            callBackBtnReplayMusic.set(G.context.getResources().getString(R.string.icon_retry));
             btnReplayMusicColor.set(R.attr.iGapTitleTextColor);
             imgRepeadOneVisibility.set(View.VISIBLE);
         }

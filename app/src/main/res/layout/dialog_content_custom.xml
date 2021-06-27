@@ -15,10 +15,10 @@
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/iconDialogTitle"
             style="@style/myIconTextViewStyle"
-            android:fontFamily="@font/font_icon_old"
+            android:fontFamily="@font/font_icons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/md_muted"
+            android:text="@string/icon_mute"
             android:paddingTop="@dimen/dp8"
             android:paddingRight="@dimen/dp4"
             android:paddingLeft="@dimen/dp4"

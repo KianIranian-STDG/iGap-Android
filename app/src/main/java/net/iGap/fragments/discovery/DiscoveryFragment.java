@@ -119,7 +119,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     .setContext(getContext())
                     .setLifecycleOwner(getViewLifecycleOwner())
                     .setLogoShown(true)
-                    .setLeftIcon(R.string.back_icon)
+                    .setLeftIcon(R.string.icon_back)
                     .setListener(this);
 
         } else {
@@ -130,8 +130,8 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
                     // .setRightSmallAvatarShown(true)
                     .setLogoShown(true)
                     .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true, R.string.unlock_icon)
-                    .setScannerVisibility(true, R.string.scan_qr_code_icon)
+                    .setPassCodeVisibility(true, R.string.icon_unlock)
+                    .setScannerVisibility(true, R.string.icon_QR_code)
                     //  .setSearchBoxShown(true, false)
                     .setListener(this);
         }

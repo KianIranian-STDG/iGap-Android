@@ -26,7 +26,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="@string/music_icon"
+            android:text="@string/icon_music"
             android:textSize="@dimen/standardIconSize"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

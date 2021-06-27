@@ -63,7 +63,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:onClick="@{()->viewModel.onRetryClick()}"
-            android:text="@string/retry_icon"
+            android:text="@string/icon_retry"
             android:visibility="@{viewModel.showViewRefresh}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

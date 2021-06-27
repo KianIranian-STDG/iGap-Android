@@ -83,8 +83,8 @@ public class FragmentSetting extends BaseFragment {
         HelperToolbar t = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.more_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_other_vertical_dots)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.settings))
                 .setListener(new ToolbarListener() {
@@ -215,12 +215,12 @@ public class FragmentSetting extends BaseFragment {
     }
 
     private void showDialogLogout() {
-        showDialog(G.context.getString(R.string.log_out), G.context.getString(R.string.content_log_out), R.string.md_exit_app, v -> viewModel.logout(), null);
+        showDialog(G.context.getString(R.string.log_out), G.context.getString(R.string.content_log_out), R.string.icon_log_out, v -> viewModel.logout(), null);
     }
 
     private void showDeleteAccountDialog() {
         showDialog(G.context.getString(R.string.delete_account), G.context.getString(R.string.delete_account_text) + "\n" + G.context.getString(R.string.delete_account_text_desc),
-                R.string.md_delete_acc, v -> {
+                R.string.icon_delete_minus, v -> {
                     if (getActivity() != null) {
                         FragmentDeleteAccount fragmentDeleteAccount = FragmentDeleteAccount.getInstance(AccountManager.getInstance().getCurrentUser().getPhoneNumber());
                         new HelperFragment(getActivity().getSupportFragmentManager(), fragmentDeleteAccount).setReplace(false).load();

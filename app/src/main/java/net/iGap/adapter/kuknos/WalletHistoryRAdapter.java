@@ -100,14 +100,14 @@ public class WalletHistoryRAdapter extends RecyclerView.Adapter<WalletHistoryRAd
             }
             if (model.getType() != null && model.getType().equals("create_account")) {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));
-                icon.setText(context.getResources().getString(R.string.download_ic));
+                icon.setText(context.getResources().getString(R.string.icon_download));
             } else if (accountID.equals(model.getFrom())) {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_sent));
-                icon.setText(context.getResources().getString(R.string.upload_ic));
+                icon.setText(context.getResources().getString(R.string.icon_upload));
                 icon.setTextColor(Color.RED);
             } else {
                 desc.setText(context.getResources().getString(R.string.kuknos_wHistory_receive));
-                icon.setText(context.getResources().getString(R.string.download_ic));
+                icon.setText(context.getResources().getString(R.string.icon_download));
 //                icon.setTextColor(context.getResources().getColor(R.color.buttonColor));
             }
         }

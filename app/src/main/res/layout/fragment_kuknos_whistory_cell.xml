@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:padding="@dimen/dp4"
-            android:text="@string/download_ic"
+            android:text="@string/icon_download"
             android:textColor="@color/buttonColor"
             android:textSize="@dimen/dp28" />
 

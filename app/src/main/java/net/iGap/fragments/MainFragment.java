@@ -6,7 +6,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -266,7 +265,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         layout.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
 
         IconView addButton = new IconView(context);
-        addButton.setIcon(R.string.add_icon_without_circle_font);
+        addButton.setIcon(R.string.icon_add);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
 
@@ -331,10 +330,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public View createToolBar(Context context) {
         toolbar = new Toolbar(context);
-        toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+        toolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         toolbar.setOnClickListener(view -> recyclerView.smoothScrollToPosition(0));
         ToolbarItems toolbarItems = toolbar.createToolbarItems();
-        searchItem = toolbarItems.addItem(0, R.string.search_icon, Color.WHITE)
+        searchItem = toolbarItems.addItem(0, R.string.icon_search, Color.WHITE)
                 .setIsSearchBox(true)
                 .setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
 
@@ -370,7 +369,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                 });
 
         if (PassCode.getInstance().isPassCode()) {
-            passCodeItem = toolbar.addItem(passCodeTag, R.string.unlock_icon, Color.WHITE);
+            passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
 
         createActionMode();
@@ -388,11 +387,11 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                         return;
                     }
                     if (ActivityMain.isLock) {
-                        passCodeItem.setIcon(R.string.unlock_icon);
+                        passCodeItem.setIcon(R.string.icon_unlock);
                         ActivityMain.isLock = false;
                         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
                     } else {
-                        passCodeItem.setIcon(R.string.lock_icon);
+                        passCodeItem.setIcon(R.string.icon_lock);
                         ActivityMain.isLock = true;
                         HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
                     }
@@ -503,14 +502,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         toolbarItems = toolbar.createActionToolbar(null);
         toolbarItems.setBackground(null);
 
-        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.more_icon, 52);
-        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.ic_clear_history, getResources().getString(R.string.clear_history));
-        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.ic_mark_as_read, getResources().getString(R.string.mark_as_unread));
-        readAllItem = moreItem.addSubItem(readAllTag, R.string.ic_mark_all_read, getResources().getString(R.string.read_all));
+        moreItem = toolbarItems.addItemWithWidth(moreTag, R.string.icon_other_vertical_dots, 52);
+        clearHistoryItem = moreItem.addSubItem(clearHistoryTag, R.string.icon_clear_history, getResources().getString(R.string.clear_history));
+        markAsReadItem = moreItem.addSubItem(markAsReadTag, R.string.icon_mark_as_read, getResources().getString(R.string.mark_as_unread));
+        readAllItem = moreItem.addSubItem(readAllTag, R.string.icon_mark_all_read, getResources().getString(R.string.read_all));
 
-        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.delete_icon, 52);
-        muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.mute_icon, 52);
-        pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.ic_pin_to_top_2, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icon_new));
+        deleteItem = toolbarItems.addItemWithWidth(leaveTag, R.string.icon_Delete, 52);
+        muteItem = toolbarItems.addItemWithWidth(muteTag, R.string.icon_mute, 52);
+        pintItem = toolbarItems.addItemWithWidth(pinTag, R.string.icon_pin_to_top, 52).setCustomTypeFace(ResourcesCompat.getFont(context, R.font.font_icons));
 
         multiSelectCounter = new NumberTextView(toolbarItems.getContext());
         multiSelectCounter.setTextSize(18);
@@ -664,20 +663,20 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             muteItem.setVisibility(View.GONE);
         } else if (hasMute) {
             muteItem.setVisibility(View.VISIBLE);
-            muteItem.setIcon(R.string.unmute_icon);
+            muteItem.setIcon(R.string.icon_speaker);
         } else if (hasUnMute) {
             muteItem.setVisibility(View.VISIBLE);
-            muteItem.setIcon(R.string.mute_icon);
+            muteItem.setIcon(R.string.icon_mute);
         }
 
         if (hasPinned && hasUnPin) {
             pintItem.setVisibility(View.GONE);
         } else if (hasPinned) {
             pintItem.setVisibility(View.VISIBLE);
-            pintItem.setIcon(R.string.ic_unpin);
+            pintItem.setIcon(R.string.icon_unpin);
         } else {
             pintItem.setVisibility(View.VISIBLE);
-            pintItem.setIcon(R.string.ic_pin_to_top_2);
+            pintItem.setIcon(R.string.icon_pin_to_top);
         }
     }
 
@@ -756,9 +755,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         IconView iconView = new IconView(context);
         iconView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         if (mute)
-            iconView.setIcon(R.string.unmute_icon);
+            iconView.setIcon(R.string.icon_speaker);
         else
-            iconView.setIcon(R.string.mute_icon);
+            iconView.setIcon(R.string.icon_mute);
         iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
         frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
@@ -888,9 +887,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         } else if (connectionState == ConnectionState.UPDATING) {
             toolbar.setTitle(getResources().getString(R.string.updating));
         } else if (connectionState == ConnectionState.IGAP) {
-            toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+            toolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         } else {
-            toolbar.setTitle(isAppRtl ? R.string.igap_fa_icon : R.string.igap_en_icon);
+            toolbar.setTitle(isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         }
     }
 
@@ -929,14 +928,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     public void checkPassCodeVisibility() {
         if (PassCode.getInstance().isPassCode()) {
             if (passCodeItem == null) {
-                passCodeItem = toolbar.addItem(passCodeTag, R.string.unlock_icon, Color.WHITE);
+                passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
             }
 
             ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
             if (ActivityMain.isLock) {
-                passCodeItem.setIcon(R.string.lock_icon);
+                passCodeItem.setIcon(R.string.icon_lock);
             } else {
-                passCodeItem.setIcon(R.string.unlock_icon);
+                passCodeItem.setIcon(R.string.icon_unlock);
             }
         } else if (passCodeItem != null) {
             passCodeItem.setVisibility(View.GONE);

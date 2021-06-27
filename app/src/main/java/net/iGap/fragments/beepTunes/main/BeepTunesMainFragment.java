@@ -124,7 +124,7 @@ public class BeepTunesMainFragment extends BaseFragment implements ToolbarListen
                 .setLogoShown(true)
                 .setListener(this)
                 .setRightSmallAvatarShown(true)
-                .setLeftIcon(R.string.back_icon);
+                .setLeftIcon(R.string.icon_back);
         viewGroup.addView(helperToolbar.getView());
         avatarHandler.getAvatar(new ParamWithAvatarType(helperToolbar.getAvatarSmall(), AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER).showMain());
     }

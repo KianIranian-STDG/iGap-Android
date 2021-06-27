@@ -45,7 +45,7 @@
             android:layout_marginBottom="@dimen/dp16"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onRetryButtonClicked()}"
-            android:text="@string/retry_icon"
+            android:text="@string/icon_retry"
             android:visibility="@{viewModel.isShowRetryView}" />
 
         <com.google.android.material.button.MaterialButton

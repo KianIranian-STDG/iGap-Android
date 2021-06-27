@@ -1,7 +1,6 @@
 package net.iGap.fragments.mobileBank;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,7 @@ public class MobileBankServiceLoanDetailFragment extends BaseMobileBankFragment<
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setRoundBackground(false)
                 .setListener(new ToolbarListener() {
                     @Override
