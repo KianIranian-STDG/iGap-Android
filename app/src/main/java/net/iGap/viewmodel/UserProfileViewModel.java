@@ -655,7 +655,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void referralTextChangeListener(String phoneNumber) {
+        referralError.set(R.string.empty_error_message);
         if (phoneNumber.startsWith("0")) {
+            referralError.set(R.string.Toast_First_0);
             phoneNumber = "";
         }
         referralNumberObservableField.set(phoneNumber);
@@ -760,7 +762,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         } else if (currentGender != gender.get()) {
             sendRequestSetGender();
         } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
-            setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
+            setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replaceAll("-", "").replaceAll(" ", ""));
         } else {
             showLoading.set(View.GONE);
         }
