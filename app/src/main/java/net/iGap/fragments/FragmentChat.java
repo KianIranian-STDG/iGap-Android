@@ -787,7 +787,7 @@ public class FragmentChat extends BaseFragment
                     searchHash.setHashString(editText.getText().toString());
                     searchHash.setPosition("");
                     if (ll_navigateHash != null) {
-                        ll_navigateHash.setVisibility(View.GONE);
+                        ll_navigateHash.setVisibility(View.VISIBLE);
                     }
                     if (viewAttachFile != null) {
                         viewAttachFile.setVisibility(View.GONE);
@@ -831,7 +831,7 @@ public class FragmentChat extends BaseFragment
                     avatarItem.setVisibility(View.VISIBLE);
                 }
                 if (pinedMessageLayout != null) {
-                    pinedMessageLayout.setVisibility(View.VISIBLE);
+                    pinedMessageLayout.setVisibility(isPinAvailable ? View.VISIBLE : View.GONE);
                 }
                 if (searchFragment != null) {
                     searchFragment.onSearchCollapsed();
@@ -1554,13 +1554,10 @@ public class FragmentChat extends BaseFragment
         };
 
         if (isCloudRoom) {
-            mHelperToolbar.getCloudChatIcon().setVisibility(View.VISIBLE);
-            mHelperToolbar.getCloudChatIcon().setImageResource(R.drawable.ic_cloud_space_blue);
+            avatarItem.setVisibility(View.VISIBLE);
+            avatarItem.setImageResource(R.drawable.ic_cloud_space_blue);
 
-            mHelperToolbar.getUserAvatarChat().setVisibility(View.GONE);
         } else {
-            mHelperToolbar.getCloudChatIcon().setVisibility(View.GONE);
-            mHelperToolbar.getUserAvatarChat().setVisibility(View.VISIBLE);
             setAvatar();
         }
 
@@ -1575,7 +1572,9 @@ public class FragmentChat extends BaseFragment
                 txtChannelMute.setText(isMuteNotification ? R.string.unmute : R.string.mute);
                 iconChannelMute.setText(isMuteNotification ? R.string.unmute_icon : R.string.mute_icon);
             }
-            iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
+            if (!mToolbar.isSearchFieldVisible()) {
+                iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
+            }
 
         }
 

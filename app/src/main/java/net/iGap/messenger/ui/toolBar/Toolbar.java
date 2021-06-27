@@ -481,7 +481,6 @@ public class Toolbar extends FrameLayout {
             public boolean onTouchEvent(MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     float x = event.getX();
-                    float y = event.getY();
                     if (x < backIcon.getWidth()) {
                         return false;
                     }
