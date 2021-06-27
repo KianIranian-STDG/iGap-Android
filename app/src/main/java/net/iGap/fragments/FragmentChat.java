@@ -801,7 +801,7 @@ public class FragmentChat extends BaseFragment
                     if (txtFloatingTime != null) {
                         txtFloatingTime.setVisibility(View.GONE);
                     }
-                    hideKeyboardView();
+                    keyboardView.setVisibility(View.GONE);
                     openSearchBox(null);
                 } else if (text.startsWith("#") && text.length() > 1) {
                     if (searchFragment != null && searchFragment.isAdded()) {
@@ -841,7 +841,6 @@ public class FragmentChat extends BaseFragment
                 hideKeyboardView();
                 searchFieldItem.setVisibility(View.GONE);
                 isSearchVisible = false;
-                Log.e(TAG, "onSearchCollapse: " + (muteIcon.getVisibility() == View.GONE ? "Gone" : "Visible"));
             }
         });
         searchFieldItem.setVisibility(View.GONE);
@@ -1412,7 +1411,7 @@ public class FragmentChat extends BaseFragment
 
         if (showKeyboardOnResume || (keyboardViewVisible && keyboardView != null && keyboardView.getCurrentMode() == KeyboardView.MODE_KEYBOARD)) {
             showPopup(KeyboardView.MODE_KEYBOARD);
-            openKeyboardInternal();
+            openKeyboardInternal(edtChat);
         }
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
@@ -3907,7 +3906,7 @@ public class FragmentChat extends BaseFragment
 
         if (isPopupShowing() && keyboardView.getCurrentMode() != KeyboardView.MODE_KEYBOARD && keyboardView.getCurrentMode() != -1) {
             showPopup(KeyboardView.MODE_KEYBOARD);
-            openKeyboardInternal();
+            openKeyboardInternal(edtChat);
         } else {
             AndroidUtils.hideKeyboard(edtChat);
             showPopup(KeyboardView.MODE_EMOJI);
@@ -4151,7 +4150,7 @@ public class FragmentChat extends BaseFragment
     private void chatMotionEvent(MotionEvent event) {
         if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
             showPopup(KeyboardView.MODE_KEYBOARD);
-            openKeyboardInternal();
+            openKeyboardInternal(edtChat);
         }
     }
 
@@ -4163,9 +4162,9 @@ public class FragmentChat extends BaseFragment
         AndroidUtils.hideKeyboard(edtChat);
     }
 
-    private void openKeyboardInternal() {
-        edtChat.requestFocus();
-        AndroidUtils.showKeyboard(edtChat);
+    private void openKeyboardInternal(EditText editText) {
+        editText.requestFocus();
+        AndroidUtils.showKeyboard(editText);
         if (!keyboardVisible) {
             G.cancelRunOnUiThread(openKeyboardRunnable);
             G.runOnUiThread(openKeyboardRunnable, 50);
@@ -6319,7 +6318,7 @@ public class FragmentChat extends BaseFragment
             edtChat.requestFocus();
 
             showPopup(KeyboardView.MODE_KEYBOARD);
-            openKeyboardInternal();
+            openKeyboardInternal(edtChat);
 
             //disable chat search when reply a message
             if (ll_Search != null && ll_Search.isShown()) goneSearchBox(edtSearchMessage);
@@ -7886,9 +7885,7 @@ public class FragmentChat extends BaseFragment
 
         searchEditText.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                layoutMute.setVisibility(View.GONE);
-                FragmentChat.this.showPopup(KeyboardView.MODE_KEYBOARD);
-                FragmentChat.this.openKeyboardInternal();
+                openKeyboardInternal(searchEditText);
             }
             return false;
         });
