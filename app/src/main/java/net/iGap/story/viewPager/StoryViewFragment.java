@@ -87,6 +87,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             Story story = new Story();
             story.setBitmap(bitmap);
             story.setUrl(itemGalleryList.get(i).path);
+            story.setTxt(itemGalleryList.get(i).getText());
             story.setStoryData(System.currentTimeMillis() - (1 * (24 - i) * 60 * 60 * 1000));
             stories.add(story);
 

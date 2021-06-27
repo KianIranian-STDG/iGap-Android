@@ -8,6 +8,7 @@ public class Story implements Serializable {
 
     private String url;
     private Bitmap bitmap;
+    private String txt;
     private long storyData;
 
     public String getUrl() {
@@ -16,6 +17,14 @@ public class Story implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
     }
 
     public boolean isVideo() {

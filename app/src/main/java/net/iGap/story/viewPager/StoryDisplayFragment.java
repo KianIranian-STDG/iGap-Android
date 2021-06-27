@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -83,6 +86,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private ConstraintLayout constraintLayout;
     private ExpandableTextView expandableTextView;
 
+
     public static StoryDisplayFragment newInstance(int position, StoryUser story) {
 
         Bundle args = new Bundle();
@@ -126,7 +130,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storyImage = view.findViewById(R.id.story_image);
         tvSend = view.findViewById(R.id.chatRoom_send_container);
         constraintLayout = view.findViewById(R.id.root_display);
-        expandableTextView =  view.findViewById(R.id.caption_text_sub_view);
+        expandableTextView = view.findViewById(R.id.caption_text_sub_view);
         return view;
     }
 
@@ -155,6 +159,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             storyDisplayVideo.setVisibility(View.GONE);
             storyDisplayVideoProgress.setVisibility(View.GONE);
             storyDisplayImage.setVisibility(View.VISIBLE);
+            if (stories.get(counter).getTxt().length()>=100){
+                expandableTextView.setTextSize(20);
+            }else if (stories.get(counter).getTxt().length()>=17){
+                expandableTextView.setTextSize(28);
+            } else {
+                expandableTextView.setTextSize(40);
+            }
+            expandableTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
+            expandableTextView.setText(stories.get(counter).getTxt());
             Glide.with(this).load(stories.get(counter).getUrl()).into(storyDisplayImage);
 
         }
@@ -227,7 +240,14 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storiesProgressView.setStoriesCountDebug(stories.size());
         storiesProgressView.setAllStoryDuration(4000L);
         storiesProgressView.setStoriesListener(this);
-
+        if (stories.get(counter).getTxt().length()>=100){
+            expandableTextView.setTextSize(20);
+        }else if (stories.get(counter).getTxt().length()>=17){
+            expandableTextView.setTextSize(28);
+        } else {
+            expandableTextView.setTextSize(40);
+        }
+        expandableTextView.setText(stories.get(counter).getTxt());
         Glide.with(this).load(storyUser.getProfilePicUrl()).circleCrop().into(storyDisplayProfilePicture);
         Glide.with(this).load(stories.get(counter).getUrl()).into(storyImage);
         storyDisplayNick.setText(storyUser.getUserName());
