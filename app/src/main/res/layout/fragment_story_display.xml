@@ -25,9 +25,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -39,7 +37,7 @@
             android:id="@+id/previous"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3" />
+            android:layout_weight="2" />
 
         <View
             android:id="@+id/next"
@@ -315,6 +313,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
+                android:id="@+id/icon_replay"
                 style="@style/myIconTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -322,23 +321,23 @@
                 android:text="@string/md_downwards_arrow"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp32"
-                app:layout_constraintBottom_toTopOf="@+id/textView4"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tv_replay"
+                app:layout_constraintEnd_toEndOf="@id/tv_replay"
+                app:layout_constraintStart_toStartOf="@id/tv_replay"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_replay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
+                android:layout_marginBottom="@dimen/dp8"
                 android:text="@string/replay"
                 android:textColor="@color/white"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/frame_story_replay"
-                app:layout_constraintStart_toStartOf="@+id/frame_story_replay"
-                app:layout_constraintTop_toBottomOf="@+id/frame_story_replay" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,17 +7,17 @@ import android.view.View;
 
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
-    private GestureDetector gestureDetecto;
+    private GestureDetector gestureDetector;
     private float startX = 0f;
     private float startY = 0f;
-    private float touchDownTime = 0L;
+    private long touchDownTime = 0L;
     private static final int SWIPE_THRESHOLD = 100;
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
     private static final long CLICK_TIME_THRESHOLD = 200L;
     private static final long TOUCH_MOVE_THRESHOLD = 150L;
 
     public OnSwipeTouchListener(Context context) {
-        gestureDetecto = new GestureDetector(context, new GestureListener());
+        gestureDetector = new GestureDetector(context, new GestureListener());
     }
 
     @Override
@@ -37,12 +37,12 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
                 }
                 break;
         }
-        return gestureDetecto.onTouchEvent(event);
+        return gestureDetector.onTouchEvent(event);
     }
 
     private boolean isAClick(float startX, float endX, float startY, float endY) {
-        boolean isTouchDuration = now() - touchDownTime < CLICK_TIME_THRESHOLD;  // short time should mean this is a click
-        boolean isTouchLength = (endX - startX) + (endY - startY) < TOUCH_MOVE_THRESHOLD; // short length should mean this is a click
+        boolean isTouchDuration = now() - touchDownTime < CLICK_TIME_THRESHOLD;  // short time mean this is a click
+        boolean isTouchLength = Math.abs(endX - startX) + Math.abs(endY - startY) < TOUCH_MOVE_THRESHOLD; // short length mean this is a click
         return isTouchDuration && isTouchLength;
     }
 
@@ -77,7 +77,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         }
     }
 
-    private float now() {
+    private long now() {
         return System.currentTimeMillis();
     }
 

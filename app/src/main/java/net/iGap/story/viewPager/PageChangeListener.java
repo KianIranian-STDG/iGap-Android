@@ -1,19 +1,18 @@
 package net.iGap.story.viewPager;
 
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.viewpager.widget.ViewPager;
 
 import static android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_FLING;
 import static android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_IDLE;
-import static android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL;
+import static androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING;
 
 public abstract class PageChangeListener implements ViewPager.OnPageChangeListener {
 
     private int pageBeforeDragging = 0;
     private int currentPage = 0;
-    private static long DEBOUNCE_TIMES = 500L;
+    private static final long DEBOUNCE_TIMES = 500L;
     private long lastTime = DEBOUNCE_TIMES + 1L;
 
     @Override
@@ -43,12 +42,10 @@ public abstract class PageChangeListener implements ViewPager.OnPageChangeListen
                     }
                 }, 300L);
 
-            case SCROLL_STATE_TOUCH_SCROLL:
+            case SCROLL_STATE_DRAGGING:
                 pageBeforeDragging = currentPage;
 
             case SCROLL_STATE_FLING:
-                Log.i("nazanin", "onPageScrollStateChanged: SCROLL_STATE_FLING");
-
 
         }
     }

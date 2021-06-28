@@ -735,9 +735,9 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         if (counter == itemGalleryList.size()) {
             Collections.sort(itemGalleryList);
-            StoryViewFragment storyViewFragment = StoryViewFragment.newInstance(itemGalleryList);
-            storyViewFragment.setItemGalleryList(itemGalleryList);
-            new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), PhotoViewer.this).popBackStack();
+            StoryViewFragment storyViewFragment = new StoryViewFragment();
+            storyViewFragment.setItemGalleryList(itemGalleryList, false);
+            new HelperFragment(getChildFragmentManager(), PhotoViewer.this).popBackStack();
             new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(true).load();
 
         }
@@ -1013,12 +1013,10 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             textStickersParentView.setDrawingCacheEnabled(true);
             textStickersParentView.setId(R.id.textstickerView);
             zoomLayout.addView(textStickersParentView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
             if (itemGalleryList.get(position).path != null && !viewHolders.containsKey(position)) {
-
-
                 String oldPath = itemGalleryList.get(position).path;
                 String finalPath = attachFile.saveGalleryPicToLocal(oldPath);
-
                 //check if old path available in selected list , replace new path with that
                 if (!oldPath.equals(finalPath)) {
                     StructBottomSheet item = textImageList.get(oldPath);
@@ -1028,15 +1026,11 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                     }
                 }
                 itemGalleryList.get(position).path = finalPath;
-
-
                 textStickersParentView.setPaintMode(false, finalPath);
-
 
             }
 
             if (!viewHolders.containsKey(position)) {
-
                 viewHolders.put(position, zoomLayout);
                 Palette.from(BitmapFactory.decodeFile(itemGalleryList.get(position).getPath())).generate(new Palette.PaletteAsyncListener() {
                     @Override
@@ -1049,18 +1043,16 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                         viewHolders.get(position).findViewById(R.id.textstickerView).setBackground(gd);
                     }
                 });
-
-
                 container.addView(zoomLayout, 0);
                 List<View> views = new ArrayList<>();
                 addedViews.put(position, views);
                 return zoomLayout;
+
             } else {
                 container.removeView(viewHolders.get(position));
                 container.addView(viewHolders.get(position), 0);
                 return viewHolders.get(position);
             }
-
 
         }
 

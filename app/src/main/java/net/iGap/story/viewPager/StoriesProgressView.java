@@ -14,7 +14,6 @@ import net.iGap.helper.LayoutCreator;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class StoriesProgressView extends LinearLayout {
 
     public StoriesProgressView(Context context, @Nullable AttributeSet attrs) {
@@ -27,8 +26,8 @@ public class StoriesProgressView extends LinearLayout {
     private boolean isReverseStart = false;
     private boolean isComplete = false;
     private StoriesListener storiesListener;
-    private List<PausableProgressBar> progressBars = new ArrayList<>();
-    private PausableProgressBar PausableProgressBar;
+    private List<StoryProgress> progressBars = new ArrayList<>();
+    private StoryProgress StoryProgress;
 
     public StoriesProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -39,23 +38,28 @@ public class StoriesProgressView extends LinearLayout {
         bindViews();
     }
 
+    public void setStoriesCount(int storiesCount) {
+        this.storiesCount = storiesCount;
+        bindViews();
+    }
+
     private void bindViews() {
         progressBars.clear();
         removeAllViews();
         for (int i = 0; i < storiesCount; i++) {
-            PausableProgressBar = createProgressBar();
-            progressBars.add(PausableProgressBar);
-            addView(PausableProgressBar);
+            StoryProgress = createProgressBar();
+            progressBars.add(StoryProgress);
+            addView(StoryProgress);
             if (i + 1 < storiesCount) {
                 addView(createSpace());
             }
         }
     }
 
-    private PausableProgressBar createProgressBar() {
-        PausableProgressBar = new PausableProgressBar(getContext(), null, 0);
-        PausableProgressBar.setLayoutParams(LayoutCreator.createLinear(0, 4, 1F));
-        return PausableProgressBar;
+    private StoryProgress createProgressBar() {
+        StoryProgress = new StoryProgress(getContext(), null, 0);
+        StoryProgress.setLayoutParams(LayoutCreator.createLinear(0, 4, 1F));
+        return StoryProgress;
     }
 
     private View createSpace() {
@@ -64,9 +68,9 @@ public class StoriesProgressView extends LinearLayout {
         return view;
     }
 
-    private PausableProgressBar.Callback callback(int index) {
+    private StoryProgress.Callback callback(int index) {
 
-        return new PausableProgressBar.Callback() {
+        return new StoryProgress.Callback() {
             @Override
             public void onStartProgress() {
                 current = index;
@@ -77,7 +81,7 @@ public class StoriesProgressView extends LinearLayout {
                 if (isReverseStart) {
                     if (storiesListener != null) storiesListener.onPrev();
                     if (0 <= current - 1) {
-                        PausableProgressBar p = progressBars.get(current - 1);
+                        StoryProgress p = progressBars.get(current - 1);
                         p.setMinWithoutCallback();
                         progressBars.get(--current).startProgress();
                     } else {
@@ -100,11 +104,6 @@ public class StoriesProgressView extends LinearLayout {
         };
     }
 
-    public void setStoriesCountDebug(int storiesCount) {
-        this.storiesCount = storiesCount;
-        bindViews();
-    }
-
     public void setStoriesListener(StoriesListener storiesListene) {
         storiesListener = storiesListene;
     }
@@ -113,18 +112,18 @@ public class StoriesProgressView extends LinearLayout {
         if (isSkipStart || isReverseStart) return;
         if (isComplete) return;
         if (current < 0) return;
-        PausableProgressBar p = progressBars.get(current);
+        StoryProgress progress = progressBars.get(current);
         isSkipStart = true;
-        p.setMax();
+        progress.setMax();
     }
 
     public void reverse() {
         if (isSkipStart || isReverseStart) return;
         if (isComplete) return;
         if (current < 0) return;
-        PausableProgressBar p = progressBars.get(current);
+        StoryProgress progress = progressBars.get(current);
         isReverseStart = true;
-        p.setMin();
+        progress.setMin();
     }
 
     public void setAllStoryDuration(long duration) {
@@ -179,7 +178,7 @@ public class StoriesProgressView extends LinearLayout {
         progressBars.get(current).resumeProgress();
     }
 
-    public PausableProgressBar getProgressWithIndex(int index) {
+    public StoryProgress getProgressWithIndex(int index) {
         return progressBars.get(index);
     }
 

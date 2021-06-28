@@ -5,7 +5,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
-
 public class PageTransformer implements ViewPager.PageTransformer {
     private float distanceMultiplier;
 

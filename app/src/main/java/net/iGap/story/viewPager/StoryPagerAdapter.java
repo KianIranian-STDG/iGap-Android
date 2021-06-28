@@ -7,17 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class StoryPagerAdapter extends FragmentStatePagerAdapter {
 
-    List<StoryUser> storyUsers = new ArrayList<>();
-
-    public StoryPagerAdapter(@NonNull FragmentManager fm) {
-        super(fm);
-    }
+    List<StoryUser> storyUsers;
 
     public StoryPagerAdapter(FragmentManager fm, List<StoryUser> storyUsers) {
         super(fm);

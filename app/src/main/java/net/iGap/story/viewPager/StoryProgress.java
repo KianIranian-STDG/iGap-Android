@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import net.iGap.R;
 
-public class PausableProgressBar extends FrameLayout {
+public class StoryProgress extends FrameLayout {
 
     private final static long DEFAULT_PROGRESS_DURATION = 4000L;
     private long duration = DEFAULT_PROGRESS_DURATION;
@@ -23,7 +23,7 @@ public class PausableProgressBar extends FrameLayout {
     private PausableScaleAnimation animation;
     private Callback callback;
 
-    public PausableProgressBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public StoryProgress(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(getContext()).inflate(R.layout.pausable_progress, this);
         frontProgressView = findViewById(R.id.front_progress);
@@ -147,7 +147,7 @@ public class PausableProgressBar extends FrameLayout {
         }
     }
 
-    interface Callback {
+    public interface Callback {
         void onStartProgress();
 
         void onFinishProgress();

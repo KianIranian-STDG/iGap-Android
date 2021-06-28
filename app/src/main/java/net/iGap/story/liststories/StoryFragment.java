@@ -13,42 +13,29 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.FragmentSetting;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
-import net.iGap.module.AttachFile;
 import net.iGap.module.Theme;
 import net.iGap.module.customView.RecyclerListView;
-import net.iGap.module.dialog.ChatAttachmentPopup;
-import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.observers.interfaces.ToolbarListener;
-import net.iGap.story.PhotoViewer;
 import net.iGap.story.StoryPagerFragment;
 import net.iGap.story.liststories.cells.AddStoryCell;
 import net.iGap.story.liststories.cells.HeaderCell;
 import net.iGap.story.liststories.cells.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Objects;
-
 public class StoryFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener {
 
     private RecyclerListView recyclerListView;
-
-    public static StoryFragment getIncense() {
-        return new StoryFragment();
-    }
-
-    public StoryFragment() {
-    }
+    private ListAdapter adapter;
+    private int rowSize;
+    private int addStoryRow;
+    private int recentHeaderRow;
+    private int recentStoryRow;
+    private int muteHeaderRow;
+    private int muteStoryRow;
 
     @Nullable
     @Override
@@ -75,10 +62,10 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         rootView.addView(recyclerListView = new RecyclerListView(getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
 
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerListView.setAdapter(new ListAdapter());
+        recyclerListView.setAdapter(adapter = new ListAdapter());
         recyclerListView.setClipToPadding(false);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
-
+        adapter.addRow();
         return rootView;
     }
 
@@ -89,31 +76,29 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         }
     }
 
-
     @Override
     public void onClick(View view, int position) {
-        if (position == 0) {
+        if (position == addStoryRow) {
             new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment()).setReplace(false).load();
-        }else {
-            AttachFile.getAllShownImagesPath(getActivity(), 3, new ChatAttachmentPopup.OnImagesGalleryPrepared() {
-                @Override
-                public void imagesList(ArrayList<StructBottomSheet> listOfAllImages) {
-                    G.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            StoryViewFragment storyViewFragment = StoryViewFragment.newInstance(listOfAllImages);
-                            storyViewFragment.setItemGalleryList(listOfAllImages);
-                            new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(true).load();
-                        }
-                    });
-                }
-            });
+        } else if (position == muteStoryRow || position == recentStoryRow) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment()).setReplace(false).load();
         }
     }
 
     private class ListAdapter extends RecyclerListView.ItemAdapter {
-        private int recentListNumber = 3;
-        private int mutedListNumber = 4;
+
+        public void addRow() {
+            rowSize = 0;
+            addStoryRow = rowSize++;
+            recentHeaderRow = rowSize++;
+            for (int i = rowSize; i < 4; i++)
+                recentStoryRow = rowSize++;
+            muteHeaderRow = rowSize++;
+            for (int i = rowSize; i < 8; i++)
+                muteStoryRow = rowSize++;
+
+            notifyDataSetChanged();
+        }
 
         @NonNull
         @Override
@@ -121,22 +106,16 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
             View cellView;
             switch (viewType) {
                 case 0:
-                    AddStoryCell addStoryCell = new AddStoryCell(context);
-                    addStoryCell.setBackgroundColor(Color.WHITE);
-                    cellView = addStoryCell;
+                    cellView = new AddStoryCell(context);
                     break;
                 case 1:
-                    HeaderCell headerCell = new HeaderCell(context);
-                    cellView = headerCell;
+                    cellView = new HeaderCell(context);
                     break;
                 case 2:
-                    StoryCell storyCell = new StoryCell(context);
-                    storyCell.setBackgroundColor(Color.WHITE);
-                    cellView = storyCell;
+                    cellView = new StoryCell(context);
                     break;
                 default:
                     cellView = new View(parent.getContext());
-                    break;
             }
             return new RecyclerListView.ItemViewHolder(cellView, StoryFragment.this);
         }
@@ -144,35 +123,48 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             int viewType = holder.getItemViewType();
-            if (viewType == 1) {
-                HeaderCell headerCell = (HeaderCell) holder.itemView;
-                if (position == 1)
-                    headerCell.setText("به روز رسانی های اخیر");
-                else
-                    headerCell.setText("به روزرسانی های بی صدا");
+            switch (viewType) {
+                case 0:
+                    AddStoryCell addStoryCell = (AddStoryCell) holder.itemView;
+                    addStoryCell.setBackgroundColor(Color.WHITE);
+                    break;
+                case 1:
+                    HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (position == recentHeaderRow) {
+                        headerCell.setText("به روز رسانی های اخیر");
+                    } else if (position == muteHeaderRow) {
+                        headerCell.setText("به روزرسانی های بی صدا");
+                    }
+                    break;
+                case 2:
+                    StoryCell storyCell = (StoryCell) holder.itemView;
+                    storyCell.setBackgroundColor(Color.WHITE);
+                    break;
+
             }
         }
 
         @Override
         public int getItemCount() {
-            return 3 + recentListNumber + mutedListNumber;
+            return rowSize;
         }
 
         @Override
         public int getItemViewType(int position) {
-            if (position == 0)
+            if (position == addStoryRow) {
                 return 0;
-            else if (position == 1 || position == recentListNumber + 2)
+            } else if (position == recentHeaderRow || position == muteHeaderRow) {
                 return 1;
-            else
+            } else if (position > recentHeaderRow && position <= recentStoryRow || position > muteHeaderRow && position <= muteStoryRow) {
                 return 2;
+            }
+            return super.getItemViewType(position);
         }
 
         @Override
         public boolean isEnable(RecyclerView.ViewHolder holder, int viewType, int position) {
             return viewType != 1;
         }
-
-
     }
+
 }
