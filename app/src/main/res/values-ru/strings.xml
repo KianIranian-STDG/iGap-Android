@@ -1339,7 +1339,7 @@
     <string name="nine_number">9</string>
     <string name="star_number">*</string>
     <string name="zero_number">0</string>
-    <string name="administrators_title">Админы</string>
+    <string name="admins_title">Админы</string>
     <string name="moderators_title">Модераторы</string>
     <string name="view_contact">Посмотреть контакт</string>
     <string name="new_group_call">Новый групповой контакт</string>

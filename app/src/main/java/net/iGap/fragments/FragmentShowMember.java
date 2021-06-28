@@ -557,10 +557,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
 
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-
                 loadMoreMember();
             }
         };
@@ -612,6 +608,9 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void loadMoreMember() {
         if (isOne) {
+            if (progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
             isOne = false;
             mCurrentUpdateCount = 0;
 

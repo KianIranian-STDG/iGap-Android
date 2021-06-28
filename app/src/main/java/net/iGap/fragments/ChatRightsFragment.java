@@ -249,7 +249,7 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setListener(this)
-                .setRightIcons(R.string.icon_sent)
+                .setRightIcons(R.string.icon_check_ok)
                 .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(R.string.new_channel))
                 .setDefaultTitle(title)

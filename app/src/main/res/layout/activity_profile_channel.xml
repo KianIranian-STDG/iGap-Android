@@ -365,7 +365,7 @@
                     android:onClick="@{()->viewModel.onAdministratorsClick()}"
                     android:padding="8dp"
                     android:visibility="gone"
-                    android:text="@string/administrators_title"
+                    android:text="@string/admins_title"
                     android:textColor="?iGapSubtitleTextColor"
                     android:textSize="@dimen/standardTextSize"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
