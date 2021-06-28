@@ -2670,5 +2670,6 @@
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
     <string name="waiting_dialog_reason_text">عدد كبير من المحاولات</string>
+    <string name="stories">histoires</string>
 
 </resources>

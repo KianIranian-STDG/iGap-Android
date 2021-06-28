@@ -18,7 +18,6 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.cache.CacheUtil;
 import com.google.android.exoplayer2.util.Util;
 
 import net.iGap.R;
@@ -26,7 +25,6 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.HelperLog;
 import net.iGap.module.structs.StructBottomSheet;
-import net.iGap.story.PhotoViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +146,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 Uri dataUri = Uri.parse(data);
                 DataSpec dataSpec = new DataSpec(dataUri, 0, 500 * 1024, null);
                 DataSource dataSource = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), getString(R.string.app_name))).createDataSource();
-                CacheUtil.ProgressListener listener = (requestLength, bytesCached, newBytesCached) -> {
+               /* CacheUtil.ProgressListener listener = (requestLength, bytesCached, newBytesCached) -> {
                     double downloadPercentage = (bytesCached * 100.0 / requestLength);
                 };
                 try {
@@ -162,7 +160,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                     );
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
             });
         }
 

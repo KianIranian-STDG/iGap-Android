@@ -2248,6 +2248,7 @@
     <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
     <string name="remove_follower">حذف دنبال کننده</string>
     <string name="hide_story">پنهان کردن استوری</string>
+    <string name="stories">histoires</string>
 
     <string name="stories_setting">تنظیمات داستان</string>
     <string name="hide_story_from">پنهان کردن داستان</string>

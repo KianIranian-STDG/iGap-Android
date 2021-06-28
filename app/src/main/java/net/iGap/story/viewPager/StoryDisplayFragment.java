@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,7 +26,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -41,7 +37,6 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -53,7 +48,6 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
     private static String EXTRA_POSITION = "EXTRA_POSITION";
@@ -125,7 +119,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         llAttach = view.findViewById(R.id.layout_attach_story);
         llSend = view.findViewById(R.id.ll_chatRoom_send);
         trackSelector = new DefaultTrackSelector();
-        simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(view.getContext(), trackSelector);
+        simpleExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();
         edtChat = view.findViewById(R.id.et_chatRoom_writeMessage);
         storyImage = view.findViewById(R.id.story_image);
         tvSend = view.findViewById(R.id.chatRoom_send_container);
@@ -159,9 +153,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             storyDisplayVideo.setVisibility(View.GONE);
             storyDisplayVideoProgress.setVisibility(View.GONE);
             storyDisplayImage.setVisibility(View.VISIBLE);
-            if (stories.get(counter).getTxt().length()>=100){
+            if (stories.get(counter).getTxt().length() >= 100) {
                 expandableTextView.setTextSize(20);
-            }else if (stories.get(counter).getTxt().length()>=17){
+            } else if (stories.get(counter).getTxt().length() >= 17) {
                 expandableTextView.setTextSize(28);
             } else {
                 expandableTextView.setTextSize(40);
@@ -183,13 +177,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             @Override
             public void onSwipeTop() {
                 Toast.makeText(getActivity(), "onSwipeTop", Toast.LENGTH_LONG).show();
-                new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
+                new HelperFragment(getChildFragmentManager(), StoryDisplayFragment.this).popBackStack();
             }
 
             @Override
             public void onSwipeBottom() {
                 Toast.makeText(getActivity(), "onSwipeBottom", Toast.LENGTH_LONG).show();
-                new HelperFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
+                new HelperFragment(getChildFragmentManager(), StoryDisplayFragment.this).popBackStack();
 
             }
 
@@ -240,9 +234,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storiesProgressView.setStoriesCountDebug(stories.size());
         storiesProgressView.setAllStoryDuration(4000L);
         storiesProgressView.setStoriesListener(this);
-        if (stories.get(counter).getTxt().length()>=100){
+        if (stories.get(counter).getTxt().length() >= 100) {
             expandableTextView.setTextSize(20);
-        }else if (stories.get(counter).getTxt().length()>=17){
+        } else if (stories.get(counter).getTxt().length() >= 17) {
             expandableTextView.setTextSize(28);
         } else {
             expandableTextView.setTextSize(40);
@@ -354,11 +348,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     public void initializePlayer() {
         if (simpleExoPlayer == null) {
-            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(requireContext());
+            simpleExoPlayer = new SimpleExoPlayer.Builder(getActivity()).build();
         } else {
             simpleExoPlayer.release();
             simpleExoPlayer = null;
-            simpleExoPlayer = ExoPlayerFactory.newSimpleInstance(requireContext());
+            simpleExoPlayer = new SimpleExoPlayer.Builder(getActivity()).build();
         }
         mediaDataSourceFactory = new CacheDataSourceFactory(
                 StoryApp.simpleCache,

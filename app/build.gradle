@@ -595,7 +595,6 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     implementation project(path: ':video')
-    implementation 'com.google.android.exoplayer:exoplayer:2.10.0'
 }
 
 configurations.all {

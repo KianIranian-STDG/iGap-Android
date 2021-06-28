@@ -1951,4 +1951,6 @@
     <string name="Submitـomment">برای مشاهده نظرسنجی باید  نظر خود را ثبت کنید</string>
     <string name="share_file_link">عوامی لنک شیئر کریں</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remove_follower">حذف دنبال کننده</string>
+    <string name="hide_story">پنهان کردن استوری</string>
 </resources>

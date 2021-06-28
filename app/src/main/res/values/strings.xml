@@ -2306,6 +2306,9 @@ Want to get it?</string>
     <string name="create_permission">ایجاد مجوز</string>
     <string name="need_permission_description">اشتراک گذاری فایل نیازمند مجوز دسترسی حافظه می باشد لطفا بعد از ایجاد مجوز فایل مورد نظر را به اشتراک گذارید.</string>
     <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
+    <string name="remove_follower">Remove Follower</string>
+    <string name="hide_story">Hide Story</string>
+    <string name="stories">histoires</string>
     <string-array name="photo_editor_emoji">
         <!-- Smiles -->
         <item>u+1f604</item>
@@ -2710,7 +2713,7 @@ Want to get it?</string>
         <item>u+1f3ad</item>
         <item>u+1f4cd</item>
         <item>u+1f6a9</item>
-</string-array>
+    </string-array>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>
