@@ -80,7 +80,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
     public void onClick(View view, int position) {
         if (position == addStoryRow) {
             new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment()).setReplace(false).load();
-        } else if (position == muteStoryRow || position == recentStoryRow) {
+        } else if (position > recentHeaderRow && position <= recentStoryRow || position > muteHeaderRow && position <= muteStoryRow) {
             new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment()).setReplace(false).load();
         }
     }
