@@ -89,7 +89,6 @@ import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
-import static net.iGap.G.context;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -430,7 +429,7 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setSearchBoxShown(true)
                 .setListener(this);

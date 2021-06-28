@@ -33,7 +33,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/background_multi_select_light"
                     android:gravity="center"
-                    android:text="@string/file_icon"
+                    android:text="@string/icon_single_file"
                     android:textColor="@color/shared_media_music_list_icon_color" />
 
                 <net.iGap.module.RadiusImageView
@@ -44,7 +44,7 @@
                     android:background="@drawable/background_multi_select_light"
                     android:gravity="center"
                     android:scaleType="centerCrop"
-                    android:text="@string/attach_icon"
+                    android:text="@string/icon_attach"
                     android:visibility="gone" />
 
                 <include

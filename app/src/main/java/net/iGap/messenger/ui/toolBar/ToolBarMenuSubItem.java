@@ -40,7 +40,7 @@ public class ToolBarMenuSubItem extends FrameLayout {
 
         iconView = new IconView(context);
         iconView.setIconColor(textColor);
-        iconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon_new));
+        iconView.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, 40, Gravity.CENTER_VERTICAL | (G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT)));
 
         textView = new TextView(context);

@@ -44,7 +44,7 @@ public class GiftStickerMainFragment extends BaseFragment {
         helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getResources().getString(R.string.gift_sticker_title))
                 .setListener(new ToolbarListener() {

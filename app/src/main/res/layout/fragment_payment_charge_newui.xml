@@ -83,7 +83,7 @@
                 android:background="@null"
                 android:gravity="center"
                 android:padding="8dp"
-                android:text="@string/md_close_button"
+                android:text="@string/icon_close"
                 android:textColor="?iGapSubtitleTextColor"
                 android:textSize="@dimen/dp24"
                 android:visibility="visible"
@@ -315,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dp2"
                     android:layout_marginRight="@dimen/dp8"
-                    android:text="@string/error_icon2"
+                    android:text="@string/icon_error"
                     android:textColor="@color/white" />
 
                 <androidx.appcompat.widget.AppCompatTextView

@@ -38,8 +38,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static net.iGap.G.context;
-
 public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM> {
 
     public enum btnActions {BRANCH_INFO, ADD_LIST}
@@ -121,7 +119,7 @@ public class ElectricityBillPayFrag extends BaseAPIViewFrag<ElectricityBillPayVM
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

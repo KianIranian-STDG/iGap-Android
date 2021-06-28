@@ -45,7 +45,7 @@
         android:layout_marginRight="@dimen/dp16"
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
-        android:text="@string/voice_call_icon"
+        android:text="@string/icon_voice_call"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

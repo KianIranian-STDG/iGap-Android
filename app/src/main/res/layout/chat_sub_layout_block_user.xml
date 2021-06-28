@@ -35,6 +35,6 @@
         android:paddingLeft="@dimen/dp20"
         android:paddingEnd="@dimen/dp20"
         android:paddingRight="@dimen/dp20"
-        android:text="@string/md_close_button" />
+        android:text="@string/icon_close" />
 
 </RelativeLayout>

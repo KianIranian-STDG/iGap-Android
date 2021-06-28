@@ -1544,7 +1544,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (isLock) {
                 iconLock.setText(getResources().getString(R.string.md_igap_lock));
             } else {
-                iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+                iconLock.setText(getResources().getString(R.string.icon_lock));
             }
         } else {
             iconLock.setVisibility(View.GONE);

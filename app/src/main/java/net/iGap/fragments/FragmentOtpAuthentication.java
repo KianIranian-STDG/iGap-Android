@@ -66,8 +66,8 @@ public abstract class FragmentOtpAuthentication extends BaseFragment implements 
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setRightIcons(R.string.check_icon)
-                .setLeftIcon(R.string.back_icon)
+                .setRightIcons(R.string.icon_sent)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(requireArguments().getString("title", getString(R.string.unknown)))
                 .setListener(this);
 

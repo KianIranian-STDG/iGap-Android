@@ -63,7 +63,7 @@ public class DataStorageFragment extends BaseFragment {
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.data_storage))
                 .setListener(new ToolbarListener() {
@@ -237,8 +237,8 @@ public class DataStorageFragment extends BaseFragment {
                 txtTitle.setText(R.string.clean_up_chat_rooms);
 
                 TextView iconTitle = dialogView.findViewById(R.id.iconDialogTitle);
-                iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext(), R.font.font_icon_old));
-                iconTitle.setText(R.string.md_clean_up);
+                iconTitle.setTypeface(ResourcesCompat.getFont(iconTitle.getContext(), R.font.font_icons));
+                iconTitle.setText(R.string.icon_clearing);
 
                 TextView txtContent = dialogView.findViewById(R.id.txtDialogContent);
                 txtContent.setText(R.string.do_you_want_to_clean_all_data_in_chat_rooms);

@@ -110,9 +110,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             if (holder.seekBar.getTag().equals(holder.mMessageID) && holder.mMessageID.equals(MusicPlayer.messageId)) {
                 if (messageOne.equals("play")) {
-                    holder.playBtn.setText(R.string.md_play_arrow);
+                    holder.playBtn.setText(R.string.icon_play);
                 } else if (messageOne.equals("pause")) {
-                    holder.playBtn.setText(R.string.md_pause_button);
+                    holder.playBtn.setText(R.string.icon_pause);
                 } else if (messageOne.equals("updateTime")) {
 
                     if (result) {
@@ -267,14 +267,14 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
             if (MusicPlayer.mp != null) {
                 if (MusicPlayer.mp.isPlaying()) {
-                    holder.playBtn.setText(R.string.md_pause_button);
+                    holder.playBtn.setText(R.string.icon_pause);
                 } else {
-                    holder.playBtn.setText(R.string.md_play_arrow);
+                    holder.playBtn.setText(R.string.icon_play);
                 }
             }
         } else {
             holder.seekBar.setProgress(0);
-            holder.playBtn.setText(R.string.md_play_arrow);
+            holder.playBtn.setText(R.string.icon_play);
         }
 
         if (HelperCalander.isPersianUnicode) {
@@ -394,10 +394,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn = new MaterialDesignTextView(view.getContext());
             playBtn.setId(R.id.txt_play_music);
             playBtn.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
-            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext(), R.font.font_icon_old));
+            playBtn.setTypeface(ResourcesCompat.getFont(playBtn.getContext(), R.font.font_icons));
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
-            playBtn.setText(R.string.md_play_arrow);
+            playBtn.setText(R.string.icon_play);
             setTextSize(playBtn, R.dimen.largeTextSize);
             playBtn.setBackgroundResource(R.drawable.background_audioitem_cover);
 

@@ -270,7 +270,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 //.setRightIcons(R.string.sort_icon)
                 .setPlayerEnable(true)
                 .setIsSharedMedia(true)
@@ -1980,7 +1980,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 if (file.exists()) {
                     holder1.messageProgress.setVisibility(View.GONE);
-                    holder1.imvPicFile.setText(getString(R.string.voice_icon));
+                    holder1.imvPicFile.setText(getString(R.string.icon_microphone_black));
 
                     try {
 
@@ -2227,7 +2227,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 File file = new File(vh.filePath);
                 if (file.exists()) {
                     vh.messageProgress.setVisibility(View.GONE);
-                    vh.iconPicFile.setText(getString(R.string.attach_icon));
+                    vh.iconPicFile.setText(getString(R.string.icon_attach));
                 } else {
                     needDownloadList.put(mList.get(position).messageId, true);
                     vh.messageProgress.setVisibility(View.VISIBLE);

@@ -107,7 +107,7 @@
                     android:layout_width="@dimen/dp48"
                     android:layout_height="@dimen/dp48"
                     style="@style/myIconTextViewStyle"
-                    android:text="@string/retry_icon"
+                    android:text="@string/icon_retry"
                     android:visibility="@{viewmodel.showRetryView}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

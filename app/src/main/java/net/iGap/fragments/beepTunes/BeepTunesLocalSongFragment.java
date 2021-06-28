@@ -60,7 +60,7 @@ public class BeepTunesLocalSongFragment extends BaseFragment implements ToolbarL
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(title)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(this);
 
         toolBarContainer.addView(helperToolbar.getView());

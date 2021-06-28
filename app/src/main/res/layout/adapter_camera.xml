@@ -29,7 +29,7 @@
                 android:layout_width="@dimen/dp100"
                 android:layout_height="@dimen/dp100"
                 style="@style/myIconTextViewStyle"
-                android:text="@string/md_camera_alt"
+                android:text="@string/icon_camera"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp32" />
         </RelativeLayout>

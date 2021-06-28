@@ -227,7 +227,7 @@ public class PaymentViewModel extends BaseAPIViewModel {
             showButtons.set(View.INVISIBLE);
             showPaymentErrorMessage.set(View.VISIBLE);
             showPaymentStatus.set(View.VISIBLE);
-            paymentStateIcon.set(R.string.close_icon);
+            paymentStateIcon.set(R.string.icon_close);
             paymentStatusTextColor.set(R.color.red);
             paymentStatus.set(payment.getMessage());
             discountVisibility.set(View.GONE);
@@ -342,14 +342,14 @@ public class PaymentViewModel extends BaseAPIViewModel {
                 paymentStatus.set(data.getMessage());
                 if (data.isPaymentSuccess()) {
                     paymentStatusTextColor.set(R.color.green);
-                    paymentStateIcon.set(R.string.check_icon);
+                    paymentStateIcon.set(R.string.icon_sent);
                     showDiscountCoupon.set(View.GONE);
                 } else if (data.isPaymentUnknown()) {
                     paymentStatusTextColor.set(R.color.orange);
-                    paymentStateIcon.set(R.string.error_icon2);
+                    paymentStateIcon.set(R.string.icon_error);
                 } else {
                     paymentStatusTextColor.set(R.color.red);
-                    paymentStateIcon.set(R.string.close_icon);
+                    paymentStateIcon.set(R.string.icon_close);
                 }
                 closeButtonColor.set(R.color.accent);
                 paymentRRN.set(data.getPaymentInfo().getRrn());
@@ -376,13 +376,13 @@ public class PaymentViewModel extends BaseAPIViewModel {
         showLoadingView.set(View.GONE);
         showPaymentStatus.set(View.VISIBLE);
         paymentStatus.set(error);
-        paymentStateIcon.set(R.string.error_icon);
+        paymentStateIcon.set(R.string.icon_error);
         paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
     }
 
     private void onFailedHandler() {
         showLoadingView.set(View.GONE);
-        paymentStateIcon.set(R.string.error_icon);
+        paymentStateIcon.set(R.string.icon_error);
         paymentStatusTextColor.set(R.color.layout_background_top_connectivity);
         showPaymentStatus.set(View.VISIBLE);
         paymentStatus.set("error");

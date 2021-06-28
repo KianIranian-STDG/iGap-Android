@@ -64,7 +64,7 @@
         android:layout_width="@dimen/dp48"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="@string/more_icon"
+        android:text="@string/icon_other_vertical_dots"
         android:textSize="@dimen/dp18"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

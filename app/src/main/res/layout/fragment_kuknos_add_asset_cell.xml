@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/add_icon_font"
+                android:text="@string/icon_add_whit_circle"
                 android:textSize="@dimen/dp32"
                 android:textColor="@color/iGapColor"
                 android:layout_marginStart="@dimen/dp10"

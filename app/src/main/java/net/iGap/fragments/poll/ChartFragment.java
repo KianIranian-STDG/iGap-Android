@@ -85,7 +85,7 @@ public class ChartFragment extends BaseFragment {
         helperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

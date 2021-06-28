@@ -230,7 +230,7 @@
             android:layout_height="@dimen/dp48"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onRetryViewClicked()}"
-            android:text="@string/retry_icon"
+            android:text="@string/icon_retry"
             android:visibility="@{viewModel.showRetryView}"
             app:layout_constraintBottom_toBottomOf="@+id/loadingView"
             app:layout_constraintEnd_toEndOf="@+id/loadingView"

@@ -147,9 +147,9 @@ public class FileManagerFragment extends BaseFragment implements ToolbarListener
                 .setContext(getActivity())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(R.string.file_manager))
-                .setRightIcons(R.string.search_icon, R.string.sort_icon)
+                .setRightIcons(R.string.icon_search, R.string.icon_sort)
                 .setListener(this);
         binding.toolbar.addView(mHelperToolbar.getView());
         setToolbarIconVisibility(false);

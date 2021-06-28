@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp12"
-        android:text="@string/check_icon"
+        android:text="@string/icon_sent"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/avatar"
         app:layout_constraintEnd_toEndOf="parent"

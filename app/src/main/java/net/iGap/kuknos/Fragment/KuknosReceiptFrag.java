@@ -108,7 +108,7 @@ public class KuknosReceiptFrag extends BaseAPIViewFrag<KuknosReceiptVM> {
                 .setContext(getContext())
                 .setDefaultTitle(getString(R.string.kuknos_receipt_bill))
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

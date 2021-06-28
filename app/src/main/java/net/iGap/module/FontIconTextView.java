@@ -25,7 +25,7 @@ public class FontIconTextView extends androidx.appcompat.widget.AppCompatTextVie
     }
 
     private void init() {
-        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon));
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         setGravity(Gravity.CENTER);
     }
 }

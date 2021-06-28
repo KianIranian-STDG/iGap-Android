@@ -61,8 +61,8 @@ public class MyQRFragment extends Fragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.share_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_share)
                 .setDefaultTitle(getString(R.string.my_qr))
                 .setListener(new ToolbarListener() {
                     @Override

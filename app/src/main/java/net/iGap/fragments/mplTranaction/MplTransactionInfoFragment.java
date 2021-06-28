@@ -249,9 +249,9 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(this)
                 .setLogoShown(true)
-                .setRightIcons(R.string.download_icon)
+                .setRightIcons(R.string.icon_download)
                 .setDefaultTitle(getResources().getString(R.string.payment_history))
-                .setLeftIcon(R.string.back_icon);
+                .setLeftIcon(R.string.icon_back);
 
         toolBarContainer.addView(toolbar.getView());
     }
@@ -266,14 +266,14 @@ public class MplTransactionInfoFragment extends BaseFragment implements ToolbarL
     private void successfulStatus() {
         statusTv.setTextColor(getResources().getColor(R.color.green));
         statusIv.setTextColor(getResources().getColor(R.color.green));
-        statusIv.setText(getResources().getString(R.string.check_icon));
+        statusIv.setText(getResources().getString(R.string.icon_sent));
         statusTv.setText(getResources().getString(R.string.successful_payment));
     }
 
     private void unsuccessfulStatus() {
         statusTv.setTextColor(getResources().getColor(R.color.red));
         statusIv.setTextColor(getResources().getColor(R.color.red));
-        statusIv.setText(getResources().getString(R.string.error_icon));
+        statusIv.setText(getResources().getString(R.string.icon_error));
         statusTv.setText(getResources().getString(R.string.unsuccessful_payment));
     }
 

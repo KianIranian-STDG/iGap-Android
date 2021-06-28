@@ -64,7 +64,7 @@ public class KuknosRestorePassFrag extends BaseAPIViewFrag<KuknosRestorePassVM> 
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {

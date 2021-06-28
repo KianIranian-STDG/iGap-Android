@@ -74,7 +74,7 @@ public class AddAllAssetAdapter extends RecyclerView.Adapter<AddAllAssetAdapter.
                 }
             });
             if (mdata.get(position).isTrusted())
-                icon.setText(R.string.check_icon);
+                icon.setText(R.string.icon_sent);
         }
     }
 

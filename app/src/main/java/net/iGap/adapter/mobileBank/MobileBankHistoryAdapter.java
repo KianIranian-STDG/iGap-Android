@@ -2,7 +2,6 @@ package net.iGap.adapter.mobileBank;
 
 import android.content.Context;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,12 +144,12 @@ public class MobileBankHistoryAdapter extends RecyclerView.Adapter<RecyclerView.
         void initView(int position) {
             if (mdata.get(position).getTransferAmount() < 0) {
                 title.setText("برداشت");
-                statusIcon.setText(R.string.bank_withdraw_ic);
+                statusIcon.setText(R.string.icon_withdrawing_money_from_card);
                 statusIcon.setTextColor(context.getResources().getColor(R.color.brown));
                 value.setTextColor(context.getResources().getColor(R.color.brown));
             } else {
                 title.setText("واریز");
-                statusIcon.setText(R.string.bank_income_ic);
+                statusIcon.setText(R.string.icon_incoming_money_to_card);
                 statusIcon.setTextColor(context.getResources().getColor(R.color.green));
                 value.setTextColor(context.getResources().getColor(R.color.green));
             }

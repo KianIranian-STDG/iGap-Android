@@ -81,7 +81,7 @@ public class FragmentCPayInquiry extends BaseFragment implements ToolbarListener
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.c_pay_title))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(this);
 
         binding.fciToolbar.addView(toolbar.getView());

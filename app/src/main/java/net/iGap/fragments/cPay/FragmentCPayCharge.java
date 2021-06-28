@@ -143,7 +143,7 @@ public class FragmentCPayCharge extends BaseAPIViewFrag<FragmentCPayChargeViewMo
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.charge))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(this);
 
         binding.toolbar.addView(toolbar.getView());

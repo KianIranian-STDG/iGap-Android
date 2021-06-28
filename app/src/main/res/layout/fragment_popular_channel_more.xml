@@ -88,7 +88,7 @@
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:text="@string/retry_icon"
+            android:text="@string/icon_retry"
             android:layout_gravity="center"
             android:textColor="?attr/iGapTitleTextColor"
             android:visibility="gone" />

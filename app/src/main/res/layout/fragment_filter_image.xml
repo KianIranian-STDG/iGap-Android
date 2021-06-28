@@ -30,7 +30,7 @@
                     android:layout_width="@dimen/dp48"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/md_close_button"
+                    android:text="@string/icon_close"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/whit_background" />
 
@@ -60,7 +60,7 @@
                     android:layout_width="@dimen/dp52"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/check_icon"
+                    android:text="@string/icon_sent"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/whit_background" />
 

@@ -24,7 +24,7 @@
                 android:layout_height="56dp"
                 android:background="@null"
                 android:gravity="center"
-                android:text="@string/play_icon"
+                android:text="@string/icon_play"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@color/toolbar_player_base_color"
                 android:textSize="@dimen/dp36"

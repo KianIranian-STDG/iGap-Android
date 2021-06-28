@@ -1156,7 +1156,7 @@ public class FragmentChat extends BaseFragment
             isMuteNotification = realmRoom.getMute();
             if (!isBot) {
                 txtChannelMute.setText(isMuteNotification ? R.string.unmute : R.string.mute);
-                iconChannelMute.setText(isMuteNotification ? R.string.unmute_icon : R.string.mute_icon);
+                iconChannelMute.setText(isMuteNotification ? R.string.icon_speaker : R.string.icon_mute);
             }
             iconMute.setVisibility(isMuteNotification ? View.VISIBLE : View.GONE);
 
@@ -1616,8 +1616,8 @@ public class FragmentChat extends BaseFragment
         mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(G.twoPaneMode ? R.string.close_icon : R.string.back_icon)
-                .setRightIcons(R.string.more_icon, R.string.voice_call_icon)
+                .setLeftIcon(G.twoPaneMode ? R.string.icon_close : R.string.icon_back)
+                .setRightIcons(R.string.icon_other_vertical_dots, R.string.icon_voice_call)
                 .setLogoShown(false)
                 .setChatRoom(true)
                 .setPlayerEnable(true)
@@ -3456,9 +3456,9 @@ public class FragmentChat extends BaseFragment
     private void showPopup(int mode) {
 
         if (mode == KeyboardView.MODE_EMOJI) {
-            changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+            changeEmojiButtonImageResource(R.string.icon_keyboard);
         } else {
-            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+            changeEmojiButtonImageResource(R.string.icon_emoji_smile);
         }
 
         if (mode != -1) {
@@ -3660,7 +3660,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void removeEditedMessage() {
-        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.icon_send));
         editTextProgress.setVisibility(View.GONE);
         edtChat.setTag(null);
         clearReplyView();
@@ -5291,7 +5291,7 @@ public class FragmentChat extends BaseFragment
         } else {
             mForwardMessages = new ArrayList<>(Arrays.asList(message));
         }
-
+        hideKeyboard();
         initAttachForward(isMessage);
         itemAdapterBottomSheetForward();
     }
@@ -5905,11 +5905,11 @@ public class FragmentChat extends BaseFragment
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
-            iconChannelMute.setText(R.string.unmute_icon);
+            iconChannelMute.setText(R.string.icon_speaker);
             iconMute.setVisibility(View.VISIBLE);
         } else {
             txtChannelMute.setText(R.string.mute);
-            iconChannelMute.setText(R.string.mute_icon);
+            iconChannelMute.setText(R.string.icon_mute);
             iconMute.setVisibility(View.GONE);
         }
     }
@@ -7045,9 +7045,9 @@ public class FragmentChat extends BaseFragment
 
             FontIconTextView replayIcon = rootView.findViewById(R.id.lcr_imv_replay);
             if (isEdit)
-                replayIcon.setText(getString(R.string.edit_icon));
+                replayIcon.setText(getString(R.string.icon_new_conversation));
             else
-                replayIcon.setText(getString(R.string.reply_icon));
+                replayIcon.setText(getString(R.string.icon_reply));
 
             ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
             TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
@@ -7132,10 +7132,10 @@ public class FragmentChat extends BaseFragment
 
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
-            iconChannelMute.setText(R.string.unmute_icon);
+            iconChannelMute.setText(R.string.icon_speaker);
         } else {
             txtChannelMute.setText(R.string.mute);
-            iconChannelMute.setText(R.string.mute_icon);
+            iconChannelMute.setText(R.string.icon_mute);
         }
     }
 

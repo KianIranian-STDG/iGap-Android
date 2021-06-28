@@ -76,7 +76,7 @@ public class PopularMoreChannelFragment extends BaseAPIViewFrag<PopularMoreChann
                 })
                 .setLogoShown(true)
                 .setDefaultTitle("")
-                .setLeftIcon(R.string.back_icon);
+                .setLeftIcon(R.string.icon_back);
 
         ((LinearLayout) view.findViewById(R.id.ll_moreChannel_toolBar)).addView(helperToolbar.getView());
 
