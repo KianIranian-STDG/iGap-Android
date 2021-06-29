@@ -106,6 +106,7 @@
     <dimen name="largeTextSize">@dimen/dp16</dimen>
     <dimen name="xlargeTextSize">@dimen/dp20</dimen>
     <dimen name="standardIconSize">@dimen/dp24</dimen>
+    <dimen name="largeIconSize">@dimen/dp32</dimen>
 
     <dimen name="toolbar_chat_avatar_size">@dimen/dp40</dimen>
     <dimen name="toolbar_txt_name_max_width">@dimen/dp140</dimen>
