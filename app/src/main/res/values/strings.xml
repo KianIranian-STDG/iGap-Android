@@ -1204,7 +1204,7 @@ Want to get it?</string>
     <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.\n\nYou can use a–z, 0–9 and underscores.\nMinimum length as 5 characters.</string>
     <string name="chat_history_for_new_member_title">Chat history for new members</string>
     <string name="permissions_title">Permissions</string>
-    <string name="administrators_title">Administrators</string>
+    <string name="admins_title">Admins</string>
     <string name="moderators_title">Moderators</string>
 
     <string name="rial">Rials</string>

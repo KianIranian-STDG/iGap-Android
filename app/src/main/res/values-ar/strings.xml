@@ -2269,7 +2269,7 @@
     <string name="nine_number">٩</string>
     <string name="star_number">*</string>
     <string name="zero_number">٠</string>
-    <string name="administrators_title">المسؤولين</string>
+    <string name="admins_title">المسؤولين</string>
     <string name="moderators_title">المشرفين</string>
     <string name="view_contact">عرض الاتصال</string>
     <string name="new_group_call">مكالمة جماعية جديدة</string>

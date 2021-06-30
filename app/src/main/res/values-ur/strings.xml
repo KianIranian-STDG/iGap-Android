@@ -1342,7 +1342,7 @@
     <string name="nine_number">٩</string>
     <string name="star_number">*</string>
     <string name="zero_number">.</string>
-    <string name="administrators_title">بەڕێوەبەران</string>
+    <string name="admins_title">بەڕێوەبەران</string>
     <string name="moderators_title">چاودێران</string>
     <string name="view_contact">نمایش­دانی بەردەنگ</string>
     <string name="new_group_call">پێوەندیی گرووپیی نوێ</string>

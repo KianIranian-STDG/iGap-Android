@@ -1342,7 +1342,7 @@
     <string name="nine_number">9</string>
     <string name="star_number">*</string>
     <string name="zero_number">.</string>
-    <string name="administrators_title">les dirigeants</string>
+    <string name="admins_title">les dirigeants</string>
     <string name="moderators_title">les surveillants</string>
     <string name="view_contact">afficher le contact</string>
     <string name="new_group_call">nouveau appel collectif</string>

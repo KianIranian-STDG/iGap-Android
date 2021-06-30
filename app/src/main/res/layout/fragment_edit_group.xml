@@ -205,7 +205,7 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
-                    android:text="@string/administrators_title"
+                    android:text="@string/admins_title"
                     android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"
