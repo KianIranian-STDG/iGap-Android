@@ -398,7 +398,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             playBtn.setGravity(CENTER);
             playBtn.setTextColor(getColor(R.color.white));
             playBtn.setText(R.string.icon_play);
-            setTextSize(playBtn, R.dimen.largeTextSize);
+            setTextSize(playBtn, R.dimen.largeIconSize);
             playBtn.setBackgroundResource(R.drawable.background_audioitem_cover);
 
             seekBar = new SeekBar(view.getContext());
