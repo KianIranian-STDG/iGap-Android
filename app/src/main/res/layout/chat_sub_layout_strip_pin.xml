@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:layoutDirection="ltr"
+    android:background="@drawable/shape_multi_select_bg"
     android:orientation="vertical">
 
     <LinearLayout

@@ -143,7 +143,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static TextView btnCloseMusic;
     private static TextView txt_music_name;
     private static TextView txt_music_info;
-    private static RemoteViews remoteViews;
+//    private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
     private static int selectedMedia = 0;
@@ -160,8 +160,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
-        if (remoteViews == null)
-            remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
+//        if (remoteViews == null)
+//            remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
@@ -335,7 +335,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+//                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
                 getNotificationManager().notify(notificationId, notification);
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -395,7 +395,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+//                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 getNotificationManager().notify(notificationId, notification);
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -448,10 +448,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-                if (remoteViews != null && mp != null) {
-                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-                    getNotificationManager().notify(notificationId, notification);
-                }
+//                if (remoteViews != null && mp != null) {
+//                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+//                    getNotificationManager().notify(notificationId, notification);
+//                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -854,7 +854,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
 
         if (HelperCalander.isPersianUnicode) {
-            txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
+//            txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
 
         isMusicPlyerEnable = true;
@@ -972,12 +972,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             PendingIntent pi = PendingIntent.getActivity(context, 555, intentFragmentMusic, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
-            remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
+//            remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
+//            remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
 
             //if (mp != null) {
             //    if (mp.isPlaying()) {
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+//            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             //    } else {
             //        remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             //    }
@@ -986,26 +986,26 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             Intent intentPrevious = new Intent(context, CustomButtonListener.class);
             intentPrevious.putExtra("mode", "previous");
             PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(context, 1, intentPrevious, 0);
-            remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
+//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
 
             Intent intentPlayPause = new Intent(context, CustomButtonListener.class);
             intentPlayPause.putExtra("mode", "play");
             PendingIntent pendingIntentPlayPause = PendingIntent.getBroadcast(context, 2, intentPlayPause, 0);
-            remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
+//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
 
             Intent intentforward = new Intent(context, CustomButtonListener.class);
             intentforward.putExtra("mode", "forward");
             PendingIntent pendingIntentforward = PendingIntent.getBroadcast(context, 3, intentforward, 0);
-            remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
+//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
 
             Intent intentClose = new Intent(context, CustomButtonListener.class);
             intentClose.putExtra("mode", "close");
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
-            remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
+//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
-                    //  .setContentText(place)
-                    .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
+//            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
+//                    //  .setContentText(place)
+//                    .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
 
         Intent intent = new Intent(context, MusicPlayer.class);
@@ -1218,9 +1218,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     }, 100);
 
                     int size = (int) context.getResources().getDimension(R.dimen.dp48);
-                    remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
+//                    remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
                 } else {
-                    remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
+//                    remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
                     // clearWallpaperLockScrean();
                     setMedaiInfoOnLockScreen(true);
                 }

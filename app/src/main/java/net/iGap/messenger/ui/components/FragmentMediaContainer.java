@@ -7,6 +7,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
@@ -68,7 +70,9 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
 
         avatarHandler = new AvatarHandler();
         fragmentView = (ViewGroup) fragment.getFragmentView();
-        fragmentView.setClipToPadding(false);
+        if (fragmentView != null) {
+            fragmentView.setClipToPadding(false);
+        }
 
         mediaContainer = new FrameLayout(context);
         mediaContainer.setTag(MEDIA_TAG);
@@ -186,20 +190,18 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
             } else {
                 setVisibilityWithAnimation(this, false);
             }
-        } else {
-
         }
     }
 
 
     private void didCallChange() {
-
         needShowCall = CallManager.getInstance().isCallAlive();
 
         if (needShowCall) {
             CallerInfo callerInfo = CallManager.getInstance().getCurrentCallerInfo();
             if (callerInfo != null) {
                 mediaContainer.setVisibility(GONE);
+                callContainer.setVisibility(VISIBLE);
                 callerName.setText(String.format("%s %s", callerInfo.name, callerInfo.lastName));
                 avatarHandler.getAvatar(new ParamWithInitBitmap(callerAvatar, callerInfo.userId).initBitmap(null).showMain());
 
@@ -256,7 +258,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
     private void setVisibilityWithAnimation(View view, boolean needShow) {
         int viewHeight;
         if (needShow)
-            viewHeight = view.getHeight();
+            viewHeight = 0;
         else
             viewHeight = -view.getHeight();
 
@@ -278,7 +280,5 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
                 view.setTranslationY(0);
             }
         });
-
-
     }
 }

@@ -174,6 +174,10 @@ public class Toolbar extends FrameLayout {
         backIcon = null;
     }
 
+    public TextView getTitleTextView() {
+        return titleTextView;
+    }
+
     public void setListener(ToolbarListener listener) {
         this.listener = listener;
     }
