@@ -828,6 +828,7 @@ public class FragmentChat extends BaseFragment
                     }
                 } else {
                     hideKeyboardView();
+                    goneSearchHashFooter();
                     if (searchFragment != null && searchFragment.isAdded()) {
                         searchFragment.onSearchCollapsed();
                     }
@@ -7610,7 +7611,7 @@ public class FragmentChat extends BaseFragment
     private void initLayoutSearchNavigation() {
         searchEditText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                closeKeyboard();
+                showPopup(-1);
                 return true;
             }
             return false;
