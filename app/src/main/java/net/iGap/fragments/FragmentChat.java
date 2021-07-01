@@ -811,7 +811,7 @@ public class FragmentChat extends BaseFragment
                 } else if (text.startsWith("#") && text.length() < 2) {
                     if (text.length() > textLength) {
                         searchFragment = SearchFragment.newInstance(mRoomId, text, true);
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.chatMainContainer, searchFragment).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.chatContainer, searchFragment).commit();
                     }
                     if (keyboardContainer != null) {
                         keyboardContainer.setVisibility(View.GONE);
@@ -7608,12 +7608,13 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutSearchNavigation() {
-//        searchEditText.setOnTouchListener((v, event) -> {
-//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                openKeyboardInternal(searchEditText);
-//            }
-//            return false;
-//        });
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                closeKeyboard();
+                return true;
+            }
+            return false;
+        });
     }
 
     private void goneSearchBox(View view) {
