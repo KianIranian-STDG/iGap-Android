@@ -802,6 +802,9 @@ public class FragmentChat extends BaseFragment
                     showPopup(KeyboardView.MODE_KEYBOARD);
                     searchHash.setHashString(editText.getText().toString());
                     searchHash.setPosition("");
+                    if (searchFragment != null) {
+                        searchFragment.onSearchCollapsed();
+                    }
                     if (ll_navigateHash != null) {
                         ll_navigateHash.setVisibility(View.VISIBLE);
                     }
