@@ -799,7 +799,6 @@ public class FragmentChat extends BaseFragment
                         initHash = true;
                         initHashView();
                     }
-                    showPopup(KeyboardView.MODE_KEYBOARD);
                     searchHash.setHashString(editText.getText().toString());
                     searchHash.setPosition("");
                     if (searchFragment != null) {
@@ -831,7 +830,9 @@ public class FragmentChat extends BaseFragment
                     }
                 } else {
                     hideKeyboardView();
-                    goneSearchHashFooter();
+                    if (ll_navigateHash != null) {
+                        ll_navigateHash.setVisibility(View.GONE);
+                    }
                     if (searchFragment != null && searchFragment.isAdded()) {
                         searchFragment.onSearchCollapsed();
                     }
