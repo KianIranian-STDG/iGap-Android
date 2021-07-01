@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -178,6 +179,7 @@ public class ToolbarItem extends FrameLayout {
         searchEditText.setBackground(null);
         searchEditText.setTextColor(Color.WHITE);
         searchEditText.setEllipsize(TextUtils.TruncateAt.END);
+        searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         searchEditText.setHintTextColor(Theme.getInstance().getDividerColor(getContext()));
 
         searchEditText.addTextChangedListener(new TextWatcher() {
