@@ -476,7 +476,7 @@ public class ToolbarItem extends FrameLayout {
 
             });
             if (openKeyboard) {
-                AndroidUtils.showKeyboard(searchEditText);
+                G.runOnUiThread(()->AndroidUtils.showKeyboard(searchEditText),200);
             }
             return true;
         }

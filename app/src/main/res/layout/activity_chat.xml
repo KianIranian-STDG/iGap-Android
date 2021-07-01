@@ -25,7 +25,6 @@
             android:id="@+id/chatContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
             android:orientation="vertical">
 
             <FrameLayout
@@ -257,7 +256,8 @@
             <FrameLayout
                 android:id="@+id/fl_chat_keyboardContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"/>
 
             <include
                 android:id="@+id/layout_bot"

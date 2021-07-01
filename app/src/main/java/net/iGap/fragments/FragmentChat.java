@@ -76,7 +76,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.ViewStubCompat;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -182,7 +181,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.BotInit;
 import net.iGap.module.ChatSendMessageUtil;
-import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileListerDialog.FileListerDialog;
@@ -538,6 +536,7 @@ public class FragmentChat extends BaseFragment
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private final ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
+    private Runnable openKeyboardRunnable;
 
     /**
      * **********************************************************************
@@ -773,6 +772,7 @@ public class FragmentChat extends BaseFragment
         mToolbar = new Toolbar(context);
 
         searchFieldItem = mToolbar.addItem(searchFieldTag, R.string.icon_search, Theme.getInstance().getTitleTextColor(getContext())).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
+            int textLength;
             @Override
             public void onSearchExpand() {
                 if (layoutMute != null) {
@@ -792,6 +792,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onTextChanged(EditText editText) {
+
                 String text = editText.getText().toString();
                 if (text.length() > 0 && !text.startsWith("#")) {
                     if (!initHash) {
@@ -808,16 +809,19 @@ public class FragmentChat extends BaseFragment
                         viewAttachFile.setVisibility(View.GONE);
                     }
                 } else if (text.startsWith("#") && text.length() < 2) {
-                    searchFragment = SearchFragment.newInstance(mRoomId, text, true);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.chatContainer, searchFragment).commit();
+                    if (text.length() > textLength) {
+                        searchFragment = SearchFragment.newInstance(mRoomId, text, true);
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.chatMainContainer, searchFragment).commit();
+                    }
+                    if (keyboardContainer != null) {
+                        keyboardContainer.setVisibility(View.GONE);
+                    }
                     if (ll_navigateHash != null) {
                         ll_navigateHash.setVisibility(View.GONE);
                     }
                     if (txtFloatingTime != null) {
                         txtFloatingTime.setVisibility(View.GONE);
                     }
-                    keyboardView.setVisibility(View.GONE);
-                    openSearchBox(null);
                 } else if (text.startsWith("#") && text.length() > 1) {
                     if (searchFragment != null && searchFragment.isAdded()) {
                         searchFragment.onTextChanged(editText.getText().toString());
@@ -828,6 +832,7 @@ public class FragmentChat extends BaseFragment
                         searchFragment.onSearchCollapsed();
                     }
                 }
+                textLength = editText.getText().length();
             }
 
             @Override
@@ -846,6 +851,7 @@ public class FragmentChat extends BaseFragment
                 if (avatarItem != null) {
                     avatarItem.setVisibility(View.VISIBLE);
                 }
+
                 if (pinedMessageLayout != null) {
                     pinedMessageLayout.setVisibility(isPinAvailable ? View.VISIBLE : View.GONE);
                 }
@@ -862,7 +868,10 @@ public class FragmentChat extends BaseFragment
             }
         });
         searchFieldItem.setVisibility(View.GONE);
-        mToolbar.setOnClickListener(view -> goToProfile());
+        mToolbar.setOnClickListener(view -> {
+            hideKeyboard();
+            goToProfile();
+        });
         mToolbar.setListener(i -> {
             switch (i) {
                 case -1:
@@ -1079,7 +1088,7 @@ public class FragmentChat extends BaseFragment
         callItem = toolbarItems.addItemWithWidth(voiceCallTag, R.string.icon_voice_call, 48);
 
         createActionMode();
-        rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60));
+        rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60,Gravity.TOP));
         notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         keyboardContainer = rootView.findViewById(R.id.fl_chat_keyboardContainer);
@@ -4063,13 +4072,6 @@ public class FragmentChat extends BaseFragment
         keyboardView.setVisibility(View.GONE);
     }
 
-    private final Runnable openKeyboardRunnable = new Runnable() {
-        @Override
-        public void run() {
-            edtChat.requestFocus();
-            AndroidUtils.showKeyboard(edtChat);
-        }
-    };
 
     private void chatMotionEvent(MotionEvent event) {
         if (/*isPopupShowing() && */event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -4086,12 +4088,22 @@ public class FragmentChat extends BaseFragment
         AndroidUtils.hideKeyboard(edtChat);
     }
 
+    private Runnable createKeyboardRunnable(EditText editText) {
+        openKeyboardRunnable = () -> {
+            editText.requestFocus();
+            AndroidUtils.showKeyboard(editText);
+        };
+        return openKeyboardRunnable;
+    }
+
     private void openKeyboardInternal(EditText editText) {
         editText.requestFocus();
         AndroidUtils.showKeyboard(editText);
         if (!keyboardVisible) {
-            G.cancelRunOnUiThread(openKeyboardRunnable);
-            G.runOnUiThread(openKeyboardRunnable, 50);
+            if (openKeyboardRunnable != null) {
+                G.cancelRunOnUiThread(openKeyboardRunnable);
+            }
+            G.runOnUiThread(createKeyboardRunnable(editText), 50);
         }
     }
 
@@ -5767,7 +5779,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void deselectMessageAndShowPinIfNeeded() {
-        if (mToolbar.isInActionMode()){
+        if (mToolbar.isInActionMode()) {
             mAdapter.deselect();
             mToolbar.hideActionToolbar();
             clearReplyView();
@@ -7596,12 +7608,12 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutSearchNavigation() {
-        searchEditText.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                openKeyboardInternal(searchEditText);
-            }
-            return false;
-        });
+//        searchEditText.setOnTouchListener((v, event) -> {
+//            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//                openKeyboardInternal(searchEditText);
+//            }
+//            return false;
+//        });
     }
 
     private void goneSearchBox(View view) {
@@ -9416,12 +9428,14 @@ public class FragmentChat extends BaseFragment
             chatContainer.addView(vgSpamUser);
         }
     }
+
     /**
      * This method changes the pinned message layout position and visibility that works in two ways for only change the position or changing the view visibility.
+     *
      * @param changeVisibility Selects that view visibility must change or not.
-     * @param dropDown For detecting direction of view positioning or in some situations will show the view visibility.
-     * @param musicIsEnable Music player is active or not.
-     * @param callIsEnable An iGap call is in progress or not.
+     * @param dropDown         For detecting direction of view positioning or in some situations will show the view visibility.
+     * @param musicIsEnable    Music player is active or not.
+     * @param callIsEnable     An iGap call is in progress or not.
      */
     private void changePinnedMessageVisibility(boolean changeVisibility, boolean dropDown, boolean musicIsEnable, boolean callIsEnable) {
         ValueAnimator animator;
