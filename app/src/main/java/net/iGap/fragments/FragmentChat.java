@@ -904,7 +904,7 @@ public class FragmentChat extends BaseFragment
                     }
                     openSearchBox(null);
                     showPopup(KeyboardView.MODE_KEYBOARD);
-                    G.handler.postDelayed(() -> editTextRequestFocus(searchEditText), 200);
+                    G.handler.postDelayed(() -> editTextRequestFocus(searchEditText), 250);
                     break;
                 case voiceCallTag:
                     if (CallManager.getInstance().getCallPeerId() == chatPeerId) {
