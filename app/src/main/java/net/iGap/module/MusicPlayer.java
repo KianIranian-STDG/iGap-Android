@@ -159,10 +159,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static boolean isRegisterSensor = false;
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
-
-//        if (remoteViews == null)
-//            remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
-
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
         }
@@ -170,8 +166,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         initLayoutTripMusic(layoutTripMusic);
 
         getAttribute();
-
-        //getOrginallWallpaper();
     }
 
     private static NotificationManager getNotificationManager() {
@@ -285,36 +279,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
-    //
-    //    private static  void getOrginallWallpaper(){
-    //
-    //        if(isGetOrginalWallpaper){
-    //            return;
-    //        }
-    //
-    //        isGetOrginalWallpaper=true;
-    //
-    //
-    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-    //
-    //            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
-    //
-    //            if (myWallpaperManager.isSetWallpaperAllowed()) {
-    //
-    //                ParcelFileDescriptor pfd = myWallpaperManager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
-    //                if (pfd != null) {
-    //                    orginalWallPaper = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
-    //                    try {
-    //                        pfd.close();
-    //                    } catch (IOException e) {
-    //                        e.printStackTrace();
-    //                    }
-    //                }
-    //            }
-    //
-    //        }
-    //    }
-
     public static void playAndPause() {
 
         if (mp != null) {
@@ -335,7 +299,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-//                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
                 getNotificationManager().notify(notificationId, notification);
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -395,7 +358,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-//                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
                 getNotificationManager().notify(notificationId, notification);
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -444,17 +406,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (txt_music_time_counter != null) {
             txt_music_time_counter.setText(zeroTime);
-        }
-
-        if (!isVoice) {
-            try {
-//                if (remoteViews != null && mp != null) {
-//                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-//                    getNotificationManager().notify(notificationId, notification);
-//                }
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
         }
 
         try {
@@ -561,10 +512,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-//        if (!canDoAction) {
-//            return;
-//        }
-//        canDoAction = false;
 
         try {
             String beforeMessageId = MusicPlayer.messageId;
@@ -712,13 +659,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
         if (!inChangeStreamType) {
-//            G.handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-////                    canDoAction = true;
-//                }
-//            }, 1000);
-
             isVoice = false;
             isPause = false;
 
@@ -972,40 +912,21 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             PendingIntent pi = PendingIntent.getActivity(context, 555, intentFragmentMusic, PendingIntent.FLAG_UPDATE_CURRENT);
 
-//            remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
-//            remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
-
-            //if (mp != null) {
-            //    if (mp.isPlaying()) {
-//            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
-            //    } else {
-            //        remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-            //    }
-            //}
-
             Intent intentPrevious = new Intent(context, CustomButtonListener.class);
             intentPrevious.putExtra("mode", "previous");
             PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(context, 1, intentPrevious, 0);
-//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
 
             Intent intentPlayPause = new Intent(context, CustomButtonListener.class);
             intentPlayPause.putExtra("mode", "play");
             PendingIntent pendingIntentPlayPause = PendingIntent.getBroadcast(context, 2, intentPlayPause, 0);
-//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
 
             Intent intentforward = new Intent(context, CustomButtonListener.class);
             intentforward.putExtra("mode", "forward");
             PendingIntent pendingIntentforward = PendingIntent.getBroadcast(context, 3, intentforward, 0);
-//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
 
             Intent intentClose = new Intent(context, CustomButtonListener.class);
             intentClose.putExtra("mode", "close");
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
-//            remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
-
-//            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
-//                    //  .setContentText(place)
-//                    .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
 
         Intent intent = new Intent(context, MusicPlayer.class);
@@ -1216,12 +1137,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                             setMedaiInfoOnLockScreen(false);
                         }
                     }, 100);
-
-                    int size = (int) context.getResources().getDimension(R.dimen.dp48);
-//                    remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
                 } else {
-//                    remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
-                    // clearWallpaperLockScrean();
                     setMedaiInfoOnLockScreen(true);
                 }
             } catch (Exception e) {
@@ -1401,10 +1317,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
             context.registerReceiver(headsetPluginReciver, filter);
-
-            //IntentFilter filterBluetooth = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            //context.registerReceiver(bluetoothCallbacks, filterBluetooth);
-
             registerDistanceSensor();
 
             isRegisterSensor = true;
@@ -1456,18 +1368,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 e.printStackTrace();
             }
 
-            //try {
-            //    context.unregisterReceiver(bluetoothCallbacks);
-            //} catch (Exception e) {
-            //    Log.e("ddddd", "music plyer  removeSensor    unregisterReceiver " + e.toString());
-            //}
-
             unRegisterDistanceSensor();
 
             remoteComponentName = null;
             remoteControlClient = null;
-
-            // clearWallpaperLockScrean();
 
         }
     }
@@ -1563,7 +1467,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle + "");
                     try {
                         metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
-                        // seMediaSesionMetaData();
 
                     } catch (Throwable e) {
                     }
@@ -1687,61 +1590,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public interface UpdateName {
         void rename();
     }
-
-
-//    private static void seMediaSesionMetaData() {
-//        if (mSession != null) {
-//
-//            MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-//            builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "aaaaaaa");
-//            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "bbbbbbb");
-//            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "ccccccccc");
-//            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 1234);
-//            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mediaThumpnail);
-//            mSession.setMetadata(builder.build());
-//
-//
-//        }
-//    }
-
-
-    /*private static void setWallpaperLockScreen(Bitmap bitmap) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
-
-            try {
-
-                if (myWallpaperManager.isSetWallpaperAllowed()) {
-                    myWallpaperManager.setImageData(bitmap, null, true, WallpaperManager.FLAG_LOCK);
-                }
-
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
-    private static void clearWallpaperLockScrean() {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-                WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
-                if (myWallpaperManager.isSetWallpaperAllowed()) {
-
-                    if (orginalWallPaper != null) {
-                        myWallpaperManager.setImageData(orginalWallPaper, null, true, WallpaperManager.FLAG_LOCK);
-                    } else {
-                        myWallpaperManager.clear(WallpaperManager.FLAG_LOCK);
-                    }
-                }
-
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     static class HeadsetPluginReciver extends BroadcastReceiver {
 

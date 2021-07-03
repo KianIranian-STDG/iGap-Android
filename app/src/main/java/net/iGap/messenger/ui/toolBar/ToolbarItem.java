@@ -426,7 +426,6 @@ public class ToolbarItem extends FrameLayout {
         if (searchContainer.getTag() != null) {
             searchContainer.setTag(null);
             searchContainer.setVisibility(GONE);
-//            searchClearButton.setVisibility(GONE);
             searchEditText.clearFocus();
             setVisibility(VISIBLE);
             if (listener != null) {
@@ -439,7 +438,6 @@ public class ToolbarItem extends FrameLayout {
         } else {
             searchContainer.setTag(1);
             searchContainer.setVisibility(VISIBLE);
-//            searchClearButton.setVisibility(VISIBLE);
             searchContainer.setAlpha(1f);
             setVisibility(GONE);
             searchEditText.setText("");
@@ -455,20 +453,9 @@ public class ToolbarItem extends FrameLayout {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    if (ignoreOnTextChange) {
-//                        ignoreOnTextChange = false;
-//                        return;
-//                    }
                     if (listener != null) {
                         listener.onTextChanged(searchEditText);
                     }
-      /*              checkClearButton();
-                    if (!currentSearchFilters.isEmpty()) {
-                        if (!TextUtils.isEmpty(searchField.getText()) && selectedFilterIndex >= 0) {
-                            selectedFilterIndex = -1;
-                            onFiltersChanged();
-                        }
-                    }*/
                 }
 
                 @Override
