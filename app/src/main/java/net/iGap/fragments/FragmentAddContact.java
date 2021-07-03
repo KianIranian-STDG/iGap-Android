@@ -387,7 +387,9 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
     public void onRightIconClickListener(View view) {
         if (pageMode == ContactMode.ADD) {
 
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact)
+                    .content(R.string.text_add_to_list_contact)
+                    .positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     addContactToServer();

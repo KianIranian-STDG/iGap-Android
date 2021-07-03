@@ -299,7 +299,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     public void Allow() throws IOException {
                         /**
                          * if contacts size is zero send request for get contacts list
-                         * for insuring that contacts not exist really or not
+                         * for insure that contacts not exist really or not
                          */
                         LoginActions.importContact();
                         prgMainLoader.setVisibility(View.GONE);
@@ -314,7 +314,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                     }
                 });
             } else {
-                LoginActions.importContact();
+//                "Following method commented to provide sending server request every time that this fragment open"
+//                LoginActions.importContact();
                 prgMainLoader.setVisibility(View.GONE);
             }
         } catch (IOException e) {
