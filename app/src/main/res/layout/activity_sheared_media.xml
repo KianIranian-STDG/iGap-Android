@@ -95,7 +95,7 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:gravity="center"
-                    android:text="@string/icon_Delete"
+                    android:text="@string/icon_delete"
                     android:textSize="@dimen/dp26" />
 
             </net.iGap.libs.rippleeffect.RippleView>

@@ -15,9 +15,11 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -177,6 +179,7 @@ public class ToolbarItem extends FrameLayout {
         searchEditText.setBackground(null);
         searchEditText.setTextColor(Color.WHITE);
         searchEditText.setEllipsize(TextUtils.TruncateAt.END);
+        searchEditText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         searchEditText.setHintTextColor(Theme.getInstance().getDividerColor(getContext()));
 
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -224,6 +227,26 @@ public class ToolbarItem extends FrameLayout {
             return;
         }
         parentToolbarItem.parentToolbar.onSearchVisibilityChanged(toggleSearch(true));
+    }
+
+    public EditText getSearchEditText() {
+        return searchEditText;
+    }
+    public void setSearchFieldText(String text) {
+        if (searchEditText == null) {
+            return;
+        }
+        searchEditText.setText(text);
+        if (!TextUtils.isEmpty(text)) {
+            searchEditText.setSelection(text.length());
+        }
+    }
+    public void removeAllSubItems() {
+        if (toolbarMenuItemLayout != null) {
+            ScrollView scrollView = (ScrollView) toolbarMenuItemLayout.getChildAt(0);
+            LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+            linearLayout.removeAllViews();
+        }
     }
 
     public ToolBarMenuSubItem addSubItem(int id, int icon, CharSequence text) {
@@ -287,7 +310,7 @@ public class ToolbarItem extends FrameLayout {
 
     public void togglePopup() {
         //todo: more conditions should add to this if statement.
-        if (toolbarMenuItemLayout == null || parentToolbarItem != null && parentToolbarItem.parentToolbar != null && !parentToolbarItem.isActionMode) {
+        if (toolbarMenuItemLayout == null || parentToolbarItem != null && parentToolbarItem.parentToolbar != null && parentToolbarItem.isActionMode && !parentToolbarItem.parentToolbar.isActionModeShowed()) {
             return;
         }
 
@@ -400,21 +423,21 @@ public class ToolbarItem extends FrameLayout {
         if (searchContainer == null) {
             return false;
         }
-        if (searchContainer.getVisibility() == VISIBLE) {
+        if (searchContainer.getTag() != null) {
+            searchContainer.setTag(null);
             searchContainer.setVisibility(GONE);
-//            searchClearButton.setVisibility(GONE);
             searchEditText.clearFocus();
+            setVisibility(VISIBLE);
             if (listener != null) {
                 listener.onSearchCollapse();
             }
             if (openKeyboard) {
                 AndroidUtils.hideKeyboard(searchEditText);
             }
-            setVisibility(VISIBLE);
             return false;
         } else {
+            searchContainer.setTag(1);
             searchContainer.setVisibility(VISIBLE);
-//            searchClearButton.setVisibility(VISIBLE);
             searchContainer.setAlpha(1f);
             setVisibility(GONE);
             searchEditText.setText("");
@@ -430,20 +453,9 @@ public class ToolbarItem extends FrameLayout {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    if (ignoreOnTextChange) {
-//                        ignoreOnTextChange = false;
-//                        return;
-//                    }
                     if (listener != null) {
                         listener.onTextChanged(searchEditText);
                     }
-      /*              checkClearButton();
-                    if (!currentSearchFilters.isEmpty()) {
-                        if (!TextUtils.isEmpty(searchField.getText()) && selectedFilterIndex >= 0) {
-                            selectedFilterIndex = -1;
-                            onFiltersChanged();
-                        }
-                    }*/
                 }
 
                 @Override
@@ -453,7 +465,7 @@ public class ToolbarItem extends FrameLayout {
 
             });
             if (openKeyboard) {
-                AndroidUtils.showKeyboard(searchEditText);
+                G.runOnUiThread(()->AndroidUtils.showKeyboard(searchEditText),200);
             }
             return true;
         }

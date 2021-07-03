@@ -105,7 +105,7 @@
                     android:layout_marginEnd="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
-                    android:text="@string/icon_Delete"
+                    android:text="@string/icon_delete"
                     android:textSize="@dimen/dp26"
                     android:textColor="@color/red"
                     app:layout_constraintEnd_toEndOf="parent"

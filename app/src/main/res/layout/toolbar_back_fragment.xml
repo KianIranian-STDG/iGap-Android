@@ -68,7 +68,7 @@
                 android:layout_marginRight="@dimen/dp10"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="@string/icon_Delete"
+                android:text="@string/icon_delete"
                 android:visibility="visible" />
 
 
