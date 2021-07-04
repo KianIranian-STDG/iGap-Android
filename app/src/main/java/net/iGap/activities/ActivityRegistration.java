@@ -35,12 +35,11 @@ public class ActivityRegistration extends ActivityEnhanced {
     public static final String showProfile = "showProfile";
 
     private RegistrationViewModel viewModel;
-    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         isOnGetPermission = true;
-        sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_registeration);
