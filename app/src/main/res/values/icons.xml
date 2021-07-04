@@ -106,5 +106,6 @@
     <string name="icon_convert_chat_to_group">\ue906</string>
     <string name="icon_export_chat">\ue907</string>
     <string name="icon_danger">\ueb17</string>
+    <string name="icon_delete_all">\ue908</string>
 
 </resources>
