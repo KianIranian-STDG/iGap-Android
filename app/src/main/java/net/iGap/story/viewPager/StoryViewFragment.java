@@ -38,7 +38,6 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.story_fragment, container, false);
         viewPager = view.findViewById(R.id.viewPager);
-        new StoryDisplayFragment(this);
         setUpPager();
         return view;
     }
@@ -109,7 +108,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             }
         }
 
-        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList);
+        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList,this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
         viewPager.setPageTransformer(true, new PageTransformer(20));

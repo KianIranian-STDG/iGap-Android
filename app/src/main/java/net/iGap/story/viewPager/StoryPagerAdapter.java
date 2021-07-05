@@ -11,17 +11,21 @@ import java.util.List;
 
 public class StoryPagerAdapter extends FragmentStatePagerAdapter {
 
-    List<StoryUser> storyUsers;
+    private List<StoryUser> storyUsers;
+    private StoryDisplayFragment.PageViewOperator pageViewOperator;
 
-    public StoryPagerAdapter(FragmentManager fm, List<StoryUser> storyUsers) {
+    public StoryPagerAdapter(FragmentManager fm, List<StoryUser> storyUsers, StoryDisplayFragment.PageViewOperator pageViewOperator) {
         super(fm);
         this.storyUsers = storyUsers;
+        this.pageViewOperator = pageViewOperator;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        return StoryDisplayFragment.newInstance(position, storyUsers.get(position));
+        StoryDisplayFragment storyDisplayFragment = StoryDisplayFragment.newInstance(position, storyUsers.get(position));
+        storyDisplayFragment.setPageViewOperator(pageViewOperator);
+        return storyDisplayFragment;
     }
 
     @Override

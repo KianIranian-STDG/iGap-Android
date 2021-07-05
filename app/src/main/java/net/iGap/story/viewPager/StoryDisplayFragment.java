@@ -44,14 +44,14 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private List<Story> stories;
     private long pressTime = 0L;
     private final long limit = 500L;
+    private int counter = 0;
+    private boolean keyboardViewVisible;
     private boolean onResumeCalled = false;
     private StoriesProgressView storiesProgressView;
-    private static PageViewOperator pageViewOperator;
-
+    private PageViewOperator pageViewOperator;
     private TextView userName, storyTime, nameFrom, descriptionFrom;
-    public AppCompatImageView storyDisplayImage, userImage, tumNailImage;
+    private AppCompatImageView storyDisplayImage, userImage, tumNailImage;
     private View previous, next;
-    private int counter = 0;
     private ConstraintLayout replayFrame;
     private LinearLayout llReplay, llAttach, llSend;
     private EventEditText edtChat;
@@ -61,28 +61,27 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private ProgressBar progressBar;
     private AtomicInteger OpenKeyboard = new AtomicInteger();
     private AtomicInteger closeKeyboard = new AtomicInteger();
-    private boolean keyboardViewVisible;
-    private  View rootView;
+    private View rootView;
 
     public static StoryDisplayFragment newInstance(int position, StoryUser storyModel) {
 
         Bundle args = new Bundle();
-
-        StoryDisplayFragment fragment = new StoryDisplayFragment(pageViewOperator);
+        StoryDisplayFragment fragment = new StoryDisplayFragment();
         args.putInt(EXTRA_POSITION, position);
         args.putSerializable(EXTRA_STORY_USER, storyModel);
         fragment.setArguments(args);
+
         return fragment;
     }
 
-    public StoryDisplayFragment(PageViewOperator pageViewOperator) {
+    public void setPageViewOperator(PageViewOperator pageViewOperator) {
         this.pageViewOperator = pageViewOperator;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        rootView= inflater.inflate(R.layout.fragment_story_display, container, false);
+        rootView = inflater.inflate(R.layout.fragment_story_display, container, false);
         assert getArguments() != null;
         position = getArguments().getInt(EXTRA_POSITION);
         storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
