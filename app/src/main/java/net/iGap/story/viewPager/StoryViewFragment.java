@@ -67,12 +67,12 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             }
             storyUserList.add(storyUser);
         } else {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 1; i++) {
                 StoryUser storyUser = new StoryUser();
                 switch (i) {
                     case 0:
                         List<Story> stories = new ArrayList<>();
-                        storyUser.setUserName("Sahar");
+                        storyUser.setUserName("Mina");
                         storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
                         for (int j = 0; j < 3; j++) {
                             Story story = new Story();
@@ -93,7 +93,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                         }
                         storyUser.setStories(stories);
                         break;
-                    case 1:
+                 /*   case 1:
                         List<Story> stories1 = new ArrayList<>();
                         Story story1 = new Story();
                         storyUser.setUserName("Mary");
@@ -102,7 +102,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                         story1.setStoryData(System.currentTimeMillis() - (1 * (24) * 60 * 60 * 1000));
                         stories1.add(story1);
                         storyUser.setStories(stories1);
-                        break;
+                        break;*/
                 }
 
                 storyUserList.add(storyUser);

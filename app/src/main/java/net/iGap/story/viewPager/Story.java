@@ -27,10 +27,6 @@ public class Story implements Serializable {
         this.txt = txt;
     }
 
-    public boolean isVideo() {
-        return url.contains(".mp4");
-    }
-
     public void setStoryData(long storyData) {
         this.storyData = storyData;
     }

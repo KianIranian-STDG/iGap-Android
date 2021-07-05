@@ -151,11 +151,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/dp4"
+                android:paddingLeft="@dimen/dp16"
                 android:paddingRight="@dimen/dp16">
 
                 <TextView
-                    android:id="@+id/replyFrom"
+                    android:id="@+id/nameFrom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp4"
@@ -168,7 +168,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/replayTo"
+                    android:id="@+id/descriptionFrom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp4"
@@ -181,7 +181,7 @@
                     android:textSize="@dimen/dp12" />
             </LinearLayout>
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/story_image"
                 style="@style/myIconTextViewStyleGray"
                 android:layout_width="@dimen/dp52"
@@ -338,6 +338,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

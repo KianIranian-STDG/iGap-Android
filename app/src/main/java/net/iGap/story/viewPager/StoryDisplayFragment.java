@@ -1,19 +1,17 @@
 package net.iGap.story.viewPager;
 
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,17 +23,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
@@ -44,10 +31,10 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.customView.EventEditText;
 import net.iGap.story.ExpandableTextView;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
@@ -58,35 +45,32 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private long pressTime = 0L;
     private final long limit = 500L;
     private boolean onResumeCalled = false;
-    /*    private boolean onVideoPrepared = false;   // for show video
-        private SimpleExoPlayer simpleExoPlayer;
-        private PlayerView storyDisplayVideo;
-        private ProgressBar storyDisplayVideoProgress;   */
-    private static PageViewOperator pageViewOperator;
     private StoriesProgressView storiesProgressView;
-    private TextView storyDisplayNick;
-    private TextView storyDisplayTime;
-    private ConstraintLayout storyOverlay;
-    public AppCompatImageView storyDisplayImage, storyDisplayProfilePicture;
+    private static PageViewOperator pageViewOperator;
+
+    private TextView userName, storyTime, nameFrom, descriptionFrom;
+    public AppCompatImageView storyDisplayImage, userImage, tumNailImage;
     private View previous, next;
     private int counter = 0;
-    TrackSelector trackSelector;
     private ConstraintLayout replayFrame;
     private LinearLayout llReplay, llAttach, llSend;
     private EventEditText edtChat;
-    private ImageView storyImage;
     private FrameLayout tvSend;
     private ConstraintLayout constraintLayout;
     private ExpandableTextView expandableTextView;
+    private ProgressBar progressBar;
+    private AtomicInteger OpenKeyboard = new AtomicInteger();
+    private AtomicInteger closeKeyboard = new AtomicInteger();
+    private boolean keyboardViewVisible;
+    private  View rootView;
 
-
-    public static StoryDisplayFragment newInstance(int position, StoryUser story) {
+    public static StoryDisplayFragment newInstance(int position, StoryUser storyModel) {
 
         Bundle args = new Bundle();
 
         StoryDisplayFragment fragment = new StoryDisplayFragment(pageViewOperator);
         args.putInt(EXTRA_POSITION, position);
-        args.putSerializable(EXTRA_STORY_USER, story);
+        args.putSerializable(EXTRA_STORY_USER, storyModel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,61 +82,71 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_story_display, container, false);
+        rootView= inflater.inflate(R.layout.fragment_story_display, container, false);
         assert getArguments() != null;
         position = getArguments().getInt(EXTRA_POSITION);
         storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
         stories = storyUser.getStories();
-//        storyDisplayVideo = view.findViewById(R.id.storyDisplayVideo);   for show video
-        storiesProgressView = view.findViewById(R.id.storiesProgressView);
-        storyDisplayImage = view.findViewById(R.id.storyDisplayImage);
-        storyDisplayNick = view.findViewById(R.id.storyDisplayNick);
-        storyDisplayProfilePicture = view.findViewById(R.id.storyDisplayProfilePicture);
-//        storyDisplayVideoProgress = view.findViewById(R.id.storyDisplayVideoProgress);     for show video
-        storyDisplayTime = view.findViewById(R.id.storyDisplayTime);
-        storyOverlay = view.findViewById(R.id.storyOverlay);
-        previous = view.findViewById(R.id.previous);
-        next = view.findViewById(R.id.next);
-        replayFrame = view.findViewById(R.id.frame_story_replay);
-        llReplay = view.findViewById(R.id.ll_replay_story);
-        llAttach = view.findViewById(R.id.layout_attach_story);
-        llSend = view.findViewById(R.id.ll_chatRoom_send);
-        trackSelector = new DefaultTrackSelector();
-//        simpleExoPlayer = new SimpleExoPlayer.Builder(getContext()).build();   for show video
-        edtChat = view.findViewById(R.id.et_chatRoom_writeMessage);
-        storyImage = view.findViewById(R.id.story_image);
-        tvSend = view.findViewById(R.id.chatRoom_send_container);
-        constraintLayout = view.findViewById(R.id.root_display);
-        expandableTextView = view.findViewById(R.id.caption_text_sub_view);
-        return view;
+        storiesProgressView = rootView.findViewById(R.id.storiesProgressView);
+        storyDisplayImage = rootView.findViewById(R.id.storyDisplayImage);
+        userName = rootView.findViewById(R.id.storyDisplayNick);
+        userImage = rootView.findViewById(R.id.storyDisplayProfilePicture);
+        storyTime = rootView.findViewById(R.id.storyDisplayTime);
+        previous = rootView.findViewById(R.id.previous);
+        next = rootView.findViewById(R.id.next);
+        replayFrame = rootView.findViewById(R.id.frame_story_replay);
+        llReplay = rootView.findViewById(R.id.ll_replay_story);
+        nameFrom = rootView.findViewById(R.id.nameFrom);
+        descriptionFrom = rootView.findViewById(R.id.descriptionFrom);
+        llAttach = rootView.findViewById(R.id.layout_attach_story);
+        llSend = rootView.findViewById(R.id.ll_chatRoom_send);
+        edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
+        tumNailImage = rootView.findViewById(R.id.story_image);
+        tvSend = rootView.findViewById(R.id.chatRoom_send_container);
+        constraintLayout = rootView.findViewById(R.id.root_display);
+        expandableTextView = rootView.findViewById(R.id.caption_text_sub_view);
+        progressBar = rootView.findViewById(R.id.storyDisplayVideoProgress);
+        return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        storyDisplayVideo.setUseController(false);        for show video
         updateStory();
         setUpUi();
-        replayFrame.setOnClickListener(view1 -> reply(true));
-        tvSend.setOnClickListener(view12 -> {
-            closeKeyboard(view);
-            resumeCurrentStory();
-            reply(false);
-        });
-        getKeyboardState();
+        setupReplay();
     }
 
-    public void updateStory() {
-/*        simpleExoPlayer.stop();
-        if (stories.get(counter).isVideo()) {
-            storyDisplayVideo.setVisibility(View.VISIBLE);
-            storyDisplayImage.setVisibility(View.GONE);
-            storyDisplayVideoProgress.setVisibility(View.VISIBLE);
-            initializePlayer();
+    @Override
+    public void onStart() {
+        super.onStart();
+        counter = restorePosition();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+        onResumeCalled = true;
+        if (counter == 0) {
+            storiesProgressView.startStories();
         } else {
-            storyDisplayVideo.setVisibility(View.GONE);
-        storyDisplayVideoProgress.setVisibility(View.GONE);*/       //for show video
+            assert getArguments() != null;
+            counter = StoryViewFragment.progressStateArray.get(getArguments().getInt(EXTRA_POSITION));
+            storiesProgressView.startStories(counter);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        storiesProgressView.abandon();
+    }
+
+    private void updateStory() {
         storyDisplayImage.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+
         if (stories.get(counter).getTxt() != null) {
             if (stories.get(counter).getTxt().length() >= 100) {
                 expandableTextView.setTextSize(20);
@@ -165,17 +159,20 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             expandableTextView.setText(stories.get(counter).getTxt());
         }
 
-
+        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
+        calendar.setTimeInMillis(stories.get(counter).getStoryData());
+        storyTime.setText(DateFormat.format(" HH:mm", calendar).toString());
+        userName.setText(storyUser.getUserName());
+        nameFrom.setText(storyUser.getUserName());
+        descriptionFrom.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
         Glide.with(this).load(stories.get(counter).getUrl()).into(storyDisplayImage);
+        Glide.with(this).load(storyUser.getProfilePicUrl()).circleCrop().into(userImage);
+        Glide.with(this).load(stories.get(counter).getUrl()).into(tumNailImage);
 
-        //   }
-
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(stories.get(counter).getStoryData());
-        storyDisplayTime.setText(DateFormat.format(" HH:mm", cal).toString());
     }
 
-    public void setUpUi() {
+    private void setUpUi() {
+
         OnSwipeTouchListener touchListener = new OnSwipeTouchListener(getActivity()) {
 
             @Override
@@ -209,12 +206,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             }
 
             @Override
-            public void onLongClick() {
-                hideStoryOverlay();
-            }
-
-
-            @Override
             public boolean onTouchView(View view, MotionEvent event) {
                 super.onTouchView(view, event);
                 switch (event.getAction()) {
@@ -223,7 +214,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                         pauseCurrentStory();
                         return false;
                     case MotionEvent.ACTION_UP:
-                        showStoryOverlay();
                         resumeCurrentStory();
                         return limit < System.currentTimeMillis() - pressTime;
                 }
@@ -231,35 +221,20 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             }
         };
-
         previous.setOnTouchListener(touchListener);
         next.setOnTouchListener(touchListener);
 
         storiesProgressView.setStoriesCount(stories.size());
         storiesProgressView.setAllStoryDuration(4000L);
         storiesProgressView.setStoriesListener(this);
-        if (stories.get(counter).getTxt() != null) {
-            if (stories.get(counter).getTxt().length() >= 100) {
-                expandableTextView.setTextSize(20);
-            } else if (stories.get(counter).getTxt().length() >= 17) {
-                expandableTextView.setTextSize(28);
-            } else {
-                expandableTextView.setTextSize(40);
-            }
-            expandableTextView.setText(stories.get(counter).getTxt());
-        }
-        Glide.with(this).load(storyUser.getProfilePicUrl()).circleCrop().into(storyDisplayProfilePicture);
-        Glide.with(this).load(stories.get(counter).getUrl()).into(storyImage);
-        storyDisplayNick.setText(storyUser.getUserName());
-
     }
 
-    private void reply(boolean visibility) {
-        if (visibility) {
+    private void setupReplay() {
+        replayFrame.setOnClickListener(view1 -> {
             openKeyBoard();
-        } else {
-            closeKeyboard(edtChat);
-        }
+            getKeyboardState();
+            pauseCurrentStory();
+        });
     }
 
     private void getKeyboardState() {
@@ -273,15 +248,34 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 llReplay.setVisibility(View.VISIBLE);
                 llAttach.setVisibility(View.VISIBLE);
                 replayFrame.setVisibility(View.GONE);
-                pauseCurrentStory();
+                keyboardViewVisible = true;
+                if (OpenKeyboard.incrementAndGet() == 1) {
+                    keyboardStateChanged(keyboardViewVisible);
+                }
+                closeKeyboard = new AtomicInteger();
                 setEdtChat();
             } else {
+
                 llReplay.setVisibility(View.INVISIBLE);
                 llAttach.setVisibility(View.INVISIBLE);
                 replayFrame.setVisibility(View.VISIBLE);
-                resumeCurrentStory();
+                keyboardViewVisible = false;
+                if (closeKeyboard.incrementAndGet() == 1) {
+                    keyboardStateChanged(keyboardViewVisible);
+                }
+                OpenKeyboard = new AtomicInteger();
             }
         });
+    }
+
+    private void keyboardStateChanged(boolean closeKeyboard) {
+        if (!closeKeyboard) {
+            closeKeyboard(rootView);
+            resumeCurrentStory();
+        } else {
+            pauseCurrentStory();
+        }
+        Log.i("nazanin", "keyboardStateChanged: " + closeKeyboard);
     }
 
     private void setEdtChat() {
@@ -310,119 +304,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        counter = restorePosition();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
-        onResumeCalled = true;
-/*        if (stories.get(counter).isVideo() && !onVideoPrepared) {
-            if (simpleExoPlayer == null) {
-                simpleExoPlayer.setPlayWhenReady(false);
-                return;
-            }
-        }
-        if (simpleExoPlayer == null)
-//            simpleExoPlayer.seekTo(5);*/  //for show video
-        if (counter == 0) {
-            storiesProgressView.startStories();
-        } else {
-            assert getArguments() != null;
-            counter = StoryViewFragment.progressStateArray.get(getArguments().getInt(EXTRA_POSITION));
-            storiesProgressView.startStories(counter);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        simpleExoPlayer.setPlayWhenReady(false);         for show video
-        storiesProgressView.abandon();
-    }
-
-  /*  public void initializePlayer() {
-        if (simpleExoPlayer == null) {
-            simpleExoPlayer = new SimpleExoPlayer.Builder(getActivity()).build();
-        } else {
-            simpleExoPlayer.release();
-            simpleExoPlayer = null;
-            simpleExoPlayer = new SimpleExoPlayer.Builder(getActivity()).build();
-        }
-        DataSource.Factory mediaDataSourceFactory = new CacheDataSourceFactory(
-                StoryApp.simpleCache,
-                new DefaultHttpDataSourceFactory(
-                        Util.getUserAgent(
-                                getContext(),
-                                Util.getUserAgent(requireContext(), getString(R.string.app_name))
-                        )
-                )
-        );
-
-        ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(mediaDataSourceFactory).createMediaSource(
-                Uri.parse(stories.get(counter).getUrl())
-        );
-
-        simpleExoPlayer.prepare(mediaSource, false, false);
-        if (onResumeCalled) {
-            simpleExoPlayer.setPlayWhenReady(true);
-        }
-
-        storyDisplayVideo.setShutterBackgroundColor(Color.BLACK);
-        storyDisplayVideo.setPlayer(simpleExoPlayer);
-
-        simpleExoPlayer.addListener(new Player.EventListener() {
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-                if (isLoading) {
-                    storyDisplayVideoProgress.setVisibility(View.VISIBLE);
-                    pressTime = System.currentTimeMillis();
-                    pauseCurrentStory();
-                } else {
-                    storyDisplayVideoProgress.setVisibility(View.GONE);
-                    storiesProgressView.getProgressWithIndex(counter).setDuration(simpleExoPlayer.getDuration() != 0 ? simpleExoPlayer.getDuration() : 8000L);
-                    onVideoPrepared = true;
-                    resumeCurrentStory();
-                }
-            }
-
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                storyDisplayVideoProgress.setVisibility(View.GONE);
-                if (counter == stories.size()) {
-                    pageViewOperator.nextPageView();
-                } else {
-                    storiesProgressView.skip();
-                }
-            }
-        });
-
-
-    }*/
-
-    public void showStoryOverlay() {
-        if (storyOverlay == null || storyOverlay.getAlpha() != 0F)
-            return;
-        storyOverlay.animate()
-                .setDuration(100)
-                .alpha(1F)
-                .start();
-    }
-
-    public void hideStoryOverlay() {
-        if (storyOverlay == null || storyOverlay.getAlpha() != 1F)
-            return;
-        storyOverlay.animate()
-                .setDuration(200)
-                .alpha(0F)
-                .start();
-
-    }
-
     public void savePosition(int pos) {
         StoryViewFragment.progressStateArray.append(position, pos);
     }
@@ -432,7 +313,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     public void pauseCurrentStory() {
-//        simpleExoPlayer.setPlayWhenReady(false);    for show video
         storiesProgressView.pause();
     }
 
@@ -457,19 +337,17 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void onComplete() {
-//        simpleExoPlayer.release();       for show video
         pageViewOperator.nextPageView();
     }
 
     public void resumeCurrentStory() {
         if (onResumeCalled) {
-//            simpleExoPlayer.setPlayWhenReady(true);     for show video
-            showStoryOverlay();
+            //  showStoryOverlay();
             storiesProgressView.resume();
         }
     }
 
-    public interface PageViewOperator extends Serializable {
+    public interface PageViewOperator {
         void backPageView();
 
         void nextPageView();
@@ -478,9 +356,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        simpleExoPlayer.release();            for show video
-        counter = 0;
-        savePosition(counter);
+        hideKeyboard();
+/*        counter = 0;
+        savePosition(counter);*/
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
     }
 }

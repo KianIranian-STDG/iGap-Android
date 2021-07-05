@@ -16,10 +16,6 @@ import java.util.List;
 
 public class StoriesProgressView extends LinearLayout {
 
-    public StoriesProgressView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
     private int storiesCount = -1;
     private int current = -1;
     private boolean isSkipStart = false;
@@ -28,6 +24,10 @@ public class StoriesProgressView extends LinearLayout {
     private StoriesListener storiesListener;
     private List<StoryProgress> progressBars = new ArrayList<>();
     private StoryProgress StoryProgress;
+
+    public StoriesProgressView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     public StoriesProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -41,6 +41,10 @@ public class StoriesProgressView extends LinearLayout {
     public void setStoriesCount(int storiesCount) {
         this.storiesCount = storiesCount;
         bindViews();
+    }
+
+    public void setStoriesListener(StoriesListener listener) {
+        storiesListener = listener;
     }
 
     private void bindViews() {
@@ -102,10 +106,6 @@ public class StoriesProgressView extends LinearLayout {
                 isSkipStart = false;
             }
         };
-    }
-
-    public void setStoriesListener(StoriesListener storiesListene) {
-        storiesListener = storiesListene;
     }
 
     public void skip() {
@@ -176,10 +176,6 @@ public class StoriesProgressView extends LinearLayout {
             return;
         }
         progressBars.get(current).resumeProgress();
-    }
-
-    public StoryProgress getProgressWithIndex(int index) {
-        return progressBars.get(index);
     }
 
     public interface StoriesListener {
