@@ -62,6 +62,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private AtomicInteger OpenKeyboard = new AtomicInteger();
     private AtomicInteger closeKeyboard = new AtomicInteger();
     private View rootView;
+    private boolean clickable;
+    private ConstraintLayout storyOverlay;
 
     public static StoryDisplayFragment newInstance(int position, StoryUser storyModel) {
 
@@ -105,6 +107,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         constraintLayout = rootView.findViewById(R.id.root_display);
         expandableTextView = rootView.findViewById(R.id.caption_text_sub_view);
         progressBar = rootView.findViewById(R.id.storyDisplayVideoProgress);
+        storyOverlay = rootView.findViewById(R.id.storyOverlay);
         return rootView;
     }
 
@@ -177,59 +180,94 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             @Override
             public void onSwipeTop() {
                 Toast.makeText(getActivity(), "onSwipeTop", Toast.LENGTH_LONG).show();
-                new HelperFragment(getChildFragmentManager(), StoryDisplayFragment.this).popBackStack();
+                new HelperFragment(getActivity().getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
             }
 
             @Override
             public void onSwipeBottom() {
                 Toast.makeText(getActivity(), "onSwipeBottom", Toast.LENGTH_LONG).show();
-                new HelperFragment(getChildFragmentManager(), StoryDisplayFragment.this).popBackStack();
+                new HelperFragment(getActivity().getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
 
             }
 
             @Override
             public void onClick(View view) {
-                if (view == next)
-                    if (counter == stories.size() - 1) {
-                        pageViewOperator.nextPageView();
-                    } else {
-                        storiesProgressView.skip();
-                    }
-                if (view == previous) {
-                    if (counter == 0) {
-                        pageViewOperator.backPageView();
-                    } else {
-                        storiesProgressView.reverse();
+                if (!clickable) {
+                    if (view == next)
+                        if (counter == stories.size() - 1) {
+                            pageViewOperator.nextPageView();
+                        } else {
+                            storiesProgressView.skip();
+                        }
+                    if (view == previous) {
+                        if (counter == 0) {
+                            pageViewOperator.backPageView();
+                        } else {
+                            storiesProgressView.reverse();
+                        }
                     }
                 }
+
             }
 
             @Override
             public boolean onTouchView(View view, MotionEvent event) {
                 super.onTouchView(view, event);
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        pressTime = System.currentTimeMillis();
-                        pauseCurrentStory();
-                        return false;
-                    case MotionEvent.ACTION_UP:
-                        resumeCurrentStory();
-                        return limit < System.currentTimeMillis() - pressTime;
+                if (!clickable) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            pressTime = System.currentTimeMillis();
+                            pauseCurrentStory();
+                            return false;
+                        case MotionEvent.ACTION_UP:
+                            showStoryOverlay();
+                            resumeCurrentStory();
+                            return limit < System.currentTimeMillis() - pressTime;
+                    }
                 }
+
                 return false;
 
             }
+
+            @Override
+            public void onLongClick() {
+                if (!clickable)
+                    hideStoryOverlay();
+            }
         };
+
         previous.setOnTouchListener(touchListener);
         next.setOnTouchListener(touchListener);
 
         storiesProgressView.setStoriesCount(stories.size());
         storiesProgressView.setAllStoryDuration(4000L);
         storiesProgressView.setStoriesListener(this);
+
+    }
+
+    public void showStoryOverlay() {
+        if (storyOverlay == null || storyOverlay.getAlpha() != 0F)
+            return;
+        storyOverlay.animate()
+                .setDuration(100)
+                .alpha(1F)
+                .start();
+    }
+
+    public void hideStoryOverlay() {
+        if (storyOverlay == null || storyOverlay.getAlpha() != 1F)
+            return;
+        storyOverlay.animate()
+                .setDuration(200)
+                .alpha(0F)
+                .start();
+
     }
 
     private void setupReplay() {
         replayFrame.setOnClickListener(view1 -> {
+            clickable = true;
             openKeyBoard();
             getKeyboardState();
             pauseCurrentStory();
@@ -271,6 +309,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         if (!closeKeyboard) {
             closeKeyboard(rootView);
             resumeCurrentStory();
+            clickable = false;
         } else {
             pauseCurrentStory();
         }
@@ -341,7 +380,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     public void resumeCurrentStory() {
         if (onResumeCalled) {
-            //  showStoryOverlay();
+            showStoryOverlay();
             storiesProgressView.resume();
         }
     }
@@ -356,6 +395,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onDestroy() {
         super.onDestroy();
         hideKeyboard();
+        closeKeyboard(rootView);
 /*        counter = 0;
         savePosition(counter);*/
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
