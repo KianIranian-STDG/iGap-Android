@@ -143,6 +143,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onPause() {
         super.onPause();
         storiesProgressView.abandon();
+        closeKeyboard(rootView);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+/*        counter = 0;
+        savePosition(counter);*/
+        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
     }
 
     private void updateStory() {
@@ -272,6 +281,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             getKeyboardState();
             pauseCurrentStory();
         });
+
     }
 
     private void getKeyboardState() {
@@ -313,7 +323,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         } else {
             pauseCurrentStory();
         }
-        Log.i("nazanin", "keyboardStateChanged: " + closeKeyboard);
     }
 
     private void setEdtChat() {
@@ -391,13 +400,4 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         void nextPageView();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        hideKeyboard();
-        closeKeyboard(rootView);
-/*        counter = 0;
-        savePosition(counter);*/
-        AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
-    }
 }
