@@ -116,7 +116,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         super.onViewCreated(view, savedInstanceState);
         updateStory();
         setUpUi();
-        setupReplay();
+        replayFrame.setOnClickListener(view1 -> {
+            setupReplay();
+        });
     }
 
     @Override
@@ -188,13 +190,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onSwipeTop() {
-                Toast.makeText(getActivity(), "onSwipeTop", Toast.LENGTH_LONG).show();
-                new HelperFragment(getActivity().getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
+                setupReplay();
             }
 
             @Override
             public void onSwipeBottom() {
-                Toast.makeText(getActivity(), "onSwipeBottom", Toast.LENGTH_LONG).show();
                 new HelperFragment(getActivity().getSupportFragmentManager(), StoryDisplayFragment.this).popBackStack();
 
             }
@@ -202,12 +202,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             @Override
             public void onClick(View view) {
                 if (!clickable) {
-                    if (view == next)
+                    if (view == next) {
                         if (counter == stories.size() - 1) {
                             pageViewOperator.nextPageView();
                         } else {
                             storiesProgressView.skip();
                         }
+                    }
                     if (view == previous) {
                         if (counter == 0) {
                             pageViewOperator.backPageView();
@@ -255,9 +256,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         next.setOnTouchListener(touchListener);
 
         storiesProgressView.setStoriesCount(stories.size());
-        storiesProgressView.setAllStoryDuration(4000L);
+        storiesProgressView.setAllStoryDuration(StoryProgress.DEFAULT_PROGRESS_DURATION);
         storiesProgressView.setStoriesListener(this);
-
     }
 
     public void showStoryOverlay() {
@@ -280,12 +280,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     private void setupReplay() {
-        replayFrame.setOnClickListener(view1 -> {
-            clickable = true;
-            openKeyBoard();
-            getKeyboardState();
-            pauseCurrentStory();
-        });
+        clickable = true;
+        openKeyBoard();
+        getKeyboardState();
+        pauseCurrentStory();
 
     }
 

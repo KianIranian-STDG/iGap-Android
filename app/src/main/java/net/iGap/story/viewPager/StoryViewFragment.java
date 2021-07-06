@@ -15,6 +15,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.module.structs.StructBottomSheet;
 
@@ -31,7 +32,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private StoryPagerAdapter pagerAdapter;
     private ArrayList<StructBottomSheet> itemGalleryList;
     private Bitmap bitmap;
-    private boolean sideStory = true;
+    private boolean sideStory = true;  // ->  To determine if I have storyList or my contacts has storyList
 
     @Nullable
     @Override
@@ -41,6 +42,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         setUpPager();
         return view;
     }
+
 
     public void setItemGalleryList(ArrayList<StructBottomSheet> itemGalleryList, boolean sideStory) {
         this.itemGalleryList = itemGalleryList;
@@ -66,12 +68,12 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             }
             storyUserList.add(storyUser);
         } else {
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 2; i++) {
                 StoryUser storyUser = new StoryUser();
                 switch (i) {
                     case 0:
                         List<Story> stories = new ArrayList<>();
-                        storyUser.setUserName("Mina");
+                        storyUser.setUserName("Contact 1");
                         storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
                         for (int j = 0; j < 3; j++) {
                             Story story = new Story();
@@ -83,7 +85,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                                     story.setUrl("https://www.koko.org/wp-content/uploads/2019/08/koko_smoky_hat1_T-phone.jpg");
                                     break;
                                 case 2:
-                                    story.setUrl("https://image.freepik.com/free-vector/shining-bokeh-overlay-background_1409-778.jpg");
+                                    story.setUrl("https://www.koko.org/wp-content/uploads/2019/08/koko_smoky_hat1_T-phone.jpg");
                                     break;
                             }
                             story.setStoryData(System.currentTimeMillis() - (1 * (24 - j) * 60 * 60 * 1000));
@@ -92,23 +94,33 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                         }
                         storyUser.setStories(stories);
                         break;
-                 /*   case 1:
+                    case 1:
                         List<Story> stories1 = new ArrayList<>();
-                        Story story1 = new Story();
-                        storyUser.setUserName("Mary");
-                        storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/2.jpg");
-                        story1.setUrl("https://image.freepik.com/free-vector/shining-bokeh-overlay-background_1409-778.jpg");
-                        story1.setStoryData(System.currentTimeMillis() - (1 * (24) * 60 * 60 * 1000));
-                        stories1.add(story1);
+                        storyUser.setUserName("Contact 2");
+                        storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
+                        for (int j = 0; j < 2; j++) {
+                            Story story1 = new Story();
+                            switch (j) {
+                                case 0:
+                                    story1.setUrl("https://image.freepik.com/free-vector/shining-bokeh-overlay-background_1409-778.jpg");
+                                    break;
+                                case 1:
+                                    story1.setUrl("https://image.freepik.com/free-vector/shining-bokeh-overlay-background_1409-778.jpg");
+                                    break;
+                            }
+                            story1.setStoryData(System.currentTimeMillis() - (1 * (24 - j) * 60 * 60 * 1000));
+                            stories1.add(story1);
+                        }
+
                         storyUser.setStories(stories1);
-                        break;*/
+                        break;
                 }
 
                 storyUserList.add(storyUser);
             }
         }
 
-        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList,this);
+        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList, this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
         viewPager.setPageTransformer(true, new PageTransformer(20));
@@ -202,7 +214,8 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 HelperLog.getInstance().setErrorLog(e);
             }
         } else {
-            //there is no next story
+            new HelperFragment(getActivity().getSupportFragmentManager(), StoryViewFragment.this).popBackStack();
+
         }
     }
 }

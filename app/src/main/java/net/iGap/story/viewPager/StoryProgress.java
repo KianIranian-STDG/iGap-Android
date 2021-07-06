@@ -15,7 +15,7 @@ import net.iGap.R;
 
 public class StoryProgress extends FrameLayout {
 
-    private final static long DEFAULT_PROGRESS_DURATION = 4000L;
+    public final static long DEFAULT_PROGRESS_DURATION = 5000L;
     private long duration = DEFAULT_PROGRESS_DURATION;
     private boolean isStarted = false;
     private View frontProgressView;
