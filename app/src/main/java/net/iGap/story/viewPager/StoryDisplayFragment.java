@@ -215,6 +215,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             storiesProgressView.reverse();
                         }
                     }
+                } else {
+                    closeKeyboard(rootView);
                 }
 
             }
@@ -233,7 +235,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                             resumeCurrentStory();
                             return limit < System.currentTimeMillis() - pressTime;
                     }
+                } else {
+                    closeKeyboard(rootView);
                 }
+
 
                 return false;
 
