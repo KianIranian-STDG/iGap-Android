@@ -6,7 +6,7 @@ import android.view.animation.Transformation;
 public class PausableScaleAnimation extends ScaleAnimation {
 
     private long elapsedAtPause = 0;
-    public static boolean isPaused = false;
+    public boolean isPaused = false;
 
     public PausableScaleAnimation(float fromX, float toX, float fromY, float toY, int pivotXType, float pivotXValue, int pivotYType, float pivotYValue) {
         super(fromX, toX, fromY, toY, pivotXType, pivotXValue, pivotYType, pivotYValue);
