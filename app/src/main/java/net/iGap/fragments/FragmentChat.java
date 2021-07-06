@@ -6985,24 +6985,26 @@ public class FragmentChat extends BaseFragment
                     HelperGetDataFromOtherApp.hasSharedData = false;
                     int permissionReadStorage = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
 
-                    if (HelperGetDataFromOtherApp.sharedList.get(0).fileType != HelperGetDataFromOtherApp.FileType.message
-                            && permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
-                        try {
-                            getStoragePermision(getActivity(), new OnGetPermission() {
-                                @Override
-                                public void Allow() throws IOException {
-                                    sendSharedData(HelperGetDataFromOtherApp.sharedList);
-                                }
+                    if (HelperGetDataFromOtherApp.sharedList.size() > 0) {
+                        if (HelperGetDataFromOtherApp.sharedList.get(0).fileType != HelperGetDataFromOtherApp.FileType.message
+                                && permissionReadStorage != PackageManager.PERMISSION_GRANTED) {
+                            try {
+                                getStoragePermision(getActivity(), new OnGetPermission() {
+                                    @Override
+                                    public void Allow() throws IOException {
+                                        sendSharedData(HelperGetDataFromOtherApp.sharedList);
+                                    }
 
-                                @Override
-                                public void deny() {
-                                }
-                            });
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                                    @Override
+                                    public void deny() {
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            sendSharedData(HelperGetDataFromOtherApp.sharedList);
                         }
-                    } else {
-                        sendSharedData(HelperGetDataFromOtherApp.sharedList);
                     }
                 }
             }
