@@ -32,7 +32,6 @@ import androidx.multidex.MultiDex;
 import com.caspian.otpsdk.context.ApplicationContext;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityEnhanced;
@@ -328,9 +327,9 @@ public class G extends ApplicationContext {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             baseContext = baseContext.createConfigurationContext(configuration);
-        } else {
-            res.updateConfiguration(configuration, res.getDisplayMetrics());
         }
+
+        res.updateConfiguration(configuration, res.getDisplayMetrics());
 
         G.context = baseContext;
 
@@ -391,7 +390,7 @@ public class G extends ApplicationContext {
 
         HelperTracker.getInstance().initMetrix(this);
 
-        Lingver.init(this, G.selectedLanguage == null ? Locale.getDefault() : new Locale(G.selectedLanguage));
+        updateResources(context);
 
         handler = new Handler();
 

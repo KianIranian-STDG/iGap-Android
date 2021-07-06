@@ -15,7 +15,6 @@ import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.yariksoffice.lingver.Lingver;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -70,6 +69,7 @@ import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
 import static net.iGap.G.selectedLanguage;
+import static net.iGap.G.updateResources;
 import static net.iGap.G.userTextSize;
 
 /**
@@ -509,7 +509,7 @@ public final class StartupActions {
                 Raad.isFA = true;
                 break;
         }
-        Lingver.getInstance().setLocale(context, selectedLanguage);
+        updateResources(context);
     }
 
     private void initializeGlobalVariables() {
