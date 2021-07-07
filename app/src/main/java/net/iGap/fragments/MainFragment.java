@@ -51,11 +51,13 @@ import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
@@ -73,6 +75,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -85,10 +88,12 @@ import net.iGap.observers.interfaces.OnVersionCallBack;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.response.ClientGetRoomListResponse;
 
 import org.jetbrains.annotations.NotNull;
+import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +104,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
 
 import static net.iGap.G.isAppRtl;
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -129,6 +135,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private final int selectCounter = 8;
     private final int markAsReadTag = 9;
     private final int readAllTag = 10;
+    private final int walletTag = 11;
     private ArrayList<View> actionModeViews = new ArrayList<>();
     private ToolbarItem passCodeItem;
     private ToolbarItem pintItem;
@@ -370,6 +377,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     }
                 });
 
+        toolbarItems.addItemWithWidth(walletTag,R.string.icon_QR_code,54);
         if (PassCode.getInstance().isPassCode()) {
             passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
@@ -383,6 +391,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     if (toolbar.isInActionMode()) {
                         disableMultiSelect();
                     }
+                    break;
+                case walletTag:
+                    onScannerClickListener();
                     break;
                 case passCodeTag:
                     if (passCodeItem == null) {
@@ -883,7 +894,33 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
     }
+    private void onScannerClickListener() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
+            }
 
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
+    }
     private void onConnectionStateChange(final ConnectionState connectionState) {
         if (connectionState == null) {
             return;

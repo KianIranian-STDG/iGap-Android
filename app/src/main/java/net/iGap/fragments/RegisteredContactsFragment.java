@@ -10,7 +10,12 @@
 
 package net.iGap.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,36 +25,45 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.collection.ArrayMap;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
+import net.iGap.activities.CallActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.HelperWallet;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.ui.components.FragmentMediaContainer;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.NumberTextView;
+import net.iGap.messenger.ui.toolBar.ToolBarMenuSubItem;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
+import net.iGap.model.PassCode;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
@@ -57,11 +71,14 @@ import net.iGap.module.Contacts;
 import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.MusicPlayer;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.ScrollingLinearLayoutManager;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.customView.CheckBox;
 import net.iGap.module.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.module.scrollbar.FastScroller;
 import net.iGap.module.scrollbar.FastScrollerBarBaseAdapter;
@@ -69,14 +86,15 @@ import net.iGap.observers.interfaces.OnContactImport;
 import net.iGap.observers.interfaces.OnContactsGetList;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnUserContactDelete;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
 import org.jetbrains.annotations.NotNull;
+import org.paygear.WalletActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,9 +102,10 @@ import java.util.List;
 
 import io.realm.Case;
 
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.helper.ContactManager.CONTACT_LIMIT;
 
-public class RegisteredContactsFragment extends BaseMainFragments implements ToolbarListener, OnContactImport, OnUserContactDelete, OnContactsGetList {
+public class RegisteredContactsFragment extends BaseMainFragments implements OnContactImport, OnUserContactDelete, OnContactsGetList {
 
     public static final int NEW_CHAT = 0;
     public static final int CONTACTS = 1;
@@ -105,16 +124,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private View btnAddNewGroup;
     private View btnAddSecretChat;
     private View btnAddNewGroupCall;
-    private View btnAddNewContact;
     private View btnDialNumber;
     private RecyclerView realmRecyclerView;
-    private Group vgInviteFriend;
     private FastScroller fastScroller;
-    private HelperToolbar mHelperToolbar;
     private ProgressBar prgWaitingLoadList, prgMainLoader;
-    private ViewGroup mLayoutMultiSelected;
-    private TextView mTxtSelectedCount;
     private ActionMode mActionMode;
+    private Toolbar contactsToolbar;
 
     private int mPageMode = NEW_CHAT;
     private boolean isCallAction = false;
@@ -127,6 +142,27 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private String searchText = "";
     private boolean isSearchEnabled;
     private int tryRequest;
+
+    private final int addUserTag = 1;
+    private final int walletTag = 2;
+    private final int passCodeTag = 3;
+    private final int multiSelectTag = 4;
+    private final int searchTag = 5;
+    private ToolBarMenuSubItem addItem;
+    private final int syncContactTag = 6;
+    private final int inviteContactTag = 7;
+    private final int moreItemTag = 8;
+    private final int deleteTag = 9;
+    private final int editTag = 10;
+    private NumberTextView multiSelectCounter;
+    private final int selectCounter = 16;
+    private ToolbarItems actionToolbar;
+    private ArrayList<ToolbarItem> actionModeViews = new ArrayList<>();
+    private ToolbarItem deleteItem;
+    private ToolbarItem editItem;
+    private ToolbarItem searchItem;
+    private ToolbarItem passCodeItem;
+    private FragmentMediaContainer mediaContainer;
 
     public static RegisteredContactsFragment newInstance(boolean isSwipe, boolean isCallAction, int pageMode) {
         RegisteredContactsFragment contactsFragment = new RegisteredContactsFragment();
@@ -163,38 +199,185 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
         realmRecyclerView = view.findViewById(R.id.recycler_view);
 
-        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+        FrameLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+        contactsToolbar = new Toolbar(getContext());
+        mediaContainer = new FragmentMediaContainer(getContext(), this);
+        mediaContainer.setListener(i -> {
+            switch (i) {
+                case FragmentMediaContainer.CALL_TAG:
+                    getActivity().startActivity(new Intent(getContext(), CallActivity.class));
+                    break;
+                case FragmentMediaContainer.MEDIA_TAG:
+                    if (!MusicPlayer.isVoice) {
+                        Intent intent = new Intent(context, ActivityMain.class);
+                        intent.putExtra(ActivityMain.openMediaPlyer, true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                    break;
+                case FragmentMediaContainer.PLAY_TAG:
+                    break;
+            }
+        });
+        ToolbarItems toolbarItems = contactsToolbar.createToolbarItems();
 
+
+        contactsToolbar.setTitle(G.isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         if (isContact) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLogoShown(true)
-                    .setLifecycleOwner(getViewLifecycleOwner())
-                    .setLeftIcon(R.string.icon_new_conversation)
-                    .setRightIcons(R.string.icon_add)
-                    .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true, R.string.icon_unlock)
-                    .setScannerVisibility(true, R.string.icon_QR_code)
-                    .setSearchBoxShown(true);
+            ToolbarItem moreItem = toolbarItems.addItemWithWidth(moreItemTag, R.string.icon_other_vertical_dots, 54);
+            addItem = moreItem.addSubItem(addUserTag, R.string.icon_add, getResources().getString(R.string.menu_add_contact));
+            moreItem.addSubItem(syncContactTag, R.string.icon_beeptunes_sync, getResources().getString(R.string.sync_contact));
+            moreItem.addSubItem(inviteContactTag, R.string.icon_add_contact, getResources().getString(R.string.Invite_Friends));
+            if (PassCode.getInstance().isPassCode()) {
+                passCodeItem = toolbarItems.addItemWithWidth(passCodeTag, R.string.icon_unlock, 54);
+            }
+        }
+        searchItem = toolbarItems.addItemWithWidth(searchTag, R.string.icon_search, 54).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
+            @Override
+            public void onSearchExpand() {
+                isSearchEnabled = true;
+                inSearchMode = true;
+                contactsToolbar.setBackIcon(new BackDrawable(true));
+            }
+
+            @Override
+            public void onSearchCollapse() {
+                isSearchEnabled = false;
+                inSearchMode = false;
+                loadContacts();
+                if (isContact) {
+                    contactsToolbar.setBackIcon(null);
+                } else {
+                    contactsToolbar.setBackIcon(new BackDrawable(false));
+                }
+            }
+
+            @Override
+            public void onTextChanged(EditText editText) {
+                String text = editText.getText().toString();
+                if (text.length() > 0) {
+                    searchText = text;
+                    loadContact(text);
+                } else {
+                    loadContacts();
+                }
+            }
+        });
+
+        if (!isContact) {
+            contactsToolbar.setBackIcon(new BackDrawable(false));
+            toolbarItems.addItemWithWidth(addUserTag, R.string.icon_add_contact, 54);
         } else {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLifecycleOwner(getViewLifecycleOwner())
-                    .setLogoShown(true)
-                    .setLeftIcon(R.string.icon_back)
-                    .setRightIcons(R.string.icon_add)
-                    .setSearchBoxShown(true);
+            toolbarItems.addItemWithWidth(walletTag, R.string.icon_QR_code, 54);
         }
-
         if (mPageMode == CALL) {
-            mHelperToolbar.setDefaultTitle(getString(R.string.make_call));
+            contactsToolbar.setTitle(getString(R.string.make_call));
         } else if (mPageMode == ADD) {
-            mHelperToolbar.setDefaultTitle(getString(R.string.create_chat));
+            contactsToolbar.setTitle(getString(R.string.create_chat));
         }
+        createActionMode();
+        toolbarLayout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM,0,60,0,0));
+        toolbarLayout.addView(contactsToolbar);
+        contactsToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    if (!isContact) {
+                        if (!contactsToolbar.isSearchFieldVisible()) {
+                            popBackStackFragment();
+                        }
+                    } else {
+                        if (isMultiSelect) {
+                            contactsToolbar.hideActionToolbar();
+                            contactsToolbar.setBackIcon(null);
+                            setMultiSelectState(isMultiSelect);
+                        }
+                    }
+                    break;
+                case editTag:
+                    if (results != null) {
+                        for (RealmContacts realmContacts : results) {
+                            if (realmContacts.getPhone() == (Long) selectedList.keySet().toArray()[0]) {
+                                FragmentAddContact fragment = FragmentAddContact.newInstance(
+                                        realmContacts.getId(), "+" + realmContacts.getPhone(), realmContacts.getFirst_name(), realmContacts.getLast_name(), FragmentAddContact.ContactMode.EDIT, (name1, family1) -> loadContacts()
+                                );
+                                if (getActivity() != null)
+                                    new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                                contactsToolbar.hideActionToolbar();
+                                setMultiSelectState(isMultiSelect);
+                                contactsToolbar.setBackIcon(null);
+                                return;
+                            }
+                        }
+                    }
+                    break;
+                case deleteTag:
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive((dialog, which) -> {
 
-        toolbarLayout.addView(mHelperToolbar.getView());
-        mHelperToolbar.setListener(this);
+                        for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
+                            new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
+                        }
+                        setMultiSelectState(true);
+                        contactsToolbar.hideActionToolbar();
+                        contactsToolbar.setBackIcon(null);
+                    }).negativeText(R.string.B_cancel).show();
+                    break;
+                case addUserTag:
+                    if (mActionMode != null) {
+                        mActionMode.finish();
+                    }
+                    if (getActivity() != null) {
+                        FragmentAddContact fragment = FragmentAddContact.newInstance(
+                                null, FragmentAddContact.ContactMode.ADD
+                        );
+                        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+                    }
+                    break;
+                case multiSelectTag:
+                    showDialog();
+                    break;
+                case walletTag:
+                    onWalletClickListener();
+                    break;
+                case syncContactTag:
+                    if (isMultiSelect) setMultiSelectState(true);
+                    ContactUtils.syncContacts();
+                    break;
+                case inviteContactTag:
+                    try {
+                        HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
+                            @Override
+                            public void Allow() {
+                                HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
+                                new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load();
+                            }
 
+                            @Override
+                            public void deny() {
+
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case passCodeTag:
+                    if (passCodeItem == null) {
+                        return;
+                    }
+                    if (ActivityMain.isLock) {
+                        passCodeItem.setIcon(R.string.icon_unlock);
+                        ActivityMain.isLock = false;
+                        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+                    } else {
+                        passCodeItem.setIcon(R.string.icon_lock);
+                        ActivityMain.isLock = true;
+                        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
+                    }
+
+                    checkPassCodeVisibility();
+                    break;
+            }
+        });
         if (isContact) {
             Contacts.localPhoneContactId = 0;
             Contacts.getContact = true;
@@ -202,25 +385,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
 
         prgMainLoader = view.findViewById(R.id.fc_loader_main);
-
-        vgInviteFriend = view.findViewById(R.id.menu_layout_inviteFriend);
-
         btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
-        btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);
         btnDialNumber = view.findViewById(R.id.menu_layout_btn_dial_number);
-
         btnAddSecretChat = view.findViewById(R.id.menu_layout_btn_secret_chat);
         btnAddNewGroup = view.findViewById(R.id.menu_layout_add_new_group);
         btnAddNewChannel = view.findViewById(R.id.menu_layout_add_new_channel);
         fastScroller = view.findViewById(R.id.fs_contact_fastScroller);
-
-        mLayoutMultiSelected = view.findViewById(R.id.fc_layout_selected_mode);
-        mTxtSelectedCount = view.findViewById(R.id.fc_selected_mode_txt_counter);
-        AppCompatTextView mBtnDeleteSelected = view.findViewById(R.id.fc_selected_mode_btn_delete);
-        MaterialDesignTextView mBtnCancelSelected = view.findViewById(R.id.fc_selected_mode_btn_cancel);
-        mTxtSelectedCount.setText(0 + " " + getString(R.string.item_selected));
-
-
         prgWaitingLoadList = view.findViewById(R.id.prgWaiting_loadList);
 
         realmRecyclerView.setAdapter(new ContactListAdapter());
@@ -230,40 +400,18 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
         switch (mPageMode) {
             case CALL:
-                btnAddNewContact.setVisibility(View.VISIBLE);
                 btnDialNumber.setVisibility(View.GONE);
-                vgInviteFriend.setVisibility(View.GONE);
-                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+                if (addItem != null) {
+//                    addItem.setVisibility(View.GONE);
+                }
                 break;
             case ADD:
                 btnAddNewChannel.setVisibility(View.VISIBLE);
                 btnAddNewGroup.setVisibility(View.VISIBLE);
-                vgInviteFriend.setVisibility(View.GONE);
                 break;
             case CONTACTS:
 
         }
-
-        vgInviteFriend.setOnClickListener(v -> {
-            try {
-                HelperPermission.getContactPermision(getContext(), new OnGetPermission() {
-                    @Override
-                    public void Allow() {
-                        HelperTracker.sendTracker(HelperTracker.TRACKER_INVITE_FRIEND);
-                        new HelperFragment(getActivity().getSupportFragmentManager(), new LocalContactFragment()).setReplace(false).load();
-                    }
-
-                    @Override
-                    public void deny() {
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        });
 
         realmRecyclerView = view.findViewById(R.id.recycler_view);
         realmRecyclerView.setLayoutManager(new ScrollingLinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false, 1000));
@@ -282,14 +430,12 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 isMultiSelect = true;
                 refreshAdapter(0, true);
 
-                if (!mLayoutMultiSelected.isShown()) {
+                if (!contactsToolbar.isInActionMode()) {
                     setPageShowingMode(4);
                 }
             }
             multi_select(position);
         };
-
-        /*fastItemAdapter = new FastItemAdapter();*/
 
         try {
             if (getPermission && isContact) {
@@ -359,37 +505,10 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             }
         });
 
-        btnAddNewContact.setOnClickListener(this::onRightIconClickListener);
-
-        mBtnDeleteSelected.setOnClickListener(v -> {
-
-            if (selectedList.size() == 0) {
-                Toast.makeText(getContext(), getString(R.string.no_item_selected), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
-                        new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
-                    }
-                    setMultiSelectState(true);
-                }
-            }).negativeText(R.string.B_cancel).show();
-
-        });
-
-
-        mBtnCancelSelected.setOnClickListener(v -> {
-            setMultiSelectState(isMultiSelect);
-        });
-
         //todo: fixed it ,effect in load time
         if (isMultiSelect) {
             refreshAdapter(0, true);
-            if (!mLayoutMultiSelected.isShown()) {
+            if (!contactsToolbar.isInActionMode()) {
                 Log.wtf(this.getClass().getName(), "setPageShowingMode 4");
                 setPageShowingMode(4);
             }
@@ -400,45 +519,68 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     private void setPageShowingMode(int mode) {
         if (mode == 0 || mode == 1) { //contact mode
             btnAddNewGroupCall.setVisibility(View.GONE);
-            btnAddNewContact.setVisibility(View.GONE);
             btnDialNumber.setVisibility(View.GONE);
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
             btnAddSecretChat.setVisibility(View.GONE);
-            mLayoutMultiSelected.setVisibility(View.GONE);
-            vgInviteFriend.setVisibility(View.VISIBLE);
         } else if (mode == 2) { // call mode
-
             btnAddNewGroupCall.setVisibility(View.VISIBLE);
-            btnAddNewContact.setVisibility(View.VISIBLE);
             btnDialNumber.setVisibility(View.VISIBLE);
-            vgInviteFriend.setVisibility(View.GONE);
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
             btnAddSecretChat.setVisibility(View.GONE);
-            mLayoutMultiSelected.setVisibility(View.GONE);
-
         } else if (mode == 3) { // add mode
 
             btnAddNewChannel.setVisibility(View.VISIBLE);
             btnAddNewGroup.setVisibility(View.VISIBLE);
             btnAddSecretChat.setVisibility(View.VISIBLE);
-            vgInviteFriend.setVisibility(View.GONE);
             btnAddNewGroupCall.setVisibility(View.GONE);
-            btnAddNewContact.setVisibility(View.GONE);
             btnDialNumber.setVisibility(View.GONE);
-            mLayoutMultiSelected.setVisibility(View.GONE);
-
         } else if (mode == 4) {//edit mode
             btnAddNewChannel.setVisibility(View.GONE);
             btnAddNewGroup.setVisibility(View.GONE);
             btnAddSecretChat.setVisibility(View.GONE);
-            vgInviteFriend.setVisibility(View.GONE);
             btnAddNewGroupCall.setVisibility(View.GONE);
-            btnAddNewContact.setVisibility(View.GONE);
-            btnDialNumber.setVisibility(View.GONE);
-            mLayoutMultiSelected.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void createActionMode() {
+        if (contactsToolbar.isInActionMode())
+            return;
+
+        actionToolbar = contactsToolbar.createActionToolbar(null);
+
+        deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_delete, 54);
+        editItem = actionToolbar.addItemWithWidth(editTag, R.string.icon_edit, 54);
+
+        multiSelectCounter = new NumberTextView(getContext());
+        multiSelectCounter.setTextSize(18);
+        multiSelectCounter.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTag(selectCounter);
+        actionToolbar.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
+
+        actionModeViews.add(deleteItem);
+        actionModeViews.add(editItem);
+    }
+
+    private void showActionMode() {
+        contactsToolbar.showActionToolbar();
+        BackDrawable backDrawable = new BackDrawable(true);
+        backDrawable.setRotation(1, true);
+        backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        contactsToolbar.setBackIcon(backDrawable);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        ArrayList<Animator> animators = new ArrayList<>();
+        for (int a = 0; a < actionModeViews.size(); a++) {
+            View view = actionModeViews.get(a);
+            view.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
+            animators.add(ObjectAnimator.ofFloat(view, View.SCALE_Y, 0.1f, 1.0f));
+        }
+        animatorSet.playTogether(animators);
+        animatorSet.setDuration(180);
+        animatorSet.start();
     }
 
     private void hideProgress() {
@@ -457,6 +599,23 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
         });
     }
 
+    public void checkPassCodeVisibility() {
+        if (PassCode.getInstance().isPassCode()) {
+            if (passCodeItem == null) {
+                passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
+            }
+
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
+            if (ActivityMain.isLock) {
+                passCodeItem.setIcon(R.string.icon_lock);
+            } else {
+                passCodeItem.setIcon(R.string.icon_unlock);
+            }
+        } else if (passCodeItem != null) {
+            passCodeItem.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -468,9 +627,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public void onResume() {
         super.onResume();
 
-        if (isSearchEnabled && mHelperToolbar != null)
-            mHelperToolbar.getmSearchBox().performClick();
-        if (isContact && mHelperToolbar != null) mHelperToolbar.checkPassCodeVisibility();
+        if (isSearchEnabled && contactsToolbar != null)
+            searchItem.performClick();
     }
 
     @Override
@@ -502,7 +660,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     }
 
     public void multi_select(int position) {
-        if (mLayoutMultiSelected.isShown()) {
+        if (contactsToolbar.isInActionMode()) {
 
             if (results.get(position) == null) {
                 return;
@@ -513,11 +671,17 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             } else {
                 selectedList.put(results.get(position).getPhone(), true);
             }
-
             if (selectedList.size() > 0) {
-                mTxtSelectedCount.setText(selectedList.size() + " " + getString(R.string.item_selected));
+                if (selectedList.size() > 1) {
+                    editItem.setVisibility(View.GONE);
+                } else {
+                    editItem.setVisibility(View.VISIBLE);
+                }
+                multiSelectCounter.setNumber(selectedList.size(), true);
             } else {
-                mTxtSelectedCount.setText(selectedList.size() + " " + getString(R.string.item_selected));
+                contactsToolbar.hideActionToolbar();
+                contactsToolbar.setBackIcon(null);
+                setMultiSelectState(isMultiSelect);
             }
             refreshAdapter(position, false);
         }
@@ -531,14 +695,6 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
                 realmRecyclerView.getAdapter().notifyItemChanged(position);
             }
         }
-    }
-
-    @Override //btn edit or back
-    public void onLeftIconClickListener(View view) {
-        if (!isContact)
-            popBackStackFragment();
-        else
-            showDialog();
     }
 
     // Add/Remove the item from/to the list
@@ -567,20 +723,19 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             items.add(getString(R.string.delete));
             items.add(getString(R.string.mark_as_several));
 
+            setMultiSelectState(isMultiSelect);
+            showActionMode();
+            multi_select(itemPosition);
+
             new BottomSheetFragment().setData(items, -1, position -> {
                 if (position == 0) {
-                    FragmentAddContact fragment = FragmentAddContact.newInstance(
-                            id, "+" + phone, name, family, FragmentAddContact.ContactMode.EDIT, (name1, family1) -> loadContacts()
-                    );
-                    if (getActivity() != null)
-                        new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
+
                 } else if (position == 1) {
-                    new RequestUserContactsDelete().contactsDelete("" + phone);
+
                 } else if (position == 2) {
-                    setMultiSelectState(isMultiSelect);
-                    multi_select(itemPosition);
+
                 }
-            }).show(getFragmentManager(), "contactLongClicked");
+            });
         }
     }
 
@@ -592,56 +747,16 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             isMultiSelect = false;
             isLongClick = false;
             selectedList.clear();
-            mTxtSelectedCount.setText("0 " + getString(R.string.item_selected));
             refreshAdapter(0, true);
         } else {
             isMultiSelect = true;
             refreshAdapter(0, true);
 
-            if (!mLayoutMultiSelected.isShown()) {
+            if (!contactsToolbar.isInActionMode()) {
                 setPageShowingMode(4);
             }
             isLongClick = true;
         }
-    }
-
-    @Override
-    public void onSearchClickListener(View view) {
-        isSearchEnabled = true;
-        inSearchMode = true;
-    }
-
-    @Override
-    public void onSearchTextChangeListener(View view, String text) {
-        if (text.length() > 0) {
-            searchText = text;
-            loadContact(text);
-        } else {
-            loadContacts();
-        }
-    }
-
-    @Override //btn add
-    public void onRightIconClickListener(View view) {
-        if (mActionMode != null) {
-            mActionMode.finish();
-        }
-        if (getActivity() != null) {
-            FragmentAddContact fragment = FragmentAddContact.newInstance(
-                    null, FragmentAddContact.ContactMode.ADD
-            );
-            new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
-        }
-    }
-
-    @Override
-    public void onBtnClearSearchClickListener(View view) {
-        isSearchEnabled = false;
-    }
-
-    @Override
-    public void onSearchBoxClosed() {
-        inSearchMode = false;
     }
 
     @Override
@@ -667,6 +782,8 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
     public boolean isAllowToBackPressed() {
         if (isMultiSelect) {
             setMultiSelectState(true);
+            contactsToolbar.setBackIcon(null);
+            contactsToolbar.hideActionToolbar();
             return false;
         } else {
             return true;
@@ -701,6 +818,34 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
     private interface onLongClickRecyclerView {
         void onClick(View view, int position);
+    }
+
+    private void onWalletClickListener() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
+            }
+
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
     }
 
     /**
@@ -792,13 +937,13 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                    viewHolder.animateCheckBox.setChecked(true);
+                    viewHolder.animateCheckBox.setChecked(true, true);
                 } else {
                     if (isLongClick) {
-                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setChecked(false, true);
                         viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
                     } else {
-                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setChecked(false, true);
                         viewHolder.animateCheckBox.setVisibility(View.GONE);
                     }
                 }
@@ -820,14 +965,14 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
 
                 if (selectedList.containsKey(usersList.get(i).getPhone())) {
                     viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                    viewHolder.animateCheckBox.setChecked(true);
+                    viewHolder.animateCheckBox.setChecked(true, true);
 
                 } else {
                     if (isLongClick) {
-                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setChecked(false, true);
                         viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
                     } else {
-                        viewHolder.animateCheckBox.setChecked(false);
+                        viewHolder.animateCheckBox.setChecked(false, true);
                         viewHolder.animateCheckBox.setVisibility(View.GONE);
                     }
                 }
@@ -966,7 +1111,7 @@ public class RegisteredContactsFragment extends BaseMainFragments implements Too
             private MaterialDesignTextView btnVoiceCall;
             private RealmContacts realmContacts;
             private ConstraintLayout root;
-            private CheckBox animateCheckBox;
+            private net.iGap.module.customView.CheckBox animateCheckBox;
 
             public ViewHolderCall(View view) {
                 super(view);
