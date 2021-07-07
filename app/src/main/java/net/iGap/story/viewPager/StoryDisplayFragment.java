@@ -387,8 +387,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void onComplete() {
-        if (clickable)
-            pageViewOperator.nextPageView();
+        pageViewOperator.nextPageView();
     }
 
     public void resumeCurrentStory() {
