@@ -10,8 +10,13 @@
 
 package net.iGap.response;
 
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.proto.ProtoClientRegisterDevice;
 import net.iGap.proto.ProtoError;
+import net.iGap.realm.RealmUserInfo;
+
+import io.realm.Realm;
 
 public class ClientRegisterDeviceResponse extends MessageHandler {
 
@@ -30,7 +35,11 @@ public class ClientRegisterDeviceResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoClientRegisterDevice.ClientRegisterDeviceResponse.Builder builder = (ProtoClientRegisterDevice.ClientRegisterDeviceResponse.Builder) message;
+        ProtoClientRegisterDevice.ClientRegisterDeviceResponse.Builder builder =
+                (ProtoClientRegisterDevice.ClientRegisterDeviceResponse.Builder) message;
+        DbManager.getInstance().doRealmTransaction(realm -> realm.where(RealmUserInfo.class)
+                .equalTo("userInfo.id", AccountManager.getInstance().getCurrentUser().getId())
+                .findFirst().setPushNotificationToken(""));
     }
 
     @Override
