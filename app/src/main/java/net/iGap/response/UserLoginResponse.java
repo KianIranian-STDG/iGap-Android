@@ -25,10 +25,13 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
+import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
+
+import io.realm.Realm;
 
 public class UserLoginResponse extends MessageHandler {
 

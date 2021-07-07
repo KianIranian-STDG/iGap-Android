@@ -13,12 +13,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +42,7 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.messenger.ui.components.FragmentMediaContainer;
 import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.NumberTextView;
 import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.messenger.ui.toolBar.ToolbarItem;
 import net.iGap.messenger.ui.toolBar.ToolbarItems;
@@ -54,6 +55,7 @@ import net.iGap.module.Theme;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.customView.CheckBox;
 import net.iGap.observers.interfaces.ISignalingGetCallLog;
 import net.iGap.observers.interfaces.OnCallLogClear;
 import net.iGap.observers.interfaces.ToolbarListener;
@@ -79,7 +81,7 @@ import static net.iGap.G.isAppRtl;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.proto.ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING;
 
-public class FragmentCall extends BaseMainFragments implements OnCallLogClear, ToolbarListener {
+public class FragmentCall extends BaseMainFragments {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
 
@@ -105,11 +107,12 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
     private ToolbarItem deleteAllItem;
     private final int createCallTag = 1;
     private final int qrWalletTag = 2;
-    private final int multiSelectTag = 3;
     private final int deleteTag = 4;
     private final int deleteAllTag = 5;
     private FragmentMediaContainer mediaContainer;
     private ArrayList<ToolbarItem> actionModeViews = new ArrayList<>();
+    private NumberTextView multiSelectCounter;
+    private final int selectCounter = 16;
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
         FragmentCall fragmentCall = new FragmentCall();
@@ -144,7 +147,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         ToolbarItems toolbarItems = callToolbar.createToolbarItems();
         toolbarItems.addItemWithWidth(createCallTag, R.string.icon_add, 54);
         toolbarItems.addItemWithWidth(qrWalletTag, R.string.icon_QR_code, 54);
-        toolbarItems.addItemWithWidth(multiSelectTag, R.string.icon_new_conversation, 54);
         callToolbar.setListener(i -> {
             switch (i) {
                 case -1:
@@ -156,16 +158,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                     break;
                 case qrWalletTag:
                     onScannerClickListener();
-                    break;
-                case multiSelectTag:
-                    mSelectedLogList.clear();
-                    if (realmResults.size() == 0) {
-                        Toast.makeText(_mActivity, getString(R.string.empty_call), Toast.LENGTH_SHORT).show();
-                        if (mIsMultiSelectEnable) setViewState(false);
-                        return;
-                    }
-                    showToolbarActions();
-                    setViewState(!mIsMultiSelectEnable);
                     break;
                 case deleteAllTag:
                     if (getRequestManager().isUserLogin()) {
@@ -389,7 +381,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         backDrawable.setRotation(1, true);
         backDrawable.setRotatedColor(Theme.getInstance().getPrimaryTextColor(getContext()));
         callToolbar.setBackIcon(backDrawable);
-
+        multiSelectCounter.setNumber(mSelectedLogList.size(), true);
         AnimatorSet animatorSet = new AnimatorSet();
         ArrayList<Animator> animators = new ArrayList<>();
         for (int a = 0; a < actionModeViews.size(); a++) {
@@ -410,6 +402,13 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
         deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_delete, 54);
         deleteAllItem = actionToolbar.addItemWithWidth(deleteAllTag, R.string.icon_delete_all, 54);
+
+        multiSelectCounter = new NumberTextView(getContext());
+        multiSelectCounter.setTextSize(18);
+        multiSelectCounter.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTag(selectCounter);
+        actionToolbar.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
 
         actionModeViews.add(deleteItem);
         actionModeViews.add(deleteAllItem);
@@ -482,18 +481,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
     }
 
-    @Override
-    public void onLeftIconClickListener(View view) {
-
-        mSelectedLogList.clear();
-        if (realmResults.size() == 0) {
-            Toast.makeText(_mActivity, getString(R.string.empty_call), Toast.LENGTH_SHORT).show();
-            if (mIsMultiSelectEnable) setViewState(false);
-            return;
-        }
-        setViewState(!mIsMultiSelectEnable);
-    }
-
     private void setViewState(boolean state) {
 
         if (!state) {
@@ -507,24 +494,6 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         refreshCallList(0, true);
     }
 
-    @Override
-    public void onRightIconClickListener(View view) {
-        showContactListForCall();
-    }
-
-    //*************************************************************************************************************
-
-    @Override
-    public void onCallLogClear() {
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        if (mAdapter != null) {
-        //            mAdapter.clear();
-        //        }
-        //    }
-        //});
-    }
 
     //*************************************************************************************************************
 
@@ -564,6 +533,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
         if (mIsMultiSelectEnable) {
             hideActionMode();
             setViewState(false);
+            mSelectedLogList.clear();
             return false;
         }
         return true;
@@ -638,9 +608,9 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                 try {
 
                     if (mSelectedLogList.contains(item)) {
-                        viewHolder.checkBox.setChecked(true);
+                        viewHolder.checkBox.setChecked(true,true);
                     } else {
-                        viewHolder.checkBox.setChecked(false);
+                        viewHolder.checkBox.setChecked(false,true);
                     }
 
                 } catch (Exception e) {
@@ -649,7 +619,7 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
 
             } else {
                 viewHolder.checkBox.setVisibility(View.GONE);
-                viewHolder.checkBox.setChecked(false);
+                viewHolder.checkBox.setChecked(false,true);
             }
 
             switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
@@ -717,23 +687,29 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
                 checkBox = itemView.findViewById(R.id.fcsl_check_box);
 
                 itemView.setOnClickListener(v -> {
-
                     if (mIsMultiSelectEnable) {
-
                         multiSelectHandler(getItem(getAdapterPosition()), getAdapterPosition(), !checkBox.isChecked());
-
+                        multiSelectCounter.setNumber(mSelectedLogList.size(), true);
+                        if (mSelectedLogList.size() < 1) {
+                            callToolbar.hideActionToolbar();
+                            callToolbar.setBackIcon(null);
+                            mIsMultiSelectEnable = false;
+                        }
                     } else {
-
                         if (canclick) {
                             long userId = callLog.getUser().getId();
-
                             if (userId != 134 && AccountManager.getInstance().getCurrentUser().getId() != userId) {
                                 CallSelectFragment callSelectFragment = CallSelectFragment.getInstance(userId, false, ProtoSignalingOffer.SignalingOffer.Type.valueOf(callLog.getType()));
                                 callSelectFragment.show(getFragmentManager(), null);
                             }
                         }
-
                     }
+                });
+                itemView.setOnLongClickListener(v -> {
+                    mIsMultiSelectEnable = true;
+                    multiSelectHandler(getItem(getAdapterPosition()), getAdapterPosition(), !checkBox.isChecked());
+                    showToolbarActions();
+                    return true;
                 });
 
                 itemView.setOnTouchListener(new View.OnTouchListener() {
@@ -755,13 +731,11 @@ public class FragmentCall extends BaseMainFragments implements OnCallLogClear, T
             }
 
             private void multiSelectHandler(RealmCallLog item, int pos, boolean checked) {
-
                 if (checked) {
                     mSelectedLogList.add(item);
                 } else {
                     mSelectedLogList.remove(item);
                 }
-
                 refreshCallList(pos, false);
             }
         }
