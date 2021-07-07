@@ -525,10 +525,6 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         goToSettingPage.setValue(true);
     }
 
-    public void onAddClick() {
-        goToAddMemberPage.setValue(true);
-    }
-
     public void onCreditClick() {
         if (!userInfo.isWalletRegister()) {
             goToWalletAgreementPage.setValue(HelperNumerical.getPhoneNumberStartedWithZero(phoneNumber));

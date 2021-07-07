@@ -157,25 +157,9 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintBottom_toTopOf="@id/fup_user_name"
-                app:layout_constraintEnd_toStartOf="@id/multiAccount_arrow"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/fup_user_image"
                 app:layout_constraintTop_toTopOf="@id/fup_user_image" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/multiAccount_arrow"
-                android:layout_width="@dimen/dp32"
-                android:layout_height="@dimen/dp32"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_marginRight="@dimen/dp8"
-                android:onClick="@{()-> viewModel.onAccountsClicked()}"
-                android:visibility="@{viewModel.accountArrowVisibility}"
-                android:tint="@color/white"
-                app:backgroundTint="?attr/colorPrimary"
-                app:fabCustomSize="@dimen/dp32"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_down" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/fup_user_name"
