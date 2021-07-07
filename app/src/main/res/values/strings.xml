@@ -1214,7 +1214,7 @@ Want to get it?</string>
     <string name="enter_username">Enter your username</string>
     <string name="country_code_not_valid">The country code is not valid</string>
     <string name="enter_your_password">Enter your password</string>
-    <string name="referral_code">Referral code</string>
+    <string name="referral_code">Referral Mobile Number</string>
 
     <string name="user_name">Username</string>
     <string name="email">Email</string>

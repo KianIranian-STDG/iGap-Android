@@ -1218,7 +1218,7 @@
     <string name="enter_username">شناسه کاربری خود را وارد کنید</string>
     <string name="country_code_not_valid">کد کشور صحیح نیست</string>
     <string name="enter_your_password">رمز عبور خود را وارد کنید</string>
-    <string name="referral_code">کد معرف</string>
+    <string name="referral_code">شماره موبایل معرف</string>
 
     <string name="user_name">نام کاربری</string>
     <string name="email">ایمیل</string>

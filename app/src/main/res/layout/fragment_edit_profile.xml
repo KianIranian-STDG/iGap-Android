@@ -123,35 +123,43 @@
                 android:paddingBottom="6dp"
                 android:text="@{viewModel.referralCountryCodeObservableField}"
                 android:textColor="?iGapTitleTextColor"
-                app:layout_constraintBottom_toBottomOf="@id/referralView"
+                app:layout_constraintBottom_toBottomOf="@id/referralEditText"
                 app:layout_constraintLeft_toLeftOf="@id/name"
-                app:layout_constraintTop_toTopOf="@id/referralView"
-                app:layout_constraintRight_toLeftOf="@id/referralView"/>
+                app:layout_constraintTop_toTopOf="@id/referralEditText"
+                app:layout_constraintRight_toLeftOf="@id/referralEditText"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/referralView"
+            <com.vicmikhailau.maskededittext.MaskedEditText
+                android:id="@+id/referralEditText"
+                style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:enabled="@{viewModel.referralEnableLiveData}"
+                android:gravity="center"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="phone"
+                android:maxLength="18"
+                android:maxLines="11"
+                android:text="@={viewModel.referralNumberObservableField}"
+                android:textAlignment="gravity"
+                android:textSize="@dimen/standardTextSize"
+                android:textColorHint="?iGapHintTextColor"
                 android:layout_marginTop="@dimen/dp8"
                 android:hint="@string/referral_code"
-                android:textColorHint="?iGapHintTextColor"
-                app:errorEnabled="@{viewModel.showReferralErrorLiveData}"
-                app:errorText="@{viewModel.referralError}"
                 app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintLeft_toRightOf="@id/countryCode"
-                app:layout_constraintTop_toBottomOf="@id/email">
+                app:layout_constraintTop_toBottomOf="@id/email"
+                app:mask="###-###-####"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/referralEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:enabled="@{viewModel.referralEnableLiveData}"
-                    android:inputType="phone"
-                    android:text="@={viewModel.referralNumberObservableField}"
-                    android:textColor="?iGapTitleTextColor"
-                    android:textSize="@dimen/standardTextSize" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/referralError"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.referralError}"
+                app:layout_constraintStart_toStartOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/referralEditText"
+                android:textColor="@color/red"
+                android:textDirection="ltr"
+                android:textSize="@dimen/smallTextSize"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/gender"
@@ -166,7 +174,7 @@
                 android:textColor="?iGapTitleTextColor"
                 android:textSize="@dimen/standardTextSize"
                 app:layout_constraintStart_toStartOf="@id/name"
-                app:layout_constraintTop_toBottomOf="@id/referralView" />
+                app:layout_constraintTop_toBottomOf="@id/referralError" />
 
             <RadioGroup
                 android:id="@+id/genderValue"

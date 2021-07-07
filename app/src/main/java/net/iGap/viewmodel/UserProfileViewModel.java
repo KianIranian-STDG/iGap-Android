@@ -196,6 +196,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     //Todo: fixed it
     private int getIvanScoreTime = 0;
 
+    private int sendRequestCount = 0;
+    private boolean hasError = false;
+
     public UserProfileViewModel(SharedPreferences sharedPreferences, AvatarHandler avatarHandler) {
         this.sharedPreferences = sharedPreferences;
         this.avatarHandler = avatarHandler;
@@ -461,11 +464,14 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void onCheckClick() {
+        referralError.set(R.string.empty_error_message);
+        showReferralErrorLiveData.set(false);
+        hasError = false;
         submitData();
-        showEditIcon();
     }
 
     public void onCancelClick() {
+        hasError = false;
         showEditIcon();
         cancelIconClick.setValue(true);
     }
@@ -655,8 +661,12 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     public void referralTextChangeListener(String phoneNumber) {
+        referralError.set(R.string.empty_error_message);
         if (phoneNumber.startsWith("0")) {
+            referralError.set(R.string.Toast_First_0);
             phoneNumber = "";
+            hasError = true;
+            showLoading.set(View.GONE);
         }
         referralNumberObservableField.set(phoneNumber);
     }
@@ -750,19 +760,35 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private void submitData() {
         showLoading.set(View.VISIBLE);
         if (!currentName.equals(name.get())) {
+            sendRequestCount++;
             sendRequestSetName();
-        } else if (!currentUserName.equals(userName.get())) {
+        }
+        if (!currentUserName.equals(userName.get())) {
+            sendRequestCount++;
             sendRequestSetUsername();
-        } else if (!currentBio.equals(bio.get())) {
+        }
+        if (!currentBio.equals(bio.get())) {
+            sendRequestCount++;
             sendRequestSetBio();
-        } else if (!currentUserEmail.equals(email.get())) {
+        }
+        if (!currentUserEmail.equals(email.get())) {
+            sendRequestCount++;
             sendRequestSetEmail();
-        } else if (currentGender != gender.get()) {
+        }
+        if (currentGender != gender.get()) {
+            sendRequestCount++;
             sendRequestSetGender();
-        } else if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
-            setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replace(" ", ""));
-        } else {
+        }
+        if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
+            referralTextChangeListener(referralNumberObservableField.get());
+            if (!hasError) {
+                sendRequestCount++;
+                setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replaceAll("-", "").replaceAll(" ", ""));
+            }
+        }
+        if(sendRequestCount == 0 && !hasError) {
             showLoading.set(View.GONE);
+            showEditIcon();
         }
     }
 
@@ -774,7 +800,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 AccountManager.getInstance().updateCurrentUserName(nickName);
                 G.handler.post(() -> {
                     currentName = nickName;
-                    submitData();
+                    sendRequestCount--;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                        if (!hasError){
+                            showEditIcon();
+                        }
+                    }
                 });
             }
 
@@ -782,7 +814,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onUserProfileNickNameError(int majorCode, int minorCode) {
                 G.handler.post(() -> {
                     currentName = name.get();
-                    submitData();
+                    sendRequestCount--;
+                    hasError = true;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                    }
                 });
             }
 
@@ -798,7 +834,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onUserProfileUpdateUsername(final String username) {
                 G.handler.post(() -> {
                     currentUserName = username;
-                    submitData();
+                    sendRequestCount--;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                        if (!hasError){
+                            showEditIcon();
+                        }
+                    }
                 });
             }
 
@@ -806,7 +848,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void Error(final int majorCode, int minorCode, final int time) {
                 G.handler.post(() -> {
                     currentUserName = userName.get();
-                    submitData();
+                    sendRequestCount--;
+                    hasError = true;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                    }
                     if (majorCode == 175) {
                         dialogWaitTime(R.string.USER_PROFILE_UPDATE_USERNAME_UPDATE_LOCK, time, majorCode);
                     }
@@ -825,7 +871,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onUserProfileEmailResponse(final String email, ProtoResponse.Response response) {
                 G.handler.post(() -> {
                     currentUserEmail = email;
-                    submitData();
+                    sendRequestCount--;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                        if (!hasError){
+                            showEditIcon();
+                        }
+                    }
                 });
             }
 
@@ -833,7 +885,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void Error(int majorCode, int minorCode) {
                 G.handler.post(() -> {
                     currentUserEmail = email.get();
-                    submitData();
+                    sendRequestCount--;
+                    hasError = true;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                    }
                     if (majorCode == 114 && minorCode == 1) {
                         emailErrorMessage.set(R.string.error_email);
                         emailErrorEnable.setValue(true);
@@ -853,7 +909,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private void sendRequestSetBio() {
         new RequestUserProfileSetBio().setBio(bio.get());
         currentBio = bio.get();
-        submitData();
+        sendRequestCount--;
+        if (sendRequestCount == 0) {
+            showLoading.set(View.GONE);
+            if (!hasError){
+                showEditIcon();
+            }
+        }
     }
 
     private void sendRequestSetGender() {
@@ -862,7 +924,13 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void onUserProfileGenderResponse(final ProtoGlobal.Gender gender, ProtoResponse.Response response) {
                 G.handler.post(() -> {
                     currentGender = gender == ProtoGlobal.Gender.MALE ? R.id.male : R.id.female;
-                    submitData();
+                    sendRequestCount--;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                        if (!hasError){
+                            showEditIcon();
+                        }
+                    }
                 });
             }
 
@@ -870,7 +938,11 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
             public void Error(int majorCode, int minorCode) {
                 G.handler.post(() -> {
                     currentGender = (gender.get() == R.id.male ? ProtoGlobal.Gender.MALE.getNumber() : ProtoGlobal.Gender.FEMALE.getNumber());
-                    submitData();
+                    sendRequestCount--;
+                    hasError = true;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                    }
                 });
             }
 
@@ -1121,14 +1193,24 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 referralEnableLiveData.postValue(false);
                 referralNumberObservableField.set("");
                 G.handler.post(() -> {
-                    submitData();
+                    sendRequestCount--;
+                    if (sendRequestCount == 0) {
+                        showLoading.set(View.GONE);
+                        if (!hasError){
+                            showEditIcon();
+                        }
+                    }
                 });
             }
 
             @Override
             public void onErrorSetRepresentative(int majorCode, int minorCode) {
                 showReferralErrorLiveData.set(true);
-                submitData();
+                sendRequestCount--;
+                hasError = true;
+                if (sendRequestCount == 0) {
+                    showLoading.set(View.GONE);
+                }
                 switch (majorCode) {
                     case 10177:
                         if (minorCode == 2) {
@@ -1144,6 +1226,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                             referralError.set(R.string.server_error);
                         break;
                 }
+                referralNumberObservableField.set("");
             }
         });
     }
