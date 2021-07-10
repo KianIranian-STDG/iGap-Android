@@ -152,6 +152,7 @@ public class FragmentCall extends BaseMainFragments {
                 case -1:
                     setViewState(!mIsMultiSelectEnable);
                     hideActionMode();
+                    mSelectedLogList.clear();
                     break;
                 case createCallTag:
                     showContactListForCall();
