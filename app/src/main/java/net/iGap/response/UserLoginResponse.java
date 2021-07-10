@@ -115,7 +115,15 @@ public class UserLoginResponse extends MessageHandler {
         }).start();
 
         G.onUserLogin.onLogin();
-        RealmUserInfo.sendPushNotificationToServer();
+        String FCMToken = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class)
+                    .equalTo("userInfo.id", AccountManager.getInstance().getCurrentUser().getId())
+                    .findFirst().getPushNotificationToken();
+        }) ;
+
+        if(!FCMToken.isEmpty()) {
+            RealmUserInfo.sendPushNotificationToServer();
+        }
 
         if (builder.getWalletActive() && builder.getWalletAgreementAccepted()) {
             new RequestWalletGetAccessToken().walletGetAccessToken();
