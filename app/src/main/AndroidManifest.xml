@@ -67,6 +67,11 @@
         android:theme="@style/iGapLightTheme"
 
         tools:replace="allowBackup,supportsRtl,android:name,android:theme">
+
+        <meta-data
+            android:name="metrix_appId"
+            android:value="jpbnabzrmeqvxme" />
+
         <receiver
             android:name="ir.metrix.sdk.MetrixReferrerReceiver"
             android:exported="true"

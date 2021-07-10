@@ -17,6 +17,8 @@ import net.iGap.viewmodel.controllers.CallManager;
 
 import org.json.JSONArray;
 
+import ir.metrix.Metrix;
+
 
 public class NotificationService extends FirebaseMessagingService {
 
@@ -33,6 +35,7 @@ public class NotificationService extends FirebaseMessagingService {
         super.onNewToken(mToken);
         if (G.ISRealmOK) {
             RealmUserInfo.setPushNotification(mToken);
+            Metrix.setPushToken(mToken);
         } else {
             G.handler.postDelayed(new Runnable() {
                 @Override
