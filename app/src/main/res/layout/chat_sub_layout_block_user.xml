@@ -5,7 +5,7 @@
     android:clickable="true"
     android:paddingTop="@dimen/dp4"
     android:paddingBottom="@dimen/dp4"
-    android:background="@drawable/shape_multi_select_bg"
+    android:background="?attr/iGapEditTxtColor"
     android:orientation="horizontal"
     android:visibility="visible">
 
