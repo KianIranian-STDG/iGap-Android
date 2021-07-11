@@ -204,7 +204,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 if (!clickable) {
                     if (view == next) {
                         if (counter == stories.size() - 1) {
-                            pageViewOperator.nextPageView();
+                            pageViewOperator.nextPageView(clickable);
                         } else {
                             storiesProgressView.skip();
                         }
@@ -280,7 +280,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     private void setupReplay() {
-        clickable = true;
         openKeyBoard();
         getKeyboardState();
         pauseCurrentStory();
@@ -325,6 +324,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             clickable = false;
         } else {
             pauseCurrentStory();
+            clickable = true;
         }
     }
 
@@ -387,7 +387,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void onComplete() {
-        pageViewOperator.nextPageView();
+        pageViewOperator.nextPageView(clickable);
     }
 
     public void resumeCurrentStory() {
@@ -400,7 +400,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public interface PageViewOperator {
         void backPageView();
 
-        void nextPageView();
+        void nextPageView(boolean clickable);
     }
 
 }

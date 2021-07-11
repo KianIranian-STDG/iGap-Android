@@ -23,7 +23,6 @@ public class StoriesProgressView extends LinearLayout {
     private boolean isComplete = false;
     private StoriesListener storiesListener;
     private List<StoryProgress> progressBars = new ArrayList<>();
-    private StoryProgress StoryProgress;
 
     public StoriesProgressView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -51,9 +50,9 @@ public class StoriesProgressView extends LinearLayout {
         progressBars.clear();
         removeAllViews();
         for (int i = 0; i < storiesCount; i++) {
-            StoryProgress = createProgressBar();
-            progressBars.add(StoryProgress);
-            addView(StoryProgress);
+            StoryProgress storyProgress = createProgressBar();
+            progressBars.add(storyProgress);
+            addView(storyProgress);
             if (i + 1 < storiesCount) {
                 addView(createSpace());
             }
@@ -61,9 +60,9 @@ public class StoriesProgressView extends LinearLayout {
     }
 
     private StoryProgress createProgressBar() {
-        StoryProgress = new StoryProgress(getContext(), null, 0);
-        StoryProgress.setLayoutParams(LayoutCreator.createLinear(0, 4, 1F));
-        return StoryProgress;
+       StoryProgress storyProgress = new StoryProgress(getContext(), null, 0);
+        storyProgress.setLayoutParams(LayoutCreator.createLinear(0, 4, 1F));
+        return storyProgress;
     }
 
     private View createSpace() {
