@@ -229,7 +229,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         return publicUrl != null;
     }
 
-    private String extractMime(String name) {
+    public static String extractMime(String name) {
         String mime = ".png";
         int index = name.lastIndexOf(".");
         if (index >= 0) {

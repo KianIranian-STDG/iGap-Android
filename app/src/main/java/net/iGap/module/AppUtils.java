@@ -166,14 +166,10 @@ public final class AppUtils {
 
                     break;
                 default:
-                    if (message.attachment != null) {
-                        if (message.attachment.isFileExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
-                        } else if (message.attachment.isThumbnailExistsOnLocal()) {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.thumbnailPath), view);
-                        } else {
-                            view.setVisibility(View.GONE);
-                        }
+                    if (message.attachment.isFileExistsOnLocal(message)) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.filePath), view);
+                    } else if (message.attachment.isThumbnailExistsOnLocal(message)) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(message.attachment.thumbnailPath), view);
                     } else {
                         view.setVisibility(View.GONE);
                     }

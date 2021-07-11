@@ -1,16 +1,17 @@
 package net.iGap.structs;
 
-import android.util.Log;
-
+import net.iGap.G;
 import net.iGap.helper.HelperUrl;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.downloader.DownloadObject;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGlobal.RoomMessage;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -220,6 +221,35 @@ public class MessageObject {
 
     public static int readStatus(String status) {
         return ProtoGlobal.RoomMessageStatus.valueOf(status).getNumber();
+    }
+
+    public boolean isFileExistWithCashId(boolean forThumb) {
+        AttachmentObject attachmentObject = forwardedMessage != null ? forwardedMessage.attachment : attachment;
+        if (attachmentObject != null) {
+            if (attachmentObject.cacheId != null) {
+                String mimeType = DownloadObject.extractMime(attachmentObject.name);
+                String path = AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+                File cashFile = new File(path + "/" + attachmentObject.cacheId + "_" + mimeType);
+                File tempFile = new File(G.DIR_TEMP + "/" + DownloadObject.createKey(forThumb? attachmentObject.smallThumbnail.cacheId: attachmentObject.cacheId, forThumb ? 1 : 0));
+                return cashFile.exists() && cashFile.length() == attachmentObject.size || tempFile.length() == (forThumb ? attachmentObject.smallThumbnail.size : attachmentObject.size);
+            }
+        }
+        return false;
+    }
+
+    public String getCashFile(boolean forThumb) {
+        AttachmentObject attachmentObject = forwardedMessage != null ? forwardedMessage.attachment : attachment;
+        if (attachmentObject != null) {
+            if (attachmentObject.cacheId != null) {
+                String mimeType = DownloadObject.extractMime(attachmentObject.name);
+                String path = AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+                if (forThumb) {
+                    return new File(G.DIR_TEMP + "/" + DownloadObject.createKey(forThumb? attachmentObject.smallThumbnail.cacheId: attachmentObject.cacheId, forThumb ? 1 : 0)).getAbsolutePath();
+                }
+                return new File(path + "/" + (forThumb ? attachmentObject.largeThumbnail.cacheId : attachmentObject.cacheId) + "_" + mimeType).getAbsolutePath();
+            }
+        }
+        return null;
     }
 
     public void setMessageText(String messageText) {

@@ -312,7 +312,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             super.bindView(holder, payloads);
 
             holder.txtNameMusic.setText(messageRoomMessagesList.attachment.name);
-            if (messageRoomMessagesList.attachment.isFileExistsOnLocal()) {
+            if (messageRoomMessagesList.attachment.isFileExistsOnLocal(messageRoomMessagesList)) {
 
                 holder.iconPlay.setVisibility(View.VISIBLE);
                 holder.messageProgress.setVisibility(View.GONE);
@@ -352,7 +352,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!messageRoomMessagesList.attachment.isFileExistsOnLocal()) {
+                    if (!messageRoomMessagesList.attachment.isFileExistsOnLocal(messageRoomMessagesList)) {
                         downloadFile(holder.getAdapterPosition(), holder.messageProgress);
                     } else {
                         if (MusicPlayer.musicName.equals(MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.name)) {

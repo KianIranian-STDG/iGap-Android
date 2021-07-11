@@ -462,7 +462,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             MessageObject messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
             boolean _continue = true;
             while (_continue) {
-                if (!messageObject.attachment.isFileExistsOnLocal()) {
+                if (!messageObject.attachment.isFileExistsOnLocal(messageObject)) {
                     selectedMedia--;
                     if (selectedMedia < 0) {
                         selectedMedia = mediaList.size() - 1;
@@ -524,7 +524,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             boolean _continue = true;
             while (_continue) {
                 messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
-                if (!messageObject.getAttachment().isFileExistsOnLocal()) {
+                if (!messageObject.getAttachment().isFileExistsOnLocal(messageObject)) {
                     selectedMedia++;
                     if (selectedMedia >= mediaList.size()) {
                         if (isVoice) { // avoid from return to first voice
