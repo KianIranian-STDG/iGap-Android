@@ -286,15 +286,6 @@
           You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
 
-        <receiver
-            android:name="ir.metrix.MetrixReferrerReceiver"
-            android:exported="true"
-            android:permission="android.permission.INSTALL_PACKAGES">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-
         <meta-data
             android:name="metrix_appId"
             android:value="@string/METRIX_ID" />
