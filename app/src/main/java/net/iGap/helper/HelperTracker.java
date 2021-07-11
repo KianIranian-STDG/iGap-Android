@@ -24,7 +24,6 @@ import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoSignalingOffer;
 
 import ir.metrix.Metrix;
-import ir.metrix.MetrixManifestException;
 
 
 public class HelperTracker {

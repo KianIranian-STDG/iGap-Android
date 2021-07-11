@@ -40,7 +40,7 @@ android {
 
         buildConfigField("String", "WEB_BASE_API_KEY", WEB_BASE_API_KEY)
         buildConfigField("String", "TAPSELL_KEY", TAPSELL_KEY)
-        buildConfigField("String", "METRIX_ID", METRIX_ID)
+        resValue("string", "METRIX_ID", METRIX_ID)
         buildConfigField("String", "METRIX_FIREBASE_FIRST_ID", METRIX_FIREBASE_FIRST_ID)
         buildConfigField("String", "METRIX_FIREBASE_SECOND_ID", METRIX_FIREBASE_SECOND_ID)
         buildConfigField("String", "METRIX_FIREBASE_THEIRD_ID", METRIX_FIREBASE_THEIRD_ID)
