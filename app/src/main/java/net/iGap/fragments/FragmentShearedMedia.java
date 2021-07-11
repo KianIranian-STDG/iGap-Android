@@ -1451,7 +1451,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                         if (isSelectedMode) {
                             setSelectedItem(getPosition());
                         } else {
-
                             openSelected(getPosition(), mAdapter.mHolder.this);
                         }
                     }
@@ -1759,7 +1758,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     long selectedFileToken = mNewList.get(position).messageId;
                     Fragment fragment = FragmentShowContent.newInstance();
                     Bundle bundle = new Bundle();
-                    bundle.putLong("RoomId", roomId);
+                    bundle.putLong("roomId", roomId);
                     bundle.putLong("SelectedImage", selectedFileToken);
                     bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
                     fragment.setArguments(bundle);
