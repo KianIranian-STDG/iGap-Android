@@ -221,11 +221,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         if (messageObject.forwardedMessage != null) {
             if (messageObject.forwardedMessage.attachment != null) {
-                if (!messageObject.forwardedMessage.attachment.isFileExistsOnLocal()) {
+                if (!messageObject.forwardedMessage.attachment.isFileExistsOnLocal(messageObject.forwardedMessage)) {
                     holder.songSize.setText(AndroidUtils.humanReadableByteCount(messageObject.forwardedMessage.attachment.size, true));
                 }
                 holder.songFileName.setText(messageObject.forwardedMessage.attachment.name);
-                if (messageObject.forwardedMessage.attachment.isFileExistsOnLocal()) {
+                if (messageObject.forwardedMessage.attachment.isFileExistsOnLocal(messageObject.forwardedMessage)) {
                     String artistName = AndroidUtils.getAudioArtistName(messageObject.forwardedMessage.attachment.filePath);
                     if (!TextUtils.isEmpty(artistName)) {
                         holder.songArtist.setText(artistName);
@@ -237,7 +237,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         } else {
             if (attachment != null) {
-                if (!attachment.isFileExistsOnLocal()) {
+                if (!attachment.isFileExistsOnLocal(messageObject)) {
                     holder.songSize.setText(AndroidUtils.humanReadableByteCount(attachment.size, true));
                 }
                 holder.songFileName.setText(attachment.name);

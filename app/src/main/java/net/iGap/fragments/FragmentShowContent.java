@@ -347,7 +347,10 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         }
         int messageType = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
         if (result.length() < 1) {
-            result = AndroidUtils.getFilePathWithCashId(at.cacheId, at.name, messageType);
+            String mimeType = DownloadObject.extractMime(at.name);
+            String path = AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+            result =  new File(path + "/" + at.cacheId + "_" + mimeType).getAbsolutePath();
+            return result;
         }
         return result;
     }
