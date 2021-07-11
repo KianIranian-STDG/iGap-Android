@@ -1283,8 +1283,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             String filePath = null;
             if (attachment.filePath != null) {
                 filePath = attachment.filePath;
-            } else if (messageObject.isFileExistWithCashId(false)) {
-                filePath = messageObject.getCashFile(false);
+            } else if (messageObject.isFileExistWithCacheId(false)) {
+                filePath = messageObject.getCacheFile(false);
             }
             if (attachment.isFileExistsOnLocalAndIsImage(messageObject)) {
                 onLoadThumbnailFromLocal(holder, getCacheId(messageObject), filePath, LocalFileType.FILE);
@@ -1292,7 +1292,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 onLoadThumbnailFromLocal(holder, getCacheId(messageObject), filePath, LocalFileType.FILE);
             } else {
                 if (attachment.isThumbnailExistsOnLocal(messageObject)) {
-                    String thumbPath = attachment.thumbnailPath != null ? attachment.thumbnailPath : messageObject.getCashFile(true);
+                    String thumbPath = attachment.thumbnailPath != null ? attachment.thumbnailPath : messageObject.getCacheFile(true);
                     onLoadThumbnailFromLocal(holder, getCacheId(messageObject), thumbPath, LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT_VALUE) {

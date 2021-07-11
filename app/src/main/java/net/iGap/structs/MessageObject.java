@@ -223,7 +223,7 @@ public class MessageObject {
         return ProtoGlobal.RoomMessageStatus.valueOf(status).getNumber();
     }
 
-    public boolean isFileExistWithCashId(boolean forThumb) {
+    public boolean isFileExistWithCacheId(boolean forThumb) {
         AttachmentObject attachmentObject = forwardedMessage != null ? forwardedMessage.attachment : attachment;
         if (attachmentObject != null) {
             if (attachmentObject.cacheId != null) {
@@ -237,7 +237,7 @@ public class MessageObject {
         return false;
     }
 
-    public String getCashFile(boolean forThumb) {
+    public String getCacheFile(boolean forThumb) {
         AttachmentObject attachmentObject = forwardedMessage != null ? forwardedMessage.attachment : attachment;
         if (attachmentObject != null) {
             if (attachmentObject.cacheId != null) {

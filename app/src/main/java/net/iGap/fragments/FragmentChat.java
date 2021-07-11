@@ -5037,7 +5037,7 @@ public class FragmentChat extends BaseFragment
         }
 
         if (filePath == null) {
-            filePath = messageObject.getCashFile(false);
+            filePath = messageObject.getCacheFile(false);
         }
 
         if (filePath == null || filePath.length() == 0) {
