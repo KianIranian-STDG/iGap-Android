@@ -75,7 +75,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList, this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
-        viewPager.setPageTransformer(true, new PageTransformer(20));
+        viewPager.setPageTransformer(true, new PageTransformer());
 
         viewPager.addOnPageChangeListener(new PageChangeListener() {
             @Override

@@ -44,9 +44,6 @@ public abstract class PageChangeListener implements ViewPager.OnPageChangeListen
 
             case SCROLL_STATE_DRAGGING:
                 pageBeforeDragging = currentPage;
-
-            case SCROLL_STATE_FLING:
-
         }
     }
 

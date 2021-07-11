@@ -6,11 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 public class PageTransformer implements ViewPager.PageTransformer {
-    private float distanceMultiplier;
-
-    public PageTransformer(int distanceMultiplier) {
-        this.distanceMultiplier = distanceMultiplier;
-    }
+    private int distanceMultiplier = 20;
 
     @Override
     public void transformPage(@NonNull View page, float position) {
@@ -45,8 +41,8 @@ public class PageTransformer implements ViewPager.PageTransformer {
     }
 
     private void onTransform(View page, float position) {
-        page.setCameraDistance(page.getMeasuredWidth() * distanceMultiplier);
-        page.setPivotX(position < 0f ? page.getWidth() : 0f);
+        page.setCameraDistance((float) page.getWidth() * distanceMultiplier);
+        page.setPivotX(position < 0f ? (float) page.getWidth() : 0f);
         page.setPivotY(page.getHeight() * 0.5f);
         page.setRotationY(90f * position);
     }

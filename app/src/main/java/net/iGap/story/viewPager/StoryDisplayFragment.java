@@ -1,5 +1,6 @@
 package net.iGap.story.viewPager;
 
+import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -43,7 +44,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private StoryUser storyUser;
     private List<Story> stories;
     private long pressTime = 0L;
-    private final long limit = 500L;
+    private long limit = 500L;
     private int counter = 0;
     private boolean keyboardViewVisible;
     private boolean onResumeCalled = false;
@@ -255,7 +256,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         previous.setOnTouchListener(touchListener);
         next.setOnTouchListener(touchListener);
 
-        storiesProgressView.setStoriesCount(stories.size());
+        storiesProgressView.setStoriesCount(stories.size(), position = getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : -1);
         storiesProgressView.setAllStoryDuration(StoryProgress.DEFAULT_PROGRESS_DURATION);
         storiesProgressView.setStoriesListener(this);
     }

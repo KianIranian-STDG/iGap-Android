@@ -14,7 +14,7 @@ public class PausableScaleAnimation extends ScaleAnimation {
 
     @Override
     public boolean getTransformation(long currentTime, Transformation outTransformation, float scale) {
-        if (isPaused && elapsedAtPause == 0) {
+        if (isPaused && elapsedAtPause == 0L) {
             elapsedAtPause = currentTime - getStartTime();
         }
         if (isPaused) {
