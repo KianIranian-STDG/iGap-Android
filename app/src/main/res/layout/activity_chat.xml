@@ -345,10 +345,9 @@
             android:id="@+id/cardFloatingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp6"
-            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp68"
+            android:visibility="visible"
             app:cardBackgroundColor="?attr/iGapDividerLine"
             app:cardCornerRadius="5dp">
 
