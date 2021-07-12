@@ -9450,22 +9450,27 @@ public class FragmentChat extends BaseFragment
      */
     private void changePinnedMessageVisibility(boolean changeVisibility, boolean dropDown, boolean musicIsEnable, boolean callIsEnable) {
         ValueAnimator animator;
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cardFloatingTime.getLayoutParams();
+        RelativeLayout.LayoutParams floatingTimeLayoutParams = (RelativeLayout.LayoutParams) cardFloatingTime.getLayoutParams();
         if (changeVisibility) { // pin layout visibility will change
             if (musicIsEnable || callIsEnable) { // call or music layout is visible
                 // if drop down was true, shows that two layout is on top of fragment and cardFloatingTime margin should be mediaContainer + pinLayout + toolbarLayout heights(150) otherwise mediaContainer + toolbar height(110).
-                layoutParams.topMargin = LayoutCreator.dp(dropDown ? 150 : 110);
-                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 140 : 100), 0, 0);
+                floatingTimeLayoutParams.topMargin = LayoutCreator.dp(dropDown ? 150 : 110);
+                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 140 : 98), 0, 0);
             } else {
                 // in this situation mediaContainer is invisible. if dropDown was true shows that cardFloatingTime margin should be toolbar + pinLayout(110) otherwise just toolbar height (65).
-                layoutParams.topMargin = LayoutCreator.dp(dropDown ? 110 : 65);
-                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 100 : 56), 0, 0);
+                floatingTimeLayoutParams.topMargin = LayoutCreator.dp(dropDown ? 110 : 65);
+                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 98 : 56), 0, 0);
             }
         } else {
             if (musicIsEnable || callIsEnable) {
                 // in this situation pinLayout is visible and just mediaContainer visibility will change.
-                layoutParams.topMargin = LayoutCreator.dp(dropDown ? 150 : 110);
-                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 140 : 100), 0, 0);
+                if (pinedMessageLayout.getVisibility() == View.GONE) {
+                    floatingTimeLayoutParams.topMargin = LayoutCreator.dp(dropDown ? 110 : 65);
+                    linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 98 : 56), 0, 0);
+                } else {
+                    floatingTimeLayoutParams.topMargin = LayoutCreator.dp(dropDown ? 150 : 110);
+                    linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 140 : 98), 0, 0);
+                }
             }
         }
         AnimatorSet animationSet = new AnimatorSet();
