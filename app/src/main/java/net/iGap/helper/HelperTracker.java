@@ -23,8 +23,8 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoSignalingOffer;
 
-import ir.metrix.sdk.Metrix;
-import ir.metrix.sdk.MetrixConfig;
+import ir.metrix.Metrix;
+
 
 public class HelperTracker {
 
@@ -122,215 +122,215 @@ public class HelperTracker {
         if (allowSendTracker && canSendMetrixEvent) {
             switch (trackerTag) {
                 case TRACKER_CHANGE_LANGUAGE:
-                    Metrix.getInstance().newEvent("rvwun");
+                    Metrix.newEvent("rvwun");
                     //CHANGE_LANGUAGE_UNIQUE
-                    Metrix.getInstance().newEvent("hrvwa");
+                    Metrix.newEvent("hrvwa");
                     break;
                 case TRACKER_CALL_PAGE:
-                    Metrix.getInstance().newEvent("mlrxn");
+                    Metrix.newEvent("mlrxn");
                     //CALL_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("nrnyz");
+                    Metrix.newEvent("nrnyz");
                     break;
                 case TRACKER_VOICE_CALL_CONNECTING:
-                    Metrix.getInstance().newEvent("qsjti");
+                    Metrix.newEvent("qsjti");
                     //VOICE_CALL_CONNECTING_UNIQUE
-                    Metrix.getInstance().newEvent("zkinz");
+                    Metrix.newEvent("zkinz");
                     break;
                 case TRACKER_VOICE_CALL_CONNECTED:
-                    Metrix.getInstance().newEvent("znfwd");
+                    Metrix.newEvent("znfwd");
                     //VOICE_CALL_CONNECTED_UNIQUE
-                    Metrix.getInstance().newEvent("cqyft");
+                    Metrix.newEvent("cqyft");
                     break;
                 case TRACKER_VIDEO_CALL_CONNECTING:
-                    Metrix.getInstance().newEvent("sxkav");
+                    Metrix.newEvent("sxkav");
                     //VIDEO_CALL_CONNECTING_UNIQUE
-                    Metrix.getInstance().newEvent("mwiez");
+                    Metrix.newEvent("mwiez");
                     break;
                 case TRACKER_VIDEO_CALL_CONNECTED:
-                    Metrix.getInstance().newEvent("dcsqk");
+                    Metrix.newEvent("dcsqk");
                     //VIDEO_CALL_CONNECTED_UNIQUE
-                    Metrix.getInstance().newEvent("qpetc");
+                    Metrix.newEvent("qpetc");
                     break;
                 case TRACKER_CHAT_VIEW:
-                    Metrix.getInstance().newEvent("rszqm");
+                    Metrix.newEvent("rszqm");
                     //CHAT_VIEW_UNIQUE
-                    Metrix.getInstance().newEvent("njcym");
+                    Metrix.newEvent("njcym");
                     break;
                 case TRACKER_GROUP_VIEW:
-                    Metrix.getInstance().newEvent("htwef");
+                    Metrix.newEvent("htwef");
                     //GROUP_VIEW_UNIQUE
-                    Metrix.getInstance().newEvent("exgqd");
+                    Metrix.newEvent("exgqd");
                     break;
                 case TRACKER_CHANNEL_VIEW:
-                    Metrix.getInstance().newEvent("smkkz");
+                    Metrix.newEvent("smkkz");
                     //CHANNEL_VIEW_UNIQUE
-                    Metrix.getInstance().newEvent("rnroy");
+                    Metrix.newEvent("rnroy");
                     break;
                 case TRACKER_BOT_VIEW:
-                    Metrix.getInstance().newEvent("sgozq");
+                    Metrix.newEvent("sgozq");
                     //BOT_VIEW_UNIQUE
-                    Metrix.getInstance().newEvent("fjouv");
+                    Metrix.newEvent("fjouv");
                     break;
                 case TRACKER_ROOM_PAGE:
-                    Metrix.getInstance().newEvent("hnahq");
+                    Metrix.newEvent("hnahq");
                     //ROOM_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("pvtkd");
+                    Metrix.newEvent("pvtkd");
                     break;
                 case TRACKER_CREATE_CHANNEL:
-                    Metrix.getInstance().newEvent("hzodo");
+                    Metrix.newEvent("hzodo");
                     //CREATE_CHANNEL_UNIQUE
-                    Metrix.getInstance().newEvent("xdtkp");
+                    Metrix.newEvent("xdtkp");
                     break;
                 case TRACKER_CREATE_GROUP:
-                    Metrix.getInstance().newEvent("szlrq");
+                    Metrix.newEvent("szlrq");
                     //CREATE_GROUP_UNIQUE
-                    Metrix.getInstance().newEvent("sofvw");
+                    Metrix.newEvent("sofvw");
                     break;
                 case TRACKER_INVITE_FRIEND:
-                    Metrix.getInstance().newEvent("kvjqi");
+                    Metrix.newEvent("kvjqi");
                     //INVITE_FRIEND_UNIQUE
-                    Metrix.getInstance().newEvent("oggbs");
+                    Metrix.newEvent("oggbs");
                     break;
                 case TRACKER_INSTALL_USER:
-                    Metrix.getInstance().newEvent("zwhkn");
+                    Metrix.newEvent("zwhkn");
                     //INSTALL_USER_UNIQUE
-                    Metrix.getInstance().newEvent("qibti");
+                    Metrix.newEvent("qibti");
                     break;
                 case TRACKER_SUBMIT_NUMBER:
-                    Metrix.getInstance().newEvent("hvxtt");
+                    Metrix.newEvent("hvxtt");
                     //SUBMIT_NUMBER_UNIQUE
-                    Metrix.getInstance().newEvent("ioouf");
+                    Metrix.newEvent("ioouf");
                     break;
                 case TRACKER_ACTIVATION_CODE:
-                    Metrix.getInstance().newEvent("jjrro");
+                    Metrix.newEvent("jjrro");
                     //ACTIVATION_CODE_UNIQUE
-                    Metrix.getInstance().newEvent("qgwir");
+                    Metrix.newEvent("qgwir");
                     break;
                 case TRACKER_QR_REGISTRATION:
-                    Metrix.getInstance().newEvent("uufge");
+                    Metrix.newEvent("uufge");
                     //QR_REGISTRATION_UNIQUE
-                    Metrix.getInstance().newEvent("zujim");
+                    Metrix.newEvent("zujim");
                     break;
                 case TRACKER_REGISTRATION_USER:
-                    Metrix.getInstance().newEvent("ooarp");
+                    Metrix.newEvent("ooarp");
                     //REGISTRATION_USER_UNIQUE
-                    Metrix.getInstance().newEvent("wohlv");
+                    Metrix.newEvent("wohlv");
                     break;
                 case TRACKER_REGISTRATION_NEW_USER:
-                    Metrix.getInstance().newEvent("wthwa");
+                    Metrix.newEvent("wthwa");
 
                     //REGISTRATION_UNIQUE
-                    Metrix.getInstance().newEvent("npmol");
+                    Metrix.newEvent("npmol");
                     break;
                 case TRACKER_DISCOVERY_PAGE:
-                    Metrix.getInstance().newEvent("qkslv");
+                    Metrix.newEvent("qkslv");
                     //DISCOVERY_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("bbkde");
+                    Metrix.newEvent("bbkde");
                     break;
                 case TRACKER_WALLET_PAGE:
-                    Metrix.getInstance().newEvent("yxhgb");
+                    Metrix.newEvent("yxhgb");
                     //WALLET_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("ecufj");
+                    Metrix.newEvent("ecufj");
                     break;
                 case TRACKER_NEARBY_PAGE:
-                    Metrix.getInstance().newEvent("vvcid");
+                    Metrix.newEvent("vvcid");
                     //NEARBY_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("mkenc");
+                    Metrix.newEvent("mkenc");
                     break;
                 case TRACKER_FINANCIAL_SERVICES:
-                    Metrix.getInstance().newEvent("dbbfk");
+                    Metrix.newEvent("dbbfk");
                     //FINANCIAL_SERVICES_UNIQUE
-                    Metrix.getInstance().newEvent("iluis");
+                    Metrix.newEvent("iluis");
                     break;
                 case TRACKER_BILL_PAGE:
-                    Metrix.getInstance().newEvent("lqduh");
+                    Metrix.newEvent("lqduh");
                     //BILL_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("qftpu");
+                    Metrix.newEvent("qftpu");
                     break;
                 case TRACKER_PHONE_BILL_PAY:
-                    Metrix.getInstance().newEvent("rruab");
+                    Metrix.newEvent("rruab");
                     //PHONE_BILL_PAY_UNIQUE
-                    Metrix.getInstance().newEvent("wdasd");
+                    Metrix.newEvent("wdasd");
                     break;
                 case TRACKER_ELECTRIC_BILL_PAY:
-                    Metrix.getInstance().newEvent("fanwy");
+                    Metrix.newEvent("fanwy");
                     //ELECTRIC_BILL_PAY_UNIQUE
-                    Metrix.getInstance().newEvent("bcavh");
+                    Metrix.newEvent("bcavh");
                     break;
                 case TRACKER_ADD_BILL_PAGE:
-                    Metrix.getInstance().newEvent("esqvs");
+                    Metrix.newEvent("esqvs");
                     //ADD_BILL_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("axtjg");
+                    Metrix.newEvent("axtjg");
                     break;
                 case TRACKER_ADD_BILL_TO_LIST:
-                    Metrix.getInstance().newEvent("xhiip");
+                    Metrix.newEvent("xhiip");
                     //ADD_BILL_TO_LIST_UNIQUE
-                    Metrix.getInstance().newEvent("fjowx");
+                    Metrix.newEvent("fjowx");
                     break;
                 case TRACKER_SERVICE_BILL_PAGE:
-                    Metrix.getInstance().newEvent("mdmnf");
+                    Metrix.newEvent("mdmnf");
                     //SERVICE_BILL_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("emtkx");
+                    Metrix.newEvent("emtkx");
                     break;
                 case TRACKER_SERVICE_BILL_PAY:
-                    Metrix.getInstance().newEvent("foxxx");
+                    Metrix.newEvent("foxxx");
                     //SERVICE_BILL_PAY_UNIQUE
-                    Metrix.getInstance().newEvent("lrmuk");
+                    Metrix.newEvent("lrmuk");
                     break;
                 case TRACKER_FINE_BILL_PAGE:
-                    Metrix.getInstance().newEvent("bkxjc");
+                    Metrix.newEvent("bkxjc");
                     //FINE_BILL_PAGE_UNIQUE
-                    Metrix.getInstance().newEvent("htfxo");
+                    Metrix.newEvent("htfxo");
                     break;
                 case TRACKER_FINE_BILL_PAY:
-                    Metrix.getInstance().newEvent("ufgna");
+                    Metrix.newEvent("ufgna");
                     //FINE_BILL_PAY_UNIQUE
-                    Metrix.getInstance().newEvent("onybr");
+                    Metrix.newEvent("onybr");
                     break;
                 case TRACKER_LOGOUT_ACCOUNT:
-                    Metrix.getInstance().newEvent("hzaqe");
+                    Metrix.newEvent("hzaqe");
                     //LOGOUT_ACCOUNT_UNIQUE
-                    Metrix.getInstance().newEvent("bxrrx");
+                    Metrix.newEvent("bxrrx");
                     break;
                 case TRACKER_DELETE_ACCOUNT:
-                    Metrix.getInstance().newEvent("zbpyd");
+                    Metrix.newEvent("zbpyd");
                     //DELETE_ACCOUNT_UNIQUE
-                    Metrix.getInstance().newEvent("kwjrb");
+                    Metrix.newEvent("kwjrb");
                     break;
                 case TRACKER_ADD_NEW_ACCOUNT:
-                    Metrix.getInstance().newEvent("bsxvt");
+                    Metrix.newEvent("bsxvt");
                     //ADD_NEW_ACCOUNT_UNIQUE
-                    Metrix.getInstance().newEvent("hnirh");
+                    Metrix.newEvent("hnirh");
                     break;
                 case TRACKER_TWO_STEP:
-                    Metrix.getInstance().newEvent("flrkw");
+                    Metrix.newEvent("flrkw");
                     //TWO_STEP_UNIQUE
-                    Metrix.getInstance().newEvent("qwqpx");
+                    Metrix.newEvent("qwqpx");
                     break;
                 case TRACKER_ENTRY_PHONE:
-                    Metrix.getInstance().newEvent("wnxfo");
+                    Metrix.newEvent("wnxfo");
                     //ENTRY_PHONE_UNIQUE
-                    Metrix.getInstance().newEvent("nfrct");
+                    Metrix.newEvent("nfrct");
                     break;
                 case TRACKER_MOBILE_BILL_PAY:
-                    Metrix.getInstance().newEvent("xnplh");
+                    Metrix.newEvent("xnplh");
                     //MOBILE_BILL_PAY_UNIQUE
-                    Metrix.getInstance().newEvent("gdouh");
+                    Metrix.newEvent("gdouh");
                     break;
                 case TRACKER_GAS_BILL_PAY:
-                    Metrix.getInstance().newEvent("zdaaq");
+                    Metrix.newEvent("zdaaq");
                     //GAS_BILL_PAY_UNIQUE
-                    Metrix.getInstance().newEvent("wegcl");
+                    Metrix.newEvent("wegcl");
                     break;
                 case TRACKER_ENTRY_NEW_USER_INFO:
-                    Metrix.getInstance().newEvent("xsqei");
+                    Metrix.newEvent("xsqei");
                     //ENTRY_NEW_USER_INFO_UNIQUE
-                    Metrix.getInstance().newEvent("gmtgx");
+                    Metrix.newEvent("gmtgx");
                     break;
                 case TRACKER_CHANGE_LANGUAGE_FIRST:
-                    Metrix.getInstance().newEvent("lmkey");
+                    Metrix.newEvent("lmkey");
                     //CHANGE_LANGUAGE_FIRST_UNIQUE
-                    Metrix.getInstance().newEvent("gxkzj");
+                    Metrix.newEvent("gxkzj");
                     break;
             }
 
@@ -354,17 +354,13 @@ public class HelperTracker {
             canSendMetrixEvent = packageName != null && packageName.toLowerCase().equals("net.igap");
 
             if (canSendMetrixEvent) {
-                MetrixConfig metrixConfig = new MetrixConfig(context, BuildConfig.METRIX_ID);
-                metrixConfig.setFirebaseId(BuildConfig.METRIX_FIREBASE_FIRST_ID, BuildConfig.METRIX_FIREBASE_SECOND_ID, BuildConfig.METRIX_FIREBASE_THEIRD_ID);
-                Metrix.onCreate(metrixConfig);
-                Metrix.initialize(context, BuildConfig.METRIX_ID);
                 if (!BuildConfig.DEBUG) {
                     if (BuildConfig.isStore) {
-                        Metrix.getInstance().setStore(BuildConfig.Store);
+                        Metrix.setStore(BuildConfig.Store);
                     } else {
-                        Metrix.getInstance().setDefaultTracker(BuildConfig.TrackCode);
+                        Metrix.setDefaultTracker(BuildConfig.TrackCode);
                     }
-                    Metrix.getInstance().setAppSecret(BuildConfig.METRIX_SECRET, BuildConfig.METRIX_FIRST_SECRET, BuildConfig.METRIX_SECOND_SECRET, BuildConfig.METRIX_THEIRD_SECRET, BuildConfig.METRIX_FOURTH_SECRET);
+                    Metrix.setAppSecret(BuildConfig.METRIX_SECRET, BuildConfig.METRIX_FIRST_SECRET, BuildConfig.METRIX_SECOND_SECRET, BuildConfig.METRIX_THEIRD_SECRET, BuildConfig.METRIX_FOURTH_SECRET);
                 }
             }
         } catch (Exception e) {

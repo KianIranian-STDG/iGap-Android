@@ -67,14 +67,6 @@
         android:theme="@style/iGapLightTheme"
 
         tools:replace="allowBackup,supportsRtl,android:name,android:theme">
-        <receiver
-            android:name="ir.metrix.sdk.MetrixReferrerReceiver"
-            android:exported="true"
-            android:permission="android.permission.INSTALL_PACKAGES">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <receiver
             android:name=".module.CustomButtonListener"
@@ -293,6 +285,11 @@
           sign the APK for publishing.
           You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
+
+        <meta-data
+            android:name="metrix_appId"
+            android:value="@string/METRIX_ID" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
