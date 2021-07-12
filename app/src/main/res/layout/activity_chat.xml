@@ -20,7 +20,39 @@
             android:adjustViewBounds="true"
             android:background="?attr/iGapDefaultChatBackground"
             android:scaleType="centerCrop" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardFloatingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp68"
+            android:visibility="visible"
+            app:cardBackgroundColor="?attr/iGapDividerLine"
+            app:cardCornerRadius="5dp">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txtFloatingTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/dp16"
+                    android:paddingTop="@dimen/dp4"
+                    android:paddingRight="@dimen/dp16"
+                    android:paddingBottom="@dimen/dp4"
+                    android:singleLine="true"
+                    android:text="@string/today"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/iGapTitleTextColor"
+                    android:textSize="@dimen/smallTextSize" />
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
         <LinearLayout
             android:id="@+id/chatContainer"
             android:layout_width="match_parent"
@@ -341,39 +373,7 @@
             android:layout_marginTop="56dp"
             android:visibility="gone" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardFloatingTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp68"
-            android:visibility="visible"
-            app:cardBackgroundColor="?attr/iGapDividerLine"
-            app:cardCornerRadius="5dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/txtFloatingTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:maxLines="1"
-                    android:paddingLeft="@dimen/dp16"
-                    android:paddingTop="@dimen/dp4"
-                    android:paddingRight="@dimen/dp16"
-                    android:paddingBottom="@dimen/dp4"
-                    android:singleLine="true"
-                    android:text="@string/today"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/iGapTitleTextColor"
-                    android:textSize="@dimen/smallTextSize" />
-
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
 
         <include
             android:id="@+id/layout_mic_recorde"

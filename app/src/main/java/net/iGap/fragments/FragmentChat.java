@@ -587,14 +587,15 @@ public class FragmentChat extends BaseFragment
     private RealmRoomAccess currentRoomAccess;
     private RealmObjectChangeListener<RealmRoomAccess> roomAccessChangeListener;
     private boolean allowScrollToTop = true;
-    ToolbarItem moreItem;
-    ToolbarItem callItem;
-    ToolbarItem searchFieldItem;
-    TextView verifiedIcon;
-    TextView muteIcon;
-    AppCompatImageView avatarItem;
-    SearchFragment searchFragment;
-    EditText searchEditText;
+    private ToolbarItem moreItem;
+    private ToolbarItem callItem;
+    private ToolbarItem searchFieldItem;
+    private TextView verifiedIcon;
+    private TextView muteIcon;
+    private AppCompatImageView avatarItem;
+    private SearchFragment searchFragment;
+    private EditText searchEditText;
+    private LinearLayout linearChatContainer;
     private final int moreTag = 1;
     private final int voiceCallTag = 2;
     private final int videoCallTag = 3;
@@ -773,6 +774,7 @@ public class FragmentChat extends BaseFragment
 
         searchFieldItem = mToolbar.addItem(searchFieldTag, R.string.icon_search, Theme.getInstance().getTitleTextColor(getContext())).setIsSearchBox(true).setActionBarMenuItemSearchListener(new ToolbarItem.ActionBarMenuItemSearchListener() {
             int textLength;
+
             @Override
             public void onSearchExpand() {
                 if (layoutMute != null) {
@@ -1093,7 +1095,7 @@ public class FragmentChat extends BaseFragment
         callItem = toolbarItems.addItemWithWidth(voiceCallTag, R.string.icon_voice_call, 48);
 
         createActionMode();
-        rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60,Gravity.TOP));
+        rootView.addView(mToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 60, Gravity.TOP));
         notifyFrameLayout.addView(rootView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
 
         keyboardContainer = rootView.findViewById(R.id.fl_chat_keyboardContainer);
@@ -1177,8 +1179,6 @@ public class FragmentChat extends BaseFragment
     }
 
     public void exportChat() {
-
-
         RealmResults<RealmRoomMessage> realmRoomMessages = DbManager.getInstance().doRealmTask(realm -> {
             return realm.where(RealmRoomMessage.class).equalTo("roomId", mRoomId).sort("createTime").findAll();
         });
@@ -1245,9 +1245,6 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
-
-//
-
     }
 
     @Override
@@ -1261,6 +1258,8 @@ public class FragmentChat extends BaseFragment
         txtChannelMute = rootView.findViewById(R.id.chl_txt_mute_channel);
         iconChannelMute = rootView.findViewById(R.id.chl_icon_mute_channel);
         layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
+
+        linearChatContainer = rootView.findViewById(R.id.chatContainer);
 
         gongingRunnable = new Runnable() {
             @Override
@@ -9451,6 +9450,24 @@ public class FragmentChat extends BaseFragment
      */
     private void changePinnedMessageVisibility(boolean changeVisibility, boolean dropDown, boolean musicIsEnable, boolean callIsEnable) {
         ValueAnimator animator;
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) cardFloatingTime.getLayoutParams();
+        if (changeVisibility) { // pin layout visibility will change
+            if (musicIsEnable || callIsEnable) { // call or music layout is visible
+                // if drop down was true, shows that two layout is on top of fragment and cardFloatingTime margin should be mediaContainer + pinLayout + toolbarLayout heights(150) otherwise mediaContainer + toolbar height(110).
+                layoutParams.topMargin = LayoutCreator.dp(dropDown ? 150 : 110);
+                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 140 : 100), 0, 0);
+            } else {
+                // in this situation mediaContainer is invisible. if dropDown was true shows that cardFloatingTime margin should be toolbar + pinLayout(110) otherwise just toolbar height (65).
+                layoutParams.topMargin = LayoutCreator.dp(dropDown ? 110 : 65);
+                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 100 : 56), 0, 0);
+            }
+        } else {
+            if (musicIsEnable || callIsEnable) {
+                // in this situation pinLayout is visible and just mediaContainer visibility will change.
+                layoutParams.topMargin = LayoutCreator.dp(dropDown ? 150 : 110);
+                linearChatContainer.setPadding(0, LayoutCreator.dp(dropDown ? 140 : 100), 0, 0);
+            }
+        }
         AnimatorSet animationSet = new AnimatorSet();
         animationSet.addListener(new AnimatorListenerAdapter() {
             @Override
