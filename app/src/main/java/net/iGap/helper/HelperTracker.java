@@ -10,7 +10,6 @@
 
 package net.iGap.helper;
 
-import com.caspian.otpsdk.context.ApplicationContext;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -345,26 +344,6 @@ public class HelperTracker {
 
             tracker.setScreenName(action);
             tracker.send(new HitBuilders.ScreenViewBuilder().build());
-        }
-    }
-
-    public void initMetrix(ApplicationContext context) {
-        try {
-            String packageName = context.getPackageName();
-            canSendMetrixEvent = packageName != null && packageName.toLowerCase().equals("net.igap");
-
-            if (canSendMetrixEvent) {
-                if (!BuildConfig.DEBUG) {
-                    if (BuildConfig.isStore) {
-                        Metrix.setStore(BuildConfig.Store);
-                    } else {
-                        Metrix.setDefaultTracker(BuildConfig.TrackCode);
-                    }
-                    Metrix.setAppSecret(BuildConfig.METRIX_SECRET, BuildConfig.METRIX_FIRST_SECRET, BuildConfig.METRIX_SECOND_SECRET, BuildConfig.METRIX_THEIRD_SECRET, BuildConfig.METRIX_FOURTH_SECRET);
-                }
-            }
-        } catch (Exception e) {
-            FileLog.e(e);
         }
     }
 

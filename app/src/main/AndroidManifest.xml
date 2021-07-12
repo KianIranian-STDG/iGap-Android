@@ -291,6 +291,22 @@
             android:value="@string/METRIX_ID" />
 
         <meta-data
+            android:name="metrix_signature"
+            android:value="@string/METRIX_SECRET" />
+
+        <meta-data
+            android:name="metrix_trackerToken"
+            android:value="@string/TrackCode" />
+
+        <meta-data
+            android:name="metrix_storeName"
+            android:value="@string/Store" />
+
+        <meta-data
+            android:name="metrix_deviceId_collection_enabled"
+            android:value="false" />
+
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
