@@ -48,7 +48,7 @@ public class GlideImageLoader implements ImageLoaderService {
         RequestBuilder requestBuilder = requestManager.load(imageUrl).placeholder(placeHolder);
 
         if (isGif) {
-            requestBuilder = requestManager.asGif();
+            requestBuilder = requestManager.asGif().load(imageUrl);
         }
 
         targetImageView.setImageBitmap(null);
