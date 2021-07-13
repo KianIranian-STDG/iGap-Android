@@ -1,13 +1,11 @@
 package net.iGap.story.viewPager;
 
-import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,10 +82,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_story_display, container, false);
-        assert getArguments() != null;
-        position = getArguments().getInt(EXTRA_POSITION);
-        storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
-        stories = storyUser.getStories();
+
         storiesProgressView = rootView.findViewById(R.id.storiesProgressView);
         storyDisplayImage = rootView.findViewById(R.id.storyDisplayImage);
         userName = rootView.findViewById(R.id.storyDisplayNick);
@@ -109,6 +103,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         expandableTextView = rootView.findViewById(R.id.caption_text_sub_view);
         progressBar = rootView.findViewById(R.id.storyDisplayVideoProgress);
         storyOverlay = rootView.findViewById(R.id.storyOverlay);
+
+        if (getArguments() != null) {
+            position = getArguments().getInt(EXTRA_POSITION);
+            storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
+            stories = storyUser.getStories();
+        }
+
         return rootView;
     }
 
@@ -136,8 +137,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         if (counter == 0) {
             storiesProgressView.startStories();
         } else {
-            assert getArguments() != null;
-            counter = StoryViewFragment.progressStateArray.get(getArguments().getInt(EXTRA_POSITION));
+            counter = StoryViewFragment.progressStateArray.get(getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : 0);
             storiesProgressView.startStories(counter);
         }
     }
@@ -152,8 +152,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onDestroy() {
         super.onDestroy();
-/*        counter = 0;
-        savePosition(counter);*/
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
     }
 
@@ -356,7 +354,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     public void savePosition(int pos) {
-        StoryViewFragment.progressStateArray.append(position, pos);
+        StoryViewFragment.progressStateArray.put(position, pos);
     }
 
     public int restorePosition() {

@@ -14,8 +14,8 @@ public class StoryPagerAdapter extends FragmentStatePagerAdapter {
     private List<StoryUser> storyUsers;
     private StoryDisplayFragment.PageViewOperator pageViewOperator;
 
-    public StoryPagerAdapter(FragmentManager fm, List<StoryUser> storyUsers, StoryDisplayFragment.PageViewOperator pageViewOperator) {
-        super(fm);
+    public StoryPagerAdapter(@NonNull FragmentManager fm, int behavior, List<StoryUser> storyUsers, StoryDisplayFragment.PageViewOperator pageViewOperator) {
+        super(fm, behavior);
         this.storyUsers = storyUsers;
         this.pageViewOperator = pageViewOperator;
     }

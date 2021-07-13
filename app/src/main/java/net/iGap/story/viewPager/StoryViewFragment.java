@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 import net.iGap.R;
@@ -72,7 +73,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             storyUserList = storyGenerator.generateStories();
         }
 
-        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), storyUserList, this);
+        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, storyUserList, this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
         viewPager.setPageTransformer(true, new PageTransformer());

@@ -63,13 +63,13 @@ public class StoriesProgressView extends LinearLayout {
 
     private StoryProgress createProgressBar() {
         StoryProgress storyProgress = new StoryProgress(getContext(), null, 0);
-        storyProgress.setLayoutParams(LayoutCreator.createLinear(0, LayoutCreator.WRAP_CONTENT, 1F));
+        storyProgress.setLayoutParams(LayoutCreator.createLinear(0, 4, 1F));
         return storyProgress;
     }
 
     private View createSpace() {
         View view = new View(getContext());
-        view.setLayoutParams(LayoutCreator.createRelative(5, LayoutCreator.WRAP_CONTENT));
+        view.setLayoutParams(LayoutCreator.createRelative(5,4));
         return view;
     }
 
