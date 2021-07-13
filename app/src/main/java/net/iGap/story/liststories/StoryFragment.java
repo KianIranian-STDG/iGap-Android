@@ -2,6 +2,7 @@ package net.iGap.story.liststories;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +13,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import net.iGap.Config;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.customView.RecyclerListView;
+import net.iGap.network.IG_RPC;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.story.StoryPagerFragment;
 import net.iGap.story.liststories.cells.AddStoryCell;
 import net.iGap.story.liststories.cells.HeaderCell;
 import net.iGap.story.liststories.cells.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class StoryFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener {
 
     private RecyclerListView recyclerListView;
@@ -36,6 +47,11 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
     private int recentStoryRow;
     private int muteHeaderRow;
     private int muteStoryRow;
+    private List<Story> storyCount;
+
+    public class Story {
+//   ->     sample model for storyLIstSize
+    }
 
     @Nullable
     @Override
@@ -45,27 +61,38 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
             return super.onCreateView(inflater, container, savedInstanceState);
 
         HelperToolbar helperToolbar = HelperToolbar.create();
-
-        String title = getResources().getString(R.string.stories);
         View toolBar = helperToolbar
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setListener(this)
                 .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.stories))
-                .setDefaultTitle(title)
                 .getView();
+//request for get story list
+        IG_RPC.InfoConfig req = new IG_RPC.InfoConfig();
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                storyCount = new ArrayList<>();
+                for (int i = 0; i < 5; i++) {
+                    Story story = new Story();
+                    storyCount.add(story);
+                }
+            } else {
+                Log.i("nazanin", "onViewCreated: ");
+            }
+
+        });
 
         FrameLayout rootView = new FrameLayout(getContext());
         rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
         rootView.addView(recyclerListView = new RecyclerListView(getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
-
         recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerListView.setAdapter(adapter = new ListAdapter());
         recyclerListView.setClipToPadding(false);
         recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
+        recyclerListView.setAdapter(adapter = new ListAdapter());
         adapter.addRow();
+
         return rootView;
     }
 
@@ -90,13 +117,14 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         public void addRow() {
             rowSize = 0;
             addStoryRow = rowSize++;
-            recentHeaderRow = rowSize++;
-            for (int i = rowSize; i < 4; i++)
-                recentStoryRow = rowSize++;
-            muteHeaderRow = rowSize++;
-            for (int i = rowSize; i < 8; i++)
-                muteStoryRow = rowSize++;
-
+            if (storyCount != null) {
+                recentHeaderRow = rowSize++;
+                for (int i = rowSize; i < (storyCount.size()) + 2; i++)
+                    recentStoryRow = rowSize++;
+                muteHeaderRow = rowSize++;
+                for (int i = rowSize; i < storyCount.size() + storyCount.size() + 3; i++)
+                    muteStoryRow = rowSize++;
+            }
             notifyDataSetChanged();
         }
 
