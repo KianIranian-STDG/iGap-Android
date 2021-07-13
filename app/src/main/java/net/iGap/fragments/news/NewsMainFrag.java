@@ -20,6 +20,8 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.news.NewsFPList;
 import net.iGap.model.news.NewsFirstPage;
 import net.iGap.model.news.NewsMainBTN;
@@ -79,21 +81,18 @@ public class NewsMainFrag extends BaseAPIViewFrag<NewsMainVM> {
         else if (specificNewsID != null && !specificNewsID.equals(""))
             openNewsDetail(specificNewsID);
 
-        HelperToolbar mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        popBackStackFragment();
-                    }
-                })
-                .setDefaultTitle(getResources().getString(R.string.news_mainTitle))
-                .setLogoShown(true);
+        Toolbar newsMainToolbar = new Toolbar(getContext());
+        newsMainToolbar.setTitle(getString(R.string.news_mainTitle));
+        newsMainToolbar.setBackIcon(new BackDrawable(false));
+        newsMainToolbar.setListener(i -> {
+            if (i == -1) {
+                popBackStackFragment();
+            }
+        });
+
 
         LinearLayout toolbarLayout = binding.Toolbar;
-        toolbarLayout.addView(mHelperToolbar.getView());
+        toolbarLayout.addView(newsMainToolbar);
 
         binding.rcMain.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

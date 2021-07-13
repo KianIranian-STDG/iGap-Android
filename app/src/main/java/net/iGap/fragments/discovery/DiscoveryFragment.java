@@ -1,10 +1,13 @@
 package net.iGap.fragments.discovery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,22 +28,40 @@ import com.google.gson.reflect.TypeToken;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.adapter.items.discovery.holder.BaseViewHolder;
 import net.iGap.fragments.BaseMainFragments;
 import net.iGap.fragments.BottomNavigationFragment;
+import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperPreferences;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
+import net.iGap.helper.HelperWallet;
+import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
+import net.iGap.model.PassCode;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetDiscovery;
+
+import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 
 public class DiscoveryFragment extends BaseMainFragments implements ToolbarListener {
 
@@ -55,6 +76,10 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     private boolean needToReload = false;
     private MaterialDialog materialDialog;
     private ArrayList<DiscoveryItem> discoveryArrayList;
+    private final int walletTag = 1;
+    private final int passCodeTag = 2;
+    private Toolbar discoveryToolbar;
+    private ToolbarItem passCodeItem;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -114,30 +139,45 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         }
 
         //uncomment this lines after added small avatar and discovery setting
+
+        discoveryToolbar = new Toolbar(getContext());
+        discoveryToolbar.setTitle(G.isAppRtl ? R.string.logo_igap_fa : R.string.logo_igap_en);
         if (page != 0) {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLifecycleOwner(getViewLifecycleOwner())
-                    .setLogoShown(true)
-                    .setLeftIcon(R.string.icon_back)
-                    .setListener(this);
+            discoveryToolbar.setBackIcon(new BackDrawable(false));
 
         } else {
-            mHelperToolbar = HelperToolbar.create()
-                    .setContext(getContext())
-                    .setLifecycleOwner(getViewLifecycleOwner())
-                    //.setLeftIcon(R.string.flag_icon)
-                    // .setRightSmallAvatarShown(true)
-                    .setLogoShown(true)
-                    .setFragmentActivity(getActivity())
-                    .setPassCodeVisibility(true, R.string.icon_unlock)
-                    .setScannerVisibility(true, R.string.icon_QR_code)
-                    //  .setSearchBoxShown(true, false)
-                    .setListener(this);
+            discoveryToolbar.addItem(walletTag, R.string.icon_QR_code, Color.WHITE);
+            passCodeItem = discoveryToolbar.addItem(passCodeTag, R.string.icon_lock, Color.WHITE);
         }
+        checkPassCodeVisibility();
+        discoveryToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    popBackStackFragment();
+                    break;
+                case walletTag:
+                    onScannerClickListener();
+                    break;
+                case passCodeTag:
+                    if (passCodeItem == null) {
+                        return;
+                    }
+                    if (ActivityMain.isLock) {
+                        passCodeItem.setIcon(R.string.icon_unlock);
+                        ActivityMain.isLock = false;
+                        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
+                    } else {
+                        passCodeItem.setIcon(R.string.icon_lock);
+                        ActivityMain.isLock = true;
+                        HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
+                    }
 
+                    checkPassCodeVisibility();
+                    break;
+            }
+        });
         ViewGroup layoutToolbar = view.findViewById(R.id.fd_layout_toolbar);
-        layoutToolbar.addView(mHelperToolbar.getView());
+        layoutToolbar.addView(discoveryToolbar, LayoutCreator.createLinear(LayoutCreator.MATCH_PARENT, LayoutCreator.dp(56), Gravity.TOP));
 
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
@@ -209,6 +249,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
     @Override
     public void onResume() {
         super.onResume();
+        checkPassCodeVisibility();
     }
 
     private void setRefreshing(boolean value) {
@@ -223,7 +264,33 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             }
         }
     }
+    private void onScannerClickListener() {
+        DbManager.getInstance().doRealmTask(realm -> {
+            String phoneNumber = "";
+            RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
+            try {
+                if (userInfo != null) {
+                    phoneNumber = userInfo.getUserInfo().getPhoneNumber().substring(2);
+                } else {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                }
+            } catch (Exception e) {
+                //maybe exception was for realm substring
+                try {
+                    phoneNumber = AccountManager.getInstance().getCurrentUser().getPhoneNumber().substring(2);
+                } catch (Exception ex) {
+                    //nothing
+                }
+            }
 
+            if (userInfo == null || !userInfo.isWalletRegister()) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), FragmentWalletAgrement.newInstance(phoneNumber)).load();
+            } else {
+                getActivity().startActivityForResult(new HelperWallet().goToWallet(getContext(), new Intent(getActivity(), WalletActivity.class), "0" + phoneNumber, true), WALLET_REQUEST_CODE);
+            }
+
+        });
+    }
     private void tryToUpdateOrFetchRecycleViewData(int count) {
         setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
@@ -241,7 +308,22 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
             setRefreshing(false);
         }
     }
+    public void checkPassCodeVisibility() {
+        if (PassCode.getInstance().isPassCode()) {
+            if (passCodeItem == null) {
+                passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
+            }
 
+            ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
+            if (ActivityMain.isLock) {
+                passCodeItem.setIcon(R.string.icon_lock);
+            } else {
+                passCodeItem.setIcon(R.string.icon_unlock);
+            }
+        } else if (passCodeItem != null) {
+            passCodeItem.setVisibility(View.GONE);
+        }
+    }
     private boolean updateOrFetchRecycleViewData() {
         return new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
@@ -331,7 +413,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
         this.discoveryArrayList = discoveryArrayList;
         if (rcDiscovery.getAdapter() instanceof DiscoveryAdapter) {
             ((DiscoveryAdapter) rcDiscovery.getAdapter()).setDiscoveryList(discoveryArrayList, rcDiscovery.getWidth());
-            if (page != 0) mHelperToolbar.setDefaultTitle(title);
+            if (page != 0) discoveryToolbar.setTitle(title);
             rcDiscovery.getAdapter().notifyDataSetChanged();
         }
     }
@@ -360,7 +442,7 @@ public class DiscoveryFragment extends BaseMainFragments implements ToolbarListe
 
     @Override
     public void onLeftIconClickListener(View view) {
-        popBackStackFragment();
+
     }
 
     @Override
