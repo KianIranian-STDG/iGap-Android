@@ -22,6 +22,8 @@ import net.iGap.fragments.FragmentWebView;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.PopularChannelHomeViewModel;
@@ -50,22 +52,17 @@ public class PopularChannelHomeFragment extends BaseAPIViewFrag<PopularChannelHo
         RecyclerView recyclerView = view.findViewById(R.id.rv_popularChannel_home);
         swipeRefreshLayout = view.findViewById(R.id.sr_popularChannel_home);
         epmtyView = view.findViewById(R.id.emptyRecycle);
-
+        Toolbar popularChannelsToolbar = new Toolbar(getContext());
+        popularChannelsToolbar.setBackIcon(new BackDrawable(false));
+        popularChannelsToolbar.setTitle(getString(R.string.popular_channel));
+        popularChannelsToolbar.setListener(i -> {
+            if (i == -1) {
+                if (getActivity() != null)
+                    getActivity().onBackPressed();
+            }
+        });
         recyclerView.setAdapter(new PopularChannelHomeAdapter(viewModel.getRecyclerItemClick()));
-        ((ViewGroup) view.findViewById(R.id.ll_popularChannel_toolBar)).addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null)
-                            getActivity().onBackPressed();
-                    }
-                })
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.popular_channel))
-                .setLeftIcon(R.string.icon_back)
-                .getView());
+        ((ViewGroup) view.findViewById(R.id.ll_popularChannel_toolBar)).addView(popularChannelsToolbar);
 
 
         viewModel.getFirstPageMutableLiveData().observe(getViewLifecycleOwner(), parentChannel -> {

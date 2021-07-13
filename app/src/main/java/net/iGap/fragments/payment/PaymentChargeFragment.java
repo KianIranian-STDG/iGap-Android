@@ -47,6 +47,8 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.Config;
 import net.iGap.model.paymentPackage.ConfigData;
@@ -171,20 +173,15 @@ public class PaymentChargeFragment extends BaseFragment {
         lstOperator = view.findViewById(R.id.lstOperator);
         avatar = view.findViewById(R.id.avatar);
         editTextNumber.setGravity(G.isAppRtl ? Gravity.RIGHT : Gravity.LEFT);
-        toolbar.addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(getString(R.string.buy_charge))
-                .setLogoShown(true)
-                .setLeftIcon(R.string.icon_back)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
-                    }
-                }).getView());
+        Toolbar paymentToolbar = new Toolbar(getContext());
+        paymentToolbar.setTitle(getString(R.string.buy_charge));
+        paymentToolbar.setBackIcon(new BackDrawable(false));
+        paymentToolbar.setListener(i -> {
+            if (i == -1) {
+                getActivity().onBackPressed();
+            }
+        });
+        toolbar.addView(paymentToolbar);
         if (G.themeColor == Theme.DARK) {
             frameHistory.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
             frameContact.setBackground(getContext().getResources().getDrawable(R.drawable.shape_payment_charge_dark));
