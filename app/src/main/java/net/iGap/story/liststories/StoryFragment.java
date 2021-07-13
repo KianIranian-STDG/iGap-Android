@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
@@ -62,7 +64,21 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                 .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.stories))
                 .getView();
-//request for get story list
+
+
+        FrameLayout rootView = new FrameLayout(getContext());
+        rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
+        recyclerListView = new RecyclerListView(getContext());
+        adapter = new ListAdapter();
+        adapter.addRow();
+        recyclerListView.setAdapter(adapter);
+        recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerListView.setClipToPadding(false);
+        recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
+        rootView.addView(recyclerListView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
+
+        //request for get story list
         IG_RPC.InfoConfig req = new IG_RPC.InfoConfig();
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
@@ -71,21 +87,12 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                     Story story = new Story();
                     storyCount.add(story);
                 }
+                G.runOnUiThread(() -> adapter.addRow());
             } else {
-                Log.i("nazanin", "onViewCreated: ");
+                // handel error
             }
 
         });
-
-        FrameLayout rootView = new FrameLayout(getContext());
-        rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
-        rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
-        rootView.addView(recyclerListView = new RecyclerListView(getContext()), LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, Gravity.TOP, 0, LayoutCreator.getDimen(R.dimen.toolbar_height), 0, 0));
-        recyclerListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        recyclerListView.setClipToPadding(false);
-        recyclerListView.setPadding(0, 0, 0, LayoutCreator.dp(30));
-        recyclerListView.setAdapter(adapter = new ListAdapter());
-        adapter.addRow();
 
         return rootView;
     }
