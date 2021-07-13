@@ -13,18 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import net.iGap.Config;
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.module.Theme;
-import net.iGap.module.accountManager.AppConfig;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.interfaces.ToolbarListener;
