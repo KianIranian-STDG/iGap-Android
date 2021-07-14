@@ -326,6 +326,7 @@ import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static net.iGap.G.twoPaneMode;
+import static net.iGap.R.id.ac_ll_join;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
@@ -783,8 +784,11 @@ public class FragmentChat extends BaseFragment
                 if (viewAttachFile != null) {
                     viewAttachFile.setVisibility(View.GONE);
                 }
+                if (rootView.findViewById(R.id.ac_ll_join).getVisibility() == View.VISIBLE) {
+                    rootView.findViewById(R.id.ac_ll_join).setVisibility(View.GONE);
+                }
                 if (pinedMessageLayout != null) {
-                    pinedMessageLayout.setVisibility(View.GONE);
+                    changePinnedMessageVisibility(true,false,MusicPlayer.isMusicPlyerEnable,CallManager.getInstance().isCallAlive());
                 }
                 if (vgSpamUser != null) {
                     vgSpamUser.setVisibility(View.GONE);
@@ -860,7 +864,13 @@ public class FragmentChat extends BaseFragment
                 }
 
                 if (pinedMessageLayout != null) {
-                    pinedMessageLayout.setVisibility(isPinAvailable ? View.VISIBLE : View.GONE);
+                    if (isPinAvailable) {
+                        changePinnedMessageVisibility(true,true,MusicPlayer.isMusicPlyerEnable,CallManager.getInstance().isCallAlive());
+                    }
+                }
+
+                if (isNotJoin) {
+                    rootView.findViewById(R.id.ac_ll_join).setVisibility(View.VISIBLE);
                 }
                 if (searchFragment != null) {
                     searchFragment.onSearchCollapsed();
@@ -911,7 +921,7 @@ public class FragmentChat extends BaseFragment
                     }
                     openSearchBox(null);
                     showPopup(KeyboardView.MODE_KEYBOARD);
-                    G.handler.postDelayed(() -> editTextRequestFocus(searchEditText), 250);
+                    G.handler.postDelayed(() -> editTextRequestFocus(searchEditText), 300);
                     break;
                 case voiceCallTag:
                     if (CallManager.getInstance().getCallPeerId() == chatPeerId) {
@@ -4688,6 +4698,7 @@ public class FragmentChat extends BaseFragment
                 animatorSet.setDuration(180);
                 animatorSet.start();
             }
+            replyMessageItem.setVisibility(selectedCount > 1 ? View.GONE : View.VISIBLE);
             multiSelectCounter.setNumber(selectedCount, true);
             FragmentChat.isInSelectionMode = true;
 
