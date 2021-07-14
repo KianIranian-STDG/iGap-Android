@@ -16,11 +16,10 @@ public class HeaderCell extends AppCompatTextView {
 
     public HeaderCell(Context context) {
         super(context);
-
         setPadding(LayoutCreator.dp(16), LayoutCreator.dp(4), LayoutCreator.dp(16), LayoutCreator.dp(4));
         setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT | Gravity.CENTER_VERTICAL);
-        //setTextColor(Theme.getColor(Theme.GREY));
-        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        setBackgroundColor(getResources().getColor(R.color.gray_300));
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         setTypeface(ResourcesCompat.getFont(context, R.font.main_font_bold));
     }
 

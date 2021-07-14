@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -17,24 +16,19 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 
-import net.iGap.BuildConfig;
 import net.iGap.R;
+import net.iGap.module.CircleImageView;
 
 import static android.graphics.Shader.TileMode.CLAMP;
 
-public class ImageLoadingView extends ImageView {
-    private static String TAG = "InsLoadingView";
-    private static boolean DEBUG = BuildConfig.DEBUG;
+public class ImageLoadingView extends CircleImageView {
     private static final float ARC_WIDTH = 12;
-    private static final int MIN_WIDTH = 300;
     private static final float CIRCLE_DIA = 0.9f;
     private static final float STROKE_WIDTH = 0.035f;
     private static final float ARC_CHANGE_ANGLE = 0.2f;
@@ -116,22 +110,7 @@ public class ImageLoadingView extends ImageView {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        final int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
-        final int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
-        final int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
-        final int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-        if (DEBUG) {
-            Log.d(TAG, String.format("onMeasure widthMeasureSpec: %s -- %s", widthSpecMode, widthSpecSize));
-            Log.d(TAG, String.format("onMeasure heightMeasureSpec: %s -- %s", heightSpecMode, heightSpecSize));
-        }
-        int width;
-        if (widthSpecMode == MeasureSpec.EXACTLY && heightSpecMode == MeasureSpec.EXACTLY) {
-            width = Math.min(widthSpecSize, heightSpecSize);
-        } else {
-            width = Math.min(widthSpecSize, heightSpecSize);
-            width = Math.min(width, MIN_WIDTH);
-        }
-        setMeasuredDimension(width, width);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
@@ -155,9 +134,6 @@ public class ImageLoadingView extends ImageView {
 
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
-        if (DEBUG) {
-            Log.d(TAG, "onVisibilityChanged");
-        }
         if (visibility == View.VISIBLE) {
             startAnim();
         } else {
@@ -170,9 +146,7 @@ public class ImageLoadingView extends ImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean result = false;
-        if (DEBUG) {
-            Log.d(TAG, "onTouchEvent: " + event.getAction());
-        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 startDownAnim();
@@ -193,9 +167,7 @@ public class ImageLoadingView extends ImageView {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (DEBUG) {
-            Log.d(TAG, "onSizeChanged");
-        }
+
         mBitmapRectF = null;
         mTrackRectF = null;
         mBitmapPaint = null;
@@ -205,9 +177,7 @@ public class ImageLoadingView extends ImageView {
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        if (DEBUG) {
-            Log.d(TAG, "setImageDrawable");
-        }
+
         mBitmapPaint = null;
         super.setImageDrawable(drawable);
     }
@@ -226,13 +196,6 @@ public class ImageLoadingView extends ImageView {
         int circleDuration = mCircleDuration;
         int rotateDuration = mRotateDuration;
         int status = 0;
-        if (DEBUG) {
-            Log.d(TAG, "parseAttrs start_color: " + startColor);
-            Log.d(TAG, "parseAttrs end_color: " + endColor);
-            Log.d(TAG, "parseAttrs rotate_duration: " + rotateDuration);
-            Log.d(TAG, "parseAttrs circle_duration: " + circleDuration);
-            Log.d(TAG, "parseAttrs status: " + status);
-        }
 
         if (circleDuration != mCircleDuration) {
             setCircleDuration(circleDuration);
@@ -342,11 +305,7 @@ public class ImageLoadingView extends ImageView {
         canvas.rotate(mRotateDegree, centerX(), centerY());
         canvas.rotate(ARC_WIDTH, centerX(), centerY());
 
-        if (DEBUG) {
-            Log.d(TAG, "circleWidth:" + mCircleWidth);
-        }
         if (mCircleWidth < 0) {
-            //a
             float startArg = mCircleWidth + 360;
             canvas.drawArc(mTrackRectF, startArg, 360 - startArg, false, paint);
             float adjustCircleWidth = mCircleWidth + 360;
@@ -357,7 +316,6 @@ public class ImageLoadingView extends ImageView {
                 canvas.drawArc(mTrackRectF, adjustCircleWidth, width, false, paint);
             }
         } else {
-            //b
             for (int i = 0; i <= 4; i++) {
                 if (ARC_WIDTH * i > mCircleWidth) {
                     break;
@@ -369,9 +327,7 @@ public class ImageLoadingView extends ImageView {
             }
             float adjustCircleWidth = 360;
             float width = 8 * (360 - mCircleWidth) / 360;
-            if (DEBUG) {
-                Log.d(TAG, "width:" + width);
-            }
+
             while (width > 0 && adjustCircleWidth > ARC_WIDTH) {
                 width = width - ARC_CHANGE_ANGLE;
                 adjustCircleWidth = adjustCircleWidth - ARC_WIDTH;
