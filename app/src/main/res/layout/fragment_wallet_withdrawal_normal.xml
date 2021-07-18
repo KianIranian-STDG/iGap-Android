@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/iGapWalletDarkerBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/toolbar_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_vertical_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/dp24" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_vertical_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/dp24" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_container">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/immediate_withdrawal"
+                app:item_text_size="18sp" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/normal_withdrawal"
+                app:item_text_size="18sp" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <View
+            android:id="@+id/white_view_1"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/background_white_bottom_shadow"
+            app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/removable_bank_balance"
+            android:textColor="?attr/iGapPrimaryTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/bank_balance_textView"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toTopOf="@id/white_view_1" />
+
+        <TextView
+            android:id="@+id/bank_balance_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorAccent"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/white_view_1"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toTopOf="@id/white_view_1"
+            tools:text="150,000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rial"
+            android:textColor="?attr/colorAccent"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/white_view_1"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@id/bank_balance_textView" />
+
+        <View
+            android:id="@+id/white_view_2"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/background_white_bottom_shadow"
+            app:layout_constraintTop_toBottomOf="@id/white_view_1" />
+
+        <TextView
+            android:id="@+id/please_enter_desire_amount_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/please_specify_the_desired_amount"
+            android:textColor="?attr/iGapPrimaryTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/amount_editText"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toTopOf="@id/white_view_2" />
+
+        <EditText
+            android:id="@+id/amount_editText"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:background="@drawable/edit_text_square_background"
+            android:hint="@string/amount"
+            android:textColor="?attr/iGapPrimaryTextColor"
+            android:textColorHint="@color/hint_edit_text"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/white_view_2"
+            app:layout_constraintEnd_toStartOf="@id/rials_textView"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@id/please_enter_desire_amount_textView" />
+
+        <TextView
+            android:id="@+id/rials_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rial"
+            android:textColor="?attr/iGapPrimaryTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/amount_editText"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toEndOf="@id/amount_editText"
+            app:layout_constraintTop_toTopOf="@id/amount_editText" />
+
+
+        <View
+            android:id="@+id/white_view_3"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/background_white_bottom_shadow"
+            app:layout_constraintTop_toBottomOf="@id/white_view_2" />
+
+        <TextView
+            android:id="@+id/enter_card_number_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/please_enter_the_sheba_bank_number"
+            android:textColor="?attr/iGapPrimaryTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@id/card_number_editText"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toTopOf="@id/white_view_3" />
+
+        <EditText
+            android:id="@+id/card_number_editText"
+            android:layout_width="310dp"
+            android:layout_height="40dp"
+            android:background="@drawable/edit_text_square_background"
+            android:hint="@string/sheba_24_digit_number"
+            android:textColor="?attr/iGapPrimaryTextColor"
+            android:textColorHint="@color/hint_edit_text"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/finding_account_number_textView"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@id/enter_card_number_textView" />
+
+        <TextView
+            android:id="@+id/finding_account_number_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/know_bank_account_number"
+            android:textColor="?attr/colorAccent"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/card_number_editText"
+            app:layout_constraintBottom_toBottomOf="@id/white_view_3"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"/>
+
+
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/iGapButton"
+            android:layout_width="@dimen/dp200"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/submit"
+            app:layout_constraintEnd_toEndOf="@id/end_vertical_guideline"
+            app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
+            app:layout_constraintTop_toBottomOf="@id/white_view_3" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>

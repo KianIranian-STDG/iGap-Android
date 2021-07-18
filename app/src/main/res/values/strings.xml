@@ -2254,6 +2254,31 @@ Want to get it?</string>
     <string name="please_try_later">Please Try later</string>
     <string name="access_folder">Unauthorized Folder</string>
     <string name="restrict_folder">Access to this folder is restricted.</string>
+    <string name="dear_subscription">Dear subscriber</string>
+    <string name="wallet_introduction">Welcome to the wallet, By activating this section, you can benefit from payment and purchase services of recharge and internet package in igap</string>
+    <string name="wallet_activation">Wallet Activation</string>
+    <string name="enter_to_wallet">Login wallet</string>
+    <string name="Rials">Rials</string>
+    <string name="management">Management</string>
+    <string name="send_money">Send money</string>
+    <string name="Withdrawal">Withdrawal</string>
+    <string name="increase_bank_balance">Increase bank balance</string>
+    <string name="enter_information_for_send_money">Enter the destination mobile number and amount correctly</string>
+    <string name="amount_in_words">Amount in words</string>
+    <string name="immediate_withdrawal">immediate</string>
+    <string name="normal_withdrawal">Normal</string>
+    <string name="removable_bank_balance">Removable bank balance</string>
+    <string name="know_bank_account_number">How to know the bank account number</string>
+    <string name="please_enter_your_card_number">Please enter your card number‌</string>
+    <string name="please_specify_the_desired_amount">Please specify the desired amount</string>
+    <string name="please_enter_the_sheba_bank_number">Please enter the Sheba bank number</string>
+    <string name="sheba_24_digit_number">Sheba 24 digit number</string>
+    <string name="card_16_digit_number">Card 16 digit number</string>
+    <string name="cash_pocket">Cash pocket</string>
+    <string name="credit_pocket">Credit pocket</string>
+    <string name="cards_pocket">Cards pocket</string>
+    <string name="currency_pocket">Currency pocket</string>
+    <string name="faq">Frequently asked questions</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>

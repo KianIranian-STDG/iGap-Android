@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/IGapRootViewStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/iGapWalletDarkerBackground">
+
+    <FrameLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/top_horizontal_scrollView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp60"
+        android:background="@color/white"
+        android:fillViewport="true"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_container">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/top_tabs_strip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tab_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="?attr/iGapButtonSelector"
+                android:gravity="center"
+                android:minWidth="@dimen/round_button_max_width"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/all"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/top_tabs_strip"
+                app:layout_constraintStart_toStartOf="@id/top_tabs_strip"
+                app:layout_constraintTop_toTopOf="@id/top_tabs_strip" />
+
+            <TextView
+                android:id="@+id/tab_cash_pocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="?attr/iGapButtonSelector"
+                android:gravity="center"
+                android:minWidth="@dimen/round_button_max_width"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/cash_pocket"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/top_tabs_strip"
+                app:layout_constraintStart_toEndOf="@id/tab_all"
+                app:layout_constraintTop_toTopOf="@id/top_tabs_strip" />
+
+            <TextView
+                android:id="@+id/tab_credit_pocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="?attr/iGapButtonSelector"
+                android:gravity="center"
+                android:minWidth="@dimen/round_button_max_width"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/credit_pocket"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/top_tabs_strip"
+                app:layout_constraintStart_toEndOf="@id/tab_cash_pocket"
+                app:layout_constraintTop_toTopOf="@id/top_tabs_strip" />
+
+            <TextView
+                android:id="@+id/tab_cards_pocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="?attr/iGapButtonSelector"
+                android:gravity="center"
+                android:minWidth="@dimen/round_button_max_width"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/cards_pocket"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/top_tabs_strip"
+                app:layout_constraintStart_toEndOf="@id/tab_credit_pocket"
+                app:layout_constraintTop_toTopOf="@id/top_tabs_strip" />
+
+            <TextView
+                android:id="@+id/tab_currency_pocket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/round_buttons_margin"
+                android:background="?attr/iGapButtonSelector"
+                android:gravity="center"
+                android:minWidth="@dimen/round_button_max_width"
+                android:paddingLeft="@dimen/round_buttons_large_padding"
+                android:paddingTop="@dimen/round_buttons_small_padding"
+                android:paddingRight="@dimen/round_buttons_large_padding"
+                android:paddingBottom="@dimen/round_buttons_small_padding"
+                android:singleLine="true"
+                android:text="@string/currency_pocket"
+                android:textColor="@color/button_text_color_selector"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@id/top_tabs_strip"
+                app:layout_constraintStart_toEndOf="@id/tab_cards_pocket"
+                app:layout_constraintTop_toTopOf="@id/top_tabs_strip" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/transactions_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_horizontal_scrollView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

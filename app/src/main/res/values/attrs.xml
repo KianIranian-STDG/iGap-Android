@@ -238,4 +238,8 @@
     </declare-styleable>
     <attr name="numberPickerTheme" format="reference" />
 
+    <!--Wallet item color-->
+    <attr name="iGapWalletDarkerBackground" format="color"/>
+    <attr name="iGapWalletLighterBackground" format="color"/>
+
 </resources>

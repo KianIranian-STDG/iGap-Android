@@ -32,7 +32,7 @@
                 android:gravity="center"
                 android:minHeight="38dp"
                 android:text="@string/kuknos_wHistory_desc"
-                android:textColor="@color/buttonTextColor"
+                android:textColor="?attr/iGapButtonTextColor"
                 android:textSize="@dimen/dp14"
                 android:textStyle="bold" />
 
@@ -44,7 +44,7 @@
                 android:gravity="center"
                 android:minHeight="38dp"
                 android:text="@string/kuknos_wHistory_date"
-                android:textColor="@color/buttonTextColor"
+                android:textColor="?attr/iGapButtonTextColor"
                 android:textSize="@dimen/dp14"
                 android:textStyle="bold" />
 
@@ -56,7 +56,7 @@
                 android:gravity="center"
                 android:minHeight="38dp"
                 android:text="@string/kuknos_wHistory_time"
-                android:textColor="@color/buttonTextColor"
+                android:textColor="?attr/iGapButtonTextColor"
                 android:textSize="@dimen/dp14"
                 android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                 android:gravity="center"
                 android:minHeight="38dp"
                 android:text="@string/kuknos_wHistory_amount"
-                android:textColor="@color/buttonTextColor"
+                android:textColor="?attr/iGapButtonTextColor"
                 android:textSize="@dimen/dp14"
                 android:textStyle="bold" />
 

@@ -2142,7 +2142,7 @@
     <string name="wallet_card">محفظة</string>
     <string name="amount_to_pay">المبلغ المستحق (ریال) :</string>
     <string name="club_balance">رصيد بطاقة النادي (ریال)</string>
-    <string name="wallet_balance">جرد المحفظة (ریال)</string>
+    <string name="wallet_balance">جرد المحفظة</string>
     <string name="total_amount">المبلغ الإجمالي (ریال) :</string>
     <string name="discount_amount">مبلغ الخصم (ریال) :</string>
 
@@ -2493,7 +2493,7 @@
     <string name="bill_title">دفع الفاتورة</string>
     <string name="topUp_message">رسالة شراء الشحن</string>
     <string name="bill_message">رسالة دفع الفواتير</string>
-    <string name="soon">قريبا...</string>
+    <string name="soon">قريبا</string>
     <string name="delete_recently_sticker">حذف ملصق مؤخرا</string>
     <string name="sticker_setting">إعداد الملصقات</string>
     <string name="empty_sticker">لم تقم بإضافة أي ملصقات بعد!</string>
@@ -2646,5 +2646,30 @@
     <string name="AccessBan">الوصول مغلق لعرض الأعضاء</string>
 
     <string name="how_to_get_points">كيف تحصل على النقاط</string>
+    <string name="dear_subscription">آیگپی عزیز</string>
+    <string name="wallet_introduction">به بخش کیف پول خوش آمدید، شما می توانید با فعال سازی این بخش از خدمات پرداخت و خرید شارژ و بسته اینترنتی در آیگپ بهره مند شوید</string>
+    <string name="wallet_activation">فعال سازی کیف پول</string>
+    <string name="enter_to_wallet">ورود به کیف پول</string>
+    <string name="Rials">ریال</string>
+    <string name="management">Management</string>
+    <string name="send_money">Send money</string>
+    <string name="Withdrawal">Receive money</string>
+    <string name="increase_bank_balance">Increase bank balance</string>
+    <string name="enter_information_for_send_money">Enter the destination mobile number and amount correctly</string>
+    <string name="amount_in_words">Amount in words</string>
+    <string name="immediate_withdrawal">immediate</string>
+    <string name="normal_withdrawal">Normal</string>
+    <string name="removable_bank_balance">Removable bank balance</string>
+    <string name="know_bank_account_number">How to know the bank account number</string>
+    <string name="please_enter_your_card_number">Please enter your card number‌</string>
+    <string name="please_specify_the_desired_amount">Please specify the desired amount</string>
+    <string name="please_enter_the_sheba_bank_number">Please enter the Sheba bank number</string>
+    <string name="sheba_24_digit_number">Sheba 24 digit number</string>
+    <string name="card_16_digit_number">Card 16 digit number</string>
+    <string name="cash_pocket">Cash pocket</string>
+    <string name="credit_pocket">Credit pocket</string>
+    <string name="cards_pocket">Cards pocket</string>
+    <string name="currency_pocket">Currency pocket</string>
+    <string name="faq">Frequently asked questions</string>
 
 </resources>
