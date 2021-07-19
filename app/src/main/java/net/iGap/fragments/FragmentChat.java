@@ -7483,6 +7483,7 @@ public class FragmentChat extends BaseFragment
                 replayIcon.setText(getString(R.string.icon_reply));
 
             ImageView thumbnail = mReplayLayout.findViewById(R.id.thumbnail);
+            thumbnail.setImageResource(android.R.color.transparent);
             TextView closeReplay = mReplayLayout.findViewById(R.id.cancelIcon);
             closeReplay.setOnClickListener(new View.OnClickListener() {
                 @Override
