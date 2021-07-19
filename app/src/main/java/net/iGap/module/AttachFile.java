@@ -63,6 +63,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,6 +90,7 @@ public class AttachFile {
     public static Uri imageUri;
     public static String mCurrentPhotoPath;
     public static String videoPath = "";
+    public SecureRandom random = new SecureRandom();
     OnComplete complete;
     private PopupWindow popupWindow;
     private FragmentActivity context;
@@ -938,7 +940,9 @@ public class AttachFile {
 
     public File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        Date date = new Date();
+        date.setTime(System.currentTimeMillis() + random.nextInt(1000) + 1);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US).format(date);
         String imageFileName = "JPEG_" + timeStamp + "_";
 
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
