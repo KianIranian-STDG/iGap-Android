@@ -14,6 +14,7 @@ public class Story implements Serializable {
     private String txt;
     private long storyData;
     private long userId;
+    private long storyId;
     private RealmAttachment attachment;
     private ProtoGlobal.File file;
 
@@ -72,5 +73,13 @@ public class Story implements Serializable {
 
     public void setFile(ProtoGlobal.File file) {
         this.file = file;
+    }
+
+    public long getStoryId() {
+        return storyId;
+    }
+
+    public void setStoryId(long storyId) {
+        this.storyId = storyId;
     }
 }

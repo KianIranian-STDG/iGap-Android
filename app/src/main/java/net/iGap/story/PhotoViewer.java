@@ -767,7 +767,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                         counter++;
                         if (counter == itemGalleryList.size()) {
                             Collections.sort(itemGalleryList);
-                            StoryViewFragment storyViewFragment = new StoryViewFragment(AccountManager.getInstance().getCurrentUser().getId(),false);
+                            StoryViewFragment storyViewFragment = new StoryViewFragment(AccountManager.getInstance().getCurrentUser().getId(),true);
                             storyViewFragment.setItemGalleryList(itemGalleryList, false);
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 for (int i = 0; i < storyListFromProto.size(); i++) {
