@@ -10,6 +10,9 @@
 
 package net.iGap.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,16 +55,24 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.activities.CallActivity;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
+import net.iGap.helper.LayoutCreator;
 import net.iGap.libs.bottomNavigation.Util.Utils;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
+import net.iGap.messenger.ui.components.FragmentMediaContainer;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.NumberTextView;
+import net.iGap.messenger.ui.toolBar.Toolbar;
+import net.iGap.messenger.ui.toolBar.ToolbarItem;
+import net.iGap.messenger.ui.toolBar.ToolbarItems;
 import net.iGap.model.GoToSharedMediaModel;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -75,6 +86,7 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.dialog.topsheet.TopSheetDialog;
 import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.mobileBank.JalaliCalendar;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.observers.interfaces.OnClientSearchRoomHistory;
 import net.iGap.observers.interfaces.OnComplete;
@@ -117,7 +129,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class FragmentShearedMedia extends BaseFragment implements ToolbarListener {
+public class FragmentShearedMedia extends BaseFragment {
 
     public static String SELECTED_TAB_ID = "selected_tab";
     private static final String ROOM_ID = "RoomId";
@@ -142,9 +154,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     private mAdapter adapter;
     private OnComplete complete;
     private ProgressBar progressBar;
-    private LinearLayout ll_AppBarSelected;
     private LinearLayout mediaLayout;
-    private TextView txtNumberOfSelected;
     private ProtoGlobal.Room.Type roomType;
     private int numberOfSelected = 0;
     private int listCount = 0;
@@ -162,11 +172,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     public static GoToPositionFromShardMedia goToPositionFromShardMedia;
     public static boolean goToPosition = false;
     private int mCurrentSharedMediaType = 1; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
-    private HelperToolbar mHelperToolbar;
     private boolean isToolbarInEditMode = false;
     private HashMap<Integer, String> mSharedTypesList = new HashMap<Integer, String>();
     private List<SharedButtons> mSharedTypeButtonsList = new ArrayList<>();
     private LinearLayout mediaTypesLayout;
+    private Toolbar sharedMediaToolbar;
+    private NumberTextView multiSelectCounter;
+    private ArrayList<ToolbarItem> actionModeViews = new ArrayList<>();
+    private int selectCounter = 8;
+    private final int deleteTag = 1;
+    private final int forwardTag = 2;
+    private final int seeInChatTag = 3;
+    private ToolbarItems actionToolbar;
+    private ToolbarItem seeInChatItem;
 
     private void initSharedTypes() {
         mSharedTypesList.clear();
@@ -265,23 +283,117 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     }
 
     private void initComponent(View view) {
-        LinearLayout toolbarLayout = view.findViewById(R.id.frg_shared_media_ll_toolbar_layout);
+        FrameLayout toolbarLayout = view.findViewById(R.id.frg_shared_media_ll_toolbar_layout);
+        FragmentMediaContainer mediaContainer = new FragmentMediaContainer(getContext(), this);
+        mediaContainer.setListener(i -> {
+            switch (i) {
+                case FragmentMediaContainer.CALL_TAG:
+                    getActivity().startActivity(new Intent(getContext(), CallActivity.class));
+                    break;
+                case FragmentMediaContainer.MEDIA_TAG:
+                    if (!MusicPlayer.isVoice) {
+                        Intent intent = new Intent(context, ActivityMain.class);
+                        intent.putExtra(ActivityMain.openMediaPlyer, true);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                    }
+                    break;
+                case FragmentMediaContainer.PLAY_TAG:
+                    break;
+            }
+        });
 
-        mHelperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.icon_back)
-                //.setRightIcons(R.string.sort_icon)
-                .setPlayerEnable(true)
-                .setIsSharedMedia(true)
-                //.setSearchBoxShown(true)
-                .setLogoShown(true)
-                .setDefaultTitle(getString(R.string.shared_media))
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setListener(this);
+        sharedMediaToolbar = new Toolbar(getContext());
+        sharedMediaToolbar.setBackIcon(new BackDrawable(false));
+        sharedMediaToolbar.createToolbarItems();
+        sharedMediaToolbar.setTitle(getString(R.string.shared_media));
+        sharedMediaToolbar.setListener(i -> {
+            switch (i) {
+                case -1:
+                    if (isSelectedMode) {
+                        adapter.resetSelected();
+                        sharedMediaToolbar.hideActionToolbar();
+                        return;
+                    }
+                    popBackStackFragment();
+                    break;
+                case deleteTag:
+                    DbManager.getInstance().doRealmTask(realm -> {
 
-        toolbarLayout.addView(mHelperToolbar.getView());
+                        String count = SelectedList.size() + "";
+                        final RealmRoom realmRoom = RealmRoom.getRealmRoom(realm, roomId);
 
+                        if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
+                            // TODO: 1/10/21 OPTIMAZE CODE
+                            // show both Delete check box
+                            String delete;
+                            if (HelperCalander.isPersianUnicode) {
+                                delete = HelperCalander.convertToUnicodeFarsiNumber(requireContext().getResources().getString(R.string.st_desc_delete) + count);
+                            } else {
+                                delete = HelperCalander.convertToUnicodeFarsiNumber(requireContext().getResources().getString(R.string.st_desc_delete) + "the");
+                            }
+                            new MaterialDialog.Builder(getContext()).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive((dialog, which) -> {
+                                if (!dialog.isPromptCheckBoxChecked()) {
+                                    bothDeleteMessageId = null;
+                                }
+                                if (realmRoom != null) {
+                                    ArrayList<Long> selectedListForDel = new ArrayList<>();
+
+                                    for (StructShearedMedia item : SelectedList) {
+                                        selectedListForDel.add(item.messageId);
+                                    }
+                                    getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, selectedListForDel, bothDeleteMessageId);
+                                }
+                                resetItems();
+                            }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+
+                        } else {
+                            new MaterialDialog.Builder(requireContext()).title(R.string.message).content(getContext().getResources().getString(R.string.st_desc_delete) + count).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    bothDeleteMessageId = null;
+                                    if (realmRoom != null) {
+                                        ArrayList<Long> messageIds = new ArrayList<>();
+                                        for (StructShearedMedia item : SelectedList) {
+                                            messageIds.add(item.messageId);
+                                        }
+                                        getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, messageIds, bothDeleteMessageId);
+                                    }
+                                    resetItems();
+                                }
+                            }).show();
+                        }
+                    });
+                    break;
+                case forwardTag:
+                    ArrayList<MessageObject> messageInfos = new ArrayList<>(SelectedList.size());
+                    for (StructShearedMedia media : SelectedList) {
+                        messageInfos.add(MessageObject.create(media.item));
+                    }
+                    FragmentChat.mForwardMessages = messageInfos;
+                    adapter.resetSelected();
+                    if (getActivity() instanceof ActivityMain) {
+                        ((ActivityMain) getActivity()).setForwardMessage(true);
+                        ((ActivityMain) getActivity()).removeAllFragmentFromMain();
+                        /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
+                    }
+                    break;
+                case seeInChatTag:
+                    if (SelectedList.size() == 1) {
+                        long messageId = SelectedList.get(0).messageId;
+                        RealmRoomMessage.setGap(messageId);
+                        goToPositionFromShardMedia.goToPosition(messageId);
+                        goToPosition = true;
+                        popBackStackFragment();
+                        adapter.resetSelected();
+                        popBackStackFragment();
+                    }
+                    break;
+            }
+        });
+        createActionMode();
+        toolbarLayout.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 39, Gravity.BOTTOM, 0, 60, 0, 0));
+        toolbarLayout.addView(sharedMediaToolbar);
 
         progressBar = view.findViewById(R.id.asm_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
@@ -335,9 +447,31 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         recyclerView.addOnScrollListener(onScrollListener);
 
         checkSelectedDefaultTab();
-        initAppbarSelected(view);
         makeSharedTypesViews();
         checkSharedButtonsBackgrounds();
+    }
+
+    private void createActionMode() {
+        if (sharedMediaToolbar.isInActionMode(null)) {
+            return;
+        }
+
+        actionToolbar = sharedMediaToolbar.createActionToolbar(null);
+        actionToolbar.setBackground(null);
+        ToolbarItem deleteItem = actionToolbar.addItemWithWidth(deleteTag, R.string.icon_delete, 54);
+        ToolbarItem forwardItem = actionToolbar.addItemWithWidth(forwardTag, R.string.icon_forward, 54);
+        seeInChatItem = actionToolbar.addItemWithWidth(seeInChatTag, R.string.icon_eye, 54);
+
+        multiSelectCounter = new NumberTextView(getContext());
+        multiSelectCounter.setTextSize(18);
+        multiSelectCounter.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        multiSelectCounter.setTextColor(Theme.getInstance().getPrimaryTextColor(getContext()));
+        multiSelectCounter.setTag(selectCounter);
+        actionToolbar.addView(multiSelectCounter, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1.0f, 72, 0, 0, 0));
+
+        actionModeViews.add(deleteItem);
+        actionModeViews.add(forwardItem);
+        actionModeViews.add(seeInChatItem);
     }
 
     private void checkSelectedDefaultTab() {
@@ -375,106 +509,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         }
     }
 
-    private void initAppbarSelected(View view) {
-        RippleView rippleCloseAppBarSelected = view.findViewById(R.id.asm_ripple_close_layout);
-        rippleCloseAppBarSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                adapter.resetSelected();
-            }
-        });
-
-        btnGoToPage = view.findViewById(R.id.asm_btn_goToPage);
-        btnGoToPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (SelectedList.size() == 1) {
-                    long messageId = SelectedList.get(0).messageId;
-                    RealmRoomMessage.setGap(messageId);
-                    goToPositionFromShardMedia.goToPosition(messageId);
-                    goToPosition = true;
-                    popBackStackFragment();
-                    adapter.resetSelected();
-                    popBackStackFragment();
-                }
-            }
-        });
-
-        MaterialDesignTextView btnForwardSelected = view.findViewById(R.id.asm_btn_forward_selected);
-        btnForwardSelected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ArrayList<MessageObject> messageInfos = new ArrayList<>(SelectedList.size());
-                for (StructShearedMedia media : SelectedList) {
-                    messageInfos.add(MessageObject.create(media.item));
-                }
-                FragmentChat.mForwardMessages = messageInfos;
-                adapter.resetSelected();
-                if (getActivity() instanceof ActivityMain) {
-                    ((ActivityMain) getActivity()).setForwardMessage(true);
-                    ((ActivityMain) getActivity()).removeAllFragmentFromMain();
-                    /*new HelperFragment(getActivity().getSupportFragmentManager()).popBackStack(3);*/
-                }
-            }
-        });
-
-        RippleView rippleDeleteSelected = view.findViewById(R.id.asm_riple_delete_selected);
-
-        if (roomType == ProtoGlobal.Room.Type.CHANNEL)
-            rippleDeleteSelected.setVisibility(View.GONE);
-
-        rippleDeleteSelected.setOnRippleCompleteListener(rippleView -> DbManager.getInstance().doRealmTask(realm -> {
-            
-            String count = SelectedList.size() + "";
-            final RealmRoom realmRoom = RealmRoom.getRealmRoom(realm, roomId);
-
-            if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
-                // TODO: 1/10/21 OPTIMAZE CODE
-                // show both Delete check box
-                String delete;
-                if (HelperCalander.isPersianUnicode) {
-                    delete = HelperCalander.convertToUnicodeFarsiNumber(Objects.requireNonNull(getContext()).getResources().getString(R.string.st_desc_delete) + count);
-                } else {
-                    delete = HelperCalander.convertToUnicodeFarsiNumber(Objects.requireNonNull(getContext()).getResources().getString(R.string.st_desc_delete) + "the");
-                }
-                new MaterialDialog.Builder(getContext()).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive((dialog, which) -> {
-                    if (!dialog.isPromptCheckBoxChecked()) {
-                        bothDeleteMessageId = null;
-                    }
-                    if (realmRoom != null) {
-                        ArrayList<Long> selectedListForDel = new ArrayList<>();
-
-                        for (StructShearedMedia item : SelectedList) {
-                            selectedListForDel.add(item.messageId);
-                        }
-                        getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, selectedListForDel, bothDeleteMessageId);
-                    }
-                    resetItems();
-                }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
-
-            } else {
-                new MaterialDialog.Builder(Objects.requireNonNull(getContext())).title(R.string.message).content(getContext().getResources().getString(R.string.st_desc_delete)+ count).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        bothDeleteMessageId = null;
-                        if (realmRoom != null) {
-                            ArrayList<Long> messageIds = new ArrayList<>();
-                            for (StructShearedMedia item : SelectedList) {
-                                messageIds.add(item.messageId);
-                            }
-                            getMessageController().deleteSelectedMessage(roomType.getNumber(), roomId, messageIds, bothDeleteMessageId);
-                        }
-                        resetItems();
-                    }
-                }).show();
-            }
-        }));
-
-        txtNumberOfSelected = view.findViewById(R.id.asm_txt_number_of_selected);
-
-        ll_AppBarSelected = view.findViewById(R.id.asm_ll_appbar_selelected);
-    }
-
     private void resetItems() {
         for (StructShearedMedia item : SelectedList) {
             list.add(item.messageId);
@@ -507,39 +541,6 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         updateStringSharedMediaCount(null, roomId);
 
         adapter.resetSelected();
-    }
-
-    @Override //back button at toolbar
-    public void onLeftIconClickListener(View view) {
-        popBackStackFragment();
-    }
-
-    @Override
-    public void onSearchClickListener(View view) {
-        if (!isToolbarInEditMode) {
-            isToolbarInEditMode = true;
-            openKeyBoard();
-        }
-    }
-
-    @Override
-    public void onBtnClearSearchClickListener(View view) {
-        if (mHelperToolbar.getEditTextSearch().getText().length() > 0) {
-            mHelperToolbar.getEditTextSearch().setText("");
-        } else {
-            isToolbarInEditMode = false;
-
-        }
-    }
-
-    @Override
-    public void onSearchTextChangeListener(View view, String text) {
-
-    }
-
-    @Override //menu button at toolbar
-    public void onRightIconClickListener(View view) {
-        popUpMenuSharedMedia();
     }
 
     private void makeSharedTypesViews() {
@@ -641,15 +642,13 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
             case 1://for show or gone layout appBar selected
                 if (result) {
-                    ll_AppBarSelected.setVisibility(View.VISIBLE);
-                    txtNumberOfSelected.setText(number);
                     if (SelectedList.size() == 1) {
-                        btnGoToPage.setVisibility(View.VISIBLE);
+                        seeInChatItem.setVisibility(View.VISIBLE);
                     } else {
-                        btnGoToPage.setVisibility(View.GONE);
+                        seeInChatItem.setVisibility(View.GONE);
                     }
                 } else {
-                    ll_AppBarSelected.setVisibility(View.GONE);
+                    sharedMediaToolbar.hideActionToolbar();
                 }
                 break;
         }
@@ -1272,6 +1271,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
 
                 if (numberOfSelected < 1) {
                     isSelectedMode = false;
+                    sharedMediaToolbar.setBackIcon(new BackDrawable(false));
+                    sharedMediaToolbar.hideActionToolbar();
                 }
             } else {
                 SelectedList.add(mList.get(position));
@@ -1286,7 +1287,7 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                 numberOfSelected++;
             }
             notifyItemChanged(position);
-
+            multiSelectCounter.setNumber(numberOfSelected, true);
             if (complete != null) {
                 complete.complete(isSelectedMode, "1", numberOfSelected + "");
             }
@@ -1461,6 +1462,19 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
                     public boolean onLongClick(View view) {
                         isSelectedMode = true;
                         setSelectedItem(getPosition());
+                        createActionMode();
+                        sharedMediaToolbar.showActionToolbar();
+                        AnimatorSet animatorSet = new AnimatorSet();
+                        ArrayList<Animator> animators = new ArrayList<>();
+                        for (int a = 0; a < actionModeViews.size(); a++) {
+                            View animView = actionModeViews.get(a);
+                            animView.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
+                            animators.add(ObjectAnimator.ofFloat(animView, View.SCALE_Y, 0.1f, 1.0f));
+                        }
+                        animatorSet.playTogether(animators);
+                        animatorSet.setDuration(180);
+                        animatorSet.start();
+
                         return true;
                     }
                 });
