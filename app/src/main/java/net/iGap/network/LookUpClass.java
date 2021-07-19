@@ -71,6 +71,12 @@ public class LookUpClass {
         classes.put(IG_RPC.Res_Group_Delete_Room.actionId, IG_RPC.Res_Group_Delete_Room.class);
         classes.put(IG_RPC.Res_Group_Left.actionId, IG_RPC.Res_Group_Left.class);
         classes.put(IG_RPC.Res_Channel_Left.actionId, IG_RPC.Res_Channel_Left.class);
+        classes.put(IG_RPC.Res_Story_Get_Own_Story_Views.actionId, IG_RPC.Res_Story_Get_Own_Story_Views.class);
+        classes.put(IG_RPC.Res_Story_User_Add_New.actionId, IG_RPC.Res_Story_User_Add_New.class);
+        classes.put(IG_RPC.Res_Story_Room_Add_New.actionId, IG_RPC.Res_Story_Room_Add_New.class);
+        classes.put(IG_RPC.Res_Get_Stories.actionId, IG_RPC.Res_Get_Stories.class);
+        classes.put(IG_RPC.Res_Story_Delete.actionId, IG_RPC.Res_Story_Delete.class);
+        classes.put(IG_RPC.Res_Story_Add_View.actionId, IG_RPC.Res_Story_Add_View.class);
 
     }
 

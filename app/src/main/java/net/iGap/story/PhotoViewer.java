@@ -26,6 +26,7 @@ import android.text.TextWatcher;
 import android.text.method.MovementMethod;
 import android.text.method.ScrollingMovementMethod;
 
+import android.util.Log;
 import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
@@ -72,6 +73,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.libs.emojiKeyboard.EmojiView;
 import net.iGap.libs.emojiKeyboard.KeyboardView;
 import net.iGap.libs.emojiKeyboard.NotifyFrameLayout;
@@ -85,10 +87,20 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.SUID;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.EventEditText;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
+import net.iGap.network.AbstractObject;
+import net.iGap.network.IG_RPC;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnRotateImage;
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryGetStories;
+import net.iGap.realm.RealmStory;
 import net.iGap.story.viewPager.StoryDisplayFragment;
 import net.iGap.story.viewPager.StoryViewFragment;
 
@@ -159,6 +171,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     public static StoryModes mode;
     private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
     private HashMap<Integer, ZoomLayout> viewHolders = new HashMap<>();
+    private List<ProtoStoryGetStories.IgapStory> storyListFromProto = new ArrayList<>();
     public List<GalleryItemModel> selectedPhotos;
     private int viewHolderPostion = 0;
     public static UpdateImage updateImage;
@@ -731,16 +744,51 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         }
 
         itemGalleryList.get(counter).setPath(path);
-        counter++;
 
-        if (counter == itemGalleryList.size()) {
-            Collections.sort(itemGalleryList);
-            StoryViewFragment storyViewFragment = new StoryViewFragment();
-            storyViewFragment.setItemGalleryList(itemGalleryList, false);
-            new HelperFragment(getChildFragmentManager(), PhotoViewer.this).popBackStack();
-            new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(true).load();
+        long storyId = SUID.id().get();
+        long lastUploadedStoryId = storyId + 1L;
+        Uploader.getInstance().upload(UploadObject.createForAvatar(lastUploadedStoryId, path, null, ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
+            @Override
+            public void onProgress(String id, int progress) {
 
-        }
+            }
+
+            @Override
+            public void onFinish(String id, String token) {
+                AbstractObject req = null;
+                IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
+                story_user_addNew.token = token;
+                story_user_addNew.caption = itemGalleryList.get(counter).getText();
+                req = story_user_addNew;
+                getRequestManager().sendRequest(req, (response, error) -> {
+                    if (error == null) {
+                        IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
+                        storyListFromProto.add(res.igapStory);
+                        counter++;
+                        if (counter == itemGalleryList.size()) {
+                            Collections.sort(itemGalleryList);
+                            StoryViewFragment storyViewFragment = new StoryViewFragment(AccountManager.getInstance().getCurrentUser().getId(),false);
+                            storyViewFragment.setItemGalleryList(itemGalleryList, false);
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                for (int i = 0; i < storyListFromProto.size(); i++) {
+                                    RealmStory.putOrUpdate(realm, AccountManager.getInstance().getCurrentUser().getId(), storyListFromProto);
+                                }
+                            });
+                            new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).remove();
+                            new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
+
+                        }
+                    } else {
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String id) {
+
+            }
+
+        }));
 
     }
 

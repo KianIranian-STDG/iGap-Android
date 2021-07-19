@@ -101,6 +101,22 @@ public class UploadObject {
         return object;
     }
 
+    public static UploadObject createForStory(long avatarId, String imagePath, String token, ProtoGlobal.RoomMessageType roomType, OnUploadListener onUploadListener) {
+        UploadObject object = new UploadObject();
+
+
+        object.path = imagePath;
+        object.file = new File(object.path);
+        object.fileName = object.file.getName();
+        object.fileSize = object.file.length();
+        object.fileToken = token;
+        object.key = String.valueOf(avatarId);
+        object.messageId = avatarId;
+        object.messageType = roomType;
+        object.onUploadListener = onUploadListener;
+        return object;
+    }
+
     @Override
     public String toString() {
         return "UploadObject{" +

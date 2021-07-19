@@ -302,7 +302,7 @@ public class IG_RPC {
 
     public static class Res_Story_Delete extends AbstractObject {
         public static int actionId = 31206;
-
+        public String storyId;
 
         public static Res_Story_Delete deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -324,6 +324,7 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoStoryDeleteStory.StoryDeleteStoryResponse response = ProtoStoryDeleteStory.StoryDeleteStoryResponse.parseFrom(message);
             resId = response.getResponse().getId();
+            storyId = response.getStoryId();
         }
     }
 
