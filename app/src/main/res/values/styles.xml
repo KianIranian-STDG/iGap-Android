@@ -153,7 +153,7 @@
     <style name="BaseIGapButtonStyle" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:textColor">?attr/iGapButtonTextColor</item>
         <item name="android:textAllCaps">false</item>
-        <item name="cornerRadius">@dimen/dp14</item>
+        <item name="cornerRadius">@dimen/dp12</item>
         <item name="android:textSize">@dimen/dp16</item>
     </style>
 

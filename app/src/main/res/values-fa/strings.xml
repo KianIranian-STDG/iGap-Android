@@ -280,12 +280,12 @@
     <string name="confirm_email_title">کد تأیید</string>
     <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است.</string>
     <string name="chats">"گفتگو"</string>
-    <string name="contacts">"مخاطبین"</string>
+    <string name="contacts">مخاطبین</string>
     <string name="messages">"پیام‌ها"</string>
     <string name="show_message_count">"پیام‌های قابل نمایش"</string>
     <string name="count_of_show_message">"تعداد پیام‌های قابل نمایش"</string>
     <string name="new_messages_from">"پیام‌های جدید از"</string>
-    <string name="from">"از"</string>
+    <string name="from">از</string>
     <string name="new_message">"پیام جدید"</string>
     <string name="new_messages">"پیام‌ جدید"</string>
     <string name="unknown_artist">"هنرمند نامشخص"</string>
@@ -1007,7 +1007,7 @@
     <string name="barcode_reader">بار کد خوان</string>
     <string name="billing_id">شناسه قبض</string>
     <string name="payment_code">شناسه پرداخت</string>
-    <string name="amount">مبلغ(ریال)</string>
+    <string name="amount">مبلغ</string>
     <string name="hamrahe_aval">همراه اول</string>
     <string name="irancell">ایرانسل</string>
     <string name="ritel">رایتل</string>
@@ -1402,7 +1402,7 @@
     <string name="wallet_card">کیف پول</string>
     <string name="amount_to_pay">مبلغ قابل پرداخت (ریال) :</string>
     <string name="club_balance">موجودی کارت باشگاهی (ریال)</string>
-    <string name="wallet_balance">موجودی کیف پول (ریال)</string>
+    <string name="wallet_balance">موجودی کیف پول</string>
     <string name="total_amount">مبلغ کل (ریال) :</string>
     <string name="discount_amount">مبلغ تخفیف (ریال) :</string>
 
@@ -2263,4 +2263,18 @@
 
     <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
 
+    <string name="you_have_not_added_any_cards_yet">هنوز هیچ کارتی اضافه نکرده اید</string>
+    <string name="please_select_the_desired_amount_or_enter_it_manually">لطفا مبلغ مورد نظر را انتخاب کرده و یا به صورت دستی وارد کنید</string>
+    <string name="the_amount_is_in_rials">مبلغ به ریال می باشد</string>
+    <string name="type_of_transaction">نوع تراکنش</string>
+    <string name="paying_qr">پرداخت QR</string>
+    <string name="shopping_from_store">خرید از فروشگاه</string>
+    <string name="offer">پیشکش</string>
+    <string name="successful">موفق</string>
+    <string name="unknown2">نامشخص</string>
+    <string name="status_of_transaction">وضعیت تراکنش</string>
+    <string name="time_of_transaction">زمان تراکنش</string>
+    <string name="to">تا</string>
+    <string name="apply">اعمال</string>
+    <string name="withdrawal_dialog_message">شما می توانید در هر زمان که بخواهید موجودی کیف نقدی را به صورت آنی به حساب بانکی خود منتقل کنید. این ویژگی به زودی فعال می شود</string>
 </resources>

@@ -28,6 +28,7 @@
     <string name="kunos_receipt_hash">"Хеш"</string>
     <string name="kunos_receipt_date_apply">"Дата подачи заявки"</string>
     <string name="kuknos_receipt_Return_to_digital_token_bag">"Вернуться в сумку с цифровыми жетонами"</string>
+    <string name="kuknos_setting_dialog">Подтверждение выкупа токена</string>
     <string name="kuknos_rial_max_buy">"Максимально допустимый"</string>
     <string name="kuknos_rial_min_buy">"Минимально допустимый"</string>
     <string name="kuknos_rial_price_of_day">"Цена дня"</string>
@@ -1646,23 +1647,13 @@
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
+    <string name="to">To</string>
+    <string name="apply">Apply</string>
+    <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
     <string name="please_try_later">Please Try later</string>
     <string name="access_folder">Unauthorized Folder</string>
     <string name="restrict_folder">Access to this folder is restricted.</string>
 
-    <string name="name_error">Имя не подтверждено</string>
-    <string name="user_name_error">Имя пользователя не подтверждено</string>
-    <string name="email_error">Электронная почта не подтверждена</string>
-    <string name="gender_error">Пол не подтвержден</string>
-    <string name="seted_name">Name confirmed</string>
-    <string name="user_name_added">Username confirmed</string>
-    <string name="bio_added">Bio verified</string>
-    <string name="bio_error">Bio not verified</string>
-    <string name="email_added">added Email Address</string>
-    <string name="seted_gender">Gender confirmed</string>
-    <string name="AccessBan">دسترسی برای دیدن اعضا بسته شده است</string>
-
-    <string name="how_to_get_points">Как заработать баллы</string>
 </resources>

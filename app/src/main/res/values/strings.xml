@@ -2102,7 +2102,7 @@ Want to get it?</string>
     <string name="rrn">Reference no</string>
     <string name="bill_id">Bill id</string>
     <string name="topUp_title">Buying The Charge</string>
-    <string name="bill_title">Bill Payment</string>
+    <string name="bill_payment">Bill Payment</string>
     <string name="topUp_message">Buying the charge message</string>
     <string name="bill_message">Bill payment message</string>
     <string name="soon">Coming soon...</string>
@@ -2262,7 +2262,7 @@ Want to get it?</string>
     <string name="management">Management</string>
     <string name="send_money">Send money</string>
     <string name="Withdrawal">Withdrawal</string>
-    <string name="increase_bank_balance">Increase bank balance</string>
+    <string name="increase_bank_balance">Increase balance</string>
     <string name="enter_information_for_send_money">Enter the destination mobile number and amount correctly</string>
     <string name="amount_in_words">Amount in words</string>
     <string name="immediate_withdrawal">immediate</string>
@@ -2279,6 +2279,20 @@ Want to get it?</string>
     <string name="cards_pocket">Cards pocket</string>
     <string name="currency_pocket">Currency pocket</string>
     <string name="faq">Frequently asked questions</string>
+    <string name="you_have_not_added_any_cards_yet">You have not added any cards yet</string>
+    <string name="please_select_the_desired_amount_or_enter_it_manually">Please select the desired amount or enter it manually</string>
+    <string name="the_amount_is_in_rials">The amount is in Rials</string>
+    <string name="type_of_transaction">Type of transaction</string>
+    <string name="paying_qr">Paying QR</string>
+    <string name="shopping_from_store">Shopping from store</string>
+    <string name="offer">Offer</string>
+    <string name="successful">Successful</string>
+    <string name="unknown2">Unknown</string>
+    <string name="status_of_transaction">Status of transaction</string>
+    <string name="time_of_transaction">Time of transaction</string>
+    <string name="to">To</string>
+    <string name="apply">Apply</string>
+    <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. this feature will be enabled soon</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>

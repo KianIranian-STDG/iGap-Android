@@ -11,6 +11,7 @@
     <string name="btn_start_page6">هەر ئێستا دەست پێ­بکە</string>
     <string name="text_line_1_introduce_page7">دەوروبەری من</string>
     <string name="kuknos_panelStr_buyAgain">Qurtuluş</string>
+    <string name="kuknos_setting_dialog">Jeton kullanım onayı</string>
     <string name="kuknos_rial_max_buy">"Maksimum izin verilen"</string>
     <string name="kuknos_rial_min_buy">"İzin verilen minimum"</string>
     <string name="kuknos_rial_price_of_day">"Günün fiyatı"</string>
@@ -1936,4 +1937,8 @@
 
     <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
 
+    <string name="can_not_support_file">Can not support file</string>
+    <string name="to">To</string>
+    <string name="apply">Apply</string>
+    <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
 </resources>

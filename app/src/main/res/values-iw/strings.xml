@@ -38,6 +38,7 @@
     <string name="kuknos_rial_Deposit_amount">"Mîqeya spartinê (Riyal)"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"Bi çûna beşa mîhengan\n agahdariya xwe \n temam bikin"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Agahdariya hesabê biguherînin û biguherînin"</string>
+    <string name="kuknos_rial_dialog_Repurchase_tokens">"Tokenan bikirin"</string>
     <string name="Block_Users">مسدود ائدیلمیش لیست</string>
     <string name="CARD_TRANSFER_MONEY">کارتدان کارتا انتقال </string>
     <string name="Call_Quality">تماسین کیفیتی </string>
@@ -869,7 +870,7 @@
     <string name="invalid_verify_email_code">تایید کدو اعتبارسیزدیر</string>
     <string name="invitation_message">سلام. آشاغیداکی لیک واسطه سی ایله آیگپه عضو اولا بیلرسن. سنی گوزله ییرم. معرفین شماره سی: http://d.igap.net/invite \n</string>
     <string name="invite_link_title">دعوت لینکی </string>
-    <string name="ip">شناسه:</string>
+    <string name="ip">شناسه</string>
     <string name="iran">ایران</string>
     <string name="irancell">ایرانسل </string>
     <string name="is_empty">اولوبدور</string>
@@ -1919,5 +1920,8 @@
     <string name="AccessBan">Üyeleri görüntülemek için erişim kapatıldı</string>
 
     <string name="how_to_get_points">چگونه امتیاز بگیرید</string>
+    <string name="to">To</string>
+    <string name="apply">Apply</string>
+    <string name="withdrawal_dialog_message">You can transfer iGap cash balance to your bank account instantly at any time. فhis feature will be enabled soon</string>
 
 </resources>

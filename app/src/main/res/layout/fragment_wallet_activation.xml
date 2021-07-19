@@ -63,8 +63,8 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/activation_button"
-        android:layout_width="wrap_content"
         style="@style/iGapButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp60"
         android:text="@string/wallet_activation"

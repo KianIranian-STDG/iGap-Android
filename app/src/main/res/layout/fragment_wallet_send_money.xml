@@ -59,7 +59,7 @@
             android:background="@drawable/edit_text_square_background"
             android:hint="@string/mobile_number"
             android:textColor="?attr/iGapPrimaryTextColor"
-            android:textColorHint="@color/hint_edit_text"
+            android:textColorHint="?attr/iGapHintTextColor"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
             app:layout_constraintTop_toBottomOf="@id/information_request_Sentence" />
@@ -90,7 +90,7 @@
             android:background="@drawable/edit_text_square_background"
             android:hint="@string/amount"
             android:textColor="?attr/iGapPrimaryTextColor"
-            android:textColorHint="@color/hint_edit_text"
+            android:textColorHint="?attr/iGapHintTextColor"
             app:layout_constraintBottom_toBottomOf="@id/white_view_2"
             app:layout_constraintStart_toStartOf="@id/start_vertical_guideline"
             app:layout_constraintTop_toTopOf="@id/white_view_2" />
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/amount_in_words"
             android:textColor="?attr/iGapPrimaryTextColor"
-            android:textColorHint="@color/hint_edit_text"
+            android:textColorHint="?attr/iGapHintTextColor"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/white_view_3"
             app:layout_constraintEnd_toEndOf="@id/white_view_3"
