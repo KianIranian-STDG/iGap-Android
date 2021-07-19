@@ -120,8 +120,7 @@ public class CameraStoryFragment extends BaseFragment {
 
                 settingButton.layout(cx3 - settingButton.getMeasuredWidth() / 2, cy3 - settingButton.getMeasuredHeight() / 2, cx3 + settingButton.getMeasuredWidth() / 2, cy3 + settingButton.getMeasuredHeight() / 2);
                 closeButton.layout(cx2 - closeButton.getMeasuredWidth() / 2, cy2 - closeButton.getMeasuredHeight() / 2, cx2 + closeButton.getMeasuredWidth() / 2, cy2 + closeButton.getMeasuredHeight() / 2);
-                flashModeButton.layout(cx - flashModeButton.getMeasuredWidth() / 2, cy - flashModeButton.getMeasuredHeight() / 2, cx + flashModeButton.getMeasuredWidth() / 2, cy + flashModeButton.getMeasuredHeight() / 2);
-
+                flashModeButton.layout(cx3 - flashModeButton.getMeasuredWidth() / 2, cy3 - flashModeButton.getMeasuredHeight() / 2, cx3 + flashModeButton.getMeasuredWidth() / 2, cy3 + flashModeButton.getMeasuredHeight() / 2);
             }
         };
         cameraView = new CameraView(getContext(), true);
@@ -137,7 +136,7 @@ public class CameraStoryFragment extends BaseFragment {
 
         settingButton = new ImageButton(context);
         settingButton.setBackground(getActivity().getResources().getDrawable(R.drawable.ic_setting));
-        topToolPanel.addView(settingButton, LayoutCreator.createFrame(28, 28, Gravity.LEFT | Gravity.CENTER_VERTICAL));
+//        topToolPanel.addView(settingButton, LayoutCreator.createFrame(28, 28, Gravity.LEFT | Gravity.CENTER_VERTICAL));
 
 
         cameraContainer.addView(topToolPanel, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 126, Gravity.LEFT | Gravity.TOP));
@@ -194,7 +193,7 @@ public class CameraStoryFragment extends BaseFragment {
         bottomToolPanel.addView(galleryIcon, LayoutCreator.createFrame(48, 48));
 
         bottomPanelTitle = new TextView(context);
-        bottomPanelTitle.setText("Story");
+        bottomPanelTitle.setText(getString(R.string.status));
         bottomPanelTitle.setTypeface(Typeface.DEFAULT_BOLD);
         bottomPanelTitle.setTextColor(Color.WHITE);
         bottomToolPanel.addView(bottomPanelTitle, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
@@ -262,7 +261,7 @@ public class CameraStoryFragment extends BaseFragment {
 
         flashModeButton = new ImageView(context);
         flashModeButton.setScaleType(ImageView.ScaleType.CENTER);
-        topToolPanel.addView(flashModeButton, LayoutCreator.createFrame(48, 48, Gravity.CENTER));
+        topToolPanel.addView(flashModeButton, LayoutCreator.createFrame(48, 48, Gravity.LEFT | Gravity.CENTER_VERTICAL));
         flashModeButton.setOnClickListener(currentImage -> {
             if (cameraView == null || !cameraView.isInitied()) {
                 return;
@@ -283,11 +282,6 @@ public class CameraStoryFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 String fileName = "story_" + HelperString.getRandomFileName(3) + ".jpg";
-//
-//                File dir = new File(G.DIR_IMAGES);
-//                if (!dir.exists()) {
-//                    dir.mkdirs();
-//                }
                 File cameraFile = null;
                 try {
                     cameraFile = new AttachFile(getActivity()).createImageFile();
@@ -389,7 +383,7 @@ public class CameraStoryFragment extends BaseFragment {
 
             }
         } else {
-            Toast.makeText(getContext(), "دستگاه شما دارای دوربین نمی باشد!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.your_device_does_not_have_a_camera), Toast.LENGTH_LONG).show();
         }
 
         closeButton.setOnClickListener(new View.OnClickListener() {
