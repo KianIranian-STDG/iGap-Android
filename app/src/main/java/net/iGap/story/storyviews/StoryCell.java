@@ -1,6 +1,7 @@
 package net.iGap.story.storyviews;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,12 +16,28 @@ import androidx.core.content.res.ResourcesCompat;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.Theme;
+import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Status;
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmStory;
 import net.iGap.story.liststories.ImageLoadingView;
+import net.iGap.structs.AttachmentObject;
+
+import java.io.File;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -33,21 +50,83 @@ public class StoryCell extends FrameLayout {
     private IconView icon;
     private IconView icon2;
     private MaterialDesignTextView addIcon;
+    private MaterialDesignTextView deleteIcon;
     private Context context;
     private int padding = 16;
     private boolean isRtl = G.isAppRtl;
     private boolean needDivider;
+    private DeleteStory deleteStory;
     private IconClicked iconClicked;
+    private AvatarHandler avatarHandler;
+    private long userId = 0;
+    private long storyId = 0;
 
-    public enum Status {CIRCLE_IMAGE, LOADING_CIRCLE_IMAGE}
+    public enum CircleStatus {CIRCLE_IMAGE, LOADING_CIRCLE_IMAGE}
 
-    private Status status;
+    private CircleStatus status;
 
-    public StoryCell(@NonNull Context context, boolean needDivider, Status status) {
+    public StoryCell(@NonNull Context context, boolean needDivider, CircleStatus status) {
         this(context, needDivider, status, null);
     }
 
-    public StoryCell(@NonNull Context context, boolean needDivider, Status status, IconClicked iconClicked) {
+    public void setStoryId(long id) {
+        this.storyId = id;
+    }
+
+    public void setData(boolean isFromMyStatus, long userId, long time, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
+        //   avatarHandler.getAvatar(new ParamWithAvatarType(imageView, userId).avatarType(AvatarHandler.AvatarType.USER));
+        this.userId = userId;
+        topText.setText(displayName);
+        bottomText.setText(HelperCalander.getTimeForMainRoom(time));
+        if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
+            if (attachment.getLocalThumbnailPath() != null) {
+                if (!isFromMyStatus) {
+                    circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                } else {
+                    circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                }
+
+            } else {
+                circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), false);
+                if (object != null) {
+                    Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
+                        if (arg.status == Status.SUCCESS && arg.data != null) {
+                            String filepath = arg.data.getFilePath();
+                            String downloadedFileToken = arg.data.getToken();
+
+                            if (!(new File(filepath).exists())) {
+                                HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                            }
+
+
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("id", userId).findAll()) {
+                                    realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
+                                }
+                            });
+                            G.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!isFromMyStatus) {
+                                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(filepath));
+                                    } else {
+
+                                        circleImage.setImageBitmap(BitmapFactory.decodeFile(filepath));
+                                    }
+                                }
+                            });
+
+
+                        }
+
+                    });
+                }
+            }
+        }
+    }
+
+    public StoryCell(@NonNull Context context, boolean needDivider, CircleStatus status, IconClicked iconClicked) {
         super(context);
         this.status = status;
         this.needDivider = needDivider;
@@ -55,7 +134,6 @@ public class StoryCell extends FrameLayout {
         this.context = context;
         setWillNotDraw(!needDivider);
         View view;
-
         switch (this.status) {
             case CIRCLE_IMAGE:
                 circleImage = new CircleImageView(getContext());
@@ -78,7 +156,7 @@ public class StoryCell extends FrameLayout {
         addIcon.setTextColor(getResources().getColor(R.color.green));
         addIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         addIcon.setGravity(isRtl ? Gravity.LEFT : Gravity.RIGHT);
-        addIcon.setVisibility(GONE);
+
         addView(addIcon, LayoutCreator.createFrame(18, 18, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, isRtl ? 0 : padding, 8, isRtl ? padding : 0, 8));
 
         topText = new TextView(context);
@@ -105,10 +183,22 @@ public class StoryCell extends FrameLayout {
         icon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         addView(icon2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 30) : padding, 0, isRtl ? padding : (30 + padding), 0));
 
+
+        deleteIcon = new MaterialDesignTextView(getContext());
+        deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
+        deleteIcon.setText(R.string.horizontal_more_icon);
+        deleteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteStory.deleteStory(storyId);
+            }
+        });
+        addView(deleteIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 20) : padding, 0, isRtl ? padding : (20 + padding), 0));
         // this.iconClicked.clickedIcon(icon, icon2);
 
 
-        if (status == Status.LOADING_CIRCLE_IMAGE) {
+        if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
             setOnClickListener(v -> {
                 Log.i("nazanin", "StoryCell: ");
                 switch (circleImageLoading.getStatus()) {
@@ -160,10 +250,10 @@ public class StoryCell extends FrameLayout {
         this.icon2.setTextColor(color2);
     }
 
-    public void setImage(int imageId) {
+    public void setImage(int imageId, AvatarHandler avatarHandler) {
         switch (status) {
             case CIRCLE_IMAGE:
-                this.circleImage.setImageResource(imageId);
+                avatarHandler.getAvatar(new ParamWithAvatarType(this.circleImage, AccountManager.getInstance().getCurrentUser().getId()).avatarType(AvatarHandler.AvatarType.USER));
                 break;
             case LOADING_CIRCLE_IMAGE:
                 this.circleImageLoading.setImageResource(imageId);
@@ -172,6 +262,15 @@ public class StoryCell extends FrameLayout {
 
     public void addIconVisibility(boolean visible) {
         addIcon.setVisibility(visible ? VISIBLE : GONE);
+    }
+
+    public void deleteIconVisibility(boolean visible) {
+        deleteIcon.setVisibility(visible ? VISIBLE : GONE);
+    }
+
+    public void deleteIconVisibility(boolean visible, int image) {
+        deleteIcon.setVisibility(visible ? VISIBLE : GONE);
+        deleteIcon.setText(image);
     }
 
     @Override
@@ -190,4 +289,61 @@ public class StoryCell extends FrameLayout {
         void clickedIcon(View icon, View icon2);
     }
 
+    public CircleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CircleStatus status) {
+        this.status = status;
+        View view;
+        switch (this.status) {
+            case CIRCLE_IMAGE:
+                if (circleImage == null) {
+                    circleImage = new CircleImageView(getContext());
+                    circleImage.setLayoutParams(LayoutCreator.createFrame(56, 56, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : padding, 8, isRtl ? padding : 0, 8));
+                    addView(circleImage, 0);
+                } else {
+                    circleImage.setVisibility(VISIBLE);
+                }
+
+                if (circleImageLoading != null) {
+                    circleImageLoading.setVisibility(GONE);
+                }
+                break;
+            case LOADING_CIRCLE_IMAGE:
+                if (circleImage != null) {
+                    circleImage.setVisibility(GONE);
+                }
+                if (circleImageLoading == null) {
+                    circleImageLoading = new ImageLoadingView(context);
+                    circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
+                    circleImageLoading.setLayoutParams(LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 8, 8, isRtl ? 8 : 0, 8));
+                    addView(circleImageLoading, 0);
+                } else {
+                    circleImageLoading.setVisibility(VISIBLE);
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + this.status);
+        }
+
+    }
+
+    public void setDeleteStory(DeleteStory deleteStory) {
+        this.deleteStory = deleteStory;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public interface DeleteStory {
+        void deleteStory(long storyId);
+
+        void openMyStory();
+    }
 }

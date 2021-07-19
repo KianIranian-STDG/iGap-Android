@@ -221,6 +221,44 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         return struct;
     }
 
+    public static DownloadObject createForStoryAvatar(AttachmentObject attachment, boolean big) {
+
+        if (attachment == null) {
+            return null;
+        }
+
+        final AttachmentObject thumbnail = big ? attachment.largeThumbnail : attachment.smallThumbnail;
+
+        if (thumbnail == null || thumbnail.cacheId == null) {
+            return null;
+        }
+
+        DownloadObject struct = new DownloadObject();
+        struct.selector = big ? LARGE_THUMBNAIL_VALUE : SMALL_THUMBNAIL_VALUE;
+        struct.key = createKey(String.valueOf(thumbnail.cacheId), struct.selector);
+        struct.mainCacheId = attachment.cacheId;
+        struct.fileToken = attachment.token;
+        struct.fileName = attachment.name;
+        struct.fileSize = attachment.largeThumbnail.size;
+        struct.mimeType = struct.extractMime(struct.fileName);
+        struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
+
+        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
+        struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
+        struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
+        struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+
+        if (struct.tempFile.exists()) {
+            struct.offset = struct.tempFile.length();
+
+            if (struct.offset > 0 && struct.fileSize > 0) {
+                struct.progress = (int) ((struct.offset * 100) / struct.fileSize);
+            }
+        }
+
+        return struct;
+    }
+
     public static String createKey(String cacheId, int selector) {
         return String.format(Locale.US, "%s_%d", cacheId, selector);
     }

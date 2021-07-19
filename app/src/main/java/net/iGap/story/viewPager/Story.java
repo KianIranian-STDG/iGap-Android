@@ -2,6 +2,9 @@ package net.iGap.story.viewPager;
 
 import android.graphics.Bitmap;
 
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAttachment;
+
 import java.io.Serializable;
 
 public class Story implements Serializable {
@@ -10,6 +13,10 @@ public class Story implements Serializable {
     private Bitmap bitmap;
     private String txt;
     private long storyData;
+    private long userId;
+    private RealmAttachment attachment;
+    private ProtoGlobal.File file;
+
 
     public String getUrl() {
         return url;
@@ -17,6 +24,22 @@ public class Story implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public RealmAttachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(RealmAttachment attachment) {
+        this.attachment = attachment;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getTxt() {
@@ -41,5 +64,13 @@ public class Story implements Serializable {
 
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public ProtoGlobal.File getFile() {
+        return file;
+    }
+
+    public void setFile(ProtoGlobal.File file) {
+        this.file = file;
     }
 }
