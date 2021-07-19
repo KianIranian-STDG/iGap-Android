@@ -2249,6 +2249,14 @@
     <string name="remove_follower">حذف دنبال کننده</string>
     <string name="hide_story">پنهان کردن استوری</string>
     <string name="stories">histoires</string>
+    <string name="status">وضعیت</string>
+    <string name="my_status">وضعیت من</string>
+    <string name="tap_to_add_status_update">برای افزودن به روزرسانی وضعیت ضربه بزنید</string>
+    <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
+    <string name="recent_updates">بروز رسانی های اخیر</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">به روزرسانی های وضعیت شما پس از ۲۴ ساعت ناپدید می شوند.</string>
+    <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
+    <string name="delete_status_update">این بروزرسانی وضعیت حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
 
     <string name="stories_setting">تنظیمات داستان</string>
     <string name="hide_story_from">پنهان کردن داستان</string>

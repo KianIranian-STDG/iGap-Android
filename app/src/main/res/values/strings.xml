@@ -2309,6 +2309,14 @@ Want to get it?</string>
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Story</string>
     <string name="stories">histoires</string>
+    <string name="my_status">My Status</string>
+    <string name="status">Status</string>
+    <string name="tap_to_add_status_update">Tap to add status update</string>
+    <string name="viewed_updates">Viewed updates</string>
+    <string name="recent_updates">Recent Updates</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Your status updates will disappear after 24 hours.</string>
+    <string name="your_device_does_not_have_a_camera">Your device does not have a camera!</string>
+    <string name="delete_status_update">Delete this status update? It will also be deleted for everyone who received it.</string>
     <string-array name="photo_editor_emoji">
         <!-- Smiles -->
         <item>u+1f604</item>
