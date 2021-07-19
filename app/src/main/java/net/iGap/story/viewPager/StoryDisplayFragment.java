@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,13 +23,28 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
+import net.iGap.helper.avatar.AvatarHandler;
+import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.customView.EventEditText;
+import net.iGap.module.downloader.DownloadObject;
+import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.Status;
+import net.iGap.network.AbstractObject;
+import net.iGap.network.IG_RPC;
+import net.iGap.proto.ProtoFileDownload;
+import net.iGap.realm.RealmAttachment;
 import net.iGap.story.ExpandableTextView;
+import net.iGap.structs.AttachmentObject;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -37,12 +53,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
     private static final String EXTRA_STORY_USER = "EXTRA_STORY_USER";
+    private static final String EXTRA_IS_MY_STORY = "EXTRA_IS_MY_STORY";
     private int position;
     private StoryUser storyUser;
     private List<Story> stories;
     private long pressTime = 0L;
     private long limit = 500L;
     private int counter = 0;
+    private int downloadCounter = 0;
     private boolean keyboardViewVisible;
     private boolean onResumeCalled = false;
     private StoriesProgressView storiesProgressView;
@@ -60,15 +78,20 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private AtomicInteger OpenKeyboard = new AtomicInteger();
     private AtomicInteger closeKeyboard = new AtomicInteger();
     private View rootView;
+    private LinearLayout storyViewsRootView;
+    private TextView storyViewsCount;
     private boolean clickable;
     private ConstraintLayout storyOverlay;
+    private ProgressBar loadingProgressbar;
+    boolean isMyStory = false;
 
-    public static StoryDisplayFragment newInstance(int position, StoryUser storyModel) {
+    public static StoryDisplayFragment newInstance(int position, StoryUser storyModel, boolean isMyStory) {
 
         Bundle args = new Bundle();
         StoryDisplayFragment fragment = new StoryDisplayFragment();
         args.putInt(EXTRA_POSITION, position);
         args.putSerializable(EXTRA_STORY_USER, storyModel);
+        args.putBoolean(EXTRA_IS_MY_STORY, isMyStory);
         fragment.setArguments(args);
 
         return fragment;
@@ -103,11 +126,23 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         expandableTextView = rootView.findViewById(R.id.caption_text_sub_view);
         progressBar = rootView.findViewById(R.id.storyDisplayVideoProgress);
         storyOverlay = rootView.findViewById(R.id.storyOverlay);
+        loadingProgressbar = rootView.findViewById(R.id.display_story_progress_bar);
+        storyViewsRootView = rootView.findViewById(R.id.story_display_seen_views_root_view);
+        storyViewsCount = rootView.findViewById(R.id.story_display_views_count);
+
 
         if (getArguments() != null) {
             position = getArguments().getInt(EXTRA_POSITION);
+            isMyStory = getArguments().getBoolean(EXTRA_IS_MY_STORY, false);
             storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
             stories = storyUser.getStories();
+        }
+        if (isMyStory) {
+            replayFrame.setVisibility(View.INVISIBLE);
+            storyViewsRootView.setVisibility(View.VISIBLE);
+        } else {
+            replayFrame.setVisibility(View.VISIBLE);
+            storyViewsRootView.setVisibility(View.INVISIBLE);
         }
 
         return rootView;
@@ -116,8 +151,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        updateStory();
+        counter = 0;
         setUpUi();
+        updateStory();
+        loadingProgressbar.setVisibility(View.VISIBLE);
         replayFrame.setOnClickListener(view1 -> {
             setupReplay();
         });
@@ -134,9 +171,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         super.onResume();
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
         onResumeCalled = true;
-        if (counter == 0) {
-            storiesProgressView.startStories();
-        } else {
+        if (counter != 0) {
             counter = StoryViewFragment.progressStateArray.get(getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : 0);
             storiesProgressView.startStories(counter);
         }
@@ -153,6 +188,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onDestroy() {
         super.onDestroy();
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
+        counter = 0;
+        savePosition(counter);
     }
 
     private void updateStory() {
@@ -171,17 +208,99 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             expandableTextView.setText(stories.get(counter).getTxt());
         }
 
-        Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-        calendar.setTimeInMillis(stories.get(counter).getStoryData());
-        storyTime.setText(DateFormat.format(" HH:mm", calendar).toString());
+        storyTime.setText(HelperCalander.getTimeForMainRoom(stories.get(counter).getStoryData()));
         userName.setText(storyUser.getUserName());
         nameFrom.setText(storyUser.getUserName());
         descriptionFrom.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
-        Glide.with(this).load(stories.get(counter).getUrl()).into(storyDisplayImage);
-        Glide.with(this).load(storyUser.getProfilePicUrl()).circleCrop().into(userImage);
-        Glide.with(this).load(stories.get(counter).getUrl()).into(tumNailImage);
+        RealmAttachment ra = stories.get(counter).getAttachment();
+        String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : "";
+
+        File file = new File(path);
+        if (file.exists()) {
+            loadImage(path);
+        } else {
+            path = ra.getLocalThumbnailPath() != null ? ra.getLocalThumbnailPath() : "";
+            file = new File(path);
+            if (file.exists()) {
+                loadImage(path);
+            } else {
+                // if thumpnail not exist download it
+                ProtoFileDownload.FileDownload.Selector selector = null;
+                long fileSize = 0;
+
+                if (ra.getSmallThumbnail() != null) {
+                    selector = ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL;
+                    fileSize = ra.getSmallThumbnail().getSize();
+                } else if (ra.getLargeThumbnail() != null) {
+                    selector = ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL;
+                    fileSize = ra.getLargeThumbnail().getSize();
+                }
+
+                if (selector != null && fileSize > 0) {
+
+                    DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(ra), true);
+                    if (object != null) {
+                        Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
+                            if (arg.status == Status.SUCCESS && arg.data != null) {
+                                String filepath = arg.data.getFilePath();
+                                String downloadedFileToken = arg.data.getToken();
+
+                                if (!(new File(filepath).exists())) {
+                                    HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                                }
+
+                                G.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadImage(filepath);
+                                    }
+                                });
+
+
+                            }
+
+                        });
+                    }
+                }
+            }
+        }
 
     }
+
+
+    private void loadImage(String path) {
+        Log.e("faslkfhsfhsakjd", "loadImage: " + downloadCounter);
+
+        loadingProgressbar.setVisibility(View.GONE);
+        Glide.with(this).load(path).into(storyDisplayImage);
+        avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
+        Glide.with(this).load(path).into(tumNailImage);
+
+        if (counter == 0 && downloadCounter == 0) {
+            storiesProgressView.startStories(counter);
+        } else {
+            resumeCurrentStory();
+        }
+
+        if (!isMyStory) {
+            AbstractObject req = null;
+            IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
+            story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
+            req = story_add_view;
+            getRequestManager().sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
+
+
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        downloadCounter++;
+    }
+
 
     private void setUpUi() {
 
@@ -189,7 +308,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onSwipeTop() {
-                setupReplay();
+                if (!isMyStory) {
+                    setupReplay();
+                }
             }
 
             @Override
@@ -372,6 +493,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         }
         ++counter;
         savePosition(counter);
+        Log.e("faslkfhsfhsakjd", "onNext: ");
+        pauseCurrentStory();
+        loadingProgressbar.setVisibility(View.VISIBLE);
         updateStory();
     }
 
@@ -381,6 +505,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             return;
         --counter;
         savePosition(counter);
+        pauseCurrentStory();
         updateStory();
     }
 

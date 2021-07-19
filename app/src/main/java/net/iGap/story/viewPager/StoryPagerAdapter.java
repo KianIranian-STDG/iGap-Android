@@ -13,17 +13,19 @@ public class StoryPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<StoryUser> storyUsers;
     private StoryDisplayFragment.PageViewOperator pageViewOperator;
+    private boolean isMyStory = false;
 
-    public StoryPagerAdapter(@NonNull FragmentManager fm, int behavior, List<StoryUser> storyUsers, StoryDisplayFragment.PageViewOperator pageViewOperator) {
+    public StoryPagerAdapter(@NonNull FragmentManager fm, int behavior, List<StoryUser> storyUsers, StoryDisplayFragment.PageViewOperator pageViewOperator, boolean isMyStory) {
         super(fm, behavior);
         this.storyUsers = storyUsers;
         this.pageViewOperator = pageViewOperator;
+        this.isMyStory = isMyStory;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        StoryDisplayFragment storyDisplayFragment = StoryDisplayFragment.newInstance(position, storyUsers.get(position));
+        StoryDisplayFragment storyDisplayFragment = StoryDisplayFragment.newInstance(position, storyUsers.get(position),isMyStory);
         storyDisplayFragment.setPageViewOperator(pageViewOperator);
         return storyDisplayFragment;
     }

@@ -89,7 +89,7 @@ public class IG_RPC {
 
     public static class Res_Story_Get_Own_Story_Views extends AbstractObject {
         public static int actionId = 31205;
-
+        public List<ProtoStoryGetOwnStoryViews.GroupedViews> groupedViews;
 
         public static Res_Story_Get_Own_Story_Views deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -111,6 +111,7 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoStoryGetOwnStoryViews.StoryGetOwnStoryViewsResponse response = ProtoStoryGetOwnStoryViews.StoryGetOwnStoryViewsResponse.parseFrom(message);
             resId = response.getResponse().getId();
+            groupedViews = response.getGroupedViewsList();
         }
     }
 

@@ -262,12 +262,12 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
             if (storyCell.getStatus() == StoryCell.CircleStatus.CIRCLE_IMAGE) {
                 new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment()).setReplace(false).load();
             } else if (storyCell.getStatus() == StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE) {
-                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(stories.get(position).getUserId(), true)).setReplace(false).load();
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true)).setReplace(false).load();
             }
 
         } else if (position > recentHeaderRow && position <= recentStoryRow || position > muteHeaderRow && position <= muteStoryRow) {
             StoryViewFragment storyViewFragment;
-            storyViewFragment = new StoryViewFragment(stories.get(position).getUserId(), false);
+            storyViewFragment = new StoryViewFragment(storyCell.getUserId(), false);
             new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
         }
     }
