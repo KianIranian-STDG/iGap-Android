@@ -472,7 +472,7 @@ public class AvatarHandler {
              */
             String avatarPath = AndroidUtils.getFilePathWithCashId(avatar.getFile().getCacheId(), avatar.getFile().getName(), G.DIR_IMAGE_USER, false);
 
-            AndroidUtils.copyFile(new File(src), new File(avatarPath));
+            AndroidUtils.copyFile(new File(src), new File(avatarPath),0,null);
 
             return avatarPath;
         } catch (IOException e) {

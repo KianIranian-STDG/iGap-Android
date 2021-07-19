@@ -43,6 +43,7 @@ import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperLog;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -89,6 +90,7 @@ public final class AndroidUtils {
         display.getSize(size);
         return size.x;
     }
+
     public static void clearDrawableAnimation(View view) {
         if (Build.VERSION.SDK_INT < 21 || view == null) {
             return;
@@ -107,6 +109,7 @@ public final class AndroidUtils {
             }
         }
     }
+
     public static String formatDuration(int timeMs) {
         int totalSeconds = timeMs / 1000;
 
@@ -385,28 +388,49 @@ public final class AndroidUtils {
         File cutTo = new File(newPath);
         File cutFrom = new File(pathTmp);
 
-        copyFile(cutFrom, cutTo);
+        copyFile(cutFrom, cutTo,0,null);
         deleteFile(cutFrom);
     }
 
-    public static void copyFile(File src, File dst) throws IOException {
+    public static void copyFile(File src, File dst, int successMessage, OnFileCopyComplete onFileCopyComplete) throws IOException {
         InputStream in = new FileInputStream(src);
 
-        copyFile(in, dst);
+        copyFile(in, dst, successMessage, onFileCopyComplete);
     }
 
-    public static void copyFile(InputStream in, File dst) throws IOException {
+    public static void copyFile(InputStream in, File dst,int successMessage,OnFileCopyComplete onFileCopyComplete) throws IOException {
 
         OutputStream out = new FileOutputStream(dst);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Transfer bytes from in to out
+                    byte[] buf = new byte[1024];
+                    int len = 0;
 
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
+                    while (true) {
+                        if (!((len = in.read(buf)) > 0)) break;
+                        out.write(buf, 0, len);
+                    }
+
+                    in.close();
+                    out.close();
+
+                    if (successMessage != 0 && onFileCopyComplete != null) {
+                        G.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                onFileCopyComplete.complete(successMessage);
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 
     public static boolean deleteFile(File src) {
