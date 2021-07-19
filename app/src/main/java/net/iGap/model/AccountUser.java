@@ -144,7 +144,7 @@ public class AccountUser {
 
         Realm.init(G.context);
         RealmConfiguration oldConfig = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                .schemaVersion(37)
+                .schemaVersion(38)
                 .compactOnLaunch()
                 .migration(new RealmMigration()).build();
         RealmConfiguration newConfig;

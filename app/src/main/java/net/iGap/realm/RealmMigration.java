@@ -898,6 +898,26 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == 50) {
+            RealmObjectSchema realmAttachmentSchema = schema.get(RealmAttachment.class.getSimpleName());
+
+            RealmObjectSchema realmStoryProto = schema.create(RealmStoryProto.class.getSimpleName())
+                    .addField("caption", String.class)
+                    .addField("fileToken", String.class)
+                    .addRealmObjectField("file", realmAttachmentSchema)
+                    .addField("createdAt", long.class)
+                    .addField("userId", long.class)
+                    .addField("storyId", long.class);
+
+
+            RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
+                    .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
+                    .addField("userId", long.class)
+                    .addRealmObjectField("realmStoryProtos", realmStoryProto);
+
+            oldVersion++;
+        }
     }
 
     @Override
