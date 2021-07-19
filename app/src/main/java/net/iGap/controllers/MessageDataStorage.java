@@ -30,6 +30,8 @@ import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.structs.RoomContactObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import io.realm.Realm;
@@ -355,6 +357,42 @@ public class MessageDataStorage extends BaseController {
         }
 
         return result[0];
+    }
+
+    public List<List<String>> getDisplayNameWithUserId(List<Long> userId) {
+        FileLog.i(TAG, "getDisplayNameWithUserId: " + userId);
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        final List<List<String>> result = new ArrayList<>();
+
+        storageQueue.postRunnable(() -> {
+            try {
+                for (int i = 0; i < userId.size(); i++) {
+                    RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", userId.get(i)).findFirst();
+                    if (realmRegisteredInfo != null) {
+                        List<String> initializeInfo = new ArrayList<>();
+                        initializeInfo.add(realmRegisteredInfo.getInitials());
+                        initializeInfo.add(realmRegisteredInfo.getColor());
+                        result.add(initializeInfo);
+                    }
+
+                }
+
+
+                countDownLatch.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        });
+
+        try {
+            countDownLatch.await();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+
+        return result;
     }
 
     public void putAttachmentToken(final long messageId, final String token) {
