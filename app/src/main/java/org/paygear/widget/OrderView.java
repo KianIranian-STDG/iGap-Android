@@ -16,8 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.WalletActivity;
@@ -235,15 +237,14 @@ public class OrderView extends LinearLayout {
         price.setText(RaadCommonUtils.formatPrice(order.amount, true, "\n"));
 
         if (imgRes > 0) {
-            Picasso.get().load(imgRes)
-                    .fit()
-                    .centerCrop()
-                    .into(image);
+            Glide.with(G.context).load(imgRes).fitCenter().centerCrop().into(image);
         } else {
-            Picasso.get().load(RaadCommonUtils.getImageUrl(img))
+
+            Glide.with(G.context)
+                    .load(RaadCommonUtils.getImageUrl(img))
                     .error(R.drawable.ic_person_outline2_white_24dp)
                     .placeholder(R.drawable.ic_person_outline2_white_24dp)
-                    .fit()
+                    .fitCenter()
                     .centerCrop()
                     .into(image);
         }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
@@ -176,7 +177,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 rootTitle.setVisibility(View.GONE);
             else
                 rootTitle.setText(tempRoot);
-            Picasso.get().load(mData.getNews().get(position).getImage())
+            Glide.with(G.context)
+                    .load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));
@@ -213,7 +215,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void initVH(int position) {
-            Picasso.get().load(mData.getNews().get(position).getImage())
+            Glide.with(G.context)
+                    .load(mData.getNews().get(position).getImage())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position)));

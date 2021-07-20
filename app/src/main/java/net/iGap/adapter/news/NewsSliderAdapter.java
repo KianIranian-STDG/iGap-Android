@@ -11,9 +11,11 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.bumptech.glide.Glide;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.news.NewsFPList;
 
@@ -98,7 +100,8 @@ public class NewsSliderAdapter extends SliderViewAdapter {
                 }
                 return false;
             });
-            Picasso.get().load(temp.getImage().get(0).getOriginal())
+            Glide.with(G.context)
+                    .load(temp.getImage().get(0).getOriginal())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
 

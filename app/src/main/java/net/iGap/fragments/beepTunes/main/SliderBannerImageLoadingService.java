@@ -2,14 +2,18 @@ package net.iGap.fragments.beepTunes.main;
 
 import android.widget.ImageView;
 
-import net.iGap.helper.ImageLoadingService;
+import com.bumptech.glide.Glide;
+
+import net.iGap.G;
+import net.iGap.R;
 import net.iGap.libs.bannerslider.BannerImageLoadingService;
 
 public class SliderBannerImageLoadingService implements BannerImageLoadingService {
 
     @Override
     public void loadImage(String url, ImageView imageView) {
-        ImageLoadingService.load(url, imageView);
+        Glide.with(G.context)
+                .load(url).fitCenter().centerInside().error(R.drawable.ic_error).into(imageView);
     }
 
     @Override

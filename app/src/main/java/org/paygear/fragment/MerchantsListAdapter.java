@@ -2,6 +2,7 @@ package org.paygear.fragment;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,8 +15,11 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Transformation;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.MerchantsListItemBinding;
@@ -168,26 +172,29 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
             if (data.getAccount_type() != 4) {
                 if (data.getBusiness_type()==2){
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                            .transform(new CircleImageTransform())
+                    Glide.with(G.context)
+                            .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                            .transform((Transformation<Bitmap>) new CircleImageTransform())
                             .error(R.drawable.ic_local_taxi_black_24dp)
                             .placeholder(R.drawable.ic_local_taxi_black_24dp)
-                            .fit()
+                            .fitCenter()
                             .into(mBinding.image);
                 }else {
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                            .transform(new CircleImageTransform())
+                    Glide.with(G.context)
+                            .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                            .transform((Transformation<Bitmap>) new CircleImageTransform())
                             .error(R.drawable.ic_store_black_24dp)
                             .placeholder(R.drawable.ic_store_black_24dp)
-                            .fit()
+                            .fitCenter()
                             .into(mBinding.image);
                 }
             } else {
-                Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                        .transform(new CircleImageTransform())
+                Glide.with(G.context)
+                        .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                        .transform((Transformation<Bitmap>) new CircleImageTransform())
                         .error(R.drawable.ic_person_outline2_white_24dp)
                         .placeholder(R.drawable.ic_person_outline2_white_24dp)
-                        .fit()
+                        .fitCenter()
                         .into(mBinding.image);
             }
 

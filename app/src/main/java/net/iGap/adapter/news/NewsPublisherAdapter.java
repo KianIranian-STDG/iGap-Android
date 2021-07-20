@@ -10,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.news.NewsPublisher;
 
@@ -69,7 +71,8 @@ public class NewsPublisherAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         void initView(int position) {
             title.setText(mData.get(position).getName());
-            Picasso.get().load(mData.get(position).getImage())
+            Glide.with(G.context)
+                    .load(mData.get(position).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.get(position)));

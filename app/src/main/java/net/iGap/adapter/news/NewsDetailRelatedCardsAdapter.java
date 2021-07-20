@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
@@ -101,7 +102,8 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
             source.setText(mData.getNews().get(position * 2).getSource());
             rootTitle.setText(mData.getNews().get(position * 2).getRootTitle());
             title.setText(mData.getNews().get(position * 2).getTitle());
-            Picasso.get().load(mData.getNews().get(position * 2).getImage())
+            Glide.with(G.context)
+                    .load(mData.getNews().get(position * 2).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image);
             container.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position * 2)));
@@ -113,7 +115,8 @@ public class NewsDetailRelatedCardsAdapter extends RecyclerView.Adapter<Recycler
             source1.setText(mData.getNews().get(position * 2 + 1).getSource());
             rootTitle1.setText(mData.getNews().get(position * 2 + 1).getRootTitle());
             title1.setText(mData.getNews().get(position * 2 + 1).getTitle());
-            Picasso.get().load(mData.getNews().get(position * 2 + 1).getImage())
+            Glide.with(G.context)
+                    .load(mData.getNews().get(position * 2 + 1).getImage())
                     .placeholder(R.mipmap.news_temp_icon)
                     .into(image1);
             container1.setOnClickListener(v -> callBack.onNewsGroupClick(mData.getNews().get(position * 2 + 1)));

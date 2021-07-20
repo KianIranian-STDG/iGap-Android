@@ -19,14 +19,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.beepTunes.BeepTunesAlbumAdapter;
 import net.iGap.adapter.beepTunes.BeepTunesTrackAdapter;
 import net.iGap.api.apiService.BaseAPIViewFrag;
-import net.iGap.helper.ImageLoadingService;
 import net.iGap.observers.interfaces.OnTrackAdapter;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.module.SHP_SETTING;
@@ -199,7 +200,12 @@ public class BeepTunesAlbumFragment extends BaseAPIViewFrag<AlbumViewModel> impl
     private void setUpAlbumInfo(Album album) {
         artistNameTv.setText(album.getArtists().get(0).getName());
         albumNameTv.setText(album.getEnglishName());
-        ImageLoadingService.load(album.getImage(), albumAvatarIv);
+        Glide.with(G.context)
+                .load(album.getImage())
+                .fitCenter()
+                .centerInside()
+                .error(R.drawable.ic_error)
+                .into(albumAvatarIv);
         albumPriceTv.setText(album.getFinalPrice().toString());
         toolBarTv.setText(album.getArtists().get(0).getName() + " | " + album.getName());
     }
