@@ -19,8 +19,6 @@
         <item name="android:windowBackground">@drawable/theme</item>
     </style>
 
-    <style name="AppTheme" parent="BaseTheme" />
-
     <style name="MySearch" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:editTextColor">?attr/iGapTitleTextColor</item>
         <item name="android:textColorHint">?attr/iGapHintTextColor</item>
@@ -196,30 +194,6 @@ z
 
     <style name="primaryIconTextViewStyle" parent="baseFontIcon">
         <item name="android:textColor">?iGapPrimaryIconTextColor</item>
-    </style>
-
-    <style name="ExoMediaButton.Play">
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ExoMediaButton.Pause">
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ExoMediaButton.Previous">
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ExoMediaButton.Next">
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ExoMediaButton.FastForward">
-        <item name="android:visibility">gone</item>
-    </style>
-
-    <style name="ExoMediaButton.Rewind">
-        <item name="android:visibility">gone</item>
     </style>
 
 </resources>

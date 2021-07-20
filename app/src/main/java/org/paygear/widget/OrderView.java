@@ -17,7 +17,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -152,16 +151,16 @@ public class OrderView extends LinearLayout {
 
             if (order.orderType == Order.ORDER_TYPE_CASH_OUT) {
 //                title.setText(order.isPaid ? R.string.settled : R.string.settled_pending);
-                if (order.state==0){
+                if (order.state == 0) {
                     title.setText(R.string.settled_pending);
                     title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_pending, 0);
-                }else if (order.state==1){
+                } else if (order.state == 1) {
                     title.setText(R.string.settled);
                     title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_out, 0);
-                }else if (order.state==5){
+                } else if (order.state == 5) {
                     title.setText(R.string.refound);
-                    title.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_payment_in, 0);
-                }else {
+                    title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_in, 0);
+                } else {
                     title.setText(order.isPaid ? R.string.settled : R.string.settled_pending);
                     title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_out, 0);
                 }
@@ -224,7 +223,7 @@ public class OrderView extends LinearLayout {
             }
 
         }
-        if (order.state==5) {
+        if (order.state == 5) {
             title.setText(R.string.refound);
             title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_in, 0);
         }

@@ -32,7 +32,6 @@ import androidx.core.view.ViewCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -372,7 +371,7 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     AccountPaymentDialog.this, null, ScannerFragment.class);
 
-            if (WalletActivity.refreshLayout!=null)
+            if (WalletActivity.refreshLayout != null)
                 WalletActivity.refreshLayout.setRefreshLayout(true);
         }
 
@@ -865,7 +864,6 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
                  *     podMap.put("callback_url","https://web.igap.net/#!/iG");
                  */
                 //         podMap.put("callback_url", "");
-
 
 
                 if (payment.orderType > -1) {

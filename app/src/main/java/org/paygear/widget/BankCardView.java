@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -262,7 +261,7 @@ public class BankCardView extends CardView {
         int screenWidth = displayMetrics.widthPixels;
         int dp16 = RaadCommonUtils.getPx(16, context);
         int cardWidth = screenWidth - (dp16 * 2);
-        return (int)(cardWidth / 1.7f);
+        return (int) (cardWidth / 1.7f);
     }
 
 

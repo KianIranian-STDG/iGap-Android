@@ -27,7 +27,6 @@ import androidx.core.view.ViewCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;

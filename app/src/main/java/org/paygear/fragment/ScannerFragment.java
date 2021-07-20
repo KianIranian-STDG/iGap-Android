@@ -42,13 +42,11 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -509,7 +507,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         appBarTitle.setText(getString(R.string.scanner));
         Glide.with(G.context)
                 .load(RaadCommonUtils.getImageUrl(myAccount.profilePicture))
-                .transform((Transformation<Bitmap>) new CircleImageTransform())
+                .circleCrop()
                 .error(R.drawable.ic_person_outline_black_24dp)
                 .placeholder(R.drawable.ic_person_outline_black_24dp)
                 .fitCenter()

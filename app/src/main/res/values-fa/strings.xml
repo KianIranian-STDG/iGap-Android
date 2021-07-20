@@ -50,7 +50,6 @@
     <!--Reagent-->
     <string name="ra_enter_reagent_code">لطفا شماره ی معرف خود را وارد کنید(اختیاری)</string>
     <string name="ra_confirm">"تایید"</string>
-    <string name="reagent_error_message">شماره وارد شده برای معرف اشتباه می باشد.</string>
 
 
     <!-- Toast -->
@@ -99,7 +98,6 @@
     <string name="mute_notification">"اطلاع رسانی بیصدا"</string>
     <string name="pin_to_top">پین به بالا</string>
     <string name="Unpin_to_top">برداشتن پین</string>
-    <string name="unmute_notification">"اطلاع رسانی باصدا"</string>
     <string name="clear_history">"پاک کردن تاریخچه"</string>
     <string name="left_group">ترک گروه</string>
     <string name="delete_group">حذف گروه</string>
@@ -137,8 +135,6 @@
     <string name="device_dosenot_support">"دستگاه شما برنامه ای برای انجام این کار ندارد."</string>
     <string name="do_you_want_to_turn_on_gps">"سیستم مکان‌یاب جهانی (GPS) شما خاموش است، آیا مایلید آن را روشن کنید؟"</string>
     <string name="select_picture_en">"انتخاب تصویر"</string>
-    <string name="cannot_load_data_en">"عدم توانایی در بارگیری داده‌ها"</string>
-    <string name="do_you_want_exit">"آیا می‌خواهید خارج شوید؟"</string>
     <string name="slide_to_cancel_en">"برای لغو بکشید"</string>
     <string name="video_duration" formatted="false">"%s (%s)"</string>
 
@@ -252,7 +248,6 @@
     <string name="delete_item_dialog">"حذف"</string>
     <string name="saveToDownload_item_dialog">"ذخیره در پوشهٔ دانلودها"</string>
     <string name="edit_item_dialog">"ویرایش"</string>
-    <string name="Search">"جستجو"</string>
     <string name="Delete_and_leave_Group">"حذف و ترک گروه"</string>
     <string name="New_Chanel">"کانال جدید"</string>
 
@@ -571,7 +566,6 @@
     <string name="enter_discount_code">کد تخفیف را وارد کنید.</string>
     <string name="save_discount_code">ثبت کد</string>
     <string name="enter_your_discount_code">کد تخفیف خود را وارد کنید.</string>
-    <string name="discount_code_not_valid">متاسفانه کد تخفیف شما صحیح نمی باشد.</string>
     <string name="content_log_out">آیا از خروج از حساب کاربری خود اطمینان دارید؟</string>
     <string name="two_day">دو روز قبل</string>
     <string name="three_day">سه روز قبل</string>
@@ -696,7 +690,7 @@
     <string name="my_contacts">مخاطبین من</string>
     ‬‬‬‬‬‬
     <string name="empty_message"> لطفاً 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
-    <string name="empty_message3"> برای جستجو حداقل 5 کاراکتر وارد کنید</string>‬‬‬‬‬‬
+    ‬‬‬‬‬‬
     <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
     <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
     <string name="empty_room">هنوز پیامی ندارید</string>
@@ -828,7 +822,6 @@
     <string name="ringing">در حال زنگ خوردن</string>
     <string name="connecting_call">در حال اتصال</string>
     <string name="connected">متصل شد</string>
-    <string name="disconnected">قطع شد</string>
     <string name="faild">ناموفق</string>
     <string name="reject">رد تماس</string>
     <string name="busy">مشغول</string>
@@ -837,8 +830,6 @@
     <string name="invalid_question_token">"پاسخ شما نادرست است"</string>
 
     <string name="not_answerd_call">تماس ناموفق</string>
-    <string name="not_answered_voice_call">تماس صوتی ناموفق</string>
-    <string name="not_answered_video_call">تماس تصویری ناموفق</string>
 
     <string name="recorded_by">"ضبط شده توسط " </string>
 
@@ -847,12 +838,6 @@
     <string name="QrCode_Scan">ورود با اسکن بارکد</string>
     <string name="Call_Quality">کیفیت تماس</string>
     <string name="desc_self_destroy">"درصورتی که از حساب کاربری خود در طول یکی از مدت زمان های تعیین شده به هیچ وجه استفاده نکنید، حساب شما پس از آن زمان به صورت خودکار تخریب و برای همیشه حذف می شود."</string>
-
-    <string name="crop_image_menu_rotate_right">چرخاندن</string>
-    <string name="crop_image_menu_crop">برش</string>
-    <string name="crop_image_menu_flip">برگرداندن تصویر</string>
-    <string name="crop_image_menu_flip_horizontally">برگرداندن افقی تصویر</string>
-    <string name="crop_image_menu_flip_vertically">برگرداندن عمودی تصویر</string>
 
     <string name="title_who_can_see_my_avatar">دیده شدن عکسهای پروفایل من توسط</string>
     <string name="title_who_can_invite_you_to_channel_s">دریافت لینک دعوت کانال از</string>
@@ -1442,7 +1427,6 @@
     <string name="remaining_balance">موجودی باقیمانده</string>
     <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
     <string name="Favorite_Sticker">استیکر های من</string>
-    <string name="item_selected"> مورد انتخاب شده</string>
 
     <string name="terms_and_condition">فشردن دکمه شروع به منزله پذیرش %s می‌باشد.</string>
     <string name="terms_and_condition_clickable">قوانین و مقررات</string>
@@ -1480,7 +1464,6 @@
     <string name="cloud">فضای ابری</string>
     <string name="score">امتیاز</string>
     <string name="Credit">اعتبار</string>
-    <string name="make_as_read">خوانده شده</string>
     <string name="read_all">همه خوانده شده</string>
     <string name="financial_report">گزارش مالی</string>
     <string name="fag">سوالات متداول</string>
@@ -1549,7 +1532,6 @@
     <string name="tablet_empty_chat_description">شروع کار\n به آیگپ خوش آمدید.همیشه می توانید عکس نمایه خود را تنظیم کرده و یا در بخش تنظیمات نام خود را تغییر دهید.</string>
     <string name="make_call">ایجاد تماس</string>
     <string name="create_chat">ایجاد گفتگو</string>
-    <string name="delete_all">حذف همه</string>
     <string name="maximum_poll">شما به تعداد مجاز رای خود را ثبت کرده اید.</string>
     <string name="before_try">قبلا رای خود را ثبت کرده اید.</string>
     <string name="poll_ok">رای شما با موفقیت ثبت شد</string>
@@ -1617,13 +1599,10 @@
     <string name="kuknos_rial_Maximum_redeemable_token">"حداکثر توکن قابل بازخرید"</string>
     <string name="kuknos_rial_Number_of_contracts">"تعداد پیمان"</string>
     <string name="kuknos_rial_Redemption_fee">"کارمزد بازخرید PMN"</string>
-    <string name="kuknos_rial_Redemption_feee">"کارمزد بازخرید"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"تعداد کل پیمان"</string>
     <string name="kuknos_rial_Deposit_amount">"مبلغ واریزی (ریال)"</string>
-    <string name="kuknos_rial_Deposit_amount2">"مبلغ واریزی"</string>
     <string name="kuknos_receipt_token">"توکن"</string>
     <string name="kuknos_rial_min_buy">"حداقل مجاز"</string>
-    <string name="kuknos_rial_dialog_Repurchase_tokens">"توکن بازخرید"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"با مراجعه به بخش تنظیمات \n نسبت به تکمیل اطلاعات خود \n اقدام نمایید"</string>
     <string name="kuknos_edit_info_birthday">"تاریخ تولد"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"ویرایش و تغییر اطلاعات حساب کاربری"</string>
@@ -1705,8 +1684,6 @@
     <string name="kuknos_wHistory_dialogTitle">خطا</string>
     <string name="kuknos_wHistory_error">ارتباط با سرور برقرار نشد. لطفا دقایقی دیگر دوباره تلاش کنید.</string>
     <string name="kuknos_setting_title">تنظیمات</string>
-    <string name="kuknos_setting_viewRecoveryP">نمایش اطلاعات حساب کاربری</string>
-    <string name="kuknos_setting_dialog">تاییدیه بازخرید توکن</string>
     <string name="kuknos_setting_logout">خروج از کیف پول</string>
     <string name="kuknos_changePIN_successTitle">موفقیت</string>
     <string name="kuknos_changePIN_failTitle">خطا</string>
@@ -1858,12 +1835,6 @@
     <string name="tapsell_click">کلیک کن!</string>
     <string name="noDetail_textView">فاقد توضیحات</string>
     <string name="igasht_empty_history_message">هنوز بلیطی خریداری نشده است.</string>
-    <string name="Restaurant_textView">رستوران</string>
-    <string name="parking_textView">پارکینگ</string>
-    <string name="wifi_textView">وای فای</string>
-    <string name="coffeeShop_textView">کافی شاپ</string>
-    <string name="wheelchair_textView">ویلچر</string>
-    <string name="prayerRoom_textView">نمازخانه</string>
     <string name="edit_contact">ویرایش مخاطب</string>
     <string name="default_theme_title">پیش فرض</string>
     <string name="dark_theme_title">تاریک</string>
@@ -2203,11 +2174,6 @@
     <string name="all_packages">همه بسته ها</string>
     <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
     <string name="invalid_sim_type">لطفاً نوع سیم کارت را تغییر دهید ، بسته ای برای آن وجود ندارد.</string>
-    <string name="credit_sim">سیمکارت اعتباری</string>
-    <string name="permanent_sim">سیمکارت دائمی</string>
-    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
-    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
-    <string name="data_sim">سیمکارت دیتا</string>
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای در لیست مخاطبین موجود نیست</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
@@ -2224,7 +2190,6 @@
     <string name="submit">قبول</string>
     <string name="refund_history">سابقه بازخرید</string>
     <string name="history">سابقه تراکنش</string>
-    <string name="error_resume_file_expired">فایل منقضی شده است. لطفا دوباره تلاش کنید</string>
     <string name="Submitـomment">برای مشاهده نتیجه نظرسنجی لطفا ابتدا رای خود را ثبت نمایید !</string>
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string-array name="billsOptions">
@@ -2233,7 +2198,6 @@
     </string-array>
     <string name="refund_button">بازخرید</string>
     <string name="history_asset_type">نوع توکن</string>
-    <string name="history_hash">هش</string>
     <string name="history_amount">مبلغ</string>
     <string name="histroy_fee">کارمزد</string>
     <string name="history_count">مقدار</string>
@@ -2243,7 +2207,6 @@
     <string name="refund_done">بازخرید با موفقیت انجام شد</string>
     <string name="refund_error">خطا در عملیات بازخرید</string>
     <string name="token_not_selected">هیچ توکنی انتخاب نشده است</string>
-    <string name="refund_is_not_available">امکان بازخرید برای این توکن وجود ندارد</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
 

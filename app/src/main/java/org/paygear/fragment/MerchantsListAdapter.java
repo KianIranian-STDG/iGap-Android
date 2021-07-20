@@ -2,7 +2,6 @@ package org.paygear.fragment;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -31,7 +28,6 @@ import org.paygear.model.SearchedAccount;
 import java.util.ArrayList;
 
 import ir.radsense.raadcore.utils.RaadCommonUtils;
-import ir.radsense.raadcore.widget.CircleImageTransform;
 
 public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Object> Data;
@@ -47,9 +43,9 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
         ArrayList<SearchedAccount> shops = new ArrayList<>();
         ArrayList<SearchedAccount> taxis = new ArrayList<>();
 
-        for (SearchedAccount searchedAccount: Data) {
+        for (SearchedAccount searchedAccount : Data) {
             if (searchedAccount.getAccount_type() != 4) {
-                if (searchedAccount.getBusiness_type()==2){
+                if (searchedAccount.getBusiness_type() == 2) {
                     taxis.add(searchedAccount);
                 } else {
                     shops.add(searchedAccount);
@@ -86,7 +82,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
             textView.setBackgroundColor(new Theme().getRootColor(textView.getContext()));
-            textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
             textView.setGravity(Gravity.START);
 
             return new ViewHolderTitle(textView);
@@ -121,6 +117,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     class ViewHolderTitle extends RecyclerView.ViewHolder {
         TextView title;
+
         public ViewHolderTitle(TextView view) {
             super(view);
             this.title = view;
@@ -171,18 +168,18 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
                 mBinding.subtitle.setText(R.string.paygear_user);
             }
             if (data.getAccount_type() != 4) {
-                if (data.getBusiness_type()==2){
+                if (data.getBusiness_type() == 2) {
                     Glide.with(G.context)
                             .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                            .transform((Transformation<Bitmap>) new CircleImageTransform())
+                            .circleCrop()
                             .error(R.drawable.ic_local_taxi_black_24dp)
                             .placeholder(R.drawable.ic_local_taxi_black_24dp)
                             .fitCenter()
                             .into(mBinding.image);
-                }else {
+                } else {
                     Glide.with(G.context)
                             .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                            .transform((Transformation<Bitmap>) new CircleImageTransform())
+                            .circleCrop()
                             .error(R.drawable.ic_store_black_24dp)
                             .placeholder(R.drawable.ic_store_black_24dp)
                             .fitCenter()
@@ -191,7 +188,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             } else {
                 Glide.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                        .transform((Transformation<Bitmap>) new CircleImageTransform())
+                        .circleCrop()
                         .error(R.drawable.ic_person_outline2_white_24dp)
                         .placeholder(R.drawable.ic_person_outline2_white_24dp)
                         .fitCenter()
@@ -208,26 +205,26 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             });
 
 
-            if (RaadApp.selectedMerchant!=null){
-                if (RaadApp.selectedMerchant.get_id().equals(data.get_id())){
+            if (RaadApp.selectedMerchant != null) {
+                if (RaadApp.selectedMerchant.get_id().equals(data.get_id())) {
                     mBinding.title.setTextColor(Color.parseColor("#2196f3"));
                     mBinding.check.setVisibility(View.VISIBLE);
                     mBinding.checkFrame.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     mBinding.title.setTextColor(Color.parseColor("#de000000"));
                     mBinding.check.setVisibility(View.GONE);
                     mBinding.checkFrame.setVisibility(View.GONE);
 
                 }
 
-            }else {
-                if (position==0){
+            } else {
+                if (position == 0) {
                     mBinding.title.setTextColor(Color.parseColor("#2196f3"));
                     mBinding.check.setVisibility(View.VISIBLE);
                     mBinding.checkFrame.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     mBinding.title.setTextColor(Color.parseColor("#de000000"));
                     mBinding.check.setVisibility(View.GONE);
                     mBinding.checkFrame.setVisibility(View.GONE);

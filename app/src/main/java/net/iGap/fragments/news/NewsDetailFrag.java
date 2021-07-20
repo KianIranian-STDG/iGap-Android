@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;

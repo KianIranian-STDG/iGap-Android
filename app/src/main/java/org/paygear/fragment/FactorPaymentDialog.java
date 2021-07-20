@@ -20,7 +20,6 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -119,7 +118,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             mAmount = getArguments().getLong("Amount", 0);
             isCredit = getArguments().getBoolean("IsCredit", false);
             qrResponse = (QRResponse) getArguments().getSerializable("QrResponse");
-            mInvoiceNumber=getArguments().getString("InvoiceNumber");
+            mInvoiceNumber = getArguments().getString("InvoiceNumber");
         }
         setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
     }
@@ -185,13 +184,13 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             factorPaymentBinding.amountToPay.setText(RaadCommonUtils.formatPrice(mOrder.paidAmount, false));
 
         }
-        if (isCredit){
+        if (isCredit) {
             mCreditSwitch.setLeftTextColor(Color.parseColor("#9e9e9e"));
             mCreditSwitch.setRightTextColor(Color.WHITE);
             factorPaymentBinding.cardsBox.setVisibility(View.VISIBLE);
             factorPaymentBinding.button.setVisibility(View.GONE);
             showCards();
-        }else {
+        } else {
             mCreditSwitch.setRightTextColor(Color.parseColor("#9e9e9e"));
             mCreditSwitch.setLeftTextColor(Color.WHITE);
             factorPaymentBinding.cardsBox.setVisibility(View.GONE);
@@ -218,7 +217,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (getActivity()!=null)
+                if (getActivity() != null)
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -227,9 +226,9 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
                         }
                     });
                 else {
-                    try{
+                    try {
                         factorPaymentBinding.progress.setStatus(1);
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
 
@@ -261,8 +260,8 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             podMap.put("to", mAccount.id);
             podMap.put("amount", mAmount);
             podMap.put("credit", false);
-            if (discount!=0){
-                podMap.put("discount_price",discount);
+            if (discount != 0) {
+                podMap.put("discount_price", discount);
             }
             podMap.put("transaction_type", 4);
             if (mTransport != null) {
@@ -271,8 +270,8 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
             if (qrResponse != null) {
                 podMap.put("qr_code", qrResponse.sequenceNumber);
             }
-            if (mInvoiceNumber!=null){
-                podMap.put("hyperme_invoice_number",mInvoiceNumber);
+            if (mInvoiceNumber != null) {
+                podMap.put("hyperme_invoice_number", mInvoiceNumber);
             }
             requestBody = PostRequest.getRequestBody(podMap);
         }
@@ -356,7 +355,7 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
                 if (mAccount.type == 0 && mClubs != null && mClubs.size() > 0 && RaadApp.cards != null) {
                     for (AvailableClubs_Result item : mClubs) {
                         for (Card clubCard : RaadApp.cards) {
-                            if (item.getID().equals(clubCard.clubId)&&clubCard.balance>0) {
+                            if (item.getID().equals(clubCard.clubId) && clubCard.balance > 0) {
                                 cards.add(clubCard);
                             }
                         }
@@ -399,31 +398,31 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Boolean clubHasMaximium=false;
-                Boolean clubIsPercentage=false;
-                Long avaialableAmount=0l;
-                for (AvailableClubs_Result item:mClubs) {
-                    if (item.getID().equals(card.clubId)){
-                        if (item.getMerchant_max()!=null&&item.getMerchant_max()!=0){
-                            clubHasMaximium=true;
-                            clubIsPercentage=item.getMerchant_is_percentage();
-                            avaialableAmount=item.getMerchant_max();
-                        }else if(item.getMax()!=null&&item.getMax()!=0) {
-                            clubHasMaximium=true;
-                            clubIsPercentage=item.getIs_percentage();
-                            avaialableAmount=item.getMax();
-                        }else {
-                            clubHasMaximium=false;
-                            clubIsPercentage=false;
-                            avaialableAmount=0l;
+                Boolean clubHasMaximium = false;
+                Boolean clubIsPercentage = false;
+                Long avaialableAmount = 0l;
+                for (AvailableClubs_Result item : mClubs) {
+                    if (item.getID().equals(card.clubId)) {
+                        if (item.getMerchant_max() != null && item.getMerchant_max() != 0) {
+                            clubHasMaximium = true;
+                            clubIsPercentage = item.getMerchant_is_percentage();
+                            avaialableAmount = item.getMerchant_max();
+                        } else if (item.getMax() != null && item.getMax() != 0) {
+                            clubHasMaximium = true;
+                            clubIsPercentage = item.getIs_percentage();
+                            avaialableAmount = item.getMax();
+                        } else {
+                            clubHasMaximium = false;
+                            clubIsPercentage = false;
+                            avaialableAmount = 0l;
                         }
                     }
-                    
+
                 }
                 if (RaadApp.paygearCard.isProtected) {
                     FactorPaymentDialog.this.dismiss();
                     if (getActivity() instanceof NavigationBarActivity)
-                        CreditPaymentDialog.newInstance(mAccount, mOrder, mTransport, mProduct, mOrderId, isServices, isCashOutToWallet, orderToken, pubKey, xAccessToken, amountToPay, qrResponse, mCreditSwitch.isChecked(), card,discount,mInvoiceNumber,clubHasMaximium,clubIsPercentage,avaialableAmount).show(
+                        CreditPaymentDialog.newInstance(mAccount, mOrder, mTransport, mProduct, mOrderId, isServices, isCashOutToWallet, orderToken, pubKey, xAccessToken, amountToPay, qrResponse, mCreditSwitch.isChecked(), card, discount, mInvoiceNumber, clubHasMaximium, clubIsPercentage, avaialableAmount).show(
                                 getActivity().getSupportFragmentManager(), "CreditPaymentDialog");
 
                 } else {
@@ -474,14 +473,13 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
 //                }
 //            }
 //        });
-        amountToPay=mAmount;
-        if (mAccount.discountPercent != null &&mAccount.discountPercent!=0) {
+        amountToPay = mAmount;
+        if (mAccount.discountPercent != null && mAccount.discountPercent != 0) {
             discount = (mAmount * mAccount.discountPercent) / 100;
             amountToPay = mAmount - discount;
-        }
-        else if (mAccount.discountValue!=null&&mAccount.discountValue!=0){
-            discount=mAccount.discountValue;
-            amountToPay=mAmount-discount;
+        } else if (mAccount.discountValue != null && mAccount.discountValue != 0) {
+            discount = mAccount.discountValue;
+            amountToPay = mAmount - discount;
         }
         loadAvailableClubs();
     }
@@ -511,12 +509,13 @@ public class FactorPaymentDialog extends BottomSheetDialogFragment {
                     FactorPaymentDialog.this, null, ScannerFragment.class);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
         if (getActivity() != null) {
-            Bundle bundle=new Bundle();
-            bundle.putBoolean("Visible",false);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("Visible", false);
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     FactorPaymentDialog.this, bundle, ScannerFragment.class);
         }

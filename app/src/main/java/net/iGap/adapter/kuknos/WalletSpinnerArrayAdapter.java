@@ -16,7 +16,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
