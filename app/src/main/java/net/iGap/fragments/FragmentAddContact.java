@@ -238,17 +238,14 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
         edtPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.i("shokoofe","beforeTextChanged : " + charSequence);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.i("shokoofe","onTextChanged : " + charSequence);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Log.i("shokoofe","afterTextChanged : " + editable);
                 isEnableSetButton();
             }
         });
@@ -270,11 +267,9 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener,
             txtCodeCountry.setText(nameCountry);
             txtCodeCountry.setText("+" + code);
             if (!mask.equals(" ")) {
-                Log.i("shokoofe","mask : 1" );
                 edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
 
             } else {
-                Log.i("shokoofe","mask : 2");
                 edtPhoneNumber.setMask("###-###-####");
             }
         });
