@@ -119,7 +119,7 @@ public class UserLoginResponse extends MessageHandler {
             return realm.where(RealmUserInfo.class)
                     .equalTo("userInfo.id", AccountManager.getInstance().getCurrentUser().getId())
                     .findFirst().getPushNotificationToken();
-        }) ;
+        });
 
         if(!FCMToken.isEmpty()) {
             RealmUserInfo.sendPushNotificationToServer();
