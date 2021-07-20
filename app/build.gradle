@@ -449,7 +449,7 @@ dependencies {
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.vicmikhailau:MaskedEditText:1.1.1'
+    implementation 'io.github.vicmikhailau:MaskedEditText:4.0.5'
     implementation 'com.uncopt:android.justified:1.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
