@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface OnUserRegistration {
 
-    void onRegister(String userName, long userId, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbers, String regex, int verifyCodeDigitCount, String authorHash, boolean callMethodSupported);
+    void onRegister(String userNameR, long userIdR, ProtoUserRegister.UserRegisterResponse.Method methodValue, List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, String authorHashR, boolean callMethodSupported, long resendCodeDelay);
 
     void onRegisterError(int majorCode, int minorCode, int getWait);
 }

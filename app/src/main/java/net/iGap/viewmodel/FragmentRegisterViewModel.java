@@ -260,6 +260,7 @@ public class FragmentRegisterViewModel extends BaseViewModel {
 
     private void registerUser() {
         repository.registration(callBackEdtPhoneNumber.get(), new RegisterRepository.RepositoryCallbackWithError<ErrorWithWaitTime>() {
+
             @Override
             public void onSuccess() {
                 isShowLoading.set(View.GONE);
