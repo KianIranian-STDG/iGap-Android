@@ -97,7 +97,7 @@ public class StoryCell extends FrameLayout {
 
             } else {
                 circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
-                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), false);
+                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                         if (arg.status == Status.SUCCESS && arg.data != null) {
@@ -159,7 +159,7 @@ public class StoryCell extends FrameLayout {
 
             } else {
                 circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
-                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), false);
+                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
                         if (arg.status == Status.SUCCESS && arg.data != null) {
