@@ -234,7 +234,7 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         }
 
         DownloadObject struct = new DownloadObject();
-        struct.selector = big ? LARGE_THUMBNAIL_VALUE : SMALL_THUMBNAIL_VALUE;
+        struct.selector = big ? FILE_VALUE : SMALL_THUMBNAIL_VALUE;
         struct.key = createKey(String.valueOf(thumbnail.cacheId), struct.selector);
         struct.mainCacheId = attachment.cacheId;
         struct.fileToken = attachment.token;
@@ -242,8 +242,12 @@ public class DownloadObject extends Observable<Resource<HttpRequest.Progress>> {
         struct.fileSize = attachment.largeThumbnail.size;
         struct.mimeType = struct.extractMime(struct.fileName);
         struct.priority = HttpRequest.PRIORITY.PRIORITY_MEDIUM;
-
-        String filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
+        String filePath = null;
+        if (big) {
+            filePath = suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(1));
+        } else {
+            filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, G.DIR_IMAGE_USER, true);
+        }
         struct.destFile = new File(filePath + "/" + struct.mainCacheId + "_" + struct.mimeType);
         struct.tempFile = new File(G.DIR_TEMP + "/" + struct.key);
         struct.messageType = ProtoGlobal.RoomMessageType.UNRECOGNIZED;
