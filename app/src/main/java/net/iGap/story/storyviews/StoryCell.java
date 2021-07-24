@@ -74,6 +74,67 @@ public class StoryCell extends FrameLayout {
         this.storyId = id;
     }
 
+    public void setData(boolean isFromMyStatus, long userId, long time, String viewCount, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
+        this.userId = userId;
+        topText.setText(viewCount);
+        bottomText.setText(HelperCalander.getTimeForMainRoom(time));
+        if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
+            if (attachment.getLocalThumbnailPath() != null) {
+                try {
+                    if (!isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                    } else {
+                        circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                    }
+                } catch (Exception e) {
+                    if (!isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                    } else {
+                        circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                    }
+                }
+
+
+            } else {
+                circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), false);
+                if (object != null) {
+                    Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
+                        if (arg.status == Status.SUCCESS && arg.data != null) {
+                            String filepath = arg.data.getFilePath();
+                            String downloadedFileToken = arg.data.getToken();
+
+                            if (!(new File(filepath).exists())) {
+                                HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
+                            }
+
+
+                            DbManager.getInstance().doRealmTransaction(realm -> {
+                                for (RealmStory realmAvatar1 : realm.where(RealmStory.class).equalTo("id", userId).findAll()) {
+                                    realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
+                                }
+                            });
+                            G.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!isFromMyStatus) {
+                                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(filepath));
+                                    } else {
+
+                                        circleImage.setImageBitmap(BitmapFactory.decodeFile(filepath));
+                                    }
+                                }
+                            });
+
+
+                        }
+
+                    });
+                }
+            }
+        }
+    }
+
     public void setData(boolean isFromMyStatus, long userId, long time, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
         //   avatarHandler.getAvatar(new ParamWithAvatarType(imageView, userId).avatarType(AvatarHandler.AvatarType.USER));
         this.userId = userId;
@@ -81,13 +142,13 @@ public class StoryCell extends FrameLayout {
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
             if (attachment.getLocalThumbnailPath() != null) {
-                try{
+                try {
                     if (!isFromMyStatus) {
                         circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
                     } else {
                         circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     if (!isFromMyStatus) {
                         circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
                     } else {
@@ -140,7 +201,7 @@ public class StoryCell extends FrameLayout {
         super(context);
         if (G.themeColor == Theme.DARK) {
             setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(context));
-        }else {
+        } else {
             setBackgroundColor(Color.WHITE);
         }
         this.status = status;

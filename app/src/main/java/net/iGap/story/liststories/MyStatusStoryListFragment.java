@@ -126,6 +126,27 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 IG_RPC.Res_Story_Get_Own_Story_Views res = (IG_RPC.Res_Story_Get_Own_Story_Views) response;
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    int counter = 0;
+                    for (int i = 0; i < res.groupedViews.size(); i++) {
+                        for (int j = 0; j < res.groupedViews.get(i).getUserIdsList().size(); j++) {
+                            if (res.groupedViews.get(i).getUserIdsList().get(j) != AccountManager.getInstance().getCurrentUser().getId()) {
+                                counter++;
+                            }
+                        }
+                        realm.where(RealmStoryProto.class).equalTo("storyId", res.groupedViews.get(i).getStoryId()).findFirst().setViewCount(counter);
+                        counter = 0;
+                    }
+
+
+                });
+
+                G.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadStories();
+                    }
+                });
 
             } else {
                 progressBar.setVisibility(View.GONE);
@@ -285,7 +306,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         storyCell.setDeleteStory(MyStatusStoryListFragment.this);
                         storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                         if (position < stories.get(0).getRealmStoryProtos().size()) {
-                            storyCell.setData(false, stories.get(0).getUserId(), stories.get(0).getRealmStoryProtos().get(position).getCreatedAt(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), stories.get(0).getRealmStoryProtos().get(position).getFile(), null);
+                            storyCell.setData(false, stories.get(0).getUserId(), stories.get(0).getRealmStoryProtos().get(position).getCreatedAt(), stories.get(0).getRealmStoryProtos().get(position).getViewCount() + " " + "views",displayNameList.get(0).get(0), displayNameList.get(0).get(1), stories.get(0).getRealmStoryProtos().get(position).getFile(), null);
                             storyCell.setStoryId(stories.get(0).getRealmStoryProtos().get(position).getStoryId());
                         }
                         storyCell.deleteIconVisibility(true, R.string.delete_icon);
