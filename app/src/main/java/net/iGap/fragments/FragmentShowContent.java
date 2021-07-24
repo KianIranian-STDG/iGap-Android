@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,6 +60,7 @@ import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.IDownloader;
 import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmConstants;
@@ -331,9 +333,14 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             File file = new File(path);
             if (file.exists()) {
                 if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder,null);
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                    HelperSaveFile.savePicToGallery(path, true);
+                    HelperSaveFile.savePicToGallery(path, true, new OnFileCopyComplete() {
+                        @Override
+                        public void complete(int successMessage) {
+                            Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         }

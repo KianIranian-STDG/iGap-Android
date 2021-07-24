@@ -238,6 +238,7 @@ import net.iGap.observers.interfaces.OnClientGetRoomMessage;
 import net.iGap.observers.interfaces.OnComplete;
 import net.iGap.observers.interfaces.OnConnectionChangeStateChat;
 import net.iGap.observers.interfaces.OnDeleteChatFinishActivity;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnForwardBottomSheet;
 import net.iGap.observers.interfaces.OnGetFavoriteMenu;
 import net.iGap.observers.interfaces.OnGetPermission;
@@ -5420,11 +5421,25 @@ public class FragmentChat extends BaseFragment
                 break;
 
             case R.string.save_to_gallery:
-                saveSelectedMessageToGallery(message, adapterPosition);
+                prgWaiting.setVisibility(View.VISIBLE);
+                saveSelectedMessageToGallery(message, adapterPosition,new OnFileCopyComplete() {
+                    @Override
+                    public void complete(int successMessage) {
+                        prgWaiting.setVisibility(View.GONE);
+                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
 
             case R.string.save_to_Music:
-                saveSelectedMessageToMusic(message, adapterPosition);
+                prgWaiting.setVisibility(View.VISIBLE);
+                saveSelectedMessageToMusic(message, adapterPosition,new OnFileCopyComplete() {
+                    @Override
+                    public void complete(int successMessage) {
+                        prgWaiting.setVisibility(View.GONE);
+                        Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
 
             case R.string.saveToDownload_item_dialog:
@@ -5538,7 +5553,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToMusic(MessageObject message, int pos) {
+    private void saveSelectedMessageToMusic(MessageObject message, int pos,OnFileCopyComplete onFileCopyComplete) {
         String filename;
         String filepath;
 
@@ -5550,7 +5565,7 @@ public class FragmentChat extends BaseFragment
             filepath = message.getAttachment().filePath != null ? message.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cacheId, message.getAttachment().name, message.messageType);
         }
         if (new File(filepath).exists()) {
-            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder,onFileCopyComplete);
         } else {
             final int _messageType = message.forwardedMessage != null ? message.forwardedMessage.messageType : message.messageType;
             String cacheId = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().cacheId : message.getAttachment().cacheId;
@@ -5573,7 +5588,7 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(() -> {
                             if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
                                 if (arg.data != null && arg.data.getProgress() == 100) {
-                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder,onFileCopyComplete);
                                 }
                             }
                         });
@@ -5585,7 +5600,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos) {
+    private void saveSelectedMessageToGallery(MessageObject messageObject, int pos, OnFileCopyComplete onFileCopyComplete) {
         String filename;
         String filepath;
         int messageType;
@@ -5601,11 +5616,11 @@ public class FragmentChat extends BaseFragment
         }
         if (new File(filepath).exists()) {
             if (messageType == VIDEO_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, onFileCopyComplete);
             } else if (messageType == GIF_VALUE || messageType == GIF_TEXT_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder, onFileCopyComplete);
             } else if (messageType == IMAGE_VALUE) {
-                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary, onFileCopyComplete);
             }
         } else {
             final int _messageType = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
@@ -5635,11 +5650,11 @@ public class FragmentChat extends BaseFragment
                                         return;
                                     if (arg.data.getProgress() == 100) {
                                         if (_messageType == VIDEO_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, onFileCopyComplete);
                                         } else if (_messageType == GIF_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder, onFileCopyComplete);
                                         } else if (_messageType == IMAGE_VALUE) {
-                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                                            HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary, onFileCopyComplete);
                                         }
                                     }
                                     break;

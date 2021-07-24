@@ -12,6 +12,7 @@ package net.iGap.viewmodel;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
@@ -33,6 +34,7 @@ import net.iGap.module.CountryListComparator;
 import net.iGap.module.SingleLiveEvent;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnQrCodeNewDevice;
 import net.iGap.request.RequestQrCodeNewDevice;
 
@@ -324,7 +326,12 @@ public class FragmentRegisterViewModel extends BaseViewModel {
         }
         File file = new File(_resultQrCode);
         if (file.exists()) {
-            HelperSaveFile.savePicToGallery(_resultQrCode, true);
+            HelperSaveFile.savePicToGallery(_resultQrCode, true, new OnFileCopyComplete() {
+                @Override
+                public void complete(int successMessage) {
+                    Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -27,6 +28,7 @@ import net.iGap.G;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.api.beepTunes.DownloadSong;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnFileDownloadResponse;
 import net.iGap.observers.interfaces.OnSongDownload;
 import net.iGap.proto.ProtoFileDownload;
@@ -481,7 +483,12 @@ public class HelperDownloadFile {
                 if (file.exists()) {
 
                     if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
-                        HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
+                        HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false, new OnFileCopyComplete() {
+                            @Override
+                            public void complete(int successMessage) {
+                                Toast.makeText(G.context, successMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             }

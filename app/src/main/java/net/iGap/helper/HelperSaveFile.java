@@ -25,6 +25,7 @@ import com.yalantis.ucrop.util.FileUtils;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.AndroidUtils;
+import net.iGap.observers.interfaces.OnFileCopyComplete;
 import net.iGap.observers.interfaces.OnGetPermission;
 
 import java.io.File;
@@ -36,14 +37,14 @@ import java.io.OutputStream;
 
 public class HelperSaveFile {
 
-    public static void saveFileToDownLoadFolder(final String filePath, final String fileName, final FolderType folderType, final int successMessage) {
+    public static void saveFileToDownLoadFolder(final String filePath, final String fileName, final FolderType folderType, final int successMessage, OnFileCopyComplete onFileCopyComplete) {
 
         if (!HelperPermission.grantedUseStorage()) {
             try {
                 HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
-                        saveFileToDownLoadFolder(filePath, fileName, folderType, successMessage);
+                        saveFileToDownLoadFolder(filePath, fileName, folderType, successMessage, onFileCopyComplete);
                     }
 
                     @Override
@@ -134,9 +135,8 @@ public class HelperSaveFile {
 
                 if (shouldCopy) {
                     File file = new File(destinationPath);
-                    AndroidUtils.copyFile(src, file);
+                    AndroidUtils.copyFile(src, file,successMessage, onFileCopyComplete);
                     MediaScannerConnection.scanFile(G.context, new String[]{file.getAbsolutePath()}, null, null);
-                    Toast.makeText(G.currentActivity, successMessage, Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -145,12 +145,12 @@ public class HelperSaveFile {
         }
     }
 
-    public static void savePicToGallery(final String filePath, final boolean showToast) {
+    public static void savePicToGallery(final String filePath, final boolean showToast,OnFileCopyComplete onFileCopyComplete) {
         try {
             String extension = filePath.substring(filePath.lastIndexOf("."));
-            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + extension, FolderType.image, R.string.file_save_to_picture_folder);
+            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + extension, FolderType.image, R.string.file_save_to_picture_folder,onFileCopyComplete);
         } catch (Exception e) {
-            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image, R.string.file_save_to_picture_folder);
+            saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image, R.string.file_save_to_picture_folder,onFileCopyComplete);
             FileLog.e(e);
         }
     }
