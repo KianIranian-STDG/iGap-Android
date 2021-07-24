@@ -55,7 +55,7 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new RecyclerListView.ItemViewHolder(new StoryCell(parent.getContext(), true, StoryCell.Status.CIRCLE_IMAGE, FragmentStoryViews.this::clickedIcon), null);
+            return new RecyclerListView.ItemViewHolder(new StoryCell(parent.getContext(), true, StoryCell.CircleStatus.CIRCLE_IMAGE, FragmentStoryViews.this::clickedIcon), null);
         }
 
         @Override
@@ -63,7 +63,7 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
             StoryCell storyCell = (StoryCell) holder.itemView;
             storyCell.setText("topppppppppp", "bottommmm");
             storyCell.setIcons(R.string.md_send_button, R.string.more_icon);
-            storyCell.setImage(R.color.red);
+            storyCell.setImage(R.color.red,avatarHandler);
         }
 
         @Override

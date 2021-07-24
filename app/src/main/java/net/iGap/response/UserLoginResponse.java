@@ -11,6 +11,8 @@
 package net.iGap.response;
 
 import android.os.Looper;
+import android.util.Log;
+import android.view.View;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -20,15 +22,23 @@ import net.iGap.helper.HelperConnectionState;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
+import net.iGap.network.AbstractObject;
+import net.iGap.network.IG_RPC;
 import net.iGap.network.RequestManager;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
 import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmClientCondition;
+import net.iGap.realm.RealmContacts;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
+
+import io.realm.Realm;
 
 public class UserLoginResponse extends MessageHandler {
 
@@ -37,6 +47,8 @@ public class UserLoginResponse extends MessageHandler {
     public String identity;
     private boolean isDeprecated = false;
     private boolean isUpdateAvailable = false;
+    private int contactCount = 0;
+    public static boolean isFetched = false;
 
     public UserLoginResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -93,7 +105,7 @@ public class UserLoginResponse extends MessageHandler {
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
 
-        TokenContainer.getInstance().updateToken(builder.getAccessToken(),false);
+        TokenContainer.getInstance().updateToken(builder.getAccessToken(), false);
 
         /**
          * get Signaling Configuration
@@ -120,6 +132,7 @@ public class UserLoginResponse extends MessageHandler {
 
         DbManager.getInstance().doRealmTransaction(realm -> {
             RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+            contactCount = realm.where(RealmContacts.class).findAll().size();
             if (realmUserInfo != null) {
                 realmUserInfo.setWalletActive(builder.getWalletActive());
                 realmUserInfo.setMplActive(builder.getMplActive());
@@ -127,6 +140,61 @@ public class UserLoginResponse extends MessageHandler {
                 realmUserInfo.setAccessToken(builder.getAccessToken());
             }
         });
+
+        if (!isFetched) {
+            AbstractObject req = null;
+            IG_RPC.Get_Stories get_stories = new IG_RPC.Get_Stories();
+            get_stories.offset = 0;
+            get_stories.limit = contactCount;
+            req = get_stories;
+            RequestManager.getInstance(AccountManager.selectedAccount).sendRequest(req, (response, error) -> {
+                if (error == null) {
+                    IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
+
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        if (res.stories.size() > 0 && res.stories.size() >= realm.where(RealmStory.class).findAll().size()) {
+                            for (int i = 0; i < res.stories.size(); i++) {
+                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), res.stories.get(i).getStoriesList());
+                            }
+                        } else if (res.stories.size() != 0 && res.stories.size() < realm.where(RealmStory.class).findAll().size()) {
+                            for (int i = 0; i < res.stories.size(); i++) {
+                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), res.stories.get(i).getStoriesList());
+                            }
+
+                            for (int i = 0; i < realm.where(RealmStory.class).findAll().size(); i++) {
+                                if (i < res.stories.size()) {
+                                    if (res.stories.get(i).getUserId() != realm.where(RealmStory.class).findAll().get(i).getUserId()) {
+                                        realm.where(RealmStory.class).equalTo("id", realm.where(RealmStory.class).findAll().get(i).getUserId()).findFirst().deleteFromRealm();
+                                    }
+                                } else {
+                                    realm.where(RealmStory.class).equalTo("id", realm.where(RealmStory.class).findAll().get(i).getUserId()).findFirst().deleteFromRealm();
+                                }
+                            }
+
+                        } else if (res.stories.size() == 0) {
+                            realm.where(RealmStory.class).findAll().deleteAllFromRealm();
+                        }
+                    });
+                    Log.e("fdajhfjshf", "getRequestManager5: ");
+
+                    G.refreshRealmUi();
+                    isFetched = true;
+                    G.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED);
+                        }
+                    });
+
+
+                    Log.e("fdajhfjshf", "getRequestManager: ");
+
+                } else {
+                    Log.e("fdajhfjshf", "getRequestManager2: " + "/" + error);
+                }
+            });
+
+        }
     }
 
     @Override

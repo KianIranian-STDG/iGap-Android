@@ -29,6 +29,7 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.realm.RealmStory;
 import net.iGap.request.RequestClientGetRoomList;
@@ -41,7 +42,7 @@ import net.iGap.story.viewPager.StoryViewFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoryFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory {
+public class StoryFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
 
     private RecyclerListView recyclerListView;
     private ListAdapter adapter;
@@ -75,6 +76,12 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_DELETED, this);
+    }
 
     @Nullable
     @Override
@@ -113,12 +120,14 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_LIST_FETCHED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_DELETED, this);
         mOffset = 0;
         userIdList = new ArrayList<>();
         displayNameList = new ArrayList<>();
         progressBar.setVisibility(View.VISIBLE);
         loadStories();
-        GetStoryList(mOffset, 50);
+
         recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean scrollUpdated;
             private boolean scrollingManually;
@@ -146,7 +155,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                     if (mOffset > 0) {
                         int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                         if (lastVisiblePosition + 10 >= mOffset) {
-                            GetStoryList(mOffset, 50);
+//                            GetStoryList(mOffset, 50);
                         }
                     }
                 }
@@ -172,52 +181,6 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                         scrollUpdated = true;
                     }
                 }
-            }
-        });
-    }
-
-    private void GetStoryList(int offset, int limit) {
-        AbstractObject req = null;
-        IG_RPC.Get_Stories get_stories = new IG_RPC.Get_Stories();
-        get_stories.offset = offset;
-        get_stories.limit = limit;
-        req = get_stories;
-        getRequestManager().sendRequest(req, (response, error) -> {
-            if (error == null) {
-                counter = 0;
-                IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
-
-                DbManager.getInstance().doRealmTransaction(realm -> {
-                    if (res.stories.size() > 0) {
-                        for (int i = 0; i < res.stories.size(); i++) {
-                            RealmStory.putOrUpdate(realm, res.stories.get(counter).getUserId(), res.stories.get(counter).getStoriesList());
-                            counter++;
-                        }
-                    } else if (res.stories.size() == 0) {
-                        realm.where(RealmStory.class).findAll().deleteAllFromRealm();
-                    }
-                });
-                Log.e("fdajhfjshf", "getRequestManager5: ");
-
-                G.refreshRealmUi();
-                mOffset += res.stories.size();
-                if (res.stories.size() == 0) {
-                    storyListFetched = true;
-                }
-                G.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.VISIBLE);
-                        recyclerListView.setVisibility(View.GONE);
-                        loadStories();
-                    }
-                });
-
-
-                Log.e("fdajhfjshf", "getRequestManager: ");
-
-            } else {
-                Log.e("fdajhfjshf", "getRequestManager2: " + "/" + error);
             }
         });
     }
@@ -272,6 +235,20 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         }
     }
 
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.STORY_LIST_FETCHED) {
+            G.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadStories();
+                }
+            });
+        } else if (id == EventManager.STORY_DELETED) {
+            loadStories();
+        }
+    }
+
     private class ListAdapter extends RecyclerListView.ItemAdapter {
 
         public void addRow() {
@@ -322,13 +299,17 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                 case 0:
                 case 1:
                     StoryCell storyCell = (StoryCell) holder.itemView;
-                    storyCell.setBackgroundColor(Color.WHITE);
                     storyCell.setTextColor(Color.BLACK, Color.GRAY);
                     storyCell.setDeleteStory(StoryFragment.this);
                     storyCell.deleteIconVisibility(false);
                     storyCell.addIconVisibility(false);
                     if (position == addStoryRow) {
                         if (position < stories.size() && stories.get(position).getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                            if (!stories.get(position).isSeenAll()) {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
+                            } else {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
+                            }
                             storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                             storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(position).get(0), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
                             storyCell.addIconVisibility(false);
@@ -338,6 +319,11 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                         } else if (position < stories.size() && !isAddedUserStory) {
                             for (int i = 0; i < stories.size(); i++) {
                                 if (stories.get(i).getUserId() == AccountManager.getInstance().getCurrentUser().getId()) {
+                                    if (!stories.get(i).isSeenAll()) {
+                                        storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
+                                    } else {
+                                        storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
+                                    }
                                     storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                                     storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(i).get(0), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
                                     storyCell.addIconVisibility(false);
@@ -364,18 +350,33 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
 
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (!isAddedUserStory && recentStoryCounter < stories.size()) {
+                            if (!stories.get(recentStoryCounter).isSeenAll()) {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
+                            } else {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
+                            }
                             storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                             storyCell.setData(false, stories.get(recentStoryCounter).getUserId(), stories.get(recentStoryCounter).getRealmStoryProtos().get(stories.get(recentStoryCounter).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(recentStoryCounter).get(0), displayNameList.get(recentStoryCounter).get(1), stories.get(recentStoryCounter).getRealmStoryProtos().get(stories.get(recentStoryCounter).getRealmStoryProtos().size() - 1).getFile(), null);
                             storyCell.deleteIconVisibility(false);
                             storyCell.addIconVisibility(false);
                             recentStoryCounter++;
                         } else if (isAddedUserStory && recentStoryCounter != userStoryIndex && recentStoryCounter < stories.size()) {
+                            if (!stories.get(recentStoryCounter).isSeenAll()) {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
+                            } else {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
+                            }
                             storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                             storyCell.setData(false, stories.get(recentStoryCounter).getUserId(), stories.get(recentStoryCounter).getRealmStoryProtos().get(stories.get(recentStoryCounter).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(recentStoryCounter).get(0), displayNameList.get(recentStoryCounter).get(1), stories.get(recentStoryCounter).getRealmStoryProtos().get(stories.get(recentStoryCounter).getRealmStoryProtos().size() - 1).getFile(), null);
                             storyCell.deleteIconVisibility(false);
                             storyCell.addIconVisibility(false);
                             recentStoryCounter++;
                         } else if (isAddedUserStory && recentStoryCounter == userStoryIndex && (recentStoryCounter + 1) < stories.size()) {
+                            if (!stories.get(recentStoryCounter + 1).isSeenAll()) {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
+                            } else {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
+                            }
                             storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                             storyCell.setData(false, stories.get(recentStoryCounter + 1).getUserId(), stories.get(recentStoryCounter + 1).getRealmStoryProtos().get(stories.get(recentStoryCounter + 1).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(recentStoryCounter + 1).get(0), displayNameList.get(recentStoryCounter + 1).get(1), stories.get(recentStoryCounter + 1).getRealmStoryProtos().get(stories.get(recentStoryCounter + 1).getRealmStoryProtos().size() - 1).getFile(), null);
                             storyCell.deleteIconVisibility(false);

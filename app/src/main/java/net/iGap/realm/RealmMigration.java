@@ -908,12 +908,14 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addRealmObjectField("file", realmAttachmentSchema)
                     .addField("createdAt", long.class)
                     .addField("userId", long.class)
-                    .addField("storyId", long.class);
+                    .addField("storyId", long.class)
+                    .addField("isSeen", boolean.class);
 
 
             RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
                     .addField("userId", long.class)
+                    .addField("isSeenAll", boolean.class)
                     .addRealmObjectField("realmStoryProtos", realmStoryProto);
 
             oldVersion++;

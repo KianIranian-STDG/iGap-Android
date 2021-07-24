@@ -96,6 +96,7 @@ import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.OnGetPermission;
 import net.iGap.observers.interfaces.OnRotateImage;
 import net.iGap.proto.ProtoGlobal;
@@ -771,11 +772,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                             storyViewFragment.setItemGalleryList(itemGalleryList, false);
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 for (int i = 0; i < storyListFromProto.size(); i++) {
-                                    RealmStory.putOrUpdate(realm, AccountManager.getInstance().getCurrentUser().getId(), storyListFromProto);
+                                    RealmStory.putOrUpdate(realm,false, AccountManager.getInstance().getCurrentUser().getId(), storyListFromProto);
                                 }
                             });
                             new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).remove();
                             new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
+                            G.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED);
+                                }
+                            });
 
                         }
                     } else {
@@ -1251,6 +1258,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             itemGalleryList.add(0, item);
             textImageList.put(path, item);
         }
+        Collections.reverse(FragmentEditImage.itemGalleryList);
         itemGalleryList.addAll(0, FragmentEditImage.itemGalleryList);
         setUpViewPager();
 

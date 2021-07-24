@@ -17,7 +17,9 @@ public class RealmStory extends RealmObject {
     private long uid; // id for sorting avatars
     @Index
     private long userId; // userId for users and roomId for rooms
+    private boolean isSeenAll;
     private RealmList<RealmStoryProto> realmStoryProtos;
+
 
     public RealmStory() {
     }
@@ -26,16 +28,26 @@ public class RealmStory extends RealmObject {
         this.id = id;
     }
 
-    public static RealmStory putOrUpdate(Realm realm, final long userId, final List<ProtoStoryGetStories.IgapStory> stories) {
+    public static RealmStory putOrUpdate(Realm realm,boolean isSeenAll, final long userId, final List<ProtoStoryGetStories.IgapStory> stories) {
         RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", userId).findFirst();
         if (realmStory == null) {
             realmStory = realm.createObject(RealmStory.class, userId);
+            realmStory.setSeenAll(false);
         }
         realmStory.setUserId(userId);
+        realmStory.setSeenAll(isSeenAll);
         realmStory.setRealmStoryProtos(realm, stories);
         return realmStory;
     }
 
+    public static RealmStory putOrUpdate(Realm realm, final long userId, boolean isSeenAll) {
+        RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", userId).findFirst();
+        if (realmStory == null) {
+            realmStory = realm.createObject(RealmStory.class, userId);
+        }
+        realmStory.setSeenAll(isSeenAll);
+        return realmStory;
+    }
 
     public long getId() {
         return id;
@@ -66,6 +78,14 @@ public class RealmStory extends RealmObject {
         return realmStoryProtos;
     }
 
+    public boolean isSeenAll() {
+        return isSeenAll;
+    }
+
+    public void setSeenAll(boolean seenAll) {
+        isSeenAll = seenAll;
+    }
+
     public void setRealmStoryProtos(Realm realm, List<ProtoStoryGetStories.IgapStory> stories) {
         boolean isExist = false;
         for (ProtoStoryGetStories.IgapStory igapStory : stories) {
@@ -73,6 +93,7 @@ public class RealmStory extends RealmObject {
             RealmStoryProto storyProto = realm.where(RealmStoryProto.class).equalTo("fileToken", igapStory.getFileToken()).findFirst();
             if (storyProto == null) {
                 storyProto = realm.createObject(RealmStoryProto.class);
+                setSeenAll(false);
             } else {
                 isExist = true;
             }
@@ -83,6 +104,7 @@ public class RealmStory extends RealmObject {
             storyProto.setFileToken(igapStory.getFileToken());
             storyProto.setUserId(igapStory.getUserId());
             storyProto.setStoryId(igapStory.getId());
+            storyProto.setSeen(igapStory.getSeen());
             if (!isExist) {
                 realmStoryProtos.add(storyProto);
             } else {

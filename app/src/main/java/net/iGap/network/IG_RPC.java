@@ -356,7 +356,7 @@ public class IG_RPC {
 
     public static class Res_Story_Add_View extends AbstractObject {
         public static int actionId = 31204;
-
+        public String storyId;
 
         public static Res_Story_Add_View deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -378,6 +378,7 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoStoryAddView.StoryAddViewResponse response = ProtoStoryAddView.StoryAddViewResponse.parseFrom(message);
             resId = response.getResponse().getId();
+            storyId = response.getStoryId();
         }
     }
 

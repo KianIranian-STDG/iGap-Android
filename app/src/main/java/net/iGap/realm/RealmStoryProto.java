@@ -10,6 +10,7 @@ public class RealmStoryProto extends RealmObject {
     private long createdAt;
     private long userId;
     private long storyId;
+    private boolean isSeen;
 
     public String getCaption() {
         return caption;
@@ -57,5 +58,13 @@ public class RealmStoryProto extends RealmObject {
 
     public void setStoryId(long storyId) {
         this.storyId = storyId;
+    }
+
+    public boolean isSeen() {
+        return isSeen;
+    }
+
+    public void setSeen(boolean seen) {
+        isSeen = seen;
     }
 }

@@ -334,6 +334,7 @@ public class ImageLoadingView extends CircleImageView {
                 canvas.drawArc(mTrackRectF, adjustCircleWidth, width, false, paint);
             }
         }
+        mStatus = Status.UNCLICKED;
     }
 
     private void drawCircle(Canvas canvas, Paint paint) {
@@ -392,17 +393,23 @@ public class ImageLoadingView extends CircleImageView {
             return paint;
         }
         Bitmap bitmap = drawableToBitmap(drawable);
-        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
-        float scale = getWidth() * 1.0f / size;
-        matrix.setScale(scale, scale);
-        if (bitmap.getWidth() > bitmap.getHeight()) {
-            matrix.postTranslate(-(bitmap.getWidth() * scale - getWidth()) / 2, 0);
-        } else {
-            matrix.postTranslate(0, -(bitmap.getHeight() * scale - getHeight()) / 2);
+        try {
+            BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
+            float scale = getWidth() * 1.0f / size;
+            matrix.setScale(scale, scale);
+            if (bitmap.getWidth() > bitmap.getHeight()) {
+                matrix.postTranslate(-(bitmap.getWidth() * scale - getWidth()) / 2, 0);
+            } else {
+                matrix.postTranslate(0, -(bitmap.getHeight() * scale - getHeight()) / 2);
+            }
+            shader.setLocalMatrix(matrix);
+            paint.setShader(shader);
+            return paint;
+        } catch (Exception e) {
+
         }
-        shader.setLocalMatrix(matrix);
-        paint.setShader(shader);
+
         return paint;
     }
 

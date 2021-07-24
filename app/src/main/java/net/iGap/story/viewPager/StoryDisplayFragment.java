@@ -33,6 +33,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.EventEditText;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
@@ -41,6 +42,8 @@ import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.ExpandableTextView;
 import net.iGap.structs.AttachmentObject;
 
@@ -290,15 +293,27 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             getRequestManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
-
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        realm.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(res.storyId)).findFirst().setSeen(true);
+                    });
 
                 } else {
                     progressBar.setVisibility(View.GONE);
                 }
             });
+        } else {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                realm.where(RealmStoryProto.class).equalTo("storyId", stories.get(counter).getStoryId()).findFirst().setSeen(true);
+            });
         }
 
         downloadCounter++;
+
+        if (downloadCounter == stories.size()) {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                RealmStory.putOrUpdate(realm, stories.get(counter).getUserId(), true);
+            });
+        }
     }
 
 

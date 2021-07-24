@@ -3,6 +3,7 @@ package net.iGap.story.storyviews;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -80,11 +81,20 @@ public class StoryCell extends FrameLayout {
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
             if (attachment.getLocalThumbnailPath() != null) {
-                if (!isFromMyStatus) {
-                    circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
-                } else {
-                    circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                try{
+                    if (!isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                    } else {
+                        circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                    }
+                }catch (Exception e){
+                    if (!isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                    } else {
+                        circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                    }
                 }
+
 
             } else {
                 circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
@@ -128,6 +138,11 @@ public class StoryCell extends FrameLayout {
 
     public StoryCell(@NonNull Context context, boolean needDivider, CircleStatus status, IconClicked iconClicked) {
         super(context);
+        if (G.themeColor == Theme.DARK) {
+            setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(context));
+        }else {
+            setBackgroundColor(Color.WHITE);
+        }
         this.status = status;
         this.needDivider = needDivider;
         this.iconClicked = iconClicked;
@@ -163,6 +178,7 @@ public class StoryCell extends FrameLayout {
         topText.setSingleLine();
         topText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         topText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        topText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
         topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
 
@@ -171,6 +187,7 @@ public class StoryCell extends FrameLayout {
         bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
+        bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
         addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 34.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
 
         icon = new IconView(getContext());
@@ -316,7 +333,6 @@ public class StoryCell extends FrameLayout {
                 }
                 if (circleImageLoading == null) {
                     circleImageLoading = new ImageLoadingView(context);
-                    circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
                     circleImageLoading.setLayoutParams(LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 8, 8, isRtl ? 8 : 0, 8));
                     addView(circleImageLoading, 0);
                 } else {
@@ -327,6 +343,12 @@ public class StoryCell extends FrameLayout {
                 throw new IllegalStateException("Unexpected value: " + this.status);
         }
 
+    }
+
+    public void setImageLoadingStatus(ImageLoadingView.Status status) {
+        if (circleImageLoading != null) {
+            circleImageLoading.setStatus(status);
+        }
     }
 
     public void setDeleteStory(DeleteStory deleteStory) {

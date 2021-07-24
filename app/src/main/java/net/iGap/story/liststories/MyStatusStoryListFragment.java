@@ -34,6 +34,7 @@ import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.downloader.HttpRequest;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.realm.RealmStory;
@@ -47,7 +48,7 @@ import java.util.List;
 
 import static net.iGap.G.isAppRtl;
 
-public class MyStatusStoryListFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory {
+public class MyStatusStoryListFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
     private RecyclerListView recyclerListView;
     private ListAdapter adapter;
     List<RealmStory> stories;
@@ -59,6 +60,12 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private int rowSize;
     private int recentHeaderRow;
     private int recentStoryRow;
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
+    }
 
     @Nullable
     @Override
@@ -107,6 +114,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_LIST_FETCHED, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
@@ -118,7 +126,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 IG_RPC.Res_Story_Get_Own_Story_Views res = (IG_RPC.Res_Story_Get_Own_Story_Views) response;
-
 
             } else {
                 progressBar.setVisibility(View.GONE);
@@ -203,6 +210,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         @Override
                         public void run() {
                             loadStories();
+                            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
                         }
                     });
 
@@ -220,6 +228,18 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     @Override
     public void openMyStory() {
 
+    }
+
+    @Override
+    public void receivedEvent(int id, int account, Object... args) {
+        if (id == EventManager.STORY_LIST_FETCHED) {
+            G.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadStories();
+                }
+            });
+        }
     }
 
 

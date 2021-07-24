@@ -91,6 +91,10 @@ public class MessageController extends BaseController implements EventManager.Ev
             onDeleteMessageResponse(res, true);
         } else if (object instanceof IG_RPC.Res_Chat_Update_Status || object instanceof IG_RPC.Res_Group_Update_Status) {
             onMessageStatusResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_User_Add_New) {
+            onUserAddStoryResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_Delete) {
+            onUserDeletedStoryResponse(object, true);
         }
     }
 
@@ -126,6 +130,16 @@ public class MessageController extends BaseController implements EventManager.Ev
                 onMessageStatusResponse(response, false);
             }
         });
+    }
+
+    private void onUserDeletedStoryResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
+        getMessageDataStorage().deleteUserStory(res.storyId);
+    }
+
+    private void onUserAddStoryResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
+        getMessageDataStorage().updateUserAddedStory(res.igapStory.getUserId(), res.igapStory);
     }
 
     private void onMessageStatusResponse(AbstractObject response, boolean update) {
@@ -300,7 +314,7 @@ public class MessageController extends BaseController implements EventManager.Ev
         }
 
         getMessageDataStorage().updateEditedMessage(roomId, messageId, messageVersion, messageType, newMessage, isUpdate);
-        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage,isUpdate));
+        G.runOnUiThread(() -> getEventManager().postEvent(EventManager.ON_EDIT_MESSAGE, roomId, messageId, newMessage, isUpdate));
 
     }
 

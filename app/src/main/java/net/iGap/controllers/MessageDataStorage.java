@@ -13,6 +13,7 @@ import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmChannelExtra;
@@ -25,6 +26,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
@@ -878,6 +881,65 @@ public class MessageDataStorage extends BaseController {
                 FileLog.e(e);
             }
         });
+    }
+
+
+    public void updateUserAddedStory(long userId, final ProtoStoryGetStories.IgapStory igapStory) {
+
+
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "updateUserAddedStory userId " + userId + " storiesId " + igapStory.getId());
+            try {
+                database.beginTransaction();
+
+                RealmStory realmStory = database.where(RealmStory.class).equalTo("id", userId).findFirst();
+                if (realmStory == null) {
+                    realmStory = database.createObject(RealmStory.class, userId);
+                }
+
+                List<ProtoStoryGetStories.IgapStory> igapStoryList = new ArrayList<>();
+                igapStoryList.add(igapStory);
+
+                realmStory.setUserId(userId);
+                realmStory.setSeenAll(false);
+                realmStory.setRealmStoryProtos(database, igapStoryList);
+
+
+                database.commitTransaction();
+
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_LIST_FETCHED));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+
+
+    }
+
+
+    public void deleteUserStory(String storyId) {
+
+
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteUserStoryId " + storyId);
+            try {
+                database.beginTransaction();
+
+                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", Long.valueOf(storyId)).findFirst();
+
+                if (realmStoryProto != null) {
+                    realmStoryProto.deleteFromRealm();
+                }
+
+                database.commitTransaction();
+
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_DELETED));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+
+
     }
 
     public interface DatabaseDelegate {
