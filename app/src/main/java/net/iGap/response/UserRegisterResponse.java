@@ -33,7 +33,7 @@ public class UserRegisterResponse extends MessageHandler {
         super.handler();
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
         if (identity instanceof OnUserRegistration) {
-            ((OnUserRegistration) identity).onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported());
+            ((OnUserRegistration) identity).onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported(), builder.getResendDelay());
         } else {
             throw new ClassCastException("identity must be : " + OnUserRegistration.class.getName());
         }
