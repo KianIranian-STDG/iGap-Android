@@ -2,7 +2,6 @@ package net.iGap.adapter.items.cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -15,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -75,7 +75,8 @@ public class RoomListCell extends FrameLayout {
     private AppCompatTextView lastMessageTv;
     private TextBadge badgeView;
     private FontIconTextView statusTv;
-    private IconView pinView;
+    private IconView pinIcon;
+    private AppCompatImageView pinView;
     private CheckBox checkBox;
 
     private boolean haveAvatar = false;
@@ -99,15 +100,19 @@ public class RoomListCell extends FrameLayout {
     public void setData(RealmRoom room, AvatarHandler avatarHandler, boolean isSelectedMode) {
         if (room.isPinned()) {
             if (!havePin) {
-                pinView = new IconView(getContext());
-                pinView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                pinView.setIconColor(Theme.getInstance().getSubTitleColor(getContext()));
-                pinView.setIcon(R.string.icon_pin_to_top2);
-//                pinView.setAlpha(G.themeColor == Theme.DARK ? 0.2f : 0.6f);
+                pinIcon = new IconView(getContext());
+                pinIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                pinIcon.setIconColor(Theme.getInstance().getSubTitleColor(getContext()));
+                pinIcon.setIcon(R.string.icon_pin_to_top2);
+                pinView = new AppCompatImageView(getContext());
+                pinView.setBackgroundResource(R.drawable.pin);
+                pinView.setAlpha(G.themeColor == Theme.DARK ? 0.2f : 0.6f);
                 addView(pinView, 0);
+                addView(pinIcon, 1);
                 havePin = true;
             }
         } else if (havePin) {
+            removeView(pinIcon);
             removeView(pinView);
             havePin = false;
         }
@@ -445,11 +450,11 @@ public class RoomListCell extends FrameLayout {
                     lastMessageTv.measure(makeMeasureSpec(messageRight - messageLeft, MeasureSpec.EXACTLY), makeMeasureSpec(lastMessageHeight, AT_MOST));
                     lastMessageTv.layout(messageLeft, h2, messageRight, messageBottom);
                 } else if (havePin) {
-                    int pinRight = isRtl ? paddingEnd + LayoutCreator.getTextWidth(pinView) + standardMargin : getWidth() - paddingEnd;
-                    int pinLeft = isRtl ? paddingEnd : getWidth() - LayoutCreator.getTextWidth(pinView) - paddingEnd - standardMargin;
+                    int pinRight = isRtl ? paddingEnd + LayoutCreator.getTextWidth(pinIcon) + standardMargin : getWidth() - paddingEnd;
+                    int pinLeft = isRtl ? paddingEnd : getWidth() - LayoutCreator.getTextWidth(pinIcon) - paddingEnd - standardMargin;
 
-                    pinView.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(35, EXACTLY));
-                    pinView.layout(pinLeft, h2 + dpToPx(4), pinRight, messageBottom );
+                    pinIcon.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(35, EXACTLY));
+                    pinIcon.layout(pinLeft, h2 + dpToPx(4), pinRight, messageBottom);
                     if (isRtl) {
                         messageLeft = pinRight + standardMargin;
                     } else {
@@ -480,6 +485,11 @@ public class RoomListCell extends FrameLayout {
                     lastMessageTv.measure(makeMeasureSpec(messageRight - messageLeft, MeasureSpec.EXACTLY), makeMeasureSpec(lastMessageHeight, AT_MOST));
                     lastMessageTv.layout(messageLeft, h2, messageRight, messageBottom);
                 }
+            }
+
+            if (havePin) {
+                pinView.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(getHeight(), EXACTLY));
+                pinView.layout(0, 0, getWidth(), getHeight());
             }
 
             if (haveCheckBox) {
