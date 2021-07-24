@@ -2,18 +2,19 @@ package net.iGap.adapter.items.cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -29,6 +30,7 @@ import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithInitBitmap;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
+import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FontIconTextView;
@@ -73,7 +75,7 @@ public class RoomListCell extends FrameLayout {
     private AppCompatTextView lastMessageTv;
     private TextBadge badgeView;
     private FontIconTextView statusTv;
-    private AppCompatImageView pinView;
+    private IconView pinView;
     private CheckBox checkBox;
 
     private boolean haveAvatar = false;
@@ -97,9 +99,11 @@ public class RoomListCell extends FrameLayout {
     public void setData(RealmRoom room, AvatarHandler avatarHandler, boolean isSelectedMode) {
         if (room.isPinned()) {
             if (!havePin) {
-                pinView = new AppCompatImageView(getContext());
-                pinView.setBackgroundResource(R.drawable.pin);
-                pinView.setAlpha(G.themeColor == Theme.DARK ? 0.2f : 0.6f);
+                pinView = new IconView(getContext());
+                pinView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                pinView.setIconColor(Theme.getInstance().getSubTitleColor(getContext()));
+                pinView.setIcon(R.string.icon_pin_to_top2);
+//                pinView.setAlpha(G.themeColor == Theme.DARK ? 0.2f : 0.6f);
                 addView(pinView, 0);
                 havePin = true;
             }
@@ -432,13 +436,25 @@ public class RoomListCell extends FrameLayout {
 
                     badgeView.measure(makeMeasureSpec(badgeWidth, AT_MOST), makeMeasureSpec(badgeHeight, AT_MOST));
                     badgeView.layout(badgeLeft, h2 + dpToPx(2), badgeRight, messageBottom - dpToPx(2));
-
                     if (isRtl) {
                         messageLeft = badgeRight + standardMargin;
                     } else {
                         messageRight = badgeLeft - standardMargin;
                     }
 
+                    lastMessageTv.measure(makeMeasureSpec(messageRight - messageLeft, MeasureSpec.EXACTLY), makeMeasureSpec(lastMessageHeight, AT_MOST));
+                    lastMessageTv.layout(messageLeft, h2, messageRight, messageBottom);
+                } else if (havePin) {
+                    int pinRight = isRtl ? paddingEnd + LayoutCreator.getTextWidth(pinView) + standardMargin : getWidth() - paddingEnd;
+                    int pinLeft = isRtl ? paddingEnd : getWidth() - LayoutCreator.getTextWidth(pinView) - paddingEnd - standardMargin;
+
+                    pinView.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(35, EXACTLY));
+                    pinView.layout(pinLeft, h2 + dpToPx(4), pinRight, messageBottom );
+                    if (isRtl) {
+                        messageLeft = pinRight + standardMargin;
+                    } else {
+                        messageRight = pinLeft - standardMargin;
+                    }
                     lastMessageTv.measure(makeMeasureSpec(messageRight - messageLeft, MeasureSpec.EXACTLY), makeMeasureSpec(lastMessageHeight, AT_MOST));
                     lastMessageTv.layout(messageLeft, h2, messageRight, messageBottom);
                 } else if (haveStatus) {
@@ -464,11 +480,6 @@ public class RoomListCell extends FrameLayout {
                     lastMessageTv.measure(makeMeasureSpec(messageRight - messageLeft, MeasureSpec.EXACTLY), makeMeasureSpec(lastMessageHeight, AT_MOST));
                     lastMessageTv.layout(messageLeft, h2, messageRight, messageBottom);
                 }
-            }
-
-            if (havePin) {
-                pinView.measure(makeMeasureSpec(getWidth(), AT_MOST), makeMeasureSpec(getHeight(), EXACTLY));
-                pinView.layout(0, 0, getWidth(), getHeight());
             }
 
             if (haveCheckBox) {

@@ -107,5 +107,8 @@
     <string name="icon_export_chat">\ue907</string>
     <string name="icon_danger">\ueb17</string>
     <string name="icon_delete_all">\ue908</string>
+    <string name="icon_update">\ue909</string>
+    <string name="icon_device">\ue90a</string>
+    <string name="icon_pin_to_top2">\ue90b</string>
 
 </resources>
