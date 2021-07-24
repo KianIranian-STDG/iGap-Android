@@ -20,6 +20,8 @@ public class SHP_SETTING {
     public static final String CHECK_11 = "CHECK_11";
     public static final String KEY_REALM_DELETE_ALL = "KEY_REALM_DELETE_ALL";
 
+    public static final String KEY_LOGIN_TIME_STAMP = "key_login_time_stamp";
+
     public static final String DELETE_FOLDER_BACKGROUND = "delete_folder_background";
     public static final String KEY_CALL_NOTIFICATION = "calls_notification_channel";
 

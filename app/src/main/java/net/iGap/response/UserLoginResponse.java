@@ -10,13 +10,18 @@
 
 package net.iGap.response;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Looper;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.helper.HelperConnectionState;
+import net.iGap.model.cPay.PlaqueInfoModel;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
@@ -30,6 +35,8 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
+
+import java.util.Date;
 
 import io.realm.Realm;
 
@@ -97,6 +104,11 @@ public class UserLoginResponse extends MessageHandler {
         RequestManager.getInstance(AccountManager.selectedAccount).setUserLogin(true);
 
         TokenContainer.getInstance().updateToken(builder.getAccessToken(),false);
+
+        if(BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0){
+            SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+            sharedPreferences.edit().putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, new Date().getTime()).apply();
+        }
 
         /**
          * get Signaling Configuration

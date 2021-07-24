@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -37,6 +38,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -96,6 +98,7 @@ import org.jetbrains.annotations.NotNull;
 import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -148,6 +151,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private ToolBarMenuSubItem markAsReadItem;
     private ToolBarMenuSubItem readAllItem;
     private SearchFragment searchFragment;
+    private SharedPreferences sharedPreferences;
 
     private boolean floatingHidden;
     private float floatingButtonHideProgress;
@@ -166,7 +170,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         isNeedResume = true;
+
     }
 
 
@@ -377,7 +383,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     }
                 });
 
-        toolbarItems.addItemWithWidth(walletTag,R.string.icon_QR_code,54);
+        toolbarItems.addItemWithWidth(walletTag, R.string.icon_QR_code, 54);
         if (PassCode.getInstance().isPassCode()) {
             passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
@@ -668,12 +674,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             } else {
                 hasUnPin = true;
             }
-            if(room.getType() == CHANNEL){
+            if (room.getType() == CHANNEL) {
                 hasChannel = true;
             }
         }
 
-        if(hasChannel){
+        if (hasChannel) {
             clearHistoryItem.setVisibility(View.GONE);
         } else {
             clearHistoryItem.setVisibility(View.VISIBLE);
@@ -886,6 +892,44 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0) {
+            long currentTimeStamp = new Date().getTime();
+            long loginTimeStamp = sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0);
+            long showDialogPeriodTimeMs = BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE * 60 * 60 * 1000;
+            if (currentTimeStamp - loginTimeStamp >= 30000) {
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
+                builder
+                        .title(R.string.score_request_text)
+                        .titleGravity(GravityEnum.START)
+                        .buttonsGravity(GravityEnum.CENTER)
+                        .titleColorAttr(R.attr.iGapTitleTextColor)
+                        .positiveText(R.string.ok)
+                        .positiveColorAttr(R.attr.colorAccent)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                            }
+                        })
+                        .negativeText(R.string.remind_me_later)
+                        .negativeColorAttr(R.attr.colorAccent)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                sharedPreferences.edit().putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, currentTimeStamp).apply();
+                                dialog.dismiss();
+                            }
+                        });
+                MaterialDialog dialog = builder.build();
+                dialog.show();
+            }
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
@@ -894,6 +938,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
     }
+
     private void onScannerClickListener() {
         DbManager.getInstance().doRealmTask(realm -> {
             String phoneNumber = "";
@@ -921,6 +966,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
         });
     }
+
     private void onConnectionStateChange(final ConnectionState connectionState) {
         if (connectionState == null) {
             return;

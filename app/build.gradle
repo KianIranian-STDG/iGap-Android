@@ -48,6 +48,7 @@ android {
         buildConfigField("String", "INVITE_FRIEND_LINK", INVITE_FRIEND_LINK)
         buildConfigField("String", "FAQ_LINK", FAQ_LINK)
         buildConfigField("String", "UPDATE_LINK", UPDATE_LINK)
+        buildConfigField("int", "SHOW_RATE_DIALOG_PERIOD_HOURE", SHOW_RATE_DIALOG_PERIOD_HOURE)
     }
 
 

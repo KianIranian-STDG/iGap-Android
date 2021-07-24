@@ -61,6 +61,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -966,5 +968,16 @@ public final class AndroidUtils {
             }
         }
         return false;
+    }
+
+    boolean verifyInstallerId(Context context) {
+        // A list with valid installers package name
+        List<String> validInstallers = new ArrayList<>(Arrays.asList("com.android.vending", "com.google.android.feedback"));
+
+        // The package name of the app that has installed your app
+        final String installer = context.getPackageManager().getInstallerPackageName(context.getPackageName());
+
+        // true if your app has been downloaded from Play Store
+        return installer != null && validInstallers.contains(installer);
     }
 }

@@ -2248,6 +2248,8 @@ Want to get it?</string>
     <string name="leave_confirm">Are you sure you want to leave %s?</string>
     <string name="clear_selected_history">Are you sure you want to clear history of %s?</string>
     <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
     <string-array name="billsOptions">
         <item>Electricity</item>
         <item>Gas</item>
