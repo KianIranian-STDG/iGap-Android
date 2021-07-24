@@ -11,6 +11,7 @@ public class RealmStoryProto extends RealmObject {
     private long userId;
     private long storyId;
     private boolean isSeen;
+    private int viewCount;
 
     public String getCaption() {
         return caption;
@@ -66,5 +67,13 @@ public class RealmStoryProto extends RealmObject {
 
     public void setSeen(boolean seen) {
         isSeen = seen;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 }

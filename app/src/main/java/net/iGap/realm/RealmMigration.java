@@ -909,7 +909,8 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("createdAt", long.class)
                     .addField("userId", long.class)
                     .addField("storyId", long.class)
-                    .addField("isSeen", boolean.class);
+                    .addField("isSeen", boolean.class)
+                    .addField("viewCount", int.class);
 
 
             RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
