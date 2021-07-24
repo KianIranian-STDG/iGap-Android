@@ -9,9 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageLoadingService;
 import net.iGap.model.popularChannel.Category;
 
 import java.util.List;
@@ -61,7 +62,13 @@ public class NormalCategoryAdapter extends RecyclerView.Adapter<NormalCategoryAd
         }
 
         public void bindChannel(Category category) {
-            ImageLoadingService.load(category.getIcon(), channelImageGrid);
+            Glide.with(G.context)
+                    .load(category.getIcon())
+                    .fitCenter()
+                    .centerInside()
+                    .error(R.drawable.ic_error)
+                    .into(channelImageGrid);
+
             if (G.isAppRtl)
                 channelTitleGrid.setText(category.getTitle());
             else

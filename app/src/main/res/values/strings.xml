@@ -46,7 +46,6 @@
     <!--Reagent-->
     <string name="ra_enter_reagent_code">enter referral code(Optional)</string>
     <string name="ra_confirm">"Confirm"</string>
-    <string name="reagent_error_message">The number entered is incorrect for the referral.</string>
 
 
     <!-- Toast -->
@@ -95,7 +94,6 @@
     <string name="mute_notification">Mute Notification</string>
     <string name="pin_to_top">Pin To Top</string>
     <string name="Unpin_to_top">UnPin From Top</string>
-    <string name="unmute_notification">Unmute Notification</string>
     <string name="clear_history">Clear History</string>
     <string name="delete_chat">Delete Chat</string>
     <string name="delete">Delete</string>
@@ -133,8 +131,6 @@
     <string name="device_dosenot_support">This device does not have an app for this action.</string>
     <string name="do_you_want_to_turn_on_gps">Your GPS is off, do you want to turn it on?</string>
     <string name="select_picture_en">Select Picture</string>
-    <string name="cannot_load_data_en">Unable to load data.</string>
-    <string name="do_you_want_exit">Do you want to exit?</string>
     <string name="slide_to_cancel_en">Slide to Cancel</string>
     <string name="video_duration" formatted="false">%s (%s)</string>
 
@@ -247,7 +243,6 @@
     <string name="delete_item_dialog">Delete</string>
     <string name="saveToDownload_item_dialog">Save To Downloads</string>
     <string name="edit_item_dialog">Edit</string>
-    <string name="Search">Search</string>
     <string name="Delete_and_leave_Group">Delete and Leave Group</string>
     <string name="New_Chanel">New Channel</string>
 
@@ -672,7 +667,6 @@ Want to get it?</string>
     <string name="am">AM</string>
     <string name="message_selected">Message(s) Selected</string>
     <string name="messages_selected">Message(s) Selected</string>
-    <string name="item_selected"> item Selected</string>
     <string name="forward_message">Forward message</string>
     <string name="file_not_download_yet">File Not Downloaded Yet</string>
     <string name="navigation_drawer_open">Open</string>
@@ -698,7 +692,6 @@ Want to get it?</string>
     <string name="no_body">Nobody</string>
     <string name="my_contacts">My Contacts</string>
     <string name="empty_message">Please try to enter the first 5 characters of username</string>
-    <string name="empty_message3">Enter at least 5 characters to search</string>
     <string name="there_is_no_any_result">No Result</string>
     <string name="there_is_no_connection_to_server">Server not found</string>
     <string name="empty_room">No Messages Yet</string>
@@ -829,7 +822,6 @@ Want to get it?</string>
     <string name="ringing">Ringing</string>
     <string name="connecting_call">Connecting</string>
     <string name="connected">Connected</string>
-    <string name="disconnected">Disconnected</string>
     <string name="faild">Failed</string>
     <string name="reject">Rejected</string>
     <string name="busy">Busy</string>
@@ -838,20 +830,12 @@ Want to get it?</string>
     <string name="invalid_question_token">"Your answer is invalid"</string>
 
     <string name="not_answerd_call">Call Cancelled</string>
-    <string name="not_answered_voice_call">Voice Call Cancelled</string>
-    <string name="not_answered_video_call">Video Call Cancelled</string>
     <string name="recorded_by">Recorded By</string>
     <string name="Login_with_QrCode">Login With QR Scan</string>
     <string name="Input_device_specification">Device login success</string>
     <string name="QrCode_Scan">Login With QR Scan</string>
     <string name="Call_Quality">Call Quality</string>
     <string name="desc_self_destroy">"If you choose one of the periods in the following and never use your iGap account during the certain time, your account will be destructed and deleted spontaneously."</string>
-
-    <string name="crop_image_menu_rotate_right">Rotate</string>
-    <string name="crop_image_menu_crop">Crop</string>
-    <string name="crop_image_menu_flip">Flip</string>
-    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
-    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
     <string name="title_who_can_see_my_avatar">My Avatars get seen by</string>
     <string name="title_who_can_invite_you_to_channel_s">Channels Invite Link received from</string>
@@ -1470,7 +1454,6 @@ Want to get it?</string>
     <string name="cloud">Cloud</string>
     <string name="score">Score</string>
     <string name="Credit">Credit</string>
-    <string name="make_as_read">Make as Read</string>
     <string name="read_all">Read All</string>
 
     <string name="wallet_message">Wallet Message</string>
@@ -1534,7 +1517,6 @@ Want to get it?</string>
     <string name="tablet_empty_chat_description">Get Started \nWelcome to iGap. You can ever set your profile picture and/or change your name in Settings section.</string>
     <string name="make_call">Make Phone Call</string>
     <string name="create_chat">Create Chat</string>
-    <string name="delete_all">Delete All</string>
     <string name="maximum_poll">You Have Reached Your Vote Limit.</string>
     <string name="before_try">You have already registered your vote.</string>
     <string name="poll_ok">Your vote was successfully recorded.</string>
@@ -1621,12 +1603,6 @@ Want to get it?</string>
     <string name="igasht_success_payment">Your payment has been successful</string>
     <string name="noDetail_textView">Is no detail</string>
     <string name="igasht_empty_history_message">No tickets purchased yet.</string>
-    <string name="Restaurant_textView">Restaurant</string>
-    <string name="parking_textView">Parking</string>
-    <string name="wifi_textView">WiFi</string>
-    <string name="coffeeShop_textView">Coffee shop</string>
-    <string name="wheelchair_textView">wheelchair</string>
-    <string name="prayerRoom_textView">Prayer room</string>
 
     <!-- kuknos -->
     <string name="kuknos_login_id_str">ID Number *</string>
@@ -1709,17 +1685,13 @@ Want to get it?</string>
     <string name="kuknos_rial_Deposit_sheba_number">"Deposit sheba number"</string>
     <string name="kuknos_rial_Maximum_redeemable_token">"Maximum redeemable token"</string>
     <string name="kuknos_rial_Number_of_contracts">"Number of contracts"</string>
-    <string name="kuknos_setting_dialog">Token redemption confirmation</string>
     <string name="kuknos_rial_Redemption_fee">"Redemption fee PMN"</string>
-    <string name="kuknos_rial_Redemption_feee">"Redemption fee"</string>
-    <string name="kuknos_rial_Deposit_amount2">"Deposit amount"</string>
     <string name="kuknos_receipt_token">"Token"</string>
     <string name="kuknos_receipt_Refund_address">"Refund address"</string>
     <string name="kunos_receipt_type_refund">"Type of refund"</string>
     <string name="kunos_receipt_hash">"Hash"</string>
     <string name="kunos_receipt_date_apply">"Date of application"</string>
     <string name="kuknos_receipt_Return_to_digital_token_bag">"Return to digital token bag"</string>
-    <string name="kuknos_rial_dialog_Repurchase_tokens">"Repurchase tokens"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Total number of contracts"</string>
     <string name="kuknos_buy_again_tab_Get_PMN_physical_support">"Get support \n %1$s physical"</string>
     <string name="kuknos_buy_again_tab_Rial_equivalent">"Rial equivalent  \n payment %1$s"</string>
@@ -1760,7 +1732,6 @@ Want to get it?</string>
     <string name="kuknos_wHistory_dialogTitle">Error</string>
     <string name="kuknos_wHistory_error">The connection to server is lost. Please try again in a few moments.</string>
     <string name="kuknos_setting_title">Setting</string>
-    <string name="kuknos_setting_viewRecoveryP">Show Account Info</string>
     <string name="kuknos_setting_logout">Logout</string>
     <string name="kuknos_changePIN_successTitle">Success</string>
     <string name="kuknos_changePIN_failTitle">Fail</string>
@@ -2173,7 +2144,6 @@ Want to get it?</string>
     <string name="enter_discount_code">Enter the discount code.</string>
     <string name="save_discount_code">Save Code</string>
     <string name="enter_your_discount_code">Enter Your discount code.</string>
-    <string name="discount_code_not_valid">Sorry, your discount code is incorrect.</string>
     <string name="inter_cheque_amount">Enter Amount</string>
     <string name="take_turn">Take turn</string>
     <string name="mobile_bank_activeNotification">Activate Notification</string>
@@ -2231,11 +2201,6 @@ Want to get it?</string>
     <string name="all_packages">All Packages</string>
     <string name="sim_type_not_choosed">SIM card not been chosen</string>
     <string name="invalid_sim_type">Please change the SIM card type, There is no package for it. </string>
-    <string name="credit_sim">Credit SIM</string>
-    <string name="permanent_sim">Permanent SIM</string>
-    <string name="credit_tdlte_sim">Credit TD-LTE SIM</string>
-    <string name="tdlte_permanent_sim">Permanent TD-LTE SIM</string>
-    <string name="data_sim">Data SIM</string>
     <string name="no_history_found">No history found</string>
     <string name="no_number_found">No number found</string>
     <string name="no_package_selected">No package selected</string>
@@ -2263,7 +2228,6 @@ Want to get it?</string>
     <string name="refund_history">Refund History</string>
     <string name="history">History</string>
     <string name="history_asset_type">Asset Type</string>
-    <string name="history_hash">Hash</string>
     <string name="history_amount">Amount</string>
     <string name="histroy_fee">Fee</string>
     <string name="history_count">Count</string>
@@ -2273,8 +2237,6 @@ Want to get it?</string>
     <string name="enter_pmn_count">please enter the token count</string>
     <string name="refund_error">Refund progress error</string>
     <string name="token_not_selected">Token not selected</string>
-    <string name="refund_is_not_available">Refund for this Token is not available</string>
-    <string name="error_resume_file_expired">Resuming file is expired! please try again.</string>
     <string name="Submitـomment">To view the poll results, please register your vote first!</string>
     <string name="location_list_tile">Search entertainment centers</string>
     <string name="share_file_link">Share public Link</string>
@@ -2285,9 +2247,6 @@ Want to get it?</string>
     <string name="delete_selected_chat">Are you sure you want to delete selected chats?</string>
     <string name="leave_confirm">Are you sure you want to leave %s?</string>
     <string name="clear_selected_history">Are you sure you want to clear history of %s?</string>
-    <string name="shared_file">اشتراک گذاری فایل</string>
-    <string name="create_permission">ایجاد مجوز</string>
-    <string name="need_permission_description">اشتراک گذاری فایل نیازمند مجوز دسترسی حافظه می باشد لطفا بعد از ایجاد مجوز فایل مورد نظر را به اشتراک گذارید.</string>
     <string name="waiting_dialog_reason_text">Excessive number of attempts</string>
     <string-array name="billsOptions">
         <item>Electricity</item>

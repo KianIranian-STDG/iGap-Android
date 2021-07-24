@@ -7,9 +7,6 @@
     <dimen name="messageContainerPadding">5dp</dimen>
     <dimen name="messageContainerPaddingLeftRight">8dp</dimen>
 
-    <dimen name="design_fab_size_mini">18pt</dimen>
-    <dimen name="design_fab_size_normal">23pt</dimen>
-
     <dimen name="messageBox_cornerRadius">5dp</dimen>
 
     <dimen name="dp1">0.75dp</dimen>
@@ -55,16 +52,6 @@
     <dimen name="dp105">83dp</dimen>
     <dimen name="dp110">110dp</dimen>
     <dimen name="dp95">72dp</dimen>
-
-
-    <dimen name="md_action_corner_radius" tools:override="true">4dp</dimen>
-    <dimen name="md_bg_corner_radius" tools:override="true">4dp</dimen>
-
-    <dimen name="md_content_textsize" tools:override="true">12dp</dimen>
-    <dimen name="md_button_textsize" tools:override="true">19.5dp</dimen>
-    <dimen name="md_listitem_textsize" tools:override="true">12dp</dimen>
-    <dimen name="md_title_textsize" tools:override="true">14dp</dimen>
-    <dimen name="md_content_padding_bottom" tools:override="true">4dp</dimen>
 
 
 </resources>

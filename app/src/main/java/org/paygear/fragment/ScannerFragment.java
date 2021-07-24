@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -39,13 +40,15 @@ import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.Transformation;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
-import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.CongratulationsDialogBinding;
 import net.iGap.databinding.QrVoucherDialogBinding;
@@ -502,12 +505,12 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             return;
         Account myAccount = RaadApp.me;
         appBarTitle.setText(getString(R.string.scanner));
-        Picasso.get()
+        Glide.with(G.context)
                 .load(RaadCommonUtils.getImageUrl(myAccount.profilePicture))
-                .transform(new CircleImageTransform())
+                .circleCrop()
                 .error(R.drawable.ic_person_outline_black_24dp)
                 .placeholder(R.drawable.ic_person_outline_black_24dp)
-                .fit()
+                .fitCenter()
                 .into(appBarImage);
     }
 

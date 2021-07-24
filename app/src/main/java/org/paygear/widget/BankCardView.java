@@ -20,8 +20,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.model.Card;
@@ -200,14 +201,14 @@ public class BankCardView extends CardView {
         BankUtils bankInfo = BankUtils.getBank(getContext(), card.bankCode);
 
         if (!TextUtils.isEmpty(mCard.backgroundImage)) {
-            Picasso.get()
+            Glide.with(G.context)
                     .load(RaadCommonUtils.getImageUrl(mCard.backgroundImage))
-                    .fit()
+                    .fitCenter()
                     .into(mBackImage);
         } else {
-            Picasso.get()
+            Glide.with(G.context)
                     .load(R.drawable.default_card_pattern)
-                    .fit()
+                    .fitCenter()
                     .into(mBackImage);
         }
 
@@ -260,7 +261,7 @@ public class BankCardView extends CardView {
         int screenWidth = displayMetrics.widthPixels;
         int dp16 = RaadCommonUtils.getPx(16, context);
         int cardWidth = screenWidth - (dp16 * 2);
-        return (int)(cardWidth / 1.7f);
+        return (int) (cardWidth / 1.7f);
     }
 
 

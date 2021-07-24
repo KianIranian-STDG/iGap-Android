@@ -16,8 +16,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -84,7 +84,8 @@ public class NewsGroupPagerFrag extends BaseFragment {
         binding.Toolbar.addView(mHelperToolbar.getView());
 
         if (!arg.getString("GroupPic").equals(""))
-            Picasso.get().load(arg.getString("GroupPic"))
+            Glide.with(G.context)
+                    .load(arg.getString("GroupPic"))
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(binding.groupImage);
 
@@ -95,8 +96,7 @@ public class NewsGroupPagerFrag extends BaseFragment {
         NewsListFrag frag = new NewsListFrag();
         frag.setApiArg(new NewsApiArg(1, 10, Integer.parseInt(groupID), NewsApiArg.NewsType.GROUP_NEWS));
         frag.setHandler(news -> {
-            Picasso.get().load(news.getImage())
-                    .into(binding.groupImage);
+            Glide.with(G.context).load(news.getImage()).into(binding.groupImage);
             binding.groupTitle.setText(news.getTitle());
             binding.headerNews.setOnClickListener(v -> {
                 FragmentManager fragmentManager = getChildFragmentManager();

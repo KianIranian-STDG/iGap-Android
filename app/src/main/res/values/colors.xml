@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#25000000</color>
-    <color name="colorAccent">#FF4081</color>
 
     <color name="gray">#999797</color>
     <color name="light_gray">#adadadad</color>
@@ -28,8 +26,6 @@
     <color name="transparent">#00000000</color>
     <color name="transparent_player">#CB000000</color>
 
-    <color name="notification_music_background">@color/white</color>
-    <color name="notification_music_icons">@color/gray_4c</color>
     //mo
     <!--toolbar-->
 
@@ -124,12 +120,10 @@
     <color name="colorToolbarBackgroundEnd">#FF5EBC45</color>
     <color name="colorToolbarActionModeBackgroundEnd">#7CBA6C</color>
     <color name="colorToolbarBackgroundStart">#B9E244</color>
-    <color name="colorToolbarActionModeBackgroundStart">#BEDD65</color>
     <color name="toolbar_search_box_bg">#F6F6F9</color>
     <color name="notification_badge">#5ebc45</color>
 
     <!--bottom navigation-->
-    <color name="background_color">#EEEEEE</color>
 
 
     <!-- New Color-->
@@ -172,7 +166,6 @@
     <color name="players_dark_background">#242424</color>
     <color name="toolbar_search_box_dark_bg">#7D7D80</color>
     <color name="round_buttons_enabled_bg">#7B7B7B</color>
-    <color name="round_buttons_disabled_bg">#F3F3F3</color>
     <color name="tick_background_color">#66000000</color>
 
     <color name="default_indicator_color_selected">#eeee</color>

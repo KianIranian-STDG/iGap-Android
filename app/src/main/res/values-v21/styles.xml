@@ -2,8 +2,4 @@
 <resources>
 
 
-    <style name="AppTheme" parent="BaseTheme">
-        <item name="android:colorEdgeEffect">@color/gray</item>
-    </style>
-
 </resources>
