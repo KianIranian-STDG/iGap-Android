@@ -69,6 +69,7 @@ public class EventManager {
 
     public static final int STORY_LIST_FETCHED = eventId++;
     public static final int STORY_DELETED = eventId++;
+    public static final int STORY_ALL_SEEN = eventId++;
 
     private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();
