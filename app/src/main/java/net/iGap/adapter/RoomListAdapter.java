@@ -11,6 +11,7 @@ import net.iGap.adapter.items.cells.RoomListCell;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
+import net.iGap.network.RequestManager;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.Room;
 
@@ -78,7 +79,6 @@ public class RoomListAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomL
                 selectedRoom.clear();
                 callBack.needCheckMultiSelect();
             }
-
             OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
             for (OrderedCollectionChangeSet.Range range : insertions) {
                 notifyItemRangeInserted(range.startIndex, range.length);
