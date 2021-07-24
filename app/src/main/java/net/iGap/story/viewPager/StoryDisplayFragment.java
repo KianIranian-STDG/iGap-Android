@@ -37,9 +37,11 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.EventEditText;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
+import net.iGap.module.downloader.HttpRequest;
 import net.iGap.module.downloader.Status;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
+import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStory;
@@ -243,7 +245,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
                     DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(ra), true);
                     if (object != null) {
-                        Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
+                        ProtoFileDownload.FileDownload.Selector imageSelector = ProtoFileDownload.FileDownload.Selector.FILE;
+                        Downloader.getInstance(AccountManager.selectedAccount).download(object,imageSelector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
                             if (arg.status == Status.SUCCESS && arg.data != null) {
                                 String filepath = arg.data.getFilePath();
                                 String downloadedFileToken = arg.data.getToken();
@@ -285,7 +288,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             resumeCurrentStory();
         }
 
-        if (!isMyStory) {
+
             AbstractObject req = null;
             IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
             story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
@@ -301,11 +304,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     progressBar.setVisibility(View.GONE);
                 }
             });
-        } else {
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                realm.where(RealmStoryProto.class).equalTo("storyId", stories.get(counter).getStoryId()).findFirst().setSeen(true);
-            });
-        }
+
 
         downloadCounter++;
 
@@ -313,6 +312,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmStory.putOrUpdate(realm, stories.get(counter).getUserId(), true);
             });
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_ALL_SEEN);
         }
     }
 
