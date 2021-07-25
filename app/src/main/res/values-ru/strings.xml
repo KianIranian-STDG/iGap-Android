@@ -263,6 +263,7 @@
     <string name="confirm_email_text">Код подтверждения был отправлен на ваш адрес электронной почты, чтобы идентифицировать и подтвердить адрес электронной почты.</string>
     <string name="chats">Диалог</string>
     <string name="contacts">Контакты</string>
+    <string name="bottom_navigation_my_story">история</string>
     <string name="messages">Сообщения</string>
     <string name="show_message_count">Отображаемые сообщения</string>
     <string name="count_of_show_message">Количество отображаемых сообщений</string>

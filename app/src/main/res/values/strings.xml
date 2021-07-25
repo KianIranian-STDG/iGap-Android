@@ -281,6 +281,7 @@
     <string name="please_enter_firstname_or_lastname">Please enter your first name or last name</string>
     <string name="chats">Chats</string>
     <string name="contacts">Contacts</string>
+    <string name="bottom_navigation_my_story">Story</string>
     <string name="messages">Messages</string>
     <string name="show_message_count">Displayable Messages</string>
     <string name="count_of_show_message">Number of Displayable Messages</string>
@@ -2317,6 +2318,7 @@ Want to get it?</string>
     <string name="your_status_updates_will_disappear_after_24_hours">Your status updates will disappear after 24 hours.</string>
     <string name="your_device_does_not_have_a_camera">Your device does not have a camera!</string>
     <string name="delete_status_update">Delete this status update? It will also be deleted for everyone who received it.</string>
+    <string name="story_views">views</string>
     <string-array name="photo_editor_emoji">
         <!-- Smiles -->
         <item>u+1f604</item>

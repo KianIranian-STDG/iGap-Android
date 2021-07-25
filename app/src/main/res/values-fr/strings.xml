@@ -265,6 +265,7 @@
     <string name="confirm_email_text">Un code de confirmation a été envoyé à votre adresse e-mail pour identifier et vérifier l\'e-mail.</string>
     <string name="chats">discussion</string>
     <string name="contacts">contact</string>
+    <string name="bottom_navigation_my_story">récit</string>
     <string name="messages">messages </string>
     <string name="show_message_count">messages affichables</string>
     <string name="count_of_show_message">nombre des messages affichables</string>

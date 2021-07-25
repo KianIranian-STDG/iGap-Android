@@ -286,6 +286,7 @@
     <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است.</string>
     <string name="chats">"گفتگو"</string>
     <string name="contacts">"مخاطبین"</string>
+    <string name="bottom_navigation_my_story">داستان</string>
     <string name="messages">"پیام‌ها"</string>
     <string name="show_message_count">"پیام‌های قابل نمایش"</string>
     <string name="count_of_show_message">"تعداد پیام‌های قابل نمایش"</string>
@@ -2257,6 +2258,7 @@
     <string name="your_status_updates_will_disappear_after_24_hours">به روزرسانی های وضعیت شما پس از ۲۴ ساعت ناپدید می شوند.</string>
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
     <string name="delete_status_update">این بروزرسانی وضعیت حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
+    <string name="story_views">دیده شده</string>
 
     <string name="stories_setting">تنظیمات داستان</string>
     <string name="hide_story_from">پنهان کردن داستان</string>

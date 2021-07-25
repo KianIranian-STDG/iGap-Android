@@ -263,6 +263,7 @@
     <string name="confirm_email_text">بەمەبەستی دەستنیشان­کردن و پەسەندی پۆستی ئەلەکترۆنیکی، کۆدی پەسەند بۆ ئیمەیلەکەت رەوانە کراوە.</string>
     <string name="chats">وتووێژ</string>
     <string name="contacts">بەردەنگەکان</string>
+    <string name="bottom_navigation_my_story">Çîrok</string>
     <string name="messages">پەیامەکان</string>
     <string name="show_message_count">پەیامی شیاوی نمایش</string>
     <string name="count_of_show_message">ژمارەی پەیامی شیاوی نمایش</string>
