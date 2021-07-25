@@ -917,7 +917,7 @@ public class MessageDataStorage extends BaseController {
     }
 
 
-    public void deleteUserStory(String storyId) {
+    public void deleteUserStory(String storyId, long userId) {
 
 
         storageQueue.postRunnable(() -> {
@@ -931,9 +931,55 @@ public class MessageDataStorage extends BaseController {
                     realmStoryProto.deleteFromRealm();
                 }
 
+                if (database.where(RealmStory.class).equalTo("id", userId).findFirst().getRealmStoryProtos().size() == 0) {
+                    database.where(RealmStory.class).equalTo("id", userId).findFirst().deleteFromRealm();
+                }
+
                 database.commitTransaction();
 
                 G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_DELETED));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+
+
+    }
+
+    public void userAddViewStory(String storyId, long storyOwnerUserId) {
+
+
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteUserStoryId " + storyId);
+            try {
+                database.beginTransaction();
+
+
+                database.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(storyId)).findFirst().setSeen(true);
+
+                int viewCount = database.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(storyId)).findFirst().getViewCount();
+
+                database.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(storyId)).findFirst().setViewCount(viewCount + 1);
+
+                RealmStory realmStory = database.where(RealmStory.class).equalTo("id", storyOwnerUserId).findFirst();
+                if (realmStory != null) {
+                    int counter = 0;
+                    for (int i = 0; i < realmStory.getRealmStoryProtos().size(); i++) {
+                        if (realmStory.getRealmStoryProtos().get(i).isSeen()) {
+                            counter++;
+                        }
+                    }
+
+                    if (counter == realmStory.getRealmStoryProtos().size()) {
+                        database.where(RealmStory.class).equalTo("id", storyOwnerUserId).findFirst().setSeenAll(true);
+                    }
+
+
+                }
+
+                database.commitTransaction();
+
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_LIST_FETCHED));
             } catch (Exception e) {
                 FileLog.e(e);
             }

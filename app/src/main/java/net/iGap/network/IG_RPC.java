@@ -304,6 +304,7 @@ public class IG_RPC {
     public static class Res_Story_Delete extends AbstractObject {
         public static int actionId = 31206;
         public String storyId;
+        public long userId;
 
         public static Res_Story_Delete deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -326,6 +327,7 @@ public class IG_RPC {
             ProtoStoryDeleteStory.StoryDeleteStoryResponse response = ProtoStoryDeleteStory.StoryDeleteStoryResponse.parseFrom(message);
             resId = response.getResponse().getId();
             storyId = response.getStoryId();
+            userId = response.getUserId();
         }
     }
 
@@ -357,6 +359,8 @@ public class IG_RPC {
     public static class Res_Story_Add_View extends AbstractObject {
         public static int actionId = 31204;
         public String storyId;
+        public long storyOwnerUserId;
+        public long userId;
 
         public static Res_Story_Add_View deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -379,6 +383,8 @@ public class IG_RPC {
             ProtoStoryAddView.StoryAddViewResponse response = ProtoStoryAddView.StoryAddViewResponse.parseFrom(message);
             resId = response.getResponse().getId();
             storyId = response.getStoryId();
+            storyOwnerUserId = response.getStoryOwnerUserId();
+            userId = response.getUserId();
         }
     }
 

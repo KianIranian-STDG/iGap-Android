@@ -95,6 +95,8 @@ public class MessageController extends BaseController implements EventManager.Ev
             onUserAddStoryResponse(object, true);
         } else if (object instanceof IG_RPC.Res_Story_Delete) {
             onUserDeletedStoryResponse(object, true);
+        } else if (object instanceof IG_RPC.Res_Story_Add_View) {
+            onUserStoryAddViewResponse(object, true);
         }
     }
 
@@ -132,9 +134,16 @@ public class MessageController extends BaseController implements EventManager.Ev
         });
     }
 
+    private void onUserStoryAddViewResponse(AbstractObject response, boolean update) {
+        IG_RPC.Res_Story_Add_View story_add_view = (IG_RPC.Res_Story_Add_View) response;
+        if (story_add_view.storyOwnerUserId == AccountManager.getInstance().getCurrentUser().getId()) {
+            getMessageDataStorage().userAddViewStory(story_add_view.storyId, story_add_view.storyOwnerUserId);
+        }
+    }
+
     private void onUserDeletedStoryResponse(AbstractObject response, boolean update) {
         IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
-        getMessageDataStorage().deleteUserStory(res.storyId);
+        getMessageDataStorage().deleteUserStory(res.storyId, res.userId);
     }
 
     private void onUserAddStoryResponse(AbstractObject response, boolean update) {
