@@ -144,17 +144,17 @@ public class BottomNavigationFragment extends BaseFragment implements OnUnreadCh
         Fragment fragment;
         switch (position) {
             case CONTACT_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(RegisteredContactsFragment.class.getName());
+                fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
                 if (fragment == null) {
-                    fragment = RegisteredContactsFragment.newInstance(false, false, RegisteredContactsFragment.CONTACTS);
+                    fragment = new StoryFragment();
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
                 break;
             case CALL_FRAGMENT:
-                fragment = fragmentManager.findFragmentByTag(StoryFragment.class.getName());
+                fragment = fragmentManager.findFragmentByTag(FragmentCall.class.getName());
                 if (fragment == null) {
-                    fragment = new StoryFragment();
+                    fragment = FragmentCall.newInstance(true);
                     fragmentTransaction.addToBackStack(fragment.getClass().getName());
                 }
                 fragmentTransaction.replace(R.id.viewpager, fragment, fragment.getClass().getName()).commit();
