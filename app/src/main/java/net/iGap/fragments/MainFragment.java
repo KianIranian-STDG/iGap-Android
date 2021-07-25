@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +38,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,6 +50,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
+import net.iGap.fragments.populaChannel.RatingDialog;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -98,10 +98,8 @@ import org.jetbrains.annotations.NotNull;
 import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -151,7 +149,6 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private ToolBarMenuSubItem markAsReadItem;
     private ToolBarMenuSubItem readAllItem;
     private SearchFragment searchFragment;
-    private SharedPreferences sharedPreferences;
 
     private boolean floatingHidden;
     private float floatingButtonHideProgress;
@@ -159,6 +156,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     private int firstVisibleItemPosition;
     private int firstVisibleItemPositionOffset;
+    private SharedPreferences sharedPreferences;
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -170,7 +168,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         isNeedResume = true;
 
     }
@@ -801,7 +799,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         fadeIn.setDuration(1000);
         iconView.setAnimation(fadeIn);
 
-        Snackbar snackbar = Snackbar.make(Objects.requireNonNull(getView()), "", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(requireView(), "", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
         layout.setBackgroundColor(Color.TRANSPARENT);
         layout.addView(frameLayout, 0);
@@ -891,41 +889,13 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onStart() {
         super.onStart();
 
         if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0) {
-            long currentTimeStamp = new Date().getTime();
-            long loginTimeStamp = sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0);
-            long showDialogPeriodTimeMs = BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE * 60 * 60 * 1000;
-            if (currentTimeStamp - loginTimeStamp >= 30000) {
-                MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
-                builder
-                        .title(R.string.score_request_text)
-                        .titleGravity(GravityEnum.START)
-                        .buttonsGravity(GravityEnum.CENTER)
-                        .titleColorAttr(R.attr.iGapTitleTextColor)
-                        .positiveText(R.string.ok)
-                        .positiveColorAttr(R.attr.colorAccent)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                            }
-                        })
-                        .negativeText(R.string.remind_me_later)
-                        .negativeColorAttr(R.attr.colorAccent)
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                sharedPreferences.edit().putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, currentTimeStamp).apply();
-                                dialog.dismiss();
-                            }
-                        });
-                MaterialDialog dialog = builder.build();
-                dialog.show();
-            }
+            RatingDialog.show(getActivity());
         }
     }
 
