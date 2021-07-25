@@ -306,7 +306,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         storyCell.setDeleteStory(MyStatusStoryListFragment.this);
                         storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                         if (position < stories.get(0).getRealmStoryProtos().size()) {
-                            storyCell.setData(false, stories.get(0).getUserId(), stories.get(0).getRealmStoryProtos().get(position).getCreatedAt(), stories.get(0).getRealmStoryProtos().get(position).getViewCount() + " " + "views",displayNameList.get(0).get(0), displayNameList.get(0).get(1), stories.get(0).getRealmStoryProtos().get(position).getFile(), null);
+                            storyCell.setData(false, stories.get(0).getUserId(), stories.get(0).getRealmStoryProtos().get(position).getCreatedAt(), stories.get(0).getRealmStoryProtos().get(position).getViewCount(),displayNameList.get(0).get(0), displayNameList.get(0).get(1), stories.get(0).getRealmStoryProtos().get(position).getFile(), null);
                             storyCell.setStoryId(stories.get(0).getRealmStoryProtos().get(position).getStoryId());
                         }
                         storyCell.deleteIconVisibility(true, R.string.delete_icon);

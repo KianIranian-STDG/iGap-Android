@@ -74,9 +74,14 @@ public class StoryCell extends FrameLayout {
         this.storyId = id;
     }
 
-    public void setData(boolean isFromMyStatus, long userId, long time, String viewCount, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
+    public void setData(boolean isFromMyStatus, long userId, long time, int viewCount, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
         this.userId = userId;
-        topText.setText(viewCount);
+        if (G.selectedLanguage.equals("en")){
+            topText.setText(viewCount+" "+context.getString(R.string.story_views));
+        }else {
+            topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount))+" "+context.getString(R.string.story_views));
+        }
+
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
             if (attachment.getLocalThumbnailPath() != null) {
