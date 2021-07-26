@@ -146,18 +146,20 @@ public class StoryCell extends FrameLayout {
         topText.setText(displayName);
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
-            if (attachment.getLocalThumbnailPath() != null) {
+            if (attachment.getLocalThumbnailPath() != null && BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()) != null) {
                 try {
-                    if (!isFromMyStatus) {
-                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
-                    } else {
-                        circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
-                    }
+                        if (!isFromMyStatus) {
+                            circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                        } else {
+                            circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                        }
                 } catch (Exception e) {
-                    if (!isFromMyStatus) {
-                        circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
-                    } else {
-                        circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                    if (BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()) != null) {
+                        if (!isFromMyStatus) {
+                            circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                        } else {
+                            circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                        }
                     }
                 }
 
@@ -278,7 +280,7 @@ public class StoryCell extends FrameLayout {
                 deleteStory.deleteStory(storyId);
             }
         });
-        addView(deleteIcon, LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 20) : padding, 0, isRtl ? padding : (20 + padding), 0));
+        addView(deleteIcon, LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 8, 8, isRtl ? 8 : 0, 8));
         // this.iconClicked.clickedIcon(icon, icon2);
 
 
