@@ -28,6 +28,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class StoryViewFragment extends BaseFragment implements StoryDisplayFragment.PageViewOperator {
 
@@ -78,7 +79,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             });
         } else {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                storyResults = realm.where(RealmStory.class).findAll();
+                storyResults = realm.where(RealmStory.class).sort("id" , Sort.DESCENDING).findAll();
             });
         }
 
@@ -102,17 +103,20 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             storyUser.setUserId(storyResults.get(i).getUserId());
             for (int j = 0; j < realmStoryProtos.size(); j++) {
                 RealmStoryProto realmStoryProto = realmStoryProtos.get(j);
+                if (realmStoryProto.getUserId() == userId) {
+                    currentPage = i;
+                }
                 if (isSingle) {
                     if (realmStoryProto.getStoryId() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null,realmStoryProto.getViewCount());
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
                     }
                 } else {
                     Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null,realmStoryProto.getViewCount());
+                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
                     stories.add(story);
                     storyUser.setStories(stories);
                 }
