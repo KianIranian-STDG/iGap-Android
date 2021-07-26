@@ -49,6 +49,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
     private FontIconTextView eyeIconTv;
     private FontIconTextView voteDownIv;
     private FontIconTextView voteUpIv;
+    private View emptyView;
 
     private LinearLayout voteContainer;
     private LinearLayout viewContainer;
@@ -93,6 +94,9 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
 
         voteDownTv = new AppCompatTextView(itemView.getContext());
         voteUpTv = new AppCompatTextView(itemView.getContext());
+
+        emptyView = new View(itemView.getContext());
+        emptyView.setId(R.id.tv_chatItem_empty);
 
         //set text color not here because text color depends on send message type or Received message type
         signatureTv = new AppCompatTextView(itemView.getContext());
@@ -160,10 +164,11 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteDownIv.setTextColor(otherColor);
         setTextSize(voteDownIv, R.dimen.standardTextSize);
 
-
+        set.constrainWidth(emptyView.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainHeight(emptyView.getId(), LayoutCreator.dp(20));
 
         /*channelForwardIv.setImageResource(R.drawable.ic_channel_forward_light);*/
-        set.constrainWidth(signatureTv.getId(), ConstraintSet.MATCH_CONSTRAINT);
+        set.constrainWidth(signatureTv.getId(), ConstraintSet.WRAP_CONTENT);
         set.constrainHeight(signatureTv.getId(), LayoutCreator.dp(20));
 
         set.constrainHeight(contentBloke.getId(), ConstraintSet.WRAP_CONTENT);
@@ -202,6 +207,9 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.connect(voteContainer.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
         set.connect(voteContainer.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
 
+        set.connect(emptyView.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
+        set.connect(emptyView.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
+
         set.connect(signatureTv.getId(), ConstraintSet.TOP, messageTimeTv.getId(), ConstraintSet.TOP);
         set.connect(signatureTv.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.BOTTOM);
 
@@ -222,11 +230,12 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         voteContainer.addView(voteDownContainer, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT,
                 Gravity.CENTER, 0, 0, 8, 0));
 
-        int[] views = {viewContainer.getId(), voteContainer.getId(), signatureTv.getId(), messageTimeTv.getId(), messageStatusTv.getId()};
+        int[] views = {viewContainer.getId(), voteContainer.getId(),emptyView.getId(),signatureTv.getId(), messageTimeTv.getId(), messageStatusTv.getId()};
         set.createHorizontalChain(chatBloke.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.RIGHT, views,
                 null, ConstraintSet.CHAIN_SPREAD);
 
 
+        chatBloke.addView(emptyView);
         chatBloke.addView(signatureTv);
         chatBloke.addView(contentBloke);
         chatBloke.addView(messageTimeTv);
