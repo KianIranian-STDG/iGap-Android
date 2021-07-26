@@ -18,6 +18,7 @@ public class RealmStory extends RealmObject {
     @Index
     private long userId; // userId for users and roomId for rooms
     private boolean isSeenAll;
+    private int indexOfSeen;
     private RealmList<RealmStoryProto> realmStoryProtos;
 
 
@@ -28,7 +29,7 @@ public class RealmStory extends RealmObject {
         this.id = id;
     }
 
-    public static RealmStory putOrUpdate(Realm realm,boolean isSeenAll, final long userId, final List<ProtoStoryGetStories.IgapStory> stories) {
+    public static RealmStory putOrUpdate(Realm realm, boolean isSeenAll, final long userId, final List<ProtoStoryGetStories.IgapStory> stories) {
         RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", userId).findFirst();
         if (realmStory == null) {
             realmStory = realm.createObject(RealmStory.class, userId);
@@ -73,7 +74,6 @@ public class RealmStory extends RealmObject {
         this.userId = userId;
     }
 
-
     public RealmList<RealmStoryProto> getRealmStoryProtos() {
         return realmStoryProtos;
     }
@@ -84,6 +84,14 @@ public class RealmStory extends RealmObject {
 
     public void setSeenAll(boolean seenAll) {
         isSeenAll = seenAll;
+    }
+
+    public int getIndexOfSeen() {
+        return indexOfSeen;
+    }
+
+    public void setIndexOfSeen(int indexOfSeen) {
+        this.indexOfSeen = indexOfSeen;
     }
 
     public void setRealmStoryProtos(Realm realm, List<ProtoStoryGetStories.IgapStory> stories) {
@@ -105,12 +113,15 @@ public class RealmStory extends RealmObject {
             storyProto.setUserId(igapStory.getUserId());
             storyProto.setStoryId(igapStory.getId());
             storyProto.setSeen(igapStory.getSeen());
-            if (!isExist) {
-                realmStoryProtos.add(storyProto);
-            } else {
-                realmStoryProtos.remove(storyProto);
-                realmStoryProtos.add(storyProto);
+
+            if (igapStory.getSeen()) {
+                setIndexOfSeen(stories.indexOf(igapStory));
             }
+
+            if (isExist) {
+                realmStoryProtos.remove(storyProto);
+            }
+            realmStoryProtos.add(storyProto);
             isExist = false;
         }
     }

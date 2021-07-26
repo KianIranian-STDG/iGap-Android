@@ -32,7 +32,6 @@ import io.realm.Sort;
 
 public class StoryViewFragment extends BaseFragment implements StoryDisplayFragment.PageViewOperator {
 
-    public static SparseIntArray progressStateArray = new SparseIntArray();
     private float prevDragPosition = 0;
 
     private int currentPage = 0;

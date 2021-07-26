@@ -917,6 +917,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
                     .addField("userId", long.class)
                     .addField("isSeenAll", boolean.class)
+                    .addField("indexOfSeen", int.class)
                     .addRealmObjectField("realmStoryProtos", realmStoryProto);
 
             oldVersion++;

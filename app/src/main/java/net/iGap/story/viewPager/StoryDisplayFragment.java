@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,9 +49,7 @@ import net.iGap.story.ExpandableTextView;
 import net.iGap.structs.AttachmentObject;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
@@ -177,7 +174,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         updateStory();
         onResumeCalled = true;
         if (counter != 0) {
-            counter = StoryViewFragment.progressStateArray.get(getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : 0);
+            counter = restorePosition();
             storiesProgressView.startStories(counter);
         }
     }
@@ -193,7 +190,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onDestroy() {
         super.onDestroy();
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
-        counter = 0;
         savePosition(counter);
     }
 
@@ -246,7 +242,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(ra), true);
                     if (object != null) {
                         ProtoFileDownload.FileDownload.Selector imageSelector = ProtoFileDownload.FileDownload.Selector.FILE;
-                        Downloader.getInstance(AccountManager.selectedAccount).download(object,imageSelector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
+                        Downloader.getInstance(AccountManager.selectedAccount).download(object, imageSelector, HttpRequest.PRIORITY.PRIORITY_HIGH, arg -> {
                             if (arg.status == Status.SUCCESS && arg.data != null) {
                                 String filepath = arg.data.getFilePath();
                                 String downloadedFileToken = arg.data.getToken();
@@ -278,9 +274,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         Log.e("faslkfhsfhsakjd", "loadImage: " + downloadCounter);
 
         loadingProgressbar.setVisibility(View.GONE);
-        Glide.with(this).load(path).into(storyDisplayImage);
+        Glide.with(storyDisplayImage.getContext()).load(path).into(storyDisplayImage);
         avatarHandler.getAvatar(new ParamWithAvatarType(userImage, stories.get(counter).getUserId()).avatarType(AvatarHandler.AvatarType.USER));
-        Glide.with(this).load(path).into(tumNailImage);
+        Glide.with(tumNailImage.getContext()).load(path).into(tumNailImage);
 
         if (counter == 0 && downloadCounter == 0) {
             storiesProgressView.startStories(counter);
@@ -288,24 +284,24 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             resumeCurrentStory();
         }
         if (isMyStory) {
-           storyViewsCount.setText(stories.get(counter).getViewCount()+"");
+            storyViewsCount.setText(stories.get(counter).getViewCount() + "");
         }
 
-            AbstractObject req = null;
-            IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
-            story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
-            req = story_add_view;
-            getRequestManager().sendRequest(req, (response, error) -> {
-                if (error == null) {
-                    IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
-                    DbManager.getInstance().doRealmTransaction(realm -> {
-                        realm.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(res.storyId)).findFirst().setSeen(true);
-                    });
+        AbstractObject req = null;
+        IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();
+        story_add_view.storyId = String.valueOf(stories.get(counter).getStoryId());
+        req = story_add_view;
+        getRequestManager().sendRequest(req, (response, error) -> {
+            if (error == null) {
+                IG_RPC.Res_Story_Add_View res = (IG_RPC.Res_Story_Add_View) response;
+                DbManager.getInstance().doRealmTransaction(realm -> {
+                    realm.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(res.storyId)).findFirst().setSeen(true);
+                });
 
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
+            } else {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
 
 
         downloadCounter++;
@@ -492,11 +488,22 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     }
 
     public void savePosition(int pos) {
-        StoryViewFragment.progressStateArray.put(position, pos);
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", storyUser.getUserId()).findFirst();
+            if (realmStory != null) {
+                realmStory.setIndexOfSeen(pos);
+            }
+        });
     }
 
     public int restorePosition() {
-        return StoryViewFragment.progressStateArray.get(position);
+        return DbManager.getInstance().doRealmTask((DbManager.RealmTaskWithReturn<Integer>) realm -> {
+            RealmStory realmStory = realm.where(RealmStory.class).equalTo("id", storyUser.getUserId()).findFirst();
+            if (realmStory != null) {
+                return realmStory.getIndexOfSeen();
+            }
+            return 0;
+        });
     }
 
     public void pauseCurrentStory() {
@@ -528,6 +535,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void onComplete() {
+        savePosition(counter = 0);
         pageViewOperator.nextPageView(clickable);
     }
 
