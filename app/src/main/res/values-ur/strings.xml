@@ -1916,4 +1916,7 @@
     <string name="Submitـomment">برای مشاهده نظرسنجی باید  نظر خود را ثبت کنید</string>
     <string name="share_file_link">عوامی لنک شیئر کریں</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
 </resources>
