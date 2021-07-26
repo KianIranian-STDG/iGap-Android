@@ -21,9 +21,13 @@ import net.iGap.helper.HelperLog;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class StoryViewFragment extends BaseFragment implements StoryDisplayFragment.PageViewOperator {
 
@@ -36,16 +40,18 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private ArrayList<StructBottomSheet> itemGalleryList;
     private Bitmap bitmap;
     private boolean myStory = true;  // ->  To determine if I have storyList or my contacts has storyList
-    private RealmStory userStory;
+    private RealmResults<RealmStory> storyResults;
     private long userId;
 
     public StoryViewFragment(long userId, boolean muStory) {
         this.userId = userId;
         this.myStory = muStory;
     }
+
     public StoryViewFragment() {
 
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,7 +64,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         DbManager.getInstance().doRealmTransaction(realm -> {
-            userStory = realm.where(RealmStory.class).equalTo("id", userId).findFirst();
+            storyResults = realm.where(RealmStory.class).findAll();
         });
         setUpPager();
     }
@@ -71,25 +77,28 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private void setUpPager() {
         List<StoryUser> storyUserList = new ArrayList<>();
 
+        for (int i = 0; i < storyResults.size(); i++) {
+            RealmList<RealmStoryProto> realmStoryProtos = storyResults.get(i).getRealmStoryProtos();
             StoryUser storyUser = new StoryUser();
             List<Story> stories = new ArrayList<>();
             storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(userId));
             storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
-            for (int i = 0; i < userStory.getRealmStoryProtos().size(); i++) {
+            for (int j = 0; j < realmStoryProtos.size(); j++) {
                 Story story = new Story();
                 story.setBitmap(bitmap);
-                story.setUserId(userStory.getUserId());
-                story.setAttachment(userStory.getRealmStoryProtos().get(i).getFile());
-                story.setTxt(userStory.getRealmStoryProtos().get(i).getCaption());
-                story.setStoryData(userStory.getRealmStoryProtos().get(i).getCreatedAt());
-                story.setStoryId(userStory.getRealmStoryProtos().get(i).getStoryId());
+                story.setUserId(realmStoryProtos.get(j).getUserId());
+                story.setAttachment(realmStoryProtos.get(j).getFile());
+                story.setTxt(realmStoryProtos.get(j).getCaption());
+                story.setStoryData(realmStoryProtos.get(j).getCreatedAt());
+                story.setStoryId(realmStoryProtos.get(j).getStoryId());
                 stories.add(story);
                 storyUser.setStories(stories);
             }
             storyUserList.add(storyUser);
+        }
 
 
-        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, storyUserList, this,myStory);
+        pagerAdapter = new StoryPagerAdapter(getChildFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, storyUserList, this, myStory);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(currentPage);
         viewPager.setPageTransformer(true, new PageTransformer());
@@ -183,9 +192,8 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 HelperLog.getInstance().setErrorLog(e);
             }
         } else {
-            if (clickable)
+            if (!clickable)
                 new HelperFragment(getActivity().getSupportFragmentManager(), StoryViewFragment.this).popBackStack();
-
         }
     }
 }
