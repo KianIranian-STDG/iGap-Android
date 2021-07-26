@@ -158,7 +158,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         super.onViewCreated(view, savedInstanceState);
         counter = 0;
         setUpUi();
-        updateStory();
         loadingProgressbar.setVisibility(View.VISIBLE);
         replayFrame.setOnClickListener(view1 -> {
             setupReplay();
@@ -175,6 +174,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onResume() {
         super.onResume();
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
+        updateStory();
         onResumeCalled = true;
         if (counter != 0) {
             counter = StoryViewFragment.progressStateArray.get(getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : 0);
