@@ -195,9 +195,15 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
             stories = realm.copyFromRealm(realm.where(RealmStory.class).limit(50).findAll());
         });
         isAddedUserStory = false;
+        if (userIdList.size() > 0) {
+            userIdList = new ArrayList<>();
+        }
         for (int i = 0; i < stories.size(); i++) {
             userIdList.add(stories.get(i).getUserId());
 
+        }
+        if (displayNameList.size() > 0) {
+            displayNameList = new ArrayList<>();
         }
         displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
         if (stories != null && stories.size() > 0) {
@@ -311,7 +317,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                             } else {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                             }
-                            storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(position).get(0), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
+                            storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), getString(R.string.my_status), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
                             storyCell.addIconVisibility(false);
                             storyCell.deleteIconVisibility(true);
                             isAddedUserStory = true;
@@ -325,7 +331,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                                     } else {
                                         storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                     }
-                                    storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(i).get(0), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
+                                    storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), getString(R.string.my_status), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
                                     storyCell.addIconVisibility(false);
                                     storyCell.deleteIconVisibility(true);
                                     isAddedUserStory = true;
