@@ -287,7 +287,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         } else {
             resumeCurrentStory();
         }
-
+        if (isMyStory) {
+           storyViewsCount.setText(stories.get(counter).getViewCount()+"");
+        }
 
             AbstractObject req = null;
             IG_RPC.Story_Add_View story_add_view = new IG_RPC.Story_Add_View();

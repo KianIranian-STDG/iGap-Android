@@ -42,10 +42,19 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     private boolean myStory = true;  // ->  To determine if I have storyList or my contacts has storyList
     private RealmResults<RealmStory> storyResults;
     private long userId;
+    private boolean isSingle = false;
+    private long storyId;
 
     public StoryViewFragment(long userId, boolean muStory) {
         this.userId = userId;
         this.myStory = muStory;
+    }
+
+    public StoryViewFragment(long userId, boolean muStory, boolean isSingle, long storyId) {
+        this.userId = userId;
+        this.myStory = muStory;
+        this.isSingle = isSingle;
+        this.storyId = storyId;
     }
 
     public StoryViewFragment() {
@@ -63,9 +72,16 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            storyResults = realm.where(RealmStory.class).findAll();
-        });
+        if (isSingle) {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                storyResults = realm.where(RealmStory.class).equalTo("id", userId).findAll();
+            });
+        } else {
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                storyResults = realm.where(RealmStory.class).findAll();
+            });
+        }
+
         setUpPager();
     }
 
@@ -83,16 +99,24 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             List<Story> stories = new ArrayList<>();
             storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(userId));
             storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
+            storyUser.setUserId(storyResults.get(i).getUserId());
             for (int j = 0; j < realmStoryProtos.size(); j++) {
-                Story story = new Story();
-                story.setBitmap(bitmap);
-                story.setUserId(realmStoryProtos.get(j).getUserId());
-                story.setAttachment(realmStoryProtos.get(j).getFile());
-                story.setTxt(realmStoryProtos.get(j).getCaption());
-                story.setStoryData(realmStoryProtos.get(j).getCreatedAt());
-                story.setStoryId(realmStoryProtos.get(j).getStoryId());
-                stories.add(story);
-                storyUser.setStories(stories);
+                RealmStoryProto realmStoryProto = realmStoryProtos.get(j);
+                if (isSingle) {
+                    if (realmStoryProto.getStoryId() == storyId) {
+                        Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null,realmStoryProto.getViewCount());
+                        stories.add(story);
+                        storyUser.setStories(stories);
+                        break;
+                    }
+                } else {
+                    Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
+                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null,realmStoryProto.getViewCount());
+                    stories.add(story);
+                    storyUser.setStories(stories);
+                }
+
             }
             storyUserList.add(storyUser);
         }
