@@ -1,6 +1,7 @@
 package net.iGap.story.liststories;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,6 +24,7 @@ import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.Theme;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -41,6 +43,8 @@ import net.iGap.story.viewPager.StoryViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.iGap.G.isAppRtl;
 
 public class StoryFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
 
@@ -65,6 +69,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
     private int recentStoryCounter = 0;
     boolean isAddedUserStory = false;
     private int userStoryIndex = 0;
+    private FrameLayout floatActionLayout;
 
     @Override
     public void deleteStory(long storyId) {
@@ -96,7 +101,6 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setListener(this)
-                .setLeftIcon(R.string.back_icon)
                 .setDefaultTitle(getString(R.string.status))
                 .getView();
 
@@ -115,6 +119,16 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         progressBar = new ProgressBar(context);
         progressBar.setVisibility(View.GONE);
         rootView.addView(progressBar, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER));
+
+
+        floatActionLayout = new FrameLayout(context);
+        Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
+        floatActionLayout.setBackground(drawable);
+        IconView addButton = new IconView(context);
+        addButton.setIcon(R.string.add_icon_without_circle_font);
+        addButton.setIconColor(Color.WHITE);
+        floatActionLayout.addView(addButton);
+        rootView.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
         return rootView;
     }
 
@@ -129,7 +143,12 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         displayNameList = new ArrayList<>();
         progressBar.setVisibility(View.VISIBLE);
         loadStories();
-
+        floatActionLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryPagerFragment()).setReplace(false).load();
+            }
+        });
         recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private boolean scrollUpdated;
             private boolean scrollingManually;
@@ -218,13 +237,6 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         }
     }
 
-
-    @Override
-    public void onLeftIconClickListener(View view) {
-        if (getActivity() != null) {
-            getActivity().onBackPressed();
-        }
-    }
 
     @Override
     public void onClick(View view, int position) {
