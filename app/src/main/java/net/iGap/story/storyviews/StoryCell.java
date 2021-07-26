@@ -76,10 +76,10 @@ public class StoryCell extends FrameLayout {
 
     public void setData(boolean isFromMyStatus, long userId, long time, int viewCount, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
         this.userId = userId;
-        if (G.selectedLanguage.equals("en")){
-            topText.setText(viewCount+" "+context.getString(R.string.story_views));
-        }else {
-            topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount))+" "+context.getString(R.string.story_views));
+        if (G.selectedLanguage.equals("en")) {
+            topText.setText(viewCount + " " + context.getString(R.string.story_views));
+        } else {
+            topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount)) + " " + context.getString(R.string.story_views));
         }
 
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
@@ -271,13 +271,14 @@ public class StoryCell extends FrameLayout {
         deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
         deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         deleteIcon.setText(R.string.horizontal_more_icon);
+        deleteIcon.setGravity(Gravity.CENTER);
         deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteStory.deleteStory(storyId);
             }
         });
-        addView(deleteIcon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 20) : padding, 0, isRtl ? padding : (20 + padding), 0));
+        addView(deleteIcon, LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 20) : padding, 0, isRtl ? padding : (20 + padding), 0));
         // this.iconClicked.clickedIcon(icon, icon2);
 
 
