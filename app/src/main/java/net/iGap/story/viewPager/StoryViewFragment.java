@@ -97,7 +97,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             RealmList<RealmStoryProto> realmStoryProtos = storyResults.get(i).getRealmStoryProtos();
             StoryUser storyUser = new StoryUser();
             List<Story> stories = new ArrayList<>();
-            storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(userId));
+            storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(realmStoryProtos.get(i).getUserId()));
             storyUser.setProfilePicUrl("https://randomuser.me/api/portraits/women/1.jpg");
             storyUser.setUserId(storyResults.get(i).getUserId());
             for (int j = 0; j < realmStoryProtos.size(); j++) {
