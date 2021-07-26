@@ -42,6 +42,7 @@ import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.StoryPagerFragment;
 import net.iGap.story.liststories.cells.HeaderCell;
 import net.iGap.story.storyviews.StoryCell;
+import net.iGap.story.viewPager.StoryViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +194,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     @Override
     public void onClick(View view, int position) {
-
+        StoryCell storyCell = (StoryCell) view;
+        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true)).setReplace(false).load();
     }
 
     @Override

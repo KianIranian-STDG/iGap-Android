@@ -17,7 +17,22 @@ public class Story implements Serializable {
     private long storyId;
     private RealmAttachment attachment;
     private ProtoGlobal.File file;
+    private int viewCount;
 
+    public Story(String url, Bitmap bitmap, String txt, long storyData, long userId, long storyId, RealmAttachment attachment, ProtoGlobal.File file, int viewCount) {
+        this.url = url;
+        this.bitmap = bitmap;
+        this.txt = txt;
+        this.storyData = storyData;
+        this.userId = userId;
+        this.storyId = storyId;
+        this.attachment = attachment;
+        this.file = file;
+        this.viewCount = viewCount;
+    }
+
+    public Story() {
+    }
 
     public String getUrl() {
         return url;
@@ -81,5 +96,13 @@ public class Story implements Serializable {
 
     public void setStoryId(long storyId) {
         this.storyId = storyId;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 }

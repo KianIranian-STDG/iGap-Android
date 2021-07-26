@@ -7,6 +7,7 @@ import java.util.List;
 public class StoryUser implements Serializable {
 
     private String userName;
+    private long userId;
     private String profilePicUrl;
     private List<Story> stories;
 
@@ -32,5 +33,13 @@ public class StoryUser implements Serializable {
 
     public void setStories(List<Story> stories) {
         this.stories = stories;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }
