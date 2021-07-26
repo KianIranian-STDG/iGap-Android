@@ -47,6 +47,8 @@ public class UserLoginResponse extends MessageHandler {
     public String identity;
     private boolean isDeprecated = false;
     private boolean isUpdateAvailable = false;
+    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+
 
     public UserLoginResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -105,9 +107,11 @@ public class UserLoginResponse extends MessageHandler {
 
         TokenContainer.getInstance().updateToken(builder.getAccessToken(),false);
 
-        if(BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0){
-            SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
-            sharedPreferences.edit().putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, new Date().getTime()).apply();
+        if(BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0 && sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP , 0) == 0){
+            sharedPreferences
+                    .edit()
+                    .putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, new Date().getTime())
+                    .apply();
         }
 
         /**

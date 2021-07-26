@@ -2219,4 +2219,5 @@
     <string name="waiting_dialog_reason_text">تلاش بیش از حد</string>
     <string name="remind_me_later">بعدا بهم یادآوری کن</string>
     <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>
+    <string name="please_try_later">لطفا بعدا تلاش کنید</string>
 </resources>

@@ -98,6 +98,7 @@ import org.jetbrains.annotations.NotNull;
 import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -893,9 +894,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public void onStart() {
         super.onStart();
-
         if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0) {
-            RatingDialog.show(getActivity());
+            long currentTimeStamp = new Date().getTime();
+            long loginTimeStamp = sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0);
+            long showDialogPeriodTimeMs = BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE * 60 * 60 * 1000;
+            if ((currentTimeStamp - loginTimeStamp >= showDialogPeriodTimeMs) &&
+                    !sharedPreferences.getBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, false)) {
+                RatingDialog.show(getActivity(), currentTimeStamp);
+            }
         }
     }
 
