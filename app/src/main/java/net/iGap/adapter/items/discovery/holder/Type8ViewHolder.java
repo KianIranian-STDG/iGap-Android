@@ -2,15 +2,12 @@ package net.iGap.adapter.items.discovery.holder;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import net.iGap.R;
@@ -22,17 +19,14 @@ import ir.tapsell.plus.AdHolder;
 import ir.tapsell.plus.AdRequestCallback;
 import ir.tapsell.plus.AdShowListener;
 import ir.tapsell.plus.TapsellPlus;
-import ir.tapsell.sdk.nativeads.views.RatioImageView;
+import ir.tapsell.plus.model.TapsellPlusAdModel;
+import ir.tapsell.plus.model.TapsellPlusErrorModel;
 
 public class Type8ViewHolder extends BaseViewHolder {
 
-    private CardView adContainer;
+    private ViewGroup adContainer;
     private AdHolder adHolder;
-    private Activity activity;
-    private String addId;
-    private int addModel;
-    private View tapCellWrapper;
-
+    private final Activity activity;
 
     public Type8ViewHolder(@NonNull View itemView, FragmentActivity activity) {
         super(itemView, activity);
@@ -42,21 +36,21 @@ public class Type8ViewHolder extends BaseViewHolder {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void bindView(DiscoveryItem item) {
-        addId = item.discoveryFields.get(0).value;
-        addModel = item.model.getNumber();
+        String addId = item.discoveryFields.get(0).value;
+        int addModel = item.model.getNumber();
+
+        adContainer = itemView.findViewById(R.id.adContainer);
 
         switch (addModel) {
             case 8:
-                adContainer = itemView.findViewById(R.id.root_ad_layout);
                 adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_8);
                 break;
             case 9:
-                adContainer = itemView.findViewById(R.id.root_ad_layout_banner);
                 adHolder = TapsellPlus.createAdHolder(activity, adContainer, R.layout.item_discovery_9);
                 break;
         }
 
-        tapCellWrapper = itemView.findViewById(R.id.tapCellWrapper);
+        View tapCellWrapper = itemView.findViewById(R.id.tapCellWrapper);
         tapCellWrapper.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -66,43 +60,37 @@ public class Type8ViewHolder extends BaseViewHolder {
         });
 
         if (!BottomNavigationFragment.isShowedAdd) {
-            TapsellPlus.requestNativeBanner(activity, addId, new AdRequestCallback() {
-                @Override
-                public void response() {
-                    showAdd();
-                }
+            TapsellPlus.requestNativeAd(
+                    activity,
+                    addId,
+                    new AdRequestCallback() {
+                        @Override
+                        public void response(TapsellPlusAdModel tapsellPlusAdModel) {
+                            super.response(tapsellPlusAdModel);
+                            showAdd(tapsellPlusAdModel.getResponseId());
+                        }
 
-                @Override
-                public void error(@NonNull String message) {
-                }
-            });
+                        @Override
+                        public void error(@NonNull String message) {
+                        }
+                    });
         }
     }
 
-    private void showAdd() {
-        TapsellPlus.showAd(
-                activity,
-                adHolder,
-                addId,
+    private void showAdd(String nativeAdResponseId) {
+        TapsellPlus.showNativeAd(activity, nativeAdResponseId, adHolder,
                 new AdShowListener() {
                     @Override
-                    public void onOpened() {
+                    public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
                         adContainer.setVisibility(View.VISIBLE);
                         BottomNavigationFragment.isShowedAdd = true;
                     }
 
                     @Override
-                    public void onClosed() {
-                    }
-
-                    @Override
-                    public void onRewarded() {
-                    }
-
-                    @Override
-                    public void onError(String s) {
-                        FileLog.e(s);
+                    public void onError(TapsellPlusErrorModel tapsellPlusErrorModel) {
+                        FileLog.e(tapsellPlusErrorModel.getErrorMessage());
                     }
                 });
     }
+
 }

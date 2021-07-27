@@ -68,6 +68,9 @@ import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.realm.Realm;
 import ir.radsense.raadcore.web.WebBase;
 import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.plus.TapsellPlusInitListener;
+import ir.tapsell.plus.model.AdNetworkError;
+import ir.tapsell.plus.model.AdNetworks;
 
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
@@ -429,7 +432,20 @@ public class G extends ApplicationContext {
             FileLog.i("---------------------------------------------------");
         }
 
-        TapsellPlus.initialize(this, BuildConfig.TAPSELL_KEY);
+        TapsellPlus.initialize(this, BuildConfig.TAPSELL_KEY,
+                new TapsellPlusInitListener() {
+                    @Override
+                    public void onInitializeSuccess(AdNetworks adNetworks) {
+                        Log.d("onInitializeSuccess", adNetworks.name());
+                    }
+
+                    @Override
+                    public void onInitializeFailed(AdNetworks adNetworks,
+                                                   AdNetworkError adNetworkError) {
+                        Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " +	adNetworkError.getErrorMessage());
+                    }
+                });
+        TapsellPlus.setGDPRConsent(this, true);
     }
 
     @Override
