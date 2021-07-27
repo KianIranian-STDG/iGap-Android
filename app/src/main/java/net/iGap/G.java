@@ -445,7 +445,6 @@ public class G extends ApplicationContext {
                         Log.e("onInitializeFailed", "ad network: " + adNetworks.name() + ", error: " +	adNetworkError.getErrorMessage());
                     }
                 });
-        TapsellPlus.setGDPRConsent(this, true);
     }
 
     @Override
