@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.bumptech.glide.Glide;
@@ -194,7 +195,7 @@ public class CameraStoryFragment extends BaseFragment {
 
         bottomPanelTitle = new TextView(context);
         bottomPanelTitle.setText(getString(R.string.status));
-        bottomPanelTitle.setTypeface(Typeface.DEFAULT_BOLD);
+        bottomPanelTitle.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
         bottomPanelTitle.setTextColor(Color.WHITE);
         bottomToolPanel.addView(bottomPanelTitle, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, Gravity.CENTER, 0, 0, 0, 0));
 
