@@ -88,6 +88,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_DELETED, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_ALL_SEEN, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_NEW, this);
     }
 
     @Nullable
@@ -139,6 +140,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_LIST_FETCHED, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_DELETED, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_ALL_SEEN, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_NEW, this);
         mOffset = 0;
         userIdList = new ArrayList<>();
         displayNameList = new ArrayList<>();
@@ -258,7 +260,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
-        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_DELETED || id == EventManager.STORY_ALL_SEEN) {
+        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_DELETED || id == EventManager.STORY_ALL_SEEN || id == EventManager.STORY_USER_ADD_NEW) {
             G.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
