@@ -774,14 +774,17 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                                     RealmStory.putOrUpdate(realm,false, AccountManager.getInstance().getCurrentUser().getId(), storyListFromProto);
                                 }
                             });
-                            new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).remove();
-                            new HelperFragment(getActivity().getSupportFragmentManager(), storyViewFragment).setReplace(false).load();
+
+
                             G.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED);
+                                    new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
+                                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_ADD_NEW);
                                 }
                             });
+
+
 
                         }
                     } else {
