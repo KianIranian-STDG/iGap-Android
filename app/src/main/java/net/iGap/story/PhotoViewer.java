@@ -767,7 +767,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                         storyListFromProto.add(res.igapStory);
                         counter++;
                         if (counter == itemGalleryList.size()) {
-                            Collections.sort(itemGalleryList);
                             StoryViewFragment storyViewFragment = new StoryViewFragment(AccountManager.getInstance().getCurrentUser().getId(),true);
                             storyViewFragment.setItemGalleryList(itemGalleryList, false);
                             DbManager.getInstance().doRealmTransaction(realm -> {
@@ -1258,8 +1257,8 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             itemGalleryList.add(0, item);
             textImageList.put(path, item);
         }
-        Collections.reverse(FragmentEditImage.itemGalleryList);
         itemGalleryList.addAll(0, FragmentEditImage.itemGalleryList);
+        Collections.reverse(itemGalleryList);
         setUpViewPager();
 
     }
