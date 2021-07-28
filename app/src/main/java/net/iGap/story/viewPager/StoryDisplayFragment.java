@@ -135,10 +135,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
         if (getArguments() != null) {
             position = getArguments().getInt(EXTRA_POSITION);
-            isMyStory = getArguments().getBoolean(EXTRA_IS_MY_STORY, false);
             storyUser = (StoryUser) getArguments().getSerializable(EXTRA_STORY_USER);
             stories = storyUser.getStories();
         }
+        isMyStory = storyUser.getUserId() == AccountManager.getInstance().getCurrentUser().getId();
         if (isMyStory) {
             replayFrame.setVisibility(View.INVISIBLE);
             storyViewsRootView.setVisibility(View.VISIBLE);
