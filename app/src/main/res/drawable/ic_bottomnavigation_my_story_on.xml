@@ -14,8 +14,12 @@
           android:endY="93.03997"
           android:endX="113.35261"
           android:type="linear">
-        <item android:offset="0" android:color="#FFC6DA42"/>
-        <item android:offset="1" android:color="#FF50B452"/>
+        <item
+            android:color="?attr/iGapBottomNavigationIconStart"
+            android:offset="0" />
+        <item
+            android:color="?attr/iGapBottomNavigationIconEnd"
+            android:offset="1" />
       </gradient>
     </aapt:attr>
   </path>
