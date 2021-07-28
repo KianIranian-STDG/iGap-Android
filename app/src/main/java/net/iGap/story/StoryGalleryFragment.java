@@ -124,6 +124,7 @@ public class StoryGalleryFragment extends BaseFragment {
         sendIcon.setText(getString(R.string.md_send_button));
         sendIcon.setTextColor(context.getResources().getColor(R.color.white));
         sendIcon.setTextSize(22);
+        sendIcon.setVisibility(View.GONE);
         sendIcon.setGravity(Gravity.CENTER);
         toolbarView.addView(sendIcon, LayoutCreator.createFrame(40, 40, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
 
@@ -203,7 +204,7 @@ public class StoryGalleryFragment extends BaseFragment {
     private void checkPhotoMultiSelectAndSendToEdit() {
         if (adapterGalleryPhoto == null) return;
         if (adapterGalleryPhoto.getMultiSelectState()) {
-            sendIcon.setText(R.string.edit_icon);
+
             if (adapterGalleryPhoto.getSelectedPhotos().size() > 0)
                 sendSelectedPhotos(adapterGalleryPhoto.getSelectedPhotos());
         } else {
