@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,9 +60,7 @@ public class RatingDialog {
                             activity.startActivity(intent);
                             sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
                             dialog.dismiss();
-
-                        } else {
-
+                        } else if (isFromPlayStore(activity)) {
                             ReviewManager manager = ReviewManagerFactory.create(activity);
                             Task<ReviewInfo> request = manager.requestReviewFlow();
                             request.addOnCompleteListener(task -> {
@@ -74,13 +71,20 @@ public class RatingDialog {
                                         sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
                                         dialog.dismiss();
                                     });
-
                                 } else {
                                     Toast.makeText(activity, R.string.please_try_later, Toast.LENGTH_LONG).show();
                                 }
                             });
+                        } else {
+                            try {
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.getPackageName())));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())));
+                            } finally {
+                                sharedPreferences.edit().putBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, true).apply();
+                                dialog.dismiss();
+                            }
                         }
-
                     }
                 })
                 .negativeText(R.string.remind_me_later)
