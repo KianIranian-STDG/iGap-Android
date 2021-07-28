@@ -907,7 +907,7 @@ public class MessageDataStorage extends BaseController {
 
                 database.commitTransaction();
 
-                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_LIST_FETCHED));
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW));
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -979,7 +979,7 @@ public class MessageDataStorage extends BaseController {
 
                 database.commitTransaction();
 
-                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_LIST_FETCHED));
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_USER_ADD_VIEW));
             } catch (Exception e) {
                 FileLog.e(e);
             }
