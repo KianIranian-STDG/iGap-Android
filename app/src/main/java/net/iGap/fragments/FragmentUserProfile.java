@@ -73,7 +73,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+                return (T) new UserProfileViewModel(avatarHandler);
             }
         }).get(UserProfileViewModel.class);
     }
@@ -95,14 +95,16 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
+        viewModel.getCloseKeyboard().observe(getViewLifecycleOwner(), aBoolean -> {
+            closeKeyboard((binding.getRoot()));
+        });
+
         viewModel.openAccountsDialog.observe(getViewLifecycleOwner(), show -> {
             if (show == null) return;
             if (show) {
                 openAccountsDialog();
             }
         });
-
-
 
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
@@ -191,11 +193,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             if (isPopBackStack != null && isPopBackStack) {
                 getChildFragmentManager().popBackStack();
             }
-        });
-
-        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner(), state -> {
-            if (state == null) return;
-            closeKeyboard(binding.getRoot());
         });
     }
 

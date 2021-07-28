@@ -115,7 +115,6 @@
             android:layout_height="0dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:onClick="@{()->viewModel.onAccountsClicked()}"
-            android:visibility="@{viewModel.accountArrowVisibility}"
             app:constraint_referenced_ids="addTitle,addIcon"
             app:layout_constraintBottom_toBottomOf="@id/addTitle"
             app:layout_constraintEnd_toEndOf="@id/addIcon"

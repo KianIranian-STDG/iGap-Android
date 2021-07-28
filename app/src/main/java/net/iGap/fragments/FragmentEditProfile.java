@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,7 +57,7 @@ public class FragmentEditProfile extends BaseFragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+                return (T) new UserProfileViewModel(avatarHandler);
             }
         }).get(UserProfileViewModel.class);
     }
@@ -76,6 +77,12 @@ public class FragmentEditProfile extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        viewModel.showEditError.observe(getViewLifecycleOwner(), message -> {
+            if (message != null) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         viewModel.getShowDialogSelectCountry().observe(getViewLifecycleOwner(), isShow -> {
             if (isShow != null && isShow) {

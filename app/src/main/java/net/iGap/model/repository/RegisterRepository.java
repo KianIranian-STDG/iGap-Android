@@ -416,7 +416,7 @@ public class RegisterRepository {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
                 if (user.getId() == userId) {
-                    AccountManager.getInstance().updateCurrentUserName(user.getDisplayName());
+                    AccountManager.getInstance().updateCurrentNickName(user.getDisplayName());
                     AccountManager.getInstance().updatePhoneNumber(String.valueOf(user.getPhone()));
                     DbManager.getInstance().doRealmTask(realm -> {
                         realm.executeTransactionAsync(realm1 -> RealmUserInfo.putOrUpdate(realm1, user), () -> G.onUserInfoResponse = null);
