@@ -783,7 +783,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             iconView.setIcon(R.string.icon_speaker);
         else
             iconView.setIcon(R.string.icon_mute);
-        iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
+        iconView.setIconColor(Theme.getInstance().getPrimaryColor(context));
         frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
         TextView textView = new TextView(context);
@@ -793,7 +793,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         else
             textView.setText(R.string.muted);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        textView.setTextColor(Theme.getInstance().getPrimaryColor(context));
         frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 5 : 50, 15, isAppRtl ? 50 : 5, 15));
 
         Animation fadeIn = new AlphaAnimation(0, 1);
