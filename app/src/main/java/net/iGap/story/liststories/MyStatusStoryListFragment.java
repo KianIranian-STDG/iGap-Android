@@ -45,14 +45,17 @@ import net.iGap.story.storyviews.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import io.realm.Sort;
 
 import static net.iGap.G.isAppRtl;
 
 public class MyStatusStoryListFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
     private RecyclerListView recyclerListView;
     private ListAdapter adapter;
-    List<RealmStory> stories;
+    List<RealmStoryProto> storyProto;
     private FrameLayout floatActionLayout;
     private List<List<String>> displayNameList;
     public final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
@@ -66,6 +69,9 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     public void onDestroyView() {
         super.onDestroyView();
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_NEW, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_VIEW, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_DELETED, this);
     }
 
     @Nullable
@@ -116,13 +122,16 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_LIST_FETCHED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_NEW, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_VIEW, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_DELETED, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
         AbstractObject req = null;
         IG_RPC.Story_Get_Own_Story_Views story_get_own_story_views = new IG_RPC.Story_Get_Own_Story_Views();
         story_get_own_story_views.offset = 0;
-        story_get_own_story_views.limit = stories.get(0).getRealmStoryProtos().size();
+        story_get_own_story_views.limit = storyProto.size();
         req = story_get_own_story_views;
         getRequestManager().sendRequest(req, (response, error) -> {
             if (error == null) {
@@ -166,18 +175,18 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private void loadStories() {
         DbManager.getInstance().doRealmTransaction(realm -> {
             realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-            stories = realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).limit(50).findAll();
+            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
         });
-        if (stories != null && stories.size() > 0 && stories.get(0).getRealmStoryProtos().size() == 0) {
+        if (storyProto != null && storyProto.size() == 0) {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findAll().deleteAllFromRealm();
-                stories = realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).limit(50).findAll();
+                storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
             });
         }
         List<Long> userIdList = new ArrayList<>();
         userIdList.add(AccountManager.getInstance().getCurrentUser().getId());
         displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
-        if (stories != null && stories.size() > 0) {
+        if (storyProto != null && storyProto.size() > 0) {
             progressBar.setVisibility(View.GONE);
             recyclerListView.setVisibility(View.VISIBLE);
             adapter.addRow();
@@ -226,7 +235,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                     DbManager.getInstance().doRealmTransaction(realm -> {
                         realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
                         realm.where((RealmStoryProto.class)).equalTo("storyId", Long.valueOf(res.storyId)).findAll().deleteAllFromRealm();
-                        stories = realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findAll();
+                        storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
                     });
                     G.refreshRealmUi();
                     G.runOnUiThread(new Runnable() {
@@ -255,7 +264,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
-        if (id == EventManager.STORY_LIST_FETCHED) {
+        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED) {
             G.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -270,8 +279,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
         public void addRow() {
             rowSize = 0;
-            if (stories != null) {
-                for (int i = rowSize; i < stories.get(0).getRealmStoryProtos().size(); i++) {
+            if (storyProto != null) {
+                for (int i = rowSize; i < storyProto.size(); i++) {
                     recentStoryRow = rowSize++;
                 }
                 recentHeaderRow = rowSize++;
@@ -307,9 +316,9 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         storyCell.setTextColor(Color.BLACK, Color.GRAY);
                         storyCell.setDeleteStory(MyStatusStoryListFragment.this);
                         storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
-                        if (position < stories.get(0).getRealmStoryProtos().size()) {
-                            storyCell.setData(false, stories.get(0).getUserId(), stories.get(0).getRealmStoryProtos().get(position).getCreatedAt(), stories.get(0).getRealmStoryProtos().get(position).getViewCount(),displayNameList.get(0).get(0), displayNameList.get(0).get(1), stories.get(0).getRealmStoryProtos().get(position).getFile(), null);
-                            storyCell.setStoryId(stories.get(0).getRealmStoryProtos().get(position).getStoryId());
+                        if (position < storyProto.size()) {
+                            storyCell.setData(false, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), storyProto.get(position).getFile(), null);
+                            storyCell.setStoryId(storyProto.get(position).getStoryId());
                         }
                         storyCell.deleteIconVisibility(true, R.string.delete_icon);
                         storyCell.addIconVisibility(false);
