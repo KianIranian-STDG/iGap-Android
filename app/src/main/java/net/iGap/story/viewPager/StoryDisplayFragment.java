@@ -176,6 +176,9 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         if (counter != 0) {
             counter = restorePosition();
             storiesProgressView.startStories(counter);
+        } else {
+            setUpUi();
+            storiesProgressView.startStories();
         }
     }
 
@@ -190,7 +193,11 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     public void onDestroy() {
         super.onDestroy();
         AndroidUtils.removeAdjustResize(getActivity(), getClass().getSimpleName());
-        savePosition(counter);
+        if (stories.size() <= counter + 1) {
+            savePosition(0);
+        } else {
+            savePosition(counter);
+        }
     }
 
     private void updateStory() {
@@ -337,7 +344,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 if (!clickable) {
                     if (view == next) {
                         if (counter == stories.size() - 1) {
-                            pageViewOperator.nextPageView(clickable);
+                            pageViewOperator.nextPageView(false);
                         } else {
                             storiesProgressView.skip();
                         }
@@ -352,7 +359,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                 } else {
                     closeKeyboard(rootView);
                 }
-
             }
 
             @Override
@@ -388,7 +394,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         previous.setOnTouchListener(touchListener);
         next.setOnTouchListener(touchListener);
 
-        storiesProgressView.setStoriesCount(stories.size(), position = getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : -1);
+        storiesProgressView.setStoriesCount(stories.size(), position = getArguments() != null ? getArguments().getInt(EXTRA_POSITION) : counter);
         storiesProgressView.setAllStoryDuration(StoryProgress.DEFAULT_PROGRESS_DURATION);
         storiesProgressView.setStoriesListener(this);
     }
@@ -535,7 +541,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     @Override
     public void onComplete() {
-        savePosition(counter = 0);
+        savePosition(counter);
         pageViewOperator.nextPageView(clickable);
     }
 
