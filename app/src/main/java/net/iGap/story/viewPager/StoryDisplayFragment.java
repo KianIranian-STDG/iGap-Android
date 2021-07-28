@@ -1,5 +1,6 @@
 package net.iGap.story.viewPager;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -50,6 +51,7 @@ import net.iGap.structs.AttachmentObject;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
@@ -170,6 +172,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onResume() {
         super.onResume();
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         AndroidUtils.requestAdjustResize(getActivity(), getClass().getSimpleName());
         updateStory();
         onResumeCalled = true;
@@ -185,6 +188,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onPause() {
         super.onPause();
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         storiesProgressView.abandon();
         closeKeyboard(rootView);
     }
