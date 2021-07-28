@@ -143,16 +143,21 @@ public class StoryCell extends FrameLayout {
     public void setData(boolean isFromMyStatus, long userId, long time, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
         //   avatarHandler.getAvatar(new ParamWithAvatarType(imageView, userId).avatarType(AvatarHandler.AvatarType.USER));
         this.userId = userId;
-        topText.setText(displayName);
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
+            topText.setText(context.getString(R.string.my_status));
+        } else {
+            topText.setText(displayName);
+        }
+
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
             if (attachment.getLocalThumbnailPath() != null && BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()) != null) {
                 try {
-                        if (!isFromMyStatus) {
-                            circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
-                        } else {
-                            circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
-                        }
+                    if (!isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                    } else {
+                        circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
+                    }
                 } catch (Exception e) {
                     if (BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()) != null) {
                         if (!isFromMyStatus) {

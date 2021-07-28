@@ -21,6 +21,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.BaseMainFragments;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
@@ -46,7 +47,7 @@ import java.util.List;
 
 import static net.iGap.G.isAppRtl;
 
-public class StoryFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
+public class StoryFragment extends BaseMainFragments implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
 
     private RecyclerListView recyclerListView;
     private ListAdapter adapter;
@@ -267,6 +268,16 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
         }
     }
 
+    @Override
+    public boolean isAllowToBackPressed() {
+        return false;
+    }
+
+    @Override
+    public void scrollToTopOfList() {
+
+    }
+
     private class ListAdapter extends RecyclerListView.ItemAdapter {
 
         public void addRow() {
@@ -329,7 +340,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                             } else {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                             }
-                            storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), getString(R.string.my_status), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
+                            storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(position).get(0), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
                             storyCell.addIconVisibility(false);
                             storyCell.deleteIconVisibility(true);
                             isAddedUserStory = true;
@@ -343,7 +354,7 @@ public class StoryFragment extends BaseFragment implements ToolbarListener, Recy
                                     } else {
                                         storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                     }
-                                    storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), getString(R.string.my_status), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
+                                    storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(i).get(0), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
                                     storyCell.addIconVisibility(false);
                                     storyCell.deleteIconVisibility(true);
                                     isAddedUserStory = true;
