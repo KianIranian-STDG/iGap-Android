@@ -141,6 +141,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final MutableLiveData<Boolean> referralEnableLiveData = new MutableLiveData<>();
     private final ObservableField<String> referralNumberObservableField = new ObservableField<>("");
     public ObservableField<String> referralCountryCodeObservableField = new ObservableField<>("+98");
+    public ObservableField<String> referralMaskObservableField = new ObservableField<>("###-###-####");
 
     //ui
     private final SingleLiveEvent<Boolean> goToAddMemberPage = new SingleLiveEvent<>();
@@ -1260,6 +1261,9 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
         new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
             @Override
             public void onRepresent(String phoneNumber) {
+                if (phoneNumber.startsWith("98")){
+                    referralMaskObservableField.set("##-###-###-####");
+                }
                 referralNumberObservableField.set(phoneNumber);
                 referralError.set(R.string.empty_error_message);
                 if (phoneNumber.equals("")) {
