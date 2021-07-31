@@ -1645,5 +1645,8 @@
     <string name="share_file_link">Поделиться общедоступной ссылкой</string>
     <string name="can_not_support_file">Can not support file</string>
     <string name="waiting_dialog_reason_text">Чрезмерное количество попыток</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
 
 </resources>

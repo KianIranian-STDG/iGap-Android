@@ -1,71 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:ignore="MissingClass">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/root_ad_layout_banner"
+    <TextView
+        android:id="@id/tapsell_nativead_cta"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:visibility="visible" />
+
+    <ir.tapsell.sdk.nativeads.views.RatioImageView
+        android:id="@+id/tapsell_nativead_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/discovery_margin"
-        android:foreground="?android:attr/selectableItemBackground"
-        app:cardBackgroundColor="@color/transparent"
-        app:cardCornerRadius="@dimen/discovery_radius"
-        app:cardElevation="0dp"
-        app:cardPreventCornerOverlap="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_gravity="end|center"
+        android:scaleType="fitXY" />
 
-        <FrameLayout
-            android:id="@+id/tapsell_nativead_cta_view"
-            style="@style/IGapRootViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:layoutDirection="ltr">
-
-            <FrameLayout
-                android:id="@+id/adContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ir.tapsell.sdk.nativeads.views.RatioImageView
-                    android:id="@+id/tapsell_nativead_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center"
-                    android:scaleType="fitXY" />
-
-                <TextView
-                    android:id="@+id/tapsell_nativead_sponsored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/shape_favorite_channel_dark"
-                    android:gravity="start|center"
-                    android:paddingLeft="6.0dip"
-                    android:paddingTop="2.0dip"
-                    android:paddingRight="6.0dip"
-                    android:paddingBottom="2.0dip"
-                    android:text="@string/tapsell_advertisement"
-                    android:textColor="@color/black"
-                    android:textSize="11sp" />
-            </FrameLayout>
-        </FrameLayout>
-    </androidx.cardview.widget.CardView>
-
-    <View
-        android:id="@+id/tapCellWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="@+id/root_ad_layout_banner"
-        app:layout_constraintLeft_toLeftOf="@+id/root_ad_layout_banner"
-        app:layout_constraintRight_toRightOf="@+id/root_ad_layout_banner"
-        app:layout_constraintTop_toTopOf="@+id/root_ad_layout_banner" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tapsell_nativead_sponsored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/shape_favorite_channel_dark"
+        android:gravity="start|center"
+        android:paddingLeft="6.0dip"
+        android:paddingTop="2.0dip"
+        android:paddingRight="6.0dip"
+        android:paddingBottom="2.0dip"
+        android:text="@string/tapsell_advertisement"
+        android:textColor="@color/black"
+        android:textSize="11sp" />
+</com.google.android.gms.ads.nativead.NativeAdView>
 

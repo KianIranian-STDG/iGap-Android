@@ -133,22 +133,22 @@
                 style="@style/iGapEditTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp8"
                 android:enabled="@{viewModel.referralEnableLiveData}"
                 android:gravity="center"
+                android:hint="@string/referral_code"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="phone"
                 android:maxLength="18"
-                android:maxLines="11"
+                android:maxLines="1"
                 android:text="@={viewModel.referralNumberObservableField}"
                 android:textAlignment="gravity"
-                android:textSize="@dimen/standardTextSize"
                 android:textColorHint="?iGapHintTextColor"
-                android:layout_marginTop="@dimen/dp8"
-                android:hint="@string/referral_code"
-                app:layout_constraintRight_toRightOf="@id/name"
+                android:textSize="@dimen/standardTextSize"
                 app:layout_constraintLeft_toRightOf="@id/countryCode"
+                app:layout_constraintRight_toRightOf="@id/name"
                 app:layout_constraintTop_toBottomOf="@id/email"
-                app:mask="###-###-####"/>
+                app:mask="@{viewModel.referralMaskObservableField}" />
 
             <TextView
                 android:id="@+id/referralError"

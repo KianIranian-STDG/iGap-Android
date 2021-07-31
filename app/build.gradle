@@ -26,8 +26,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 29
         multiDexEnabled true
-        versionCode 249
-        versionName "2.2.2.beta1"
+        versionCode 251
+        versionName "2.2.2.beta3"
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
@@ -48,12 +48,12 @@ android {
         buildConfigField("String", "INVITE_FRIEND_LINK", INVITE_FRIEND_LINK)
         buildConfigField("String", "FAQ_LINK", FAQ_LINK)
         buildConfigField("String", "UPDATE_LINK", UPDATE_LINK)
+        buildConfigField("int", "SHOW_RATE_DIALOG_PERIOD_HOURE", SHOW_RATE_DIALOG_PERIOD_HOURE)
     }
 
-
     compileOptions {
-        targetCompatibility 1.8 // never don't decrease it
-        sourceCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8 // never don't decrease it
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dataBinding {
@@ -433,11 +433,11 @@ dependencies {
     }
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
-    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:1.2.6'
+    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.3'
 
     //for adMob
 
-    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'com.google.android.gms:play-services-ads:20.2.0'
 
     implementation project(path: ':lvl')
     implementation 'com.mikepenz:fastadapter:3.2.5'
@@ -500,6 +500,7 @@ dependencies {
     // don't upgrade this lib
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.squareup.picasso:picasso:2.71828' // JUST USE FOR PEC MPL
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
@@ -545,6 +546,9 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     implementation project(path: ':video')
+    // This dependency is downloaded from the Google’s Maven repository.
+    // So, make sure you also include that repository in your project's build.gradle file.
+    implementation 'com.google.android.play:core:1.10.0'
 }
 
 configurations.all {

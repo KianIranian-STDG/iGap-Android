@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -14,7 +16,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -49,6 +50,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.CallActivity;
 import net.iGap.adapter.RoomListAdapter;
 import net.iGap.adapter.items.cells.RoomListCell;
+import net.iGap.fragments.populaChannel.RatingDialog;
 import net.iGap.helper.AsyncTransaction;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
@@ -96,9 +98,9 @@ import org.jetbrains.annotations.NotNull;
 import org.paygear.WalletActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Realm;
@@ -155,6 +157,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     private final AccelerateDecelerateInterpolator floatingInterpolator = new AccelerateDecelerateInterpolator();
     private int firstVisibleItemPosition;
     private int firstVisibleItemPositionOffset;
+    private SharedPreferences sharedPreferences;
 
     public static MainFragment newInstance() {
         Bundle bundle = new Bundle();
@@ -166,7 +169,9 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
         isNeedResume = true;
+
     }
 
 
@@ -377,7 +382,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
                     }
                 });
 
-        toolbarItems.addItemWithWidth(walletTag,R.string.icon_QR_code,54);
+        toolbarItems.addItemWithWidth(walletTag, R.string.icon_QR_code, 54);
         if (PassCode.getInstance().isPassCode()) {
             passCodeItem = toolbar.addItem(passCodeTag, R.string.icon_unlock, Color.WHITE);
         }
@@ -668,12 +673,12 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             } else {
                 hasUnPin = true;
             }
-            if(room.getType() == CHANNEL){
+            if (room.getType() == CHANNEL) {
                 hasChannel = true;
             }
         }
 
-        if(hasChannel){
+        if (hasChannel) {
             clearHistoryItem.setVisibility(View.GONE);
         } else {
             clearHistoryItem.setVisibility(View.VISIBLE);
@@ -778,7 +783,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
             iconView.setIcon(R.string.icon_speaker);
         else
             iconView.setIcon(R.string.icon_mute);
-        iconView.setIconColor(Theme.getInstance().getPrimaryTextIconColor(context));
+        iconView.setIconColor(Theme.getInstance().getPrimaryColor(context));
         frameLayout.addView(iconView, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, 20, 16, 20, 20));
 
         TextView textView = new TextView(context);
@@ -788,14 +793,14 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         else
             textView.setText(R.string.muted);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setTextColor(Theme.getInstance().getTitleTextColor(context));
+        textView.setTextColor(Theme.getInstance().getPrimaryColor(context));
         frameLayout.addView(textView, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT, isAppRtl ? Gravity.RIGHT : Gravity.LEFT, isAppRtl ? 5 : 50, 15, isAppRtl ? 50 : 5, 15));
 
         Animation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(1000);
         iconView.setAnimation(fadeIn);
 
-        Snackbar snackbar = Snackbar.make(Objects.requireNonNull(getView()), "", Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(requireView(), "", Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
         layout.setBackgroundColor(Color.TRANSPARENT);
         layout.addView(frameLayout, 0);
@@ -885,6 +890,21 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
     }
 
+    @SuppressLint("ResourceType")
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0) {
+            long currentTimeStamp = new Date().getTime();
+            long loginTimeStamp = sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0);
+            long showDialogPeriodTimeMs = BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE * 60 * 60 * 1000;
+            if ((currentTimeStamp - loginTimeStamp >= showDialogPeriodTimeMs) &&
+                    !sharedPreferences.getBoolean(SHP_SETTING.KEY_DO_USER_RATE_APP, false)) {
+                RatingDialog.show(getActivity(), currentTimeStamp);
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -894,6 +914,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
     }
+
     private void onScannerClickListener() {
         DbManager.getInstance().doRealmTask(realm -> {
             String phoneNumber = "";
@@ -921,6 +942,7 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
 
         });
     }
+
     private void onConnectionStateChange(final ConnectionState connectionState) {
         if (connectionState == null) {
             return;

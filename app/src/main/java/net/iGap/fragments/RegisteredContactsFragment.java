@@ -460,8 +460,9 @@ public class RegisteredContactsFragment extends BaseMainFragments implements OnC
                     }
                 });
             } else {
-//                "Following method commented to provide sending server request every time that this fragment open"
-//                LoginActions.importContact();
+                if (results.size() == 0) {
+                    LoginActions.importContact();
+                }
                 prgMainLoader.setVisibility(View.GONE);
             }
         } catch (IOException e) {
