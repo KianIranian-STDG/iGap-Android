@@ -301,7 +301,10 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 progressView.setVisibility(View.VISIBLE);
                 new RequestChannelAddAdmin().channelAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
-                        G.runOnUiThread(() -> onLeftIconClickListener(null));
+                        G.runOnUiThread(() -> {
+                            onLeftIconClickListener(null);
+                            progressView.setVisibility(View.GONE);
+                        });
                     } else if (response == null) {
                         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
                         G.runOnUiThread(() -> progressView.setVisibility(View.GONE));
@@ -320,7 +323,10 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 progressView.setVisibility(View.VISIBLE);
                 new RequestGroupAddAdmin().groupAddAdmin(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
-                        G.runOnUiThread(() -> onLeftIconClickListener(null));
+                        G.runOnUiThread(() -> {
+                            progressView.setVisibility(View.GONE);
+                            onLeftIconClickListener(null);
+                        });
                     } else if (response == null) {
                         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
                         G.runOnUiThread(() -> progressView.setVisibility(View.GONE));
@@ -342,7 +348,10 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 progressView.setVisibility(View.VISIBLE);
                 new RequestGroupChangeMemberRights().groupChangeRights(roomId, builder.build(), (response, error) -> {
                     if (error == null) {
-                        G.runOnUiThread(() -> onLeftIconClickListener(null));
+                        G.runOnUiThread(() -> {
+                            progressView.setVisibility(View.GONE);
+                            onLeftIconClickListener(null);
+                        });
                     } else if (response == null) {
                         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
                         G.runOnUiThread(() -> progressView.setVisibility(View.GONE));
@@ -362,7 +371,10 @@ public class ChatRightsFragment extends BaseFragment implements ToolbarListener,
                 progressView.setVisibility(View.VISIBLE);
                 new RequestGroupChangeMemberRights().groupChangeMemberRights(roomId, userId, builder.build(), (response, error) -> {
                     if (error == null) {
-                        G.runOnUiThread(() -> onLeftIconClickListener(null));
+                        G.runOnUiThread(() -> {
+                            progressView.setVisibility(View.GONE);
+                            onLeftIconClickListener(null);
+                        });
                     } else if (response == null) {
                         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) error;
                         G.runOnUiThread(() -> progressView.setVisibility(View.GONE));

@@ -608,9 +608,6 @@ public class FragmentShowMember extends BaseFragment implements ToolbarListener,
 
     private void loadMoreMember() {
         if (isOne) {
-            if (progressBar != null) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
             isOne = false;
             mCurrentUpdateCount = 0;
 
