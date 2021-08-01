@@ -321,7 +321,7 @@ public class RoomListCell extends FrameLayout {
                 int roomTop = h2 - roomNameHeight;
                 int nameLeft = 0;
                 int nameRight = 0;
-                roomNameTv.measure(makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY), makeMeasureSpec(roomNameHeight, AT_MOST));
+                roomNameTv.measure(makeMeasureSpec(LayoutCreator.getTextWidth(roomNameTv), EXACTLY), makeMeasureSpec(roomNameHeight, AT_MOST));
 
                 if (haveChatIcon) {
                     int chatIconWidth = LayoutCreator.getTextWidth(chatIconTv);
@@ -338,17 +338,21 @@ public class RoomListCell extends FrameLayout {
 
                     if (isRtl) {
                         nameRight = chatIconLeft - smallMargin;
+                        nameLeft = chatIconLeft - roomNameTv.getMeasuredWidth() - standardMargin;
                     } else {
                         nameLeft = chatIconRight + smallMargin;
+                        nameRight = chatIconRight + roomNameTv.getMeasuredWidth() + smallMargin;
                     }
                 } else {
                     if (isRtl) {
                         nameRight = avatarLeft - standardMargin;
+                        nameLeft = avatarLeft - roomNameTv.getMeasuredWidth() - standardMargin;
                     } else {
                         nameLeft = avatarRight + standardMargin;
+                        nameRight = avatarRight + roomNameTv.getMeasuredWidth() + standardMargin;
                     }
                 }
-
+                roomNameTv.layout(nameLeft, roomTop, nameRight, h2);
                 if (haveDate) {
                     int dateWidth = LayoutCreator.getTextWidth(messageDataTv);
                     int dateHeight = LayoutCreator.getTextHeight(messageDataTv);
@@ -362,43 +366,40 @@ public class RoomListCell extends FrameLayout {
 
                     if (roomVerified) {
                         int verifyWidth = LayoutCreator.getTextWidth(verifyIconTv);
-
                         int t = (dateHeight - verifyWidth) / 2;
-                        int verifyTop = dateTop + t;
 
-                        int verifyRight = isRtl ? dateRight + verifyWidth + smallMargin : dateLeft - smallMargin;
-                        int verifyLeft = isRtl ? dateRight + smallMargin : dateLeft - verifyWidth - smallMargin;
+                        int muteRight;
+                        int muteLeft;
 
-                        verifyIconTv.measure(makeMeasureSpec(verifyWidth, AT_MOST), makeMeasureSpec(verifyWidth, AT_MOST));
-                        verifyIconTv.layout(verifyLeft, verifyTop, verifyRight, h2 - t);
-
+                        int verifyRight;
+                        int verifyLeft;
                         if (isMute) {
                             int muteWidth = LayoutCreator.getTextWidth(muteIconTv);
-
                             int muteTop = dateTop + t;
 
-                            int muteRight = isRtl ? verifyRight + muteWidth + smallMargin : verifyLeft - smallMargin;
-                            int muteLeft = isRtl ? verifyRight + smallMargin : verifyLeft - muteWidth - smallMargin;
+                            muteRight = isRtl ? nameLeft - smallMargin : nameRight + muteWidth + smallMargin;
+                            muteLeft = isRtl ? nameLeft - muteWidth - smallMargin : nameRight + smallMargin;
 
                             muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
                             muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
 
-                            if (isRtl)
-                                nameLeft = muteRight + smallMargin;
-                            else
-                                nameRight = muteLeft - smallMargin;
+                            verifyRight = isRtl ? muteLeft - smallMargin : muteRight + verifyWidth + smallMargin;
+                            verifyLeft = isRtl ? muteLeft - verifyWidth - smallMargin : muteRight + smallMargin;
                         } else {
-                            if (isRtl)
-                                nameLeft = verifyRight + smallMargin;
-                            else
-                                nameRight = verifyLeft - smallMargin;
+                            verifyRight = isRtl ? nameLeft : nameRight + verifyWidth + smallMargin;
+                            verifyLeft = isRtl ? nameLeft - verifyWidth - smallMargin : nameRight + smallMargin;
                         }
+
+                        int verifyTop = dateTop + t;
+
+                        verifyIconTv.measure(makeMeasureSpec(verifyWidth, AT_MOST), makeMeasureSpec(verifyWidth, AT_MOST));
+                        verifyIconTv.layout(verifyLeft, verifyTop, verifyRight, h2 - t);
                     } else {
                         if (isMute) {
                             int muteWidth = LayoutCreator.getTextWidth(muteIconTv);
 
-                            int muteRight = isRtl ? dateRight + muteWidth + smallMargin : dateLeft - smallMargin;
-                            int muteLeft = isRtl ? dateRight + smallMargin : dateLeft - muteWidth - smallMargin;
+                            int muteRight = isRtl ? nameLeft -  smallMargin : nameRight + muteWidth + smallMargin;
+                            int muteLeft = isRtl ?  + nameLeft - muteWidth - smallMargin : nameRight + smallMargin;
 
                             int t = (dateHeight - muteWidth) / 2;
                             int muteTop = dateTop + t;
@@ -406,23 +407,9 @@ public class RoomListCell extends FrameLayout {
 
                             muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
                             muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
-
-                            if (isRtl)
-                                nameLeft = muteRight + smallMargin;
-                            else
-                                nameRight = muteLeft - smallMargin;
-                        } else {
-                            if (isRtl)
-                                nameLeft = dateRight + smallMargin;
-                            else
-                                nameRight = dateLeft - smallMargin;
                         }
                     }
-                } else {
-                    if (!isRtl)
-                        nameRight = getWidth() - paddingEnd;
                 }
-                roomNameTv.layout(nameLeft, roomTop, nameRight, h2);
             }
 
             if (haveLastMessage) {
