@@ -109,6 +109,9 @@ public class RegisterRepository {
     }
 
     public long getResendDelayTime() {
+        if (resendDelayTime <= 0) {
+            resendDelayTime = 60;
+        }
         return resendDelayTime;
     }
 

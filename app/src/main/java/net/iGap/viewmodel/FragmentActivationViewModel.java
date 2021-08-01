@@ -1,6 +1,5 @@
 package net.iGap.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -53,7 +52,7 @@ public class FragmentActivationViewModel extends ViewModel {
 
     public FragmentActivationViewModel() {
         repository = RegisterRepository.getInstance();
-        timerValue.set("60");
+        timerValue.set(String.format(Locale.getDefault(), "%02d", repository.getResendDelayTime()));
         counterTimer(repository.getResendDelayTime());
 
         String phoneNumber = repository.getPhoneNumber();
@@ -90,8 +89,6 @@ public class FragmentActivationViewModel extends ViewModel {
         countDownTimer = new CountDownTimer(resendCodeDelay * DateUtils.SECOND_IN_MILLIS, Config.COUNTER_TIMER_DELAY) {
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
                 timerValue.set(String.format(Locale.getDefault(), "%02d", seconds));
                 currentTimePosition.setValue(seconds * 6);
             }
