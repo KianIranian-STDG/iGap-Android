@@ -1462,19 +1462,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     public boolean onLongClick(View view) {
                         isSelectedMode = true;
                         setSelectedItem(getPosition());
-                        createActionMode();
-                        sharedMediaToolbar.showActionToolbar();
-                        AnimatorSet animatorSet = new AnimatorSet();
-                        ArrayList<Animator> animators = new ArrayList<>();
-                        for (int a = 0; a < actionModeViews.size(); a++) {
-                            View animView = actionModeViews.get(a);
-                            animView.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
-                            animators.add(ObjectAnimator.ofFloat(animView, View.SCALE_Y, 0.1f, 1.0f));
-                        }
-                        animatorSet.playTogether(animators);
-                        animatorSet.setDuration(180);
-                        animatorSet.start();
-
+                        showActionMode();
                         return true;
                     }
                 });
@@ -1501,10 +1489,26 @@ public class FragmentShearedMedia extends BaseFragment {
                     public boolean onLongClick(View v) {
                         isSelectedMode = true;
                         setSelectedItem(getPosition());
+                        showActionMode();
                         return true;
                     }
                 });
             }
+        }
+
+        private void showActionMode(){
+            createActionMode();
+            sharedMediaToolbar.showActionToolbar();
+            AnimatorSet animatorSet = new AnimatorSet();
+            ArrayList<Animator> animators = new ArrayList<>();
+            for (int a = 0; a < actionModeViews.size(); a++) {
+                View animView = actionModeViews.get(a);
+                animView.setPivotY(Toolbar.getCurrentActionBarHeight() / 2);
+                animators.add(ObjectAnimator.ofFloat(animView, View.SCALE_Y, 0.1f, 1.0f));
+            }
+            animatorSet.playTogether(animators);
+            animatorSet.setDuration(180);
+            animatorSet.start();
         }
 
         public class ViewHolderTime extends RecyclerView.ViewHolder {
