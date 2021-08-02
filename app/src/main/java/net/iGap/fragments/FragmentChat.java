@@ -789,7 +789,7 @@ public class FragmentChat extends BaseFragment
                     rootView.findViewById(R.id.ac_ll_join).setVisibility(View.GONE);
                 }
                 if (pinedMessageLayout != null) {
-                    changePinnedMessageVisibility(true,false,MusicPlayer.isMusicPlyerEnable,CallManager.getInstance().isCallAlive());
+                    changePinnedMessageVisibility(true, false, MusicPlayer.isMusicPlyerEnable, CallManager.getInstance().isCallAlive());
                 }
                 if (vgSpamUser != null) {
                     vgSpamUser.setVisibility(View.GONE);
@@ -866,7 +866,7 @@ public class FragmentChat extends BaseFragment
 
                 if (pinedMessageLayout != null) {
                     if (isPinAvailable) {
-                        changePinnedMessageVisibility(true,true,MusicPlayer.isMusicPlyerEnable,CallManager.getInstance().isCallAlive());
+                        changePinnedMessageVisibility(true, true, MusicPlayer.isMusicPlyerEnable, CallManager.getInstance().isCallAlive());
                     }
                 }
 
@@ -5422,7 +5422,7 @@ public class FragmentChat extends BaseFragment
 
             case R.string.save_to_gallery:
                 prgWaiting.setVisibility(View.VISIBLE);
-                saveSelectedMessageToGallery(message, adapterPosition,new OnFileCopyComplete() {
+                saveSelectedMessageToGallery(message, adapterPosition, new OnFileCopyComplete() {
                     @Override
                     public void complete(int successMessage) {
                         prgWaiting.setVisibility(View.GONE);
@@ -5433,7 +5433,7 @@ public class FragmentChat extends BaseFragment
 
             case R.string.save_to_Music:
                 prgWaiting.setVisibility(View.VISIBLE);
-                saveSelectedMessageToMusic(message, adapterPosition,new OnFileCopyComplete() {
+                saveSelectedMessageToMusic(message, adapterPosition, new OnFileCopyComplete() {
                     @Override
                     public void complete(int successMessage) {
                         prgWaiting.setVisibility(View.GONE);
@@ -5553,7 +5553,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void saveSelectedMessageToMusic(MessageObject message, int pos,OnFileCopyComplete onFileCopyComplete) {
+    private void saveSelectedMessageToMusic(MessageObject message, int pos, OnFileCopyComplete onFileCopyComplete) {
         String filename;
         String filepath;
 
@@ -5565,7 +5565,7 @@ public class FragmentChat extends BaseFragment
             filepath = message.getAttachment().filePath != null ? message.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cacheId, message.getAttachment().name, message.messageType);
         }
         if (new File(filepath).exists()) {
-            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder,onFileCopyComplete);
+            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder, onFileCopyComplete);
         } else {
             final int _messageType = message.forwardedMessage != null ? message.forwardedMessage.messageType : message.messageType;
             String cacheId = message.forwardedMessage != null ? message.forwardedMessage.getAttachment().cacheId : message.getAttachment().cacheId;
@@ -5588,7 +5588,7 @@ public class FragmentChat extends BaseFragment
                         G.handler.post(() -> {
                             if (arg.status == Status.SUCCESS || arg.status == Status.LOADING) {
                                 if (arg.data != null && arg.data.getProgress() == 100) {
-                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder,onFileCopyComplete);
+                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder, onFileCopyComplete);
                                 }
                             }
                         });
@@ -6495,7 +6495,10 @@ public class FragmentChat extends BaseFragment
             bundle.putInt(RealmConstants.REALM_MESSAGE_TYPE, messageObject.messageType);
             bundle.putLong(RealmConstants.REALM_SELECTED_IMAGE, messageObject.id);
             fragment.setArguments(bundle);
-
+            if (keyboardViewVisible) {
+                mToolbar.closeSearchBox(true);
+                hideKeyboard();
+            }
             new HelperFragment(getActivity().getSupportFragmentManager(), fragment).setReplace(false).load();
         }
     }
