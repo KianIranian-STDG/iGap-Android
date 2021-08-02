@@ -29,6 +29,7 @@ import net.iGap.module.FontIconTextView;
 import net.iGap.module.Theme;
 
 import static android.view.Gravity.BOTTOM;
+import static android.view.Gravity.CENTER;
 import static android.view.Gravity.CENTER_VERTICAL;
 
 public class NewChatItemHolder extends RecyclerView.ViewHolder {
@@ -132,6 +133,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         setTextSize(messageTimeTv, R.dimen.verySmallTextSize);
         messageTimeTv.setPadding(dpToPx(2), 0, dpToPx(2), 0);
         messageTimeTv.setSingleLine(true);
+        messageTimeTv.setGravity(CENTER);
         setTypeFace(messageTimeTv);
 
         voteUpTv.setSingleLine(true);
