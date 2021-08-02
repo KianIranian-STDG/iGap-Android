@@ -120,6 +120,7 @@ public class SearchFragment extends BaseFragment {
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        openKeyBoard();
         initComponent(view);
         initRecycleView();
         if (searchTxt != null) {
