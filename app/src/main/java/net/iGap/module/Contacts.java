@@ -39,7 +39,7 @@ import io.realm.RealmResults;
  */
 public class Contacts {
 
-    public static final int PHONE_CONTACT_FETCH_LIMIT = 100;
+    public static final int PHONE_CONTACT_FETCH_LIMIT = 1000;
     public static boolean isSendingContactToServer = false;
 
     //Local Fetch Contacts Fields
@@ -299,60 +299,42 @@ public class Contacts {
         String startContactId = ">=" + localPhoneContactId;
         String selection = ContactsContract.Contacts._ID + startContactId;
 
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-
-        if (cur != null) {
-            if (cur.getCount() > 0) {
-                while (cur.moveToNext()) {
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null,selection, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
                     if (!getContact) {
                         return;
                     }
-
-                    int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                    localPhoneContactId = contactId + 1;//plus for fetch next contact in future query
-
-                    try {
-                        if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                            Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                    new String[]{String.valueOf(contactId)}, null);
-                            if (pCur != null) {
-                                while (pCur.moveToNext()) {
-                                    String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                    if (number != null) {
-                                        String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                                        if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
-                                            StructListOfContact itemContact = new StructListOfContact();
-                                            itemContact.setDisplayName(name);
-                                            itemContact.setPhone(number);
-                                            contactList.add(itemContact);
-                                            tempList.add(number.replace("[\\s\\-()]", "").replace(" ", ""));
-                                        }
-                                    }
-                                }
-                                pCur.close();
+                    String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    localPhoneContactId = Integer. parseInt(contactId) + 1;//plus for fetch next contact in future query
+                    Cursor phones = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                    if (phones != null){
+                        while (phones.moveToNext()) {
+                            String number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                            if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
+                                StructListOfContact itemContact = new StructListOfContact();
+                                itemContact.setDisplayName(name);
+                                itemContact.setPhone(number);
+                                contactList.add(itemContact);
+                                tempList.add(number.replace("[\\s\\-()]", "").replace(" ", ""));
                             }
                         }
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    } catch (NullPointerException e1) {
-                        e1.printStackTrace();
+                        phones.close();
                     }
-
                     fetchCount++;
-
                     if (fetchCount > PHONE_CONTACT_FETCH_LIMIT) {
                         break;
                     }
-
                 }
             }
-            cur.close();
+            cursor.close();
         }
 
         if (fetchCount < PHONE_CONTACT_FETCH_LIMIT) {
             isEndLocal = true;
         }
-
 
         if (G.onPhoneContact != null) {
             G.onPhoneContact.onPhoneContact(contactList, isEndLocal);
