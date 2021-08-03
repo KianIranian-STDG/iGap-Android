@@ -31,6 +31,9 @@ import net.iGap.realm.RealmRoomMessage;
 
 import org.parceler.Parcels;
 
+import javax.annotation.Nullable;
+
+import io.realm.ObjectChangeSet;
 import io.realm.RealmObjectChangeListener;
 
 /**

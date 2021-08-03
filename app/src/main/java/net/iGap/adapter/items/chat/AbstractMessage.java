@@ -1283,6 +1283,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             String filePath = null;
             if (attachment.filePath != null) {
                 filePath = attachment.filePath;
+                if (!new File(filePath).exists()) {
+                    attachment.filePath = filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, messageObject.messageType);
+                }
             } else if (messageObject.isFileExistWithCacheId(false)) {
                 filePath = messageObject.getCacheFile(false);
             }
@@ -1514,7 +1517,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     switch (arg.status) {
                         case SUCCESS:
                             if (arg.data != null) {
-                                attachment.thumbnailPath = arg.data.getFilePath();
+                                if (arg.data.getSelector() == ProtoFileDownload.FileDownload.Selector.FILE_VALUE) {
+                                    attachment.filePath = arg.data.getFilePath();
+                                } else {
+                                    attachment.thumbnailPath = arg.data.getFilePath();
+                                }
                             }
                             if (attachment.isFileExistsOnLocalAndIsImage(messageObject)) {
                                 onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
@@ -1938,7 +1945,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     attachment.filePath = downloadedMessage.attachment.filePath;
                     attachment.token = downloadedMessage.attachment.token;
                     ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(downloadedMessage.messageType);
-                    onProgressFinish(holder,downloadedMessage.attachment,messageType.getNumber());
+                    onProgressFinish(holder, downloadedMessage.attachment, messageType.getNumber());
                     loadImageOrThumbnail(messageType);
                 }
             });

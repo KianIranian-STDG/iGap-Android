@@ -190,7 +190,7 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
             HelperDataUsage.increaseDownloadFiles(fileObject.messageType);
             moveTempToDownloadedDir();
             fileObject.progress = 100;
-            notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
+            notifyObservers(Resource.success(new Progress(fileObject.progress, selector == Selector.FILE_VALUE ? fileObject.destFile.getAbsolutePath() : fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
             notifyDownloadStatus(HttpDownloader.DownloadStatus.DOWNLOADED);
 
         } catch (Exception e) {
@@ -200,9 +200,9 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
     public void onProgress(int progress) {
         if (selector == Selector.FILE_VALUE)
-            notifyObservers(Resource.loading(new Progress(progress, fileObject.destFile.getAbsolutePath(), fileObject.fileToken)));
+            notifyObservers(Resource.loading(new Progress(progress, fileObject.destFile.getAbsolutePath(), fileObject.fileToken, Selector.FILE_VALUE)));
         else
-            notifyObservers(Resource.loading(new Progress(progress, fileObject.tempFile.getAbsolutePath(), fileObject.fileToken)));
+            notifyObservers(Resource.loading(new Progress(progress, fileObject.tempFile.getAbsolutePath(), fileObject.fileToken, selector)));
     }
 
     public void onError(@NotNull Throwable throwable) {
@@ -252,11 +252,13 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
         int progress;
         String filePath;
         String token;
+        int selector;
 
-        public Progress(int progress, String filePath, String fileToken) {
+        public Progress(int progress, String filePath, String fileToken, int selector) {
             this.progress = progress;
             this.filePath = filePath;
             this.token = fileToken;
+            this.selector = selector;
         }
 
         public int getProgress() {
@@ -269,6 +271,10 @@ public class HttpRequest extends Observable<Resource<HttpRequest.Progress>> impl
 
         public String getToken() {
             return token;
+        }
+
+        public int getSelector() {
+            return selector;
         }
     }
 
