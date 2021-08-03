@@ -131,11 +131,13 @@ public class FragmentCall extends BaseMainFragments {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        realmResults = null;
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
         HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -238,7 +240,7 @@ public class FragmentCall extends BaseMainFragments {
         });
 
         ViewGroup layoutToolbar = view.findViewById(R.id.fc_layout_toolbar);
-        layoutToolbar.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM,0,60,0,0));
+        layoutToolbar.addView(mediaContainer, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 38, Gravity.BOTTOM, 0, 60, 0, 0));
         layoutToolbar.addView(callToolbar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, 64, Gravity.TOP));
 
         mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
@@ -394,6 +396,7 @@ public class FragmentCall extends BaseMainFragments {
         animatorSet.setDuration(180);
         animatorSet.start();
     }
+
     private void createToolbarActions() {
         if (callToolbar.isInActionMode())
             return;
@@ -609,9 +612,9 @@ public class FragmentCall extends BaseMainFragments {
                 try {
 
                     if (mSelectedLogList.contains(item)) {
-                        viewHolder.checkBox.setChecked(true,true);
+                        viewHolder.checkBox.setChecked(true, true);
                     } else {
-                        viewHolder.checkBox.setChecked(false,true);
+                        viewHolder.checkBox.setChecked(false, true);
                     }
 
                 } catch (Exception e) {
@@ -620,7 +623,7 @@ public class FragmentCall extends BaseMainFragments {
 
             } else {
                 viewHolder.checkBox.setVisibility(View.GONE);
-                viewHolder.checkBox.setChecked(false,true);
+                viewHolder.checkBox.setChecked(false, true);
             }
 
             switch (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.Status.valueOf(item.getStatus())) {
