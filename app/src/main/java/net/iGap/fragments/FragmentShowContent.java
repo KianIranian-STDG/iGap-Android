@@ -95,6 +95,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private boolean initialViewPager = true;
     private ImageButton imgPlay;
     private LinearLayout toolbarLl;
+    private int currentPosition = 0;
 
     public static FragmentShowContent newInstance() {
         return new FragmentShowContent();
@@ -181,7 +182,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
             List messageTypesList = Arrays.asList(messageTypeImageVideo);
             ArrayList<RealmRoomMessage> roomMessagesImageVideo = new ArrayList<>(realmRoomMessages);
-            for (RealmRoomMessage roomMessageObj: realmRoomMessages) {
+            for (RealmRoomMessage roomMessageObj : realmRoomMessages) {
                 if (roomMessageObj.forwardMessage != null && !messageTypesList.contains(roomMessageObj.forwardMessage.messageType)) {
                     roomMessagesImageVideo.remove(roomMessageObj);
                 }
@@ -265,11 +266,19 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 imgPlay.setVisibility(View.GONE);
                 toolbarLl.setVisibility(View.GONE);
 
+
                 try {
                     WeakReference<PlayerView> weakPlayerView = videos.get(position);
                     if (weakPlayerView != null) {
                         MessageObject messageObject = MessageObject.create(roomMessages.get(position));
                         MessageObject finalMessageObject = RealmRoomMessage.getFinalMessage(messageObject);
+                        if (messageObject != null) {
+                            if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
+                                imgPlay.setVisibility(View.GONE);
+                            } else {
+                                imgPlay.setVisibility(View.VISIBLE);
+                            }
+                        }
                         String path = getFilePath(finalMessageObject);
                         ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(path));
                         exoPlayer.prepare(mediaSource);
@@ -281,6 +290,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
         };
         viewPager.registerOnPageChangeCallback(viewPagerListener);
@@ -333,7 +347,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
             File file = new File(path);
             if (file.exists()) {
                 if (messageType == ProtoGlobal.RoomMessageType.VIDEO_VALUE || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE) {
-                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder,null);
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder, null);
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
                     HelperSaveFile.savePicToGallery(path, true, new OnFileCopyComplete() {
                         @Override
@@ -356,7 +370,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         if (result.length() < 1) {
             String mimeType = DownloadObject.extractMime(at.name);
             String path = AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
-            result =  new File(path + "/" + at.cacheId + "_" + mimeType).getAbsolutePath();
+            result = new File(path + "/" + at.cacheId + "_" + mimeType).getAbsolutePath();
             return result;
         }
         return result;
@@ -407,10 +421,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
         }
     }
 
-    @Override
-    public void setPlayButtonVisibility(int state) {
-        imgPlay.setVisibility(state);
-    }
 
     @Override
     public void setToolbarVisibility(int state) {
@@ -576,7 +586,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                     if (Downloader.getInstance(currentAccount).isDownloading(_cashID)) {
                         progress.withDrawable(R.drawable.ic_download, true);
                         Downloader.getInstance(currentAccount).cancelDownload(_cashID);
-                    }else {
+                    } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
                         startDownload(position, progress, zoomableImageView, roomMessages);
                     }
@@ -584,7 +594,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
                 playerView.hideController();
                 playerView.setControllerVisibilityListener(visibility -> {
-                    mShowContentListener.setPlayButtonVisibility(visibility);
                     mShowContentListener.setToolbarVisibility(visibility);
                     mediaInfoCl.setVisibility(visibility);
                 });
@@ -653,13 +662,11 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
             private void showImageView() {
                 playerView.setVisibility(View.GONE);
-                mShowContentListener.setPlayButtonVisibility(View.GONE);
                 zoomableImageView.setVisibility(View.VISIBLE);
             }
 
             private void showPlayerView() {
                 playerView.setVisibility(View.VISIBLE);
-                mShowContentListener.setPlayButtonVisibility(View.VISIBLE);
                 zoomableImageView.setVisibility(View.GONE);
             }
         }
@@ -694,7 +701,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 interface ShowMediaListener {
     void videoAttached(WeakReference<PlayerView> playerView, int position, boolean callPageSelected);
 
-    void setPlayButtonVisibility(int state);
 
     void setToolbarVisibility(int state);
 }
