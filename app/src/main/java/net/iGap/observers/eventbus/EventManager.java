@@ -66,6 +66,8 @@ public class EventManager {
     public static final int CHANNEL_UPDATE_VOTE = eventId++;
     public static final int CHANNEL_UPDATE_SIGNATURE = eventId++;
 
+    public static final int NEXT_VOICE = eventId++;
+
     private final SparseArray<ArrayList<EventDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> removeAfterBroadcast = new SparseArray<>();
     private final SparseArray<ArrayList<EventDelegate>> addAfterBroadcast = new SparseArray<>();

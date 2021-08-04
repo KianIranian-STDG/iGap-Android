@@ -104,6 +104,30 @@
         app:layout_constraintTop_toTopOf="@id/createTimeTitle" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/activeTimeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:text="@string/last_connectivity"
+        android:textColor="?iGapTitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintStart_toStartOf="@id/deviceTitle"
+        app:layout_constraintTop_toBottomOf="@id/createTimeTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/activeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp8"
+        android:textColor="?iGapSubtitleTextColor"
+        android:textSize="@dimen/standardTextSize"
+        app:layout_constraintBottom_toBottomOf="@id/activeTimeTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/activeTimeTitle"
+        app:layout_constraintTop_toTopOf="@id/activeTimeTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ipTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,7 +136,7 @@
         android:textColor="?iGapTitleTextColor"
         android:textSize="@dimen/standardTextSize"
         app:layout_constraintStart_toStartOf="@id/deviceTitle"
-        app:layout_constraintTop_toBottomOf="@id/createTimeTitle" />
+        app:layout_constraintTop_toBottomOf="@id/activeTimeTitle" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ip"
