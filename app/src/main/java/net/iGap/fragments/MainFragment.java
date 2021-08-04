@@ -913,6 +913,10 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
         getEventManager().removeObserver(EventManager.EMOJI_LOADED, this);
         getEventManager().removeObserver(EventManager.ROOM_LIST_CHANGED, this);
         getEventManager().removeObserver(EventManager.CONNECTION_STATE_CHANGED, this);
+
+        if (toolbar.isInActionMode()) {
+            disableMultiSelect();
+        }
     }
 
     private void onScannerClickListener() {
