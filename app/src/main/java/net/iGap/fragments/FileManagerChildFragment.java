@@ -174,11 +174,17 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
     }
 
     private void setupListItems(List<StructFileManager> items) {
-        binding.loader.setVisibility(View.GONE);
-        mAdapter = new AdapterFileManager(items, this);
-        binding.rvItems.setAdapter(mAdapter);
-
-        if(items.size() == 0){
+        if (items != null) {
+            binding.loader.setVisibility(View.GONE);
+            mAdapter = new AdapterFileManager(items, this);
+            binding.rvItems.setAdapter(mAdapter);
+            if (items.size() == 0) {
+                binding.btnBack.setVisibility(View.VISIBLE);
+                binding.lytNothing.setVisibility(View.VISIBLE);
+            }
+        }
+        else{
+            binding.loader.setVisibility(View.GONE);
             binding.btnBack.setVisibility(View.VISIBLE);
             binding.lytNothing.setVisibility(View.VISIBLE);
         }
@@ -199,7 +205,9 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
         if (text == null) {
             binding.lytNothing.setVisibility(View.GONE);
             binding.rvItems.setVisibility(View.VISIBLE);
-            mAdapter.update(mViewModel.getItems());
+            if (mAdapter != null){
+                mAdapter.update(mViewModel.getItems());
+            }
             if(mViewModel.getItems().size() == 0){
                 binding.btnBack.setVisibility(View.VISIBLE);
                 binding.lytNothing.setVisibility(View.VISIBLE);
