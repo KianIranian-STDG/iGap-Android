@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -37,7 +36,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.dialog.account.AccountDialogListener;
@@ -53,14 +51,11 @@ import static android.app.Activity.RESULT_OK;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
-    private static final String TAG = "FragmentUserProfile1";
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
     public static FragmentUserProfile newInstance() {
-
         Bundle args = new Bundle();
-
         FragmentUserProfile fragment = new FragmentUserProfile();
         fragment.setArguments(args);
         return fragment;
@@ -121,7 +116,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                     Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
                     if (fragment == null) {
                         fragment = FragmentProfile.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
                     }
                     fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
                 }
