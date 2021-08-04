@@ -33,7 +33,6 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperTracker;
 import net.iGap.helper.HelperWallet;
 import net.iGap.helper.LayoutCreator;
@@ -56,9 +55,6 @@ import net.iGap.module.TimeUtils;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.CheckBox;
-import net.iGap.observers.interfaces.ISignalingGetCallLog;
-import net.iGap.observers.interfaces.OnCallLogClear;
-import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoSignalingGetLog;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmCallLog;
@@ -131,13 +127,12 @@ public class FragmentCall extends BaseMainFragments {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        realmResults = null;
     }
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mSelectedStatus = ProtoSignalingGetLog.SignalingGetLog.Filter.ALL;
+
         HelperTracker.sendTracker(HelperTracker.TRACKER_CALL_PAGE);
 
         if (getContext() != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -254,7 +249,7 @@ public class FragmentCall extends BaseMainFragments {
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mFiltersLayout = view.findViewById(R.id.fc_layout_filters);
 
-        setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+        setEnableButtonOnReturn(mSelectedStatus);
 
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
@@ -335,43 +330,37 @@ public class FragmentCall extends BaseMainFragments {
 
         mBtnAllCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.ALL) {
-                setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
             }
         });
 
         mBtnMissedCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED) {
-                setEnableButton(mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
             }
         });
 
         mBtnOutgoingCalls.setOnClickListener(v -> {
-
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING) {
-                setEnableButton(mBtnOutgoingCalls, mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnCanceledCalls);
+                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
             }
-
         });
 
         mBtnIncomingCalls.setOnClickListener(v -> {
-
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING) {
-                setEnableButton(mBtnIncomingCalls, mBtnMissedCalls, mBtnAllCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
             }
-
         });
 
         mBtnCanceledCalls.setOnClickListener(v -> {
-
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED) {
-                setEnableButton(mBtnCanceledCalls, mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls);
+                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
             }
-
         });
         //Todo: fixed it, cause load view with delay
         setViewState(mIsMultiSelectEnable);
@@ -436,6 +425,29 @@ public class FragmentCall extends BaseMainFragments {
 
         mRecyclerView.setAdapter(new CallAdapter(realmResults));
         checkListIsEmpty();
+    }
+
+    private void setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter status) {
+        switch (status) {
+            case ALL:
+                setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                break;
+            case MISSED:
+                setEnableButton(mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                break;
+            case OUTGOING:
+                setEnableButton(mBtnOutgoingCalls, mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnCanceledCalls);
+                break;
+            case INCOMING:
+                setEnableButton(mBtnIncomingCalls, mBtnMissedCalls, mBtnAllCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                break;
+            case CANCELED:
+                setEnableButton(mBtnCanceledCalls, mBtnMissedCalls, mBtnAllCalls, mBtnIncomingCalls, mBtnOutgoingCalls);
+                break;
+            default:
+                setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
+                break;
+        }
     }
 
     private void setEnableButton(TextView enable, TextView disable, TextView disable2, TextView disable3, TextView disable4) {
