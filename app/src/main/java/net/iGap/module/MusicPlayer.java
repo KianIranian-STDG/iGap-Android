@@ -52,6 +52,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
@@ -81,6 +82,8 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.G.context;
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED_VALUE;
 
 public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
@@ -118,6 +121,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static ArrayList<MessageObject> mediaList;
     public static String strTimer = "";
     public static String messageId = "";
+    public static int roomType = 0;
     public static boolean isNearDistance = false;
     public static int currentDuration = 0;
     public static boolean isVoice = false;
@@ -522,6 +526,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 }
             }
             startPlayer(messageObject.attachment.name, messageObject.attachment.filePath, roomName, roomId, false, String.valueOf(mediaList.get(selectedMedia).id));
+
+            if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
+                if (roomType != CHANNEL_VALUE && isVoice) {
+                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.NEXT_VOICE,roomType, roomId, mediaList.get(selectedMedia).id, LISTENED_VALUE);
+                }
+            }
             if (FragmentChat.onMusicListener != null) {
                 FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }

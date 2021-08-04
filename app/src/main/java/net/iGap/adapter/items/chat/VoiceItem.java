@@ -159,6 +159,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             AndroidUtils.getAudioDuration(G.context, holder.mFilePath);
             int currentVoiceGoTO = (int) (AndroidUtils.getAudioDuration(G.context, holder.mFilePath) * holder.waveView.getProgress() / 100);
             MusicPlayer.currentDuration = currentVoiceGoTO;
+            MusicPlayer.roomType = holder.roomType.getNumber();
             if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                 MusicPlayer.onCompleteChat = holder.complete;
 
