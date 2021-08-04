@@ -58,9 +58,9 @@ class SocketDownloader implements IDownloader {
                             return;
 
                         if (progress < 100 && progress >= 0) {
-                            observer.onUpdate(Resource.loading(new HttpRequest.Progress(progress, path, message.fileToken)));
+                            observer.onUpdate(Resource.loading(new HttpRequest.Progress(progress, path, message.fileToken, message.selector)));
                         } else if (progress == 100) {
-                            observer.onUpdate(Resource.success(new HttpRequest.Progress(progress, path, message.fileToken)));
+                            observer.onUpdate(Resource.success(new HttpRequest.Progress(progress, path, message.fileToken, message.selector)));
                         }
                     }
 

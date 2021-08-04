@@ -759,7 +759,7 @@ public class HelperToolbar {
 //            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
         }
 
-        MusicPlayer.setMusicPlayer(musicLayout);
+//        MusicPlayer.setMusicPlayer(musicLayout);
         setMediaLayout();
     }
 

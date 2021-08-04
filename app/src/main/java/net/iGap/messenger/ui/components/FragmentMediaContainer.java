@@ -73,7 +73,7 @@ public class FragmentMediaContainer extends FrameLayout implements EventManager.
         if (fragmentView != null) {
             fragmentView.setClipToPadding(false);
         }
-
+        MusicPlayer.setMusicPlayer();
         mediaContainer = new FrameLayout(context);
         mediaContainer.setTag(MEDIA_TAG);
         mediaContainer.setOnClickListener(view -> listener.clickListener((Integer) mediaContainer.getTag()));

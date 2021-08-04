@@ -84,7 +84,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 holder.songArtist.setVisibility(View.INVISIBLE);
                 holder.playBtn.setVisibility(View.VISIBLE);
                 holder.songSize.setVisibility(View.INVISIBLE);
-
             } else {
                 holder.seekBar.setEnabled(false);
                 holder.playBtn.setEnabled(false);
