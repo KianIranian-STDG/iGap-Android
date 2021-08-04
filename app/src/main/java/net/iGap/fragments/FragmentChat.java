@@ -1138,6 +1138,7 @@ public class FragmentChat extends BaseFragment
         getEventManager().addObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
         getEventManager().addObserver(EventManager.CHAT_UPDATE_STATUS, this);
         getEventManager().addObserver(EventManager.MEDIA_PLAYER_STATE_CHANGED, this);
+        getEventManager().addObserver(EventManager.NEXT_VOICE, this);
         if (twoPaneMode)
             EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
         return attachToSwipeBack(notifyFrameLayout);
@@ -1650,6 +1651,7 @@ public class FragmentChat extends BaseFragment
         getEventManager().removeObserver(EventManager.CHANNEL_UPDATE_VOTE, this);
         getEventManager().removeObserver(EventManager.CHAT_UPDATE_STATUS, this);
         getEventManager().removeObserver(EventManager.MEDIA_PLAYER_STATE_CHANGED, this);
+        getEventManager().removeObserver(EventManager.NEXT_VOICE, this);
 
         if (twoPaneMode)
             getEventManager().removeObserver(EventManager.CHAT_BACKGROUND_CHANGED, this);
@@ -9452,6 +9454,12 @@ public class FragmentChat extends BaseFragment
                 G.runOnUiThread(() -> changePinnedMessageVisibility(false, true, true, CallManager.getInstance().isCallAlive()));
                 changeSpamLayoutPosition(true);
             }
+        } else if (id == EventManager.NEXT_VOICE) {
+            int roomType = (int) args[0];
+            long roomId = (long) args[1];
+            long messageId = (long) args[2];
+            int roomMessageStatus = (int) args[3];
+            getMessageController().sendUpdateStatus(roomType, roomId, messageId, roomMessageStatus);
         }
     }
 
