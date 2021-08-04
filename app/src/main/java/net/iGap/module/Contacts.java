@@ -39,12 +39,9 @@ import io.realm.RealmResults;
  */
 public class Contacts {
 
-    public static final int PHONE_CONTACT_FETCH_LIMIT = 1000;
-    public static boolean isSendingContactToServer = false;
-
-    //Local Fetch Contacts Fields
-    public static boolean getContact = true;
     public static boolean isEndLocal = false;
+    public static boolean isSendingContactToServer = false;
+    public static boolean getContact = true;
     public static int localPhoneContactId = 0;
     private Delegate delegate;
 
@@ -94,7 +91,6 @@ public class Contacts {
         });
     }
 
-
     public static void showLimitDialog() {
         if (HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.EXCEED_CONTACTS_DIALOG))
             return;
@@ -120,106 +116,6 @@ public class Contacts {
             e1.printStackTrace();
         }
     }
-
-    /*
-    private static void getPhoneContactForServer() { //get List Of Contact
-        if (!HelperPermission.grantedContactPermission()) {
-            return;
-        }
-
-        if (RealmUserInfo.isLimitImportContacts()) {
-            showLimitDialog();
-            return;
-        }
-
-        ArrayList<StructListOfContact> contactList = new ArrayList<>();
-        ContentResolver cr = G.context.getContentResolver();
-
-        try {
-            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-            if (cur != null) {
-
-                if (cur.getCount() > PHONE_CONTACT_MAX_COUNT_LIMIT) {
-                    cur.close();
-                    showLimitDialog();
-                    return;
-                }
-
-                if (cur.getCount() > 0) {
-                    while (cur.moveToNext()) {
-                        int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                        try {
-                            if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                                Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                        new String[]{String.valueOf(contactId)}, null);
-
-                                if (pCur != null) {
-                                    while (pCur.moveToNext()) {
-                                        StructListOfContact itemContact = new StructListOfContact();
-                                        itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-                                        itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                                        contactList.add(itemContact);
-                                    }
-                                    pCur.close();
-                                }
-                            }
-                        } catch (NumberFormatException e) {
-                            e.printStackTrace();
-                        } catch (NullPointerException e1) {
-                            e1.printStackTrace();
-                        }
-
-                    }
-                }
-                cur.close();
-            }
-
-            List<StructListOfContact> resultContactList = new ArrayList<>();
-
-            for (StructListOfContact item : contactList) {
-
-                if (item.getPhone() != null && item.getDisplayName() != null) {
-                    StructListOfContact itemContact = new StructListOfContact();
-                    String[] sp = item.getDisplayName().split(" ");
-                    if (sp.length == 1) {
-                        itemContact.setFirstName(sp[0]);
-                        itemContact.setLastName("");
-                        itemContact.setPhone(item.getPhone());
-                        itemContact.setDisplayName(item.displayName);
-                    } else if (sp.length == 2) {
-                        itemContact.setFirstName(sp[0]);
-                        itemContact.setLastName(sp[1]);
-                        itemContact.setPhone(item.getPhone());
-                        itemContact.setDisplayName(item.displayName);
-                    } else if (sp.length == 3) {
-                        itemContact.setFirstName(sp[0]);
-                        itemContact.setLastName(sp[1] + " " + sp[2]);
-                        itemContact.setPhone(item.getPhone());
-                        itemContact.setDisplayName(item.displayName);
-                    } else if (sp.length >= 3) {
-                        itemContact.setFirstName(item.getDisplayName());
-                        itemContact.setLastName("");
-                        itemContact.setPhone(item.getPhone());
-                        itemContact.setDisplayName(item.displayName);
-                    }
-
-                    resultContactList.add(itemContact);
-                }
-            }
-
-
-            if (G.onContactFetchForServer != null) {
-                G.onContactFetchForServer.onFetch(resultContactList, true);
-            }
-
-
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 
     public static void getSearchContact(String text, ContactCallback callback) {
         if (!HelperPermission.grantedContactPermission()) {
@@ -289,9 +185,7 @@ public class Contacts {
             return;
         }
 
-        int fetchCount = 0;
         isEndLocal = false;
-
         ArrayList<String> tempList = new ArrayList<>();
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
@@ -323,30 +217,14 @@ public class Contacts {
                         }
                         phones.close();
                     }
-                    fetchCount++;
-                    if (fetchCount > PHONE_CONTACT_FETCH_LIMIT) {
-                        break;
-                    }
                 }
             }
             cursor.close();
-        }
-
-        if (fetchCount < PHONE_CONTACT_FETCH_LIMIT) {
             isEndLocal = true;
         }
 
         if (G.onPhoneContact != null) {
             G.onPhoneContact.onPhoneContact(contactList, isEndLocal);
-        }
-
-        if (!isEndLocal) {
-            //G.handler.postDelayed(new Runnable() {
-            //    @Override
-            //    public void run() {
-            //        new FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            //    }
-            //}, 500);
         }
     }
 
@@ -527,6 +405,4 @@ public class Contacts {
             return null;
         }
     }
-
-
 }
