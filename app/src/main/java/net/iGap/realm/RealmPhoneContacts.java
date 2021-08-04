@@ -30,87 +30,64 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmPhoneContacts extends RealmObject {
 
+    private static int PHONE_CONTACT_FETCH_LIMIT = 100;
     @PrimaryKey
     private String phone;
     private String firstName;
     private String lastName;
 
-//    public static void sendContactList(final List<StructListOfContact> list, final boolean force) {
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                List<StructListOfContact> _list = fillContactsToDB(list);
-//                if (_list.size() > 0) {
-//                    RequestUserContactImport listContact = new RequestUserContactImport();
-//                    listContact.contactImport(_list, force);
-//                } else {
-//                    new RequestUserContactsGetList().userContactGetList();
-//                }
-//            }
-//        }).start();
-//    }
-
-
     private static List<StructListOfContact> tmpList;
+    private static int counter = 1;
 
     public static void sendContactList(final List<StructListOfContact> list, final boolean force, final boolean getContactList) {
 
         if (Contacts.isSendingContactToServer) {
             return;
         }
-
         final List<StructListOfContact> _list = fillContactsToDB(list);
-
         if (_list.size() > 0) {
-
-            if (_list.size() > Contacts.PHONE_CONTACT_FETCH_LIMIT) {
+            if (_list.size() > PHONE_CONTACT_FETCH_LIMIT) {
                 RequestUserContactImport listContact = new RequestUserContactImport();
-                tmpList = _list.subList(0, Contacts.PHONE_CONTACT_FETCH_LIMIT);
+                final int loopCount = _list.size() / PHONE_CONTACT_FETCH_LIMIT;
+                tmpList = _list.subList(0,PHONE_CONTACT_FETCH_LIMIT);
                 Contacts.isSendingContactToServer = true;
-
+                addListToDB(tmpList);
+                listContact.contactImport(tmpList, force, false);
                 G.onQueueSendContact = new OnQueueSendContact() {
                     @Override
                     public void sendContact() {
-
-                        if (tmpList.size() > 0) {
+                        counter++;
+                        tmpList.clear();
+                        if (counter <= loopCount){
+                            RequestUserContactImport listContact = new RequestUserContactImport();
+                            tmpList = _list.subList(0,PHONE_CONTACT_FETCH_LIMIT);
                             addListToDB(tmpList);
-                            tmpList.clear();
-                        } else {
-                            addListToDB(_list);
-                            _list.clear();
-                        }
-
-
-                        if (_list.size() == 0) {
-                            G.onQueueSendContact = null;
-                            Contacts.isSendingContactToServer = false;
-                            return;
-                        }
-
-                        if (_list.size() > Contacts.PHONE_CONTACT_FETCH_LIMIT) {
-                            RequestUserContactImport listContact = new RequestUserContactImport();
-                            tmpList = _list.subList(0, Contacts.PHONE_CONTACT_FETCH_LIMIT);
                             listContact.contactImport(tmpList, force, false);
-
-                        } else {
-                            RequestUserContactImport listContact = new RequestUserContactImport();
-                            listContact.contactImport(_list, force, true);
                         }
-
+                        else{
+                            if(_list.size() % PHONE_CONTACT_FETCH_LIMIT == 0){
+                                G.onQueueSendContact = null;
+                                Contacts.isSendingContactToServer = false;
+                                return;
+                            }
+                            else{
+                                RequestUserContactImport listContact = new RequestUserContactImport();
+                                tmpList = _list.subList(0 , _list.size() - 1 );
+                                addListToDB(tmpList);
+                                listContact.contactImport(tmpList, force, true);
+                                G.onQueueSendContact = null;
+                            }
+                        }
                     }
                 };
-
-                listContact.contactImport(tmpList, force, false);
-
-            } else {
+            }
+            else {
                 RequestUserContactImport listContact = new RequestUserContactImport();
+                addListToDB(_list);
                 listContact.contactImport(_list, force, true);
                 G.onQueueSendContact = new OnQueueSendContact() {
                     @Override
                     public void sendContact() {
-                        addListToDB(_list);
                         G.onQueueSendContact = null;
                         Contacts.isSendingContactToServer = false;
                     }
