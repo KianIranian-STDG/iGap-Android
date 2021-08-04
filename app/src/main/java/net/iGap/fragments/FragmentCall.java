@@ -249,7 +249,7 @@ public class FragmentCall extends BaseMainFragments {
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mFiltersLayout = view.findViewById(R.id.fc_layout_filters);
 
-        setEnableButtonOnReturn(mSelectedStatus);
+        setEnableButton(mSelectedStatus);
 
         mRecyclerView = view.findViewById(R.id.fc_recycler_view_call);
         mRecyclerView.setItemAnimator(null);
@@ -330,35 +330,35 @@ public class FragmentCall extends BaseMainFragments {
 
         mBtnAllCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.ALL) {
-                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
+                setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.ALL);
             }
         });
 
         mBtnMissedCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED) {
-                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
+                setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.MISSED);
             }
         });
 
         mBtnOutgoingCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING) {
-                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
+                setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.OUTGOING);
             }
         });
 
         mBtnIncomingCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING) {
-                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
+                setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.INCOMING);
             }
         });
 
         mBtnCanceledCalls.setOnClickListener(v -> {
             if (mSelectedStatus != ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED) {
-                setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
+                setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
                 getCallLogsFromRealm(ProtoSignalingGetLog.SignalingGetLog.Filter.CANCELED);
             }
         });
@@ -427,7 +427,7 @@ public class FragmentCall extends BaseMainFragments {
         checkListIsEmpty();
     }
 
-    private void setEnableButtonOnReturn(ProtoSignalingGetLog.SignalingGetLog.Filter status) {
+    private void setEnableButton(ProtoSignalingGetLog.SignalingGetLog.Filter status) {
         switch (status) {
             case ALL:
                 setEnableButton(mBtnAllCalls, mBtnMissedCalls, mBtnIncomingCalls, mBtnOutgoingCalls, mBtnCanceledCalls);
