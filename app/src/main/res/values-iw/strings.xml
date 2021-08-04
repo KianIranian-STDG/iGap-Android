@@ -562,6 +562,7 @@
     <string name="crad_to_card_dest_name">حساب صاحبینین آدی </string>
     <string name="create_chat">دانیشیق یاراتماق </string>
     <string name="create_time">... ده یارانمیش</string>
+    <string name="last_connectivity">سون متصل:</string>
     <string name="credit_card_set_pin_confirm">پولکارت کیفیندن استفاده ائتمک اوچون اؤنجه اونون اوچون رمز تعریف ائتمه لی سیز. رمزی فعال ائتمک ایسته ییرسیز می؟</string>
     <string name="crop_selected_for_send">سئچیلمیش تصویر</string>
     <string name="current_pass">حاضرکی رمز</string>
@@ -868,7 +869,7 @@
     <string name="invalid_verify_email_code">تایید کدو اعتبارسیزدیر</string>
     <string name="invitation_message">سلام. آشاغیداکی لیک واسطه سی ایله آیگپه عضو اولا بیلرسن. سنی گوزله ییرم. معرفین شماره سی: http://d.igap.net/invite \n</string>
     <string name="invite_link_title">دعوت لینکی </string>
-    <string name="ip">شناسه</string>
+    <string name="ip">شناسه:</string>
     <string name="iran">ایران</string>
     <string name="irancell">ایرانسل </string>
     <string name="is_empty">اولوبدور</string>

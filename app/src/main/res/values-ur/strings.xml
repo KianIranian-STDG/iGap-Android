@@ -441,7 +441,8 @@
     <string name="device">ئامێر:</string>
     <string name="country">وڵات:</string>
     <string name="create_time">پێکهاتوو لە:</string>
-    <string name="ip">تێپەڕەوشە</string>
+    <string name="last_connectivity">دوایین پەیوەست­بوون:</string>
+    <string name="ip">تێپەڕەوشە:</string>
     <string name="current_session">دانیشتنی ئێستا</string>
     <string name="Active_session">دانیشتنی چالاک</string>
     <string name="terminate_all">هەڵوەشاندنەوەی هەموو دانیشتنە چالاکەکان</string>

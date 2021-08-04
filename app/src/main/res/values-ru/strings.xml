@@ -440,7 +440,8 @@
     <string name="device">Устройство</string>
     <string name="country">Страна:</string>
     <string name="create_time">Создано в:</string>
-    <string name="ip">ID</string>
+    <string name="last_connectivity">Последнее подключение:</string>
+    <string name="ip">IP:</string>
     <string name="current_session">Текущая встреча</string>
     <string name="Active_session">активная встреча</string>
     <string name="terminate_all">Отменить все активные сеансы</string>

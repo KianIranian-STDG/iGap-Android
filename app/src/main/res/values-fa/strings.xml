@@ -484,7 +484,8 @@
     <string name="device">دستگاه:</string>
     <string name="country">کشور:</string>
     <string name="create_time">ایجاد شده در:</string>
-    <string name="ip">شناسه</string>
+    <string name="last_connectivity">آخرین اتصال:</string>
+    <string name="ip">شناسه:</string>
     <string name="current_session">جلسهٔ فعلی</string>
     <string name="Active_session">جلسهٔ فعال</string>
     <string name="terminate_all">لغو تمامی جلسات فعال</string>

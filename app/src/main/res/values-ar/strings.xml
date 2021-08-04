@@ -880,7 +880,9 @@
 
     <string name="create_time">تم الإنشاء في :</string>
 
-    <string name="ip">الرمز </string>
+    <string name="last_connectivity">آخر اتصال:</string>
+
+    <string name="ip">الرمز: </string>
 
     <string name="current_session">الجلسة الحالية </string>
 

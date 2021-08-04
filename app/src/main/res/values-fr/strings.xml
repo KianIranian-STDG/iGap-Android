@@ -442,7 +442,8 @@
     <string name="device">appareil</string>
     <string name="country">pays</string>
     <string name="create_time">créé à</string>
-    <string name="ip">ID</string>
+    <string name="last_connectivity">Dernière connectivité:</string>
+    <string name="ip">IP:</string>
     <string name="current_session">session en cours</string>
     <string name="Active_session">session active</string>
     <string name="terminate_all">annuler toutes les sessions actives</string>

@@ -481,6 +481,7 @@
     <string name="device">Device:</string>
     <string name="country">Country:</string>
     <string name="create_time">Create on:</string>
+    <string name="last_connectivity">Last connectivity:</string>
     <string name="ip">IP:</string>
     <string name="current_session">Current Session</string>
     <string name="Active_session">Active Session</string>
