@@ -419,11 +419,25 @@ public class RoomListCell extends FrameLayout {
                             int t = (dateHeight - muteWidth) / 2;
                             int muteTop = dateTop + t;
 
-                            finalNameLeft = isRtl ? nameLeft : nameLeft;
-                            finalNameRight = isRtl ? nameRight : nameRight;
+                            if (isRtl) {
+                                if (nameLeft < dateRight + muteWidth) {
+                                    finalNameLeft = dateRight + muteWidth + standardMargin;
+                                } else {
+                                    finalNameLeft = nameLeft;
+                                }
+                                finalNameRight = nameRight;
+
+                            } else {
+                                finalNameLeft = nameLeft;
+                                if (nameRight > dateLeft - muteWidth) {
+                                    finalNameRight = dateLeft - muteWidth - standardMargin;
+                                } else {
+                                    finalNameRight = nameRight;
+                                }
+                            }
 
                             muteRight = isRtl ? finalNameLeft - smallMargin : finalNameRight + muteWidth + smallMargin;
-                            muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin : finalNameRight + smallMargin;
+                            muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin  : finalNameRight + smallMargin;
 
                             muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
                             muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
@@ -455,7 +469,7 @@ public class RoomListCell extends FrameLayout {
                         int newVerifyRight;
                         if (!isRtl) {
                             if (nameRight > statusLeft) {
-                                finalNameRight = nameRight - dateWidth - statusWidth - muteWidth - verifyWidth - 3 * standardMargin;
+                                finalNameRight = statusLeft - statusWidth - muteWidth - verifyWidth;
                                 newMuteLeft = finalNameRight;
                                 newMuteRight = finalNameRight + muteWidth;
                                 if (isMute) {
@@ -469,7 +483,7 @@ public class RoomListCell extends FrameLayout {
                             }
                         } else {
                             if (nameLeft < statusRight) {
-                                finalNameLeft = nameLeft + dateWidth + statusWidth + muteWidth + verifyWidth + 3 * standardMargin;
+                                finalNameLeft = statusRight + statusWidth + muteWidth + verifyWidth;
                                 newMuteRight = finalNameLeft - smallMargin;
                                 newMuteLeft = finalNameLeft - muteWidth - smallMargin;
                                 if (isMute) {
