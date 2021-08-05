@@ -69,7 +69,7 @@ public class RoomListCell extends FrameLayout {
     private AppCompatTextView roomNameTv;
     private FontIconTextView verifyIconTv;
     private CircleImageView avatarImageView;
-    private TextView messageDataTv;
+    private TextView messageDateTv;
     private FontIconTextView muteIconTv;
     private FontIconTextView chatIconTv;
     private AppCompatTextView lastMessageTv;
@@ -165,17 +165,17 @@ public class RoomListCell extends FrameLayout {
         }
 
         if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0 && !haveDate) {
-            messageDataTv = new AppCompatTextView(getContext());
-            messageDataTv.setSingleLine(true);
-            messageDataTv.setTextColor(Theme.getInstance().getSendMessageTextColor(messageDataTv.getContext()));
-            messageDataTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
-            setTextSize(messageDataTv, R.dimen.smallTextSize);
-            setTypeFace(messageDataTv);
-            addView(messageDataTv);
+            messageDateTv = new AppCompatTextView(getContext());
+            messageDateTv.setSingleLine(true);
+            messageDateTv.setTextColor(Theme.getInstance().getSendMessageTextColor(messageDateTv.getContext()));
+            messageDateTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
+            setTextSize(messageDateTv, R.dimen.smallTextSize);
+            setTypeFace(messageDateTv);
+            addView(messageDateTv);
             haveDate = true;
 
         } else if (room.getLastMessage() != null && room.getLastMessage().getUpdateOrCreateTime() != 0) {
-            messageDataTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
+            messageDateTv.setText(HelperCalander.getTimeForMainRoom(room.getLastMessage().getUpdateOrCreateTime()));
         }
 
         if (room.getMute()) {
@@ -363,15 +363,15 @@ public class RoomListCell extends FrameLayout {
                     }
                 }
                 if (haveDate) {
-                    int dateWidth = LayoutCreator.getTextWidth(messageDataTv);
-                    int dateHeight = LayoutCreator.getTextHeight(messageDataTv);
+                    int dateWidth = LayoutCreator.getTextWidth(messageDateTv);
+                    int dateHeight = LayoutCreator.getTextHeight(messageDateTv);
                     int dateTop = h2 - dateHeight;
 
                     int dateRight = isRtl ? dateWidth + paddingEnd : getWidth() - paddingEnd;
                     int dateLeft = isRtl ? paddingEnd : getWidth() - dateWidth - paddingEnd;
 
-                    messageDataTv.measure(makeMeasureSpec(dateWidth, AT_MOST), makeMeasureSpec(dateHeight, AT_MOST));
-                    messageDataTv.layout(dateLeft, dateTop, dateRight, h2);
+                    messageDateTv.measure(makeMeasureSpec(dateWidth, AT_MOST), makeMeasureSpec(dateHeight, AT_MOST));
+                    messageDateTv.layout(dateLeft, dateTop, dateRight, h2);
 
                     int muteRight;
                     int muteLeft;
