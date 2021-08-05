@@ -66,6 +66,9 @@ public class Toolbar extends FrameLayout {
         titleIsFontIcon = false;
         titleTextView.setText(title);
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        titleTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        titleTextView.setMarqueeRepeatLimit(-1);
+        titleTextView.setSelected(true);
         titleTextView.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font));
     }
 
@@ -380,9 +383,12 @@ public class Toolbar extends FrameLayout {
             } else {
                 titleTop = (getMeasuredHeight() - titleTextHeight) / 2;
             }
-
-            titleTextView.layout(titleLeft, titleTop, titleLeft + titleTextView.getMeasuredWidth(), titleTop + titleTextHeight);
-            verifyLeft = titleLeft + titleTextView.getMeasuredWidth() + LayoutCreator.dp(5);
+            int titleRight = titleLeft + titleTextView.getMeasuredWidth();
+            if (titleLeft + titleTextView.getMeasuredWidth() > getWidth() - (items != null ? items.getMeasuredWidth() : 0)) {
+                titleRight -= items.getMeasuredWidth();
+            }
+            titleTextView.layout(titleLeft, titleTop, titleRight, titleTop + titleTextHeight);
+            verifyLeft = titleRight + LayoutCreator.dp(5);
         }
 
         if (subTitleTextView != null && subTitleTextView.getVisibility() != GONE) {
