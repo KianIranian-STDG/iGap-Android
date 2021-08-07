@@ -366,6 +366,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.WALLET_VALUE;
+import static net.iGap.realm.RealmRoomMessage.getRealmRoomMessage;
 import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
@@ -8235,7 +8236,7 @@ public class FragmentChat extends BaseFragment
             Long sourceMessageId = (Long) object[3];
 
             if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
-                if (isSingleForward) {
+                if (isSingleForward || forwardedRealm.getRoomId() == mRoomId ) {
                     switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
                     scrollToEnd();
                 }
