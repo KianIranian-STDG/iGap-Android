@@ -2221,4 +2221,6 @@
     <string name="remind_me_later">بعدا بهم یادآوری کن</string>
     <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>
     <string name="please_try_later">لطفا بعدا تلاش کنید</string>
+    <string name="access_folder">پوشه غیر مجاز</string>
+    <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
 </resources>

@@ -1920,4 +1920,6 @@
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
     <string name="please_try_later">Please Try later</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
 </resources>
