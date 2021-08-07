@@ -587,22 +587,26 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     }
 
     private void submitData() {
-        showLoading.set(View.VISIBLE);
-        if (!currentName.equals(name.get()))
-            sendRequestSetName();
-        if (!currentUserName.equals(userName.get()))
-            sendRequestSetUsername();
-        if (!currentBio.equals(bio.get()))
-            sendRequestSetBio();
-        if (!currentUserEmail.equals(email.get()))
-            sendRequestSetEmail();
-        if (currentGender != gender.get())
-            sendRequestSetGender();
-        if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
-            referralTextChangeListener(referralNumberObservableField.get());
-            if (!hasError) {
-                setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replaceAll("-", "").replaceAll(" ", ""));
+        if (!currentName.equals(name.get()) || !currentUserName.equals(userName.get()) || !currentBio.equals(bio.get()) || !currentUserEmail.equals(email.get()) || currentGender != gender.get()) {
+            showLoading.set(View.VISIBLE);
+            if (!currentName.equals(name.get()))
+                sendRequestSetName();
+            if (!currentUserName.equals(userName.get()))
+                sendRequestSetUsername();
+            if (!currentBio.equals(bio.get()))
+                sendRequestSetBio();
+            if (!currentUserEmail.equals(email.get()))
+                sendRequestSetEmail();
+            if (currentGender != gender.get())
+                sendRequestSetGender();
+            if (!referralNumberObservableField.get().equals("") && referralEnableLiveData.getValue()) {
+                referralTextChangeListener(referralNumberObservableField.get());
+                if (!hasError) {
+                    setReferral(referralCountryCodeObservableField.get().replace("+", "") + referralNumberObservableField.get().replaceAll("-", "").replaceAll(" ", ""));
+                }
             }
+        } else {
+            showEditIcon();
         }
     }
 
