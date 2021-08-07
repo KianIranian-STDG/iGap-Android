@@ -210,7 +210,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.connect(contentBloke.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
         set.connect(contentBloke.getId(), ConstraintSet.BOTTOM, messageTimeTv.getId(), ConstraintSet.TOP, dpToPx(2));
 
-        set.connect(messageStatusTv.getId(), ConstraintSet.RIGHT, contentBloke.getId(), ConstraintSet.RIGHT);
+        set.connect(messageStatusTv.getId(), ConstraintSet.RIGHT, chatBloke.getId(), ConstraintSet.RIGHT);
         set.connect(messageStatusTv.getId(), ConstraintSet.LEFT, messageTimeTv.getId(), ConstraintSet.RIGHT);
         set.connect(messageStatusTv.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
@@ -231,7 +231,7 @@ public class NewChatItemHolder extends RecyclerView.ViewHolder {
         set.connect(voteContainer.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
         set.connect(viewContainer.getId(), ConstraintSet.RIGHT, voteContainer.getId(), ConstraintSet.LEFT,dpToPx(4));
-        set.connect(viewContainer.getId(), ConstraintSet.LEFT, contentBloke.getId(), ConstraintSet.LEFT);
+        set.connect(viewContainer.getId(), ConstraintSet.LEFT, chatBloke.getId(), ConstraintSet.LEFT);
         set.connect(viewContainer.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
 
      /* int[] views = {viewContainer.getId(), voteContainer.getId(),emptyView.getId(),signatureTv.getId(), messageTimeTv.getId(), messageStatusTv.getId()};
