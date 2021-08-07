@@ -146,44 +146,42 @@ public class FileManagerChildViewModel extends BaseViewModel {
 
     public void getFoldersSubItems(String folder, FolderResultCallback callback) {
         boolean isLogDir = folder.endsWith("/logs") && Config.FILE_LOG_ENABLE;
+        File file = new File(folder);
+        if (file.isDirectory()) {
+            String[] items = file.list();
+            if (items != null) {
+                new Thread(() -> {
+                    for (int i = 0; i < items.length; i++) {
+                        String item = items[i];
+                        //ignore hidden and temp files
+                        if (item.startsWith(".")) continue;
+                        if (item.endsWith(".tmp")) continue;
+                        if (isLogDir && i == items.length - 1) {
+                            continue;
+                        }
+                        String address = folder + "/" + item;
+                        File subFile = new File(address);
 
-        new Thread(() -> {
-
-            File file = new File(folder);
-            if (file.isDirectory()) {
-                String[] items = file.list();
-                for (int i = 0; i < items.length; i++) {
-                    String item = items[i];
-
-                    //ignore hidden and temp files
-                    if (item.startsWith(".")) continue;
-                    if (item.endsWith(".tmp")) continue;
-                    if (isLogDir && i == items.length - 1) {
-                        continue;
+                        addItemToList(
+                                0,
+                                item,
+                                subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
+                                address,
+                                subFile.isDirectory() ? R.string.folder : 0,
+                                subFile.isDirectory() ? null : getFileDescription(subFile),
+                                subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
+                                true
+                        );
                     }
-
-                    String address = folder + "/" + item;
-                    File subFile = new File(address);
-
-                    addItemToList(
-                            0,
-                            item,
-                            subFile.isDirectory() ? R.drawable.ic_fm_folder : HelperMimeType.getMimeResource(address),
-                            address,
-                            subFile.isDirectory() ? R.string.folder : 0,
-                            subFile.isDirectory() ? null : getFileDescription(subFile),
-                            subFile.isDirectory() ? R.drawable.shape_file_manager_folder_bg : R.drawable.shape_file_manager_file_bg,
-                            true
-                    );
-                }
-
-                Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
-                checkListHasSelectedBefore();
-                callback.onResult(mItems);
+                    Collections.sort(mItems, Ordering.from(new FileManager.SortFolder()).compound(new FileManager.SortFileName()));
+                    checkListHasSelectedBefore();
+                    callback.onResult(mItems);
+                }).start();
             }
-
-        }).start();
-
+            else{
+                callback.onResult(null);
+            }
+        }
     }
 
     public void sortList(Boolean isDate) {

@@ -1845,4 +1845,7 @@
     <string name="user_name_error">Nom d\'utilisateur non confirmé</string>
     <string name="email_error">Courriel non confirmé</string>
     <string name="gender_error">Sexe non confirmé</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
+
 </resources>

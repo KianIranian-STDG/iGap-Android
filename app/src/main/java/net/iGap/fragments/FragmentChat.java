@@ -310,6 +310,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -327,7 +328,6 @@ import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static net.iGap.G.twoPaneMode;
-import static net.iGap.R.id.ac_ll_join;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperPermission.getStoragePermision;
@@ -366,6 +366,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.WALLET_VALUE;
+import static net.iGap.realm.RealmRoomMessage.getRealmRoomMessage;
 import static net.iGap.realm.RealmRoomMessage.makeSeenAllMessageOfRoom;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
@@ -2688,11 +2689,30 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initPinedMessage() {
-        final long pinMessageId = RealmRoom.hasPinedMessage(mRoomId);
+        CountDownLatch countdown = new CountDownLatch(1);
+        final long[] pinMessageId = new long[1];
+        getMessageDataStorage().getStorageQueue().postRunnable(() -> {
+            try {
+                pinMessageId[0] = DbManager.getInstance().doRealmTask(realm -> {
+                    return RealmRoom.hasPinedMessage(realm, mRoomId);
+                });
+                countdown.countDown();
+            } catch (Exception e) {
+                FileLog.e(e);
+            } finally {
+                countdown.countDown();
+            }
+        });
+        try {
+            countdown.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         pinedMessageLayout = rootView.findViewById(R.id.ac_ll_strip_Pin);
-        if (pinMessageId > 0) {
+        if (pinMessageId[0] > 0) {
             RealmRoomMessage realmRoomMessage = DbManager.getInstance().doRealmTask(realm -> {
-                return realm.where(RealmRoomMessage.class).equalTo("messageId", pinMessageId).findFirst();
+                return realm.where(RealmRoomMessage.class).equalTo("messageId", pinMessageId[0]).findFirst();
             });
 
             if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
@@ -2724,18 +2744,18 @@ public class FragmentChat extends BaseFragment
                 pinedMessageLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!goToPositionWithAnimation(pinMessageId, 1000)) {
+                        if (!goToPositionWithAnimation(pinMessageId[0], 1000)) {
                             RealmRoomMessage rm = DbManager.getInstance().doRealmTask(realm -> {
-                                return realm.where(RealmRoomMessage.class).equalTo("messageId", pinMessageId).findFirst();
+                                return realm.where(RealmRoomMessage.class).equalTo("messageId", pinMessageId[0]).findFirst();
                             });
                             rm = RealmRoomMessage.getFinalMessage(rm);
                             if (rm != null) {
                                 resetMessagingValue();
-                                savedScrollMessageId = pinMessageId;
+                                savedScrollMessageId = pinMessageId[0];
                                 firstVisiblePositionOffset = 0;
                                 getMessages();
                             } else {
-                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId, new OnClientGetRoomMessage() {
+                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId[0], new OnClientGetRoomMessage() {
                                     @Override
                                     public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
                                         G.handler.post(new Runnable() {
@@ -2749,7 +2769,7 @@ public class FragmentChat extends BaseFragment
                                                         }
                                                     }, () -> {
                                                         resetMessagingValue();
-                                                        savedScrollMessageId = pinMessageId;
+                                                        savedScrollMessageId = pinMessageId[0];
                                                         firstVisiblePositionOffset = 0;
                                                         getMessages();
                                                     });
@@ -8216,7 +8236,7 @@ public class FragmentChat extends BaseFragment
             Long sourceMessageId = (Long) object[3];
 
             if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
-                if (isSingleForward) {
+                if (isSingleForward || forwardedRealm.getRoomId() == mRoomId ) {
                     switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
                     scrollToEnd();
                 }
