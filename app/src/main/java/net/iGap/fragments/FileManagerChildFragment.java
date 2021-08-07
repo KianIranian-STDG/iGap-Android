@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterFileManager;
 import net.iGap.databinding.FileManagerChildFragmentBinding;
@@ -165,7 +170,29 @@ public class FileManagerChildFragment extends BaseFragment implements AdapterFil
             mViewModel.getFoldersSubItems(folder , items -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        setupListItems(items);
+                        if (items != null) {
+                            setupListItems(items);
+                        }
+                        else{
+                            binding.loader.setVisibility(View.GONE);
+                            new MaterialDialog
+                                    .Builder(G.currentActivity)
+                                    .title(G.fragmentActivity.getResources().getString(R.string.access_folder))
+                                    .content(G.fragmentActivity.getResources().getString(R.string.restrict_folder))
+                                    .contentColor(Color.BLACK)
+                                    .autoDismiss(true)
+                                    .canceledOnTouchOutside(false)
+                                    .positiveText(G.fragmentActivity.getResources().getString(R.string.dialog_ok))
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            closeSearch();
+                                            popBackStackFragment();
+                                        }
+                                    })
+                                    .build()
+                                    .show();
+                        }
                     });
                 }
             });
