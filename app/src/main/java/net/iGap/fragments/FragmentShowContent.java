@@ -95,7 +95,7 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
     private boolean initialViewPager = true;
     private ImageButton imgPlay;
     private LinearLayout toolbarLl;
-    private int currentPosition = 0;
+    private int itemPosition = 0;
 
     public static FragmentShowContent newInstance() {
         return new FragmentShowContent();
@@ -265,20 +265,13 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 }
                 imgPlay.setVisibility(View.GONE);
                 toolbarLl.setVisibility(View.GONE);
-
+                itemPosition = position;
 
                 try {
                     WeakReference<PlayerView> weakPlayerView = videos.get(position);
                     if (weakPlayerView != null) {
                         MessageObject messageObject = MessageObject.create(roomMessages.get(position));
                         MessageObject finalMessageObject = RealmRoomMessage.getFinalMessage(messageObject);
-                        if (messageObject != null) {
-                            if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
-                                imgPlay.setVisibility(View.GONE);
-                            } else {
-                                imgPlay.setVisibility(View.VISIBLE);
-                            }
-                        }
                         String path = getFilePath(finalMessageObject);
                         ProgressiveMediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(path));
                         exoPlayer.prepare(mediaSource);
@@ -290,11 +283,6 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
         };
         viewPager.registerOnPageChangeCallback(viewPagerListener);
@@ -502,8 +490,14 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
                         ImageLoadingServiceInjector.inject().loadImage(zoomableImageView, path, true);
 
                         if (messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_VALUE || messageObject.messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE) {
+                            if (itemPosition == position) {
+                                imgPlay.setVisibility(View.GONE);
+                            }
                             showImageView();
                         } else {
+                            if (itemPosition == position) {
+                                imgPlay.setVisibility(View.VISIBLE);
+                            }
                             showPlayerView();
                             mShowContentListener.videoAttached(new WeakReference(playerView), position, false);
                         }
@@ -594,6 +588,9 @@ public class FragmentShowContent extends Fragment implements ShowMediaListener {
 
                 playerView.hideController();
                 playerView.setControllerVisibilityListener(visibility -> {
+                    if (itemPosition == position) {
+                        imgPlay.setVisibility(visibility);
+                    }
                     mShowContentListener.setToolbarVisibility(visibility);
                     mediaInfoCl.setVisibility(visibility);
                 });
