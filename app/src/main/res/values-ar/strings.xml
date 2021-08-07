@@ -2630,5 +2630,8 @@
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
     <string name="please_try_later">Please Try later</string>
-
+    <string name="name_error">لم يتم التحقق من الاسم</string>
+    <string name="user_name_error">اسم المستخدم غير مؤكد</string>
+    <string name="email_error">لم يتم تأكيد البريد الإلكتروني</string>
+    <string name="gender_error">لم يتم تأكيد الجنس</string>
 </resources>

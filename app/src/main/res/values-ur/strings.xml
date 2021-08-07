@@ -1920,4 +1920,8 @@
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
     <string name="please_try_later">Please Try later</string>
+    <string name="name_error">لطفا بعدا تلاش کنید</string>
+    <string name="user_name_error">لطفا بعدا تلاش کنید</string>
+    <string name="email_error">لطفا بعدا تلاش کنید</string>
+    <string name="gender_error">لطفا بعدا تلاش کنید</string>
 </resources>

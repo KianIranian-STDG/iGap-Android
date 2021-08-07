@@ -1649,5 +1649,8 @@
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
     <string name="please_try_later">Please Try later</string>
-
+    <string name="name_error">Имя не подтверждено</string>
+    <string name="user_name_error">Имя пользователя не подтверждено</string>
+    <string name="email_error">Электронная почта не подтверждена</string>
+    <string name="gender_error">Пол не подтвержден</string>
 </resources>

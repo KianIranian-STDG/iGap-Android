@@ -104,20 +104,17 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
                 if (isEdit) {
-                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                    Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
-                    if (fragment == null) {
-                        fragment = FragmentEditProfile.newInstance();
-                        fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
-                    }
-                    fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
+                    getChildFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .add(R.id.frame_edit, FragmentEditProfile.class, null)
+                            .addToBackStack(FragmentEditProfile.class.getName())
+                            .commit();
                 } else {
-                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                    Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
-                    if (fragment == null) {
-                        fragment = FragmentProfile.newInstance();
-                    }
-                    fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
+                    getChildFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.frame_edit, FragmentProfile.class, null)
+                            .addToBackStack(FragmentProfile.class.getName())
+                            .commit();
                 }
             }
         });
@@ -331,4 +328,5 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         }
         viewModel.uploadAvatar(path);
     }
+
 }

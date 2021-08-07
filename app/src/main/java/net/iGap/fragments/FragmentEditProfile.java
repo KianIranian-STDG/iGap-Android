@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.Theme;
 import net.iGap.adapter.AdapterDialog;
@@ -80,7 +81,7 @@ public class FragmentEditProfile extends BaseFragment {
 
         viewModel.showEditError.observe(getViewLifecycleOwner(), message -> {
             if (message != null) {
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                HelperError.showSnackMessage(getString(message), false);
             }
         });
 

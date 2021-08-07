@@ -1841,5 +1841,8 @@
     <string name="remind_me_later">Remind me later</string>
     <string name="score_request_text">Would you like to rate the app?</string>
     <string name="please_try_later">Please Try later</string>
-
+    <string name="name_error">Nom non vérifié</string>
+    <string name="user_name_error">Nom d\'utilisateur non confirmé</string>
+    <string name="email_error">Courriel non confirmé</string>
+    <string name="gender_error">Sexe non confirmé</string>
 </resources>
