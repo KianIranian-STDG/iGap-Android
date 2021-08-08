@@ -164,7 +164,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static void setMusicPlayer() {
 
-        if (remoteViews == null)
+        if (remoteViews == null && !isVoice)
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
 
         if (layoutTripMusic != null) {
@@ -500,7 +500,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             String beforeMessageId = MusicPlayer.messageId;
             selectedMedia--;
             if (selectedMedia < 0) {
-
                 if (isVoice) { // avoid from return to first voice
                     if (btnPlayMusic != null) {
                         btnPlayMusic.setText(context.getString(R.string.icon_play));
@@ -654,7 +653,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
             context.startService(intent);
         } catch (RuntimeException e) {
-
             try {
                 getNotificationManager().cancel(notificationId);
             } catch (NullPointerException e1) {
@@ -750,11 +748,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     HelperLog.getInstance().setErrorLog(e);
                 }
             }
-
-            if (isVoice) {
-                closeLayoutMediaPlayer();
-            }
-
             updateFastAdapter(MusicPlayer.messageId);
             MusicPlayer.messageId = messageID;
             MusicPlayer.musicPath = musicPath;
@@ -815,10 +808,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 //            txt_music_name.setText(musicName);
 
             if (isVoice) {
-//                txt_music_info.setVisibility(View.GONE);
+                txt_music_info.setVisibility(View.GONE);
             } else {
-//                txt_music_info.setVisibility(View.VISIBLE);
-//                txt_music_info.setText(musicInfoTitle);
+                txt_music_info.setVisibility(View.VISIBLE);
+                txt_music_info.setText(musicInfoTitle);
             }
             updateName = new UpdateName() {
                 @Override
@@ -1614,7 +1607,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 if (action.equals(STARTFOREGROUND_ACTION)) {
 
-                    if (notification != null) {
+                    if (notification != null && !isVoice) {
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.
