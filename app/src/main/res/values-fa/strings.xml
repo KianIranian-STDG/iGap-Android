@@ -2221,6 +2221,10 @@
     <string name="remind_me_later">بعدا بهم یادآوری کن</string>
     <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>
     <string name="please_try_later">لطفا بعدا تلاش کنید</string>
+    <string name="name_error">نام تایید نشد</string>
+    <string name="user_name_error">نام کاربری تایید نشد</string>
+    <string name="email_error">ایمیل تایید نشد</string>
+    <string name="gender_error">جنسیت تایید نشد</string>
     <string name="access_folder">پوشه غیر مجاز</string>
     <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
 </resources>

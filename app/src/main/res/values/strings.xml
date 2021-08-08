@@ -2258,4 +2258,8 @@ Want to get it?</string>
         <item>Electricity</item>
         <item>Gas</item>
     </string-array>
+    <string name="name_error">Name not verified</string>
+    <string name="user_name_error">Username not confirmed</string>
+    <string name="email_error">Email not confirmed</string>
+    <string name="gender_error">Gender not confirmed</string>
 </resources>

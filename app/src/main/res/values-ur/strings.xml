@@ -1916,10 +1916,14 @@
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string name="Submitـomment">برای مشاهده نظرسنجی باید  نظر خود را ثبت کنید</string>
     <string name="share_file_link">عوامی لنک شیئر کریں</string>
-    <string name="can_not_support_file">Can not support file</string>
-    <string name="remind_me_later">Remind me later</string>
-    <string name="score_request_text">Would you like to rate the app?</string>
-    <string name="please_try_later">Please Try later</string>
-    <string name="access_folder">Unauthorized Folder</string>
-    <string name="restrict_folder">Access to this folder is restricted.</string>
+    <string name="can_not_support_file">این فایل پشتیبانی نمی شود</string>
+    <string name="remind_me_later">بعدا بهم یادآوری کن</string>
+    <string name="score_request_text">دوست داری به برنامه امتیاز بدی؟</string>
+    <string name="please_try_later">لطفا بعدا تلاش کنید</string>
+    <string name="access_folder">پوشه غیر مجاز</string>
+    <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
+    <string name="name_error">نام تایید نشد</string>
+    <string name="user_name_error">نام کاربری تایید نشد</string>
+    <string name="email_error">ایمیل تایید نشد</string>
+    <string name="gender_error">جنسیت تایید نشد</string>
 </resources>
