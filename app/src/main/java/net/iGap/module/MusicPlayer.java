@@ -164,7 +164,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static void setMusicPlayer() {
 
-        if (remoteViews == null && !isVoice)
+        if (remoteViews == null)
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
 
         if (layoutTripMusic != null) {
@@ -748,6 +748,22 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     HelperLog.getInstance().setErrorLog(e);
                 }
             }
+
+            if (isVoice) {
+                try {
+                    Intent intent = new Intent(context, MusicPlayer.class);
+                    intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
+                    context.startService(intent);
+                } catch (RuntimeException e) {
+
+                    try {
+                        getNotificationManager().cancel(notificationId);
+                    } catch (NullPointerException e1) {
+
+                    }
+                }
+            }
+
             updateFastAdapter(MusicPlayer.messageId);
             MusicPlayer.messageId = messageID;
             MusicPlayer.musicPath = musicPath;
@@ -808,10 +824,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 //            txt_music_name.setText(musicName);
 
             if (isVoice) {
-                txt_music_info.setVisibility(View.GONE);
+//                txt_music_info.setVisibility(View.GONE);
             } else {
-                txt_music_info.setVisibility(View.VISIBLE);
-                txt_music_info.setText(musicInfoTitle);
+//                txt_music_info.setVisibility(View.VISIBLE);
+//                txt_music_info.setText(musicInfoTitle);
             }
             updateName = new UpdateName() {
                 @Override
@@ -1006,7 +1022,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
+            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSilent(true).setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
 //                      .setContentText(place)
                     .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
