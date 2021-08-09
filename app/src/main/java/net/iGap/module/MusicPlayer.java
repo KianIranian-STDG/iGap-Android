@@ -1022,7 +1022,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSilent(true).setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
+            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setNotificationSilent().setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
 //                      .setContentText(place)
                     .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
