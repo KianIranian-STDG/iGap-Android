@@ -404,7 +404,7 @@ public class RealmRoomMessage extends RealmObject {
 
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo("id", roomId).findFirst();
                 if (realmRoom != null) {
-                    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getForwardMessage() == null && realmRoom.getLastMessage().getReplyTo() == null) {
+                    if (realmRoom.getLastMessage() != null) {
                         realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).notEqualTo("messageId", realmRoom.getLastMessage().getMessageId()).findAll().deleteAllFromRealm();
                     } else {
                         realm.where(RealmRoomMessage.class).equalTo("roomId", roomId).findAll().deleteAllFromRealm();
