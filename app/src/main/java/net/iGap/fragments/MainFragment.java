@@ -712,28 +712,29 @@ public class MainFragment extends BaseMainFragments implements EventManager.Even
     }
 
     private void deleteChat(RealmRoom item, boolean exit) {
-
-        if (item.getType() == CHAT) {
-            getRoomController().chatDeleteRoom(item.getId());
-        } else if (item.getType() == GROUP) {
-            if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
-                getRoomController().groupDeleteRoom(item.getId());
-            } else {
-                getRoomController().groupLeft(item.getId());
-            }
-        } else if (item.getType() == CHANNEL) {
-
-            if (MusicPlayer.mainLayout != null) {
-                if (item.getId() == MusicPlayer.roomId) {
-                    MusicPlayer.closeLayoutMediaPlayer();
+        if (item.getType() != null) {
+            if (item.getType() == CHAT) {
+                getRoomController().chatDeleteRoom(item.getId());
+            } else if (item.getType() == GROUP) {
+                if (item.getGroupRoom().getRole() == GroupChatRole.OWNER) {
+                    getRoomController().groupDeleteRoom(item.getId());
+                } else {
+                    getRoomController().groupLeft(item.getId());
                 }
-            }
+            } else if (item.getType() == CHANNEL) {
+
+                if (MusicPlayer.mainLayout != null) {
+                    if (item.getId() == MusicPlayer.roomId) {
+                        MusicPlayer.closeLayoutMediaPlayer();
+                    }
+                }
 
 
-            if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
-                getMessageController().deleteChannel(item.getId());
-            } else {
-                getRoomController().channelLeft(item.getId());
+                if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
+                    getMessageController().deleteChannel(item.getId());
+                } else {
+                    getRoomController().channelLeft(item.getId());
+                }
             }
         }
         if (exit)
