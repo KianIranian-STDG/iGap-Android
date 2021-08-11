@@ -358,7 +358,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     @Override
-    @CallSuper
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
