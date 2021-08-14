@@ -905,18 +905,23 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmStoryProto = schema.create(RealmStoryProto.class.getSimpleName())
                     .addField("caption", String.class)
                     .addField("fileToken", String.class)
+                    .addField("imagePath", String.class)
                     .addRealmObjectField("file", realmAttachmentSchema)
                     .addField("createdAt", long.class)
                     .addField("userId", long.class)
                     .addField("storyId", long.class)
+                    .addField("id", long.class)
                     .addField("isSeen", boolean.class)
-                    .addField("viewCount", int.class);
+                    .addField("viewCount", int.class)
+                    .addField("status", int.class);
 
 
             RealmObjectSchema realmStorySchema = schema.create(RealmStory.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.PRIMARY_KEY)
                     .addField("userId", long.class)
                     .addField("isSeenAll", boolean.class)
+                    .addField("isSentAll", boolean.class)
+                    .addField("isUploadedAll", boolean.class)
                     .addField("indexOfSeen", int.class)
                     .addRealmObjectField("realmStoryProtos", realmStoryProto);
 
