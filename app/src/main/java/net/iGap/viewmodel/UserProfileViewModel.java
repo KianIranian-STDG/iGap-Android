@@ -124,7 +124,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
     private final ObservableField<String> email = new ObservableField<>("");
     private final ObservableField<String> birthDate = new ObservableField<>("");
     private final ObservableInt gender = new ObservableInt(-1);
-    private final MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> usernameErrorEnable = new MutableLiveData<>(false);
     private final ObservableInt usernameErrorMessage = new ObservableInt(R.string.empty_error_message);
     private final MutableLiveData<Boolean> emailErrorEnable = new MutableLiveData<>();
     private final ObservableInt emailErrorMessage = new ObservableInt(R.string.empty_error_message);
@@ -473,13 +473,16 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
 
                     @Override
                     public void Error(int majorCode, int minorCode) {
-
+                        usernameErrorEnable.setValue(true);
+                        usernameErrorMessage.set(R.string.error);
                     }
                 });
             } else {
                 usernameErrorEnable.setValue(true);
                 usernameErrorMessage.set(R.string.INVALID);
             }
+        } else {
+            usernameErrorEnable.setValue(false);
         }
     }
 
