@@ -1,5 +1,7 @@
 package net.iGap.network;
 
+import android.util.Log;
+
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAddMessageReaction;
@@ -59,6 +61,14 @@ public class IG_RPC {
             resId = response.getResponse().getId();
             minor = response.getMinorCode();
             major = response.getMajorCode();
+        }
+    }
+
+    public static class TimeOut_error extends Error {
+        public TimeOut_error() {
+            Log.e("IG_RPC_timeout", "TimeOut_error");
+            major = 5;
+            minor = 1;
         }
     }
 
@@ -172,7 +182,7 @@ public class IG_RPC {
 
     public static class Story_Room_Add_New extends AbstractObject {
         public static int actionId = 1202;
-        public String caption;
+        public List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests;
 
 
         @Override
@@ -189,14 +199,14 @@ public class IG_RPC {
         @Override
         public Object getProtoObject() {
             ProtoStoryRoomAddNew.StoryRoomAddNew.Builder builder = ProtoStoryRoomAddNew.StoryRoomAddNew.newBuilder();
-            builder.setCaption(caption);
+            builder.addAllTokenBatch(storyAddRequests);
             return builder;
         }
     }
 
     public static class Res_Story_Room_Add_New extends AbstractObject {
         public static int actionId = 31202;
-
+        public List<ProtoGlobal.Story> stories;
 
         public static Res_Story_Room_Add_New deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -218,6 +228,7 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoStoryRoomAddNew.StoryRoomAddNewResponse response = ProtoStoryRoomAddNew.StoryRoomAddNewResponse.parseFrom(message);
             resId = response.getResponse().getId();
+            stories = response.getStoryList();
         }
     }
 
