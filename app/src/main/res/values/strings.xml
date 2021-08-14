@@ -2320,6 +2320,9 @@ Want to get it?</string>
     <string name="your_device_does_not_have_a_camera">Your device does not have a camera!</string>
     <string name="delete_status_update">Delete this moment? It will also be deleted for everyone who received it.</string>
     <string name="story_views">views</string>
+    <string name="story_uploading">Uploading...</string>
+    <string name="story_sending">Sending...</string>
+    <string name="story_could_not_sent">Couldn\'t send!</string>
     <string-array name="photo_editor_emoji">
         <!-- Smiles -->
         <item>u+1f604</item>

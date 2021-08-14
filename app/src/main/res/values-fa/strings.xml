@@ -2260,6 +2260,9 @@
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
     <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
     <string name="story_views">دیده شده</string>
+    <string name="story_uploading">در حال آپلود...</string>
+    <string name="story_sending">در حال ارسال...</string>
+    <string name="story_could_not_sent">ارسال نشد!</string>
 
     <string name="stories_setting">تنظیمات داستان</string>
     <string name="hide_story_from">پنهان کردن داستان</string>
