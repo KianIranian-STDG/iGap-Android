@@ -29,6 +29,8 @@ import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.story.StoryObject;
+import net.iGap.story.viewPager.Story;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.structs.RoomContactObject;
@@ -373,7 +375,7 @@ public class MessageDataStorage extends BaseController {
                     RealmRegisteredInfo realmRegisteredInfo = database.where(RealmRegisteredInfo.class).equalTo("id", userId.get(i)).findFirst();
                     if (realmRegisteredInfo != null) {
                         List<String> initializeInfo = new ArrayList<>();
-                        initializeInfo.add(realmRegisteredInfo.getInitials());
+                        initializeInfo.add(realmRegisteredInfo.getDisplayName());
                         initializeInfo.add(realmRegisteredInfo.getColor());
                         result.add(initializeInfo);
                     }
@@ -884,25 +886,26 @@ public class MessageDataStorage extends BaseController {
     }
 
 
-    public void updateUserAddedStory(long userId, final ProtoStoryGetStories.IgapStory igapStory) {
+    public void updateUserAddedStory(final List<ProtoGlobal.Story> stories) {
 
 
         storageQueue.postRunnable(() -> {
-            FileLog.i(TAG, "updateUserAddedStory userId " + userId + " storiesId " + igapStory.getId());
+            FileLog.i(TAG, "updateUserAddedStory userId " + stories.get(0).getUserId() + " storiesId " + stories.get(0).getId());
             try {
                 database.beginTransaction();
 
-                RealmStory realmStory = database.where(RealmStory.class).equalTo("id", userId).findFirst();
+                RealmStory realmStory = database.where(RealmStory.class).equalTo("id", stories.get(0).getUserId()).findFirst();
                 if (realmStory == null) {
-                    realmStory = database.createObject(RealmStory.class, userId);
+                    realmStory = database.createObject(RealmStory.class, stories.get(0).getUserId());
+                }
+                List<StoryObject> storyObjects = new ArrayList<>();
+                for (int i = 0; i < storyObjects.size(); i++) {
+                    storyObjects.add(StoryObject.create(stories.get(i)));
                 }
 
-                List<ProtoStoryGetStories.IgapStory> igapStoryList = new ArrayList<>();
-                igapStoryList.add(igapStory);
-
-                realmStory.setUserId(userId);
+                realmStory.setUserId(stories.get(0).getUserId());
                 realmStory.setSeenAll(false);
-                realmStory.setRealmStoryProtos(database, igapStoryList);
+                realmStory.setRealmStoryProtos(database, storyObjects);
 
 
                 database.commitTransaction();

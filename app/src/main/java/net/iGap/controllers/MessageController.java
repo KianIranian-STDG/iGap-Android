@@ -148,7 +148,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     private void onUserAddStoryResponse(AbstractObject response, boolean update) {
         IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
-        getMessageDataStorage().updateUserAddedStory(res.igapStory.getUserId(), res.igapStory);
+        getMessageDataStorage().updateUserAddedStory(res.stories);
     }
 
     private void onMessageStatusResponse(AbstractObject response, boolean update) {
