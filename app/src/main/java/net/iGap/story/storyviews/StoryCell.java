@@ -72,6 +72,7 @@ public class StoryCell extends FrameLayout {
     private boolean isFromMyStatus;
     private long userId = 0;
     private long storyId = 0;
+    private long uploadId;
 
     public enum CircleStatus {CIRCLE_IMAGE, LOADING_CIRCLE_IMAGE}
 
@@ -87,6 +88,14 @@ public class StoryCell extends FrameLayout {
 
     public long getStoryId() {
         return storyId;
+    }
+
+    public long getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(long uploadId) {
+        this.uploadId = uploadId;
     }
 
     public void setData(boolean isFromMyStatus, long userId, long time, int viewCount, String displayName, String color, RealmAttachment attachment, String imagePath) {
@@ -111,16 +120,30 @@ public class StoryCell extends FrameLayout {
             bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
             bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-            bottomText.setText("ارسال نشده!");
+            bottomText.setText(context.getString(R.string.story_could_not_sent));
             bottomText.setTextColor(Color.RED);
             addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
-        }else if (circleImageLoading.getStatus()== ImageLoadingView.Status.LOADING){
-            bottomText.setText("در حال ارسال...");
+        } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
+
+            deleteIcon.setVisibility(GONE);
+            progressBar.setVisibility(VISIBLE);
+            removeView(topText);
+            removeView(bottomText);
+
+            bottomText = new TextView(context);
+            bottomText.setSingleLine();
+            bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+            bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+            bottomText.setText(context.getString(R.string.story_sending));
+            bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
         } else {
 
             removeView(topText);
             removeView(bottomText);
-
+            deleteIcon.setVisibility(VISIBLE);
+            progressBar.setVisibility(GONE);
             topText = new TextView(context);
             topText.setSingleLine();
             if (G.selectedLanguage.equals("en")) {
@@ -215,13 +238,13 @@ public class StoryCell extends FrameLayout {
         }
         String name = HelperImageBackColor.getFirstAlphabetName(displayName);
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
-            bottomText.setText("ارسال نشده!");
+            bottomText.setText(context.getString(R.string.story_could_not_sent));
             bottomText.setTextColor(Color.RED);
             deleteIcon.setTextColor(Color.RED);
             addIcon.setTextColor(Color.RED);
             addIcon.setText(R.string.error_icon);
         } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
-            bottomText.setText("در حال ارسال...");
+            bottomText.setText(context.getString(R.string.story_sending));
         } else {
             bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         }
@@ -395,11 +418,11 @@ public class StoryCell extends FrameLayout {
                     deleteIcon.setVisibility(GONE);
                     progressBar.setVisibility(VISIBLE);
                     bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
-                    bottomText.setText("در حال ارسال...");
+                    bottomText.setText(context.getString(R.string.story_sending));
                     circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
                     DbManager.getInstance().doRealmTransaction(realm -> {
                         RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
-                        if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.getId()))) {
+                        if (realmStoryProto != null && realmStoryProto.getStatus() == MessageObject.STATUS_FAILED && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.getId()))) {
                             realmStoryProto.setStatus(MessageObject.STATUS_SENDING);
                             Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.getId(), realmStoryProto.getImagePath(), null, realmStoryProto.getCaption(), ProtoGlobal.RoomMessageType.IMAGE));
                         }
