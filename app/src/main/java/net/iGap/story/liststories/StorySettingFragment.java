@@ -81,6 +81,11 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
     public void onClick(View view, int position) {
     }
 
+    @Override
+    public void onLongClick(View view, int position) {
+
+    }
+
     private class ListAdapter extends RecyclerListView.ItemAdapter {
         @NonNull
         @Override

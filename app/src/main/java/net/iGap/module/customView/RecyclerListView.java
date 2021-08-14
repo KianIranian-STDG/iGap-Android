@@ -10,6 +10,7 @@ public class RecyclerListView extends RecyclerView {
 
     public interface OnItemClickListener {
         void onClick(View view, int position);
+        void onLongClick(View view, int position);
     }
 
     public RecyclerListView(@NonNull Context context) {
@@ -24,6 +25,15 @@ public class RecyclerListView extends RecyclerView {
             itemView.setOnClickListener(v -> {
                 if (onItemClickListener != null && itemView.isEnabled())
                     onItemClickListener.onClick(itemView, getAdapterPosition());
+            });
+
+            itemView.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (onItemClickListener != null && itemView.isEnabled())
+                        onItemClickListener.onLongClick(itemView, getAdapterPosition());
+                    return true;
+                }
             });
         }
     }

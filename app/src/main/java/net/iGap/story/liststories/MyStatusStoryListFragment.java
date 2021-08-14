@@ -32,6 +32,7 @@ import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.RecyclerListView;
 import net.iGap.module.downloader.HttpRequest;
+import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
@@ -43,6 +44,7 @@ import net.iGap.story.StoryPagerFragment;
 import net.iGap.story.liststories.cells.HeaderCell;
 import net.iGap.story.storyviews.StoryCell;
 import net.iGap.story.viewPager.StoryViewFragment;
+import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +52,8 @@ import java.util.List;
 
 import io.realm.Sort;
 
+import static android.content.Context.EUICC_SERVICE;
+import static net.iGap.G.bothChatDeleteTime;
 import static net.iGap.G.isAppRtl;
 
 public class MyStatusStoryListFragment extends BaseFragment implements ToolbarListener, RecyclerListView.OnItemClickListener, StoryCell.DeleteStory, EventManager.EventDelegate {
@@ -72,6 +76,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_NEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_VIEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_DELETED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_NEW, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
     }
 
     @Nullable
@@ -125,6 +131,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_NEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_VIEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_DELETED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_NEW, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_FAILED, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
@@ -204,7 +212,56 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     @Override
     public void onClick(View view, int position) {
         StoryCell storyCell = (StoryCell) view;
-        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true)).setReplace(false).load();
+        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true, true, storyCell.getStoryId())).setReplace(false).load();
+    }
+
+    @Override
+    public void onLongClick(View itemView, int position) {
+        StoryCell storyCell = (StoryCell) itemView;
+        boolean isAbleToSendToServer = false;
+        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.delete_status_update))
+                .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                .positiveText(R.string.ok)
+                .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+
+        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            recyclerListView.setVisibility(View.GONE);
+            DbManager.getInstance().doRealmTransaction(realm -> {
+                if (realm.where(RealmStoryProto.class).equalTo("id", storyCell.getUploadId()).findFirst().getStatus() == MessageObject.STATUS_FAILED) {
+                    realm.where(RealmStoryProto.class).equalTo("id", storyCell.getUploadId()).findFirst().deleteFromRealm();
+                } else {
+                    AbstractObject req = null;
+                    IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
+                    story_delete.storyId = String.valueOf(storyCell.getStoryId());
+                    req = story_delete;
+                    getRequestManager().sendRequest(req, (response, error) -> {
+                        if (error == null) {
+                            IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
+                            DbManager.getInstance().doRealmTransaction(realmDB -> {
+                                realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+                                realmDB.where((RealmStoryProto.class)).equalTo("storyId", Long.valueOf(res.storyId)).findAll().deleteAllFromRealm();
+                                storyProto = realmDB.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
+                            });
+                            G.refreshRealmUi();
+
+
+                        } else {
+
+                        }
+                    });
+                }
+
+                G.runOnUiThread(() -> {
+                    loadStories();
+                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
+                });
+            });
+
+            dialog.dismiss();
+        });
+
+
     }
 
     @Override
@@ -238,12 +295,9 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
                     });
                     G.refreshRealmUi();
-                    G.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadStories();
-                            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
-                        }
+                    G.runOnUiThread(() -> {
+                        loadStories();
+                        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
                     });
 
 
@@ -264,7 +318,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
-        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED) {
+        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED || id == EventManager.STORY_UPLOADED_FAILED || id == EventManager.STORY_UPLOADED_NEW) {
             G.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -315,12 +369,38 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                         storyCell.setBackgroundColor(Color.WHITE);
                         storyCell.setTextColor(Color.BLACK, Color.GRAY);
                         storyCell.setDeleteStory(MyStatusStoryListFragment.this);
+
                         storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                         if (position < storyProto.size()) {
-                            storyCell.setData(false, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), storyProto.get(position).getFile(), null);
+                            if (storyProto.get(position).getStatus() == MessageObject.STATUS_FAILED) {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
+                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), null, storyProto.get(position).getImagePath());
+                            } else if (storyProto.get(position).getStatus() == MessageObject.STATUS_SENDING) {
+                                if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(storyProto.get(position).getId()))) {
+                                    long failedStoryId = storyProto.get(position).getId();
+                                    DbManager.getInstance().doRealmTransaction(realm -> {
+                                        realm.where(RealmStoryProto.class).equalTo("id", failedStoryId).findFirst().setStatus(MessageObject.STATUS_FAILED);
+                                    });
+                                    storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
+                                } else {
+                                    storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
+
+                                }
+
+                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), null, storyProto.get(position).getImagePath());
+                            } else if (storyProto.get(position).getStatus() == MessageObject.STATUS_UPLOADED) {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
+                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), null, storyProto.get(position).getImagePath());
+                            } else {
+                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
+                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), storyProto.get(position).getFile(), null);
+                                storyCell.deleteIconVisibility(true, R.string.delete_icon);
+                            }
+
                             storyCell.setStoryId(storyProto.get(position).getStoryId());
+                            storyCell.setUploadId(storyProto.get(position).getId());
                         }
-                        storyCell.deleteIconVisibility(true, R.string.delete_icon);
+
                         storyCell.addIconVisibility(false);
                     }
                     break;
