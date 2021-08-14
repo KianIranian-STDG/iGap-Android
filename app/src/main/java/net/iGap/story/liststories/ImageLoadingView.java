@@ -33,8 +33,9 @@ public class ImageLoadingView extends CircleImageView {
     private static final float STROKE_WIDTH = 0.035f;
     private static final float ARC_CHANGE_ANGLE = 0.2f;
     private static final int CLICKED_COLOR = Color.LTGRAY;
+    private static final int FAILED_COLOR = Color.RED;
 
-    public enum Status {LOADING, CLICKED, UNCLICKED}
+    public enum Status {LOADING, CLICKED, UNCLICKED,FAILED}
 
     private static SparseArray<Status> sStatusArray;
 
@@ -43,6 +44,7 @@ public class ImageLoadingView extends CircleImageView {
         sStatusArray.put(0, Status.LOADING);
         sStatusArray.put(1, Status.CLICKED);
         sStatusArray.put(2, Status.UNCLICKED);
+        sStatusArray.put(3, Status.FAILED);
     }
 
     private Status mStatus = Status.LOADING;
@@ -128,6 +130,9 @@ public class ImageLoadingView extends CircleImageView {
                 break;
             case CLICKED:
                 drawClickedCircle(canvas);
+                break;
+            case FAILED:
+                drawRedCircle(canvas);
                 break;
         }
     }
@@ -342,7 +347,12 @@ public class ImageLoadingView extends CircleImageView {
                 getWidth() * CIRCLE_DIA, getHeight() * CIRCLE_DIA);
         canvas.drawOval(rectF, paint);
     }
-
+    private void drawRedCircle(Canvas canvas) {
+        Paint paintClicked = new Paint();
+        paintClicked.setColor(FAILED_COLOR);
+        setPaintStroke(paintClicked);
+        drawCircle(canvas, paintClicked);
+    }
     private void drawClickedCircle(Canvas canvas) {
         Paint paintClicked = new Paint();
         paintClicked.setColor(CLICKED_COLOR);

@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.messenger.ui.components.IconView;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.MaterialDesignTextView;
@@ -32,13 +34,20 @@ import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.module.downloader.Downloader;
 import net.iGap.module.downloader.Status;
+import net.iGap.module.upload.UploadHttpRequest;
+import net.iGap.module.upload.UploadObject;
+import net.iGap.module.upload.Uploader;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.liststories.ImageLoadingView;
 import net.iGap.structs.AttachmentObject;
+import net.iGap.structs.MessageObject;
 
 import java.io.File;
+
+import yogesh.firzen.mukkiasevaigal.P;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
@@ -57,8 +66,10 @@ public class StoryCell extends FrameLayout {
     private boolean isRtl = G.isAppRtl;
     private boolean needDivider;
     private DeleteStory deleteStory;
+    private ProgressBar progressBar;
     private IconClicked iconClicked;
     private AvatarHandler avatarHandler;
+    private boolean isFromMyStatus;
     private long userId = 0;
     private long storyId = 0;
 
@@ -74,34 +85,85 @@ public class StoryCell extends FrameLayout {
         this.storyId = id;
     }
 
-    public void setData(boolean isFromMyStatus, long userId, long time, int viewCount, String displayName, String color, RealmAttachment attachment, ProtoGlobal.File file) {
+    public long getStoryId() {
+        return storyId;
+    }
+
+    public void setData(boolean isFromMyStatus, long userId, long time, int viewCount, String displayName, String color, RealmAttachment attachment, String imagePath) {
         this.userId = userId;
+        this.isFromMyStatus = isFromMyStatus;
         if (G.selectedLanguage.equals("en")) {
             topText.setText(viewCount + " " + context.getString(R.string.story_views));
         } else {
             topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount)) + " " + context.getString(R.string.story_views));
         }
+        String name = HelperImageBackColor.getFirstAlphabetName(displayName);
 
-        bottomText.setText(HelperCalander.getTimeForMainRoom(time));
-        if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
+        if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
+            progressBar.setVisibility(GONE);
+            deleteIcon.setVisibility(VISIBLE);
+            deleteIcon.setText(R.string.upload_ic);
+            removeView(topText);
+            removeView(bottomText);
+
+            bottomText = new TextView(context);
+            bottomText.setSingleLine();
+            bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+            bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+            bottomText.setText("ارسال نشده!");
+            bottomText.setTextColor(Color.RED);
+            addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
+        }else if (circleImageLoading.getStatus()== ImageLoadingView.Status.LOADING){
+            bottomText.setText("در حال ارسال...");
+        } else {
+
+            removeView(topText);
+            removeView(bottomText);
+
+            topText = new TextView(context);
+            topText.setSingleLine();
+            if (G.selectedLanguage.equals("en")) {
+                topText.setText(viewCount + " " + context.getString(R.string.story_views));
+            } else {
+                topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount)) + " " + context.getString(R.string.story_views));
+            }
+            topText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            topText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+            topText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
+            topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
+            addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
+
+            bottomText = new TextView(context);
+            bottomText.setSingleLine();
+            bottomText.setText(HelperCalander.getTimeForMainRoom(time));
+            bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+            bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
+            bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+            addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 34.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
+
+        }
+
+        if ((status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) && attachment != null) {
             if (attachment.getLocalThumbnailPath() != null) {
                 try {
-                    if (!isFromMyStatus) {
+                    if (isFromMyStatus) {
                         circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
                     } else {
                         circleImage.setImageBitmap(BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()));
                     }
                 } catch (Exception e) {
-                    if (!isFromMyStatus) {
-                        circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                    if (isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
                     } else {
-                        circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                        circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
                     }
                 }
 
 
             } else {
-                circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
                 DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
@@ -122,7 +184,7 @@ public class StoryCell extends FrameLayout {
                             G.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (!isFromMyStatus) {
+                                    if (isFromMyStatus) {
                                         circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(filepath));
                                     } else {
 
@@ -137,6 +199,53 @@ public class StoryCell extends FrameLayout {
                     });
                 }
             }
+        } else {
+            if (imagePath != null) {
+                circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            }
+        }
+    }
+
+    public void setData(boolean isFromMyStatus, long userId, long time, String displayName, String color, String imagePath) {
+        this.userId = userId;
+        if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
+            topText.setText(context.getString(R.string.my_status));
+        } else {
+            topText.setText(displayName);
+        }
+        String name = HelperImageBackColor.getFirstAlphabetName(displayName);
+        if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
+            bottomText.setText("ارسال نشده!");
+            bottomText.setTextColor(Color.RED);
+            deleteIcon.setTextColor(Color.RED);
+            addIcon.setTextColor(Color.RED);
+            addIcon.setText(R.string.error_icon);
+        } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
+            bottomText.setText("در حال ارسال...");
+        } else {
+            bottomText.setText(HelperCalander.getTimeForMainRoom(time));
+        }
+
+        if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
+            if (BitmapFactory.decodeFile(imagePath) != null) {
+                try {
+                    if (!isFromMyStatus) {
+                        circleImageLoading.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+                    } else {
+                        circleImage.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+                    }
+                } catch (Exception e) {
+                    if (BitmapFactory.decodeFile(imagePath) != null) {
+                        if (!isFromMyStatus) {
+                            circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
+                        } else {
+                            circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
+                        }
+                    }
+                }
+
+
+            }
         }
     }
 
@@ -148,7 +257,7 @@ public class StoryCell extends FrameLayout {
         } else {
             topText.setText(displayName);
         }
-
+        String name = HelperImageBackColor.getFirstAlphabetName(displayName);
         bottomText.setText(HelperCalander.getTimeForMainRoom(time));
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) {
             if (attachment.getLocalThumbnailPath() != null && BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()) != null) {
@@ -161,16 +270,16 @@ public class StoryCell extends FrameLayout {
                 } catch (Exception e) {
                     if (BitmapFactory.decodeFile(attachment.getLocalThumbnailPath()) != null) {
                         if (!isFromMyStatus) {
-                            circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                            circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
                         } else {
-                            circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                            circleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
                         }
                     }
                 }
 
 
             } else {
-                circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), displayName, color));
+                circleImageLoading.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color));
                 DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
@@ -282,12 +391,36 @@ public class StoryCell extends FrameLayout {
         deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                deleteStory.deleteStory(storyId);
+                if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED && isFromMyStatus) {
+                    deleteIcon.setVisibility(GONE);
+                    progressBar.setVisibility(VISIBLE);
+                    bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
+                    bottomText.setText("در حال ارسال...");
+                    circleImageLoading.setStatus(ImageLoadingView.Status.LOADING);
+                    DbManager.getInstance().doRealmTransaction(realm -> {
+                        RealmStoryProto realmStoryProto = realm.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst();
+                        if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.getId()))) {
+                            realmStoryProto.setStatus(MessageObject.STATUS_SENDING);
+                            Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.getId(), realmStoryProto.getImagePath(), null, realmStoryProto.getCaption(), ProtoGlobal.RoomMessageType.IMAGE));
+                        }
+
+                    });
+
+
+                } else {
+                    deleteStory.deleteStory(storyId);
+                }
+
+
             }
         });
         addView(deleteIcon, LayoutCreator.createFrame(72, 72, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 8, 8, isRtl ? 8 : 0, 8));
         // this.iconClicked.clickedIcon(icon, icon2);
 
+
+        progressBar = new ProgressBar(getContext());
+        progressBar.setVisibility(GONE);
+        addView(progressBar, LayoutCreator.createFrame(30, 30, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? 0 : 12, 8, isRtl ? 12 : 0, 8));
 
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
             setOnClickListener(v -> {
@@ -425,6 +558,10 @@ public class StoryCell extends FrameLayout {
         }
     }
 
+    public ImageLoadingView getCircleImageLoading() {
+        return circleImageLoading;
+    }
+
     public void setDeleteStory(DeleteStory deleteStory) {
         this.deleteStory = deleteStory;
     }
@@ -439,6 +576,7 @@ public class StoryCell extends FrameLayout {
 
     public interface DeleteStory {
         void deleteStory(long storyId);
+
 
         void openMyStory();
     }

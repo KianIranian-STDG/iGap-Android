@@ -39,6 +39,7 @@ import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.proto.ProtoStoryRoomAddNew;
 import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.request.RequestPagination;
+import net.iGap.story.viewPager.Story;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,8 +119,7 @@ public class IG_RPC {
 
     public static class Story_User_Add_New extends AbstractObject {
         public static int actionId = 1201;
-        public String caption;
-        public String token;
+        public List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests;
 
 
         @Override
@@ -136,15 +136,14 @@ public class IG_RPC {
         @Override
         public Object getProtoObject() {
             ProtoStoryUserAddNew.StoryUserAddNew.Builder builder = ProtoStoryUserAddNew.StoryUserAddNew.newBuilder();
-            builder.setCaption(caption);
-            builder.setToken(token);
+            builder.addAllTokenBatch(storyAddRequests);
             return builder;
         }
     }
 
     public static class Res_Story_User_Add_New extends AbstractObject {
         public static int actionId = 31201;
-        public ProtoStoryGetStories.IgapStory igapStory;
+        public List<ProtoGlobal.Story> stories;
 
         public static Res_Story_User_Add_New deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -166,7 +165,7 @@ public class IG_RPC {
         public void readParams(byte[] message) throws Exception {
             ProtoStoryUserAddNew.StoryUserAddNewResponse response = ProtoStoryUserAddNew.StoryUserAddNewResponse.parseFrom(message);
             resId = response.getResponse().getId();
-            igapStory = response.getStory();
+            stories = response.getStoryList();
         }
     }
 
