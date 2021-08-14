@@ -45,6 +45,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -71,6 +72,7 @@ import net.iGap.fragments.filterImage.BitmapUtils;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.LayoutCreator;
 import net.iGap.helper.upload.OnUploadListener;
@@ -81,6 +83,7 @@ import net.iGap.libs.emojiKeyboard.emoji.EmojiManager;
 import net.iGap.libs.photoEdit.BrushDrawingView;
 import net.iGap.libs.photoEdit.BrushViewChangeListener;
 import net.iGap.libs.photoEdit.PhotoEditor;
+import net.iGap.libs.photoEdit.SaveSettings;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.model.GalleryItemModel;
 import net.iGap.module.AndroidUtils;
@@ -172,7 +175,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
     public static StoryModes mode;
     private MutableLiveData<Integer> onPaintChanged = new MutableLiveData<>();
     private HashMap<Integer, ZoomLayout> viewHolders = new HashMap<>();
-    private List<ProtoStoryGetStories.IgapStory> storyListFromProto = new ArrayList<>();
+    private List<String> finalBitmapsPaths = new ArrayList<>();
     public List<GalleryItemModel> selectedPhotos;
     private int viewHolderPostion = 0;
     public static UpdateImage updateImage;
@@ -698,7 +701,19 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 Bitmap finalResultBitmap = Bitmap.createBitmap(resultBitmap, textStickerWidthCenterX - (imageViewWidth / 2), textStickerHeightCenterY - (imageViewHeight / 2), imageViewWidth, imageViewHeight);
 
                 if (textStickerView != null && this.mode != StoryModes.NONE) {
-                    this.imagePath = BitmapUtils.insertImage(getActivity().getContentResolver(), finalResultBitmap, System.currentTimeMillis() + "edited_image.jpg", null);
+                    String savedPath = G.DIR_TEMP + "/" + System.currentTimeMillis() + "_edited_image.jpg";
+                    File imageFile = new File(savedPath);
+
+                    imageFile.createNewFile();
+
+                    SaveSettings saveSettings = new SaveSettings.Builder()
+                            .setTransparencyEnabled(true)
+                            .build();
+                    File file = new File(imageFile.getAbsolutePath());
+                    FileOutputStream out = new FileOutputStream(file, false);
+                    finalResultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    BitmapUtils.insertImage(getActivity().getContentResolver(), finalResultBitmap, System.currentTimeMillis() + "_edited_image.jpg", null);
+                    this.imagePath = imageFile.getAbsolutePath();
                 } else if (this.mode == StoryModes.NONE) {
                     File imageFile = new File(this.imagePath);
                     FileOutputStream fileOutputStream = new FileOutputStream(imageFile, false);
@@ -745,59 +760,12 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         }
 
         itemGalleryList.get(counter).setPath(path);
-
-        long storyId = SUID.id().get();
-        long lastUploadedStoryId = storyId + 1L;
-        Uploader.getInstance().upload(UploadObject.createForAvatar(lastUploadedStoryId, path, null, ProtoGlobal.RoomMessageType.IMAGE, new OnUploadListener() {
-            @Override
-            public void onProgress(String id, int progress) {
-
-            }
-
-            @Override
-            public void onFinish(String id, String token) {
-                AbstractObject req = null;
-                IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
-                story_user_addNew.token = token;
-                story_user_addNew.caption = itemGalleryList.get(counter).getText();
-                req = story_user_addNew;
-                getRequestManager().sendRequest(req, (response, error) -> {
-                    if (error == null) {
-                        IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
-                        storyListFromProto.add(res.igapStory);
-                        counter++;
-                        if (counter == itemGalleryList.size()) {
-                            StoryViewFragment storyViewFragment = new StoryViewFragment(AccountManager.getInstance().getCurrentUser().getId(),true);
-                            storyViewFragment.setItemGalleryList(itemGalleryList, false);
-                            DbManager.getInstance().doRealmTransaction(realm -> {
-                                for (int i = 0; i < storyListFromProto.size(); i++) {
-                                    RealmStory.putOrUpdate(realm,false, AccountManager.getInstance().getCurrentUser().getId(), storyListFromProto);
-                                }
-                            });
-
-
-                            G.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
-                                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_USER_ADD_NEW);
-                                }
-                            });
-
-
-
-                        }
-                    } else {
-                    }
-                });
-            }
-
-            @Override
-            public void onError(String id) {
-
-            }
-
-        }));
+        finalBitmapsPaths.add(path);
+        counter++;
+        if (counter == itemGalleryList.size()) {
+            new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOAD, finalBitmapsPaths,itemGalleryList);
+        }
 
     }
 
