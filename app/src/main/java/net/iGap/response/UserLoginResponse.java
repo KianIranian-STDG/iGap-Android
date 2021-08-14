@@ -37,6 +37,10 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
+import net.iGap.story.StoryObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -151,14 +155,24 @@ public class UserLoginResponse extends MessageHandler {
                 if (error == null) {
                     IG_RPC.Res_Get_Stories res = (IG_RPC.Res_Get_Stories) response;
 
+
                     DbManager.getInstance().doRealmTransaction(realm -> {
+                        List<StoryObject> storyObjects = new ArrayList<>();
                         if (res.stories.size() > 0 && res.stories.size() >= realm.where(RealmStory.class).findAll().size()) {
                             for (int i = 0; i < res.stories.size(); i++) {
-                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), res.stories.get(i).getStoriesList());
+                                for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j)));
+                                }
+                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
+                                storyObjects = new ArrayList<>();
                             }
                         } else if (res.stories.size() != 0 && res.stories.size() < realm.where(RealmStory.class).findAll().size()) {
                             for (int i = 0; i < res.stories.size(); i++) {
-                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), res.stories.get(i).getStoriesList());
+                                for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j)));
+                                }
+                                RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
+                                storyObjects = new ArrayList<>();
                             }
 
                             for (int i = 0; i < realm.where(RealmStory.class).findAll().size(); i++) {
@@ -172,7 +186,7 @@ public class UserLoginResponse extends MessageHandler {
                             }
 
                         } else if (res.stories.size() == 0) {
-                            realm.where(RealmStory.class).findAll().deleteAllFromRealm();
+                            realm.where(RealmStory.class).equalTo("isSentAll",true).findAll().deleteAllFromRealm();
                         }
                     });
                     Log.e("fdajhfjshf", "getRequestManager5: ");
