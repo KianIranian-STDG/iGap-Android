@@ -281,7 +281,7 @@
     <string name="please_enter_firstname_or_lastname">Please enter your first name or last name</string>
     <string name="chats">Chats</string>
     <string name="contacts">Contacts</string>
-    <string name="bottom_navigation_my_story">Story</string>
+    <string name="bottom_navigation_my_story">Moments</string>
     <string name="messages">Messages</string>
     <string name="show_message_count">Displayable Messages</string>
     <string name="count_of_show_message">Number of Displayable Messages</string>
@@ -2310,14 +2310,15 @@ Want to get it?</string>
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Story</string>
     <string name="stories">histoires</string>
-    <string name="my_status">My Status</string>
-    <string name="status">Status</string>
-    <string name="tap_to_add_status_update">Tap to add status update</string>
+    <string name="my_status">My Moment</string>
+    <string name="status">Moments</string>
+    <string name="status_title">Moment</string>
+    <string name="tap_to_add_status_update">Tap to add moment</string>
     <string name="viewed_updates">Viewed updates</string>
     <string name="recent_updates">Recent Updates</string>
-    <string name="your_status_updates_will_disappear_after_24_hours">Your status updates will disappear after 24 hours.</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">Your moments will be delete after 24 hours.</string>
     <string name="your_device_does_not_have_a_camera">Your device does not have a camera!</string>
-    <string name="delete_status_update">Delete this status update? It will also be deleted for everyone who received it.</string>
+    <string name="delete_status_update">Delete this moment? It will also be deleted for everyone who received it.</string>
     <string name="story_views">views</string>
     <string-array name="photo_editor_emoji">
         <!-- Smiles -->

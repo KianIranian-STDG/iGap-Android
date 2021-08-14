@@ -286,7 +286,7 @@
     <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است.</string>
     <string name="chats">"گفتگو"</string>
     <string name="contacts">"مخاطبین"</string>
-    <string name="bottom_navigation_my_story">داستان</string>
+    <string name="bottom_navigation_my_story">لحظه ها</string>
     <string name="messages">"پیام‌ها"</string>
     <string name="show_message_count">"پیام‌های قابل نمایش"</string>
     <string name="count_of_show_message">"تعداد پیام‌های قابل نمایش"</string>
@@ -2250,14 +2250,15 @@
     <string name="remove_follower">حذف دنبال کننده</string>
     <string name="hide_story">پنهان کردن استوری</string>
     <string name="stories">histoires</string>
-    <string name="status">وضعیت</string>
-    <string name="my_status">وضعیت من</string>
-    <string name="tap_to_add_status_update">برای افزودن به روزرسانی وضعیت ضربه بزنید</string>
+    <string name="status">لحظه ها</string>
+    <string name="status_title">لحظه</string>
+    <string name="my_status">لحظه من</string>
+    <string name="tap_to_add_status_update">برای افزودن لحظه ضربه بزنید</string>
     <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
     <string name="recent_updates">بروز رسانی های اخیر</string>
-    <string name="your_status_updates_will_disappear_after_24_hours">به روزرسانی های وضعیت شما پس از ۲۴ ساعت ناپدید می شوند.</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">لحظات شما پس از ۲۴ ساعت حذف می شوند.</string>
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
-    <string name="delete_status_update">این بروزرسانی وضعیت حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
+    <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
     <string name="story_views">دیده شده</string>
 
     <string name="stories_setting">تنظیمات داستان</string>
