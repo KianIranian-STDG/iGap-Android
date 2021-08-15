@@ -40,10 +40,12 @@ import net.iGap.module.upload.UploadObject;
 import net.iGap.module.upload.Uploader;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
+import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.observers.interfaces.ToolbarListener;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoStoryGetStories;
+import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoomList;
@@ -58,6 +60,8 @@ import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.isAppRtl;
@@ -171,7 +175,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         userIdList = new ArrayList<>();
         displayNameList = new ArrayList<>();
         progressBar.setVisibility(View.VISIBLE);
-        loadStories();
         floatActionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,14 +236,59 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                 }
             }
         });
+        DbManager.getInstance().doRealmTransaction(realm -> {
+            List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_UPLOADED).findAll();
+
+
+            if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                List<ProtoStoryUserAddNew.StoryAddRequest> storyAddRequests = new ArrayList<>();
+                for (int i = 0; i < realmStoryProtos.size(); i++) {
+                    ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                    storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
+                    storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
+                    storyAddRequests.add(storyAddRequest.build());
+                }
+                AbstractObject request = null;
+                IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
+                story_user_addNew.storyAddRequests = storyAddRequests;
+                request = story_user_addNew;
+                getRequestManager().sendRequest(request, (response, error) -> {
+                    IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
+                    if (error == null) {
+                        if (res.failedTokens.size() > 0) {
+                            for (int i = 0; i < res.failedTokens.size(); i++) {
+                                realm.where(RealmStoryProto.class).equalTo("fileToken", res.failedTokens.get(i)).findFirst().setStatus(MessageObject.STATUS_SENT);
+                            }
+                        } else {
+                            List<StoryObject> storyObjectList = new ArrayList<>();
+                            for (int i = 0; i < res.stories.size(); i++) {
+                                storyObjectList.add(StoryObject.create(res.stories.get(i)));
+                            }
+
+                            RealmStory.putOrUpdate(realm, false, AccountManager.getInstance().getCurrentUser().getId(), storyObjectList);
+                            realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(true);
+                        }
+                        G.runOnUiThread(() -> loadStories());
+                    } else {
+                        G.runOnUiThread(() -> loadStories());
+                    }
+
+                });
+
+            } else {
+                loadStories(realm);
+            }
+        });
+
+
     }
 
 
     private void loadStories() {
 
-        DbManager.getInstance().doRealmTransaction(realm -> {
-            realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-            stories = realm.copyFromRealm(realm.where(RealmStory.class).limit(50).findAll());
+        DbManager.getInstance().doRealmTransaction(realmDB -> {
+            realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+            stories = realmDB.copyFromRealm(realmDB.where(RealmStory.class).limit(50).findAll());
         });
         isAddedUserStory = false;
         if (userIdList.size() > 0) {
@@ -266,6 +314,35 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         }
     }
 
+    private void loadStories(Realm realm) {
+
+
+        realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+        stories = realm.copyFromRealm(realm.where(RealmStory.class).limit(50).findAll());
+
+        isAddedUserStory = false;
+        if (userIdList.size() > 0) {
+            userIdList = new ArrayList<>();
+        }
+        for (int i = 0; i < stories.size(); i++) {
+            userIdList.add(stories.get(i).getUserId());
+
+        }
+        if (displayNameList.size() > 0) {
+            displayNameList = new ArrayList<>();
+        }
+        displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
+        if (stories != null && stories.size() > 0) {
+            Log.e("fdajhfjshf", "loadStories ");
+            progressBar.setVisibility(View.GONE);
+            recyclerListView.setVisibility(View.VISIBLE);
+            adapter.addRow();
+        } else {
+            progressBar.setVisibility(View.GONE);
+            recyclerListView.setVisibility(View.VISIBLE);
+            adapter.addRow();
+        }
+    }
 
     @Override
     public void onClick(View view, int position) {
@@ -435,7 +512,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 storyCell.addIconVisibility(false);
                             } else {
                                 for (int i = 0; i < stories.get(position).getRealmStoryProtos().size(); i++) {
-                                    if (stories.get(position).getRealmStoryProtos().get(i).getStatus() == MessageObject.STATUS_FAILED) {
+                                    if (stories.get(position).getRealmStoryProtos().get(i).getStatus() == MessageObject.STATUS_FAILED ||
+                                            stories.get(position).getRealmStoryProtos().get(i).getStatus() == MessageObject.STATUS_UPLOADED) {
                                         isHaveFailedUpload = true;
                                     } else if (stories.get(position).getRealmStoryProtos().get(i).getStatus() == MessageObject.STATUS_SENDING) {
                                         if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(stories.get(position).getRealmStoryProtos().get(i).getId()))) {
@@ -459,10 +537,10 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                 }
 
                             }
-                            if (stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getImagePath() == null) {
-                                storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(position).get(0), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
-                            } else {
+                            if (stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getImagePath() != null) {
                                 storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(position).get(0), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getImagePath());
+                            } else {
+                                storyCell.setData(false, stories.get(position).getUserId(), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(position).get(0), displayNameList.get(position).get(1), stories.get(position).getRealmStoryProtos().get(stories.get(position).getRealmStoryProtos().size() - 1).getFile(), null);
                             }
                             isAddedUserStory = true;
                             userStoryIndex = position;
@@ -476,7 +554,8 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                         storyCell.addIconVisibility(false);
                                     } else {
                                         for (int j = 0; j < stories.get(i).getRealmStoryProtos().size(); j++) {
-                                            if (stories.get(position).getRealmStoryProtos().get(j).getStatus() == MessageObject.STATUS_FAILED) {
+                                            if (stories.get(position).getRealmStoryProtos().get(j).getStatus() == MessageObject.STATUS_FAILED ||
+                                                    stories.get(position).getRealmStoryProtos().get(j).getStatus() == MessageObject.STATUS_UPLOADED ) {
                                                 isHaveFailedUpload = true;
                                             } else if (stories.get(position).getRealmStoryProtos().get(j).getStatus() == MessageObject.STATUS_SENDING) {
                                                 if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(stories.get(position).getRealmStoryProtos().get(j).getId()))) {
@@ -499,10 +578,10 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                         }
 
                                     }
-                                    if (stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getImagePath() == null) {
-                                        storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(i).get(0), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
-                                    } else {
+                                    if (stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getImagePath() != null) {
                                         storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(i).get(0), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getImagePath());
+                                    } else {
+                                        storyCell.setData(false, stories.get(i).getUserId(), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getCreatedAt(), displayNameList.get(i).get(0), displayNameList.get(i).get(1), stories.get(i).getRealmStoryProtos().get(stories.get(i).getRealmStoryProtos().size() - 1).getFile(), null);
                                     }
 
                                     //    storyCell.addIconVisibility(false);

@@ -56,6 +56,7 @@ public class StoryCell extends FrameLayout {
     private CircleImageView circleImage;
     private ImageLoadingView circleImageLoading;
     private TextView topText;
+    private TextView middleText;
     private TextView bottomText;
     private IconView icon;
     private IconView icon2;
@@ -101,71 +102,36 @@ public class StoryCell extends FrameLayout {
     public void setData(boolean isFromMyStatus, long userId, long time, int viewCount, String displayName, String color, RealmAttachment attachment, String imagePath) {
         this.userId = userId;
         this.isFromMyStatus = isFromMyStatus;
-        if (G.selectedLanguage.equals("en")) {
-            topText.setText(viewCount + " " + context.getString(R.string.story_views));
-        } else {
-            topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount)) + " " + context.getString(R.string.story_views));
-        }
+
         String name = HelperImageBackColor.getFirstAlphabetName(displayName);
 
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
             progressBar.setVisibility(GONE);
             deleteIcon.setVisibility(VISIBLE);
             deleteIcon.setText(R.string.upload_ic);
-            removeView(topText);
-            removeView(bottomText);
+            topText.setVisibility(GONE);
+            bottomText.setVisibility(GONE);
+            middleText.setVisibility(VISIBLE);
+            middleText.setText(context.getString(R.string.story_could_not_sent));
+            middleText.setTextColor(Color.RED);
 
-            bottomText = new TextView(context);
-            bottomText.setSingleLine();
-            bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
-            bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-            bottomText.setText(context.getString(R.string.story_could_not_sent));
-            bottomText.setTextColor(Color.RED);
-            addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
         } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
-
             deleteIcon.setVisibility(GONE);
             progressBar.setVisibility(VISIBLE);
-            removeView(topText);
-            removeView(bottomText);
+            topText.setVisibility(GONE);
+            bottomText.setVisibility(GONE);
+            middleText.setVisibility(VISIBLE);
+            middleText.setText(context.getString(R.string.story_sending));
+            middleText.setTextColor(Theme.getInstance().getTitleTextColor(context));
 
-            bottomText = new TextView(context);
-            bottomText.setSingleLine();
-            bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
-            bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
-            bottomText.setText(context.getString(R.string.story_sending));
-            bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
-            addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
         } else {
 
-            removeView(topText);
-            removeView(bottomText);
-            deleteIcon.setVisibility(VISIBLE);
-            progressBar.setVisibility(GONE);
-            topText = new TextView(context);
-            topText.setSingleLine();
             if (G.selectedLanguage.equals("en")) {
                 topText.setText(viewCount + " " + context.getString(R.string.story_views));
             } else {
                 topText.setText(HelperCalander.convertToUnicodeFarsiNumber(String.valueOf(viewCount)) + " " + context.getString(R.string.story_views));
             }
-            topText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            topText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
-            topText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
-            topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-            addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
-
-            bottomText = new TextView(context);
-            bottomText.setSingleLine();
             bottomText.setText(HelperCalander.getTimeForMainRoom(time));
-            bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
-            bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-            bottomText.setTextColor(Theme.getInstance().getTitleTextColor(context));
-            addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 34.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
-
         }
 
         if ((status == CircleStatus.LOADING_CIRCLE_IMAGE || isFromMyStatus) && attachment != null) {
@@ -386,6 +352,16 @@ public class StoryCell extends FrameLayout {
         topText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
         topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
+
+        middleText = new TextView(context);
+        middleText.setSingleLine();
+        middleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        middleText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        middleText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
+        middleText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        middleText.setVisibility(GONE);
+        addView(middleText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, isRtl ? padding : ((padding * 2) + 56), 0, isRtl ? ((padding * 2) + 56) : padding, 0));
+
 
         bottomText = new TextView(context);
         bottomText.setSingleLine();

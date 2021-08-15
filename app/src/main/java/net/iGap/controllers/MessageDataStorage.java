@@ -920,7 +920,7 @@ public class MessageDataStorage extends BaseController {
     }
 
 
-    public void deleteUserStory(String storyId, long userId) {
+    public void deleteUserStory(long storyId, long userId) {
 
 
         storageQueue.postRunnable(() -> {
@@ -928,7 +928,7 @@ public class MessageDataStorage extends BaseController {
             try {
                 database.beginTransaction();
 
-                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", Long.valueOf(storyId)).findFirst();
+                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", storyId).findFirst();
 
                 if (realmStoryProto != null) {
                     realmStoryProto.deleteFromRealm();
@@ -949,7 +949,7 @@ public class MessageDataStorage extends BaseController {
 
     }
 
-    public void userAddViewStory(String storyId, long storyOwnerUserId) {
+    public void userAddViewStory(long storyId, long storyOwnerUserId) {
 
 
         storageQueue.postRunnable(() -> {
@@ -958,11 +958,11 @@ public class MessageDataStorage extends BaseController {
                 database.beginTransaction();
 
 
-                database.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(storyId)).findFirst().setSeen(true);
+                database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst().setSeen(true);
 
-                int viewCount = database.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(storyId)).findFirst().getViewCount();
+                int viewCount = database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst().getViewCount();
 
-                database.where(RealmStoryProto.class).equalTo("storyId", Long.valueOf(storyId)).findFirst().setViewCount(viewCount + 1);
+                database.where(RealmStoryProto.class).equalTo("storyId", storyId).findFirst().setViewCount(viewCount + 1);
 
                 RealmStory realmStory = database.where(RealmStory.class).equalTo("id", storyOwnerUserId).findFirst();
                 if (realmStory != null) {

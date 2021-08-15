@@ -183,12 +183,12 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private void loadStories() {
         DbManager.getInstance().doRealmTransaction(realm -> {
             realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
+            storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("createdAt", Sort.DESCENDING);
         });
         if (storyProto != null && storyProto.size() == 0) {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findAll().deleteAllFromRealm();
-                storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
+                storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("createdAt", Sort.DESCENDING);
             });
         }
         List<Long> userIdList = new ArrayList<>();
@@ -233,18 +233,21 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 } else {
                     AbstractObject req = null;
                     IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
-                    story_delete.storyId = String.valueOf(storyCell.getStoryId());
+                    story_delete.storyId = storyCell.getStoryId();
                     req = story_delete;
                     getRequestManager().sendRequest(req, (response, error) -> {
                         if (error == null) {
                             IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
                             DbManager.getInstance().doRealmTransaction(realmDB -> {
                                 realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-                                realmDB.where((RealmStoryProto.class)).equalTo("storyId", Long.valueOf(res.storyId)).findAll().deleteAllFromRealm();
+                                realmDB.where((RealmStoryProto.class)).equalTo("storyId",res.storyId).findAll().deleteAllFromRealm();
                                 storyProto = realmDB.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
                             });
                             G.refreshRealmUi();
-
+                            G.runOnUiThread(() -> {
+                                loadStories();
+                                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
+                            });
 
                         } else {
 
@@ -252,10 +255,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                     });
                 }
 
-                G.runOnUiThread(() -> {
-                    loadStories();
-                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
-                });
+
             });
 
             dialog.dismiss();
@@ -284,15 +284,15 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
             recyclerListView.setVisibility(View.GONE);
             AbstractObject req = null;
             IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
-            story_delete.storyId = String.valueOf(storyId);
+            story_delete.storyId = storyId;
             req = story_delete;
             getRequestManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
                     DbManager.getInstance().doRealmTransaction(realm -> {
                         realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-                        realm.where((RealmStoryProto.class)).equalTo("storyId", Long.valueOf(res.storyId)).findAll().deleteAllFromRealm();
-                        storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
+                        realm.where((RealmStoryProto.class)).equalTo("storyId", res.storyId).findAll().deleteAllFromRealm();
+                        storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("createdAt", Sort.DESCENDING);
                     });
                     G.refreshRealmUi();
                     G.runOnUiThread(() -> {
