@@ -2,6 +2,8 @@ package net.iGap.network;
 
 import android.util.Log;
 
+import com.google.protobuf.ProtocolStringList;
+
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.helper.FileLog;
 import net.iGap.proto.ProtoChannelAddMessageReaction;
@@ -154,6 +156,7 @@ public class IG_RPC {
     public static class Res_Story_User_Add_New extends AbstractObject {
         public static int actionId = 31201;
         public List<ProtoGlobal.Story> stories;
+        public ProtocolStringList failedTokens;
 
         public static Res_Story_User_Add_New deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -176,6 +179,7 @@ public class IG_RPC {
             ProtoStoryUserAddNew.StoryUserAddNewResponse response = ProtoStoryUserAddNew.StoryUserAddNewResponse.parseFrom(message);
             resId = response.getResponse().getId();
             stories = response.getStoryList();
+            failedTokens = response.getFailedTokensList();
         }
     }
 
@@ -289,7 +293,7 @@ public class IG_RPC {
 
     public static class Story_Delete extends AbstractObject {
         public static int actionId = 1206;
-        public String storyId;
+        public long storyId;
 
 
         @Override
@@ -313,7 +317,7 @@ public class IG_RPC {
 
     public static class Res_Story_Delete extends AbstractObject {
         public static int actionId = 31206;
-        public String storyId;
+        public long storyId;
         public long userId;
 
         public static Res_Story_Delete deserializeObject(int constructor, byte[] message) {
@@ -368,7 +372,7 @@ public class IG_RPC {
 
     public static class Res_Story_Add_View extends AbstractObject {
         public static int actionId = 31204;
-        public String storyId;
+        public long storyId;
         public long storyOwnerUserId;
         public long userId;
 

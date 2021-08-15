@@ -264,7 +264,7 @@ public class HttpUploader implements IUpload {
                                             ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
                                             storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
                                             storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
-                                            storyObjects.add(storyAddRequest.getDefaultInstanceForType());
+                                            storyObjects.add(storyAddRequest.build());
                                         }
 
 
@@ -282,11 +282,10 @@ public class HttpUploader implements IUpload {
                                                     }
 
                                                     RealmStory.putOrUpdate(realmDB, false, AccountManager.getInstance().getCurrentUser().getId(), storyObjectList);
-                                                    realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(true);
+                                                    realmDB.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(true);
 
-                                                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_NEW));
                                                 });
-
+                                                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_NEW));
 
                                             } else {
                                                 IG_RPC.Error err = (IG_RPC.Error) error;
