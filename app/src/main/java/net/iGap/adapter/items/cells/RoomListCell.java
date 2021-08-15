@@ -326,6 +326,10 @@ public class RoomListCell extends FrameLayout {
             if (haveName) {
                 int roomNameHeight = LayoutCreator.getTextHeight(roomNameTv);
                 int roomNameWidth = LayoutCreator.getTextWidth(roomNameTv);
+                int emojiCount = EmojiManager.getEmojiCount(roomNameTv.getText().toString());
+                if (emojiCount > 0) {
+                    roomNameWidth += roomNameWidth + emojiCount;
+                }
                 int roomTop = h2 - roomNameHeight;
                 int nameLeft = 0;
                 int nameRight = 0;
@@ -437,7 +441,7 @@ public class RoomListCell extends FrameLayout {
                             }
 
                             muteRight = isRtl ? finalNameLeft - smallMargin : finalNameRight + muteWidth + smallMargin;
-                            muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin  : finalNameRight + smallMargin;
+                            muteLeft = isRtl ? finalNameLeft - muteWidth - smallMargin : finalNameRight + smallMargin;
 
                             muteIconTv.measure(makeMeasureSpec(muteWidth, AT_MOST), makeMeasureSpec(muteWidth, AT_MOST));
                             muteIconTv.layout(muteLeft, muteTop, muteRight, h2 - t);
