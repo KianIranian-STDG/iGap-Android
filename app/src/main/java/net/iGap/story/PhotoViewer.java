@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -203,6 +204,14 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         return fragment;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
+    }
 
     public interface UpdateImage {
         void result(Bitmap path);
@@ -566,13 +575,23 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             public void onClick(View view) {
                 pickerViewSendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(VISIBLE);
+                editTextView.setEnabled(false);
+                emoji.setEnabled(false);
+                revertTextView.setEnabled(false);
+                paintTextView.setEnabled(false);
+                addTextView.setEnabled(false);
+                captionEditText.setEnabled(false);
+                keyboardEmoji.setEnabled(false);
+                rootView.setEnabled(false);
                 for (int i = 0; i < itemGalleryList.size(); i++) {
                     if (viewHolders.get(i) != null) {
                         reservedView = viewHolders.get(i);
-                        new SaveBitmapAsync(itemGalleryList.get(i).path, viewHolders.get(i).findViewById(R.id.textstickerView), modes.get(i)).execute();
+                        new SaveBitmapAsync(itemGalleryList.get(i).path, null, viewHolders.get(i).findViewById(R.id.textstickerView), modes.get(i)).execute();
                     } else {
                         zoomLayout = new ZoomLayout(context);
-
+                        zoomLayout.measure(View.MeasureSpec.makeMeasureSpec(viewPager.getMeasuredWidth(), View.MeasureSpec.EXACTLY),
+                                View.MeasureSpec.makeMeasureSpec(viewPager.getMeasuredHeight(), View.MeasureSpec.EXACTLY));
+                        zoomLayout.layout(0, 0, viewPager.getMeasuredWidth(), viewPager.getMeasuredHeight());
 
                         textStickersParentView = new TextStickerView(context, false);
 
@@ -597,8 +616,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                             itemGalleryList.get(i).path = finalPath;
 
 
-                            textStickersParentView.setPaintMode(false, finalPath);
-
                             textStickersParentView.measure(View.MeasureSpec.makeMeasureSpec(viewPager.getMeasuredWidth(), View.MeasureSpec.EXACTLY),
                                     View.MeasureSpec.makeMeasureSpec(viewPager.getMeasuredHeight(), View.MeasureSpec.EXACTLY));
                             textStickersParentView.layout(0, 0, viewPager.getMeasuredWidth(), viewPager.getMeasuredHeight());
@@ -611,7 +628,15 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                                             palette.getLightMutedColor(0xFF616261), palette.getMutedColor(0xFF616261), palette.getDarkMutedColor(0xFF616261)});
 
                             textStickersParentView.setBackground(gd);
-                            new SaveBitmapAsync(itemGalleryList.get(i).path, textStickersParentView, modes.get(i)).execute();
+                            textStickersParentView.setPaintMode(false, finalPath);
+
+                            Bitmap b = Bitmap.createBitmap(textStickersParentView.getMeasuredWidth(), textStickersParentView.getMeasuredHeight(),
+                                    Bitmap.Config.ARGB_8888);
+                            Canvas mCanvas = new Canvas(b);
+                            mCanvas.translate((-textStickersParentView.getScrollX()), (-textStickersParentView.getScrollY()));
+                            textStickersParentView.draw(mCanvas);
+
+                            new SaveBitmapAsync(itemGalleryList.get(i).path, b, textStickersParentView, modes.get(i)).execute();
 
 
                         }
@@ -672,11 +697,13 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         String imagePath;
         TextStickerView textStickerView;
         StoryModes mode;
+        Bitmap finalImageBitmap;
 
-        public SaveBitmapAsync(String imagePath, TextStickerView textStickerView, StoryModes mode) {
+        public SaveBitmapAsync(String imagePath, Bitmap finalImageBitmap, TextStickerView textStickerView, StoryModes mode) {
             this.imagePath = imagePath;
             this.textStickerView = textStickerView;
             this.mode = mode;
+            this.finalImageBitmap = finalImageBitmap;
         }
 
         @Override
@@ -717,7 +744,12 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                 } else if (this.mode == StoryModes.NONE) {
                     File imageFile = new File(this.imagePath);
                     FileOutputStream fileOutputStream = new FileOutputStream(imageFile, false);
-                    finalResultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                    if (finalImageBitmap != null) {
+                        finalImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                    } else {
+                        finalResultBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                    }
+
                 }
 
                 return null;
@@ -764,7 +796,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         counter++;
         if (counter == itemGalleryList.size()) {
             new HelperFragment(getActivity().getSupportFragmentManager(), PhotoViewer.this).popBackStack(2);
-            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOAD, finalBitmapsPaths,itemGalleryList);
+            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOAD, finalBitmapsPaths, itemGalleryList);
         }
 
     }
