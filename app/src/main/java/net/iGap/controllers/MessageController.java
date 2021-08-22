@@ -152,6 +152,7 @@ public class MessageController extends BaseController implements EventManager.Ev
                 IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
                 MessageController.isSendingStory = false;
                 getMessageDataStorage().updateUserAddedStory(res.stories);
+
             } else {
                 IG_RPC.Error err = (IG_RPC.Error) error;
                 MessageController.isSendingStory = false;

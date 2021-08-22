@@ -231,10 +231,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         } else {
             savePosition(counter);
         }
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        }
     }
 
     private void updateStory() {

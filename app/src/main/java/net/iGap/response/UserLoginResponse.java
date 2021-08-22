@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.api.apiService.TokenContainer;
+import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperConnectionState;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -38,6 +40,7 @@ import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.story.StoryObject;
+import net.iGap.structs.MessageObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,38 +170,53 @@ public class UserLoginResponse extends MessageHandler {
                                 storyObjects = new ArrayList<>();
                             }
                         } else if (res.stories.size() != 0 && res.stories.size() < realm.where(RealmStory.class).findAll().size()) {
+
+                            boolean isExist = false;
+                            List<RealmStory> realmStories = realm.where(RealmStory.class).findAll();
+                            if (realmStories != null && realmStories.size() > 0) {
+                                for (int i = 0; i < realmStories.size(); i++) {
+                                    for (int j = 0; j < res.stories.size(); j++) {
+                                        if (realmStories.get(i).getUserId() == res.stories.get(j).getUserId()) {
+                                            isExist = true;
+                                        }
+                                    }
+                                    if (!isExist) {
+
+                                        if (realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findFirst().isSentAll()) {
+                                            realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findFirst().deleteFromRealm();
+                                        }
+                                    }
+                                    isExist = false;
+                                }
+                            }
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
                                     storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j)));
                                 }
+
                                 RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
                                 storyObjects = new ArrayList<>();
                             }
 
-                            for (int i = 0; i < realm.where(RealmStory.class).findAll().size(); i++) {
-                                if (i < res.stories.size()) {
-                                    if (res.stories.get(i).getUserId() != realm.where(RealmStory.class).findAll().get(i).getUserId()) {
-                                        realm.where(RealmStory.class).equalTo("id", realm.where(RealmStory.class).findAll().get(i).getUserId()).findFirst().deleteFromRealm();
-                                    }
-                                } else {
-                                    realm.where(RealmStory.class).equalTo("id", realm.where(RealmStory.class).findAll().get(i).getUserId()).findFirst().deleteFromRealm();
-                                }
-                            }
-
                         } else if (res.stories.size() == 0) {
-                            realm.where(RealmStory.class).equalTo("isSentAll",true).findAll().deleteAllFromRealm();
+                            realm.where(RealmStory.class).equalTo("isSentAll", true).findAll().deleteAllFromRealm();
                         }
                     });
                     Log.e("fdajhfjshf", "getRequestManager5: ");
 
                     G.refreshRealmUi();
                     isFetched = true;
-                    G.runOnUiThread(new Runnable() {
+                    new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED);
+                            G.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED);
+                                }
+                            });
                         }
-                    });
+                    }, 2000);
 
 
                     Log.e("fdajhfjshf", "getRequestManager: ");

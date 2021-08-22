@@ -252,8 +252,11 @@ public class HttpUploader implements IUpload {
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setFileToken(fileObject.fileToken);
 
-
-                                List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENDING).findAll();
+//                                if (realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().getRealmStoryProtos().size() ==
+//                                        realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).isNotNull("fileToken").findAll().size()){
+//
+//                                }
+                                    List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENDING).isNotNull("fileToken").findAll();
                                 if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
                                     List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
                                     for (int i = 0; i < realmStoryProtos.size(); i++) {

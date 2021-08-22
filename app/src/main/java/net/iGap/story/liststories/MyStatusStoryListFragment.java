@@ -71,14 +71,6 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private int recentHeaderRow;
     private int recentStoryRow;
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        }
-    }
 
     @Override
     public void onDestroyView() {
@@ -90,19 +82,11 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_SENDING, this);
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
         if (getContext() == null)
             return super.onCreateView(inflater, container, savedInstanceState);
 

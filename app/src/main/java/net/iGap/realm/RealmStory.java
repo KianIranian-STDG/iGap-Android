@@ -138,11 +138,7 @@ public class RealmStory extends RealmObject {
             } else {
                 storyProto.setFile(igapStory.realmAttachment);
             }
-            if (igapStory.status == MessageObject.STATUS_SENT) {
-                setSentAll(true);
-            } else if (igapStory.status == MessageObject.STATUS_FAILED || igapStory.status == MessageObject.STATUS_SENDING) {
-                setSentAll(false);
-            }
+
             storyProto.setCaption(igapStory.caption);
             storyProto.setCreatedAt(igapStory.createdAt * 1000L);
             storyProto.setFileToken(igapStory.fileToken);
@@ -164,6 +160,14 @@ public class RealmStory extends RealmObject {
             realmStoryProtos.add(storyProto);
             isExist = false;
         }
+        if (realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||
+                realm.where(RealmStoryProto.class).equalTo("userId", getUserId()).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
+            setSentAll(false);
+        } else {
+            setSentAll(true);
+        }
+
+
     }
 
 }

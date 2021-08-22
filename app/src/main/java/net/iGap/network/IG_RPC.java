@@ -156,7 +156,7 @@ public class IG_RPC {
     public static class Res_Story_User_Add_New extends AbstractObject {
         public static int actionId = 31201;
         public List<ProtoGlobal.Story> stories;
-        public ProtocolStringList failedTokens;
+
 
         public static Res_Story_User_Add_New deserializeObject(int constructor, byte[] message) {
             if (constructor != actionId || message == null) {
@@ -179,7 +179,7 @@ public class IG_RPC {
             ProtoStoryUserAddNew.StoryUserAddNewResponse response = ProtoStoryUserAddNew.StoryUserAddNewResponse.parseFrom(message);
             resId = response.getResponse().getId();
             stories = response.getStoryList();
-            failedTokens = response.getFailedTokensList();
+
         }
     }
 
