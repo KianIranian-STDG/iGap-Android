@@ -464,6 +464,7 @@ public class CallService extends Service implements CallManager.CallStateChange 
         super.onDestroy();
 
         if (myPhoneStateService != null) {
+            myPhoneStateService.onDestroy();
             unregisterReceiver(myPhoneStateService);
             myPhoneStateService = null;
         }
