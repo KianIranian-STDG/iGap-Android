@@ -20,6 +20,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 
@@ -56,18 +57,14 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         this.isSingle = isSingle;
         this.storyId = storyId;
     }
-
+    public StoryViewFragment(long userId, boolean muStory, boolean isSingle, String filePath) {
+        this.userId = userId;
+        this.myStory = muStory;
+        this.isSingle = isSingle;
+        this.storyId = storyId;
+    }
     public StoryViewFragment() {
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (getActivity() != null) {
-            getActivity().setRequestedOrientation(
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        }
     }
 
     @Nullable
@@ -91,7 +88,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
             });
         } else {
             DbManager.getInstance().doRealmTransaction(realm -> {
-                storyResults = realm.where(RealmStory.class).sort("id" , Sort.DESCENDING).findAll();
+                storyResults = realm.where(RealmStory.class).sort("id", Sort.DESCENDING).findAll();
             });
         }
 

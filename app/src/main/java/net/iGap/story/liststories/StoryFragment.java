@@ -137,6 +137,15 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
@@ -499,7 +508,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                             }
                                         }
 
-                                    } else if (realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_FAILED).findFirst().getStatus() == MessageObject.STATUS_FAILED) {
+                                    } else if (realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
                                         isHaveFailedUpload = true;
                                     }
 
@@ -524,7 +533,6 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                     }
 
                                 }
-
 
 
                                 isAddedUserStory = true;
