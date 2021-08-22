@@ -35,7 +35,6 @@ public class MessageObject {
     public static final int STATUS_DELIVERED = 3;
     public static final int STATUS_SEEN = 4;
     public static final int STATUS_LISTENED = 5;
-    public static final int STATUS_UPLOADED = 6;
 
     public MessageObject forwardedMessage;
     public MessageObject replayToMessage;
