@@ -55,7 +55,7 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new RecyclerListView.ItemViewHolder(new StoryCell(parent.getContext(), true, StoryCell.CircleStatus.CIRCLE_IMAGE, FragmentStoryViews.this::clickedIcon), null);
+            return new RecyclerListView.ItemViewHolder(new StoryCell(parent.getContext()), null);
         }
 
         @Override

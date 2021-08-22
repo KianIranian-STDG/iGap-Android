@@ -362,8 +362,8 @@ public class StoryGalleryFragment extends BaseFragment {
 
                     viewHolderGallery.check.setOnCheckedChangeListener((buttonView, isChecked) -> {
                         if (isChecked) {
-                            if (mSelectedPhotos.size() == 10) {
-                                Toast.makeText(getContext(), "نمی توانید بیش از ۱۰ مورد رسانه را به اشتراک بگذارید", Toast.LENGTH_LONG).show();
+                            if (mSelectedPhotos.size() == 6) {
+                                Toast.makeText(getContext(), getString(R.string.story_you_can_not_share_more_than_items), Toast.LENGTH_LONG).show();
                                 viewHolderGallery.check.setChecked(false);
                             } else if (!mSelectedPhotos.contains(photosItem.get(viewHolderGallery.getAdapterPosition()))) {
                                 mSelectedPhotos.add(photosItem.get(viewHolderGallery.getAdapterPosition()));

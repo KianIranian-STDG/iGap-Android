@@ -111,6 +111,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         rootView = inflater.inflate(R.layout.fragment_story_display, container, false);
 
         storiesProgressView = rootView.findViewById(R.id.storiesProgressView);
@@ -227,6 +231,10 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         } else {
             savePosition(counter);
         }
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
     }
 
     private void updateStory() {
@@ -250,7 +258,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         nameFrom.setText(storyUser.getUserName());
         descriptionFrom.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
         RealmAttachment ra = stories.get(counter).getAttachment();
-        String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : stories.get(counter).getImagePath();
+        String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : ra.getLocalThumbnailPath();
 
         File file = new File(path);
         if (file.exists()) {

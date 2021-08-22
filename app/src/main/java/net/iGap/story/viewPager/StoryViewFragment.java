@@ -2,6 +2,7 @@ package net.iGap.story.viewPager;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -60,9 +61,22 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         View view = LayoutInflater.from(getContext()).inflate(R.layout.story_fragment, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         return view;
@@ -107,14 +121,14 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 if (isSingle) {
                     if (realmStoryProto.getStoryId() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(),realmStoryProto.getImagePath());
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
                     }
                 } else {
                     Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(),realmStoryProto.getImagePath());
+                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
                     stories.add(story);
                     storyUser.setStories(stories);
                 }
