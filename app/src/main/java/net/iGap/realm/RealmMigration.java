@@ -925,8 +925,15 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("indexOfSeen", int.class)
                     .addRealmObjectField("realmStoryProtos", realmStoryProto);
 
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addRealmObjectField("storyReplyMessage", realmStoryProto);
+            }
+
             oldVersion++;
         }
+
     }
 
     @Override

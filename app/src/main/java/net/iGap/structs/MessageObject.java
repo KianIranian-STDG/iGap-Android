@@ -10,6 +10,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGlobal.RoomMessage;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.story.StoryObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class MessageObject {
     public WalletObject wallet;
     public AttachmentObject attachment;
     public AdditionalObject additional;
+    public StoryObject storyObject;
     public String additionalData;
     public int additionalType;
     public long id;
@@ -199,6 +201,9 @@ public class MessageObject {
             messageObject.channelExtraObject = ChannelExtraObject.create(roomMessage.getChannelExtra());
         }
 
+        if (roomMessage.getStoryReplyMessage() != null) {
+            messageObject.storyObject = StoryObject.create(roomMessage.getStoryReplyMessage());
+        }
         messageObject.messageType = roomMessage.getMessageType().getNumber();
         messageObject.messageVersion = roomMessage.getMessageVersion();
         messageObject.statusVersion = roomMessage.getStatusVersion();

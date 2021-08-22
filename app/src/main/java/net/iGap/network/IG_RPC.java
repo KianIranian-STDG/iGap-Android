@@ -21,6 +21,7 @@ import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.proto.ProtoChatDelete;
 import net.iGap.proto.ProtoChatDeleteMessage;
 import net.iGap.proto.ProtoChatEditMessage;
+import net.iGap.proto.ProtoChatGetRoom;
 import net.iGap.proto.ProtoChatUpdateStatus;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoClientMuteRoom;
@@ -43,7 +44,6 @@ import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.proto.ProtoStoryRoomAddNew;
 import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.request.RequestPagination;
-import net.iGap.story.viewPager.Story;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -2133,5 +2133,59 @@ public class IG_RPC {
             return actionId;
         }
 
+    }
+
+    public static class Chat_get_room extends AbstractObject {
+        public static final int actionId = 200;
+        public long peerId;
+
+        @Override
+        public Object getProtoObject() {
+            ProtoChatGetRoom.ChatGetRoom.Builder builder = ProtoChatGetRoom.ChatGetRoom.newBuilder();
+            builder.setPeerId(peerId);
+            return builder;
+        }
+
+        @Override
+        public AbstractObject deserializeResponse(int constructor, byte[] message) {
+            return new Res_chat_get_room().deserializeObject(constructor, message);
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
+    }
+
+    public static class Res_chat_get_room extends AbstractObject {
+        public static final int actionId = 30200;
+
+        public ProtoGlobal.Room room;
+
+        public AbstractObject deserializeObject(int constructor, byte[] message) {
+            if (constructor != actionId || message == null) {
+                return null;
+            }
+
+            Res_chat_get_room object = null;
+            try {
+                object = new Res_chat_get_room();
+                object.readParams(message);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return object;
+        }
+
+        @Override
+        public void readParams(byte[] message) throws Exception {
+            ProtoChatGetRoom.ChatGetRoomResponse response = ProtoChatGetRoom.ChatGetRoomResponse.parseFrom(message);
+            room = response.getRoom();
+        }
+
+        @Override
+        public int getActionId() {
+            return actionId;
+        }
     }
 }

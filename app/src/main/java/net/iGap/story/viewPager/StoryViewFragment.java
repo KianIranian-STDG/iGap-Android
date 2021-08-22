@@ -107,14 +107,14 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 if (isSingle) {
                     if (realmStoryProto.getStoryId() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
+                                realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(),realmStoryProto.getImagePath());
                         stories.add(story);
                         storyUser.setStories(stories);
                         break;
                     }
                 } else {
                     Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
-                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());
+                            realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount(),realmStoryProto.getImagePath());
                     stories.add(story);
                     storyUser.setStories(stories);
                 }

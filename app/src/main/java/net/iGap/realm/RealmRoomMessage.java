@@ -79,6 +79,7 @@ public class RealmRoomMessage extends RealmObject {
     public boolean deleted = false;
     public RealmRoomMessage forwardMessage;
     public RealmRoomMessage replyTo;
+    public RealmStoryProto storyReplyMessage;
     public boolean showMessage = true;
     public String authorHash;
     public boolean hasEmojiInText;
@@ -371,6 +372,9 @@ public class RealmRoomMessage extends RealmObject {
             message.channelExtra = RealmChannelExtra.putOrUpdate(realm, input.getMessageId(), input.getChannelExtra());
         }
 
+        if (input.hasStory()) {
+            message.storyReplyMessage = RealmStoryProto.putOrUpdate(realm, input);
+        }
 //        addTimeIfNeed(message, realm);
 //
 //        isEmojiInText(message, input.getMessage());
@@ -1043,6 +1047,11 @@ public class RealmRoomMessage extends RealmObject {
             setHasMessageLink(false);
         }
     }
+
+    public RealmStoryProto getStoryReplyMessage() {
+        return storyReplyMessage;
+    }
+
 
     public boolean getHasMessageLink() {
         return hasMessageLink;

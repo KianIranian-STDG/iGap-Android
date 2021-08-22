@@ -1,5 +1,9 @@
 package net.iGap.realm;
 
+import net.iGap.module.enums.AttachmentFor;
+import net.iGap.proto.ProtoGlobal;
+
+import io.realm.Realm;
 import io.realm.RealmObject;
 
 public class RealmStoryProto extends RealmObject {
@@ -15,6 +19,23 @@ public class RealmStoryProto extends RealmObject {
     private boolean isSeen;
     private int viewCount;
     private int status;
+
+    public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
+        RealmStoryProto realmStory = realm.where(RealmStoryProto.class).equalTo("storyId", roomMessage.getStory().getStory().getId()).findFirst();
+        ProtoGlobal.Story story = roomMessage.getStory().getStory();
+        if (realmStory == null) {
+            realmStory = realm.createObject(RealmStoryProto.class);
+        }
+
+        realmStory.setCaption(story.getCaption());
+        realmStory.setCreatedAt(story.getCreatedAt());
+        realmStory.setFile(RealmAttachment.build(realm,story.getFileDetails(), AttachmentFor.MESSAGE_ATTACHMENT, ProtoGlobal.RoomMessageType.STORY));
+        realmStory.setSeen(story.getSeen());
+        realmStory.setFileToken(story.getFileToken());
+        realmStory.setStoryId(story.getId());
+        realmStory.setUserId(story.getUserId());
+        return realmStory;
+    }
 
     public String getCaption() {
         return caption;

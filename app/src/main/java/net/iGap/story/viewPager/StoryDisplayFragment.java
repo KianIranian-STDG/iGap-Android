@@ -32,6 +32,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.customView.EventEditText;
@@ -44,6 +45,7 @@ import net.iGap.network.IG_RPC;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
 import net.iGap.story.ExpandableTextView;
@@ -51,8 +53,9 @@ import net.iGap.structs.AttachmentObject;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.realm.Realm;
 
 public class StoryDisplayFragment extends BaseFragment implements StoriesProgressView.StoriesListener {
     private static final String EXTRA_POSITION = "EXTRA_POSITION";
@@ -122,7 +125,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         nameFrom = rootView.findViewById(R.id.nameFrom);
         descriptionFrom = rootView.findViewById(R.id.descriptionFrom);
         llAttach = rootView.findViewById(R.id.layout_attach_story);
-        llSend = rootView.findViewById(R.id.ll_chatRoom_send);
+        llSend = rootView.findViewById(R.id.llSendReply);
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         tumNailImage = rootView.findViewById(R.id.story_image);
         tvSend = rootView.findViewById(R.id.chatRoom_send_container);
@@ -133,7 +136,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         loadingProgressbar = rootView.findViewById(R.id.display_story_progress_bar);
         storyViewsRootView = rootView.findViewById(R.id.story_display_seen_views_root_view);
         storyViewsCount = rootView.findViewById(R.id.story_display_views_count);
-
 
         if (getArguments() != null) {
             position = getArguments().getInt(EXTRA_POSITION);
@@ -160,6 +162,29 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         loadingProgressbar.setVisibility(View.VISIBLE);
         replayFrame.setOnClickListener(view1 -> {
             setupReplay();
+        });
+
+        tvSend.setOnClickListener(view1 -> {
+
+            RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
+                return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", stories.get(counter).getUserId()).findFirst();
+            });
+
+            if (realmRoom == null) {
+                IG_RPC.Chat_get_room chat_get_room = new IG_RPC.Chat_get_room();
+                chat_get_room.peerId = stories.get(counter).getUserId();
+
+                getRequestManager().sendRequest(chat_get_room, (response, error) -> {
+                    if (response != null) {
+                        IG_RPC.Res_chat_get_room res = (IG_RPC.Res_chat_get_room) response;
+                        ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(res.room.getTypeValue(), res.room.getId(), stories.get(counter), edtChat.getText().toString());
+                    }
+                });
+
+            } else {
+                ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), edtChat.getText().toString());
+            }
+
         });
     }
 
@@ -225,7 +250,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         nameFrom.setText(storyUser.getUserName());
         descriptionFrom.setText(stories.get(counter).getTxt() != null ? stories.get(counter).getTxt() : "Photo");
         RealmAttachment ra = stories.get(counter).getAttachment();
-        String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : "";
+        String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : stories.get(counter).getImagePath();
 
         File file = new File(path);
         if (file.exists()) {

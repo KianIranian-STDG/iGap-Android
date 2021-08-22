@@ -881,7 +881,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getContentBloke().removeView(cslr_replay_layout);
         }
 
-        if (messageObject.replayToMessage != null && !messageObject.replayToMessage.deleted) {
+        if ((messageObject.replayToMessage != null && !messageObject.replayToMessage.deleted) || messageObject.storyObject != null) {
 
             final View replayView = ViewMaker.getViewReplay(((NewChatItemHolder) holder).getContext());
 
@@ -899,7 +899,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             replayView.setOnLongClickListener(getLongClickPerform(holder));
 
             try {// TODO: 12/29/20 MESSAGE_REFACTOR
-                AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage.messageType : messageObject.replayToMessage.forwardedMessage.messageType, messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage : messageObject.replayToMessage.forwardedMessage);
+                if (messageObject.replayToMessage != null) {
+                    AppUtils.rightFileThumbnailIcon(replayView.findViewById(R.id.chslr_imv_replay_pic), messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage.messageType : messageObject.replayToMessage.forwardedMessage.messageType, messageObject.replayToMessage.forwardedMessage == null ? messageObject.replayToMessage : messageObject.replayToMessage.forwardedMessage);
+                } else {
+                    AttachmentObject storyAttachment = messageObject.storyObject.attachmentObject;  // TODO: 8/15/21 must write a new method for this part
+                    ImageView view = replayView.findViewById(R.id.chslr_imv_replay_pic);
+                    if (storyAttachment != null) {
+                        if (storyAttachment.isFileExistsOnLocal()) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(storyAttachment.filePath), view);
+                        } else if (storyAttachment.isThumbnailExistsOnLocal()) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(storyAttachment.thumbnailPath), view);
+                        } else {
+                            view.setVisibility(View.GONE);
+                        }
+                    } else {
+                        view.setVisibility(View.GONE);
+                    }
+
+                }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -910,14 +927,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else {
                 RealmRegisteredInfo replayToInfo = DbManager.getInstance().doRealmTask(realm -> {
-                    return RealmRegisteredInfo.getRegistrationInfo(realm, messageObject.replayToMessage.userId);
+                    return RealmRegisteredInfo.getRegistrationInfo(realm, (messageObject.replayToMessage != null ? messageObject.replayToMessage.userId : messageObject.storyObject.userId));
                 });
                 if (replayToInfo != null) {
-                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
+                    replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()) + " \u25CF " + "Moments");
                 }
             }
             // TODO: 12/29/20 MESSAGE_REFACTOR
-            String replayText = AppUtils.replyTextMessage(messageObject.replayToMessage, holder.itemView.getResources());
+            String replayText;
+            if (messageObject.replayToMessage != null) {
+                replayText = AppUtils.replyTextMessage(messageObject.replayToMessage, holder.itemView.getResources());
+            } else {
+                replayText = messageObject.storyObject.caption;
+                ArrayList<Tuple<Integer, Integer>> places = AbstractMessage.getBoldPlaces(replayText);
+                replayText = AbstractMessage.removeBoldMark(replayText, places);
+            }
+
             replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));
 
             if (messageObject.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
@@ -1932,7 +1957,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     attachment.filePath = downloadedMessage.attachment.filePath;
                     attachment.token = downloadedMessage.attachment.token;
                     ProtoGlobal.RoomMessageType messageType = ProtoGlobal.RoomMessageType.forNumber(downloadedMessage.messageType);
-                    onProgressFinish(holder,downloadedMessage.attachment,messageType.getNumber());
+                    onProgressFinish(holder, downloadedMessage.attachment, messageType.getNumber());
                     loadImageOrThumbnail(messageType);
                 }
             });

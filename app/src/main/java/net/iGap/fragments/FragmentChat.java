@@ -352,6 +352,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOCATION_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STORY_REPLY_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
@@ -8008,6 +8009,7 @@ public class FragmentChat extends BaseFragment
 
                 switch (messageType) {
                     case TEXT_VALUE:
+                    case STORY_REPLY_VALUE:
                         if (messageObject.getAdditional() != null && messageObject.getAdditional().type == AdditionalType.CARD_TO_CARD_MESSAGE)
                             if (!addTop) {
                                 mAdapter.add(new CardToCardItem(mAdapter, chatType, FragmentChat.this).setMessage(messageObject).withIdentifier(identifier));
