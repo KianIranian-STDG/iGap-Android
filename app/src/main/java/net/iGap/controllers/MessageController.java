@@ -9,19 +9,25 @@ import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.accountManager.DbManager;
 import net.iGap.network.AbstractObject;
 import net.iGap.network.IG_RPC;
 import net.iGap.network.RequestManager;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoStoryUserAddNew;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmStory;
+import net.iGap.realm.RealmStoryProto;
 import net.iGap.request.RequestClientGetRoom;
+import net.iGap.story.StoryObject;
 import net.iGap.structs.MessageObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT_VALUE;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP_VALUE;
@@ -30,7 +36,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     private String lastUploadedAvatarId;
     private long lastUploadedAvatarRoomId;
-
+    public static boolean isSendingStory = false;
     private static volatile MessageController[] instance = new MessageController[AccountManager.MAX_ACCOUNT_COUNT];
     private String TAG = getClass().getSimpleName() + " " + currentAccount + " ";
 
@@ -134,6 +140,27 @@ public class MessageController extends BaseController implements EventManager.Ev
         });
     }
 
+    public void addMyStory(List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects) {
+        isSendingStory = true;
+        AbstractObject request = null;
+        IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
+        story_user_addNew.storyAddRequests = storyObjects;
+        request = story_user_addNew;
+        getRequestManager().sendRequest(request, (response, error) -> {
+
+            if (error == null) {
+                IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
+                MessageController.isSendingStory = false;
+                getMessageDataStorage().updateUserAddedStory(res.stories);
+            } else {
+                IG_RPC.Error err = (IG_RPC.Error) error;
+                MessageController.isSendingStory = false;
+                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_FAILED));
+            }
+        });
+
+    }
+
     private void onUserStoryAddViewResponse(AbstractObject response, boolean update) {
         IG_RPC.Res_Story_Add_View story_add_view = (IG_RPC.Res_Story_Add_View) response;
         if (story_add_view.storyOwnerUserId == AccountManager.getInstance().getCurrentUser().getId()) {
@@ -143,7 +170,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     private void onUserDeletedStoryResponse(AbstractObject response, boolean update) {
         IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
-        getMessageDataStorage().deleteUserStory(res.storyId, res.userId);
+        getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
     }
 
     private void onUserAddStoryResponse(AbstractObject response, boolean update) {

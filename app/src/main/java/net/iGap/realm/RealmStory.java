@@ -3,6 +3,7 @@ package net.iGap.realm;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.story.StoryObject;
+import net.iGap.structs.MessageObject;
 
 import java.util.List;
 
@@ -131,11 +132,16 @@ public class RealmStory extends RealmObject {
             } else {
                 isExist = true;
             }
-            if (igapStory.file != null) {
+            if (igapStory.file != null && igapStory.fileToken != null) {
                 realmAttachment = RealmAttachment.build(realm, igapStory.file, AttachmentFor.AVATAR, null);
                 storyProto.setFile(realmAttachment);
+            } else {
+                storyProto.setFile(igapStory.realmAttachment);
+            }
+            if (igapStory.status == MessageObject.STATUS_SENT) {
                 setSentAll(true);
-                setUploadedAll(true);
+            } else if (igapStory.status == MessageObject.STATUS_FAILED || igapStory.status == MessageObject.STATUS_SENDING) {
+                setSentAll(false);
             }
             storyProto.setCaption(igapStory.caption);
             storyProto.setCreatedAt(igapStory.createdAt * 1000L);
@@ -143,7 +149,7 @@ public class RealmStory extends RealmObject {
             storyProto.setUserId(igapStory.userId);
             storyProto.setStoryId(igapStory.storyId);
             storyProto.setSeen(igapStory.isSeen);
-            storyProto.setImagePath(igapStory.imagePath);
+//            storyProto.setImagePath(igapStory.imagePath);
             storyProto.setStatus(igapStory.status);
             storyProto.setId(igapStory.id);
 

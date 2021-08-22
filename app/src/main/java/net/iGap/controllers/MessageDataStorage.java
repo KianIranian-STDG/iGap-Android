@@ -2,6 +2,8 @@ package net.iGap.controllers;
 
 import android.util.Log;
 
+import com.google.protobuf.ProtocolStringList;
+
 import net.iGap.G;
 import net.iGap.helper.DispatchQueue;
 import net.iGap.helper.FileLog;
@@ -885,6 +887,29 @@ public class MessageDataStorage extends BaseController {
         });
     }
 
+    public void storyUpdateStatusWithFailedTokens(ProtocolStringList failedTokens) {
+        storageQueue.postRunnable(() -> {
+            try {
+                database.beginTransaction();
+
+                for (int i = 0; i < failedTokens.size(); i++) {
+                    RealmStoryProto realmStoryProto = database.where(RealmStoryProto.class).equalTo("fileToken", failedTokens.get(i)).findFirst();
+                    if (realmStoryProto != null) {
+                        realmStoryProto.setStatus(MessageObject.STATUS_SENT);
+                    }
+                }
+                if (database.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() == 0 &&
+                        database.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() == 0) {
+                    database.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(true);
+                }
+                database.commitTransaction();
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+
+    }
 
     public void updateUserAddedStory(final List<ProtoGlobal.Story> stories) {
 
@@ -899,7 +924,7 @@ public class MessageDataStorage extends BaseController {
                     realmStory = database.createObject(RealmStory.class, stories.get(0).getUserId());
                 }
                 List<StoryObject> storyObjects = new ArrayList<>();
-                for (int i = 0; i < storyObjects.size(); i++) {
+                for (int i = 0; i < stories.size(); i++) {
                     storyObjects.add(StoryObject.create(stories.get(i)));
                 }
 
@@ -907,6 +932,33 @@ public class MessageDataStorage extends BaseController {
                 realmStory.setSeenAll(false);
                 realmStory.setRealmStoryProtos(database, storyObjects);
 
+                database.commitTransaction();
+
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_USER_ADD_NEW));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+
+
+    }
+    public void updateUserAddedStoryWithStoryObjects(final List<StoryObject> stories) {
+
+
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "updateUserAddedStory userId " + stories.get(0).userId + " storiesId " + stories.get(0).id);
+            try {
+                database.beginTransaction();
+
+                RealmStory realmStory = database.where(RealmStory.class).equalTo("id", stories.get(0).userId).findFirst();
+                if (realmStory == null) {
+                    realmStory = database.createObject(RealmStory.class, stories.get(0).userId);
+                    realmStory.setSeenAll(false);
+                }
+
+
+                realmStory.setUserId(stories.get(0).userId);
+                realmStory.setRealmStoryProtos(database, stories);
 
                 database.commitTransaction();
 
@@ -919,16 +971,46 @@ public class MessageDataStorage extends BaseController {
 
     }
 
-
-    public void deleteUserStory(long storyId, long userId) {
+    public void deleteUserStoryWithStoryId(long storyId, long userId) {
 
 
         storageQueue.postRunnable(() -> {
             FileLog.i(TAG, "deleteUserStoryId " + storyId);
             try {
                 database.beginTransaction();
-
+                long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
+                database.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
                 RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("storyId", storyId).findFirst();
+
+                if (realmStoryProto != null) {
+                    realmStoryProto.deleteFromRealm();
+                }
+
+                if (database.where(RealmStory.class).equalTo("id", userId).findFirst().getRealmStoryProtos().size() == 0) {
+                    database.where(RealmStory.class).equalTo("id", userId).findFirst().deleteFromRealm();
+                }
+
+                database.commitTransaction();
+
+                G.runOnUiThread(() -> getEventManager().postEvent(EventManager.STORY_DELETED));
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+
+
+    }
+
+    public void deleteUserStoryWithUploadId(long uploadId, long userId) {
+
+
+        storageQueue.postRunnable(() -> {
+            FileLog.i(TAG, "deleteUserStoryId " + uploadId);
+            try {
+                database.beginTransaction();
+                long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
+                database.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
+                RealmStoryProto realmStoryProto = database.where((RealmStoryProto.class)).equalTo("id", uploadId).findFirst();
 
                 if (realmStoryProto != null) {
                     realmStoryProto.deleteFromRealm();

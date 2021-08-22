@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
 
 import net.iGap.G;
+import net.iGap.controllers.MessageController;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
@@ -249,57 +250,20 @@ public class HttpUploader implements IUpload {
                         }
                         if (fileObject.type.equals("story")) {
                             DbManager.getInstance().doRealmTransaction(realm -> {
-                                realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setStatus(MessageObject.STATUS_UPLOADED);
                                 realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setFileToken(fileObject.fileToken);
 
-                                if (realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() == 0 &&
-                                        realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() == 0) {
-                                    realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setUploadedAll(true);
 
-
-                                    List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_UPLOADED).findAll();
-                                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
-                                        List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
-                                        for (int i = 0; i < realmStoryProtos.size(); i++) {
-                                            ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                                            storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
-                                            storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
-                                            storyObjects.add(storyAddRequest.build());
-                                        }
-
-
-                                        AbstractObject request = null;
-                                        IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
-                                        story_user_addNew.storyAddRequests = storyObjects;
-                                        request = story_user_addNew;
-                                        RequestManager.getInstance(AccountManager.selectedAccount).sendRequest(request, (response, error) -> {
-                                            if (error == null) {
-                                                IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
-                                                List<StoryObject> storyObjectList = new ArrayList<>();
-                                                DbManager.getInstance().doRealmTransaction(realmDB -> {
-                                                    for (int i = 0; i < res.stories.size(); i++) {
-                                                        storyObjectList.add(StoryObject.create(res.stories.get(i)));
-                                                    }
-
-                                                    RealmStory.putOrUpdate(realmDB, false, AccountManager.getInstance().getCurrentUser().getId(), storyObjectList);
-                                                    realmDB.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(true);
-
-                                                });
-                                                G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_UPLOADED_NEW));
-
-                                            } else {
-                                                IG_RPC.Error err = (IG_RPC.Error) error;
-                                                if (err.minor == 1 && err.major == 5) {
-
-                                                }
-
-
-                                            }
-                                        });
-
-
+                                List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENDING).findAll();
+                                if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                                    List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                                    for (int i = 0; i < realmStoryProtos.size(); i++) {
+                                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                                        storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
+                                        storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
+                                        storyObjects.add(storyAddRequest.build());
                                     }
 
+                                    MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
 
                                 }
 
