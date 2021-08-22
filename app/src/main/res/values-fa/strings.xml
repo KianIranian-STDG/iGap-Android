@@ -2256,13 +2256,14 @@
     <string name="tap_to_add_status_update">برای افزودن لحظه ضربه بزنید</string>
     <string name="viewed_updates">به روزرسانی های مشاهده شده</string>
     <string name="recent_updates">بروز رسانی های اخیر</string>
-    <string name="your_status_updates_will_disappear_after_24_hours">لحظات شما پس از ۲۴ ساعت حذف می شوند.</string>
+    <string name="your_status_updates_will_disappear_after_24_hours">لحظه های شما پس از ۲۴ ساعت حذف می شوند.</string>
     <string name="your_device_does_not_have_a_camera">دستگاه شما دارای دوربین نمی باشد!</string>
     <string name="delete_status_update">این لحظه حذف شود؟ برای همه کسانی که آن را دریافت کرده اند حذف خواهد شد. </string>
     <string name="story_views">دیده شده</string>
     <string name="story_uploading">در حال آپلود...</string>
     <string name="story_sending">در حال ارسال...</string>
     <string name="story_could_not_sent">ارسال نشد!</string>
+    <string name="story_you_can_not_share_more_than_items">نمیتوانید بیش از ۶ مورد رسانه را به اشتراک بگذارید!</string>
 
     <string name="stories_setting">تنظیمات داستان</string>
     <string name="hide_story_from">پنهان کردن داستان</string>

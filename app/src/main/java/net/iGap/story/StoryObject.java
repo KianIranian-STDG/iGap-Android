@@ -19,6 +19,7 @@ public class StoryObject {
     public long storyId;
     public boolean isSeen;
     public String imagePath;
+    public RealmAttachment realmAttachment;
     public int status = MessageObject.STATUS_LISTENED;
     public long id;
 
@@ -29,7 +30,7 @@ public class StoryObject {
         storyObject.caption = igapStory.getCaption();
         storyObject.fileToken = igapStory.getFileToken();
         storyObject.file = igapStory.getFileDetails();
-        if (storyObject.file != null) {
+        if (storyObject.file != null && storyObject.fileToken != null) {
             storyObject.status = MessageObject.STATUS_SENT;
         }
         storyObject.createdAt = igapStory.getCreatedAt();

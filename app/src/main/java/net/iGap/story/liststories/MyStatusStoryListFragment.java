@@ -1,5 +1,6 @@
 package net.iGap.story.liststories;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
@@ -70,19 +72,37 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     private int recentStoryRow;
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_LIST_FETCHED, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_NEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_USER_ADD_VIEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_DELETED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_NEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOADED_FAILED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_UPLOAD, this);
+        EventManager.getInstance(AccountManager.selectedAccount).removeObserver(EventManager.STORY_SENDING, this);
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (getActivity() != null) {
+            getActivity().setRequestedOrientation(
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         if (getContext() == null)
             return super.onCreateView(inflater, container, savedInstanceState);
 
@@ -131,8 +151,9 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_NEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_USER_ADD_VIEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_DELETED, this);
-        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_NEW, this);
         EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOADED_FAILED, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_UPLOAD, this);
+        EventManager.getInstance(AccountManager.selectedAccount).addObserver(EventManager.STORY_SENDING, this);
         progressBar.setVisibility(View.VISIBLE);
         displayNameList = new ArrayList<>();
         loadStories();
@@ -196,6 +217,8 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         displayNameList = getMessageDataStorage().getDisplayNameWithUserId(userIdList);
         if (storyProto != null && storyProto.size() > 0) {
             progressBar.setVisibility(View.GONE);
+            adapter = new ListAdapter();
+            recyclerListView.setAdapter(adapter);
             recyclerListView.setVisibility(View.VISIBLE);
             adapter.addRow();
         } else {
@@ -229,7 +252,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
             recyclerListView.setVisibility(View.GONE);
             DbManager.getInstance().doRealmTransaction(realm -> {
                 if (realm.where(RealmStoryProto.class).equalTo("id", storyCell.getUploadId()).findFirst().getStatus() == MessageObject.STATUS_FAILED) {
-                    realm.where(RealmStoryProto.class).equalTo("id", storyCell.getUploadId()).findFirst().deleteFromRealm();
+                    getMessageDataStorage().deleteUserStoryWithUploadId(storyCell.getUploadId(), storyCell.getUserId());
                 } else {
                     AbstractObject req = null;
                     IG_RPC.Story_Delete story_delete = new IG_RPC.Story_Delete();
@@ -238,17 +261,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                     getRequestManager().sendRequest(req, (response, error) -> {
                         if (error == null) {
                             IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
-                            DbManager.getInstance().doRealmTransaction(realmDB -> {
-                                realmDB.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-                                realmDB.where((RealmStoryProto.class)).equalTo("storyId",res.storyId).findAll().deleteAllFromRealm();
-                                storyProto = realmDB.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("storyId", Sort.DESCENDING);
-                            });
-                            G.refreshRealmUi();
-                            G.runOnUiThread(() -> {
-                                loadStories();
-                                EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
-                            });
-
+                            getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
                         } else {
 
                         }
@@ -289,18 +302,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
             getRequestManager().sendRequest(req, (response, error) -> {
                 if (error == null) {
                     IG_RPC.Res_Story_Delete res = (IG_RPC.Res_Story_Delete) response;
-                    DbManager.getInstance().doRealmTransaction(realm -> {
-                        realm.where(RealmStory.class).lessThan("realmStoryProtos.createdAt", System.currentTimeMillis() - MILLIS_PER_DAY).findAll().deleteAllFromRealm();
-                        realm.where((RealmStoryProto.class)).equalTo("storyId", res.storyId).findAll().deleteAllFromRealm();
-                        storyProto = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findAll().sort("createdAt", Sort.DESCENDING);
-                    });
-                    G.refreshRealmUi();
-                    G.runOnUiThread(() -> {
-                        loadStories();
-                        EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_DELETED);
-                    });
-
-
+                    getMessageDataStorage().deleteUserStoryWithStoryId(res.storyId, res.userId);
                 } else {
 
                 }
@@ -312,18 +314,28 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     }
 
     @Override
-    public void openMyStory() {
-
+    public void onStoryClick(StoryCell storyCell) {
+        new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(storyCell.getUserId(), true, true, storyCell.getStoryId())).setReplace(false).load();
     }
+
 
     @Override
     public void receivedEvent(int id, int account, Object... args) {
-        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_USER_ADD_NEW || id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED || id == EventManager.STORY_UPLOADED_FAILED || id == EventManager.STORY_UPLOADED_NEW) {
-            G.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadStories();
-                }
+        if (id == EventManager.STORY_LIST_FETCHED || id == EventManager.STORY_USER_ADD_NEW ||
+                id == EventManager.STORY_USER_ADD_VIEW || id == EventManager.STORY_DELETED ||
+                id == EventManager.STORY_UPLOADED_FAILED) {
+            G.runOnUiThread(() -> {
+                floatActionLayout.setVisibility(View.VISIBLE);
+                loadStories();
+            });
+        } else if (id == EventManager.STORY_UPLOAD) {
+            G.runOnUiThread(() -> {
+                floatActionLayout.setVisibility(View.GONE);
+                loadStories();
+            });
+        } else if (id == EventManager.STORY_SENDING) {
+            G.runOnUiThread(() -> {
+                floatActionLayout.setVisibility(View.GONE);
             });
         }
     }
@@ -348,7 +360,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
             View cellView;
             switch (viewType) {
                 case 0:
-                    cellView = new StoryCell(context, true, StoryCell.CircleStatus.CIRCLE_IMAGE);
+                    cellView = new StoryCell(context);
                     break;
                 case 1:
                     cellView = new HeaderCell(context);
@@ -366,39 +378,41 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 case 0:
                     if (position <= recentStoryRow) {
                         StoryCell storyCell = (StoryCell) holder.itemView;
-                        storyCell.setBackgroundColor(Color.WHITE);
-                        storyCell.setTextColor(Color.BLACK, Color.GRAY);
-                        storyCell.setDeleteStory(MyStatusStoryListFragment.this);
 
-                        storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                         if (position < storyProto.size()) {
+
                             if (storyProto.get(position).getStatus() == MessageObject.STATUS_FAILED) {
+                                floatActionLayout.setVisibility(View.VISIBLE);
+                                storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
-                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), null, storyProto.get(position).getImagePath());
                             } else if (storyProto.get(position).getStatus() == MessageObject.STATUS_SENDING) {
-                                if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(storyProto.get(position).getId()))) {
+                                if (!Uploader.getInstance().isCompressingOrUploading(String.valueOf(storyProto.get(position).getId())) && !MessageController.isSendingStory) {
+                                    floatActionLayout.setVisibility(View.VISIBLE);
                                     long failedStoryId = storyProto.get(position).getId();
                                     DbManager.getInstance().doRealmTransaction(realm -> {
                                         realm.where(RealmStoryProto.class).equalTo("id", failedStoryId).findFirst().setStatus(MessageObject.STATUS_FAILED);
                                     });
+                                    storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.FAILED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
                                 } else {
+                                    floatActionLayout.setVisibility(View.GONE);
+                                    storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.LOADING, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
 
                                 }
 
-                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), null, storyProto.get(position).getImagePath());
-                            } else if (storyProto.get(position).getStatus() == MessageObject.STATUS_UPLOADED) {
-                                storyCell.setImageLoadingStatus(ImageLoadingView.Status.FAILED);
-                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), null, storyProto.get(position).getImagePath());
                             } else {
+                                storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
-                                storyCell.setData(true, storyProto.get(position).getUserId(), storyProto.get(position).getCreatedAt(), storyProto.get(position).getViewCount(), displayNameList.get(0).get(0), displayNameList.get(0).get(1), storyProto.get(position).getFile(), null);
                                 storyCell.deleteIconVisibility(true, R.string.delete_icon);
                             }
+                            storyCell.setBackgroundColor(Color.WHITE);
+                            storyCell.setDeleteStory(MyStatusStoryListFragment.this);
 
+                            storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                             storyCell.setStoryId(storyProto.get(position).getStoryId());
                             storyCell.setUploadId(storyProto.get(position).getId());
+                            storyCell.setFileToken(storyProto.get(position).getFileToken());
                         }
 
                         storyCell.addIconVisibility(false);
