@@ -90,9 +90,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_my_web_view, container, false);
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        return view;
+        return inflater.inflate(R.layout.fragment_my_web_view, container, false);
     }
 
     @Override
@@ -267,7 +265,6 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (webView != null) {
             webView.destroy();
         }
