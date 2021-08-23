@@ -182,7 +182,13 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
 
 
         FrameLayout rootView = new FrameLayout(getContext());
-        rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        if (G.themeColor == Theme.DARK) {
+            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
+        }else {
+            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        }
+
+
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
         recyclerListView = new RecyclerListView(getContext());
         adapter = new ListAdapter();
@@ -556,7 +562,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), "test", "#FF4081", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll()) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {
@@ -572,7 +578,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    headerCell.setTextColor(getResources().getColor(R.color.ou_background_crop));
+                    headerCell.setTextColor(Theme.getInstance().getSendMessageTextColor(headerCell.getContext()));
                     if (position == recentHeaderRow) {
                         headerCell.setText(getString(R.string.recent_updates));
                     } else if (position == muteHeaderRow) {

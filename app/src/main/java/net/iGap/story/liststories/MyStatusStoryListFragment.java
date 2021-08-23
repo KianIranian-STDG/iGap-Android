@@ -101,7 +101,11 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
 
 
         FrameLayout rootView = new FrameLayout(getContext());
-        rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        if (G.themeColor == Theme.DARK) {
+            rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
+        }else {
+            rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
+        }
         rootView.addView(toolBar, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.WRAP_CONTENT, Gravity.TOP));
         recyclerListView = new RecyclerListView(getContext());
         adapter = new ListAdapter();
