@@ -104,7 +104,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
         List<StoryUser> storyUserList = new ArrayList<>();
 
         for (int i = 0; i < storyResults.size(); i++) {
-            RealmList<RealmStoryProto> realmStoryProtos = storyResults.get(i).getRealmStoryProtos();
+            RealmResults<RealmStoryProto> realmStoryProtos = storyResults.get(i).getRealmStoryProtos().sort("createdAt");
             StoryUser storyUser = new StoryUser();
             List<Story> stories = new ArrayList<>();
             storyUser.setUserName(getMessageDataStorage().getDisplayNameWithUserId(storyResults.get(i).getUserId()));

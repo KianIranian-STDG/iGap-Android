@@ -485,7 +485,10 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                             RealmStory realmStory = realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst();
                             if (realmStory != null) {
                                 if (realmStory.isSentAll()) {
-                                    storyCell.setData(realmStory, displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
+                                    G.runOnUiThread(() -> {
+                                        floatActionLayout.setVisibility(View.VISIBLE);
+                                    });
+                                    storyCell.setData(realmStory, displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, otherUserRealmStory.size() > 0, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                     storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                     storyCell.deleteIconVisibility(true);
                                     storyCell.addIconVisibility(false);
@@ -553,7 +556,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), "testi", "#FF4081", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(position).get(0), displayNameList.get(position).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll()) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {
