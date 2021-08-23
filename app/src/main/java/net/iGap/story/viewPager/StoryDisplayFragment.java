@@ -32,7 +32,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -82,6 +81,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private FrameLayout tvSend;
     private ConstraintLayout constraintLayout;
     private ExpandableTextView expandableTextView;
+    private LinearLayout captionRootView;
     private ProgressBar progressBar;
     private AtomicInteger OpenKeyboard = new AtomicInteger();
     private AtomicInteger closeKeyboard = new AtomicInteger();
@@ -136,6 +136,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         tvSend = rootView.findViewById(R.id.chatRoom_send_container);
         constraintLayout = rootView.findViewById(R.id.root_display);
         expandableTextView = rootView.findViewById(R.id.caption_text_sub_view);
+        captionRootView = rootView.findViewById(R.id.caption_text_root_view);
         progressBar = rootView.findViewById(R.id.storyDisplayVideoProgress);
         storyOverlay = rootView.findViewById(R.id.storyOverlay);
         loadingProgressbar = rootView.findViewById(R.id.display_story_progress_bar);
@@ -237,7 +238,12 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         storyDisplayImage.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
 
-        if (stories.get(counter).getTxt() != null) {
+        if (stories.get(counter).getTxt() == null || stories.get(counter).getTxt().trim().equals("") || stories.get(counter).getTxt().trim().isEmpty()) {
+            captionRootView.setVisibility(View.GONE);
+            expandableTextView.setVisibility(View.GONE);
+        } else if (stories.get(counter).getTxt() != null) {
+            captionRootView.setVisibility(View.VISIBLE);
+            expandableTextView.setVisibility(View.VISIBLE);
             if (stories.get(counter).getTxt().length() >= 100) {
                 expandableTextView.setTextSize(20);
             } else if (stories.get(counter).getTxt().length() >= 17) {
@@ -291,12 +297,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                                     HelperLog.getInstance().setErrorLog(new Exception("File Dont Exist After Download !!" + filepath));
                                 }
 
-                                G.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        loadImage(filepath);
-                                    }
-                                });
+                                G.runOnUiThread(() -> loadImage(filepath));
 
 
                             }
