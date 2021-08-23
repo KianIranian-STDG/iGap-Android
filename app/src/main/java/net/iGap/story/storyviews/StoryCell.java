@@ -173,6 +173,7 @@ public class StoryCell extends FrameLayout {
 
 
         } else if (attachment != null) {
+            Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
             if (object != null) {
                 Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
@@ -241,6 +242,7 @@ public class StoryCell extends FrameLayout {
 
 
             } else if (attachment != null) {
+                Glide.with(context).load(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
                 DownloadObject object = DownloadObject.createForStoryAvatar(AttachmentObject.create(attachment), true);
                 if (object != null) {
                     Downloader.getInstance(AccountManager.selectedAccount).download(object, arg -> {
