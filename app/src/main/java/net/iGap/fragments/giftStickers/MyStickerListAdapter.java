@@ -106,10 +106,10 @@ public class MyStickerListAdapter extends RecyclerView.Adapter<MyStickerListAdap
 
             if (giftSticker.getFromUserId() != null) {
                 userId = Long.valueOf(giftSticker.getFromUserId());
-                sendOrReceiveTv.setText(R.string.forward_icon);
+                sendOrReceiveTv.setText(R.string.icon_forward);
             } else if (giftSticker.getToUserId() != null) {
                 userId = Long.valueOf(giftSticker.getToUserId());
-                sendOrReceiveTv.setText(R.string.reply_icon);
+                sendOrReceiveTv.setText(R.string.icon_reply);
             }
 
             if (userId != null) {

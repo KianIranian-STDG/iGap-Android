@@ -55,6 +55,9 @@ public class UserContactsImportResponse extends MessageHandler {
         if (G.onQueueSendContact != null) {
             G.onQueueSendContact.sendContact();
         }
+        else{
+            Contacts.isSendingContactToServer = false;
+        }
 
 
         if (getContactList) {

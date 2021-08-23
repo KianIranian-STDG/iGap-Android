@@ -78,8 +78,8 @@ public class FragmentSetSecurityPassword extends BaseFragment implements Toolbar
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(G.context.getResources().getString(R.string.your_password))
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.check_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_sent)
                 .setLogoShown(true)
                 .setListener(this);
 

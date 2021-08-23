@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{()-> viewModel.onRetryClicked()}"
-            android:text="@string/retry_icon"
+            android:text="@string/icon_retry"
             android:textSize="@dimen/dp32"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

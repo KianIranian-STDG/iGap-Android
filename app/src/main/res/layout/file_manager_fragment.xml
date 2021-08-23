@@ -53,7 +53,7 @@
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:text="@string/md_close_button" />
+                android:text="@string/icon_close" />
 
         </LinearLayout>
 
@@ -104,7 +104,7 @@
             android:visibility="@{vm.sendBoxVisibility}"
             android:onClick="@{()-> vm.OnSendClick()}"
             style="@style/myIconToolbarStyle"
-            android:text="@string/md_send_button"
+            android:text="@string/icon_send"
             app:layout_constraintRight_toRightOf="@id/edtMessage"
             app:layout_constraintTop_toTopOf="@id/edtMessage"
             app:layout_constraintBottom_toTopOf="@id/edtMessage" />

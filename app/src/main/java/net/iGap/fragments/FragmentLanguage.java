@@ -14,8 +14,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.yariksoffice.lingver.Lingver;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityEnhanced;
@@ -63,7 +61,7 @@ public class FragmentLanguage extends BaseFragment {
         binding.flLayoutToolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setShowConnectionState(false)
                 .setDefaultTitle(getString(R.string.language))
@@ -76,8 +74,7 @@ public class FragmentLanguage extends BaseFragment {
 
         viewModel.getRefreshActivityForChangeLanguage().observe(getViewLifecycleOwner(), language -> {
             if (getActivity() instanceof ActivityEnhanced && language != null) {
-                /*G.updateResources(getActivity().getBaseContext());*/
-                Lingver.getInstance().setLocale(getActivity(), language);
+                G.updateResources(getActivity().getBaseContext());
 
                 if (G.twoPaneMode) {
                     Fragment frg;

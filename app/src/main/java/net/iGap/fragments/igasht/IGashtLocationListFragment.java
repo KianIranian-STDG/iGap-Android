@@ -46,8 +46,8 @@ public class IGashtLocationListFragment extends IGashtBaseView<IGashtLocationVie
         binding.toolbar.addView(HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.history_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_time)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

@@ -91,7 +91,7 @@
         android:layout_height="@dimen/dp48"
         android:layout_gravity="center"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:text="@string/retry_icon"
+        android:text="@string/icon_retry"
         android:textColor="?attr/iGapTitleTextColor"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tv_stickerDialog_add"

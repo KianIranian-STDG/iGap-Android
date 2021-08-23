@@ -16,7 +16,7 @@ public class IconView extends AppCompatTextView {
         setGravity(Gravity.CENTER);
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, 26);
         setTextColor(0xffffffff);
-        setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
     }
 
     public void setIconColor(int color) {

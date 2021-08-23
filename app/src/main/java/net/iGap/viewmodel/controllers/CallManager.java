@@ -168,6 +168,7 @@ public class CallManager {
         this.callPeerId = callPeerId;
         this.callType = callType;
         // TODO: 5/12/2020 music player is changed and must be checked
+        G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.CALL_STATE_CHANGED, true));
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
                 MusicPlayer.stopSound();

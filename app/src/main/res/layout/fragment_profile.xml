@@ -20,7 +20,7 @@
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:layout_marginTop="@dimen/dp24"
-            android:text="@string/cloud_icon"
+            android:text="@string/icon_cloud_space"
             android:textSize="@dimen/dp32"
             app:layout_constraintEnd_toStartOf="@id/settingIcon"
             app:layout_constraintHorizontal_chainStyle="spread"
@@ -55,7 +55,7 @@
             style="@style/myIconTextViewStyleGray"
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
-            android:text="@string/setting_icon"
+            android:text="@string/icon_settings_lines"
             android:textSize="@dimen/dp28"
             app:layout_constraintBottom_toBottomOf="@id/cloudIcon"
             app:layout_constraintEnd_toStartOf="@id/addIcon"
@@ -91,7 +91,7 @@
             android:layout_width="@dimen/dp40"
             android:layout_height="@dimen/dp40"
             android:padding="@dimen/fup_items_icon_padding"
-            android:text="@string/add_icon_without_circle_font"
+            android:text="@string/icon_add"
             android:textSize="@dimen/dp28"
             app:layout_constraintBottom_toBottomOf="@id/cloudIcon"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +102,7 @@
             android:id="@+id/addTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Add"
+            android:text="@string/account"
             android:textColor="?iGapSubtitleTextColor"
             android:textSize="@dimen/standardTextSize"
             app:layout_constraintEnd_toEndOf="@id/addIcon"
@@ -114,7 +114,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="@{()->viewModel.onAddClick()}"
+            android:onClick="@{()->viewModel.onAccountsClicked()}"
             app:constraint_referenced_ids="addTitle,addIcon"
             app:layout_constraintBottom_toBottomOf="@id/addTitle"
             app:layout_constraintEnd_toEndOf="@id/addIcon"
@@ -151,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                android:text="@string/wallet_icon"
+                android:text="@string/icon_charge_wallet"
                 app:layout_constraintEnd_toStartOf="@id/fup_btn_credit_lbl"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -214,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                android:text="@string/score_star_icon"
+                android:text="@string/icon_favourite"
                 app:layout_constraintEnd_toStartOf="@id/fup_btn_score_lbl"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
@@ -265,7 +265,7 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="@string/invite_icon"
+            android:text="@string/icon_add_contact"
             app:layout_constraintStart_toStartOf="@id/fup_btn_invite_friends"
             app:layout_constraintTop_toTopOf="@id/fup_btn_invite_friends" />
 
@@ -301,7 +301,7 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="@string/scan_qr_code_icon"
+            android:text="@string/icon_QR_code"
             app:layout_constraintStart_toStartOf="@id/fup_btn_qr_scanner"
             app:layout_constraintTop_toTopOf="@id/fup_btn_qr_scanner" />
 
@@ -335,7 +335,7 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="@string/location_pin_icon"
+            android:text="@string/icon_location"
             app:layout_constraintStart_toStartOf="@id/fup_btn_nearBy"
             app:layout_constraintTop_toTopOf="@id/fup_btn_nearBy" />
 
@@ -369,7 +369,7 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="@string/dark_mode_icon"
+            android:text="@string/icon_dark_mode"
             app:layout_constraintStart_toStartOf="@id/fup_btn_dark_mode"
             app:layout_constraintTop_toTopOf="@id/fup_btn_dark_mode" />
 
@@ -417,7 +417,7 @@
             style="@style/myIconTextViewStyle"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:text="@string/faq_icon"
+            android:text="@string/icon_FAQ"
             app:layout_constraintStart_toStartOf="@id/fup_btn_faq"
             app:layout_constraintTop_toTopOf="@id/fup_btn_faq" />
 

@@ -12,6 +12,7 @@ import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoFileDownload;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 class HttpDownloader extends BaseController implements IDownloader, Observer<Pair<HttpRequest, HttpDownloader.DownloadStatus>>, EventManager.EventDelegate {
     private static HttpDownloader[] instance = new HttpDownloader[AccountManager.MAX_ACCOUNT_COUNT];
     private Queue<HttpRequest> requestsQueue = new PriorityBlockingQueue<>();
-    private List<HttpRequest> inProgressRequests = new ArrayList<>();
+    private List<HttpRequest> inProgressRequests = Collections.synchronizedList(new ArrayList<>());
     private AtomicInteger inProgressCount = new AtomicInteger(0);
     private boolean canStartDownload;
     private static final int MAX_DOWNLOAD = 3;
@@ -81,9 +82,12 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
             if (request.getRequestKey().equals(requestId))
                 return request;
         }
-        for (HttpRequest request : inProgressRequests) {
-            if (request.getRequestKey().equals(requestId))
-                return request;
+
+        synchronized (inProgressRequests) {
+            for (HttpRequest request : inProgressRequests) {
+                if (request.getRequestKey().equals(requestId))
+                    return request;
+            }
         }
         return null;
     }
@@ -126,11 +130,13 @@ class HttpDownloader extends BaseController implements IDownloader, Observer<Pai
         if (request == null)
             return;
 
-        for (int i = 0; i < inProgressRequests.size(); i++) {
-            if (request.getRequestKey().equals(inProgressRequests.get(i).getRequestKey())) {
-                inProgressRequests.remove(i);
-                inProgressCount.decrementAndGet();
-                break;
+        synchronized (inProgressRequests) {
+            for (int i = 0; i < inProgressRequests.size(); i++) {
+                if (request.getRequestKey().equals(inProgressRequests.get(i).getRequestKey())) {
+                    inProgressRequests.remove(i);
+                    inProgressCount.decrementAndGet();
+                    break;
+                }
             }
         }
     }

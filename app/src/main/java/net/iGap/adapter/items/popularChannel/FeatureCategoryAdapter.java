@@ -10,9 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.ImageLoadingService;
 import net.iGap.model.popularChannel.Channel;
 
 import java.util.List;
@@ -66,7 +67,12 @@ public class FeatureCategoryAdapter extends RecyclerView.Adapter<FeatureCategory
 
 
         void bindChannel(Channel channel) {
-            ImageLoadingService.load(channel.getIcon(), channelImage);
+            Glide.with(G.context)
+                    .load(channel.getIcon())
+                    .fitCenter()
+                    .centerInside()
+                    .error(R.drawable.ic_error)
+                    .into(channelImage);
             if (G.isAppRtl)
                 channelTitle.setText(channel.getTitle());
             else

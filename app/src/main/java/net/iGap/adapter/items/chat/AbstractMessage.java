@@ -348,12 +348,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void loadImageOrThumbnail(ProtoGlobal.RoomMessageType messageType) {
-        if (attachment.isFileExistsOnLocalAndIsImage()) {
+        if (attachment.isFileExistsOnLocalAndIsImage(messageObject)) {
             onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
         } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
             onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
         } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-            if (attachment.isThumbnailExistsOnLocal()) {
+            if (attachment.isThumbnailExistsOnLocal(messageObject)) {
                 onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
             }
         }
@@ -1315,14 +1315,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
                 mHolder.getContentBloke().getLayoutParams().width = dimens[0];
             }
-
-            if (attachment.isFileExistsOnLocalAndIsImage()) {
-                onLoadThumbnailFromLocal(holder, getCacheId(messageObject), attachment.filePath, LocalFileType.FILE);
+            String filePath = null;
+            if (attachment.filePath != null) {
+                filePath = attachment.filePath;
+                if (!new File(filePath).exists()) {
+                    attachment.filePath = filePath = AndroidUtils.getFilePathWithCashId(attachment.cacheId, attachment.name, messageObject.messageType);
+                }
+            } else if (messageObject.isFileExistWithCacheId(false)) {
+                filePath = messageObject.getCacheFile(false);
+            }
+            if (attachment.isFileExistsOnLocalAndIsImage(messageObject)) {
+                onLoadThumbnailFromLocal(holder, getCacheId(messageObject), filePath, LocalFileType.FILE);
             } else if (messageType == ProtoGlobal.RoomMessageType.VOICE_VALUE || messageType == ProtoGlobal.RoomMessageType.AUDIO_VALUE || messageType == AUDIO_TEXT_VALUE) {
-                onLoadThumbnailFromLocal(holder, getCacheId(messageObject), attachment.filePath, LocalFileType.FILE);
+                onLoadThumbnailFromLocal(holder, getCacheId(messageObject), filePath, LocalFileType.FILE);
             } else {
-                if (attachment.isThumbnailExistsOnLocal()) {
-                    onLoadThumbnailFromLocal(holder, getCacheId(messageObject), attachment.thumbnailPath, LocalFileType.THUMBNAIL);
+                if (attachment.isThumbnailExistsOnLocal(messageObject)) {
+                    String thumbPath = attachment.thumbnailPath != null ? attachment.thumbnailPath : messageObject.getCacheFile(true);
+                    onLoadThumbnailFromLocal(holder, getCacheId(messageObject), thumbPath, LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT_VALUE) {
                         if (mHolder instanceof StickerItem.ViewHolder || mHolder instanceof AnimatedStickerItem.ViewHolder) {
@@ -1351,7 +1360,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 });
 
-                if (!attachment.isFileExistsOnLocal()) {
+                if (!attachment.isFileExistsOnLocal(messageObject)) {
                     if (HelperCheckInternetConnection.currentConnectivityType == null) {
                         checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.WIFI);
                         checkAutoDownload(holder, holder.itemView.getContext(), HelperCheckInternetConnection.ConnectivityType.MOBILE);
@@ -1375,7 +1384,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public void onProgressFinish(VH holder, AttachmentObject attachment, int messageType) {
 
-        if (attachment == null || !attachment.isFileExistsOnLocal()) {
+        if (attachment == null || !attachment.isFileExistsOnLocal(messageObject)) {
             return;
         }
 
@@ -1492,7 +1501,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             thumbnail.setVisibility(View.VISIBLE);
 
 
-            if (attachment.isFileExistsOnLocal()) {
+            if (attachment.isFileExistsOnLocal(messageObject)) {
                 int _status = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.status : messageObject.status;
                 int _type = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.messageType : messageObject.messageType;
 
@@ -1543,14 +1552,18 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     switch (arg.status) {
                         case SUCCESS:
                             if (arg.data != null) {
-                                attachment.thumbnailPath = arg.data.getFilePath();
+                                if (arg.data.getSelector() == ProtoFileDownload.FileDownload.Selector.FILE_VALUE) {
+                                    attachment.filePath = arg.data.getFilePath();
+                                } else {
+                                    attachment.thumbnailPath = arg.data.getFilePath();
+                                }
                             }
-                            if (attachment.isFileExistsOnLocalAndIsImage()) {
+                            if (attachment.isFileExistsOnLocalAndIsImage(messageObject)) {
                                 onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
                             } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
                                 onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
                             } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-                                if (attachment.isThumbnailExistsOnLocal()) {
+                                if (attachment.isThumbnailExistsOnLocal(messageObject)) {
                                     onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
                                 }
                             }
@@ -1612,7 +1625,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     return;
                                 }
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(messageObject.id)) {
-                                    if (messageObject.attachment == null || !messageObject.attachment.isFileExistsOnLocal()) {
+                                    if (messageObject.attachment == null || !messageObject.attachment.isFileExistsOnLocal(messageObject)) {
                                         if (arg.data.getProgress() != 100) {
                                             progressBar.withProgress(arg.data.getProgress());
                                             if (textView != null) {
@@ -1730,7 +1743,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             downLoadFile(holder, 0);
         } else {
-            if (messageObject.getAttachment().isFileExistsOnLocal()) {
+            if (messageObject.getAttachment().isFileExistsOnLocal(messageObject)) {
                 if (messageObject.status != MessageObject.STATUS_SENDING && messageObject.status != MessageObject.STATUS_FAILED) {
                     progress.performProgress();
                 }

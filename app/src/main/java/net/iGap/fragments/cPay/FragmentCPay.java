@@ -188,8 +188,8 @@ public class FragmentCPay extends BaseAPIViewFrag<FragmentCPayViewModel> impleme
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.c_pay_title))
-                .setLeftIcon(R.string.back_icon)
-                .setRightIcons(R.string.history_icon)
+                .setLeftIcon(R.string.icon_back)
+                .setRightIcons(R.string.icon_time)
                 .setListener(this);
 
         binding.fspToolbar.addView(toolbar.getView());

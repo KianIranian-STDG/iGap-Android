@@ -312,15 +312,15 @@ public class FragmentMediaPlayer extends BaseFragment {
             super.bindView(holder, payloads);
 
             holder.txtNameMusic.setText(messageRoomMessagesList.attachment.name);
-            if (messageRoomMessagesList.attachment.isFileExistsOnLocal()) {
+            if (messageRoomMessagesList.attachment.isFileExistsOnLocal(messageRoomMessagesList)) {
 
                 holder.iconPlay.setVisibility(View.VISIBLE);
                 holder.messageProgress.setVisibility(View.GONE);
 
                 if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (messageRoomMessagesList.id)) {
-                    holder.iconPlay.setText(R.string.pause_icon);
+                    holder.iconPlay.setText(R.string.icon_pause);
                 } else {
-                    holder.iconPlay.setText(R.string.play_icon);
+                    holder.iconPlay.setText(R.string.icon_play);
                 }
                 //holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
                 MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
@@ -352,7 +352,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!messageRoomMessagesList.attachment.isFileExistsOnLocal()) {
+                    if (!messageRoomMessagesList.attachment.isFileExistsOnLocal(messageRoomMessagesList)) {
                         downloadFile(holder.getAdapterPosition(), holder.messageProgress);
                     } else {
                         if (MusicPlayer.musicName.equals(MusicPlayer.mediaList.get(holder.getAdapterPosition()).attachment.name)) {

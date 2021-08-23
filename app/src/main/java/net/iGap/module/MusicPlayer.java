@@ -52,6 +52,7 @@ import androidx.lifecycle.MutableLiveData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.controllers.MessageController;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
@@ -81,6 +82,8 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.G.context;
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageStatus.LISTENED_VALUE;
 
 public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
@@ -118,6 +121,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static ArrayList<MessageObject> mediaList;
     public static String strTimer = "";
     public static String messageId = "";
+    public static int roomType = 0;
     public static boolean isNearDistance = false;
     public static int currentDuration = 0;
     public static boolean isVoice = false;
@@ -158,7 +162,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static ComponentName remoteComponentName;
     private static boolean isRegisterSensor = false;
 
-    public static void setMusicPlayer(LinearLayout layoutTripMusic) {
+    public static void setMusicPlayer() {
 
         if (remoteViews == null)
             remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
@@ -167,7 +171,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             layoutTripMusic.setVisibility(View.GONE);
         }
 
-        initLayoutTripMusic(layoutTripMusic);
+//        initLayoutTripMusic(layoutTripMusic);
 
         getAttribute();
 
@@ -267,9 +271,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             txt_music_time.setText(musicTime);
 
             if (MusicPlayer.mp.isPlaying()) {
-                btnPlayMusic.setText(context.getString(R.string.pause_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_pause));
             } else {
-                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_play));
             }
         }
 
@@ -346,7 +350,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             stopTimer();
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_play));
             }
 
             if (!isShowMediaPlayer) {
@@ -405,7 +409,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.pause_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_pause));
             }
 
             if (!isShowMediaPlayer) {
@@ -460,7 +464,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                btnPlayMusic.setText(context.getString(R.string.icon_play));
             }
 
             musicProgress = 0;
@@ -496,10 +500,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             String beforeMessageId = MusicPlayer.messageId;
             selectedMedia--;
             if (selectedMedia < 0) {
-
                 if (isVoice) { // avoid from return to first voice
                     if (btnPlayMusic != null) {
-                        btnPlayMusic.setText(context.getString(R.string.play_icon));
+                        btnPlayMusic.setText(context.getString(R.string.icon_play));
                     }
                     stopSound();
                     closeLayoutMediaPlayer();
@@ -511,7 +514,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             MessageObject messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
             boolean _continue = true;
             while (_continue) {
-                if (!messageObject.attachment.isFileExistsOnLocal()) {
+                if (!messageObject.attachment.isFileExistsOnLocal(messageObject)) {
                     selectedMedia--;
                     if (selectedMedia < 0) {
                         selectedMedia = mediaList.size() - 1;
@@ -522,6 +525,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 }
             }
             startPlayer(messageObject.attachment.name, messageObject.attachment.filePath, roomName, roomId, false, String.valueOf(mediaList.get(selectedMedia).id));
+
+            if (!messageObject.isSenderMe() && messageObject.status != MessageObject.STATUS_LISTENED) {
+                if (roomType != CHANNEL_VALUE && isVoice) {
+                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.NEXT_VOICE,roomType, roomId, mediaList.get(selectedMedia).id, LISTENED_VALUE);
+                }
+            }
             if (FragmentChat.onMusicListener != null) {
                 FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }
@@ -577,12 +586,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             boolean _continue = true;
             while (_continue) {
                 messageObject = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
-                if (!messageObject.getAttachment().isFileExistsOnLocal()) {
+                if (!messageObject.getAttachment().isFileExistsOnLocal(messageObject)) {
                     selectedMedia++;
                     if (selectedMedia >= mediaList.size()) {
                         if (isVoice) { // avoid from return to first voice
                             if (btnPlayMusic != null) {
-                                btnPlayMusic.setText(context.getString(R.string.play_icon));
+                                btnPlayMusic.setText(context.getString(R.string.icon_play));
                             }
                             stopSound();
                             closeLayoutMediaPlayer();
@@ -644,7 +653,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
             context.startService(intent);
         } catch (RuntimeException e) {
-
             try {
                 getNotificationManager().cancel(notificationId);
             } catch (NullPointerException e1) {
@@ -742,7 +750,18 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             }
 
             if (isVoice) {
-//                closeLayoutMediaPlayer();
+                try {
+                    Intent intent = new Intent(context, MusicPlayer.class);
+                    intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
+                    context.startService(intent);
+                } catch (RuntimeException e) {
+
+                    try {
+                        getNotificationManager().cancel(notificationId);
+                    } catch (NullPointerException e1) {
+
+                    }
+                }
             }
 
             updateFastAdapter(MusicPlayer.messageId);
@@ -800,15 +819,15 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
-            txt_music_time.setText(musicTime);
-            btnPlayMusic.setText(context.getString(R.string.pause_icon));
-            txt_music_name.setText(musicName);
+//            txt_music_time.setText(musicTime);
+//            btnPlayMusic.setText(context.getString(R.string.icon_pause));
+//            txt_music_name.setText(musicName);
 
             if (isVoice) {
-                txt_music_info.setVisibility(View.GONE);
+//                txt_music_info.setVisibility(View.GONE);
             } else {
-                txt_music_info.setVisibility(View.VISIBLE);
-                txt_music_info.setText(musicInfoTitle);
+//                txt_music_info.setVisibility(View.VISIBLE);
+//                txt_music_info.setText(musicInfoTitle);
             }
             updateName = new UpdateName() {
                 @Override
@@ -854,7 +873,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
 
         if (HelperCalander.isPersianUnicode) {
-            txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
+//            txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
 
         isMusicPlyerEnable = true;
@@ -1003,8 +1022,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
-                    //  .setContentText(place)
+            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setNotificationSilent().setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
+//                      .setContentText(place)
                     .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
 
@@ -1563,7 +1582,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle + "");
                     try {
                         metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
-                        // seMediaSesionMetaData();
+//                         seMediaSesionMetaData();
 
                     } catch (Throwable e) {
                     }
@@ -1604,7 +1623,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 if (action.equals(STARTFOREGROUND_ACTION)) {
 
-                    if (notification != null) {
+                    if (notification != null && !isVoice) {
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.

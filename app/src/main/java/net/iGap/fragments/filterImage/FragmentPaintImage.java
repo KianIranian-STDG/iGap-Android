@@ -98,9 +98,9 @@ public class FragmentPaintImage extends Fragment {
         photoEditor.getOnPaintChanged().observe(getViewLifecycleOwner(), count -> {
             if (count == null) return;
             if (count > 0) {
-                closeRevertBtn.setText(R.string.forward_icon);
+                closeRevertBtn.setText(R.string.icon_forward);
             } else {
-                closeRevertBtn.setText(R.string.close_icon);
+                closeRevertBtn.setText(R.string.icon_close);
             }
         });
 

@@ -5,6 +5,7 @@
     android:clickable="true"
     android:paddingTop="@dimen/dp4"
     android:paddingBottom="@dimen/dp4"
+    android:background="?attr/iGapEditTxtColor"
     android:orientation="horizontal"
     android:visibility="visible">
 
@@ -35,6 +36,6 @@
         android:paddingLeft="@dimen/dp20"
         android:paddingEnd="@dimen/dp20"
         android:paddingRight="@dimen/dp20"
-        android:text="@string/md_close_button" />
+        android:text="@string/icon_close" />
 
 </RelativeLayout>

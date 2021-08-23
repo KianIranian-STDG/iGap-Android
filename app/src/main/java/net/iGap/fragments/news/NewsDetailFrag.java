@@ -18,11 +18,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.smarteist.autoimageslider.IndicatorAnimations;
 import com.smarteist.autoimageslider.SliderAnimations;
-import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.news.NewsCommentAdapter;
 import net.iGap.adapter.news.NewsDetailRelatedCardsAdapter;
@@ -75,7 +76,7 @@ public class NewsDetailFrag extends BaseAPIViewFrag<NewsDetailVM> {
         HelperToolbar mHelperToolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setListener(new ToolbarListener() {
                     @Override
                     public void onLeftIconClickListener(View view) {
@@ -186,8 +187,8 @@ public class NewsDetailFrag extends BaseAPIViewFrag<NewsDetailVM> {
     }
 
     private void initMainRecycler(NewsDetail data) {
-
-        Picasso.get().load(data.getSourceImage())
+        Glide.with(G.context)
+                .load(data.getSourceImage())
                 .placeholder(R.mipmap.news_temp_banner)
                 .into(binding.image);
 

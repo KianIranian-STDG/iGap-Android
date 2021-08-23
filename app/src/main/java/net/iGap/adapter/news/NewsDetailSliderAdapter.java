@@ -5,9 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.smarteist.autoimageslider.SliderViewAdapter;
-import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.model.news.NewsImage;
 
@@ -51,7 +52,8 @@ public class NewsDetailSliderAdapter extends SliderViewAdapter {
         }
 
         void initView(int position) {
-            Picasso.get().load(data.get(position).getOriginal())
+            Glide.with(G.context)
+                    .load(data.get(position).getOriginal())
                     .placeholder(R.mipmap.news_temp_banner)
                     .into(imageViewBackground);
         }

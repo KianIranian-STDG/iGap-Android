@@ -24,10 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.nightonke.jellytogglebutton.JellyToggleButton;
-import com.squareup.picasso.Picasso;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import org.paygear.RaadApp;
@@ -458,14 +459,14 @@ public class NewAccountPaymentDialog extends BottomSheetDialogFragment implement
             }
 
             if (mOrder == null) {
-                Picasso.get()
+                Glide.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
-                        .fit()
+                        .fitCenter()
                         .into(mImageView);
             } else {
-                Picasso.get()
+                Glide.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
-                        .fit()
+                        .fitCenter()
                         .into(mImageView);
             }
 
@@ -489,14 +490,15 @@ public class NewAccountPaymentDialog extends BottomSheetDialogFragment implement
                 mPriceText.setText(s);
             }
             if (mOrder == null) {
-                Picasso.get()
+                Glide.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mAccount.profilePicture))
-                        .fit()
+                        .fitCenter()
                         .into(mImageView);
+
             } else {
-                Picasso.get()
+                Glide.with(G.context)
                         .load(RaadCommonUtils.getImageUrl(mOrder.receiver.profilePicture))
-                        .fit()
+                        .fitCenter()
                         .into(mImageView);
             }
 

@@ -698,9 +698,9 @@ public class HelperToolbar {
                 ActivityMain.isLock = HelperPreferences.getInstance().readBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE);
 
                 if (ActivityMain.isLock) {
-                    passCodeBtn.setText(mContext.getString(R.string.lock_icon));
+                    passCodeBtn.setText(mContext.getString(R.string.icon_lock));
                 } else {
-                    passCodeBtn.setText(mContext.getString(R.string.unlock_icon));
+                    passCodeBtn.setText(mContext.getString(R.string.icon_unlock));
                 }
             } else {
                 passCodeBtn.setVisibility(View.GONE);
@@ -765,7 +765,7 @@ public class HelperToolbar {
 //            txtCallActivityBack.setOnClickListener(v -> mContext.startActivity(new Intent(G.fragmentActivity, ActivityCall.class)));
         }
 
-        MusicPlayer.setMusicPlayer(musicLayout);
+//        MusicPlayer.setMusicPlayer(musicLayout);
         setMediaLayout();
     }
 
@@ -840,11 +840,11 @@ public class HelperToolbar {
             if (mTxtLogo.getText().toString().toLowerCase().equals("igap")) {
                 Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
                 mTxtLogo.setTypeface(tfFontIcon);
-                mTxtLogo.setText(mContext.getString(R.string.igap_en_icon));
+                mTxtLogo.setText(mContext.getString(R.string.logo_igap_en));
             } else if (mTxtLogo.getText().toString().toLowerCase().equals("آیگپ") || mTxtLogo.getText().toString().equals("آیکب")) {
                 Utils.setTextSize(mTxtLogo, R.dimen.toolbar_igap_icon_textSize);
                 mTxtLogo.setTypeface(tfFontIcon);
-                mTxtLogo.setText(mContext.getString(R.string.igap_fa_icon));
+                mTxtLogo.setText(mContext.getString(R.string.logo_igap_fa));
             } else {
                 mTxtLogo.setTypeface(tfMain);
             }
@@ -1003,12 +1003,12 @@ public class HelperToolbar {
     private void onPassCodeButtonClickListener() {
 
         if (ActivityMain.isLock) {
-            passCodeBtn.setText(mContext.getResources().getString(R.string.unlock_icon));
+            passCodeBtn.setText(mContext.getResources().getString(R.string.icon_unlock));
             ActivityMain.isLock = false;
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, false);
 
         } else {
-            passCodeBtn.setText(mContext.getResources().getString(R.string.lock_icon));
+            passCodeBtn.setText(mContext.getResources().getString(R.string.icon_lock));
             ActivityMain.isLock = true;
             HelperPreferences.getInstance().putBoolean(SHP_SETTING.FILE_NAME, SHP_SETTING.KEY_LOCK_STARTUP_STATE, true);
         }
@@ -1173,7 +1173,7 @@ public class HelperToolbar {
     private void typeFaceGenerator() {
 
         if (tfFontIcon == null)
-            tfFontIcon = ResourcesCompat.getFont(mContext, R.font.font_icon);
+            tfFontIcon = ResourcesCompat.getFont(mContext, R.font.font_icons);
 
         if (tfMain == null)
             tfMain = ResourcesCompat.getFont(mContext, R.font.main_font);
@@ -1490,7 +1490,7 @@ public class HelperToolbar {
                     tvClearSearch = new TextView(getContext());
                     tvClearSearch.setTypeface(tfFontIcon);
                     tvClearSearch.setGravity(Gravity.CENTER);
-                    tvClearSearch.setText(R.string.close_icon);
+                    tvClearSearch.setText(R.string.icon_close);
                     tvClearSearch.setVisibility(GONE);
                     Utils.setTextSize(tvClearSearch, R.dimen.largeTextSize);
                     RelativeLayout.LayoutParams lp = setLayoutParams(tvClearSearch, WRAP_CONTENT, i_Dp(R.dimen.toolbar_search_box_size), i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
@@ -1607,7 +1607,7 @@ public class HelperToolbar {
                     layoutChatName.addView(tvChatName);
 
                     //verify icon
-                    iconChatVerify = makeIcon(R.id.view_toolbar_chat_txt_verify, R.string.verify_icon);
+                    iconChatVerify = makeIcon(R.id.view_toolbar_chat_txt_verify, R.string.icon_blue_badge);
                     iconChatVerify.setTextColor(getContext().getResources().getColor(R.color.verify_color));
                     Utils.setTextSize(iconChatVerify, R.dimen.smallTextSize);
                     iconChatVerify.setVisibility(GONE);
@@ -1616,7 +1616,7 @@ public class HelperToolbar {
                     layoutChatName.addView(iconChatVerify);
 
                     //mute icon
-                    muteChatIcon = makeIcon(R.id.view_toolbar_chat_txt_isMute, R.string.mute_icon);
+                    muteChatIcon = makeIcon(R.id.view_toolbar_chat_txt_isMute, R.string.icon_mute);
                     Utils.setTextSize(muteChatIcon, R.dimen.smallTextSize);
                     muteChatIcon.setVisibility(GONE);
                     muteChatIcon.setPadding(i_Dp(R.dimen.dp4), 0, 0, 0);

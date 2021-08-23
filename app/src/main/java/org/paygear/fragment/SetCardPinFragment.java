@@ -107,7 +107,7 @@ public class SetCardPinFragment extends Fragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(R.string.paygear_card_pin))
                 .setListener(new ToolbarListener() {
                     @Override

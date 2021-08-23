@@ -61,6 +61,18 @@ public class EmojiManager {
         getInstance();
     }
 
+    public static int getEmojiCount(String string) {
+        int emojiCount = 0;
+
+        for (int i = 0; i < string.length(); i++) {
+            int type = Character.getType(string.charAt(i));
+            if (type == Character.SURROGATE || type == Character.OTHER_SYMBOL) {
+                emojiCount++;
+            }
+        }
+
+        return emojiCount/2;
+    }
     public static EmojiManager getInstance() {
         if (instance == null) {
             instance = new EmojiManager();

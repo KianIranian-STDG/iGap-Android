@@ -55,7 +55,7 @@ public class TextCell extends View {
         textPaint.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
 
         iconPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        iconPaint.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icon_new));
+        iconPaint.setTypeface(ResourcesCompat.getFont(getContext(), R.font.font_icons));
         iconPaint.setTextSize(LayoutCreator.dp(23));
     }
 

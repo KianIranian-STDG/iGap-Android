@@ -91,7 +91,7 @@
                         android:layout_marginBottom="@dimen/dp6"
                         android:background="@drawable/circle_white"
                         android:gravity="center"
-                        android:text="@string/md_igap_lock_open_outline"
+                        android:text="@string/icon_lock"
                         android:textAppearance="@style/TextIconAppearance.all"
                         android:textColor="@color/gray_4c"
                         android:textSize="@dimen/dp16" />
@@ -104,7 +104,7 @@
                         android:layout_gravity="bottom"
                         android:background="?attr/iGapAvatarBackground"
                         android:padding="@dimen/dp8"
-                        android:text="@string/md_voice_message_microphone_button"
+                        android:text="@string/icon_microphone"
                         android:textColor="@color/black_register"
                         android:textSize="@dimen/dp26" />
                 </LinearLayout>

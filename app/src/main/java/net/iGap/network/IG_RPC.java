@@ -1597,7 +1597,7 @@ public class IG_RPC {
 
     public static class Res_Channel_Get_Message_Reaction extends AbstractObject {
 
-        public static int actionId;
+        public static int actionId = 30423;
         public List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> states;
 
         @Override

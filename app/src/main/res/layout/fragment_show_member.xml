@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootShowMember"
     style="@style/IGapRootViewStyle"
     android:layout_width="match_parent"
@@ -7,81 +8,69 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_for_below_layouts_of_toolbar"
-        android:orientation="vertical">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="10dp">
-
-
-            <TextView
-                android:id="@+id/fcm_lbl_add"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="34dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:text="@string/add_new_member"
-                android:textColor="?iGapTitleTextColor"
-                android:textSize="@dimen/standardTextSize" />
-
-            <View
-                android:id="@+id/fcm_splitter_add"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="?iGapDividerLine" />
-
-
-        </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ProgressBar
-                android:id="@+id/fcg_prgWaiting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center|bottom"
-                android:layout_margin="@dimen/dp20"
-                android:visibility="gone" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fcm_recycler_view_show_member"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:fadeScrollbars="false"
-                android:overScrollMode="never"
-                android:paddingTop="@dimen/dp16"
-                android:scrollbarSize="5dp"
-                android:scrollbarThumbVertical="@color/toolbar_background"
-                android:scrollbars="vertical" />
-
-
-        </FrameLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/fcm_layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height_root_with_search"
         android:orientation="horizontal" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/fcm_lbl_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:text="@string/add_new_member"
+            android:textColor="?iGapTitleTextColor"
+            android:textSize="@dimen/standardTextSize" />
+
+        <View
+            android:id="@+id/fcm_splitter_add"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="?iGapDividerLine" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fcm_recycler_view_show_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:fadeScrollbars="false"
+            android:overScrollMode="never"
+            android:paddingTop="@dimen/dp16"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@color/toolbar_background"
+            android:scrollbars="vertical" />
+
+        <ProgressBar
+            android:id="@+id/fcg_prgWaiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_margin="@dimen/dp20"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

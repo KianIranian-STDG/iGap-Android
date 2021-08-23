@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/fc_layout_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,50 +20,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fc_layout_toolbar">
-
-        <LinearLayout
-            android:id="@+id/fc_layout_multi_select"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="locale"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/fc_btn_remove_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/round_button_disabled_bg"
-                android:gravity="center"
-                android:minWidth="@dimen/round_button_max_width"
-                android:paddingLeft="@dimen/round_buttons_large_padding"
-                android:paddingTop="@dimen/round_buttons_small_padding"
-                android:paddingRight="@dimen/round_buttons_large_padding"
-                android:paddingBottom="@dimen/round_buttons_small_padding"
-                android:singleLine="true"
-                android:text="@string/delete_all"
-                android:textColor="@color/gray_4c"
-                android:textSize="@dimen/smallTextSize" />
-
-            <TextView
-                android:id="@+id/fc_btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/round_buttons_margin"
-                android:background="@drawable/round_button_disabled_bg"
-                android:gravity="center"
-                android:minWidth="@dimen/round_button_max_width"
-                android:paddingLeft="@dimen/round_buttons_large_padding"
-                android:paddingTop="@dimen/round_buttons_small_padding"
-                android:paddingRight="@dimen/round_buttons_large_padding"
-                android:paddingBottom="@dimen/round_buttons_small_padding"
-                android:singleLine="true"
-                android:text="@string/delete"
-                android:textColor="@color/gray_4c"
-                android:textSize="@dimen/smallTextSize" />
-
-        </LinearLayout>
 
         <HorizontalScrollView
             android:id="@+id/fc_layout_filters"

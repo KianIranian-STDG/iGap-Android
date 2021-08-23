@@ -92,7 +92,7 @@
                             android:layout_marginLeft="@dimen/dp10"
                             android:layout_marginRight="@dimen/dp10"
                             style="@style/myIconTextViewStyle"
-                            android:text="@string/down_arrow_icon"
+                            android:text="@string/icon_chevron_Down"
                             android:textSize="@dimen/largeTextSize" />
 
                         <TextView

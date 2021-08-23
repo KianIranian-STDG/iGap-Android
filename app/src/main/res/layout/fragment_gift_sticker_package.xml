@@ -56,7 +56,7 @@
         android:layout_marginBottom="@dimen/dp16"
         android:visibility="gone"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:text="@string/retry_icon" />
+        android:text="@string/icon_retry" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cancelButton"

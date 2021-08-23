@@ -90,12 +90,10 @@ public class RealmUserInfo extends RealmObject {
         new Thread(() -> {
             DbManager.getInstance().doRealmTransaction(realm -> {
                 RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                if (realmUserInfo != null) {
-                    realmUserInfo.setPushNotificationToken(pushToken);
-                } else {
+                if (realmUserInfo == null) {
                     realmUserInfo = realm.createObject(RealmUserInfo.class);
-                    realmUserInfo.setPushNotificationToken(pushToken);
                 }
+                realmUserInfo.setPushNotificationToken(pushToken);
             });
         }).start();
 

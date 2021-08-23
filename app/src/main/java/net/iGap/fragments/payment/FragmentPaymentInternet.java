@@ -41,6 +41,8 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 import net.iGap.model.OperatorType;
 import net.iGap.model.paymentPackage.Config;
 import net.iGap.model.paymentPackage.ConfigData;
@@ -145,20 +147,15 @@ public class FragmentPaymentInternet extends BaseFragment implements HandShakeCa
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         lstOperator.setLayoutManager(new LinearLayoutManager(getActivity()));
         lstOperator.setLayoutManager(layoutManager);
-        toolbar.addView(HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setDefaultTitle(getString(R.string.buy_internet_package_title))
-                .setLogoShown(true)
-                .setLeftIcon(R.string.back_icon)
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
-                    }
-                }).getView());
+        Toolbar paymentInternetToolbar = new Toolbar(getContext());
+        paymentInternetToolbar.setTitle(getString(R.string.buy_internet_package_title));
+        paymentInternetToolbar.setBackIcon(new BackDrawable(false));
+        paymentInternetToolbar.setListener(i -> {
+            if (i == -1) {
+                getActivity().onBackPressed();
+            }
+        });
+        toolbar.addView(paymentInternetToolbar);
         String userToken = TokenContainer.getInstance().getToken();
         paymentRepository = PaymentRepository.getInstance();
         progressBar.setVisibility(View.VISIBLE);

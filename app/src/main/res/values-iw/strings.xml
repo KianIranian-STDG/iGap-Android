@@ -11,7 +11,6 @@
     <string name="B_cancel">انصراف </string>
     <string name="B_edit">ویرایش</string>
     <string name="B_ok">تایید</string>
-    <string name="kuknos_setting_dialog">Pejirandina xilaskirina token</string>
     <string name="kuknos_rial_max_buy">"Maximum destûr"</string>
     <string name="stories">hikayeler</string>
     <string name="kuknos_rial_min_buy">"Kêmtirîn destûr"</string>
@@ -35,14 +34,11 @@
     <string name="kuknos_rial_Maximum_redeemable_token">"Tokena herî zêde ya xilaskirî"</string>
     <string name="kuknos_rial_Number_of_contracts">"Hejmara peymanan"</string>
     <string name="kuknos_rial_Redemption_fee">"Xerca xilaskirina PMN"</string>
-    <string name="kuknos_rial_Deposit_amount2">"Mîqeya spartinê"</string>
     <string name="kuknos_edit_info_birthday">"Roja bûyînê"</string>
     <string name="kuknos_rial_Total_number_of_contracts">"Hejmara tevahî ya peymanan"</string>
     <string name="kuknos_rial_Deposit_amount">"Mîqeya spartinê (Riyal)"</string>
-    <string name="kuknos_rial_Redemption_feee">"Xerca xilaskirina"</string>
     <string name="kuknos_panel_buy_again_profile_dialog">"Bi çûna beşa mîhengan\n agahdariya xwe \n temam bikin"</string>
     <string name="kuknos_panel_Edit_and_change_account_information">"Agahdariya hesabê biguherînin û biguherînin"</string>
-    <string name="kuknos_rial_dialog_Repurchase_tokens">"Tokenan bikirin"</string>
     <string name="Block_Users">مسدود ائدیلمیش لیست</string>
     <string name="CARD_TRANSFER_MONEY">کارتدان کارتا انتقال </string>
     <string name="Call_Quality">تماسین کیفیتی </string>
@@ -210,10 +206,8 @@
     <string name="Recovery_with_email">الکترون پست واسطه سی ایله بازیابی </string>
     <string name="Recovery_with_question">امنیتی سوال واسطه سی ایله دییشمک </string>
     <string name="Remove">حذف </string>
-    <string name="Restaurant_textView">رستوران </string>
     <string name="Ringtone">زنگین ملودی سی</string>
     <string name="Room_Deleted_log">"حذف ائدیلدی"</string>
-    <string name="Search">آختاریش</string>
     <string name="Security">امنیت</string>
     <string name="Select">سئچیم </string>
     <string name="Select_Audio_file">بیر سس فایل سئچین </string>
@@ -279,7 +273,7 @@
     <string name="add_to_home_screen">اساس صفحه یه علاوه ائتمک</string>
     <string name="add_to_list_contact">مخاطب لره اضافه ائتمک</string>
     <string name="admin">ادمین </string>
-    <string name="administrators_title">مدیرلر</string>
+    <string name="admins_title">مدیرلر</string>
     <string name="all">هامی سی </string>
     <string name="all_calls">تماس لار</string>
     <string name="all_member">بوتون عضولر</string>
@@ -437,7 +431,6 @@
     <string name="can_not_open_file">بو فایل آچیلمیر</string>
     <string name="can_not_save_image">تصویری ذخیره ائتمک ممکن دییل</string>
     <string name="cancel">انصراف</string>
-    <string name="cannot_load_data_en">داده لری بارگیری ائده بیلمیر</string>
     <string name="cansel">لغو</string>
     <string name="capture_image">تصویرچکمک</string>
     <string name="capture_video">ویدئو فیلمی چکمک</string>
@@ -540,7 +533,6 @@
     <string name="cloud">ابری فضا</string>
     <string name="club_balance">باشگاه کارت ینین موجودیسی (ریال):</string>
     <string name="club_balance_not_enough">مبلغ بو کارتین موجودی سیندن چوخدور</string>
-    <string name="coffeeShop_textView">کافی شاپ</string>
     <string name="comment_no">وضعیتسیز</string>
     <string name="comment_waiting">یادداشتی آلماقدادیر</string>
     <string name="complete_correct">داخل الونان معلومات دوزگون دییلدیر</string>
@@ -572,12 +564,8 @@
     <string name="crad_to_card_dest_name">حساب صاحبینین آدی </string>
     <string name="create_chat">دانیشیق یاراتماق </string>
     <string name="create_time">... ده یارانمیش</string>
+    <string name="last_connectivity">سون متصل:</string>
     <string name="credit_card_set_pin_confirm">پولکارت کیفیندن استفاده ائتمک اوچون اؤنجه اونون اوچون رمز تعریف ائتمه لی سیز. رمزی فعال ائتمک ایسته ییرسیز می؟</string>
-    <string name="crop_image_menu_crop">کسمک</string>
-    <string name="crop_image_menu_flip">تصویری دوندرمک</string>
-    <string name="crop_image_menu_flip_horizontally">تصویری افقی دوندرمک</string>
-    <string name="crop_image_menu_flip_vertically">تصویری عمودی دوندرمک</string>
-    <string name="crop_image_menu_rotate_right">دوندرمک</string>
     <string name="crop_selected_for_send">سئچیلمیش تصویر</string>
     <string name="current_pass">حاضرکی رمز</string>
     <string name="current_session">حاضرکی جلسه</string>
@@ -600,7 +588,6 @@
     <string name="delete_account">استفاده چی حسابی نی سیلمک </string>
     <string name="delete_account_text">بو استفاده چی حسابنی حذف ائتمکدن مطمئن سیز می؟</string>
     <string name="delete_account_text_desc">اوز اکانتینیزی سیلدیگینیز تقدیرده پیغام کیمی آلدیغینیز بوتون فایل لار دا دائمی شکیلده سیلینه جکدیر. </string>
-    <string name="delete_all">هامینی حذف ائتمک</string>
     <string name="delete_card">کارتی حذف ائتمک </string>
     <string name="delete_card_confirm">بو بانک کارت ینی حذف ائتمکدن مطمئن سیز می؟ </string>
     <string name="delete_chat">دانیشیغی حذف ائتمک</string>
@@ -634,7 +621,6 @@
     <string name="dialog_readonly_chat">بو دانیشیق دا سیزین اوچون پیغام گوندرمک امکانی موجود دییلدیر</string>
     <string name="disable">غیرفعال</string>
     <string name="disabled_qr_voucher">تاسفله بو کیوآر استفاده اولونا بیلمز و یا اونجه دن استفاده اولونوب</string>
-    <string name="disconnected">قطع اولدو </string>
     <string name="discount">تخفیف</string>
     <string name="discount_amount">تخفیف مبلغی (ریال):</string>
     <string name="disk_and_network_usage">حافظه و شبکه دن استفاده </string>
@@ -642,7 +628,6 @@
     <string name="do_you_want_clear_history_this">سئچدیگیز آیتمین تاریخچه سینی سیلمکدن مطمئن سیز می؟ </string>
     <string name="do_you_want_delete_this">سئچدیگیز آیتمی حذف ائتمکدن مطمئنسیز می؟</string>
     <string name="do_you_want_delete_this_channel">بو کانالی حذف ائتمکدن مطمئن سیز می؟</string>
-    <string name="do_you_want_exit">چیخماق ایسته ییرسینیز می؟</string>
     <string name="do_you_want_leave_this_channel">بو کانالی ترک ائتمکدن مطمئن سیز می؟</string>
     <string name="do_you_want_left_this">سئچیلمیش آیتمی ترک ائتمکدن مطمئن سیز می؟ </string>
     <string name="do_you_want_to_clean_all_data_in_chat_rooms">بوتون چت لرین معلومات لارینی داخلی داده لر پایگاهیندان سیلمک ایسته ییرسیز می؟ </string>
@@ -731,7 +716,6 @@
     <string name="empty_call">سیزین ایندی یه قدر هئچ تماسیز اولماییب </string>
     <string name="empty_error_message"></string>
     <string name="empty_message">استفاده چی آدینین 5 ایلکین کاراکترینی داخل ائدین </string>
-    <string name="empty_message3">آختاریش اوچون ان آز 5 کاراکتر داخل ائدین </string>
     <string name="empty_room">هله پیغامیز یوخدور </string>
     <string name="empty_text_dr_bot">آیگپین هوشمند دستیارینا خوش گلیبسیز </string>
     <string name="enter_16_digit_card_number">16 رقملی کارت شماره سینی داخل ائدین </string>
@@ -887,12 +871,11 @@
     <string name="invalid_verify_email_code">تایید کدو اعتبارسیزدیر</string>
     <string name="invitation_message">سلام. آشاغیداکی لیک واسطه سی ایله آیگپه عضو اولا بیلرسن. سنی گوزله ییرم. معرفین شماره سی: http://d.igap.net/invite \n</string>
     <string name="invite_link_title">دعوت لینکی </string>
-    <string name="ip">شناسه</string>
+    <string name="ip">شناسه:</string>
     <string name="iran">ایران</string>
     <string name="irancell">ایرانسل </string>
     <string name="is_empty">اولوبدور</string>
     <string name="item">آیتم </string>
-    <string name="item_selected">سئچیلن مورد</string>
     <string name="ivand_activities_title">امتیاز سابقه سی </string>
     <string name="ivnalid_data_provided">داخل اولونان مقدارلار دوزگون دییلدیر</string>
     <string name="jamado_aval">جمادی‌الاول</string>
@@ -1019,7 +1002,6 @@
     <string name="kuknos_setting_fileName">Kuknos_Seed_Key.txt</string>
     <string name="kuknos_setting_logout">پول کیفیندن چیخماق </string>
     <string name="kuknos_setting_title">تنظیم لر</string>
-    <string name="kuknos_setting_viewRecoveryP">بازیابی کلمه لر زنجیرینین نمایشی</string>
     <string name="kuknos_tradeDialogDelete_btn">بله </string>
     <string name="kuknos_tradeDialogDelete_message">بو مبادله نی حذف ائتمکدن مطمئنسیز می؟ </string>
     <string name="kuknos_tradeDialogDelete_title">مبادله نی حذف ائتمک</string>
@@ -1089,7 +1071,6 @@
     <string name="login">گیریش</string>
     <string name="logout">چیخیش</string>
     <string name="long_time_ago">چوخ زامان اونجه</string>
-    <string name="make_as_read">اوخونموش</string>
     <string name="make_call">تماس یاراتماق </string>
     <string name="male">جناب </string>
     <string name="mandatory">الزامی</string>
@@ -1198,8 +1179,6 @@
     <string name="normal_error">can\&apos;t do it please try later</string>
     <string name="not_answer">جوابسیز </string>
     <string name="not_answerd_call">الدن گئتمیش تماس</string>
-    <string name="not_answered_voice_call">الدن گئتمیش تماس</string>
-    <string name="not_answered_video_call">الدن گئتمیش تماس</string>
     <string name="not_exist_activities">سیزین سابقه لر لیستیز بوشدور</string>
     <string name="not_found_message">بو پیغام موجود دییلدیر</string>
     <string name="not_success">ناموفق</string>
@@ -1225,7 +1204,6 @@
     <string name="outgoing">چیخیش </string>
     <string name="pain_selected_for_send">سئچیلمیش نقاشی</string>
     <string name="painting">نقاشی ائتمکده </string>
-    <string name="parking_textView">پارکینگ </string>
     <string name="parsian_e_commerce_company_top">تجارت الکترونیک پیارسیان (تاپ) شرکتی </string>
     <string name="password">رمز</string>
     <string name="password_Question_one">مثال اوچون: سئودیگینیز معلم کیمدیر؟</string>
@@ -1311,7 +1289,6 @@
     <string name="point">امتیاز</string>
     <string name="poll_ok">سیزین رای نیز موفقیت ایله ثبت اولوندو</string>
     <string name="popular_channel">جذاب کاناللار</string>
-    <string name="prayerRoom_textView">نمازخانه</string>
     <string name="prefix">واسطه سی ایله </string>
     <string name="price">قیمت</string>
     <string name="price_rial">مبلغ (ریال)</string>
@@ -1337,7 +1314,6 @@
     <string name="re_enter_pass_code">قفلی آچان کدو یئنی دن داخل ائدین </string>
     <string name="reaction_message_detail">بو گزینه نی فعال ائتمک ایله کانال عضولرین هر بیر پست اوچون نظر وئرمه سینه امکان یاراناجاقدیر. </string>
     <string name="read_all">هامیسی اوخونموشدور</string>
-    <string name="reagent_error_message">معرف اوچون داخل ائدیلمیش شماره اشتباه دیر</string>
     <string name="receipt_saved">قبض ذخیره ائدیلدی</string>
     <string name="receive_charge_for_raad_card_from">دن پولکارت کیفی شارژی آلماق </string>
     <string name="receive_from">دن آلماق </string>
@@ -1660,7 +1636,6 @@
     <string name="unknown_type">بو نوع کارت پشتیبانی ائدیلمیر</string>
     <string name="unlock_with_fingerPrint">بارماق ایزی ایله قفل آچماق </string>
     <string name="unmute">سس لی</string>
-    <string name="unmute_notification">سسلی اطلاع ورمک </string>
     <string name="unpin">سانجاقلانمایان</string>
     <string name="unread_message">پیغام اوخوندو</string>
     <string name="unsuccessful">موفقیتلی دئیلدیر</string>
@@ -1702,14 +1677,12 @@
     <string name="warning">اخطار </string>
     <string name="wednesday">چهارشنبه </string>
     <string name="welcome_title">آیگپه خوش گلیب سیز</string>
-    <string name="wheelchair_textView">ویلچر</string>
     <string name="who_can_invite_you_to_channel_s">کیم منی کانالا دعوت ائتسین؟</string>
     <string name="who_can_invite_you_to_group_s">کیم منی گروها دعوت ائتسین؟ </string>
     <string name="who_can_see_my_avatar">منیم پروفایلیمین شکلینی کیم گورور؟</string>
     <string name="who_is_allowed_to_video_call"></string>
     <string name="who_is_allowed_to_voice_call">سسلی تماس اوچونه مجاز اولان شخص لر</string>
     <string name="wifi_data_usage">بیسیم داده دن استفاده </string>
-    <string name="wifi_textView">وای فای</string>
     <string name="year">ایل</string>
     <string name="year_1">"بیر ایل"</string>
     <string name="yes">"بلی"</string>
@@ -1909,11 +1882,6 @@
     <string name="suggested_packages">بسته های پیشنهادی</string>
     <string name="all_packages">همه بسته ها</string>
     <string name="sim_type_not_choosed">نوع سیمکارت مشخص نشده است</string>
-    <string name="credit_sim">سیمکارت اعتباری</string>
-    <string name="permanent_sim">سیمکارت دائمی</string>
-    <string name="credit_tdlte_sim">سیمکارت اعتباری TDLTE</string>
-    <string name="tdlte_permanent_sim">سیمکارت دائمی TDLTE</string>
-    <string name="data_sim">سیمکارت دیتا</string>
     <string name="no_history_found">تاریخچه ای پیدا نشده است</string>
     <string name="no_number_found">شماره ای از قبل موجود نیست</string>
     <string name="no_package_selected">بسته اینترنتی انتخاب نشده است</string>
@@ -1934,6 +1902,16 @@
     <string name="location_list_tile">جستجو مراکز تفریحی</string>
     <string name="share_file_link">اشتراک گذاری لینک عمومی</string>
     <string name="can_not_support_file">Can not support file</string>
+    <string name="remind_me_later">Remind me later</string>
+    <string name="score_request_text">Would you like to rate the app?</string>
+    <string name="please_try_later">Please Try later</string>
+    <string name="access_folder">Unauthorized Folder</string>
+    <string name="restrict_folder">Access to this folder is restricted.</string>
+
+    <string name="name_error">Ad doğrulanmadı</string>
+    <string name="user_name_error">Kullanıcı adı onaylanmadı</string>
+    <string name="email_error">E-posta onaylanmadı</string>
+    <string name="gender_error">Cinsiyet onaylanmadı</string>
     <string name="remove_follower">Remove Follower</string>
     <string name="hide_story">Hide Your Story</string>
 </resources>

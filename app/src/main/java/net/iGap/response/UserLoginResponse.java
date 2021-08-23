@@ -11,16 +11,21 @@
 package net.iGap.response;
 
 import android.os.Handler;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
+import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.api.apiService.TokenContainer;
 import net.iGap.controllers.MessageDataStorage;
 import net.iGap.helper.HelperConnectionState;
+import net.iGap.model.cPay.PlaqueInfoModel;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
 import net.iGap.module.enums.ConnectionState;
@@ -35,6 +40,7 @@ import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmStory;
 import net.iGap.realm.RealmStoryProto;
+import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestSignalingGetConfiguration;
@@ -47,6 +53,10 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import java.util.Date;
+
+import io.realm.Realm;
+
 public class UserLoginResponse extends MessageHandler {
 
     public int actionId;
@@ -56,6 +66,8 @@ public class UserLoginResponse extends MessageHandler {
     private boolean isUpdateAvailable = false;
     private int contactCount = 0;
     public static boolean isFetched = false;
+    SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE);
+
 
     public UserLoginResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -114,6 +126,13 @@ public class UserLoginResponse extends MessageHandler {
 
         TokenContainer.getInstance().updateToken(builder.getAccessToken(), false);
 
+        if(BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0 && sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP , 0) == 0){
+            sharedPreferences
+                    .edit()
+                    .putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, new Date().getTime())
+                    .apply();
+        }
+
         /**
          * get Signaling Configuration
          * (( hint : call following request after set G.userLogin=true ))
@@ -131,7 +150,15 @@ public class UserLoginResponse extends MessageHandler {
         }).start();
 
         G.onUserLogin.onLogin();
-        RealmUserInfo.sendPushNotificationToServer();
+        String FCMToken = DbManager.getInstance().doRealmTask(realm -> {
+            return realm.where(RealmUserInfo.class)
+                    .equalTo("userInfo.id", AccountManager.getInstance().getCurrentUser().getId())
+                    .findFirst().getPushNotificationToken();
+        });
+
+        if(!FCMToken.isEmpty()) {
+            RealmUserInfo.sendPushNotificationToServer();
+        }
 
         if (builder.getWalletActive() && builder.getWalletAgreementAccepted()) {
             new RequestWalletGetAccessToken().walletGetAccessToken();

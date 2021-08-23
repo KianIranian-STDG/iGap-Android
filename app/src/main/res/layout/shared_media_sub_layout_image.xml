@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp8"
             android:padding="2dp"
-            android:text="@string/camera2_icon"
+            android:text="@string/icon_image"
             style="@style/myIconTextViewStyle"
             android:textColor="@android:color/white"
             android:textSize="@dimen/dp10" />

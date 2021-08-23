@@ -23,6 +23,7 @@ import net.iGap.helper.downloadFile.IGDownloadFile;
 import net.iGap.helper.downloadFile.IGDownloadFileStruct;
 import net.iGap.libs.emojiKeyboard.struct.StructStickerCategory;
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.module.imageLoaderService.ImageLoadingServiceInjector;
 import net.iGap.observers.eventbus.EventManager;
 
 import java.util.ArrayList;
@@ -144,10 +145,12 @@ public class StickerCategoryAdapter extends RecyclerView.Adapter {
                         String token = (String) args[1];
 
                         if (token.equals(group.getAvatarToken())) {
-                            G.handler.post(() -> Glide.with(itemView.getContext())
-                                    .load(filePath)
-                                    .transition(DrawableTransitionOptions.withCrossFade(200))
-                                    .into(normalStickerCell));
+//                            G.handler.post(() -> Glide.with(itemView.getContext())
+//                                    .load(filePath)
+//                                    .transition(DrawableTransitionOptions.withCrossFade(200))
+//                                    .into(normalStickerCell));
+
+                            ImageLoadingServiceInjector.inject().loadImage(normalStickerCell, filePath);
                         }
                     });
 

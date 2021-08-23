@@ -110,7 +110,7 @@ public class MobileBankTransferCtcStep4Fragment extends BaseAPIViewFrag<MobileBa
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setRoundBackground(false)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setListener(new ToolbarListener() {
                     @Override

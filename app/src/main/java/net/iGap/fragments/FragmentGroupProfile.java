@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -294,37 +295,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
             }
         });
 
-        viewModel.showDialogCopyLink.observe(getViewLifecycleOwner(), link -> {
+        viewModel.showDialogEditLink.observe(getViewLifecycleOwner(), link -> {
             if (getActivity() != null && link != null) {
-
-                LinearLayout layoutGroupLink = new LinearLayout(getActivity());
-                layoutGroupLink.setOrientation(LinearLayout.VERTICAL);
-                View viewRevoke = new View(getActivity());
-                TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
-                MEditText edtLink = new MEditText(getActivity());
-                edtLink.setHint(getString(R.string.group_link_hint_revoke));
-                edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
-                edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                edtLink.setText(link);
-                edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
-                edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
-                edtLink.setPadding(0, 16, 0, 8);
-                edtLink.setEnabled(false);
-                edtLink.setSingleLine(true);
-                inputGroupLink.addView(edtLink);
-                inputGroupLink.addView(viewRevoke);
-
-                viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
-                }
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                layoutGroupLink.addView(inputGroupLink, layoutParams);
-
                 MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
                         .positiveText(R.string.array_Copy)
-                        .customView(layoutGroupLink, true)
+                        .customView(createDialogLayout(link), true)
                         .widgetColor(new Theme().getPrimaryColor(getContext()))
                         .negativeText(R.string.edit)
                         .onPositive((dialog1, which) -> {
@@ -338,6 +313,25 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
                             } else {
                                 setUsername();
                             }
+                        })
+                        .build();
+
+                dialog.show();
+
+            }
+        });
+
+        viewModel.showDialogCopyLink.observe(getViewLifecycleOwner(), link -> {
+            if (getActivity() != null && link != null) {
+                MaterialDialog dialog = new MaterialDialog.Builder(getActivity()).title(R.string.group_link)
+                        .positiveText(R.string.array_Copy)
+                        .customView(createDialogLayout(link), true)
+                        .widgetColor(new Theme().getPrimaryColor(getContext()))
+                        .onPositive((dialog1, which) -> {
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("LINK_GROUP", link);
+                            clipboard.setPrimaryClip(clip);
+                            Toast.makeText(getActivity(), R.string.copied, Toast.LENGTH_SHORT).show();
                         })
                         .build();
 
@@ -380,6 +374,34 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarD
     private void openChatEditRightsFragment(RealmRoom realmRoom) {
         if (getActivity() != null && realmRoom != null)
             new HelperFragment(getActivity().getSupportFragmentManager(), ChatRightsFragment.getIncense(realmRoom, null, 0, 2)).setReplace(false).load();
+    }
+
+    private View createDialogLayout(String link) {
+        LinearLayout layoutGroupLink = new LinearLayout(getActivity());
+        layoutGroupLink.setOrientation(LinearLayout.VERTICAL);
+        View viewRevoke = new View(getActivity());
+        TextInputLayout inputGroupLink = new TextInputLayout(getActivity());
+        MEditText edtLink = new MEditText(getActivity());
+        edtLink.setHint(getString(R.string.group_link_hint_revoke));
+        edtLink.setTypeface(ResourcesCompat.getFont(edtLink.getContext(), R.font.main_font));
+        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
+        edtLink.setText(link);
+        edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
+        edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtLink.setPadding(0, 16, 0, 8);
+        edtLink.setEnabled(false);
+        edtLink.setSingleLine(true);
+        inputGroupLink.addView(edtLink);
+        inputGroupLink.addView(viewRevoke);
+
+        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
+        }
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        layoutGroupLink.addView(inputGroupLink, layoutParams);
+        return layoutGroupLink;
     }
 
     private void checkRoomAccess(RealmRoomAccess realmRoomAccess) {

@@ -58,7 +58,7 @@
                                 android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="@string/md_back_arrow"
+                                android:text="@string/icon_back"
                                 android:textAppearance="@style/TextIconAppearance_toolbar"
                                 android:textColor="@color/whit_background" />
                         </net.iGap.libs.rippleeffect.RippleView>
@@ -93,7 +93,7 @@
                                 android:layout_width="@dimen/dp52"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
-                                android:text="@string/md_show_more_button"
+                                android:text="@string/icon_other_vertical_dots"
                                 android:textAppearance="@style/TextIconAppearance_toolbar"
                                 android:textColor="@color/whit_background" />
 
@@ -165,7 +165,7 @@
                                     android:layout_width="@dimen/dp52"
                                     android:layout_height="@dimen/dp52"
                                     android:gravity="center"
-                                    android:text="@string/close_icon"
+                                    android:text="@string/icon_close"
                                     android:visibility="gone" />
 
                                 <ProgressBar
@@ -205,7 +205,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/error_icon"
+                            android:text="@string/icon_error"
                             android:textColor="@color/layout_background_top_connectivity"
                             android:textSize="@dimen/dp70" />
 

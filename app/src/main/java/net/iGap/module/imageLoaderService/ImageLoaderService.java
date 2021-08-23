@@ -11,5 +11,7 @@ public interface ImageLoaderService {
 
     void loadImage(ImageView targetImageView, String imageUrl, boolean clear);
 
+    void loadImage(ImageView targetImageView, String imageUrl, boolean clear, boolean isGif);
+
     void clear(ImageView targetImageView);
 }

@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:minHeight="38dp"
             android:layout_weight="3"
-            android:text="@string/delete_icon"
+            android:text="@string/icon_delete"
             android:textSize="@dimen/dp20"
             android:gravity="center"
             android:visibility="gone"

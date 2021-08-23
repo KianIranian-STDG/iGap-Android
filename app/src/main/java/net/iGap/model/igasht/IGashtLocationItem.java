@@ -45,9 +45,9 @@ public class IGashtLocationItem implements Parcelable {
     @SerializedName("introduction")
     private String mIntroduction;
     @SerializedName("latitude")
-    private Long mLatitude;
+    private Double mLatitude;
     @SerializedName("longitude")
-    private Long mLongitude;
+    private Double mLongitude;
     @SerializedName("mandatory_entrance")
     private Boolean mMandatoryEntrance;
     @SerializedName("presell_activation")
@@ -210,19 +210,19 @@ public class IGashtLocationItem implements Parcelable {
         this.mIntroduction = mIntroduction;
     }
 
-    public Long getmLatitude() {
+    public Double getmLatitude() {
         return mLatitude;
     }
 
-    public void setmLatitude(Long mLatitude) {
+    public void setmLatitude(Double mLatitude) {
         this.mLatitude = mLatitude;
     }
 
-    public Long getmLongitude() {
+    public Double getmLongitude() {
         return mLongitude;
     }
 
-    public void setmLongitude(Long mLongitude) {
+    public void setmLongitude(Double mLongitude) {
         this.mLongitude = mLongitude;
     }
 

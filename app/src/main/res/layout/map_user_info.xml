@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/close_icon"
+            android:text="@string/icon_close"
             android:textColor="@color/iGapColor"
             android:visibility="gone" />
 
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/md_close_button"
+            android:text="@string/icon_close"
             android:textColor="@color/gray_5c"
             android:visibility="visible" />
     </LinearLayout>
@@ -62,7 +62,7 @@
                     style="@style/myIconTextViewStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/message_icon"
+                    android:text="@string/icon_call_message"
                     android:textColor="@color/iGapColor" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
-                    android:text="@string/voice_call_icon"
+                    android:text="@string/icon_voice_call"
                     android:textColor="@color/iGapColor" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp4"
-                    android:text="@string/video_call_icon"
+                    android:text="@string/icon_video_call"
                     android:textColor="@color/iGapColor" />
 
                 <View
@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:rotation="90"
-                    android:text="@string/down_arrow_icon"
+                    android:text="@string/icon_chevron_Down"
                     android:textColor="@color/iGapColor" />
 
                 <TextView

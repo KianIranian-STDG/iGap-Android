@@ -44,7 +44,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityPaint;
 import net.iGap.fragments.FileManagerFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -258,7 +257,7 @@ public class AttachFile {
             } else {
                 InputStream input = G.context.getContentResolver().openInputStream(uri);
 
-                AndroidUtils.copyFile(input, new File(destinationPath));
+                AndroidUtils.copyFile(input, new File(destinationPath),0,null);
             }
 
             return destinationPath;

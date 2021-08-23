@@ -70,7 +70,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
                 .setDefaultTitle(getString(R.string.st_title_Privacy_Security))
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setListener(new ToolbarListener() {
                     @Override

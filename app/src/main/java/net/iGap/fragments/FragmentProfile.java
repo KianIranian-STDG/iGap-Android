@@ -63,7 +63,7 @@ public class FragmentProfile extends BaseFragment {
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+                return (T) new UserProfileViewModel(avatarHandler);
             }
         }).get(UserProfileViewModel.class);
     }

@@ -54,7 +54,7 @@ public class FragmentNotification extends BaseFragment {
         HelperToolbar toolbar = HelperToolbar.create()
                 .setContext(getContext())
                 .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setLogoShown(true)
                 .setDefaultTitle(getString(R.string.ntg_title_toolbar))
                 .setListener(new ToolbarListener() {

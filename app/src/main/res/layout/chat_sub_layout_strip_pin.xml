@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:layoutDirection="ltr"
+    android:background="?attr/iGapEditTxtColor"
     android:orientation="vertical">
 
     <LinearLayout
@@ -45,7 +46,7 @@
             android:layout_marginRight="@dimen/dp8"
             android:background="@null"
             android:gravity="center"
-            android:text="@string/md_close_button"
+            android:text="@string/icon_close"
             android:textSize="@dimen/dp20" />
 
     </LinearLayout>

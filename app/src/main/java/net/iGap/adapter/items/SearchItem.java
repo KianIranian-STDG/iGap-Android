@@ -83,10 +83,10 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             //holder.txtIcon.setText(G.context.getString(R.string.md_user_shape));
         } else if (item.roomType == ProtoGlobal.Room.Type.GROUP) {
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.group_icon));
+            holder.txtIcon.setText(G.context.getString(R.string.icon_contacts));
         } else if (item.roomType == ProtoGlobal.Room.Type.CHANNEL) {
             holder.txtIcon.setVisibility(View.VISIBLE);
-            holder.txtIcon.setText(G.context.getString(R.string.channel_main_icon));
+            holder.txtIcon.setText(G.context.getString(R.string.icon_channel));
         }
     }
 

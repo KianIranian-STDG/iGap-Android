@@ -295,7 +295,7 @@ public class RequestManager extends BaseController {
         if (isRpc) {
             AbstractObject object = lookUp.deserializeObject(actionId, payload);
             if (object != null) {
-                String resId = object.getResId() != null && object.getResId().equals("") ? null : object.getResId();
+                 String resId = object.getResId() != null && object.getResId().equals("") ? null : object.getResId();
                 if (resId != null) {
                     RequestWrapper requestWrapper = requestQueueMap.get(resId);
                     if (requestWrapper != null && requestWrapper.onResponse != null) {

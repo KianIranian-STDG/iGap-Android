@@ -87,7 +87,7 @@
                     android:layout_marginRight="@dimen/dp16"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:onClick="@{()->viewModel.onEmojiClickListener()}"
-                    android:text="@string/md_emoticon_with_happy_face"
+                    android:text="@string/icon_emoji_smile"
                     android:textSize="@dimen/standardIconSize"
                     app:layout_constraintBottom_toBottomOf="@+id/groupNameEditText"
                     app:layout_constraintEnd_toEndOf="parent" />
@@ -205,7 +205,7 @@
                     android:layout_marginTop="@dimen/dp8"
                     android:onClick="@{()->viewModel.onAdministratorClick()}"
                     android:padding="8dp"
-                    android:text="@string/administrators_title"
+                    android:text="@string/admins_title"
                     android:textColor="?iGapTitleTextColor"
                     app:layout_constraintEnd_toStartOf="@id/administratorsCount"
                     app:layout_constraintStart_toStartOf="@id/chatHistoryTitle"

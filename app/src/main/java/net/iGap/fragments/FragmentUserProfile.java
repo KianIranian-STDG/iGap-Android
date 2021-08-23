@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -37,7 +36,6 @@ import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.model.PassCode;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StatusBarUtil;
 import net.iGap.module.Theme;
 import net.iGap.module.dialog.account.AccountDialogListener;
@@ -53,14 +51,11 @@ import static android.app.Activity.RESULT_OK;
 
 public class FragmentUserProfile extends BaseMainFragments implements FragmentEditImage.OnImageEdited {
 
-    private static final String TAG = "FragmentUserProfile1";
     private FragmentUserProfileBinding binding;
     private UserProfileViewModel viewModel;
 
     public static FragmentUserProfile newInstance() {
-
         Bundle args = new Bundle();
-
         FragmentUserProfile fragment = new FragmentUserProfile();
         fragment.setArguments(args);
         return fragment;
@@ -73,7 +68,7 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             @NonNull
             @Override
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                return (T) new UserProfileViewModel(getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, Context.MODE_PRIVATE), avatarHandler);
+                return (T) new UserProfileViewModel(avatarHandler);
             }
         }).get(UserProfileViewModel.class);
     }
@@ -95,6 +90,10 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             StatusBarUtil.setColor(getActivity(), new Theme().getPrimaryDarkColor(getContext()), 50);
         }
 
+        viewModel.getCloseKeyboard().observe(getViewLifecycleOwner(), aBoolean -> {
+            closeKeyboard((binding.getRoot()));
+        });
+
         viewModel.openAccountsDialog.observe(getViewLifecycleOwner(), show -> {
             if (show == null) return;
             if (show) {
@@ -102,26 +101,20 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             }
         });
 
-
-
         viewModel.setCurrentFragment.observe(getViewLifecycleOwner(), isEdit -> {
             if (isEdit != null) {
                 if (isEdit) {
-                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                    Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentEditProfile.class.getName());
-                    if (fragment == null) {
-                        fragment = FragmentEditProfile.newInstance();
-                        fragmentTransaction.addToBackStack(FragmentEditProfile.class.getName());
-                    }
-                    fragmentTransaction.replace(R.id.frame_edit, fragment, FragmentEditProfile.class.getName()).commit();
+                    getChildFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .add(R.id.frame_edit, FragmentEditProfile.class, null)
+                            .addToBackStack(FragmentEditProfile.class.getName())
+                            .commit();
                 } else {
-                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-                    Fragment fragment = getChildFragmentManager().findFragmentByTag(FragmentProfile.class.getName());
-                    if (fragment == null) {
-                        fragment = FragmentProfile.newInstance();
-                        fragmentTransaction.addToBackStack(fragment.getClass().getName());
-                    }
-                    fragmentTransaction.replace(R.id.frame_edit, fragment, fragment.getClass().getName()).commit();
+                    getChildFragmentManager().beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.frame_edit, FragmentProfile.class, null)
+                            .addToBackStack(FragmentProfile.class.getName())
+                            .commit();
                 }
             }
         });
@@ -191,11 +184,6 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
             if (isPopBackStack != null && isPopBackStack) {
                 getChildFragmentManager().popBackStack();
             }
-        });
-
-        viewModel.getEditCompleteListener().observe(getViewLifecycleOwner(), state -> {
-            if (state == null) return;
-            closeKeyboard(binding.getRoot());
         });
     }
 
@@ -340,4 +328,5 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
         }
         viewModel.uploadAvatar(path);
     }
+
 }

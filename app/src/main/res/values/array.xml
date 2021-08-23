@@ -123,25 +123,6 @@
     </string-array>
 
 
-    <string-array name="charge_type_irancell">
-        <item>@string/normal_charge</item>
-        <item>@string/amazing</item>
-        <!--<item>@string/wimax_charging</item>
-        <item>@string/permanently_charge</item>-->
-    </string-array>
-
-    <string-array name="charge_type_hamrahe_aval">
-        <!--<item>@string/amazing_charge</item>-->
-        <item>@string/normal_charge</item>
-        <item>@string/youth_charge</item>
-        <item>@string/ladies_charge</item>
-    </string-array>
-
-    <string-array name="charge_type_ritel">
-        <item>@string/normal_charge</item>
-        <item>@string/Exciting</item>
-    </string-array>
-
     <string-array name="cpay_charge">
         <item>@string/requested_amount</item>
         <item>@string/charge_5</item>

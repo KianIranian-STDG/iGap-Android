@@ -21,12 +21,12 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
     protected void setLayoutMessageContainer(LinearLayout.LayoutParams layout_param) {
         initViews();
         layoutMessageContainer.setLayoutParams(layout_param);
-        getContentBloke().addView(layoutMessageContainer);
+        getContentBloke().addView(layoutMessageContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     protected void setLayoutMessageContainer() {
         initViews();
-        getContentBloke().addView(layoutMessageContainer);
+        getContentBloke().addView(layoutMessageContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     public void addButtonLayout(LinearLayout view) {
@@ -40,7 +40,7 @@ public class ChatItemWithTextHolder extends NewChatItemHolder {
     private void initViews() {
         messageView = ViewMaker.makeTextViewMessage();
         layoutMessageContainer = ViewMaker.getTextView();
-        layoutMessageContainer.addView(messageView);
+        layoutMessageContainer.addView(messageView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         BtnContainer = new LinearLayout(getContext());
         BtnContainer.setOrientation(LinearLayout.VERTICAL);

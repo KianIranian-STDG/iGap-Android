@@ -14,8 +14,9 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.MerchantsListItemBinding;
@@ -27,7 +28,6 @@ import org.paygear.model.SearchedAccount;
 import java.util.ArrayList;
 
 import ir.radsense.raadcore.utils.RaadCommonUtils;
-import ir.radsense.raadcore.widget.CircleImageTransform;
 
 public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<Object> Data;
@@ -43,9 +43,9 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
         ArrayList<SearchedAccount> shops = new ArrayList<>();
         ArrayList<SearchedAccount> taxis = new ArrayList<>();
 
-        for (SearchedAccount searchedAccount: Data) {
+        for (SearchedAccount searchedAccount : Data) {
             if (searchedAccount.getAccount_type() != 4) {
-                if (searchedAccount.getBusiness_type()==2){
+                if (searchedAccount.getBusiness_type() == 2) {
                     taxis.add(searchedAccount);
                 } else {
                     shops.add(searchedAccount);
@@ -82,7 +82,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             textView.setPadding(ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10), ViewMaker.dpToPixel(15), ViewMaker.dpToPixel(10));
             textView.setBackgroundColor(new Theme().getRootColor(textView.getContext()));
-            textView.setTypeface(ResourcesCompat.getFont(textView.getContext() , R.font.main_font));
+            textView.setTypeface(ResourcesCompat.getFont(textView.getContext(), R.font.main_font));
             textView.setGravity(Gravity.START);
 
             return new ViewHolderTitle(textView);
@@ -117,6 +117,7 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     class ViewHolderTitle extends RecyclerView.ViewHolder {
         TextView title;
+
         public ViewHolderTitle(TextView view) {
             super(view);
             this.title = view;
@@ -167,27 +168,30 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
                 mBinding.subtitle.setText(R.string.paygear_user);
             }
             if (data.getAccount_type() != 4) {
-                if (data.getBusiness_type()==2){
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                            .transform(new CircleImageTransform())
+                if (data.getBusiness_type() == 2) {
+                    Glide.with(G.context)
+                            .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                            .circleCrop()
                             .error(R.drawable.ic_local_taxi_black_24dp)
                             .placeholder(R.drawable.ic_local_taxi_black_24dp)
-                            .fit()
+                            .fitCenter()
                             .into(mBinding.image);
-                }else {
-                    Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                            .transform(new CircleImageTransform())
+                } else {
+                    Glide.with(G.context)
+                            .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                            .circleCrop()
                             .error(R.drawable.ic_store_black_24dp)
                             .placeholder(R.drawable.ic_store_black_24dp)
-                            .fit()
+                            .fitCenter()
                             .into(mBinding.image);
                 }
             } else {
-                Picasso.get().load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
-                        .transform(new CircleImageTransform())
+                Glide.with(G.context)
+                        .load(RaadCommonUtils.getImageUrl(data.getProfile_picture()))
+                        .circleCrop()
                         .error(R.drawable.ic_person_outline2_white_24dp)
                         .placeholder(R.drawable.ic_person_outline2_white_24dp)
-                        .fit()
+                        .fitCenter()
                         .into(mBinding.image);
             }
 
@@ -201,26 +205,26 @@ public class MerchantsListAdapter extends RecyclerView.Adapter<RecyclerView.View
             });
 
 
-            if (RaadApp.selectedMerchant!=null){
-                if (RaadApp.selectedMerchant.get_id().equals(data.get_id())){
+            if (RaadApp.selectedMerchant != null) {
+                if (RaadApp.selectedMerchant.get_id().equals(data.get_id())) {
                     mBinding.title.setTextColor(Color.parseColor("#2196f3"));
                     mBinding.check.setVisibility(View.VISIBLE);
                     mBinding.checkFrame.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     mBinding.title.setTextColor(Color.parseColor("#de000000"));
                     mBinding.check.setVisibility(View.GONE);
                     mBinding.checkFrame.setVisibility(View.GONE);
 
                 }
 
-            }else {
-                if (position==0){
+            } else {
+                if (position == 0) {
                     mBinding.title.setTextColor(Color.parseColor("#2196f3"));
                     mBinding.check.setVisibility(View.VISIBLE);
                     mBinding.checkFrame.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     mBinding.title.setTextColor(Color.parseColor("#de000000"));
                     mBinding.check.setVisibility(View.GONE);
                     mBinding.checkFrame.setVisibility(View.GONE);

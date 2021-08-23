@@ -320,7 +320,7 @@ public class ChatAttachmentPopup {
             if (FragmentEditImage.textImageList.size() > 0) {
                 dismiss();
                 clearRecyclerAdapter();
-                lblSend.setText(mFrgActivity.getString(R.string.close_icon));
+                lblSend.setText(mFrgActivity.getString(R.string.icon_close));
                 lblSend.setText(mFrgActivity.getString(R.string.navigation_drawer_close));
 
                 mPopupListener.onAttachPopupSendSelected();
@@ -416,10 +416,10 @@ public class ChatAttachmentPopup {
                     FragmentEditImage.textImageList.remove(path);
                 }
                 if (FragmentEditImage.textImageList.size() > 0) {
-                    icoSend.setText(mFrgActivity.getString(R.string.md_send_button));
+                    icoSend.setText(mFrgActivity.getString(R.string.icon_send));
                     lblSend.setText("" + FragmentEditImage.textImageList.size() + " " + mFrgActivity.getString(item));
                 } else {
-                    icoSend.setText(mFrgActivity.getString(R.string.close_icon));
+                    icoSend.setText(mFrgActivity.getString(R.string.icon_close));
                     lblSend.setText(mFrgActivity.getString(R.string.navigation_drawer_close));
                 }
             }
@@ -714,12 +714,12 @@ public class ChatAttachmentPopup {
 
         if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
             if (icoSend != null)
-                icoSend.setText(mFrgActivity.getResources().getString(R.string.md_send_button));
+                icoSend.setText(mFrgActivity.getResources().getString(R.string.icon_send));
             if (lblSend != null)
                 lblSend.setText("" + FragmentEditImage.textImageList.size() + " " + mFrgActivity.getResources().getString(item));
         } else {
             if (icoSend != null)
-                icoSend.setText(mFrgActivity.getResources().getString(R.string.close_icon));
+                icoSend.setText(mFrgActivity.getResources().getString(R.string.icon_close));
             if (lblSend != null)
                 lblSend.setText(mFrgActivity.getResources().getString(R.string.navigation_drawer_close));
         }

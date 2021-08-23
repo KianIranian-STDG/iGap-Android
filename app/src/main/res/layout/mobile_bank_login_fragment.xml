@@ -136,7 +136,7 @@
                         android:background="?rootBackgroundColor"
                         android:focusable="true"
                         android:clickable="true"
-                        android:text="@string/eye_icon" />
+                        android:text="@string/icon_eye" />
 
                 </RelativeLayout>
 

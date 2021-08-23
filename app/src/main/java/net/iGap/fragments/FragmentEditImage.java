@@ -138,7 +138,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
         rootView.setListener(this);
         View view = inflater.inflate(R.layout.fragment_edit_image, container, false);
         keyboardContainer = view.findViewById(R.id.fl_chat_keyboardContainer);
-        paintTv= view.findViewById(R.id.txtPaintImage);
+        paintTv = view.findViewById(R.id.txtPaintImage);
         rootView.addView(view, LayoutCreator.createFrame(LayoutCreator.MATCH_PARENT, LayoutCreator.MATCH_PARENT));
         return rootView;
     }
@@ -316,7 +316,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             }
         });
         iconOk.setOnClickListener(v -> {
-            
+
             String path = itemGalleryList.get(viewPager.getCurrentItem()).getPath();
             String message = edtChat.getText().toString();
 
@@ -339,7 +339,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
             v.setVisibility(View.GONE);
 
-            showPopup(-2);
+            showPopup(-1);
 
         });
 
@@ -445,12 +445,12 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
             if (rootView != null) {
                 emojiPadding = currentHeight;
                 rootView.requestLayout();
-                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                changeEmojiButtonImageResource(R.string.icon_keyboard);
                 rootSend.setVisibility(View.GONE);
                 onWindowSizeChanged();
             }
         } else if (show == KeyboardView.MODE_KEYBOARD) {
-            changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+            changeEmojiButtonImageResource(R.string.icon_emoji_smile);
 
             keyboardContainer.setVisibility(VISIBLE);
 
@@ -675,9 +675,7 @@ public class FragmentEditImage extends BaseFragment implements NotifyFrameLayout
 
         boolean oldValue = keyboardVisible;
         keyboardVisible = keyboardSize > 0;
-        if (keyboardVisible && isPopupShowing()) {
-            showPopup(-1);
-        }
+
         if (emojiPadding != 0 && !keyboardVisible && keyboardVisible != oldValue && !isPopupShowing()) {
             emojiPadding = 0;
             rootView.requestLayout();

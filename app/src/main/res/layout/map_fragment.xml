@@ -108,7 +108,7 @@
                     android:layout_marginLeft="@dimen/dp8"
                     android:layout_marginRight="@dimen/dp8"
                     android:gravity="center"
-                    android:text="@string/md_igap_crosshairs_gps"
+                    android:text="@string/icon_location"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/md_green_700"
 

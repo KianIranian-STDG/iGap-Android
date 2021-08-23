@@ -13,7 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:text="@string/score_star_icon"
+        android:text="@string/icon_favourite"
         android:textColor="?attr/colorAccent"
         android:textSize="50dp"
         app:layout_constraintBottom_toBottomOf="parent"

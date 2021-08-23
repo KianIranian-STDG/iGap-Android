@@ -19,12 +19,12 @@ import net.iGap.fragments.emoji.struct.StructIGSticker;
 import net.iGap.fragments.emoji.struct.StructIGStickerGroup;
 import net.iGap.fragments.giftStickers.buyStickerCompleted.BuyGiftStickerCompletedFragment;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperToolbar;
-import net.iGap.observers.interfaces.ToolbarListener;
+import net.iGap.messenger.ui.toolBar.BackDrawable;
+import net.iGap.messenger.ui.toolBar.Toolbar;
 
 public class GiftStickerMainFragment extends BaseFragment {
 
-    private HelperToolbar helperToolbar;
+    private Toolbar GiftStickerToolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,34 +34,29 @@ public class GiftStickerMainFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_gift_sticker_main, container, false);
+        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_gift_sticker_main, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        helperToolbar = HelperToolbar.create()
-                .setContext(getContext())
-                .setLifecycleOwner(getViewLifecycleOwner())
-                .setLeftIcon(R.string.back_icon)
-                .setLogoShown(true)
-                .setDefaultTitle(getResources().getString(R.string.gift_sticker_title))
-                .setListener(new ToolbarListener() {
-                    @Override
-                    public void onLeftIconClickListener(View view) {
-                        if (getChildFragmentManager().findFragmentById(R.id.giftStickerContainer) instanceof BuyGiftStickerCompletedFragment) {
-                            goToHomePage();
-                        } else {
-                            if (getActivity() != null) {
-                                getActivity().onBackPressed();
-                            }
-                        }
+        GiftStickerToolbar = new Toolbar(getContext());
+        GiftStickerToolbar.setBackIcon(new BackDrawable(false));
+        GiftStickerToolbar.setTitle(getResources().getString(R.string.gift_sticker_title));
+        GiftStickerToolbar.setListener(i -> {
+            if (i == -1) {
+                if (getChildFragmentManager().findFragmentById(R.id.giftStickerContainer) instanceof BuyGiftStickerCompletedFragment) {
+                    goToHomePage();
+                } else {
+                    if (getActivity() != null) {
+                        getActivity().onBackPressed();
                     }
-                });
-
-        LinearLayout toolbar = view.findViewById(R.id.toolbar);
-        toolbar.addView(helperToolbar.getView());
+                }
+            }
+        });
+        LinearLayout toolbar = view.findViewById(R.id.giftStickerToolbar);
+        toolbar.addView(GiftStickerToolbar);
 
         Fragment fragment = getChildFragmentManager().findFragmentById(R.id.giftStickerContainer);
         if (fragment == null) {
@@ -171,6 +166,6 @@ public class GiftStickerMainFragment extends BaseFragment {
     }
 
     public void setToolbarTitle(int titleRes) {
-        helperToolbar.setDefaultTitle(getString(titleRes));
+        GiftStickerToolbar.setTitle(getString(titleRes));
     }
 }
