@@ -3,6 +3,7 @@ package net.iGap.story;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -204,7 +205,8 @@ public class TextStickerView extends RelativeLayout {
             }
         } else {
             if (!finalPath.isEmpty()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), bitmapHolderImageView);
+                bitmapHolderImageView.setImageBitmap(BitmapFactory.decodeFile(finalPath));
+                //G.imageLoader.displayImage(AndroidUtils.suitablePath(finalPath), bitmapHolderImageView);
             }
             if (mBrushDrawingView != null) {
                 mBrushDrawingView.setBrushDrawingMode(false);
