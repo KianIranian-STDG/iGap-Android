@@ -942,6 +942,7 @@ public class MessageDataStorage extends BaseController {
 
 
     }
+
     public void updateUserAddedStoryWithStoryObjects(final List<StoryObject> stories) {
 
 
@@ -1018,6 +1019,13 @@ public class MessageDataStorage extends BaseController {
 
                 if (database.where(RealmStory.class).equalTo("id", userId).findFirst().getRealmStoryProtos().size() == 0) {
                     database.where(RealmStory.class).equalTo("id", userId).findFirst().deleteFromRealm();
+                } else {
+                    if (database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", MessageObject.STATUS_SENDING).findAll().size() > 0 ||
+                            database.where(RealmStoryProto.class).equalTo("userId", userId).equalTo("status", MessageObject.STATUS_FAILED).findAll().size() > 0) {
+                        database.where(RealmStory.class).equalTo("id", userId).findFirst().setSentAll(false);
+                    } else {
+                        database.where(RealmStory.class).equalTo("id", userId).findFirst().setSentAll(true);
+                    }
                 }
 
                 database.commitTransaction();

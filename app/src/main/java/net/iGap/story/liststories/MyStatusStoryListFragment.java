@@ -225,17 +225,20 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
     @Override
     public void onLongClick(View itemView, int position) {
         StoryCell storyCell = (StoryCell) itemView;
-        boolean isAbleToSendToServer = false;
-        MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.delete_status_update))
-                .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
-                .positiveText(R.string.ok)
-                .onNegative((dialog1, which) -> dialog1.dismiss()).show();
 
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerListView.setVisibility(View.GONE);
-            DbManager.getInstance().doRealmTransaction(realm -> {
-                if (realm.where(RealmStoryProto.class).equalTo("id", storyCell.getUploadId()).findFirst().getStatus() == MessageObject.STATUS_FAILED) {
+
+        if (storyCell.getSendStatus() == MessageObject.STATUS_FAILED ||
+                storyCell.getSendStatus() == MessageObject.STATUS_SENT) {
+            MaterialDialog dialog = new MaterialDialog.Builder(getContext()).title(getResources().getString(R.string.delete_status_update))
+                    .titleGravity(GravityEnum.START).negativeText(R.string.cansel)
+                    .positiveText(R.string.ok)
+                    .onNegative((dialog1, which) -> dialog1.dismiss()).show();
+
+            dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(view -> {
+                progressBar.setVisibility(View.VISIBLE);
+                recyclerListView.setVisibility(View.GONE);
+
+                if (storyCell.getSendStatus() == MessageObject.STATUS_FAILED) {
                     getMessageDataStorage().deleteUserStoryWithUploadId(storyCell.getUploadId(), storyCell.getUserId());
                 } else {
                     AbstractObject req = null;
@@ -253,10 +256,10 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 }
 
 
-            });
+                dialog.dismiss();
 
-            dialog.dismiss();
-        });
+            });
+        }
 
 
     }
@@ -390,13 +393,14 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
                                 storyCell.deleteIconVisibility(true, R.string.delete_icon);
                             }
-                            storyCell.setBackgroundColor(Color.WHITE);
+
                             storyCell.setDeleteStory(MyStatusStoryListFragment.this);
 
                             storyCell.setStatus(StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE);
                             storyCell.setStoryId(storyProto.get(position).getStoryId());
                             storyCell.setUploadId(storyProto.get(position).getId());
                             storyCell.setFileToken(storyProto.get(position).getFileToken());
+                            storyCell.setSendStatus(storyProto.get(position).getStatus());
                         }
 
                         storyCell.addIconVisibility(false);
@@ -404,7 +408,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                     break;
                 case 1:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    headerCell.setTextColor(getResources().getColor(R.color.ou_background_crop));
+                    headerCell.setTextColor(Theme.getInstance().getSendMessageTextColor(headerCell.getContext()));
                     headerCell.setGravity(Gravity.CENTER);
                     headerCell.setTextSize(12);
                     if (position == recentHeaderRow) {
