@@ -217,7 +217,9 @@ public class CameraStoryFragment extends BaseFragment {
                 G.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Glide.with(getContext()).asDrawable().load(new File(listOfAllImages.get(0).getPath())).centerCrop().into(galleryIcon);
+                        if (listOfAllImages != null && listOfAllImages.size() > 0) {
+                            Glide.with(getContext()).asDrawable().load(new File(listOfAllImages.get(0).getPath())).centerCrop().into(galleryIcon);
+                        }
                         //ImageLoadingServiceInjector.inject().loadImage(galleryIcon, listOfAllImages.get(0).getPath(), true);
                     }
                 });

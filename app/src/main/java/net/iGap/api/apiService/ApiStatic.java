@@ -23,6 +23,6 @@ public class ApiStatic {
     static final String MOBILE_BANK_OTP = BASE_URL + "external/" + VERSION;
     private static final String NEWS_BASE_URL = "https://api.cafetitle.com/";
     static final String NEWS_URL = NEWS_BASE_URL + "";
-    public static final String FILE = "http://192.168.20.54:30400" + "/files/v1.0/";
+    public static final String FILE = AppConfig.servicesBaseUrl + "/files/v1.0/";
 }
 

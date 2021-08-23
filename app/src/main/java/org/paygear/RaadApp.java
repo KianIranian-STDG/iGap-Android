@@ -9,6 +9,8 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import net.iGap.G;
+
 import org.paygear.fragment.PaymentHistoryFragment;
 import org.paygear.model.Card;
 import org.paygear.model.SearchedAccount;
@@ -191,7 +193,7 @@ public class RaadApp {
 
         RaadApp.me = SettingHelper.PrefsLoad(applicationContext, SettingHelper.USER_ACCOUNT, Account.class, null);
 
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleListener(applicationContext));
+        G.runOnUiThread(() -> ProcessLifecycleOwner.get().getLifecycle().addObserver(new AppLifecycleListener(applicationContext)));
 
     }
 

@@ -32,6 +32,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.avatar.AvatarHandler;
 import net.iGap.helper.avatar.ParamWithAvatarType;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.accountManager.AccountManager;
 import net.iGap.module.accountManager.DbManager;
@@ -255,7 +256,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         RealmAttachment ra = stories.get(counter).getAttachment();
         String path = ra.getLocalFilePath() != null ? ra.getLocalFilePath() : ra.getLocalThumbnailPath();
 
-        File file = new File(path);
+        File file = new File(path != null ? path : "");
         if (file.exists()) {
             loadImage(path);
         } else {

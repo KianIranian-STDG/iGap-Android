@@ -4749,7 +4749,7 @@ public class FragmentChat extends BaseFragment
         //check and remove share base on type and download state
         if (roomMessageType == LOCATION_VALUE || roomMessageType == VOICE_VALUE) {
             items.remove(Integer.valueOf(R.string.share_item_dialog));
-        } else if (roomMessageType != TEXT_VALUE && roomMessageType != CONTACT_VALUE) {
+        } else if (roomMessageType != TEXT_VALUE && roomMessageType != STORY_REPLY_VALUE && roomMessageType != CONTACT_VALUE) {
             String filepath_;
             if (messageObject.forwardedMessage != null) {
                 filepath_ = messageObject.forwardedMessage.getAttachment().filePath != null ? messageObject.forwardedMessage.getAttachment().filePath : AndroidUtils.getFilePathWithCashId(messageObject.forwardedMessage.getAttachment().cacheId, messageObject.forwardedMessage.getAttachment().name, roomMessageType);
@@ -6638,6 +6638,7 @@ public class FragmentChat extends BaseFragment
             switch (type) {
 
                 case TEXT_VALUE:
+                case STORY_REPLY_VALUE:
                     intent.setType("text/plain");
                     String message = messageObject.forwardedMessage != null ? messageObject.forwardedMessage.message : messageObject.message;
                     intent.putExtra(Intent.EXTRA_TEXT, message);

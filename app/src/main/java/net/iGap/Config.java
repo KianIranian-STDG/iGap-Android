@@ -55,7 +55,7 @@ public class Config {
     public static final int DEFAULT_BOTH_CHAT_DELETE_TIME = (int) (2 * DateUtils.HOUR_IN_MILLIS);
 
     public static final String IGAP_ACCOUNT = "iGap";
-    public static final String URL_WEB_SOCKET = "ws://192.168.20.54:31092/";
+    public static final String URL_WEB_SOCKET = "wss://secure.igap.net/hybrid/";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
     public static final String IGAP_LINK_PREFIX = "https://iGap.net/";
 

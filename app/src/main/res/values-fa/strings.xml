@@ -2289,4 +2289,5 @@
     <string name="leave_confirm">آیا مطمئن هستید که می خواهید %s را ترک کنید؟</string>
     <string name="clear_selected_history"> آیا از پاک کردن تاریخچه %s اطمینان دارید؟</string>
     <string name="waiting_dialog_reason_text">تلاش بیش از حد</string>
+    <string name="moments_string">لحظه ها</string>
 </resources>

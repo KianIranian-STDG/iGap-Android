@@ -76,6 +76,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOCATION_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER_VALUE;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STORY_REPLY_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT_VALUE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_VALUE;
@@ -507,6 +508,7 @@ public final class AppUtils {
         if (message != null) {
             switch (message.messageType) {
                 case TEXT_VALUE:
+                case STORY_REPLY_VALUE:
                     if (message.message != null) {
                         messageText = message.message;
                     }
