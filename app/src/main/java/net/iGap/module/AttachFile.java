@@ -322,32 +322,6 @@ public class AttachFile {
      * @throws IOException
      */
 
-    public void requestPaint(final Fragment fragment) throws IOException {
-
-        HelperPermission.getStoragePermision(context, new OnGetPermission() {
-            @Override
-            public void Allow() {
-                Intent intent = new Intent(context, ActivityPaint.class);
-
-                if (fragment != null) {
-                    fragment.startActivityForResult(intent, request_code_paint);
-                } else {
-                    ((Activity) context).startActivityForResult(intent, request_code_paint);
-                }
-
-
-                if (G.onHelperSetAction != null) {
-                    G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.PAINTING);
-                }
-            }
-
-            @Override
-            public void deny() {
-
-            }
-        });
-    }
-
     public static void getAllShownImagesPath(Activity activity, int count, ChatAttachmentPopup.OnImagesGalleryPrepared onImagesGalleryPrepared) {
         new Thread(new Runnable() {
             @Override
@@ -384,10 +358,6 @@ public class AttachFile {
                 }
             }
         }).start();
-    }
-
-    public void requestPaint() throws IOException {
-        requestPaint(null);
     }
 
     //*************************************************************************************************************

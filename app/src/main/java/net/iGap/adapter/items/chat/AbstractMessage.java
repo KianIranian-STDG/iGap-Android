@@ -907,9 +907,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     AttachmentObject storyAttachment = messageObject.storyObject.attachmentObject;  // TODO: 8/15/21 must write a new method for this part
                     ImageView view = replayView.findViewById(R.id.chslr_imv_replay_pic);
                     if (storyAttachment != null) {
-                        if (storyAttachment.isFileExistsOnLocal()) {
+                        if (storyAttachment.isFileExistsOnLocal(messageObject)) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(storyAttachment.filePath), view);
-                        } else if (storyAttachment.isThumbnailExistsOnLocal()) {
+                        } else if (storyAttachment.isThumbnailExistsOnLocal(messageObject)) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(storyAttachment.thumbnailPath), view);
                         } else {
                             view.setVisibility(View.GONE);

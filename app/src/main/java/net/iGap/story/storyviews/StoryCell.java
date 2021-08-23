@@ -135,7 +135,7 @@ public class StoryCell extends FrameLayout {
 
         if (circleImageLoading.getStatus() == ImageLoadingView.Status.FAILED) {
             deleteIcon.setVisibility(VISIBLE);
-            deleteIcon.setText(R.string.upload_ic);
+            deleteIcon.setText(R.string.icon_upload);
             topText.setVisibility(GONE);
             bottomText.setVisibility(GONE);
             middleText.setVisibility(VISIBLE);
@@ -219,7 +219,7 @@ public class StoryCell extends FrameLayout {
             bottomText.setTextColor(Color.RED);
             deleteIcon.setTextColor(Color.RED);
             addIcon.setTextColor(Color.RED);
-            addIcon.setText(R.string.error_icon);
+            addIcon.setText(R.string.icon_error);
         } else if (circleImageLoading.getStatus() == ImageLoadingView.Status.LOADING) {
             bottomText.setText(context.getString(R.string.story_sending));
             deleteIcon.setTextColor(Theme.getInstance().getTitleTextColor(context));
@@ -308,7 +308,7 @@ public class StoryCell extends FrameLayout {
         addView(view);
 
         addIcon = new MaterialDesignTextView(context);
-        addIcon.setText(R.string.add_icon_2);
+        addIcon.setText(R.string.icon_add_whit_circle);
         addIcon.setTextColor(getResources().getColor(R.color.green));
         addIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         addIcon.setGravity(isRtl ? Gravity.LEFT : Gravity.RIGHT);
@@ -342,20 +342,20 @@ public class StoryCell extends FrameLayout {
         addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 34.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
 
         icon = new IconView(getContext());
-        icon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        icon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         icon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         addView(icon, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, padding, 0, padding, 0));
 
         icon2 = new IconView(getContext());
-        icon2.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        icon2.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         icon2.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         addView(icon2, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, isRtl ? (padding + 30) : padding, 0, isRtl ? padding : (30 + padding), 0));
 
 
         deleteIcon = new MaterialDesignTextView(getContext());
-        deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
+        deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icons));
         deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
-        deleteIcon.setText(R.string.horizontal_more_icon);
+        deleteIcon.setText(R.string.icon_other_horizontal_dots);
         deleteIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(deleteIcon.getContext()));
         deleteIcon.setGravity(Gravity.CENTER);
         deleteIcon.setOnClickListener(new View.OnClickListener() {
@@ -453,11 +453,11 @@ public class StoryCell extends FrameLayout {
         addIcon.setVisibility(visible ? VISIBLE : GONE);
         if (visible) {
             if (getStatus() == StoryCell.CircleStatus.CIRCLE_IMAGE) {
-                addIcon.setText(R.string.add_icon_2);
+                addIcon.setText(R.string.icon_add_whit_circle);
                 addIcon.setTextColor(getResources().getColor(R.color.green));
             } else {
                 addIcon.setTextColor(Color.RED);
-                addIcon.setText(R.string.error_icon);
+                addIcon.setText(R.string.icon_error);
             }
         }
 

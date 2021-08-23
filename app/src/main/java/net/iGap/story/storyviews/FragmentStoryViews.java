@@ -62,7 +62,7 @@ public class FragmentStoryViews extends BaseFragment implements StoryCell.IconCl
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             StoryCell storyCell = (StoryCell) holder.itemView;
             storyCell.setText("topppppppppp", "bottommmm");
-            storyCell.setIcons(R.string.md_send_button, R.string.more_icon);
+            storyCell.setIcons(R.string.icon_send, R.string.icon_other_vertical_dots);
             storyCell.setImage(R.color.red,avatarHandler);
         }
 

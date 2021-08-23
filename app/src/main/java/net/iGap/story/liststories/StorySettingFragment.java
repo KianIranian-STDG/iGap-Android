@@ -52,7 +52,7 @@ public class StorySettingFragment extends BaseFragment implements ToolbarListene
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setListener(this)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(R.string.stories_setting))
                 .setDefaultTitle(title)
                 .getView();

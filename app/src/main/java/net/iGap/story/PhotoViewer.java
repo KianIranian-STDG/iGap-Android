@@ -272,7 +272,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         cancelCropLayout.addView(rippleView, LayoutCreator.createLinear(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT));
 
         designTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        designTextView.setText(context.getString(R.string.md_close_button));
+        designTextView.setText(context.getString(R.string.icon_close));
         designTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         designTextView.setGravity(Gravity.CENTER);
         rippleView.addView(designTextView, LayoutCreator.createRelative(48, LayoutCreator.MATCH_PARENT));
@@ -281,7 +281,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         cancelCropLayout.addView(emptyView, LayoutCreator.createLinear(0, LayoutCreator.MATCH_PARENT, 1F));
 
         revertTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        revertTextView.setText(context.getString(R.string.forward_icon));
+        revertTextView.setText(context.getString(R.string.icon_forward));
         revertTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         revertTextView.setGravity(Gravity.CENTER);
         revertTextView.setVisibility(View.GONE);
@@ -289,21 +289,21 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         cropTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         cropTextView.setGravity(Gravity.CENTER);
-        cropTextView.setText(context.getString(R.string.md_crop_button));
+        cropTextView.setText(context.getString(R.string.icon_crop_picture));
         cropTextView.setVisibility(View.GONE);
         cropTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(cropTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT));
 
         editTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         editTextView.setGravity(Gravity.CENTER);
-        editTextView.setText(getString(R.string.md_igap_tune));
+        editTextView.setText(getString(R.string.icon_beeptunes_like));
         editTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(editTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
 
         emoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         emoji.setGravity(Gravity.CENTER);
-        emoji.setText(getString(R.string.md_emoticon_with_happy_face));
+        emoji.setText(getString(R.string.icon_emoji_smile));
         emoji.setTextColor(context.getResources().getColor(R.color.white));
         emoji.setTextSize(26);
         cancelCropLayout.addView(emoji, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
@@ -316,7 +316,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         paintTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         paintTextView.setGravity(Gravity.CENTER);
-        paintTextView.setText(getString(R.string.md_igap_paint));
+        paintTextView.setText(getString(R.string.icon_edit_picture));
         paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, 52, 0, 0, 8, 0));
 
@@ -336,7 +336,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         keyboardEmoji = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         keyboardEmoji.setGravity(Gravity.CENTER);
         keyboardEmoji.setPadding(8, 0, 8, 8);
-        keyboardEmoji.setText(context.getString(R.string.md_emoticon_with_happy_face));
+        keyboardEmoji.setText(context.getString(R.string.icon_emoji_smile));
         keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
         keyboardEmoji.setTextSize(26);
         layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER, 5, 0, 0, 0));
@@ -356,7 +356,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         iconOkTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         iconOkTextView.setGravity(Gravity.BOTTOM);
         iconOkTextView.setPadding(8, 0, 8, 8);
-        iconOkTextView.setText(context.getString(R.string.check_icon));
+        iconOkTextView.setText(context.getString(R.string.icon_check_ok));
         iconOkTextView.setTextColor(context.getResources().getColor(R.color.white));
         iconOkTextView.setTextSize(26);
         iconOkTextView.setVisibility(View.GONE);
@@ -377,7 +377,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         sendTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         sendTextView.setGravity(Gravity.CENTER);
-        sendTextView.setText(context.getString(R.string.md_send_button));
+        sendTextView.setText(context.getString(R.string.icon_send));
         sendTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         sendTextView.setVisibility(View.GONE);
 
@@ -1373,7 +1373,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
 
         if (event == KeyboardView.MODE_KEYBOARD) {
-            keyboardEmoji.setText(getActivity().getString(R.string.md_emoticon_with_happy_face));
+            keyboardEmoji.setText(getActivity().getString(R.string.icon_emoji_smile));
             chatKeyBoardContainer.setVisibility(VISIBLE);
 
             if (keyboardHeight <= 0) {
@@ -1430,7 +1430,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             if (rootView != null) {
                 emojiPadding = currentHeight;
                 rootView.requestLayout();
-                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                changeEmojiButtonImageResource(R.string.icon_keyboard);
             }
         } else {
             cancelCropLayout.setVisibility(VISIBLE);

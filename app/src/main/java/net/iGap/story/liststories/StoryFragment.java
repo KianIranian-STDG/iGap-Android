@@ -207,7 +207,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
-        addButton.setIcon(R.string.add_icon_without_circle_font);
+        addButton.setIcon(R.string.icon_add);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.setVisibility(View.GONE);
         floatActionLayout.addView(addButton);

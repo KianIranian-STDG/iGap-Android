@@ -114,14 +114,14 @@ public class StoryGalleryFragment extends BaseFragment {
         toolbarView.setBackgroundResource(new Theme().getToolbarDrawableSharpe(getContext()));
 
         backIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        backIcon.setText(getString(R.string.back_icon));
+        backIcon.setText(getString(R.string.icon_back));
         backIcon.setTextColor(context.getResources().getColor(R.color.white));
         backIcon.setTextSize(22);
         backIcon.setGravity(Gravity.CENTER);
         toolbarView.addView(backIcon, LayoutCreator.createFrame(40, 40, Gravity.LEFT | Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
 
         sendIcon = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
-        sendIcon.setText(getString(R.string.md_send_button));
+        sendIcon.setText(getString(R.string.icon_send));
         sendIcon.setTextColor(context.getResources().getColor(R.color.white));
         sendIcon.setTextSize(22);
         sendIcon.setVisibility(View.GONE);
@@ -171,10 +171,10 @@ public class StoryGalleryFragment extends BaseFragment {
                         sendIcon.setVisibility(View.VISIBLE);
                         backIcon.setVisibility(View.VISIBLE);
                         if (size > 0) {
-                            sendIcon.setText(R.string.md_send_button);
+                            sendIcon.setText(R.string.icon_send);
 
                         } else {
-                            sendIcon.setText(R.string.close_icon);
+                            sendIcon.setText(R.string.icon_close);
                         }
 
                     }
@@ -208,7 +208,7 @@ public class StoryGalleryFragment extends BaseFragment {
             if (adapterGalleryPhoto.getSelectedPhotos().size() > 0)
                 sendSelectedPhotos(adapterGalleryPhoto.getSelectedPhotos());
         } else {
-            sendIcon.setText(R.string.close_icon);
+            sendIcon.setText(R.string.icon_close);
         }
         adapterGalleryPhoto.setMultiSelectState(!adapterGalleryPhoto.getMultiSelectState());
     }

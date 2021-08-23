@@ -222,7 +222,7 @@
                 android:layout_gravity="bottom"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
-                android:text="@string/md_emoticon_with_happy_face" />
+                android:text="@string/icon_emoji_smile" />
 
             <net.iGap.module.customView.EventEditText
                 android:id="@+id/et_chatRoom_writeMessage"
@@ -249,7 +249,7 @@
                 android:layout_width="@dimen/dp48"
                 android:layout_height="@dimen/dp48"
                 android:padding="@dimen/dp8"
-                android:text="@string/md_bot"
+                android:text="@string/icon_robot"
                 android:visibility="gone" />
 
             <FrameLayout
@@ -267,7 +267,7 @@
                     android:layout_height="@dimen/dp44"
                     android:layout_gravity="center"
                     android:padding="@dimen/dp8"
-                    android:text="@string/md_send_button"
+                    android:text="@string/icon_send"
                     android:visibility="visible" />
 
             </FrameLayout>
@@ -289,7 +289,7 @@
                     android:layout_height="@dimen/dp44"
                     android:layout_gravity="center_vertical"
                     android:padding="@dimen/dp8"
-                    android:text="@string/financial_send_money_icon"
+                    android:text="@string/icon_send_money"
                     android:visibility="gone" />
 
                 <net.iGap.module.MaterialDesignTextView
@@ -299,7 +299,7 @@
                     android:layout_height="@dimen/dp52"
                     android:layout_gravity="top"
                     android:padding="@dimen/dp8"
-                    android:text="@string/md_attachment_clip" />
+                    android:text="@string/icon_attach" />
 
                 <net.iGap.module.MaterialDesignTextView
                     android:id="@+id/btn_chatRoom_mic"
@@ -308,7 +308,7 @@
                     android:layout_height="@dimen/dp52"
                     android:layout_gravity="top"
                     android:padding="@dimen/dp8"
-                    android:text="@string/md_voice_message_microphone_button" />
+                    android:text="@string/icon_microphone" />
 
             </LinearLayout>
         </LinearLayout>
@@ -328,7 +328,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
-                android:text="@string/md_downwards_arrow"
+                android:text="@string/icon_chevron_Down"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dp32"
                 app:layout_constraintBottom_toTopOf="@+id/tv_replay"

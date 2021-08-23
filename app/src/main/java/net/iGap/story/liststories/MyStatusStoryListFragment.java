@@ -95,7 +95,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                 .setContext(getContext())
                 .setLogoShown(true)
                 .setListener(this)
-                .setLeftIcon(R.string.back_icon)
+                .setLeftIcon(R.string.icon_back)
                 .setDefaultTitle(getString(R.string.my_status))
                 .getView();
 
@@ -125,7 +125,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(LayoutCreator.dp(56), Theme.getInstance().getToolbarBackgroundColor(context), Theme.getInstance().getAccentColor(context));
         floatActionLayout.setBackground(drawable);
         IconView addButton = new IconView(context);
-        addButton.setIcon(R.string.add_icon_without_circle_font);
+        addButton.setIcon(R.string.icon_add);
         addButton.setIconColor(Color.WHITE);
         floatActionLayout.addView(addButton);
         rootView.addView(floatActionLayout, LayoutCreator.createFrame(52, 52, (isAppRtl ? Gravity.LEFT : Gravity.RIGHT) | Gravity.BOTTOM, 16, 0, 16, 16));
@@ -395,7 +395,7 @@ public class MyStatusStoryListFragment extends BaseFragment implements ToolbarLi
                             } else {
                                 storyCell.setData(storyProto.get(position), displayNameList.get(0).get(0), displayNameList.get(0).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, ImageLoadingView.Status.CLICKED, null);
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.CLICKED);
-                                storyCell.deleteIconVisibility(true, R.string.delete_icon);
+                                storyCell.deleteIconVisibility(true, R.string.icon_delete);
                             }
 
                             storyCell.setDeleteStory(MyStatusStoryListFragment.this);
