@@ -202,6 +202,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
     }
 
     private void onBackClicked() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (webView == null) {
             popBackStackFragment();
             return;
