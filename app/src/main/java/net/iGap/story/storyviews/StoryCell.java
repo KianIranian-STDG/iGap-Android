@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.util.TypedValue;
@@ -82,6 +83,7 @@ public class StoryCell extends FrameLayout {
     private long storyId = 0;
     private long uploadId;
     private String fileToken;
+    private int sendStatus;
     private static boolean isCreatedView = false;
 
     public String getFileToken() {
@@ -114,6 +116,14 @@ public class StoryCell extends FrameLayout {
 
     public void setUploadId(long uploadId) {
         this.uploadId = uploadId;
+    }
+
+    public int getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(int sendStatus) {
+        this.sendStatus = sendStatus;
     }
 
     public void setData(RealmStoryProto realmStoryProto, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
@@ -156,7 +166,7 @@ public class StoryCell extends FrameLayout {
         RealmAttachment attachment = realmStoryProto.getFile();
         if (attachment != null && (attachment.getLocalThumbnailPath() != null || attachment.getLocalFilePath() != null)) {
             try {
-                Glide.with(context).load(attachment.getLocalThumbnailPath() != null ? attachment.getLocalThumbnailPath() : attachment.getLocalFilePath()).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                Glide.with(context).load(attachment.getLocalFilePath() != null ? attachment.getLocalFilePath() : attachment.getLocalThumbnailPath()).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
             } catch (Exception e) {
                 Glide.with(context).load(HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color)).into(circleImageLoading);
             }
@@ -180,7 +190,7 @@ public class StoryCell extends FrameLayout {
                                 realmAvatar1.getRealmStoryProtos().get(realmAvatar1.getRealmStoryProtos().size() - 1).getFile().setLocalThumbnailPath(filepath);
                             }
                         });
-                        G.runOnUiThread(() -> Glide.with(context).load(filepath).into(circleImageLoading));
+                        G.runOnUiThread(() -> Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading));
 
 
                     }
@@ -194,7 +204,7 @@ public class StoryCell extends FrameLayout {
     }
 
     public void setData(RealmStory realmStory, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
-        initView(context, needDivider, status, imageLoadingStatus, iconClicked, realmStory.getRealmStoryProtos().get(realmStory.getRealmStoryProtos().size() - 1).getCreatedAt());
+        initView(context, needDivider, status, imageLoadingStatus, iconClicked, realmStory.getRealmStoryProtos().sort("createdAt").get(realmStory.getRealmStoryProtos().size() - 1).getCreatedAt());
         this.userId = realmStory.getUserId();
         circleImageLoading.setStatus(imageLoadingStatus);
         if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
@@ -213,15 +223,15 @@ public class StoryCell extends FrameLayout {
             bottomText.setText(context.getString(R.string.story_sending));
             deleteIcon.setTextColor(Theme.getInstance().getTitleTextColor(context));
         } else {
-            bottomText.setText(HelperCalander.getTimeForMainRoom(realmStory.getRealmStoryProtos().get(realmStory.getRealmStoryProtos().size() - 1).getCreatedAt()));
+            bottomText.setText(HelperCalander.getTimeForMainRoom(realmStory.getRealmStoryProtos().sort("createdAt").get(realmStory.getRealmStoryProtos().size() - 1).getCreatedAt()));
         }
 
 
-        RealmAttachment attachment = realmStory.getRealmStoryProtos().get(realmStory.getRealmStoryProtos().size() - 1).getFile();
+        RealmAttachment attachment = realmStory.getRealmStoryProtos().sort("createdAt").get(realmStory.getRealmStoryProtos().size() - 1).getFile();
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
             if (attachment != null && (attachment.getLocalThumbnailPath() != null || attachment.getLocalFilePath() != null)) {
                 try {
-                    Glide.with(context).load(attachment.getLocalThumbnailPath() != null ? attachment.getLocalThumbnailPath() : attachment.getLocalFilePath()).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
+                    Glide.with(context).load(attachment.getLocalFilePath() != null ? attachment.getLocalFilePath() : attachment.getLocalThumbnailPath()).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
 
                 } catch (Exception e) {
 
@@ -251,7 +261,7 @@ public class StoryCell extends FrameLayout {
                             G.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Glide.with(context).load(filepath).into(circleImageLoading);
+                                    Glide.with(context).load(filepath).placeholder(new BitmapDrawable(context.getResources(), HelperImageBackColor.drawAlphabetOnPicture(LayoutCreator.dp(64), name, color))).into(circleImageLoading);
                                 }
                             });
 
@@ -268,7 +278,7 @@ public class StoryCell extends FrameLayout {
 
     public void initView(Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked, long createTime) {
         if (G.themeColor == Theme.DARK) {
-            setBackgroundColor(Theme.getInstance().getToolbarBackgroundColor(context));
+            setBackground(Theme.getSelectorDrawable(Theme.getInstance().getDividerColor(context)));
         } else {
             setBackgroundColor(Color.WHITE);
         }
@@ -307,7 +317,7 @@ public class StoryCell extends FrameLayout {
         topText.setSingleLine();
         topText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         topText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
-        topText.setTextColor(Color.BLACK);
+        topText.setTextColor(Theme.getInstance().getSendMessageTextColor(topText.getContext()));
         topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
 
@@ -344,6 +354,7 @@ public class StoryCell extends FrameLayout {
         deleteIcon.setTypeface(ResourcesCompat.getFont(context, R.font.font_icon));
         deleteIcon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
         deleteIcon.setText(R.string.horizontal_more_icon);
+        deleteIcon.setTextColor(Theme.getInstance().getSendMessageTextColor(deleteIcon.getContext()));
         deleteIcon.setGravity(Gravity.CENTER);
         deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -467,7 +478,9 @@ public class StoryCell extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         if (needDivider) {
-            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, Theme.getInstance().getDividerPaint(getContext()));
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Theme.getInstance().getDividerColor(getContext()));
+            canvas.drawLine(isRtl ? 0 : LayoutCreator.dp(21), getMeasuredHeight() - 1, getMeasuredWidth() - (isRtl ? LayoutCreator.dp(21) : 0), getMeasuredHeight() - 1, paint);
         }
     }
 
