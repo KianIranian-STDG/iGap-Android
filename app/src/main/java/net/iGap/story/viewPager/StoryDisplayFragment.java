@@ -217,7 +217,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     @Override
     public void onPause() {
         super.onPause();
-        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
         storiesProgressView.abandon();
         closeKeyboard(rootView);
     }
