@@ -202,6 +202,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
     }
 
     private void onBackClicked() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (webView == null) {
             popBackStackFragment();
             return;
@@ -337,6 +338,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             if (url.toLowerCase().equals("igap://close")) {
                 isWebViewVisible = false;
                 forceCloseFragment = true;
@@ -348,6 +350,7 @@ public class FragmentWebView extends BaseFragment implements IOnBackPressed {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
                 if (view.getTitle().length() > 27) {
                     webViewToolbar.setTitle(view.getTitle().substring(0, 27) + "...");
