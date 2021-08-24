@@ -1523,12 +1523,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     attachment.thumbnailPath = arg.data.getFilePath();
                                 }
                             }
-                            if (attachment.isFileExistsOnLocalAndIsImage(messageObject)) {
+                            if (attachment.isFileExistsOnLocalAndIsImage(messageObject) && attachment.filePath != null) {
                                 onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
                             } else if (messageType == VOICE || messageType == AUDIO || messageType == AUDIO_TEXT) {
                                 onLoadThumbnailFromLocal(holder, null, attachment.filePath, LocalFileType.FILE);
                             } else if (messageType.toString().toLowerCase().contains("image") || messageType.toString().toLowerCase().contains("video") || messageType.toString().toLowerCase().contains("gif")) {
-                                if (attachment.isThumbnailExistsOnLocal(messageObject)) {
+                                if (attachment.isThumbnailExistsOnLocal(messageObject) && attachment.thumbnailPath != null) {
                                     onLoadThumbnailFromLocal(holder, null, attachment.thumbnailPath, LocalFileType.THUMBNAIL);
                                 }
                             }
