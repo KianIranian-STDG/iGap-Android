@@ -15,7 +15,6 @@ import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.observers.eventbus.EventManager;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmChannelExtra;
@@ -925,7 +924,7 @@ public class MessageDataStorage extends BaseController {
                 }
                 List<StoryObject> storyObjects = new ArrayList<>();
                 for (int i = 0; i < stories.size(); i++) {
-                    storyObjects.add(StoryObject.create(stories.get(i)));
+                    storyObjects.add(StoryObject.create(stories.get(i), i));
                 }
 
                 realmStory.setUserId(stories.get(0).getUserId());
@@ -987,7 +986,8 @@ public class MessageDataStorage extends BaseController {
                     realmStoryProto.deleteFromRealm();
                 }
 
-                if (database.where(RealmStory.class).equalTo("id", userId).findFirst().getRealmStoryProtos().size() == 0) {
+                if (database.where(RealmStory.class).equalTo("id", userId).findFirst() != null && database.where(RealmStory.class).equalTo("id", userId).findFirst().getRealmStoryProtos() != null &&
+                        database.where(RealmStory.class).equalTo("id", userId).findFirst().getRealmStoryProtos().size() == 0) {
                     database.where(RealmStory.class).equalTo("id", userId).findFirst().deleteFromRealm();
                 }
 
