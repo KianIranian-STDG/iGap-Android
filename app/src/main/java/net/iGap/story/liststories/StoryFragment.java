@@ -570,7 +570,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     } else if (((recentHeaderRow < position) && (position <= recentStoryRow))) {
                         if (otherUserRealmStory != null && otherUserRealmStory.size() > 0 && recentStoryCounter < otherUserRealmStory.size()) {
 
-                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), "test", "#FF4081", context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
+                            storyCell.setData(otherUserRealmStory.get(recentStoryCounter), displayNameList.get(recentStoryCounter).get(0), displayNameList.get(recentStoryCounter).get(1), context, true, StoryCell.CircleStatus.LOADING_CIRCLE_IMAGE, null, null);
                             if (!otherUserRealmStory.get(recentStoryCounter).isSeenAll()) {
                                 storyCell.setImageLoadingStatus(ImageLoadingView.Status.LOADING);
                             } else {
