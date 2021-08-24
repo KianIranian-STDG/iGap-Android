@@ -1,6 +1,7 @@
 package net.iGap.helper.upload.ApiBased;
 
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
@@ -8,6 +9,7 @@ import androidx.collection.ArrayMap;
 import net.iGap.G;
 import net.iGap.controllers.MessageController;
 import net.iGap.helper.FileLog;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.upload.CompressTask;
@@ -56,7 +58,8 @@ public class HttpUploader implements IUpload {
     private ArrayMap<String, CompressTask> pendingCompressTasks = new ArrayMap<>();
     private AtomicInteger inProgressCount = new AtomicInteger(0);
     private ThreadPoolExecutor mThreadPoolExecutor;
-
+    public static boolean isMultiUpload = false;
+    public static boolean isStoryUploading = false;
     private FileIOExecutor fileExecutors;
 
     private final int MAX_UPLOAD;
@@ -252,22 +255,36 @@ public class HttpUploader implements IUpload {
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setFileToken(fileObject.fileToken);
 
-//                                if (realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().getRealmStoryProtos().size() ==
-//                                        realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).isNotNull("fileToken").findAll().size()){
-//
-//                                }
-                                    List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENDING).isNotNull("fileToken").findAll();
-                                if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
-                                    List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
-                                    for (int i = 0; i < realmStoryProtos.size(); i++) {
-                                        ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
-                                        storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
-                                        storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
-                                        storyObjects.add(storyAddRequest.build());
+                                if (isMultiUpload) {
+                                    if (realm.where(RealmStory.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).findFirst().getRealmStoryProtos().size() ==
+                                            realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).isNotNull("fileToken").findAll().size()) {
+                                        List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).isNotNull("fileToken").findAll().sort("createdAt");
+                                        if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                                            List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                                            for (int i = 0; i < realmStoryProtos.size(); i++) {
+                                                ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                                                storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
+                                                storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
+                                                storyObjects.add(storyAddRequest.build());
+                                            }
+                                            isStoryUploading = false;
+                                            MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                        }
+
                                     }
-
-                                    MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
-
+                                } else {
+                                    List<RealmStoryProto> realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).isNotNull("fileToken").findAll();
+                                    if (realmStoryProtos != null && realmStoryProtos.size() > 0) {
+                                        List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects = new ArrayList<>();
+                                        for (int i = 0; i < realmStoryProtos.size(); i++) {
+                                            ProtoStoryUserAddNew.StoryAddRequest.Builder storyAddRequest = ProtoStoryUserAddNew.StoryAddRequest.newBuilder();
+                                            storyAddRequest.setToken(realmStoryProtos.get(i).getFileToken());
+                                            storyAddRequest.setCaption(realmStoryProtos.get(i).getCaption());
+                                            storyObjects.add(storyAddRequest.build());
+                                        }
+                                        isStoryUploading = false;
+                                        MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyObjects);
+                                    }
                                 }
 
 
@@ -297,6 +314,7 @@ public class HttpUploader implements IUpload {
 
                         makeFailed(fileObject.messageId);
                         if (fileObject.type.equals("story")) {
+
                             DbManager.getInstance().doRealmTransaction(realm -> {
                                 realm.where(RealmStory.class).equalTo("id", AccountManager.getInstance().getCurrentUser().getId()).findFirst().setSentAll(false);
                                 realm.where(RealmStoryProto.class).equalTo("id", fileObject.messageId).findFirst().setStatus(MessageObject.STATUS_FAILED);

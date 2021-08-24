@@ -19,6 +19,7 @@ public class RealmStoryProto extends RealmObject {
     private boolean isSeen;
     private int viewCount;
     private int status;
+    private int index;
 
     public static RealmStoryProto putOrUpdate(Realm realm, ProtoGlobal.RoomMessage roomMessage) {
         RealmStoryProto realmStory = realm.where(RealmStoryProto.class).equalTo("storyId", roomMessage.getStory().getStory().getId()).findFirst();
@@ -123,5 +124,13 @@ public class RealmStoryProto extends RealmObject {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
