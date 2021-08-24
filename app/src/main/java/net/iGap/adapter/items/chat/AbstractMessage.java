@@ -939,7 +939,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
                     }
                 } else if (messageObject.storyObject != null && messageObject.storyStatus != ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
-                    replyFrom.setText("Unavailable Moment");
+                    replyFrom.setText(R.string.unavailable_moment);
                 }
             }
             // TODO: 12/29/20 MESSAGE_REFACTOR
@@ -952,7 +952,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     ArrayList<Tuple<Integer, Integer>> places = AbstractMessage.getBoldPlaces(replayText);
                     replayText = AbstractMessage.removeBoldMark(replayText, places);
                 } else {
-                    replayText = "Moment is no longer available";
+                    replayText = context.getString(R.string.mement_is_no_longer_available);
                 }
             }
 
