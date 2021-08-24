@@ -1847,5 +1847,10 @@
     <string name="gender_error">Sexe non confirmé</string>
     <string name="access_folder">Unauthorized Folder</string>
     <string name="restrict_folder">Access to this folder is restricted.</string>
-
+    <string name="seted_name">Name confirmed</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="bio_added">Bio verified</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="email_added">added Email Address</string>
+    <string name="seted_gender">Gender confirmed</string>
 </resources>

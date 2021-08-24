@@ -11,6 +11,9 @@
 package net.iGap.response;
 
 import net.iGap.module.accountManager.AccountManager;
+import net.iGap.observers.interfaces.OnUserProfileSetBioResponse;
+import net.iGap.observers.interfaces.OnUserProfileUpdateUsername;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileBio;
 import net.iGap.realm.RealmRegisteredInfo;
 
@@ -33,16 +36,30 @@ public class UserProfileSetBioResponse extends MessageHandler {
         super.handler();
         ProtoUserProfileBio.UserProfileSetBioResponse.Builder builder = (ProtoUserProfileBio.UserProfileSetBioResponse.Builder) message;
         RealmRegisteredInfo.updateBio(AccountManager.getInstance().getCurrentUser().getId(), builder.getBio());
-    }
+        if (identity instanceof OnUserProfileSetBioResponse) {
+            ((OnUserProfileSetBioResponse) identity).onUserProfileBioResponse(builder.getBio());
+        } else {
+            throw new ClassCastException("identity must be : " + OnUserProfileUpdateUsername.class.getName());
+        }  }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (identity instanceof OnUserProfileSetBioResponse) {
+            ((OnUserProfileSetBioResponse) identity).timeOut();
+        }
     }
 
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        final int majorCode = errorResponse.getMajorCode();
+        final int minorCode = errorResponse.getMinorCode();
+
+        if (identity instanceof OnUserProfileSetBioResponse) {
+            ((OnUserProfileSetBioResponse) identity).error(majorCode, minorCode);
+        }
     }
 }
 

@@ -2258,8 +2258,15 @@ Want to get it?</string>
         <item>Electricity</item>
         <item>Gas</item>
     </string-array>
-    <string name="name_error">Name not verified</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="bio_added">Bio verified</string>
     <string name="user_name_error">Username not confirmed</string>
-    <string name="email_error">Email not confirmed</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="update_lock_error">"Request out of number"</string>
+    <string name="seted_gender">Gender confirmed</string>
     <string name="gender_error">Gender not confirmed</string>
+    <string name="seted_name">Name confirmed</string>
+    <string name="name_error">Name not verified</string>
+    <string name="email_error">Wrong Email Address</string>
+    <string name="email_added">added Email Address</string>
 </resources>

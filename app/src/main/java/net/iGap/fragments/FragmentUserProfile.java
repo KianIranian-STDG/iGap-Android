@@ -185,6 +185,18 @@ public class FragmentUserProfile extends BaseMainFragments implements FragmentEd
                 getChildFragmentManager().popBackStack();
             }
         });
+
+        viewModel.getCheckClick().observe(getViewLifecycleOwner(), isClick -> {
+            if (isClick) {
+                viewModel.getToastId().observe(getViewLifecycleOwner(), toastId -> {
+                    if (toastId != R.string.empty_error_message) {
+                        Toast.makeText(getContext(), getResources().getString(toastId), Toast.LENGTH_SHORT).show();
+                        viewModel.getToastId().setValue(R.string.empty_error_message);
+                    }
+                });
+            }
+        });
+
     }
 
     private void openAccountsDialog() {
