@@ -1,5 +1,6 @@
 package net.iGap.realm;
 
+import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoStoryGetStories;
 import net.iGap.story.StoryObject;
@@ -132,22 +133,39 @@ public class RealmStory extends RealmObject {
             } else {
                 isExist = true;
             }
-            if (igapStory.file != null && igapStory.fileToken != null) {
-                realmAttachment = RealmAttachment.build(realm, igapStory.file, AttachmentFor.AVATAR, null);
-                storyProto.setFile(realmAttachment);
-            } else {
+            if (igapStory.realmAttachment != null) {
                 storyProto.setFile(igapStory.realmAttachment);
+            } else {
+                if (!isExist) {
+                    realmAttachment = RealmAttachment.build(realm, igapStory.file, AttachmentFor.AVATAR, null);
+                    storyProto.setFile(realmAttachment);
+                } else if (isExist && igapStory.file != null) {
+                    realmAttachment = RealmAttachment.putOrUpdate(realm, SUID.id().get(), storyProto.getFile(), igapStory.file);
+                    storyProto.setFile(realmAttachment);
+                } else {
+                    realmAttachment = RealmAttachment.build(realm, igapStory.file, AttachmentFor.AVATAR, null);
+                    storyProto.setFile(realmAttachment);
+                }
             }
 
             storyProto.setCaption(igapStory.caption);
-            storyProto.setCreatedAt(igapStory.createdAt * 1000L);
+            if (igapStory.storyId == 0) {
+                storyProto.setCreatedAt(igapStory.createdAt);
+            } else {
+                storyProto.setCreatedAt(igapStory.createdAt * 1000L);
+            }
+
             storyProto.setFileToken(igapStory.fileToken);
             storyProto.setUserId(igapStory.userId);
             storyProto.setStoryId(igapStory.storyId);
             storyProto.setSeen(igapStory.isSeen);
-//            storyProto.setImagePath(igapStory.imagePath);
             storyProto.setStatus(igapStory.status);
             storyProto.setId(igapStory.id);
+            if (isExist) {
+                storyProto.setIndex(storyProto.getIndex());
+            } else {
+                storyProto.setIndex(igapStory.index);
+            }
 
 
             if (igapStory.isSeen) {

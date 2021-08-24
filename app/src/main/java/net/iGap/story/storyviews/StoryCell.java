@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.controllers.MessageController;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperImageBackColor;
@@ -56,9 +58,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Sort;
 import yogesh.firzen.mukkiasevaigal.P;
 
 import static android.widget.Toast.LENGTH_SHORT;
+import static net.iGap.adapter.items.chat.ViewMaker.setTextSize;
+import static net.iGap.adapter.items.chat.ViewMaker.setTypeFace;
 
 public class StoryCell extends FrameLayout {
 
@@ -205,7 +210,7 @@ public class StoryCell extends FrameLayout {
     }
 
     public void setData(RealmStory realmStory, String displayName, String color, Context context, boolean needDivider, CircleStatus status, ImageLoadingView.Status imageLoadingStatus, IconClicked iconClicked) {
-        initView(context, needDivider, status, imageLoadingStatus, iconClicked, realmStory.getRealmStoryProtos().sort("createdAt").get(realmStory.getRealmStoryProtos().size() - 1).getCreatedAt());
+        initView(context, needDivider, status, imageLoadingStatus, iconClicked, realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).get(0).getCreatedAt());
         this.userId = realmStory.getUserId();
         circleImageLoading.setStatus(imageLoadingStatus);
         if (userId == AccountManager.getInstance().getCurrentUser().getId()) {
@@ -224,11 +229,11 @@ public class StoryCell extends FrameLayout {
             bottomText.setText(context.getString(R.string.story_sending));
             deleteIcon.setTextColor(Theme.getInstance().getTitleTextColor(context));
         } else {
-            bottomText.setText(HelperCalander.getTimeForMainRoom(realmStory.getRealmStoryProtos().sort("createdAt").get(realmStory.getRealmStoryProtos().size() - 1).getCreatedAt()));
+            bottomText.setText(HelperCalander.getTimeForMainRoom(realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).get(0).getCreatedAt()));
         }
 
 
-        RealmAttachment attachment = realmStory.getRealmStoryProtos().sort("createdAt").get(realmStory.getRealmStoryProtos().size() - 1).getFile();
+        RealmAttachment attachment = realmStory.getRealmStoryProtos().sort(new String[]{"createdAt", "index"}, new Sort[]{Sort.DESCENDING, Sort.DESCENDING}).get(0).getFile();
         if (status == CircleStatus.LOADING_CIRCLE_IMAGE) {
             if (attachment != null && (attachment.getLocalThumbnailPath() != null || attachment.getLocalFilePath() != null)) {
                 try {
@@ -317,16 +322,20 @@ public class StoryCell extends FrameLayout {
 
         topText = new TextView(context);
         topText.setSingleLine();
-        topText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        topText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        topText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        ViewMaker.setTextSize(topText, R.dimen.dp15);
+        topText.setSingleLine(true);
+        topText.setEllipsize(TextUtils.TruncateAt.END);
         topText.setTextColor(Theme.getInstance().getSendMessageTextColor(topText.getContext()));
         topText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(topText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 11.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
 
         middleText = new TextView(context);
         middleText.setSingleLine();
-        middleText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        middleText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        middleText.setTypeface(ResourcesCompat.getFont(getContext(), R.font.main_font_bold));
+        ViewMaker.setTextSize(middleText, R.dimen.dp15);
+        middleText.setSingleLine(true);
+        middleText.setEllipsize(TextUtils.TruncateAt.END);
         middleText.setTextColor(Theme.getInstance().getPrimaryTextColor(context));
         middleText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         middleText.setVisibility(GONE);
@@ -335,8 +344,8 @@ public class StoryCell extends FrameLayout {
 
         bottomText = new TextView(context);
         bottomText.setSingleLine();
-        bottomText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        bottomText.setTypeface(ResourcesCompat.getFont(context, R.font.main_font));
+        ViewMaker.setTypeFace(bottomText);
+        ViewMaker.setTextSize(bottomText, R.dimen.dp13);
         bottomText.setGravity((isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         bottomText.setTextColor(Color.GRAY);
         addView(bottomText, LayoutCreator.createFrame(LayoutCreator.WRAP_CONTENT, LayoutCreator.WRAP_CONTENT, (isRtl ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, isRtl ? padding : ((padding * 2) + 56), 34.5f, isRtl ? ((padding * 2) + 56) : padding, 0));
@@ -385,6 +394,7 @@ public class StoryCell extends FrameLayout {
                             MessageController.getInstance(AccountManager.selectedAccount).addMyStory(storyAddRequests);
                         } else if (realmStoryProto != null && !Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProto.getId()))) {
                             realmStoryProto.setStatus(MessageObject.STATUS_SENDING);
+                            HttpUploader.isStoryUploading = true;
                             Uploader.getInstance().upload(UploadObject.createForStory(realmStoryProto.getId(), realmStoryProto.getFile().getLocalFilePath(), null, realmStoryProto.getCaption(), ProtoGlobal.RoomMessageType.IMAGE));
                         }
                         EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_SENDING);

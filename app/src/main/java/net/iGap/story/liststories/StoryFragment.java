@@ -28,6 +28,7 @@ import net.iGap.fragments.BaseMainFragments;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.LayoutCreator;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.helper.upload.OnUploadListener;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.messenger.ui.components.IconView;
@@ -67,6 +68,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.Sort;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.isAppRtl;
@@ -184,7 +186,7 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
         FrameLayout rootView = new FrameLayout(getContext());
         if (G.themeColor == Theme.DARK) {
             rootView.setBackgroundColor(new Theme().getPrimaryDarkColor(getContext()));
-        }else {
+        } else {
             rootView.setBackgroundColor(Theme.getInstance().getDividerColor(getContext()));
         }
 
@@ -371,6 +373,9 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
             objectsCounter = 0;
             List<String> paths = (List<String>) args[0];
             ArrayList<StructBottomSheet> itemGalleryList = (ArrayList<StructBottomSheet>) args[1];
+            if (paths.size() > 1) {
+                HttpUploader.isMultiUpload = true;
+            }
             DbManager.getInstance().doRealmTransaction(realm -> {
                 for (int i = 0; i < paths.size(); i++) {
                     long storyId = SUID.id().get();
@@ -394,10 +399,16 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                     storyObject.caption = itemGalleryList.get(objectsCounter).getText();
                     storyObject.status = MessageObject.STATUS_SENDING;
                     storyObject.id = lastUploadedStoryId;
+                    List<RealmStoryProto> realmStories = realm.where(RealmStoryProto.class).equalTo("userId", storyObject.userId).findAll().sort("index", Sort.DESCENDING);
+                    if (realmStories != null && realmStories.size() > 0) {
+                        storyObject.index = realmStories.get(0).getIndex() + 1;
+                    } else {
+                        storyObject.index = i;
+                    }
                     storyInLocal.add(storyObject);
                     RealmStory.putOrUpdate(realm, false, storyObject.userId, storyInLocal);
                     storyInLocal.remove(0);
-
+                    HttpUploader.isStoryUploading = true;
                     Uploader.getInstance().upload(UploadObject.createForStory(lastUploadedStoryId, paths.get(i), null, itemGalleryList.get(objectsCounter).getText(), ProtoGlobal.RoomMessageType.IMAGE));
 
                     objectsCounter++;
@@ -504,14 +515,11 @@ public class StoryFragment extends BaseMainFragments implements ToolbarListener,
                                         List<RealmStoryProto> realmStoryProtos;
                                         realmStoryProtos = realm.where(RealmStoryProto.class).equalTo("userId", AccountManager.getInstance().getCurrentUser().getId()).equalTo("status", MessageObject.STATUS_SENDING).findAll();
                                         for (int i = 0; i < realmStoryProtos.size(); i++) {
-                                            if (Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProtos.get(i).getId()))) {
+                                            if (Uploader.getInstance().isCompressingOrUploading(String.valueOf(realmStoryProtos.get(i).getId())) || MessageController.isSendingStory || HttpUploader.isStoryUploading) {
                                                 floatActionLayout.setVisibility(View.GONE);
                                                 isHaveFailedUpload = false;
                                                 break;
-                                            } else if (MessageController.isSendingStory) {
-                                                isHaveFailedUpload = false;
-                                                break;
-                                            } else if (!MessageController.isSendingStory) {
+                                            } else {
                                                 realm.where(RealmStoryProto.class).equalTo("id", realmStoryProtos.get(i).getId()).findFirst().setStatus(MessageObject.STATUS_FAILED);
                                                 isHaveFailedUpload = true;
                                             }
