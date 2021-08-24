@@ -1656,4 +1656,10 @@
     <string name="user_name_error">Имя пользователя не подтверждено</string>
     <string name="email_error">Электронная почта не подтверждена</string>
     <string name="gender_error">Пол не подтвержден</string>
+    <string name="seted_name">Name confirmed</string>
+    <string name="user_name_added">Username confirmed</string>
+    <string name="bio_added">Bio verified</string>
+    <string name="bio_error">Bio not verified</string>
+    <string name="email_added">added Email Address</string>
+    <string name="seted_gender">Gender confirmed</string>
 </resources>

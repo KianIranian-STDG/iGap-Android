@@ -2227,4 +2227,11 @@
     <string name="gender_error">جنسیت تایید نشد</string>
     <string name="access_folder">پوشه غیر مجاز</string>
     <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
+
+    <string name="seted_name">نام تایید شد</string>
+    <string name="user_name_added">نام کاربری تایید شد</string>
+    <string name="bio_added">بیو تایید شد</string>
+    <string name="bio_error">بیو تایید نشد</string>
+    <string name="email_added">ایمیل تایید شد</string>
+    <string name="seted_gender">جنسیت تایید شد</string>
 </resources>
