@@ -6,6 +6,7 @@ import net.iGap.G;
 import net.iGap.helper.FileLog;
 import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperTimeOut;
+import net.iGap.helper.upload.ApiBased.HttpUploader;
 import net.iGap.helper.upload.UploadTask;
 import net.iGap.module.SUID;
 import net.iGap.module.accountManager.AccountManager;
@@ -142,6 +143,7 @@ public class MessageController extends BaseController implements EventManager.Ev
 
     public void addMyStory(List<ProtoStoryUserAddNew.StoryAddRequest> storyObjects) {
         isSendingStory = true;
+        HttpUploader.isMultiUpload = false;
         AbstractObject request = null;
         IG_RPC.Story_User_Add_New story_user_addNew = new IG_RPC.Story_User_Add_New();
         story_user_addNew.storyAddRequests = storyObjects;
@@ -150,8 +152,8 @@ public class MessageController extends BaseController implements EventManager.Ev
 
             if (error == null) {
                 IG_RPC.Res_Story_User_Add_New res = (IG_RPC.Res_Story_User_Add_New) response;
-                MessageController.isSendingStory = false;
                 getMessageDataStorage().updateUserAddedStory(res.stories);
+                MessageController.isSendingStory = false;
 
             } else {
                 IG_RPC.Error err = (IG_RPC.Error) error;
