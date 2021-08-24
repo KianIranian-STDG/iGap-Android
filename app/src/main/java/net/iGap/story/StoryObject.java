@@ -22,9 +22,10 @@ public class StoryObject {
     public RealmAttachment realmAttachment;
     public int status = MessageObject.STATUS_LISTENED;
     public long id;
+    public int index;
 
 
-    public static StoryObject create(ProtoGlobal.Story igapStory) {
+    public static StoryObject create(ProtoGlobal.Story igapStory, int index) {
         StoryObject storyObject = new StoryObject();
 
         storyObject.caption = igapStory.getCaption();
@@ -37,9 +38,11 @@ public class StoryObject {
         storyObject.userId = igapStory.getUserId();
         storyObject.storyId = igapStory.getId();
         storyObject.isSeen = igapStory.getSeen();
+        storyObject.index = index;
 
         return storyObject;
     }
+
     public static StoryObject create(RealmStoryProto igapStory) {
         StoryObject storyObject = new StoryObject();
 

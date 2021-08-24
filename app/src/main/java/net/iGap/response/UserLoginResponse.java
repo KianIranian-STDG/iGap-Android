@@ -126,7 +126,7 @@ public class UserLoginResponse extends MessageHandler {
 
         TokenContainer.getInstance().updateToken(builder.getAccessToken(), false);
 
-        if(BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0 && sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP , 0) == 0){
+        if (BuildConfig.SHOW_RATE_DIALOG_PERIOD_HOURE != 0 && sharedPreferences.getLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, 0) == 0) {
             sharedPreferences
                     .edit()
                     .putLong(SHP_SETTING.KEY_LOGIN_TIME_STAMP, new Date().getTime())
@@ -156,7 +156,7 @@ public class UserLoginResponse extends MessageHandler {
                     .findFirst().getPushNotificationToken();
         });
 
-        if(!FCMToken.isEmpty()) {
+        if (!FCMToken.isEmpty()) {
             RealmUserInfo.sendPushNotificationToServer();
         }
 
@@ -191,7 +191,7 @@ public class UserLoginResponse extends MessageHandler {
                         if (res.stories.size() > 0 && res.stories.size() >= realm.where(RealmStory.class).findAll().size()) {
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
-                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j)));
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j),j));
                                 }
                                 RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
                                 storyObjects = new ArrayList<>();
@@ -218,7 +218,7 @@ public class UserLoginResponse extends MessageHandler {
                             }
                             for (int i = 0; i < res.stories.size(); i++) {
                                 for (int j = 0; j < res.stories.get(i).getStoriesList().size(); j++) {
-                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j)));
+                                    storyObjects.add(StoryObject.create(res.stories.get(i).getStoriesList().get(j),j));
                                 }
 
                                 RealmStory.putOrUpdate(realm, res.stories.get(i).getSeenAllGroupStories(), res.stories.get(i).getUserId(), storyObjects);
@@ -226,24 +226,24 @@ public class UserLoginResponse extends MessageHandler {
                             }
 
                         } else if (res.stories.size() == 0) {
-                            realm.where(RealmStory.class).equalTo("isSentAll", true).findAll().deleteAllFromRealm();
+                            realm.where(RealmStoryProto.class).equalTo("status", MessageObject.STATUS_SENT).findAll().deleteAllFromRealm();
+                            List<RealmStory> realmStories = realm.where(RealmStory.class).findAll();
+                            if (realmStories != null && realmStories.size() > 0) {
+                                for (int i = 0; i < realmStories.size(); i++) {
+                                    if (realmStories.get(i).getRealmStoryProtos().size() == 0) {
+                                        realm.where(RealmStory.class).equalTo("userId", realmStories.get(i).getUserId()).findAll().deleteAllFromRealm();
+                                    }
+                                }
+                            }
+
                         }
                     });
                     Log.e("fdajhfjshf", "getRequestManager5: ");
 
                     G.refreshRealmUi();
                     isFetched = true;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            G.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED);
-                                }
-                            });
-                        }
-                    }, 2000);
+
+                    G.runOnUiThread(() -> EventManager.getInstance(AccountManager.selectedAccount).postEvent(EventManager.STORY_LIST_FETCHED));
 
 
                     Log.e("fdajhfjshf", "getRequestManager: ");

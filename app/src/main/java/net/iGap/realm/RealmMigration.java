@@ -913,6 +913,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("id", long.class)
                     .addField("isSeen", boolean.class)
                     .addField("viewCount", int.class)
+                    .addField("index", int.class)
                     .addField("status", int.class);
 
 
