@@ -287,6 +287,7 @@ public class UserProfileViewModel extends ViewModel implements RefreshWalletBala
                 }
             }
             showEditIcon();
+            toastId.setValue(R.string.empty_error_message);
         } else {
             checkClick.setValue(false);
             showEditIcon();
