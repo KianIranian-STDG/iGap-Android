@@ -8,6 +8,7 @@ import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.downloader.DownloadObject;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGlobal.RoomMessage;
+import net.iGap.proto.ProtoGlobal.RoomMessageType;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.story.StoryObject;
@@ -28,6 +29,7 @@ import static net.iGap.module.AndroidUtils.igapLink;
 import static net.iGap.module.AndroidUtils.igapResolve;
 import static net.iGap.module.AndroidUtils.webLink;
 import static net.iGap.module.AndroidUtils.webLink_with_port;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.*;
 
 public class MessageObject {
     public static final int STATUS_FAILED = 0;
@@ -73,6 +75,7 @@ public class MessageObject {
     public boolean isSelected;
     public String username;
     private HashMap<Integer, String> stringMap = new HashMap<>();
+    public int storyStatus;
 
     private MessageObject() {
 
@@ -203,6 +206,7 @@ public class MessageObject {
 
         if (roomMessage.getStoryReplyMessage() != null) {
             messageObject.storyObject = StoryObject.create(roomMessage.getStoryReplyMessage());
+            messageObject.storyStatus = roomMessage.getStoryStatus();
         }
         messageObject.messageType = roomMessage.getMessageType().getNumber();
         messageObject.messageVersion = roomMessage.getMessageVersion();
@@ -233,9 +237,9 @@ public class MessageObject {
         if (attachmentObject != null) {
             if (attachmentObject.cacheId != null) {
                 String mimeType = DownloadObject.extractMime(attachmentObject.name);
-                String path = AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+                String path = AndroidUtils.suitableAppFilePath(forNumber(messageType));
                 File cashFile = new File(path + "/" + attachmentObject.cacheId + "_" + mimeType);
-                File tempFile = new File(G.DIR_TEMP + "/" + DownloadObject.createKey(forThumb? attachmentObject.smallThumbnail.cacheId: attachmentObject.cacheId, forThumb ? 1 : 0));
+                File tempFile = new File(G.DIR_TEMP + "/" + DownloadObject.createKey(forThumb ? attachmentObject.smallThumbnail.cacheId : attachmentObject.cacheId, forThumb ? 1 : 0));
                 return cashFile.exists() && cashFile.length() == attachmentObject.size || tempFile.length() == (forThumb ? attachmentObject.smallThumbnail.size : attachmentObject.size);
             }
         }
@@ -243,13 +247,13 @@ public class MessageObject {
     }
 
     public String getCacheFile(boolean forThumb) {
-        AttachmentObject attachmentObject = forwardedMessage != null ? forwardedMessage.attachment : attachment;
+        AttachmentObject attachmentObject = forwardedMessage != null ? forwardedMessage.attachment : (messageType != STORY_REPLY_VALUE ? attachment : storyObject.attachmentObject);
         if (attachmentObject != null) {
             if (attachmentObject.cacheId != null) {
                 String mimeType = DownloadObject.extractMime(attachmentObject.name);
-                String path = AndroidUtils.suitableAppFilePath(ProtoGlobal.RoomMessageType.forNumber(messageType));
+                String path = AndroidUtils.suitableAppFilePath(forNumber(messageType));
                 if (forThumb) {
-                    return new File(G.DIR_TEMP + "/" + DownloadObject.createKey(forThumb? attachmentObject.smallThumbnail.cacheId: attachmentObject.cacheId, forThumb ? 1 : 0)).getAbsolutePath();
+                    return new File(G.DIR_TEMP + "/" + DownloadObject.createKey(forThumb ? attachmentObject.smallThumbnail.cacheId : attachmentObject.cacheId, forThumb ? 1 : 0)).getAbsolutePath();
                 }
                 return new File(path + "/" + (forThumb ? attachmentObject.largeThumbnail.cacheId : attachmentObject.cacheId) + "_" + mimeType).getAbsolutePath();
             }
@@ -347,11 +351,11 @@ public class MessageObject {
     }
 
     public static boolean canSharePublic(MessageObject message) {
-        return message != null && message.attachment != null && (message.messageType != ProtoGlobal.RoomMessageType.VOICE_VALUE || message.messageType != ProtoGlobal.RoomMessageType.STICKER_VALUE);
+        return message != null && message.attachment != null && (message.messageType != VOICE_VALUE || message.messageType != STICKER_VALUE);
     }
 
     public static boolean canSharePublic(RealmRoomMessage message) {
-        return message != null && message.attachment != null && (!message.messageType.equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || !message.messageType.equals(ProtoGlobal.RoomMessageType.STICKER.toString()));
+        return message != null && message.attachment != null && (!message.messageType.equals(VOICE.toString()) || !message.messageType.equals(STICKER.toString()));
     }
 
     public boolean allowToForward() {
@@ -359,7 +363,7 @@ public class MessageObject {
     }
 
     public boolean isGiftSticker() {
-        return messageType == ProtoGlobal.RoomMessageType.STICKER_VALUE && additionalData != null && additionalType == AdditionalType.GIFT_STICKER;
+        return messageType == STICKER_VALUE && additionalData != null && additionalType == AdditionalType.GIFT_STICKER;
     }
 
     public boolean isTimeOrLogMessage() {

@@ -929,6 +929,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
 
             if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addField("storyStatus", int.class);
                 realmRoomMessageSchema.addRealmObjectField("storyReplyMessage", realmStoryProto);
             }
 

@@ -53,12 +53,10 @@ public class StoryObject {
         builder.setName(igapStory.getFile().name);
         builder.setSize(igapStory.getFile().size);
         storyObject.attachmentObject = AttachmentObject.create(igapStory.getFile());
-        if (storyObject.attachmentObject != null || storyObject.file != null) {
-            storyObject.status = MessageObject.STATUS_SENT;
-        }
+        storyObject.status = MessageObject.STATUS_SENT;
         storyObject.createdAt = igapStory.getCreatedAt();
         storyObject.userId = igapStory.getUserId();
-        storyObject.storyId = igapStory.getId();
+        storyObject.storyId = igapStory.getStoryId();
         storyObject.isSeen = igapStory.isSeen();
 
         return storyObject;

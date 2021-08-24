@@ -1660,4 +1660,5 @@
     <string name="user_name_error">Имя пользователя не подтверждено</string>
     <string name="email_error">Электронная почта не подтверждена</string>
     <string name="gender_error">Пол не подтвержден</string>
+    <string name="reply_sent">"ответ отправлен "</string>
 </resources>

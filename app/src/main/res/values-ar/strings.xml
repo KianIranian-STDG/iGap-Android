@@ -2641,5 +2641,6 @@
     <string name="gender_error">لم يتم تأكيد الجنس</string>
     <string name="access_folder">Unauthorized Folder</string>
     <string name="restrict_folder">Access to this folder is restricted.</string>
+    <string name="reply_sent">"تم إرسال الرد "</string>
 
 </resources>

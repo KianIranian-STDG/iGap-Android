@@ -883,7 +883,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.getContentBloke().removeView(cslr_replay_layout);
         }
 
-        if ((messageObject.replayToMessage != null && !messageObject.replayToMessage.deleted) || messageObject.storyObject != null || messageObject.messageType == STORY_REPLY_VALUE) {
+        if ((messageObject.replayToMessage != null && !messageObject.replayToMessage.deleted) || messageObject.storyObject != null) {
 
             final View replayView = ViewMaker.getViewReplay(((NewChatItemHolder) holder).getContext());
 
@@ -894,8 +894,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     holder.itemView.performLongClick();
                     return;
                 }
-
-                messageClickListener.onReplyClick(messageObject.replayToMessage);
+                messageClickListener.onReplyClick(messageObject);
             });
 
             replayView.setOnLongClickListener(getLongClickPerform(holder));
@@ -933,24 +932,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 });
                 if (replayToInfo != null) {
                     if (messageObject.storyObject != null) {
-                        replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()) + " \u25CF " + context.getString(R.string.moments_string));
+                        if (messageObject.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                            replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()) + " \u25CF " + context.getString(R.string.moments_string));
+                        }
                     } else {
                         replyFrom.setText(EmojiManager.getInstance().replaceEmoji(replayToInfo.getDisplayName(), replyFrom.getPaint().getFontMetricsInt()));
                     }
-                } else if (messageObject.storyObject == null && messageObject.messageType == STORY_REPLY_VALUE) {
+                } else if (messageObject.storyObject != null && messageObject.storyStatus != ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
                     replyFrom.setText("Unavailable Moment");
                 }
             }
             // TODO: 12/29/20 MESSAGE_REFACTOR
-            String replayText;
+            String replayText = null;
             if (messageObject.replayToMessage != null) {
                 replayText = AppUtils.replyTextMessage(messageObject.replayToMessage, holder.itemView.getResources());
             } else if (messageObject.storyObject != null) {
-                replayText = messageObject.storyObject.caption;
-                ArrayList<Tuple<Integer, Integer>> places = AbstractMessage.getBoldPlaces(replayText);
-                replayText = AbstractMessage.removeBoldMark(replayText, places);
-            } else {
-                replayText = "Moment is no longer available";
+                if (messageObject.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                    replayText = messageObject.storyObject.caption;
+                    ArrayList<Tuple<Integer, Integer>> places = AbstractMessage.getBoldPlaces(replayText);
+                    replayText = AbstractMessage.removeBoldMark(replayText, places);
+                } else {
+                    replayText = "Moment is no longer available";
+                }
             }
 
             replayMessage.setText(EmojiManager.getInstance().replaceEmoji(replayText, replayMessage.getPaint().getFontMetricsInt()));

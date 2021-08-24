@@ -115,7 +115,7 @@ public class StoryViewFragment extends BaseFragment implements StoryDisplayFragm
                 if (realmStoryProto.getUserId() == userId) {
                     currentPage = i;
                 }
-                if (isSingle) {
+                if (isSingle    ) {
                     if (realmStoryProto.getStoryId() == storyId) {
                         Story story = new Story(null, bitmap, realmStoryProto.getCaption(), realmStoryProto.getCreatedAt(),
                                 realmStoryProto.getUserId(), realmStoryProto.getStoryId(), realmStoryProto.getFile(), null, realmStoryProto.getViewCount());

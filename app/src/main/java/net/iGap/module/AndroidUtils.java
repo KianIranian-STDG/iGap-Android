@@ -458,6 +458,7 @@ public final class AndroidUtils {
             case STICKER:
             case GIF:
             case GIF_TEXT:
+            case STORY:
                 return G.DIR_IMAGES;
             case VIDEO:
             case VIDEO_TEXT:

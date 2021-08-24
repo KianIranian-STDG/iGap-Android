@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +54,7 @@ import net.iGap.structs.AttachmentObject;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.realm.Realm;
@@ -76,7 +78,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
     private AppCompatImageView storyDisplayImage, userImage, tumNailImage;
     private View previous, next;
     private ConstraintLayout replayFrame;
-    private LinearLayout llReplay, llAttach, llSend;
+    private LinearLayout llReplay, llAttach;
     private EventEditText edtChat;
     private FrameLayout tvSend;
     private ConstraintLayout constraintLayout;
@@ -130,7 +132,6 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         nameFrom = rootView.findViewById(R.id.nameFrom);
         descriptionFrom = rootView.findViewById(R.id.descriptionFrom);
         llAttach = rootView.findViewById(R.id.layout_attach_story);
-        llSend = rootView.findViewById(R.id.llSendReply);
         edtChat = rootView.findViewById(R.id.et_chatRoom_writeMessage);
         tumNailImage = rootView.findViewById(R.id.story_image);
         tvSend = rootView.findViewById(R.id.chatRoom_send_container);
@@ -171,6 +172,15 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         });
 
         tvSend.setOnClickListener(view1 -> {
+            String replyText = Objects.requireNonNull(edtChat.getText()).toString().trim();
+            if (replyText.length() == 0) {
+                edtChat.setText("");
+                Toast.makeText(context, R.string.please_write_your_message, Toast.LENGTH_LONG).show();
+            } else if (!checkEmptyMessageWithSemiSpace(new String[]{replyText})) {
+                return;
+            }
+            edtChat.setText("");
+            hideKeyboard();
 
             RealmRoom realmRoom = DbManager.getInstance().doRealmTask(realm -> {
                 return realm.where(RealmRoom.class).equalTo("chatRoom.peer_id", stories.get(counter).getUserId()).findFirst();
@@ -184,20 +194,40 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                     if (response != null) {
                         IG_RPC.Res_chat_get_room res = (IG_RPC.Res_chat_get_room) response;
                         ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(res.room.getTypeValue(), res.room.getId(), stories.get(counter), edtChat.getText().toString());
+                        Toast.makeText(context, getString(R.string.reply_sent), Toast.LENGTH_SHORT).show();
                     }
                 });
 
             } else {
                 ChatSendMessageUtil.getInstance(AccountManager.selectedAccount).buildStoryReply(realmRoom.getType().getNumber(), realmRoom.getId(), stories.get(counter), edtChat.getText().toString());
+                Toast.makeText(context, getString(R.string.reply_sent), Toast.LENGTH_SHORT).show();
             }
 
         });
     }
 
+    private boolean checkEmptyMessageWithSemiSpace(String[] messages) {
+        boolean haveCharacterExceptSemiSpace = false;
+
+        char[] message = messages[0].toCharArray();
+        for (int i = 0; i < message.length; i++) {
+
+            if (message[i] != 8204) {
+                haveCharacterExceptSemiSpace = true;
+            }
+        }
+
+        return haveCharacterExceptSemiSpace;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        counter = restorePosition();
+        if (stories.size() == 1) {
+            counter = 0;
+        } else {
+            counter = restorePosition();
+        }
     }
 
     @Override
@@ -375,11 +405,13 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
             @Override
             public void onClick(View view) {
+                Log.e("mmd", "is clickable: " + clickable);
                 if (!clickable) {
                     if (view == next) {
                         if (counter == stories.size() - 1) {
                             pageViewOperator.nextPageView(false);
                         } else {
+                            Log.e("mmd", "on click");
                             storiesProgressView.skip();
                         }
                     }
@@ -407,6 +439,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
                         case MotionEvent.ACTION_UP:
                             showStoryOverlay();
                             resumeCurrentStory();
+                            Log.e("mmd", "resume Action Up");
                             return limit < System.currentTimeMillis() - pressTime;
                     }
                 } else {
@@ -454,6 +487,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
 
     private void setupReplay() {
         openKeyBoard();
+        edtChat.requestFocus();
         getKeyboardState();
         pauseCurrentStory();
 
@@ -512,10 +546,8 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (edtChat.getText() != null && edtChat.getText().length() > 0) {
                     tvSend.setVisibility(View.VISIBLE);
-                    llSend.setVisibility(View.GONE);
                 } else {
                     tvSend.setVisibility(View.GONE);
-                    llSend.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -557,7 +589,7 @@ public class StoryDisplayFragment extends BaseFragment implements StoriesProgres
         }
         ++counter;
         savePosition(counter);
-        Log.e("faslkfhsfhsakjd", "onNext: ");
+        Log.e("faslkfhsfhsakjd", "onNext:");
         pauseCurrentStory();
         loadingProgressbar.setVisibility(View.VISIBLE);
         updateStory();

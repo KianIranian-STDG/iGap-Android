@@ -2263,4 +2263,5 @@
     <string name="access_folder">پوشه غیر مجاز</string>
     <string name="restrict_folder">دسترسی به این پوشه محدود است.</string>
     <string name="moments_string">لحظه ها</string>
+    <string name="reply_sent">پاسخ ارسال شد</string>
 </resources>

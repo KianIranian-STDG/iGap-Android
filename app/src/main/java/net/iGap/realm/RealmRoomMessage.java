@@ -92,6 +92,7 @@ public class RealmRoomMessage extends RealmObject {
     public long futureMessageId;
     public String linkInfo;
     public byte[] Logs;
+    private int storyStatus;
 
     /**
      * if has forward return that otherwise return enter value
@@ -374,6 +375,8 @@ public class RealmRoomMessage extends RealmObject {
 
         if (input.hasStory()) {
             message.storyReplyMessage = RealmStoryProto.putOrUpdate(realm, input);
+            ProtoGlobal.RoomMessageStory.Status status = input.getStory().getStatus();
+            message.storyStatus = status.getNumber();
         }
 //        addTimeIfNeed(message, realm);
 //
@@ -1215,6 +1218,10 @@ public class RealmRoomMessage extends RealmObject {
 
     public boolean isSenderMe() {
         return getUserId() == AccountManager.getInstance().getCurrentUser().getId();
+    }
+
+    public int getStoryStatus() {
+        return storyStatus;
     }
 
     public boolean isAuthorMe() {

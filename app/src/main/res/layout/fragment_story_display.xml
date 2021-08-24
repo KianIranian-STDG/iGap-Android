@@ -243,15 +243,6 @@
                 android:paddingBottom="@dimen/dp8"
                 android:textSize="@dimen/largeTextSize" />
 
-            <net.iGap.module.MaterialDesignTextView
-                android:id="@+id/tv_chatRoom_botAction"
-                style="@style/myIconTextViewStyleGray"
-                android:layout_width="@dimen/dp48"
-                android:layout_height="@dimen/dp48"
-                android:padding="@dimen/dp8"
-                android:text="@string/icon_robot"
-                android:visibility="gone" />
-
             <FrameLayout
                 android:id="@+id/chatRoom_send_container"
                 android:layout_width="@dimen/dp44"
@@ -271,46 +262,6 @@
                     android:visibility="visible" />
 
             </FrameLayout>
-
-
-            <LinearLayout
-                android:id="@+id/llSendReply"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="@dimen/dp4"
-                android:minWidth="@dimen/dp88"
-                android:orientation="horizontal"
-                android:visibility="visible">
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/btn_chatRoom_wallet"
-                    style="@style/myIconTextViewStyleGray"
-                    android:layout_width="@dimen/dp44"
-                    android:layout_height="@dimen/dp44"
-                    android:layout_gravity="center_vertical"
-                    android:padding="@dimen/dp8"
-                    android:text="@string/icon_send_money"
-                    android:visibility="gone" />
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/vtn_chatRoom_attach"
-                    style="@style/myIconTextViewStyleGray"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="@dimen/dp52"
-                    android:layout_gravity="top"
-                    android:padding="@dimen/dp8"
-                    android:text="@string/icon_attach" />
-
-                <net.iGap.module.MaterialDesignTextView
-                    android:id="@+id/btn_chatRoom_mic"
-                    style="@style/myIconTextViewStyleGray"
-                    android:layout_width="@dimen/dp52"
-                    android:layout_height="@dimen/dp52"
-                    android:layout_gravity="top"
-                    android:padding="@dimen/dp8"
-                    android:text="@string/icon_microphone" />
-
-            </LinearLayout>
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

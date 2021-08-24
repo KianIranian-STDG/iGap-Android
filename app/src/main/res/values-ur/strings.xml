@@ -1930,4 +1930,5 @@
     <string name="user_name_error">نام کاربری تایید نشد</string>
     <string name="email_error">ایمیل تایید نشد</string>
     <string name="gender_error">جنسیت تایید نشد</string>
+    <string name="reply_sent">جواب بھیج دیا</string>
 </resources>

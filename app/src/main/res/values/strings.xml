@@ -2702,4 +2702,6 @@ Want to get it?</string>
     <string name="user_name_error">Username not confirmed</string>
     <string name="email_error">Email not confirmed</string>
     <string name="gender_error">Gender not confirmed</string>
+    <string name="reply_sent">Reply sent</string>
+    <string name="moment_not_available">Moment is not available</string>
 </resources>

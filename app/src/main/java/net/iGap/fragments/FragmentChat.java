@@ -293,6 +293,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.story.viewPager.StoryViewFragment;
 import net.iGap.structs.AttachmentObject;
 import net.iGap.structs.MessageObject;
 import net.iGap.viewmodel.controllers.CallManager;
@@ -5916,8 +5917,14 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onReplyClick(MessageObject replyMessage) {// TODO: 12/29/20 MESSAGE_REFACTOR
-        if (!goToPositionWithAnimation(replyMessage.id, 1000)) {
-            long replayMessageId = Math.abs(replyMessage.id);
+        if (replyMessage.messageType == STORY_REPLY_VALUE && replyMessage.replayToMessage == null) {
+            if (replyMessage.storyObject != null && replyMessage.storyStatus == ProtoGlobal.RoomMessageStory.Status.ACTIVE_VALUE) {
+                new HelperFragment(getActivity().getSupportFragmentManager(), new StoryViewFragment(replyMessage.storyObject.userId, true, true, replyMessage.storyObject.storyId)).setReplace(false).load();
+            } else {
+                Toast.makeText(getContext(), R.string.moment_not_available , Toast.LENGTH_SHORT).show();
+            }
+        } else if (!goToPositionWithAnimation(replyMessage.replayToMessage.id, 1000)) {
+            long replayMessageId = Math.abs(replyMessage.replayToMessage.id);
             if (!goToPositionWithAnimation(replayMessageId, 1000)) {
                 if (RealmRoomMessage.existMessageInRoom(replayMessageId, mRoomId)) {
                     resetMessagingValue();
@@ -8241,7 +8248,7 @@ public class FragmentChat extends BaseFragment
             Long sourceMessageId = (Long) object[3];
 
             if (forwardedRealm.isValid() && !createdForwardMessage.deleted) {
-                if (isSingleForward || forwardedRealm.getRoomId() == mRoomId ) {
+                if (isSingleForward || forwardedRealm.getRoomId() == mRoomId) {
                     switchAddItem(new ArrayList<>(Collections.singletonList(new StructMessageInfo(forwardedRealm))), false);
                     scrollToEnd();
                 }
