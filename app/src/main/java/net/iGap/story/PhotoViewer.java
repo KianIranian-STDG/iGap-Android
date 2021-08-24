@@ -296,7 +296,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         editTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         editTextView.setGravity(Gravity.CENTER);
-        editTextView.setText(getString(R.string.icon_beeptunes_like));
+        editTextView.setText(getString(R.string.icon_edit_picture));
         editTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(editTextView, LayoutCreator.createLinear(52, LayoutCreator.MATCH_PARENT, 0, 0, 8, 0));
 
@@ -316,7 +316,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
 
         paintTextView = new MaterialDesignTextView(new ContextThemeWrapper(context, R.style.myIconToolbarStyle));
         paintTextView.setGravity(Gravity.CENTER);
-        paintTextView.setText(getString(R.string.icon_edit_picture));
+        paintTextView.setText(getString(R.string.icon_edit));
         paintTextView.setTextColor(context.getResources().getColor(R.color.whit_background));
         cancelCropLayout.addView(paintTextView, LayoutCreator.createLinear(52, 52, 0, 0, 8, 0));
 
@@ -339,7 +339,7 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         keyboardEmoji.setText(context.getString(R.string.icon_emoji_smile));
         keyboardEmoji.setTextColor(context.getResources().getColor(R.color.white));
         keyboardEmoji.setTextSize(26);
-        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER, 5, 0, 0, 0));
+        layoutCaption.addView(keyboardEmoji, LayoutCreator.createLinear(30, 30, Gravity.CENTER, 0, 0, 0, 0));
 
         captionEditText = new EventEditText(context);
         captionEditText.setGravity(Gravity.BOTTOM);
@@ -386,6 +386,14 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
         return rootView;
     }
 
+    @Override
+    public boolean onBackPressed() {
+        if (isPopupShowing()) {
+            showPopUPView(-1);
+            return true;
+        } else
+            return super.onBackPressed();
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -575,14 +583,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
             public void onClick(View view) {
                 pickerViewSendButton.setVisibility(View.GONE);
                 progressBar.setVisibility(VISIBLE);
-                editTextView.setEnabled(false);
-                emoji.setEnabled(false);
-                revertTextView.setEnabled(false);
-                paintTextView.setEnabled(false);
-                addTextView.setEnabled(false);
-                captionEditText.setEnabled(false);
-                keyboardEmoji.setEnabled(false);
-                rootView.setEnabled(false);
                 for (int i = 0; i < itemGalleryList.size(); i++) {
                     if (viewHolders.get(i) != null) {
                         reservedView = viewHolders.get(i);
@@ -635,7 +635,6 @@ public class PhotoViewer extends BaseFragment implements NotifyFrameLayout.Liste
                             Canvas mCanvas = new Canvas(b);
                             mCanvas.translate((-textStickersParentView.getScrollX()), (-textStickersParentView.getScrollY()));
                             textStickersParentView.draw(mCanvas);
-
                             new SaveBitmapAsync(itemGalleryList.get(i).path, b, textStickersParentView, modes.get(i)).execute();
 
 
